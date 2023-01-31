@@ -1,0 +1,60 @@
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-md-6 login-content-wrapper">
+        <div class="login-inner">
+          <img style="height: 47px;padding-left: 20px" src="../../../assets/images/logo-new.png"/>
+          <h2 class="mt-4">Welcome ...</h2>
+          <p class="mb-35">
+            Enter details below to
+            <span class="text-info font-weight-bold">reset</span> to your password.
+          </p>
+  
+  
+          <form #fData="ngForm" (ngSubmit)="reset(fData)">            
+            <div class="form-group mb-15">
+              <label class="font-weight-bold">Password</label>
+              <br>
+              <span class="p-input-icon-right" style="width: 400px">
+                <i *ngIf="passwordType=='password'" class="pi pi-eye pass-icon" (click)="togglePassword()"></i>
+                <i *ngIf="passwordType=='text'" class="pi pi-eye-slash pass-icon" (click)="togglePassword()"></i>
+                <input required pInputText [type]="passwordType" #fpassowrd="ngModel" name="password" [(ngModel)]="password" placeholder="Password" class="form-control"/>
+              </span>
+              <p class="info-message text-danger" *ngIf="
+                  (fpassowrd.errors?.['required'] && (fpassowrd.touched || fpassowrd.dirty)) ||
+                  (fpassowrd.errors?.['required'] && isSubmitted  )">
+                  Password is required
+              </p>
+            </div>
+            <div class="form-group mb-15">
+              <label class="font-weight-bold">Confirm Password</label>
+              <br>
+              <span class="p-input-icon-right" style="width: 400px">
+                <input required pInputText type="password" #fconpassword="ngModel" name="conpassword" [(ngModel)]="cpassword" placeholder="Confirm password" class="form-control"/>
+              </span>
+              <p class="info-message text-danger" *ngIf="
+                  (fconpassword.errors?.['required'] && (fconpassword.touched || fconpassword.dirty)) ||
+                  (fconpassword.errors?.['required'] && isSubmitted  )">
+                  Password is required
+              </p>
+            </div>
+
+            <p class="info-message text-danger" *ngIf="fconpassword.touched && (cpassword !== password)">
+                Passwords are not matching
+            </p>
+
+            <p class="mb-35">
+              <a href="javascript:void(0)" (click)="goLogin()" class="text-info">Sign in</a>
+            </p>
+            <button [disabled]="!fData.form.valid || (fconpassword.touched && (cpassword !== password))" class="btn btn-primary btn-block text-uppercase btn-lg" type="submit">Sign in</button>
+          </form>
+  
+        </div>
+      </div>
+      <div class="col-md-6 login-back">
+  
+      </div>
+    </div>
+  </div>
+  
+   <!-- <p-toast position="top-right"></p-toast> -->
+  

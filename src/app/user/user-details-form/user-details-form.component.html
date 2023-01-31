@@ -1,0 +1,89 @@
+<form #fData="ngForm">
+    <div class="card">
+
+        <div class="p-grid p-fluid col-md-12 col-sm-12">
+            <div class="row">
+                <div class="col-6 col-md-6">
+                    <div class="p-field">
+                        <label >Unit *</label>
+                        <p-dropdown      
+                            appendTo="body"          
+                            [disabled]="isView"
+                            name="project"
+                            [options]="units"
+                            [(ngModel)]="user.unit"
+                            placeholder="Select .."
+                            optionLabel="name"
+                            #fUnit="ngModel"                  
+                        ></p-dropdown>
+                        <p class="info-message text-danger"*ngIf="(!user.unit && fUnit.touched) || (isSubmitted && !user.unit)">
+                            This is a mandatory field
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-6">
+                    <div class="p-field">
+                        <label>First Name *</label>
+                        <input
+                            [disabled]="isView"
+                            type="text"
+                            name="firstname"
+                            [(ngModel)]="user.firstName"
+                            class="form-control"
+                            placeholder="Enter the first name"
+                            required
+                            #fFname="ngModel"
+                        />
+                        <p class="info-message text-danger" *ngIf="(fFname.touched && !user.firstName) || (isSubmitted && !user.firstName)">
+                            This is a mandatory field
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="p-grid p-fluid col-md-12 col-sm-12">
+            <div class="row">
+                <div class="col-6 col-md-6">
+                    <div class="p-field">
+                        <label>Last Name *</label>
+                        <input
+                            [disabled]="isView"
+                            type="text"
+                            name="lastName"
+                            [(ngModel)]="user.lastName"
+                            class="form-control"
+                            placeholder="Enter the last name"
+                            required
+                            #fLname="ngModel"
+                        />
+                        <p class="info-message text-danger" *ngIf="(fLname.touched && !user.lastName) || (isSubmitted && !user.lastName)">
+                            This is a mandatory field
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-6">
+                    <div class="p-field">
+                        <label>Phone Number *</label>
+                        <input
+                            [disabled]="isView"
+                            type="text"
+                            name="telephone"
+                            [(ngModel)]="user.telephone"
+                            class="form-control"
+                            placeholder="Enter the pphone number"
+                            required
+                            #fTel="ngModel"
+                        />
+                        <p class="info-message text-danger" *ngIf="(fTel.touched && !user.telephone) || (isSubmitted && !user.telephone)">
+                            This is a mandatory field
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>               
+    </div>
+</form>

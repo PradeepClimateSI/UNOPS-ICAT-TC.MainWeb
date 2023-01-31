@@ -1,0 +1,16 @@
+<div class="outer">
+  <div id="carousel" class="img-upload-container" #scrollMe>
+    <div class="gridscroll" *ngIf="addable">
+      <label [htmlFor]="id" class="img-upload-container-p-0"><i class="pi pi-cloud-upload upload"></i></label>
+      <input #myInput [id]="id" (change)="change($event)" style="display: none" type="file"/>
+    </div>
+    <div class="gridscroll con" *ngFor="let file of files;let i = index">
+      <img *ngIf="file.fileType==='IMAGE'" (mouseover)="file.displayDelete=true" class="img-upload-preview" [src]="file.preview" alt="dummy" />
+      <label (mouseover)="file.displayDelete=true" *ngIf="file.fileType !=='IMAGE'" class="img-upload-preview-file">
+        {{file.name}}
+      </label>
+      <button (click)="deleteFile(i)" (mouseover)="file.displayDelete=true" *ngIf="file.displayDelete && deletable" pButton pRipple type="button" icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text btn"></button>
+    </div>
+
+  </div>
+</div>

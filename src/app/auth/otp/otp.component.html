@@ -1,0 +1,39 @@
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-md-6 login-content-wrapper">
+        <div class="login-inner">
+          <img style="height: 47px;padding-left: 20px" src="../../../assets/images/logo-new.png"/>
+          <h2 class="mt-4">Welcome ...</h2>
+          <p class="mb-35">
+            Please check your email and enter details below to
+            <span class="text-info font-weight-bold">reset</span> to your password.
+          </p>
+  
+  
+          <form #fData="ngForm" (ngSubmit)="checkOTP(fData)">
+            <div class="form-group mb-25">
+              <label class="font-weight-bold">OTP</label>
+              <input required type="number" #fuserName="ngModel" name="otp" [(ngModel)]="otp" placeholder="OTP" class="form-control"/>
+              <p class="info-message text-danger" *ngIf="
+                    (fuserName.errors?.['required'] && (fuserName.touched || fuserName.dirty)) ||
+                    (fuserName.errors?.['required']) && isSubmitted">
+                otp is required
+              </p>
+            </div>
+            
+            <p class="mb-35">
+              <a href="javascript:void(0)" (click)="goLogin()" class="text-info">Sign in</a>
+            </p>
+            <button [disabled]="!fData.form.valid" class="btn btn-primary btn-block text-uppercase btn-lg" type="submit">Check</button>
+          </form>
+  
+        </div>
+      </div>
+      <div class="col-md-6 login-back">
+  
+      </div>
+    </div>
+  </div>
+  
+   <!-- <p-toast position="top-right"></p-toast> -->
+  

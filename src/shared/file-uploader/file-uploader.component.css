@@ -1,0 +1,85 @@
+.img-upload-container{
+  width: 100%;
+  overflow: auto;
+  white-space: nowrap;
+  height: 100%;
+}
+
+.outer{
+  /*border-style: dotted;*/
+  border: 0.5px dotted lightgray ;
+  padding: 7px;
+  width: 300px;
+  border-radius: 5px;
+  max-height: 150px;
+}
+
+.img-upload-container-p-0{
+  margin-left: 5px;
+  background: lightgray;
+  border-radius: 5px;
+  text-align: center;
+  padding: 30px;
+  cursor: pointer;
+}
+
+.img-upload-preview{
+  border: none;
+  width: 113px;
+  height: 113px;
+  padding: 3px;
+  border-radius: 10px;
+}
+.img-upload-preview-file{
+  margin-left: 5px;
+  border-radius: 5px;
+  text-align: center;
+  padding: 30px;
+  background: lightgray;
+}
+.image-upload-container{
+  padding: 7px;
+}
+
+.upload{
+  font-size: 25px;
+  color: #77af5f;
+}
+
+
+.gridscroll{
+  display:inline-block;
+}
+
+.gridscroll img {
+  margin-right: 2px;
+}
+
+
+
+
+.con {
+  position: relative;
+ }
+
+.con .btn {
+  position: absolute;
+  top: 12%;
+  left: 90%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  /*background-color: #555;*/
+  /*color: white;*/
+  font-size: 16px;
+  /*padding: 12px 24px;*/
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.con .btn:hover {
+  border-radius: 20px;
+  border: 1px solid #ff000082;
+  background: #ff00001f;
+}

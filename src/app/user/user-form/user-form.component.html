@@ -1,0 +1,136 @@
+
+<form #fData="ngForm">
+  <div class="container pl-20 pr-20">
+    <div class="mb-12" *ngIf="!isSetting">
+      <h4 class="mt-4">{{ isNewEntry ? "Add" : isView ? "View": "Edit" }} User Details</h4>
+    </div>
+    <div class="mb-12" *ngIf="isSetting">
+      <h4 class="mt-4">Account Details</h4>
+    </div>
+    <div class="card">
+      <div class="p-grid p-fluid col-md-12 col-sm-12.">
+          <div class="row">
+              <div class="col-6 col-md-6">
+                <div class="p-field">
+                    <label >User Type *</label>
+                    <p-dropdown               
+                      appendTo="body" 
+                      [disabled]="isView"
+                      name="project"
+                      [options]="roles"
+                      [(ngModel)]="loginProfile.role"
+                      placeholder="Select .."
+                      optionLabel="name"
+                      #fRole="ngModel"                  
+                    ></p-dropdown>
+                    <p class="info-message text-danger"*ngIf="(!loginProfile.role && fRole.touched) || (fData.submitted && !loginProfile.role)">
+                      This is a mandatory field
+                    </p>
+                </div>
+              </div>
+
+              <div class="col-6 col-md-6">
+                <div class="p-field">
+                    <label>Email *</label>
+                    <input
+                      [disabled]="isView"
+                      type="email"
+                      name="firstname"
+                      [(ngModel)]="loginProfile.userName"
+                      class="form-control"
+                      placeholder="Enter the first name"
+                      required
+                      #fEmail="ngModel"
+                    />
+                    <p class="info-message text-danger" *ngIf="(fEmail.touched && !loginProfile.userName) || (fData.submitted && !loginProfile.userName)">
+                      This is a mandatory field
+                    </p>
+                </div>
+              </div>
+          </div>
+      </div>
+      <div class="p-grid p-fluid col-md-12 col-sm-12."  *ngIf="!isView">
+          <div class="row">
+              <div class="col-6 col-md-6">
+                  <div class="p-field">
+                    <label>Password *</label>
+                    <input
+                        [disabled]="isView"
+                        type="password"
+                        name="password"
+                        [(ngModel)]="loginProfile.password"
+                        class="form-control"
+                        placeholder="Enter the first name"
+                        required
+                        #fPassword="ngModel"
+                    />
+                    <p class="info-message text-danger" *ngIf="(isNewEntry && (fPassword.touched && !loginProfile.password) || (fData.submitted && !loginProfile.password))">
+                        This is a mandatory field
+                    </p>
+                  </div>
+              </div>
+
+              <div class="col-6 col-md-6">
+                <div class="p-field">
+                    <label>Confirm password *</label>
+                    <input
+                        [disabled]="isView"
+                        type="password"
+                        name="cpassword"
+                        [(ngModel)]="password"
+                        class="form-control"
+                        placeholder="Enter the first name"
+                        required
+                        #fConPassword="ngModel"
+                    />
+                    <p class="info-message text-danger" *ngIf="( (isNewEntry || loginProfile.password)  && (fConPassword.touched && !password) || (fData.submitted && !password))">
+                        This is a mandatory field
+                    </p>
+
+                    <p class="info-message text-danger" *ngIf="fConPassword.touched && password !== loginProfile.password ">
+                        Passwords are not mtching
+                    </p>
+                </div>
+            </div>
+          </div>
+      </div>                            
+    </div>
+
+
+    <app-user-details-form></app-user-details-form>
+
+
+    <div class="card">
+      <div class="row p-grid p-fluid col-md-6 col-sm-6">
+        <div class="d-flex col-4 justify-content-end p-button-vertical mb-0 pl-2" *ngIf="!isSetting">
+            <button class="btn btn-secondary text-uppercase" (click)="onBackClick()">Back</button>
+        </div>
+        <div *ngIf="!isNewEntry" class="d-flex col-4 justify-content-end p-button-vertical mb-0 pl-2">
+            <button class="btn btn-danger text-uppercase" type="button"(click)="onDeleteClick()">Delete</button>
+        </div>
+        <div class="d-flex col-4 justify-content-end p-button-vertical mb-0 pl-2">
+            <button (click)="save(fData)" class="btn btn-primary text-uppercase" type="submit">Save</button>
+        </div>
+      </div>
+      <div class="row">
+          <div *ngIf="creating" class="d-flex col-6 justify-content-end">
+              <p class="info-message text-warning mt-2" *ngIf="true">
+              please wait a moment...
+              </p>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  
+</form>  
+
+
+  
+   <!-- <p-toast position="top-right"></p-toast> -->
+    <!-- <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog> -->
+  
+  
+  
+  
+  
