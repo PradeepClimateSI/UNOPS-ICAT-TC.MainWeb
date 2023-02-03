@@ -24,7 +24,7 @@ export class UserListComponent implements OnInit {
     private router: Router,
     private messageService: MessageService,
     private activatedRoute:ActivatedRoute,
-    private loginProfileControllerServiceProxy: LoginProfileControllerServiceProxy,
+    // private loginProfileControllerServiceProxy: LoginProfileControllerServiceProxy,
 
   ) { }
 
@@ -117,7 +117,7 @@ export class UserListComponent implements OnInit {
   deleteLoginProfile(id: string){    
     //@ts-ignore
     this.loginProfileControllerServiceProxy.remove(id)
-    .subscribe(res => {
+    .subscribe((res: any) => {
       console.log(res)
     })
   }

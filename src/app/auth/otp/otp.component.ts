@@ -19,8 +19,8 @@ export class OtpComponent implements OnInit {
   constructor(
     private activatedRoute:ActivatedRoute,
     private router: Router,
-    private authControllerServiceProxy: AuthControllerServiceProxy,
-    private authServiceProxy: ServiceProxy,
+    // private authControllerServiceProxy: AuthControllerServiceProxy,
+    // private authServiceProxy: ServiceProxy,
     private messageService: MessageService,
 
   ) { }
@@ -29,37 +29,37 @@ export class OtpComponent implements OnInit {
     const resetKey = localStorage.getItem('reset-key');
     if(resetKey){
       this.userName = resetKey;
-      const profileState = await this.getProfileState(this.userName);
-      if(profileState !== ProfileStatus.Resetting){
-        this.goLogin(); 
-      }
+      // const profileState = await this.getProfileState(this.userName);
+      // if(profileState !== ProfileStatus.Resetting){
+      //   this.goLogin(); 
+      // }
     }else{
       this.goLogin();
     }
   }
 
-  checkOTP(form: NgForm){
-    if(this.userName){
-      this.authControllerServiceProxy.submitOTP(this.userName, this.otp).subscribe(res => {
-        if(res.status){
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: res.message,
-            closable: true,
-          });
-          this.goReset();
-        }else{
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: res.message,
-            closable: true,
-          });
-        }
-      })
-    }    
-  }
+  // checkOTP(form: NgForm){
+  //   if(this.userName){
+  //     this.authControllerServiceProxy.submitOTP(this.userName, this.otp).subscribe(res => {
+  //       if(res.status){
+  //         this.messageService.add({
+  //           severity: 'success',
+  //           summary: 'Success',
+  //           detail: res.message,
+  //           closable: true,
+  //         });
+  //         this.goReset();
+  //       }else{
+  //         this.messageService.add({
+  //           severity: 'error',
+  //           summary: 'Error',
+  //           detail: res.message,
+  //           closable: true,
+  //         });
+  //       }
+  //     })
+  //   }    
+  // }
 
   goReset(){
     this.router.navigate(['../reset'], {relativeTo:this.activatedRoute});
@@ -69,24 +69,24 @@ export class OtpComponent implements OnInit {
     this.router.navigate(['../login'], {relativeTo:this.activatedRoute});
   }
 
-  async getProfileState(userName: string): Promise<number>{
-    const profiles = await this.authServiceProxy.getManyBaseLoginProfileControllerLoginProfile(
-      ['profileState'],
-      undefined,
-      [ "status||$ne||"+RecordStatus.Deleted, "userName||$eq||"+userName],
-      undefined,
-      undefined,
-      undefined,
-      2,
-      0,
-      0,
-      0
-    ).toPromise();
-    if(profiles.count > 0){
-      return profiles.data[0].profileState;
-    }else{
-      return -1;
-    }
-  }
+  // async getProfileState(userName: string): Promise<number>{
+  //   const profiles = await this.authServiceProxy.getManyBaseLoginProfileControllerLoginProfile(
+  //     ['profileState'],
+  //     undefined,
+  //     [ "status||$ne||"+RecordStatus.Deleted, "userName||$eq||"+userName],
+  //     undefined,
+  //     undefined,
+  //     undefined,
+  //     2,
+  //     0,
+  //     0,
+  //     0
+  //   ).toPromise();
+  //   if(profiles.count > 0){
+  //     return profiles.data[0].profileState;
+  //   }else{
+  //     return -1;
+  //   }
+  // }
 
 }
