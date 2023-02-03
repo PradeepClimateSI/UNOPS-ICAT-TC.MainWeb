@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { LoardMoreComponent } from './landing-page/loard-more/loard-more.component';
 import { DashboardBaseComponent } from './dashboard-base/dashboard-base.component';
+import { ClimateActionComponent } from './climate-action/climate-action/climate-action.component';
 // import { UnitComponent } from './unit_/unit.component';
 
 const routes: Routes = [
@@ -13,6 +14,7 @@ const routes: Routes = [
 
   { path: 'landing-page', component: LandingPageComponent },
   { path: 'loard-more', component: LoardMoreComponent },
+  { path: 'climate-action', component: ClimateActionComponent },
 
   {
     path: 'auth',

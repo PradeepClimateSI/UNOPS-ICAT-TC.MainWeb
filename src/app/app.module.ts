@@ -74,6 +74,7 @@ import {
 
 import { AUTH_API_BASE_URL, ServiceProxy as AuthServiceProxy, AuthControllerServiceProxy } from 'shared/service-proxies/auth-service-proxies';
 import { DashboardBaseComponent } from './dashboard-base/dashboard-base.component';
+import { ClimateActionComponent } from './climate-action/climate-action/climate-action.component';
 
 export function getRemoteServiceBaseUrl(): string {
   return environment.baseUrlAPI;
@@ -88,6 +89,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
     declarations: [
         AppComponent,
         DashboardBaseComponent,
+        ClimateActionComponent,
     ],
     imports: [
         FormsModule,

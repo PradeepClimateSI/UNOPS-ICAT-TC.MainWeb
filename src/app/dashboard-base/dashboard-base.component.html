@@ -39,6 +39,26 @@
                 <div class=""></div>
                 Landing Page
               </div> -->
+              <p-accordion>
+                <p-accordionTab data-assess>
+                  <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
+                    <div>
+                      <p class="mb-2">Policies</p>
+                    </div>
+                  </p-header>
+                  <div class="sidebar-items--link d-flex flex-column align-items-start"
+                      [routerLink]="['/climate-action']"
+                      routerLinkActive="selected">
+                    <p class="mb-0 ml-20">Manage policies</p>
+                  </div>
+  
+                  <div class="sidebar-items--link d-flex flex-column align-items-start"
+                      [routerLink]="[]"
+                      routerLinkActive="selected">
+                    <p class="mb-0 ml-20">Accepted policies</p>
+                  </div>
+                </p-accordionTab>
+              </p-accordion>
   
               <p-accordion>
                 <p-accordionTab data-assess>
