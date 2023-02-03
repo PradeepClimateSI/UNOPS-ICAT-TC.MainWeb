@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import { AppService, RecordStatus } from 'shared/AppService';
-import { Role, ServiceProxy } from 'shared/service-proxies/auth-service-proxies';
+import { UserType, ServiceProxy } from 'shared/service-proxies/auth-service-proxies';
 
 @Component({
   selector: 'app-dashboard-base',
@@ -17,41 +17,41 @@ export class DashboardBaseComponent implements OnInit {
 
   userName: string = "";
   userRole: string = "";
-  roles: Role[] = [];
+  roles: UserType[] = [];
 
   constructor(
     private confirmationService: ConfirmationService,
     private appService: AppService, 
-    private authServiceProxy: ServiceProxy
+    // private authServiceProxy: ServiceProxy,
     ) { }
 
   ngOnInit() {
     this.userName = `${this.appService.getUserName()}`;
-    this.getRoles();''
+    // this.getRoles();''
   }
 
-  async getRoles(){
-    const r = this.appService.getRole();
-    if(r){
-      const res = await this.authServiceProxy.getManyBaseRoleControllerRole(
-        undefined,
-        undefined,
-        [ "status||$ne||"+RecordStatus.Deleted],
-        undefined,
-        undefined,
-        undefined,
-        100,
-        0,
-        0,
-        0
-      ).toPromise();
-      this.roles = res.data;
-      const rr = this.roles.find(role => role.code === r)    
-      if(rr){
-        this.userRole = rr.name;
-      }
-    }
-  }
+  // async getRoles(){
+  //   const r = this.appService.getRole();
+  //   if(r){
+  //     const res = await this.authServiceProxy.getManyBaseRoleControllerUserType(
+  //       undefined,
+  //       undefined,
+  //       [ "status||$ne||"+RecordStatus.Deleted],
+  //       undefined,
+  //       undefined,
+  //       undefined,
+  //       100,
+  //       0,
+  //       0,
+  //       0
+  //     ).toPromise();
+  //     this.roles = res.data;
+  //     const rr = this.roles.find(role => role.code === r)    
+  //     if(rr){
+  //       this.userRole = rr.name;
+  //     }
+  //   }
+  // }
 
   logout(){
 

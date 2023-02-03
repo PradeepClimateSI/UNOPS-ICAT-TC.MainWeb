@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
 import { UsersControllerServiceProxy, ServiceProxy } from 'shared/service-proxies/service-proxies';
-import {LoginProfile, LoginProfileControllerServiceProxy, Role, ServiceProxy as AuthServiceProxy } from 'shared/service-proxies/auth-service-proxies';
+import {LoginProfile, LoginProfileControllerServiceProxy, UserType, ServiceProxy as AuthServiceProxy } from 'shared/service-proxies/auth-service-proxies';
 import { UserDetailsFormComponent } from '../user-details-form/user-details-form.component';
 
 @Component({
@@ -24,7 +24,7 @@ export class UserFormComponent implements OnInit {
 
   password: string = "";
   loginProfile: LoginProfile = new LoginProfile();
-  roles: Role[] = [];
+  roles: UserType[] = [];
 
 
   @ViewChild(UserDetailsFormComponent) userDetailsFormComponent:UserDetailsFormComponent;
@@ -60,37 +60,37 @@ export class UserFormComponent implements OnInit {
       const loginProfileId = this.appService.getProfileId();
       const userName = this.appService.getUserName();
       const role = this.appService.getRole();
-      if(loginProfileId && userName && role){
-        this.loginProfile.userName = userName; 
-        this.loginProfile.id = loginProfileId;
-        const r = this.roles.find(r => r.code === role);
-        if(r){
-          this.loginProfile.role = r;
-        }     
+      // if(loginProfileId && userName && role){
+      //   this.loginProfile.userName = userName; 
+      //   this.loginProfile.id = loginProfileId;
+      //   const r = this.roles.find(r => r.code === role);
+      //   if(r){
+      //     this.loginProfile.role = r;
+      //   }     
 
-        console.log(this.loginProfile.id);
+      //   console.log(this.loginProfile.id);
         
-        this.serviceProxy.getManyBaseUsersControllerUser(
-          undefined,
-          undefined,
-          [ "status||$ne||"+RecordStatus.Deleted, "loginProfile||$eq||"+this.loginProfile.id ],
-          undefined,
-          undefined,
-          undefined,
-          10,
-          0,
-          0,
-          0
-        ).subscribe(res => {
-          console.log(res);
-        })
-      }
+      //   this.serviceProxy.getManyBaseUsersControllerUser(
+      //     undefined,
+      //     undefined,
+      //     [ "status||$ne||"+RecordStatus.Deleted, "loginProfile||$eq||"+this.loginProfile.id ],
+      //     undefined,
+      //     undefined,
+      //     undefined,
+      //     10,
+      //     0,
+      //     0,
+      //     0
+      //   ).subscribe(res => {
+      //     console.log(res);
+      //   })
+      // }
     }else{
       this.route.queryParams.subscribe((params) => {
         if(params['id']){
           this.isNewEntry = false;
           this.editEntryId = params['id'];
-          this.getUserData();
+          // this.getUserData();
         }
       });
     }
@@ -98,7 +98,7 @@ export class UserFormComponent implements OnInit {
   }
 
   async getRoles(){
-    const res = await this.authServiceProxy.getManyBaseRoleControllerRole(
+    const res = await this.authServiceProxy.getManyBaseRoleControllerUserType(
       undefined,
       undefined,
       [ "status||$ne||"+RecordStatus.Deleted],
@@ -113,26 +113,26 @@ export class UserFormComponent implements OnInit {
     this.roles = res.data
   }
 
-  getUserData(){
-    this.usersControllerServiceProxy.getUserDetailsWithLoginProfile(this.editEntryId)
-    .subscribe(res => {
-      this.loginProfile.userName = res.userName;
-      this.loginProfile.id = res.user.loginProfile;
-      const r = this.roles.find(r => r.code === res.role);
-      if(r){
-        this.loginProfile.role = r;
-      }    
-      this.userDetailsFormComponent.initUser(res.user);  
-    })
-  }
+  // getUserData(){
+  //   this.usersControllerServiceProxy.getUserDetailsWithLoginProfile(this.editEntryId)
+  //   .subscribe(res => {
+  //     this.loginProfile.userName = res.userName;
+  //     this.loginProfile.id = res.user.loginProfile;
+  //     const r = this.roles.find(r => r.code === res.role);
+  //     if(r){
+  //       this.loginProfile.userType = r;
+  //     }    
+  //     this.userDetailsFormComponent.initUser(res.user);  
+  //   })
+  // }
 
-  private isSupperRole(){
-    return this.loginProfile.role.code === LoginRole.MASTER_ADMIN || this.loginProfile.role.code === LoginRole.CSI_ADMIN; 
-  }
+  // private isSupperRole(){
+  //   return this.loginProfile.userType.code === LoginRole.MASTER_ADMIN || this.loginProfile.userType.code === LoginRole.CSI_ADMIN; 
+  // }
 
   private abaleToSave(form: NgForm){
-    return (form.valid || (!this.isNewEntry && this.loginProfile.role && this.loginProfile.userName) ) && 
-      this.loginProfile.role && this.userDetailsFormComponent.isValid() ;
+    return (form.valid || (!this.isNewEntry && this.loginProfile.userType && this.loginProfile.userName) ) 
+    // &&      this.loginProfile.userType && this.userDetailsFormComponent.isValid() ;
   }
 
   async save(form: NgForm) {
@@ -145,9 +145,9 @@ export class UserFormComponent implements OnInit {
             this.isNewEntry = false;
             this.loginProfile = res;
             let userSaved = true;
-            if(!this.isSupperRole()){
-              userSaved = await this.userDetailsFormComponent.save(res.id, this.loginProfile.userName)
-            }
+            // if(!this.isSupperRole()){
+            //   userSaved = await this.userDetailsFormComponent.save(res.id, this.loginProfile.userName)
+            // }
             if(!userSaved){
               // deleted login profile
             }
@@ -179,24 +179,24 @@ export class UserFormComponent implements OnInit {
         this.loginProfileControllerServiceProxy.updateOneLoginProfile(this.loginProfile)
         .subscribe(async res => {
           let userSaved = true;
-          if(!this.isSupperRole()){
-            userSaved = await this.userDetailsFormComponent.save(res.id, this.loginProfile.userName)
-          }
-          if(res && userSaved){
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Success',
-              detail: 'has updated successfully',
-              closable: true,
-            });
-          }else{
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error',
-              detail: "Failed to update",
-              closable: true,
-            });
-          }
+          // if(!this.isSupperRole()){
+          //   userSaved = await this.userDetailsFormComponent.save(res.id, this.loginProfile.userName)
+          // }
+          // if(res && userSaved){
+          //   this.messageService.add({
+          //     severity: 'success',
+          //     summary: 'Success',
+          //     detail: 'has updated successfully',
+          //     closable: true,
+          //   });
+          // }else{
+          //   this.messageService.add({
+          //     severity: 'error',
+          //     summary: 'Error',
+          //     detail: "Failed to update",
+          //     closable: true,
+          //   });
+          // }
         }, err=> {
           this.messageService.add({
             severity: 'error',

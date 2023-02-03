@@ -8,7 +8,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import { TokenInterceptor } from 'src/shared/token-interceptor ';
-import { HttpClientJsonpModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
 import { PaginatorModule } from 'primeng/paginator';
 import { AutoCompleteModule } from 'primeng/autocomplete';
@@ -34,7 +34,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
-import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
+import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { ChartModule } from 'primeng/chart';
 import { TreeModule } from 'primeng/tree';
 
@@ -45,19 +45,7 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
 
 import { environment } from '../environments/environment';
 import { MultiSelectModule } from 'primeng/multiselect';
-import {
-  NbLayoutDirectionService,
-  NbMenuModule,
-  NbOverlay,
-  NbOverlayModule,
-  NbOverlayService,
-  NbPositionBuilderService,
-  NbSidebarModule,
-  NbThemeModule,
-  NbToastrModule,
-  NbToastrService,
-  NbLayoutModule,
-} from '@nebular/theme';
+import { NbThemeModule,  NbLayoutModule,} from '@nebular/theme';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MessagesModule } from 'primeng/messages';
 import { TableModule } from 'primeng/table';
@@ -70,15 +58,11 @@ import { LoardMoreComponent } from './landing-page/loard-more/loard-more.compone
 import { DatePipe } from '@angular/common';
 import {RippleModule} from "primeng/ripple";
 import {InputTextModule} from "primeng/inputtext";
-import { DashboardBaseComponent } from './dashboard-base/dashboard-base.component';
+// import { DashboardBaseComponent } from './dashboard-base/dashboard-base.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { ErrorInterceptor } from './auth/error.interceptor';
 import { AuthGuard } from './auth/auth.guard';
 
-import {
-  ES_API_BASE_URL,
-  ServiceProxy as EsServiceProxy,
-} from 'shared/service-proxies/es-service-proxies';
 
 
 import {
@@ -89,7 +73,7 @@ import {
 } from 'shared/service-proxies/service-proxies';
 
 import { AUTH_API_BASE_URL, ServiceProxy as AuthServiceProxy, AuthControllerServiceProxy } from 'shared/service-proxies/auth-service-proxies';
-// import { EmissionFactorsModule } from './ef-management/emission-factors.module';
+import { DashboardBaseComponent } from './dashboard-base/dashboard-base.component';
 
 export function getRemoteServiceBaseUrl(): string {
   return environment.baseUrlAPI;
@@ -163,7 +147,6 @@ export function getAuthRemoteServiceBaseUrl(): string {
     providers: [
         ConfirmationService,
         ServiceProxy,
-        EsServiceProxy,
         AuthServiceProxy,
         DocumentControllerServiceProxy,
         ConfirmationService,
@@ -172,7 +155,6 @@ export function getAuthRemoteServiceBaseUrl(): string {
         DatePipe,
         {provide: API_BASE_URL, useFactory: getRemoteServiceBaseUrl},
         {provide: AUTH_API_BASE_URL, useFactory: getAuthRemoteServiceBaseUrl},
-        {provide: ES_API_BASE_URL, useFactory: getRemoteServiceESBaseUrl},
         HttpClientModule,
         Location,
         DynamicDialogModule,

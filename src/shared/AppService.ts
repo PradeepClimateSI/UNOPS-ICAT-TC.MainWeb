@@ -17,10 +17,16 @@ export enum RecordStatus {
 }
 
 export enum LoginRole {
-  MASTER_ADMIN = "MASTER_ADMIN",
-  CSI_ADMIN = "CSI_ADMIN",
-  ORG_ADMIN = "ORG_ADMIN",
-  ORG_USER = "ORG_USER",
+  MASTER_ADMIN ="Master_Admin",
+  Country_Admin = "Country Admin",
+  Verifier = "Verifier",
+  Sector_Admin = "Sector Admin",
+  MRV_Admin = "MRV Admin",
+  Technical_Team = "Technical Team",
+  Data_Collection_Team = "Data Collection Team",
+  QC_Team = "QC Team",
+  Institution_Admin ="Institution Admin",
+  Data_Entry_Operator ="Data Entry Operator"
 }
 
 export enum AuthData{
@@ -59,7 +65,7 @@ export class AppService {
     private confirmationService: ConfirmationService,
     private userIdle: UserIdleService, 
     private router: Router, 
-    private authControllerServiceProxy: AuthControllerServiceProxy,
+    // private authControllerServiceProxy: AuthControllerServiceProxy,
     private serviceProxy: ServiceProxy,
   ) {
     const token = this.getToken();
@@ -125,22 +131,22 @@ export class AppService {
       const jwtToken = JSON.parse(atob(token.split('.')[1]));
       const expires = new Date(jwtToken.exp * 1000);
       const timeout = time === null ? expires.getTime() - ( Date.now() + (60 * 1 * 1000)): time;
-      this.refreshTokenTimeout = setTimeout(() => this.refreshToken().subscribe(), timeout);
+      // this.refreshTokenTimeout = setTimeout(() => this.refreshToken().subscribe(), timeout);
     }    
   }
 
-  private refreshToken() {
-    let b = new RefreshReqRes();
-      let token = this.getRefreshToken()
-      if(token){
-        b.token =  `${token}`;
-      }
-      return this.authControllerServiceProxy.refresh(b)
-      .pipe(map(res => {
-        this.steToken(res.token);
-        this.startRefreshTokenTimer();
-      }))
-  }
+  // private refreshToken() {
+  //   let b = new RefreshReqRes();
+  //     let token = this.getRefreshToken()
+  //     if(token){
+  //       b.token =  `${token}`;
+  //     }
+  //     return this.authControllerServiceProxy.refresh(b)
+  //     .pipe(map(res => {
+  //       this.steToken(res.token);
+  //       this.startRefreshTokenTimer();
+  //     }))
+  // }
 
   async getUser(): Promise<User | null>{
 

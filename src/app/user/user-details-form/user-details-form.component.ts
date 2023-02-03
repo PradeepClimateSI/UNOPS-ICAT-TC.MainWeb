@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { RecordStatus } from 'shared/AppService';
-import { ServiceProxy, Unit, User, UsersControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { ServiceProxy,  User, UsersControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 
 @Component({
@@ -23,7 +23,7 @@ export class UserDetailsFormComponent implements OnInit {
 
 
 
-  units: Unit[] = [];
+  // units: Unit[] = [];
   @ViewChild('fData', { static: true }) form: NgForm;
   
   constructor(
@@ -42,41 +42,41 @@ export class UserDetailsFormComponent implements OnInit {
         this.isView =true;
       }
     });
-    this.getUnits();
+    // this.getUnits();
   }
 
-  initUser(user: User){
-    this.user = user;
-    this.serviceProxy.getOneBaseUsersControllerUser(this.user.id, ["unit"], undefined, undefined)
-    .subscribe(res => {
-      const u = this.units.find(u => u.id === res.unit.id);
-      if(u){
-        this.user.unit = u;
-      }
-    })
-  }
+  // initUser(user: User){
+  //   this.user = user;
+  //   this.serviceProxy.getOneBaseUsersControllerUser(this.user.id, ["unit"], undefined, undefined)
+  //   .subscribe(res => {
+  //     const u = this.units.find(u => u.id === res.unit.id);
+  //     if(u){
+  //       this.user.unit = u;
+  //     }
+  //   })
+  // }
 
-  getUnits(){
-    this.serviceProxy.getManyBaseUnitControllerUnit(
-      undefined,
-      undefined,
-      [ "status||$ne||"+RecordStatus.Deleted],
-      undefined,
-      undefined,
-      undefined,
-      1000,
-      0,
-      0,
-      0
-    ).subscribe((res: any) => {
-      this.units = res.data;    
-    });
-  }
+  // getUnits(){
+  //   this.serviceProxy.getManyBaseUnitControllerUnit(
+  //     undefined,
+  //     undefined,
+  //     [ "status||$ne||"+RecordStatus.Deleted],
+  //     undefined,
+  //     undefined,
+  //     undefined,
+  //     1000,
+  //     0,
+  //     0,
+  //     0
+  //   ).subscribe((res: any) => {
+  //     this.units = res.data;    
+  //   });
+  // }
 
-  isValid(): boolean{
-    this.isSubmitted = true;
-    return this.form.form.valid && this.user.unit !== undefined
-  }
+  // isValid(): boolean{
+  //   this.isSubmitted = true;
+  //   // return this.form.form.valid && this.user.unit !== undefined
+  // }
 
   async save(loginProfileId: string, email: string): Promise<boolean>{
     this.user.email = email;
