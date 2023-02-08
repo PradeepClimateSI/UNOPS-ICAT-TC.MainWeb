@@ -70,11 +70,13 @@ import {
   DocumentControllerServiceProxy,
   ServiceProxy,
   ProjectControllerServiceProxy,
+  CountryControllerServiceProxy,
 } from 'shared/service-proxies/service-proxies';
 
 import { AUTH_API_BASE_URL, ServiceProxy as AuthServiceProxy, AuthControllerServiceProxy } from 'shared/service-proxies/auth-service-proxies';
 import { DashboardBaseComponent } from './dashboard-base/dashboard-base.component';
 import { ClimateActionComponent } from './climate-action/climate-action/climate-action.component';
+import { UploadFilesComponent } from './components/upload-files/upload-files.component';
 
 export function getRemoteServiceBaseUrl(): string {
   return environment.baseUrlAPI;
@@ -90,6 +92,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         AppComponent,
         DashboardBaseComponent,
         ClimateActionComponent,
+        UploadFilesComponent,
     ],
     imports: [
         FormsModule,
@@ -154,10 +157,12 @@ export function getAuthRemoteServiceBaseUrl(): string {
         ConfirmationService,
         AuthControllerServiceProxy,
         ProjectControllerServiceProxy,
+        CountryControllerServiceProxy,
         DatePipe,
         {provide: API_BASE_URL, useFactory: getRemoteServiceBaseUrl},
         {provide: AUTH_API_BASE_URL, useFactory: getAuthRemoteServiceBaseUrl},
         HttpClientModule,
+       
         Location,
         DynamicDialogModule,
         {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},

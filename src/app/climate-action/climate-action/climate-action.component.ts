@@ -22,10 +22,13 @@ import {
   User,
   //SectorControllerServiceProxy,
   UsersControllerServiceProxy,
-  //CountryControllerServiceProxy,
+  CountryControllerServiceProxy,
 } from 'shared/service-proxies/service-proxies';
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
+import { UploadFilesComponent } from '../../components/upload-files/upload-files.component';
+
 import * as moment from 'moment';
 import jspdf from 'jspdf';
 import jsPDF from 'jspdf';
@@ -131,7 +134,7 @@ export class ClimateActionComponent implements OnInit {
     private location: Location,
     private messageService: MessageService,
     private projectProxy: ProjectControllerServiceProxy,
-    //private sectorProxy: CountryControllerServiceProxy
+    private sectorProxy: CountryControllerServiceProxy
   )
   {}
 
@@ -144,12 +147,12 @@ export class ClimateActionComponent implements OnInit {
     filterUser.push('username||$eq||' + this.userName);
     
 
-    // if (countryId>0){
-    //   this.sectorProxy.getCountrySector(countryId).subscribe((res: any) => {
-    //     this.sectorList = res;
-    //     console.log("++++" ,this.sectorList)
-    //   });
-    // }
+    if (countryId>0){
+      this.sectorProxy.getCountrySector(countryId).subscribe((res: any) => {
+        this.sectorList = res;
+        console.log("++++" ,this.sectorList)
+      });
+    }
     
 
     this.serviceProxy
@@ -871,10 +874,10 @@ export class ClimateActionComponent implements OnInit {
 
     this.onSectorChange(event);
 
-    // this.sectorProxy.getCountrySector(this.project.country.id).subscribe((res: any) => {
-    //   this.sectorList = res;
-    //   console.log("++++" ,this.sectorList)
-    // });
+    this.sectorProxy.getCountrySector(this.project.country.id).subscribe((res: any) => {
+      this.sectorList = res;
+      console.log("++++" ,this.sectorList)
+    });
   }
 
   onSectorChange(event: any) {

@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseUrlAPI: 'http://localhost:7080',
+  baseUrlAPI: 'http://localhost:7081',
   esbaseUrlAPI: 'http://localhost:7090',
   authBaseUrlAPI: 'http://localhost:7081',
   baseUrlAPIDocUploadAPI: 'http://localhost:7080/document/upload2',
