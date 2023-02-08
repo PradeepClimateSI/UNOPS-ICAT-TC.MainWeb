@@ -76,7 +76,9 @@ import {
 import { AUTH_API_BASE_URL, ServiceProxy as AuthServiceProxy, AuthControllerServiceProxy } from 'shared/service-proxies/auth-service-proxies';
 import { DashboardBaseComponent } from './dashboard-base/dashboard-base.component';
 import { ClimateActionComponent } from './climate-action/climate-action/climate-action.component';
-import { UploadFilesComponent } from './components/upload-files/upload-files.component';
+import { ViewComponent } from './climate-action/view/view.component';
+import { DocumentUploadComponent } from './shared/document-upload/document-upload.component';
+import {FileUploadModule} from 'primeng/fileupload';
 
 export function getRemoteServiceBaseUrl(): string {
   return environment.baseUrlAPI;
@@ -92,7 +94,8 @@ export function getAuthRemoteServiceBaseUrl(): string {
         AppComponent,
         DashboardBaseComponent,
         ClimateActionComponent,
-        UploadFilesComponent,
+        ViewComponent,
+        DocumentUploadComponent,
     ],
     imports: [
         FormsModule,
@@ -147,7 +150,8 @@ export function getAuthRemoteServiceBaseUrl(): string {
         RippleModule,
         InputTextModule,
         DialogModule,
-        DashboardModule,     
+        DashboardModule,  
+        FileUploadModule,   
     ],
     providers: [
         ConfirmationService,

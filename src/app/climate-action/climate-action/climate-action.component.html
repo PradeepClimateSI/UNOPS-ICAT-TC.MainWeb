@@ -1170,14 +1170,14 @@
   
             <ng-container *ngIf="isDownloadMode == 0; else elseBlockdocuments">
             <div class="col-12 wrapper-doc-upload mt-4">
-              <!-- <app-document-upload
+              <app-document-upload
                 [doucmentList]="documents"
                 [documentOwner]="documentsDocumentOwner"
                 [documentOwnerId]="documentOwnerId"
                 [isNew]="false"
                 [showUpload]="true"
               >
-              </app-document-upload> -->
+              </app-document-upload>
             </div>
           </ng-container>
           <ng-template #elseBlockdocuments>

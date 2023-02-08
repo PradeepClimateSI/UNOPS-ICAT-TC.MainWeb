@@ -27,7 +27,6 @@ import {
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { UploadFilesComponent } from '../../components/upload-files/upload-files.component';
 
 import * as moment from 'moment';
 import jspdf from 'jspdf';
