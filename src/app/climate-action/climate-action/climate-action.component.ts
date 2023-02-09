@@ -10,7 +10,7 @@ import {
   FinancingScheme,
   Institution,
   AggregatedAction as Ndc,
-  // NdcControllerServiceProxy,
+  NdcControllerServiceProxy,
   ClimateAction as Project,
   ProjectApprovalStatus,
   ProjectControllerServiceProxy,
@@ -23,6 +23,7 @@ import {
   //SectorControllerServiceProxy,
   UsersControllerServiceProxy,
   CountryControllerServiceProxy,
+  SectorControllerServiceProxy,
 } from 'shared/service-proxies/service-proxies';
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -46,18 +47,18 @@ export class ClimateActionComponent implements OnInit {
 
   selectedcitie: any = {};
   ndcList: Ndc[];
+  SubndcList: SubNdc[];
 
   options: any;
   relatedItem: Project[] = [];
   exsistingPrpject: boolean = false;
   countryList: Country[] = [];
- projectOwnerList: ProjectOwner[] = [];
+  projectOwnerList: ProjectOwner[] = [];
   projectStatusList: ProjectStatus[] = [];
- sectorList: Sector[] = [];
+  sectorList: Sector[] = [];
   financingSchemeList: FinancingScheme[] = [];
   documents: Documents[] = [];
-  documentsDocumentOwner: DocumentsDocumentOwner =
-    DocumentsDocumentOwner.Project;
+  documentsDocumentOwner: DocumentsDocumentOwner = DocumentsDocumentOwner.Project;
   editEntytyId: number = 0;
   anonymousEditEntytyId: number = 0;
   documentOwnerId: number = 0;
@@ -108,7 +109,6 @@ export class ClimateActionComponent implements OnInit {
   counID:number;
 
   isSector: boolean = false;
-  a= this.project.policyScope
 
   @ViewChild('gmap') gmap: any;
   @ViewChild('op') overlay: any;
@@ -133,7 +133,8 @@ export class ClimateActionComponent implements OnInit {
     private location: Location,
     private messageService: MessageService,
     private projectProxy: ProjectControllerServiceProxy,
-    private sectorProxy: CountryControllerServiceProxy
+    private sectorProxy: SectorControllerServiceProxy,
+    private ndcProxy :NdcControllerServiceProxy, 
   )
   {}
 
@@ -144,14 +145,16 @@ export class ClimateActionComponent implements OnInit {
     this.userName = localStorage.getItem('user_name')!;
     let filterUser: string[] = [];
     filterUser.push('username||$eq||' + this.userName);
+    console.log("countryId",countryId)
     
 
     if (countryId>0){
       this.sectorProxy.getCountrySector(countryId).subscribe((res: any) => {
         this.sectorList = res;
         console.log("++++" ,this.sectorList)
+        console.log("res" ,res)
       });
-    }
+    } // countryid = 0
     
 
     this.serviceProxy
@@ -175,6 +178,7 @@ export class ClimateActionComponent implements OnInit {
       });
 
     this.route.queryParams.subscribe((params) => {
+      console.log("params",params)
       this.editEntytyId = 0;
       this.anonymousEditEntytyId = 0;
       this.documentOwnerId = 0;
@@ -193,6 +197,7 @@ export class ClimateActionComponent implements OnInit {
     });
 
     if (countryId) {
+      
       this.serviceProxy
         .getOneBaseCountryControllerCountry(
           countryId,
@@ -201,12 +206,14 @@ export class ClimateActionComponent implements OnInit {
           undefined
         )
         .subscribe((res) => {
+
           this.project.country = res;
           this.isSector = true;
           // console.log('tokenPayloadmasssge',res);
         });
     } else {
       this.project.country = new Country();
+      // console.log("pr",this.project)   // working
     }
     // this.project.country = new Country();
 
@@ -222,7 +229,7 @@ export class ClimateActionComponent implements OnInit {
 
     countryaFilter.push('country.id||$eq||' + 1);
     // this.serviceProxy
-    //   .getManyBaseProjectControllerProject(
+    //   .getManyBaseProjectControllerClimateAction(
     //     undefined,
     //     undefined,
     //     countryaFilter,
@@ -254,6 +261,7 @@ export class ClimateActionComponent implements OnInit {
       )
       .subscribe((res: any) => {
         this.countryList = res.data;
+        console.log("countrylist",this.countryList)  // working
       });
 
     this.serviceProxy
@@ -271,6 +279,7 @@ export class ClimateActionComponent implements OnInit {
       )
       .subscribe((res: any) => {
         this.projectOwnerList = res.data;
+        //console.log("projectOwnerList",this.projectOwnerList) // working
       });
 
     this.serviceProxy
@@ -288,231 +297,233 @@ export class ClimateActionComponent implements OnInit {
       )
       .subscribe((res: any) => {
         this.projectStatusList = res.data;
+        // console.log("projectStatusList",this.projectStatusList)   // working
       });
 
     this.serviceProxy
-      // .getManyBaseSectorControllerSector(
-      //   undefined,
-      //   undefined,
-      //   undefined,
-      //   undefined,
-      //   ['name,ASC'],
-      //   undefined,
-      //   1000,
-      //   0,
-      //   0,
-      //   0
-      // )
-      // .subscribe((res: any) => {
+      .getManyBaseSectorControllerSector(
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        ['name,ASC'],
+        undefined,
+        1000,
+        0,
+        0,
+        0
+      )
+      .subscribe((res: any) => {
         
-      //   // this.sectorList = res.data;
+        //this.sectorList = res.data;
 
-      //   if (token && this.editEntytyId && this.editEntytyId > 0) {
-      //     this.serviceProxy
-      //       .getOneBaseProjectControllerProject(
-      //         this.editEntytyId,
-      //         undefined,
-      //         undefined,
-      //         0
-      //       )
-      //       .subscribe(async (res1) => {
-      //         this.project = res1;
-      //         this.project.ndc = res1.ndc;
-      //         this.project.sector =res1.sector;
-      //         const latitude = parseFloat(this.project.latitude + '');
-      //         const longitude = parseFloat(this.project.longitude + '');
-      //         await this.addMarker(longitude, latitude);
-      //         // console.log(latitude);
-      //         // console.log(longitude);
+        if (token && this.editEntytyId && this.editEntytyId > 0) {
+          this.serviceProxy
+            .getOneBaseProjectControllerClimateAction(
+              this.editEntytyId,
+              undefined,
+              undefined,
+              0
+            )
+            .subscribe(async (res1) => {
+              this.project = res1;
+              this.project.aggregatedAction = res1.aggregatedAction;
+              console.log("aggregatedAction",res1)
+              this.project.sector =res1.sector;
+              const latitude = parseFloat(this.project.latitude + '');
+              const longitude = parseFloat(this.project.longitude + '');
+              await this.addMarker(longitude, latitude);
+              // console.log(latitude);
+              // console.log(longitude);
 
-      //         let map = this.gmap.getMap();
-      //         this.updateMapBoundaries(map, longitude, latitude);
+              let map = this.gmap.getMap();
+              this.updateMapBoundaries(map, longitude, latitude);
 
-      //         console.log('ths.project,,,..', this.project);
-      //         this.likelyHood = this.project.likelyhood;
-      //         this.isPoliticalPreference = this.project.politicalPreference;
-      //         this.isFinancialFeciability = this.project.financialFecialbility;
-      //         this.isAvailabiltyOfTEch = this.project.availabilityOfTechnology;
-      //         this.originalApprovalStatus =
-      //           this.project.projectApprovalStatus == undefined
-      //             ? 'Propose'
-      //             : this.project.projectApprovalStatus?.name;
-      //         this.proposedDate = this.project.proposeDateofCommence.toString();
-      //         this.isMapped = this.project?.isMappedCorrectly;
-      //         this.disbaleNdcmappedFromDB = this.project?.isMappedCorrectly;
-      //         this.isLikelyhoodFromDb = this.project?.likelyhood;
-      //         this.isPoliticalPreferenceFromDb =
-      //           this.project?.politicalPreference;
-      //         this.isFinancialFeciabilityFromDb =
-      //           this.project?.financialFecialbility;
-      //         this.isAvailabiltyOfTEchFromDb =
-      //           this.project.availabilityOfTechnology;
-      //         var sector = this.sectorList.find(
-      //           (a) => a.id === this.project?.sector?.id
-      //         );
-      //         // this.project.sector = sector != undefined ? sector : new Sector();
-      //         console.log('this.project.sector...', this.project.sector);
-      //         this.onSectorChange(true);
-      //         this.proposeDateofCommence = new Date(
-      //           this.project.proposeDateofCommence.year(),
-      //           this.project.proposeDateofCommence.month(),
-      //           this.project.proposeDateofCommence.date()
-      //         );
-      //         this.endDateofCommence = new Date(
-      //           this.project.endDateofCommence.year(),
-      //           this.project.endDateofCommence.month(),
-      //           this.project.endDateofCommence.date()
-      //         );
+              console.log('ths.project,,,..', this.project);
+              // this.likelyHood = this.project.likelyhood;
+              // this.isPoliticalPreference = this.project.politicalPreference;
+              // this.isFinancialFeciability = this.project.financialFecialbility;
+              // this.isAvailabiltyOfTEch = this.project.availabilityOfTechnology;
+              this.originalApprovalStatus =
+                this.project.projectApprovalStatus == undefined
+                  ? 'Propose'
+                  : this.project.projectApprovalStatus?.name;
+              this.proposedDate = this.project.proposeDateofCommence.toString();
+              // this.isMapped = this.project?.isMappedCorrectly;
+              // this.disbaleNdcmappedFromDB = this.project?.isMappedCorrectly;
+              // this.isLikelyhoodFromDb = this.project?.likelyhood;
+              // this.isPoliticalPreferenceFromDb =
+              //   this.project?.politicalPreference;
+              // this.isFinancialFeciabilityFromDb =
+              //   this.project?.financialFecialbility;
+              // this.isAvailabiltyOfTEchFromDb =
+              //   this.project.availabilityOfTechnology;
+              var sector = this.sectorList.find(
+                (a) => a.id === this.project?.sector?.id
+              );
+              // this.project.sector = sector != undefined ? sector : new Sector();
+              console.log('this.project.sector...', this.project.sector);
+              this.onSectorChange(true);
+              this.proposeDateofCommence = new Date(
+                this.project.proposeDateofCommence.year(),
+                this.project.proposeDateofCommence.month(),
+                this.project.proposeDateofCommence.date()
+              );
+              // this.endDateofCommence = new Date(
+              //   this.project.endDateofCommence.year(),
+              //   this.project.endDateofCommence.month(),
+              //   this.project.endDateofCommence.date()
+              // );
 
-      //         this.isLoading = false;
-      //         if (this.flag == 1) {
-      //           //this.isDownloading = false;
-      //           this.originalNdc = this.project.ndc?.name;
-      //           this.originalSubNdc = this.project.subNdc?.name;
-      //         }
+              this.isLoading = false;
+              if (this.flag == 1) {
+                //this.isDownloading = false;
+                this.originalNdc = this.project.aggregatedAction?.name;
+                this.originalSubNdc = this.project.actionArea?.name;
+              }
 
-      //         let histryFilter: string[] = new Array();
-      //         histryFilter.push('project.id||$eq||' + this.project.id);
-      //         //console.log("id......",this.project.id)
-      //         this.serviceProxy
-      //           .getManyBaseCaActionHistoryControllerCaActionHistory(
-      //             undefined,
-      //             undefined,
-      //             histryFilter,
-      //             undefined,
-      //             ['createdOn,ASC'],
-      //             undefined,
-      //             1000,
-      //             0,
-      //             0,
-      //             0
-      //           )
-      //           .subscribe((res: any) => {
-      //             this.historyList = res.data;
-      //             this.ndcupdatehistoryList = this.historyList.filter(
-      //               (o) => o.isNdcAndSubNdc == 1
-      //             );
-      //             this.statusupdatehistoryList = this.historyList.filter(
-      //               (o) => o.isApprovalAction == 1
-      //             );
-      //             console.log('this.historyList..', res.data);
-      //           });
-      //       });
-      //   }
+              let histryFilter: string[] = new Array();
+              histryFilter.push('project.id||$eq||' + this.project.id);
+              //console.log("id......",this.project.id)
+              // this.serviceProxy
+              //   .getManyBaseCaActionHistoryControllerCaActionHistory(
+              //     undefined,
+              //     undefined,
+              //     histryFilter,
+              //     undefined,
+              //     ['createdOn,ASC'],
+              //     undefined,
+              //     1000,
+              //     0,
+              //     0,
+              //     0
+              //   )
+              //   .subscribe((res: any) => {
+              //     this.historyList = res.data;
+              //     this.ndcupdatehistoryList = this.historyList.filter(
+              //       (o) => o.isNdcAndSubNdc == 1
+              //     );
+              //     this.statusupdatehistoryList = this.historyList.filter(
+              //       (o) => o.isApprovalAction == 1
+              //     );
+              //     console.log('this.historyList..', res.data);
+              //   });
+            });
+        }
 
-      //   //Anonymous form
-      //   if (this.anonymousEditEntytyId && this.anonymousEditEntytyId > 0) {
-      //     // this.serviceProxy
-      //     //   .getOneBaseProjectControllerProject(
-      //     //     this.anonymousEditEntytyId,
-      //     //     undefined,
-      //     //     undefined,
-      //     //     0
-      //     //   )
-      //     // this.projectProxy
-      //     //   .getProjectByIdAnonymous(this.anonymousEditEntytyId)
-      //     //   .subscribe(async (res) => {
-      //     //     this.project = res;
-      //     //     const latitude = parseFloat(this.project.latitude + '');
-      //     //     const longitude = parseFloat(this.project.longitude + '');
-      //     //     await this.addMarker(longitude, latitude);
-      //     //     // console.log(latitude);
-      //     //     // console.log(longitude);
+        //Anonymous form
+        if (this.anonymousEditEntytyId && this.anonymousEditEntytyId > 0) {
+          // this.serviceProxy
+          //   .getOneBaseProjectControllerClimateAction(
+          //     this.anonymousEditEntytyId,
+          //     undefined,
+          //     undefined,
+          //     0
+          //   )
+          // this.projectProxy
+          //   .getProjectByIdAnonymous(this.anonymousEditEntytyId)
+          //   .subscribe(async (res) => {
+          //     this.project = res;
+          //     const latitude = parseFloat(this.project.latitude + '');
+          //     const longitude = parseFloat(this.project.longitude + '');
+          //     await this.addMarker(longitude, latitude);
+          //     // console.log(latitude);
+          //     // console.log(longitude);
 
-      //     //     let map = this.gmap.getMap();
-      //     //     this.updateMapBoundaries(map, longitude, latitude);
+          //     let map = this.gmap.getMap();
+          //     this.updateMapBoundaries(map, longitude, latitude);
 
-      //     //     console.log('ths.project,,,..', this.project);
-      //     //     this.likelyHood = this.project.likelyhood;
-      //     //     this.isPoliticalPreference = this.project.politicalPreference;
-      //     //     this.isFinancialFeciability = this.project.financialFecialbility;
-      //     //     this.isAvailabiltyOfTEch = this.project.availabilityOfTechnology;
-      //     //     this.originalApprovalStatus =
-      //     //       this.project.projectApprovalStatus == undefined
-      //     //         ? 'Propose'
-      //     //         : this.project.projectApprovalStatus?.name;
-      //     //     this.proposedDate = this.project.proposeDateofCommence.toString();
-      //     //     this.isMapped = this.project?.isMappedCorrectly;
-      //     //     this.disbaleNdcmappedFromDB = this.project?.isMappedCorrectly;
-      //     //     this.isLikelyhoodFromDb = this.project?.likelyhood;
-      //     //     this.isPoliticalPreferenceFromDb =
-      //     //       this.project?.politicalPreference;
-      //     //     this.isFinancialFeciabilityFromDb =
-      //     //       this.project?.financialFecialbility;
-      //     //     this.isAvailabiltyOfTEchFromDb =
-      //     //       this.project.availabilityOfTechnology;
-      //     //     var sector = this.sectorList.find(
-      //     //       (a) => a.id === this.project?.sector?.id
-      //     //     );
-      //     //     // this.project.sector = sector != undefined ? sector : new Sector();
-      //     //     // console.log('this.project.sector...', this.project.sector);
-      //     //     // this.onSectorChange(true);
-      //     //     // this.proposeDateofCommence = new Date(
-      //     //     //   this.project.proposeDateofCommence.year(),
-      //     //     //   this.project.proposeDateofCommence.month(),
-      //     //     //   this.project.proposeDateofCommence.date()
-      //     //     // );
-      //     //     // this.endDateofCommence = new Date(
-      //     //     //   this.project.endDateofCommence.year(),
-      //     //     //   this.project.endDateofCommence.month(),
-      //     //     //   this.project.endDateofCommence.date()
-      //     //     // );
-      //     //     this.project.climateActionName = '';
-      //     //     this.project.telephoneNumber = '';
+          //     console.log('ths.project,,,..', this.project);
+          //     // this.likelyHood = this.project.likelyhood;
+          //     // this.isPoliticalPreference = this.project.politicalPreference;
+          //     // this.isFinancialFeciability = this.project.financialFecialbility;
+          //     // this.isAvailabiltyOfTEch = this.project.availabilityOfTechnology;
+          //     this.originalApprovalStatus =
+          //       this.project.projectApprovalStatus == undefined
+          //         ? 'Propose'
+          //         : this.project.projectApprovalStatus?.name;
+          //     this.proposedDate = this.project.proposeDateofCommence.toString();
+          //     // this.isMapped = this.project?.isMappedCorrectly;
+          //     // this.disbaleNdcmappedFromDB = this.project?.isMappedCorrectly;
+          //     // this.isLikelyhoodFromDb = this.project?.likelyhood;
+          //     // this.isPoliticalPreferenceFromDb =
+          //     //   this.project?.politicalPreference;
+          //     // this.isFinancialFeciabilityFromDb =
+          //     //   this.project?.financialFecialbility;
+          //     // this.isAvailabiltyOfTEchFromDb =
+          //     //   this.project.availabilityOfTechnology;
+          //     var sector = this.sectorList.find(
+          //       (a) => a.id === this.project?.sector?.id
+          //     );
+          //     // this.project.sector = sector != undefined ? sector : new Sector();
+          //     // console.log('this.project.sector...', this.project.sector);
+          //     // this.onSectorChange(true);
+          //     // this.proposeDateofCommence = new Date(
+          //     //   this.project.proposeDateofCommence.year(),
+          //     //   this.project.proposeDateofCommence.month(),
+          //     //   this.project.proposeDateofCommence.date()
+          //     // );
+          //     // this.endDateofCommence = new Date(
+          //     //   this.project.endDateofCommence.year(),
+          //     //   this.project.endDateofCommence.month(),
+          //     //   this.project.endDateofCommence.date()
+          //     // );
+          //     this.project.policyName = '';
+          //     this.project.telephoneNumber = '';
 
-      //     //     if (countryId) {
-      //     //       this.serviceProxy
-      //     //         .getOneBaseCountryControllerCountry(
-      //     //           countryId,
-      //     //           undefined,
-      //     //           undefined,
-      //     //           undefined
-      //     //         )
-      //     //         .subscribe((res) => {
-      //     //           this.project.country = res;
-      //     //           this.isSector = true;
-      //     //           this.getUserEnterdCountry = this.project.country;
-      //     //         });
-      //     //     } else {
-      //     //       this.project.country = new Country();
-      //     //     }
+          //     if (countryId) {
+          //       this.serviceProxy
+          //         .getOneBaseCountryControllerCountry(
+          //           countryId,
+          //           undefined,
+          //           undefined,
+          //           undefined
+          //         )
+          //         .subscribe((res) => {
+          //           this.project.country = res;
+          //           this.isSector = true;
+          //           this.getUserEnterdCountry = this.project.country;
+          //         });
+          //     } else {
+          //       this.project.country = new Country();
+          //     }
 
-      //     //     this.isLoading = false;
-      //     //     if (this.flag == 1) {
-      //     //       //this.isDownloading = false;
-      //     //       this.originalNdc = this.project.ndc?.name;
-      //     //       this.originalSubNdc = this.project.subNdc?.name;
-      //     //     }
+          //     this.isLoading = false;
+          //     if (this.flag == 1) {
+          //       //this.isDownloading = false;
+          //       this.originalNdc = this.project.aggregatedAction?.name;
+          //       this.originalSubNdc = this.project.actionArea?.name;
+          //     }
 
-      //     //     let histryFilter: string[] = new Array();
-      //     //     histryFilter.push('project.id||$eq||' + this.project.id);
-      //     //     //console.log("id......",this.project.id)
-      //     //     this.serviceProxy
-      //     //       .getManyBaseCaActionHistoryControllerCaActionHistory(
-      //     //         undefined,
-      //     //         undefined,
-      //     //         histryFilter,
-      //     //         undefined,
-      //     //         ['createdOn,ASC'],
-      //     //         undefined,
-      //     //         1000,
-      //     //         0,
-      //     //         0,
-      //     //         0
-      //     //       )
-      //     //       .subscribe((res: any) => {
-      //     //         this.historyList = res.data;
-      //     //         this.ndcupdatehistoryList = this.historyList.filter(
-      //     //           (o) => o.isNdcAndSubNdc == 1
-      //     //         );
-      //     //         this.statusupdatehistoryList = this.historyList.filter(
-      //     //           (o) => o.isApprovalAction == 1
-      //     //         );
-      //     //         console.log('this.historyList..', res.data);
-      //     //       });
-      //     //   });
-      //   }
-      // });
+          //     let histryFilter: string[] = new Array();
+          //     histryFilter.push('project.id||$eq||' + this.project.id);
+          // //     //console.log("id......",this.project.id)
+          //     // this.serviceProxy
+          //     //   .getManyBaseCaActionHistoryControllerCaActionHistory(
+          //     //     undefined,
+          //     //     undefined,
+          //     //     histryFilter,
+          //     //     undefined,
+          //     //     ['createdOn,ASC'],
+          //     //     undefined,
+          //     //     1000,
+          //     //     0,
+          //     //     0,
+          //     //     0
+          //     //   )
+          //     //   .subscribe((res: any) => {
+          //     //     this.historyList = res.data;
+          //     //     this.ndcupdatehistoryList = this.historyList.filter(
+          //     //       (o) => o.isNdcAndSubNdc == 1
+          //     //     );
+          //     //     this.statusupdatehistoryList = this.historyList.filter(
+          //     //       (o) => o.isApprovalAction == 1
+          //     //     );
+          //     //     console.log('this.historyList..', res.data);
+          //     //   });
+          //   });
+        }
+      });
 
     this.serviceProxy
       .getManyBaseProjectApprovalStatusControllerProjectApprovalStatus(
@@ -632,8 +643,8 @@ export class ClimateActionComponent implements OnInit {
     }
     if (this.project.sector) {
       let sector = new Sector();
-      sector.id = this.project.sector[0].id;
-      this.project.sector = sector[0];
+      sector.id = this.project.sector.id;
+      this.project.sector = sector;
     }
    
 
@@ -651,6 +662,8 @@ export class ClimateActionComponent implements OnInit {
       let ndc = new Ndc();
       ndc.id = this.project.aggregatedAction?.id;
       this.project.aggregatedAction = ndc;
+      console.log("this.project.aggregatedAction",this.project.aggregatedAction)
+
     }
 
     if (this.project.actionArea) {
@@ -766,6 +779,7 @@ export class ClimateActionComponent implements OnInit {
         let prAprSts = new ProjectApprovalStatus();
         prAprSts.id = 4;
         this.project.projectApprovalStatus = prAprSts;
+        console.log("project to save",this.project)
 
         this.messageService.clear();
         this.serviceProxy
@@ -872,47 +886,67 @@ export class ClimateActionComponent implements OnInit {
     this.getUserEnterdCountry = this.project.country;
 
     this.onSectorChange(event);
-
+    
+    // this.SubndcList()
     this.sectorProxy.getCountrySector(this.project.country.id).subscribe((res: any) => {
       this.sectorList = res;
       console.log("++++" ,this.sectorList)
+      console.log("this.project" ,this.project)
     });
   }
+ 
 
   onSectorChange(event: any) {
-    // if (this.project.sector && this.project.country) {
-    //   this.serviceProxy
-    //     .getManyBaseNdcControllerNdc(
-    //       undefined,
-    //       undefined,
-    //       [
-    //         'sector.id||$eq||' + this.project.sector[0].id,
-    //         'country.id||$eq||' + this.project.country.id,
-    //       ],
-    //       undefined,
-    //       ['name,ASC'],
-    //       ['subNdc'],
-    //       1000,
-    //       0,
-    //       0,
-    //       0
-    //     )
-    //     .subscribe((res: any) => {
-    //       this.ndcList = res.data;
-    //       if (event === true) {
-    //         var ndc = this.ndcList?.find((a) => a.id === this.project?.aggregatedAction?.id);
-    //         this.project.aggregatedAction = ndc !== undefined ? ndc : new Ndc();
-    //         if (this.project.actionArea) {
-    //           var subNdc: SubNdc = this.project.aggregatedAction.actionArea?.find(
-    //             (a) => a.id === this.project.actionArea.id
-    //           )!;
-    //           this.project.actionArea = subNdc;
-    //         }
-    //       }
-    //     });
-    // } else {
-    //   this.ndcList = [];
-    // }
+    console.log("onSectorChange")
+    
+    console.log("onSectorChangeProject", this.project)
+    if (this.project.sector && this.project.country) {
+      console.log("onSectorChangeProject", "aaa")
+     
+      this.serviceProxy
+        .getManyBaseNdcControllerAggregatedAction(
+          undefined,
+          undefined,
+          [
+            'sector.id||$eq||' + this.project.sector.id,
+            'country.id||$eq||' + this.project.country.id,
+          ],
+          undefined,
+          ['name,ASC'],
+          ['subNdc'],
+          1000,
+          0,
+          0,
+          0
+        )
+        .subscribe((res: any) => {
+          console.log("event" ,event)
+          this.ndcList = res?.data;
+          console.log('onSectorChangeProjectres', res)
+          
+          if (event ) {
+            var ndc = this.ndcList?.find((a) => a.id === this.project?.aggregatedAction?.id);
+            this.project.aggregatedAction = ndc !== undefined ? ndc : new Ndc();
+            console.log('project', this.project)
+            if (this.project.actionArea) {
+              var subNdc: SubNdc = this.project.aggregatedAction.actionArea?.find(
+                (a) => a.id === this.project.actionArea.id
+              )!;
+              this.project.actionArea = subNdc;
+            }
+          }
+        });
+    } else {
+      this.ndcList = [];
+    }
+  }
+  onNdcChnage(event:any) :void {
+    
+    this.ndcProxy.getSubNdc(this.project.aggregatedAction.id).subscribe((res: any) => {
+      this.SubndcList = res;
+      console.log("SubndcList", this.SubndcList)
+      console.log("this.project" ,this.project)
+    });
   }
 
   escape(s: string) {
@@ -1154,8 +1188,8 @@ export class ClimateActionComponent implements OnInit {
 
   updateStatus(project: Project, aprovalStatus: number) {
     let sector = new Sector();
-    sector.id = project.sector[0].id;
-    project.sector[0] = sector;
+    sector.id = project.sector.id;
+    project.sector = sector;
 
     project.proposeDateofCommence = moment(this.proposeDateofCommence);
     //project.endDateofCommence = moment(this.endDateofCommence);
@@ -1325,9 +1359,9 @@ export class ClimateActionComponent implements OnInit {
     console.log('this.project....', this.project);
 
     let sector = new Sector();
-    sector.id = this.project.sector[0].id;
-    sector.name = this.project.sector[0].name;
-    this.project.sector[0] = sector;
+    sector.id = this.project.sector.id;
+    sector.name = this.project.sector.name;
+    this.project.sector = sector;
 
     this.project.proposeDateofCommence = moment(this.proposeDateofCommence);
     this.project['endDateofCommence'] = moment(this.endDateofCommence);

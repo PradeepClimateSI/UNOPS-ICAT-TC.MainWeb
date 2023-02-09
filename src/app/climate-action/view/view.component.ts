@@ -269,7 +269,7 @@ export class ViewComponent implements OnInit, AfterViewInit {
         ? 1
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
-    setTimeout(() => {
+    // setTimeout(() => {
       this.projectProxy
         .getClimateActionDetails(
           pageNumber,
@@ -284,8 +284,8 @@ export class ViewComponent implements OnInit, AfterViewInit {
           this.climateactions = a.items
            this.totalRecords=a.meta.totalItems
           this.loading = false;
-        });
-    }, 1000);
+        }, err => {this.loading = false;});
+    // }, 1000);
   };
   addproject() {
     this.router.navigate(['/climate-action']);

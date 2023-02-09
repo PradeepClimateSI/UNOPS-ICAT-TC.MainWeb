@@ -38,7 +38,8 @@
           #table
           [value]="climateactions"
           [lazy]="true"
-        
+          (onLazyLoad)="loadgridData($event)"
+
           [paginator]="true"
           [rows]="rows"
           [showCurrentPageReport]="true"
@@ -105,13 +106,18 @@
                 </td>
               </ng-container>
               <td>
-                <button 
+                <!-- <button 
                 
                 style="font-size: 1rem; color: #4c6fff; margin-left: 17%">
                 view
                 
+                (Onclick)="detail(climateactions)"
+              </button> -->
+              <i
+                class="pi pi-eye"
+                style="font-size: 1.5rem; color: #000; margin-left: 17%"
                 (click)="detail(climateactions)"
-              </button>
+              ></i>
               </td>
               
               

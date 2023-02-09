@@ -272,7 +272,7 @@
                 name="nameCountry"
                 #nameCountry="ngModel"
                 class="p-inputtext"
-                [(ngModel)]="project.country.name!"
+                [(ngModel)]="project.country?.name!"
                 [ngModelOptions]="{ standalone: true }"
                 pattern="^[a-zA-Z0-9 ]{1,64}$"
                 pInputText
@@ -320,7 +320,7 @@
                 name="projStatus"
                 #projStatus1="ngModel"
                 class="p-inputtext"
-                [(ngModel)]="project.projectStatus.name!"
+                [(ngModel)]="project.projectStatus?.name!"
                 [ngModelOptions]="{ standalone: true }"
                 pattern="^[a-zA-Z0-9 ]{1,64}$"
                 pInputText
@@ -366,7 +366,7 @@
                 name="projsector"
                 #projsector="ngModel"
                 class="p-inputtext"
-                [(ngModel)]="project.sector[0].name!"
+                [(ngModel)]="project.sector?.name!"
                 [ngModelOptions]="{ standalone: true }"
                 pattern="^[a-zA-Z0-9 ]{1,64}$"
                 pInputText
@@ -390,15 +390,16 @@
                   [(ngModel)]="project.aggregatedAction"
                   [ngModelOptions]="{ standalone: true }"
                   optionLabel="name"> 
+                  (ngModelChange)="onNdcChnage($event)"
                 </p-dropdown>
-                <p
+                <!-- <p
                   class="info-message text-danger"
                   *ngIf="
                     
                   "
                 >
                   This is a mandatory field
-                </p>
+                </p> -->
               </ng-container>
               <ng-template #elseBlockndc>
                 <input
@@ -408,7 +409,7 @@
                 name="projndc"
                 #projndc="ngModel"
                 class="p-inputtext"
-                [(ngModel)]="project.aggregatedAction.name!"
+                [(ngModel)]="project.aggregatedAction?.name!"
                 [ngModelOptions]="{ standalone: true }"
                 pattern="^[a-zA-Z0-9 ]{1,64}$"
                 pInputText
@@ -427,7 +428,7 @@
                     name="subndc"
                     #subndc="ngModel"
                     [autoDisplayFirst]="false"
-                    [options]="project.aggregatedAction === undefined ? [] : project.aggregatedAction.actionArea"
+                    [options] = "SubndcList"
                     [(ngModel)]="project.actionArea"
                     [ngModelOptions]="{ standalone: true }"
                     optionLabel="name"
@@ -450,7 +451,7 @@
                 name="projsubndc"
                 #projsubndc="ngModel"
                 class="p-inputtext"
-                [(ngModel)]="project.actionArea.name!"
+                [(ngModel)]="project.actionArea?.name!"
                 [ngModelOptions]="{ standalone: true }"
                 pattern="^[a-zA-Z0-9 ]{1,64}$"
                 pInputText
@@ -814,7 +815,7 @@
                     name="countrytxt"
                     class="p-inputtext"
                     #countrytxt="ngModel"
-                    [(ngModel)]="project.country.name!"
+                    [(ngModel)]="project.country?.name!"
                     pInputText
                     readonly
                   />
@@ -1197,12 +1198,12 @@
     
 
     <!-- added for document delete popup -->
-    <p-confirmDialog
+    <!-- <p-confirmDialog
       [style]="{ width: '50vw' }"
       [baseZIndex]="10000"
       rejectButtonStyleClass="p-button-text"
     >
-    </p-confirmDialog>
+    </p-confirmDialog> -->
 
     <!-- <div
       class="d-flex justify-content-start align-content-center flex-wrap pl-0"
@@ -1696,7 +1697,7 @@
         (click)="confirmBack(editEntytyId>0?'back':(isSaving?'back':'cancel'))"
       ></button>
       <!-- <div *ngIf="isDownloading == false">    [disabled]="isSaving || !fData.form.valid" -->
-      <button
+      <!-- <button
         pButton
         pRipple
         label="Download PDF"
@@ -1705,7 +1706,7 @@
         [disabled]="!(editEntytyId>0) &&  !isSaving"
         class="p-button-raised"
         (click)="toDownload()"
-      ></button>
+      ></button> -->
       <div *ngIf="flag !=1">
         <button
           pButton
