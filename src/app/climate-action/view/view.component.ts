@@ -15,7 +15,7 @@ import {
   ProjectOwner,
   ProjectStatus,
   Sector,
-  //SectorControllerServiceProxy,
+  SectorControllerServiceProxy,
   CountryControllerServiceProxy,
   ServiceProxy,
   User,
@@ -269,7 +269,7 @@ export class ViewComponent implements OnInit, AfterViewInit {
         ? 1
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
-    // setTimeout(() => {
+    setTimeout(() => {
       this.projectProxy
         .getClimateActionDetails(
           pageNumber,
@@ -279,26 +279,32 @@ export class ViewComponent implements OnInit, AfterViewInit {
           mitTypeId,
           editedOn,
           filtertext
+          
         )
+        
         .subscribe((a) => {
+          //console.log( a," this.climateactions")
           this.climateactions = a.items
            this.totalRecords=a.meta.totalItems
           this.loading = false;
         }, err => {this.loading = false;});
-    // }, 1000);
+    }, 1000);
+   
   };
   addproject() {
     this.router.navigate(['/climate-action']);
   }
 
-  // applyFilterGlobal($event, stringVal) {
-  //   this.dt.filterGlobal(($event.target as HTMLInputElement).value, 'contains');
-  // }
 
   detail(climateactions: Project) {
+    console.log("climateactions",climateactions )
     this.router.navigate(['/climate-action'], {
+      
     queryParams: { id: climateactions.id ,flag:this.flag},
+    
+   
     });
+    
   }
 
   next() {

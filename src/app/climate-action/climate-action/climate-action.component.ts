@@ -20,20 +20,18 @@ import {
   ServiceProxy,
   ActionArea as SubNdc,
   User,
-  //SectorControllerServiceProxy,
-  UsersControllerServiceProxy,
-  CountryControllerServiceProxy,
   SectorControllerServiceProxy,
+  UsersControllerServiceProxy,
 } from 'shared/service-proxies/service-proxies';
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
-
 import * as moment from 'moment';
 import jspdf from 'jspdf';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import decode from 'jwt-decode';
+
+/// <reference types="googlemaps" />
 
 @Component({
   selector: 'app-climate-action',
@@ -41,14 +39,11 @@ import decode from 'jwt-decode';
   styleUrls: ['./climate-action.component.css']
 })
 export class ClimateActionComponent implements OnInit {
-  CaActionHistory :any;
   isSaving: boolean = false;
   project: Project = new Project();
-
   selectedcitie: any = {};
   ndcList: Ndc[];
-  SubndcList: SubNdc[];
-
+  SubndcList :SubNdc []= [];
   options: any;
   relatedItem: Project[] = [];
   exsistingPrpject: boolean = false;
@@ -58,7 +53,8 @@ export class ClimateActionComponent implements OnInit {
   sectorList: Sector[] = [];
   financingSchemeList: FinancingScheme[] = [];
   documents: Documents[] = [];
-  documentsDocumentOwner: DocumentsDocumentOwner = DocumentsDocumentOwner.Project;
+  documentsDocumentOwner: DocumentsDocumentOwner =
+    DocumentsDocumentOwner.Project;
   editEntytyId: number = 0;
   anonymousEditEntytyId: number = 0;
   documentOwnerId: number = 0;
@@ -79,8 +75,6 @@ export class ClimateActionComponent implements OnInit {
   isFinancialFeciability: number = 1;
   isAvailabiltyOfTEch: number = 1;
   selectedProject: Project;
-
-
   originalNdc: string = '';
   originalSubNdc: string = '';
   commentForJustification: string = '';
@@ -134,8 +128,9 @@ export class ClimateActionComponent implements OnInit {
     private messageService: MessageService,
     private projectProxy: ProjectControllerServiceProxy,
     private sectorProxy: SectorControllerServiceProxy,
-    private ndcProxy :NdcControllerServiceProxy, 
-  )
+    private ndcProxy :NdcControllerServiceProxy,
+  ) // private usersControllerServiceProxy: UsersControllerServiceProxy,
+  // private ndcProxy:NdcControllerServiceProxy
   {}
 
   ngOnInit(): void {
@@ -145,14 +140,12 @@ export class ClimateActionComponent implements OnInit {
     this.userName = localStorage.getItem('user_name')!;
     let filterUser: string[] = [];
     filterUser.push('username||$eq||' + this.userName);
-    console.log("countryId",countryId)
     
 
     if (countryId>0){
       this.sectorProxy.getCountrySector(countryId).subscribe((res: any) => {
         this.sectorList = res;
         console.log("++++" ,this.sectorList)
-        console.log("res" ,res)
       });
     } // countryid = 0
     
@@ -178,7 +171,6 @@ export class ClimateActionComponent implements OnInit {
       });
 
     this.route.queryParams.subscribe((params) => {
-      console.log("params",params)
       this.editEntytyId = 0;
       this.anonymousEditEntytyId = 0;
       this.documentOwnerId = 0;
@@ -189,15 +181,16 @@ export class ClimateActionComponent implements OnInit {
       } else if (this.anonymousEditEntytyId > 0) {
         this.documentOwnerId = this.anonymousEditEntytyId;
       }
-
+      
       this.flag = params['flag'];
       if (this.flag == 1) {
         this.isDownloading = false;
+        console.log("flag",this.flag ,"this.editEntytyId", this.editEntytyId)
+       
       }
     });
 
     if (countryId) {
-      
       this.serviceProxy
         .getOneBaseCountryControllerCountry(
           countryId,
@@ -206,14 +199,13 @@ export class ClimateActionComponent implements OnInit {
           undefined
         )
         .subscribe((res) => {
-
           this.project.country = res;
           this.isSector = true;
           // console.log('tokenPayloadmasssge',res);
         });
     } else {
       this.project.country = new Country();
-      // console.log("pr",this.project)   // working
+      console.log("pr",this.project)   // working
     }
     // this.project.country = new Country();
 
@@ -229,7 +221,7 @@ export class ClimateActionComponent implements OnInit {
 
     countryaFilter.push('country.id||$eq||' + 1);
     // this.serviceProxy
-    //   .getManyBaseProjectControllerClimateAction(
+    //   .getManyBaseProjectControllerProject(
     //     undefined,
     //     undefined,
     //     countryaFilter,
@@ -260,8 +252,9 @@ export class ClimateActionComponent implements OnInit {
         0
       )
       .subscribe((res: any) => {
+        
         this.countryList = res.data;
-        console.log("countrylist",this.countryList)  // working
+        // console.log("countrylist all",this.countryList) //  working
       });
 
     this.serviceProxy
@@ -279,7 +272,7 @@ export class ClimateActionComponent implements OnInit {
       )
       .subscribe((res: any) => {
         this.projectOwnerList = res.data;
-        //console.log("projectOwnerList",this.projectOwnerList) // working
+        // console.log("projectOwnerList all", this.projectOwnerList) //  working
       });
 
     this.serviceProxy
@@ -297,7 +290,7 @@ export class ClimateActionComponent implements OnInit {
       )
       .subscribe((res: any) => {
         this.projectStatusList = res.data;
-        // console.log("projectStatusList",this.projectStatusList)   // working
+        // console.log("projectStatusList all", this.projectOwnerList) //  working
       });
 
     this.serviceProxy
@@ -315,9 +308,10 @@ export class ClimateActionComponent implements OnInit {
       )
       .subscribe((res: any) => {
         
-        //this.sectorList = res.data;
+        // this.sectorList = res.data;
 
-        if (token && this.editEntytyId && this.editEntytyId > 0) {
+        // if (token && this.editEntytyId && this.editEntytyId > 0) {
+          if ( this.editEntytyId && this.editEntytyId > 0) {
           this.serviceProxy
             .getOneBaseProjectControllerClimateAction(
               this.editEntytyId,
@@ -328,7 +322,6 @@ export class ClimateActionComponent implements OnInit {
             .subscribe(async (res1) => {
               this.project = res1;
               this.project.aggregatedAction = res1.aggregatedAction;
-              console.log("aggregatedAction",res1)
               this.project.sector =res1.sector;
               const latitude = parseFloat(this.project.latitude + '');
               const longitude = parseFloat(this.project.longitude + '');
@@ -414,7 +407,7 @@ export class ClimateActionComponent implements OnInit {
         //Anonymous form
         if (this.anonymousEditEntytyId && this.anonymousEditEntytyId > 0) {
           // this.serviceProxy
-          //   .getOneBaseProjectControllerClimateAction(
+          //   .getOneBaseProjectControllerProject(
           //     this.anonymousEditEntytyId,
           //     undefined,
           //     undefined,
@@ -434,24 +427,24 @@ export class ClimateActionComponent implements OnInit {
           //     this.updateMapBoundaries(map, longitude, latitude);
 
           //     console.log('ths.project,,,..', this.project);
-          //     // this.likelyHood = this.project.likelyhood;
-          //     // this.isPoliticalPreference = this.project.politicalPreference;
-          //     // this.isFinancialFeciability = this.project.financialFecialbility;
-          //     // this.isAvailabiltyOfTEch = this.project.availabilityOfTechnology;
+          //     this.likelyHood = this.project.likelyhood;
+          //     this.isPoliticalPreference = this.project.politicalPreference;
+          //     this.isFinancialFeciability = this.project.financialFecialbility;
+          //     this.isAvailabiltyOfTEch = this.project.availabilityOfTechnology;
           //     this.originalApprovalStatus =
           //       this.project.projectApprovalStatus == undefined
           //         ? 'Propose'
           //         : this.project.projectApprovalStatus?.name;
           //     this.proposedDate = this.project.proposeDateofCommence.toString();
-          //     // this.isMapped = this.project?.isMappedCorrectly;
-          //     // this.disbaleNdcmappedFromDB = this.project?.isMappedCorrectly;
-          //     // this.isLikelyhoodFromDb = this.project?.likelyhood;
-          //     // this.isPoliticalPreferenceFromDb =
-          //     //   this.project?.politicalPreference;
-          //     // this.isFinancialFeciabilityFromDb =
-          //     //   this.project?.financialFecialbility;
-          //     // this.isAvailabiltyOfTEchFromDb =
-          //     //   this.project.availabilityOfTechnology;
+          //     this.isMapped = this.project?.isMappedCorrectly;
+          //     this.disbaleNdcmappedFromDB = this.project?.isMappedCorrectly;
+          //     this.isLikelyhoodFromDb = this.project?.likelyhood;
+          //     this.isPoliticalPreferenceFromDb =
+          //       this.project?.politicalPreference;
+          //     this.isFinancialFeciabilityFromDb =
+          //       this.project?.financialFecialbility;
+          //     this.isAvailabiltyOfTEchFromDb =
+          //       this.project.availabilityOfTechnology;
           //     var sector = this.sectorList.find(
           //       (a) => a.id === this.project?.sector?.id
           //     );
@@ -468,7 +461,7 @@ export class ClimateActionComponent implements OnInit {
           //     //   this.project.endDateofCommence.month(),
           //     //   this.project.endDateofCommence.date()
           //     // );
-          //     this.project.policyName = '';
+          //     this.project.climateActionName = '';
           //     this.project.telephoneNumber = '';
 
           //     if (countryId) {
@@ -491,36 +484,36 @@ export class ClimateActionComponent implements OnInit {
           //     this.isLoading = false;
           //     if (this.flag == 1) {
           //       //this.isDownloading = false;
-          //       this.originalNdc = this.project.aggregatedAction?.name;
-          //       this.originalSubNdc = this.project.actionArea?.name;
+          //       this.originalNdc = this.project.ndc?.name;
+          //       this.originalSubNdc = this.project.subNdc?.name;
           //     }
 
           //     let histryFilter: string[] = new Array();
           //     histryFilter.push('project.id||$eq||' + this.project.id);
-          // //     //console.log("id......",this.project.id)
-          //     // this.serviceProxy
-          //     //   .getManyBaseCaActionHistoryControllerCaActionHistory(
-          //     //     undefined,
-          //     //     undefined,
-          //     //     histryFilter,
-          //     //     undefined,
-          //     //     ['createdOn,ASC'],
-          //     //     undefined,
-          //     //     1000,
-          //     //     0,
-          //     //     0,
-          //     //     0
-          //     //   )
-          //     //   .subscribe((res: any) => {
-          //     //     this.historyList = res.data;
-          //     //     this.ndcupdatehistoryList = this.historyList.filter(
-          //     //       (o) => o.isNdcAndSubNdc == 1
-          //     //     );
-          //     //     this.statusupdatehistoryList = this.historyList.filter(
-          //     //       (o) => o.isApprovalAction == 1
-          //     //     );
-          //     //     console.log('this.historyList..', res.data);
-          //     //   });
+          //     //console.log("id......",this.project.id)
+          //     this.serviceProxy
+          //       .getManyBaseCaActionHistoryControllerCaActionHistory(
+          //         undefined,
+          //         undefined,
+          //         histryFilter,
+          //         undefined,
+          //         ['createdOn,ASC'],
+          //         undefined,
+          //         1000,
+          //         0,
+          //         0,
+          //         0
+          //       )
+          //       .subscribe((res: any) => {
+          //         this.historyList = res.data;
+          //         this.ndcupdatehistoryList = this.historyList.filter(
+          //           (o) => o.isNdcAndSubNdc == 1
+          //         );
+          //         this.statusupdatehistoryList = this.historyList.filter(
+          //           (o) => o.isApprovalAction == 1
+          //         );
+          //         console.log('this.historyList..', res.data);
+          //       });
           //   });
         }
       });
@@ -540,6 +533,8 @@ export class ClimateActionComponent implements OnInit {
       )
       .subscribe((res: any) => {
         this.projectApprovalStatus = res.data;
+        
+        
       });
 
     this.serviceProxy
@@ -582,7 +577,7 @@ export class ClimateActionComponent implements OnInit {
         // this.project.mappedInstitution
       });
 
-    if (this.editEntytyId != 0) {
+    if (this.editEntytyId && this.editEntytyId !== 0 ) {
       let docFilter: string[] = new Array();
 
       docFilter.push('documentOwnerId||$eq||' + this.editEntytyId);
@@ -601,12 +596,12 @@ export class ClimateActionComponent implements OnInit {
         )
         .subscribe((res: any) => {
           this.selectedDocuments = res.data;
-          console.log('selectedDocuments...', this.selectedDocuments);
+          console.log('selectedDocuments...', this.selectedDocuments, this.editEntytyId);
         });
     }
 
     //Anonymous form
-    if (this.anonymousEditEntytyId != 0) {
+    if ( this.anonymousEditEntytyId && this.anonymousEditEntytyId != 0) {
       let docFilter: string[] = new Array();
 
       docFilter.push('documentOwnerId||$eq||' + this.anonymousEditEntytyId);
@@ -625,7 +620,7 @@ export class ClimateActionComponent implements OnInit {
         )
         .subscribe((res: any) => {
           this.selectedDocuments = res.data;
-          console.log('selectedDocuments...', this.selectedDocuments);
+          console.log('selectedDocuments...', this.selectedDocuments, this.anonymousEditEntytyId);
         });
     }
   }
@@ -649,7 +644,7 @@ export class ClimateActionComponent implements OnInit {
    
 
     this.project.proposeDateofCommence = moment(this.proposeDateofCommence);
-   // this.project.endDateofCommence = moment(this.endDateofCommence);
+    //this.project.endDateofCommence = moment(this.endDateofCommence);
     // this.project.mappedInstitution=this.selectedInstitution;/
 
     //     console.log("project")
@@ -662,8 +657,7 @@ export class ClimateActionComponent implements OnInit {
       let ndc = new Ndc();
       ndc.id = this.project.aggregatedAction?.id;
       this.project.aggregatedAction = ndc;
-      console.log("this.project.aggregatedAction",this.project.aggregatedAction)
-
+      console.log("aggregatedAction",this.project.aggregatedAction)
     }
 
     if (this.project.actionArea) {
@@ -672,6 +666,7 @@ export class ClimateActionComponent implements OnInit {
       let subned = new SubNdc();
       subned.id = this.project.actionArea?.id;
       this.project.actionArea = subned;
+      console.log("action area",this.project.actionArea)
     }
 
     // if (this.project.institution) {
@@ -684,37 +679,37 @@ export class ClimateActionComponent implements OnInit {
       if (this.anonymousEditEntytyId > 0) {
         let prAprSts = new ProjectApprovalStatus();
         prAprSts.id = 4;
-        this.project.projectApprovalStatus = prAprSts;
-        this.projectProxy.updateOneClimateAction().subscribe(
-          (res) => {
-            if (res == true) {
-              this.isSaving = true;
-              console.log('update', res);
-              this.messageService.add({
-                severity: 'success',
-                summary: 'Success',
-                detail: 'Project has updated successfully ',
-                closable: true,
-              });
-            } else {
-              this.messageService.add({
-                severity: 'error',
-                summary: 'Error.',
-                detail: 'Internal server error, please try again.',
-                sticky: true,
-              });
-            }
-          },
+        // this.project.projectApprovalStatus = prAprSts;
+        // this.projectProxy.updateProjectAnonymous(this.project).subscribe(
+        //   (res) => {
+        //     if (res == true) {
+        //       this.isSaving = true;
+        //       console.log('update', res);
+        //       this.messageService.add({
+        //         severity: 'success',
+        //         summary: 'Success',
+        //         detail: 'Project has updated successfully ',
+        //         closable: true,
+        //       });
+        //     } else {
+        //       this.messageService.add({
+        //         severity: 'error',
+        //         summary: 'Error.',
+        //         detail: 'Internal server error, please try again.',
+        //         sticky: true,
+        //       });
+        //     }
+        //   },
 
-          (err) => {
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error.',
-              detail: 'Internal server error, please try again.',
-              sticky: true,
-            });
-          }
-        );
+        //   (err) => {
+        //     this.messageService.add({
+        //       severity: 'error',
+        //       summary: 'Error.',
+        //       detail: 'Internal server error, please try again.',
+        //       sticky: true,
+        //     });
+        //   }
+        // );
       } else {
         // console.log('formData.form.valid', formData.form.valid);
         this.serviceProxy
@@ -776,10 +771,9 @@ export class ClimateActionComponent implements OnInit {
       }
     } else {
       if (formData.form.valid) {
-        let prAprSts = new ProjectApprovalStatus();
-        prAprSts.id = 4;
-        this.project.projectApprovalStatus = prAprSts;
-        console.log("project to save",this.project)
+        // let prAprSts = new ProjectApprovalStatus();
+        // prAprSts.id = 4;
+        // this.project.projectApprovalStatus = prAprSts;
 
         this.messageService.clear();
         this.serviceProxy
@@ -887,22 +881,15 @@ export class ClimateActionComponent implements OnInit {
 
     this.onSectorChange(event);
     
-    // this.SubndcList()
+
     this.sectorProxy.getCountrySector(this.project.country.id).subscribe((res: any) => {
       this.sectorList = res;
       console.log("++++" ,this.sectorList)
-      console.log("this.project" ,this.project)
     });
   }
- 
 
   onSectorChange(event: any) {
-    console.log("onSectorChange")
-    
-    console.log("onSectorChangeProject", this.project)
     if (this.project.sector && this.project.country) {
-      console.log("onSectorChangeProject", "aaa")
-     
       this.serviceProxy
         .getManyBaseNdcControllerAggregatedAction(
           undefined,
@@ -920,17 +907,18 @@ export class ClimateActionComponent implements OnInit {
           0
         )
         .subscribe((res: any) => {
-          console.log("event" ,event)
-          this.ndcList = res?.data;
-          console.log('onSectorChangeProjectres', res)
-          
-          if (event ) {
+          this.ndcList = res.data;
+          // this.onNdcChnage(event);
+          console.log("this.ndcList",  this.ndcList)
+          // console.log("event11",  event)
+          if (event === true) {
             var ndc = this.ndcList?.find((a) => a.id === this.project?.aggregatedAction?.id);
             this.project.aggregatedAction = ndc !== undefined ? ndc : new Ndc();
-            console.log('project', this.project)
+            console.log("this.ndcList",  this.project.aggregatedAction)
             if (this.project.actionArea) {
+              console.log(" this.ndcList",  this.ndcList)
               var subNdc: SubNdc = this.project.aggregatedAction.actionArea?.find(
-                (a) => a.id === this.project.actionArea.id
+                (a) => a.id === this.project.aggregatedAction.id
               )!;
               this.project.actionArea = subNdc;
             }
@@ -941,8 +929,9 @@ export class ClimateActionComponent implements OnInit {
     }
   }
   onNdcChnage(event:any) :void {
+    console.log("this.project" ,this.project)
     
-    this.ndcProxy.getSubNdc(this.project.aggregatedAction.id).subscribe((res: any) => {
+    this.ndcProxy.getSubNdc(this.project.aggregatedAction?.id).subscribe((res: any) => {
       this.SubndcList = res;
       console.log("SubndcList", this.SubndcList)
       console.log("this.project" ,this.project)
@@ -1088,7 +1077,12 @@ export class ClimateActionComponent implements OnInit {
     this.location.back();
   }
   confirmBack(label:string) {
-    this.confirmationService.confirm({
+    if (label==='back'){
+      this.location.back();
+
+    }
+    else {
+      this.confirmationService.confirm({
         message:(label=='cancel'?'Your filled data will be lost. ':'') + 'Are you sure that you want to proceed?',
         header: 'Confirmation',
         icon: 'pi pi-exclamation-triangle',
@@ -1099,6 +1093,8 @@ export class ClimateActionComponent implements OnInit {
            
         }
     });
+    }
+    
 }
   onRowSelect(event: any) {
     this.selectedProject = event;
@@ -1221,74 +1217,74 @@ export class ClimateActionComponent implements OnInit {
     // project.likelyhood = this.likelyHood;
     // project.availabilityOfTechnology = this.isAvailabiltyOfTEch;
     // project.financialFecialbility = this.isFinancialFeciability;
-    // project.actionJustification = this.commentForJustification;
-    //project.isMappedCorrectly = this.isMapped;
-    //console.log('project.actionJustification..', project.actionJustification);
+    // // project.actionJustification = this.commentForJustification;
+    // project.isMappedCorrectly = this.isMapped;
+    // console.log('project.actionJustification..', project.actionJustification);
 
     this.serviceProxy
       .updateOneBaseProjectControllerClimateAction(project.id, project)
-      .subscribe(
-        (res) => {
-          // window.alert("yess..")
-          // console.log(res);
+      // .subscribe(
+      //   (res) => {
+      //     // window.alert("yess..")
+      //     // console.log(res);
 
-          let actionObject = new this.CaActionHistory();
-          actionObject.isApprovalAction = 1;
-          actionObject.previousAction = this.originalApprovalStatus;
-          actionObject.currentAction = this.updatedApprovalStatus;
-          actionObject.actionUser = this.fullname;
-          //  actionObject.isNdcAndSubNdc = 1;
-          //  actionObject.currentNdcs = this.project.currentNdc;
-          //  actionObject.previousNdcs = this.project.previousNdc;
-          //  actionObject.currentSubNdcs = this.project.currentSubNdc;
-          //  actionObject.previousSubNdcs = this.project.previousSubNdc;
-          actionObject.project = this.project;
+      //     let actionObject = new CaActionHistory();
+      //     actionObject.isApprovalAction = 1;
+      //     actionObject.previousAction = this.originalApprovalStatus;
+      //     actionObject.currentAction = this.updatedApprovalStatus;
+      //     actionObject.actionUser = this.fullname;
+      //     //  actionObject.isNdcAndSubNdc = 1;
+      //     //  actionObject.currentNdcs = this.project.currentNdc;
+      //     //  actionObject.previousNdcs = this.project.previousNdc;
+      //     //  actionObject.currentSubNdcs = this.project.currentSubNdc;
+      //     //  actionObject.previousSubNdcs = this.project.previousSubNdc;
+      //     actionObject.project = this.project;
 
-          // this.serviceProxy
-          //   .createOneBaseCaActionHistoryControllerCaActionHistory(actionObject)
-          //   .subscribe(
-          //     (res) => {
-                // console.log('save', res);
-                // this.messageService.add({
-                //   severity: 'success',
-                //   summary: 'Success',
-                //   detail: 'project  has save successfully',
-                //   closable: true,
-                // });
-              // }
+      //     this.serviceProxy
+      //       .createOneBaseCaActionHistoryControllerCaActionHistory(actionObject)
+      //       .subscribe(
+      //         (res) => {
+      //           console.log('save', res);
+      //           // this.messageService.add({
+      //           //   severity: 'success',
+      //           //   summary: 'Success',
+      //           //   detail: 'project  has save successfully',
+      //           //   closable: true,
+      //           // });
+      //         }
 
-              // (err) => {
-              //   this.messageService.add({
-              //     severity: 'error',
-              //     summary: 'Error.',
-              //     detail: 'Internal server error, please try again.',
-              //     sticky: true,
-              //   });
-              // }
-            // );
+      //         // (err) => {
+      //         //   this.messageService.add({
+      //         //     severity: 'error',
+      //         //     summary: 'Error.',
+      //         //     detail: 'Internal server error, please try again.',
+      //         //     sticky: true,
+      //         //   });
+      //         // }
+      //       );
 
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail:
-              aprovalStatus === 1 || aprovalStatus === 2
-                ? project.policyName +
-                  ' is successfully ' +
-                  (aprovalStatus === 1 ? 'Approved.' : 'Rejected')
-                : 'Data request sent successfully.',
-            closable: true,
-          });
-        },
-        (err) => {
-          //window.alert("nooo..")
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error.',
-            detail: 'Internal server error, please try again.',
-            sticky: true,
-          });
-        }
-      );
+      //     this.messageService.add({
+      //       severity: 'success',
+      //       summary: 'Success',
+      //       detail:
+      //         aprovalStatus === 1 || aprovalStatus === 2
+      //           ? project.climateActionName +
+      //             ' is successfully ' +
+      //             (aprovalStatus === 1 ? 'Approved.' : 'Rejected')
+      //           : 'Data request sent successfully.',
+      //       closable: true,
+      //     });
+      //   },
+      //   (err) => {
+      //     //window.alert("nooo..")
+      //     this.messageService.add({
+      //       severity: 'error',
+      //       summary: 'Error.',
+      //       detail: 'Internal server error, please try again.',
+      //       sticky: true,
+      //     });
+      //   }
+      // );
   }
 
   drWithComment() {
@@ -1364,7 +1360,7 @@ export class ClimateActionComponent implements OnInit {
     this.project.sector = sector;
 
     this.project.proposeDateofCommence = moment(this.proposeDateofCommence);
-    this.project['endDateofCommence'] = moment(this.endDateofCommence);
+    //this.project.endDateofCommence = moment(this.endDateofCommence);
     // this.project.mappedInstitution=this.selectedInstitution;/
 
     //     console.log("project")
@@ -1372,8 +1368,8 @@ export class ClimateActionComponent implements OnInit {
     //  console.log(this.selectedInstitution)
 
     if (this.project.aggregatedAction) {
-      this.project['currentNdc'] = this.project.aggregatedAction.name;
-      this.project['previousNdc'] = this.originalNdc;
+      // this.project.currentNdc = this.project.aggregatedAction.name;
+      // this.project.previousNdc = this.originalNdc;
       this.originalNdc = this.project.aggregatedAction.name;
 
       let ndc = new Ndc();
@@ -1383,8 +1379,8 @@ export class ClimateActionComponent implements OnInit {
     }
 
     if (this.project.actionArea) {
-      this.project['currentSubNdc'] = this.project.actionArea.name;
-      this.project['previousSubNdc'] = this.originalSubNdc;
+      // this.project.currentSubNdc = this.project.subNdc.name;
+      // this.project.previousSubNdc = this.originalSubNdc;
       this.originalSubNdc = this.project.actionArea.name;
 
       let subned = new SubNdc();
@@ -1393,72 +1389,72 @@ export class ClimateActionComponent implements OnInit {
       this.project.actionArea = subned;
     }
 
-    if (this.project['institution']) {
-      let insti = new Institution();
-      insti.id = this.project.mappedInstitution?.id;
-      this.project.mappedInstitution = insti;
-    }
-
-
-    // if (this.project.id > 0) {
-    //   this.serviceProxy
-    //     .updateOneBaseProjectControllerProject(this.project.id, this.project)
-    //     .subscribe(
-    //       (res) => {
-    //         let historyObject = new CaActionHistory();
-    //         historyObject.isNdcAndSubNdc = 1;
-    //         historyObject.currentNdcs = this.project.currentNdc;
-    //         historyObject.previousNdcs = this.project.previousNdc;
-    //         historyObject.currentSubNdcs = this.project.currentSubNdc;
-    //         historyObject.previousSubNdcs = this.project.previousSubNdc;
-    //         historyObject.actionUser = this.fullname;
-    //         historyObject.project = this.project;
-
-    //         this.serviceProxy
-    //           .createOneBaseCaActionHistoryControllerCaActionHistory(
-    //             historyObject
-    //           )
-    //           .subscribe(
-    //             (res) => {
-    //               console.log('save', res);
-    //               // this.messageService.add({
-    //               //   severity: 'success',
-    //               //   summary: 'Success',
-    //               //   detail: 'project  has save successfully',
-    //               //   closable: true,
-    //               // });
-    //             }
-
-    //             // (err) => {
-    //             //   this.messageService.add({
-    //             //     severity: 'error',
-    //             //     summary: 'Error.',
-    //             //     detail: 'Internal server error, please try again.',
-    //             //     sticky: true,
-    //             //   });
-    //             // }
-    //           );
-
-    //         console.log('update....', res, this.project);
-    //         this.isMapped = 1
-    //         this.messageService.add({
-    //           severity: 'success',
-    //           summary: 'Success',
-    //           detail: 'Aggregated Actions and SubNdc  has updated successfully ',
-    //           closable: true,
-    //         });
-    //       },
-
-    //       (err) => {
-    //         this.messageService.add({
-    //           severity: 'error',
-    //           summary: 'Error.',
-    //           detail: 'Internal server error, please try again.',
-    //           sticky: true,
-    //         });
-    //       }
-    //     );
+    // if (this.project.institution) {
+    //   let insti = new Institution();
+    //   insti.id = this.project.mappedInstitution?.id;
+    //   this.project.mappedInstitution = insti;
     // }
+
+
+    if (this.project.id > 0) {
+      this.serviceProxy
+        .updateOneBaseProjectControllerClimateAction(this.project.id, this.project)
+        // .subscribe(
+        //   (res) => {
+        //     let historyObject = new CaActionHistory();
+        //     historyObject.isNdcAndSubNdc = 1;
+        //     historyObject.currentNdcs = this.project.currentNdc;
+        //     historyObject.previousNdcs = this.project.previousNdc;
+        //     historyObject.currentSubNdcs = this.project.currentSubNdc;
+        //     historyObject.previousSubNdcs = this.project.previousSubNdc;
+        //     historyObject.actionUser = this.fullname;
+        //     historyObject.project = this.project;
+
+        //     this.serviceProxy
+        //       .createOneBaseCaActionHistoryControllerCaActionHistory(
+        //         historyObject
+        //       )
+        //       .subscribe(
+        //         (res) => {
+        //           console.log('save', res);
+        //           // this.messageService.add({
+        //           //   severity: 'success',
+        //           //   summary: 'Success',
+        //           //   detail: 'project  has save successfully',
+        //           //   closable: true,
+        //           // });
+        //         }
+
+        //         // (err) => {
+        //         //   this.messageService.add({
+        //         //     severity: 'error',
+        //         //     summary: 'Error.',
+        //         //     detail: 'Internal server error, please try again.',
+        //         //     sticky: true,
+        //         //   });
+        //         // }
+        //       );
+
+        //     console.log('update....', res, this.project);
+        //     this.isMapped = 1
+        //     this.messageService.add({
+        //       severity: 'success',
+        //       summary: 'Success',
+        //       detail: 'Aggregated Actions and SubNdc  has updated successfully ',
+        //       closable: true,
+        //     });
+        //   },
+
+        //   (err) => {
+        //     this.messageService.add({
+        //       severity: 'error',
+        //       summary: 'Error.',
+        //       detail: 'Internal server error, please try again.',
+        //       sticky: true,
+        //     });
+        //   }
+        // );
+    }
   }
 
   toDownload() {
@@ -1514,5 +1510,3 @@ export class ClimateActionComponent implements OnInit {
     }, 1);
   }
 }
-
-

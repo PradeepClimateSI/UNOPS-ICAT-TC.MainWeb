@@ -390,7 +390,6 @@
                   [(ngModel)]="project.aggregatedAction"
                   [ngModelOptions]="{ standalone: true }"
                   optionLabel="name"> 
-                  (ngModelChange)="onNdcChnage($event)"
                 </p-dropdown>
                 <!-- <p
                   class="info-message text-danger"
@@ -428,20 +427,11 @@
                     name="subndc"
                     #subndc="ngModel"
                     [autoDisplayFirst]="false"
-                    [options] = "SubndcList"
+                    [options]="project.aggregatedAction === undefined || project.aggregatedAction === null  ? [] : project.aggregatedAction.actionArea"
                     [(ngModel)]="project.actionArea"
                     [ngModelOptions]="{ standalone: true }"
                     optionLabel="name"
                   ></p-dropdown>
-                  <!-- <p
-                    class="info-message text-danger"
-                    *ngIf="
-                      !project.aggregatedAction
-                      (fData.submitted || subndc.touched || subndc.dirty)
-                    "
-                  >
-                    This is a mandatory field
-                  </p> -->
                 </ng-container>
               <ng-template #elseBlocksubndc>
                 <input
@@ -1688,6 +1678,8 @@
 
 
     <div class="d-flex flex-row-reverse mt-2 mb-2">
+      <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
       <button
         pButton
         pRipple
@@ -1697,7 +1689,7 @@
         (click)="confirmBack(editEntytyId>0?'back':(isSaving?'back':'cancel'))"
       ></button>
       <!-- <div *ngIf="isDownloading == false">    [disabled]="isSaving || !fData.form.valid" -->
-      <!-- <button
+      <button
         pButton
         pRipple
         label="Download PDF"
@@ -1706,7 +1698,7 @@
         [disabled]="!(editEntytyId>0) &&  !isSaving"
         class="p-button-raised"
         (click)="toDownload()"
-      ></button> -->
+      ></button>
       <div *ngIf="flag !=1">
         <button
           pButton

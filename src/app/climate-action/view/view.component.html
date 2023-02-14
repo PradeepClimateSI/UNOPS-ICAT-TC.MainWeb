@@ -55,32 +55,35 @@
            
   
             <tr>
-              <th>
-                <div class="col-sm-2" style="width: 70.666667%">
+              
+          
+                
+                <th>
                   <button
-                    pRipple
-                    class="fas fa-plus"
-                    pButton
-                    type="button"
-                    style="background-color: #c6cfd7; border-color: transparent"
-                    (click)="addproject()"
-                  >
-                    <i
-                      class="pi pi-plus"
-                      style="font-size: 1rem; color: #000"
-                    ></i>
-                  </button>
+                  pRipple
+                  class="fas fa-plus"
+                  pButton
+                  type="button"
+                  style="background-color: #c6cfd7; border-color: transparent"
+                  (click)="addproject()"
+                >
+                  <i
+                    class="pi pi-plus"
+                    style="font-size: 1rem; color: #000"
+                  ></i>
+                </button>
+                  
 
                   <!-- <button (click)="addproject()" class="button-plus" icon="pi pi-plus" iconPos="left"></button> -->
-                </div>
-              </th>
+                POLICY </th>
               
-              <th>POLICY</th>
+             
               <th>PROJECT PROPENENT</th>
               <!-- <th>Type of Mitigation Action</th> -->
-              <ng-container *ngIf="this.loggedUser?.userType!?.id! == 1">
+              <!-- <ng-container *ngIf="this.loggedUser?.userType!?.id! == 1">
                 <th>STATUS OF APPPROVAL</th>
-              </ng-container>
+              </ng-container> -->
+              <th>STATUS OF APPPROVAL</th>
               <th>ACTIONS</th>
               
               
@@ -93,10 +96,10 @@
               
   
               <td>
-              {{ climateactions.climateActionName }}</td>
+              {{ climateactions.policyName }}</td>
               <td>{{ climateactions.contactPersoFullName }}</td>
               <!-- <td>{{ climateactions.mitigationAction?.name }}</td> -->
-              <ng-container *ngIf="this.loggedUser?.userType!?.id! == 1">
+              <!-- <ng-container *ngIf="this.loggedUser?.userType!?.id! == 1">
                 <td
                 (mouseenter) ="showDialog(climateactions)"
                 (mouseleave) ="hideDialog()"
@@ -104,7 +107,10 @@
                 >
                 {{(climateactions.projectApprovalStatus?.id == undefined || climateactions.projectApprovalStatus?.id == 4)?'Proposed':(climateactions.projectApprovalStatus.id == 3?'Data Requested':(climateactions.projectApprovalStatus.id == 1?'Accept':(climateactions.projectApprovalStatus.id == 5?'Active':'Reject')))}}
                 </td>
-              </ng-container>
+              </ng-container> -->
+              <td>
+                None
+              </td>
               <td>
                 <!-- <button 
                 

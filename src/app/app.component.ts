@@ -7,7 +7,7 @@ import { AppService } from 'shared/AppService';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [MessageService, DialogService],
+  providers: [MessageService, DialogService,],
 })
 export class AppComponent {
   title = 'icat-country-portal-web-app';
