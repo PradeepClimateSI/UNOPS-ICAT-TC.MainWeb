@@ -4,11 +4,12 @@
 
 export const environment = {
   production: false,
-  baseUrlAPI: 'http://localhost:7080',
+  baseUrlAPI: 'http://localhost:7081',
   esbaseUrlAPI: 'http://localhost:7090',
   authBaseUrlAPI: 'http://localhost:7081',
-  baseUrlAPIDocUploadAPI: 'http://localhost:7080/document/upload2',
+  baseUrlAPIDocUploadAPI: 'http://localhost:7081/document/upload2',
   baseUrlJsonFile: 'http://35.154.205.109:3600/filename',
+  baseUrlAPIDocUploadAnonymousAPI: 'http://localhost:7081/document/upload2'
 };
 // baseUrlAPI: 'http://3.110.188.89:7080',
 /*

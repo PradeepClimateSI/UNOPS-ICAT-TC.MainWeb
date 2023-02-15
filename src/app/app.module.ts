@@ -70,10 +70,17 @@ import {
   DocumentControllerServiceProxy,
   ServiceProxy,
   ProjectControllerServiceProxy,
+  CountryControllerServiceProxy,
+  SectorControllerServiceProxy,
+  NdcControllerServiceProxy,
 } from 'shared/service-proxies/service-proxies';
 
 import { AUTH_API_BASE_URL, ServiceProxy as AuthServiceProxy, AuthControllerServiceProxy } from 'shared/service-proxies/auth-service-proxies';
 import { DashboardBaseComponent } from './dashboard-base/dashboard-base.component';
+import { ClimateActionComponent } from './climate-action/climate-action/climate-action.component';
+import { ViewComponent } from './climate-action/view/view.component';
+import { DocumentUploadComponent } from './shared/document-upload/document-upload.component';
+import {FileUploadModule} from 'primeng/fileupload';
 
 export function getRemoteServiceBaseUrl(): string {
   return environment.baseUrlAPI;
@@ -88,6 +95,9 @@ export function getAuthRemoteServiceBaseUrl(): string {
     declarations: [
         AppComponent,
         DashboardBaseComponent,
+        ClimateActionComponent,
+        ViewComponent,
+        DocumentUploadComponent,
     ],
     imports: [
         FormsModule,
@@ -142,7 +152,8 @@ export function getAuthRemoteServiceBaseUrl(): string {
         RippleModule,
         InputTextModule,
         DialogModule,
-        DashboardModule,     
+        DashboardModule,  
+        FileUploadModule,   
     ],
     providers: [
         ConfirmationService,
@@ -152,10 +163,14 @@ export function getAuthRemoteServiceBaseUrl(): string {
         ConfirmationService,
         AuthControllerServiceProxy,
         ProjectControllerServiceProxy,
+        CountryControllerServiceProxy,
+        SectorControllerServiceProxy,
+        NdcControllerServiceProxy,
         DatePipe,
         {provide: API_BASE_URL, useFactory: getRemoteServiceBaseUrl},
         {provide: AUTH_API_BASE_URL, useFactory: getAuthRemoteServiceBaseUrl},
         HttpClientModule,
+       
         Location,
         DynamicDialogModule,
         {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
