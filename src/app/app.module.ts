@@ -81,6 +81,8 @@ import { ClimateActionComponent } from './climate-action/climate-action/climate-
 import { ViewComponent } from './climate-action/view/view.component';
 import { DocumentUploadComponent } from './shared/document-upload/document-upload.component';
 import {FileUploadModule} from 'primeng/fileupload';
+import { MethodologyComponent } from './methodology/methodology.component';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 export function getRemoteServiceBaseUrl(): string {
   return environment.baseUrlAPI;
@@ -98,6 +100,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         ClimateActionComponent,
         ViewComponent,
         DocumentUploadComponent,
+        MethodologyComponent,
     ],
     imports: [
         FormsModule,
@@ -154,6 +157,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         DialogModule,
         DashboardModule,  
         FileUploadModule,   
+        NgMultiSelectDropDownModule.forRoot(),
     ],
     providers: [
         ConfirmationService,
