@@ -73,6 +73,7 @@ import {
   CountryControllerServiceProxy,
   SectorControllerServiceProxy,
   NdcControllerServiceProxy,
+  MethodologyAssessmentControllerServiceProxy,
 } from 'shared/service-proxies/service-proxies';
 
 import { AUTH_API_BASE_URL, ServiceProxy as AuthServiceProxy, AuthControllerServiceProxy } from 'shared/service-proxies/auth-service-proxies';
@@ -170,6 +171,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         CountryControllerServiceProxy,
         SectorControllerServiceProxy,
         NdcControllerServiceProxy,
+        MethodologyAssessmentControllerServiceProxy,
         DatePipe,
         {provide: API_BASE_URL, useFactory: getRemoteServiceBaseUrl},
         {provide: AUTH_API_BASE_URL, useFactory: getAuthRemoteServiceBaseUrl},
