@@ -15,8 +15,8 @@ const routes: Routes = [
 
   { path: 'landing-page', component: LandingPageComponent },
   { path: 'loard-more', component: LoardMoreComponent },
-  { path: 'climate-action', component: ClimateActionComponent },
-  { path: 'view-climate-action', component: ViewComponent },
+  { path: 'app/climate-action', component: ClimateActionComponent },
+  { path: 'app/view-climate-action', component: ViewComponent },
 
   {
     path: 'auth',
@@ -39,4 +39,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

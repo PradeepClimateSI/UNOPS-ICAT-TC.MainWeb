@@ -19,8 +19,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private messageService: MessageService,
     private router: Router,
-    // private authControllerServiceProxy: AuthControllerServiceProxy,
-    // private appService: AppService,
+    private authControllerServiceProxy: AuthControllerServiceProxy,
+    private appService: AppService,
     private activatedRoute:ActivatedRoute,
   ) { }
 
@@ -52,15 +52,19 @@ export class LoginComponent implements OnInit {
       a.password = this.password;
       a.username = this.userName;
       try{
-        // const res = await this.authControllerServiceProxy.login(a).toPromise();
-        // this.appService.steToken(res.accessToken);
-        // this.appService.steRefreshToken(res.refreshToken);
-        // this.appService.steRole(res.role);
-        // this.appService.steProfileId(res.loginProfileId);
-        // this.appService.steUserName(this.userName);
-        // this.appService.startRefreshTokenTimer();
-        // this.appService.startIdleTimer();
-        // this.router.navigate(['../../app'], {});
+        console.log(this.authControllerServiceProxy.login(a).subscribe())
+        this.authControllerServiceProxy.login(a).subscribe((res: any)=>{
+          console.log(res)
+          this.appService.steToken(res.accessToken);
+          this.appService.steRefreshToken(res.refreshToken);
+          this.appService.steRole(res.roles[0]);
+          this.appService.steProfileId(res.loginProfileId);
+          this.appService.steUserName(this.userName);
+          this.appService.startRefreshTokenTimer();
+          this.appService.startIdleTimer();
+          this.router.navigate(['../../app'], {});
+        });
+        
       }catch(err){
         console.error(err);
         this.messageService.add({

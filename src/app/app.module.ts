@@ -81,13 +81,17 @@ import { ClimateActionComponent } from './climate-action/climate-action/climate-
 import { ViewComponent } from './climate-action/view/view.component';
 import { DocumentUploadComponent } from './shared/document-upload/document-upload.component';
 import {FileUploadModule} from 'primeng/fileupload';
+import { AddInstitutionComponent } from './institution/add-institution/add-institution.component';
+import { EditInstitutionComponent } from './institution/edit-institution/edit-institution.component';
+import { InstitutionListComponent } from './institution/institution-list/institution-list.component';
+import { InstitutionViewComponent } from './institution/institution-view/institution-view.component';
 
 export function getRemoteServiceBaseUrl(): string {
   return environment.baseUrlAPI;
 }
-export function getRemoteServiceESBaseUrl(): string {
-  return environment.esbaseUrlAPI;
-}
+// export function getRemoteServiceESBaseUrl(): string {
+//   return environment.esbaseUrlAPI;
+// }
 export function getAuthRemoteServiceBaseUrl(): string {
   return environment.authBaseUrlAPI;
 }
@@ -98,6 +102,10 @@ export function getAuthRemoteServiceBaseUrl(): string {
         ClimateActionComponent,
         ViewComponent,
         DocumentUploadComponent,
+        AddInstitutionComponent,
+        EditInstitutionComponent,
+        InstitutionListComponent,
+        InstitutionViewComponent,
     ],
     imports: [
         FormsModule,

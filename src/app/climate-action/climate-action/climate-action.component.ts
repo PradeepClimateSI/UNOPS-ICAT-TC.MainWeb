@@ -34,7 +34,7 @@ import decode from 'jwt-decode';
 /// <reference types="googlemaps" />
 
 @Component({
-  selector: 'app-climate-action',
+  selector: 'app-propose-climate-action',
   templateUrl: './climate-action.component.html',
   styleUrls: ['./climate-action.component.css']
 })
