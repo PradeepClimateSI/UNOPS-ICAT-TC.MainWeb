@@ -340,10 +340,10 @@
                   placeholder="Please Select the type of action"
                   name="projStatus"
                   #projStatus="ngModel"
-                  [(ngModel)]="project.projectStatus"
+                  [(ngModel)]="project.typeofAction"
                   [ngModelOptions]="{ standalone: false }"
                   [autoDisplayFirst]="false"
-                  [options]="projectStatusList"
+                  
                   optionLabel="name"
                   [required]="true"
                 ></p-dropdown>
@@ -362,10 +362,10 @@
                 [disabled]="editEntytyId > 0"
                 type="text"
                 maxlength="50"
-                name="projStatus"
-                #projStatus1="ngModel"
+                name="typeofAction"
+                #typeofAction="ngModel"
                 class="p-inputtext"
-                [(ngModel)]="project.projectStatus?.name!"
+                [(ngModel)]="project.typeofAction"
                 [ngModelOptions]="{ standalone: true }"
                 pattern="^[a-zA-Z0-9 ]{1,64}$"
                 pInputText
@@ -657,10 +657,10 @@
                 <label for="impEntity">Defenition of Assessment</label>
                 <textarea
                 [disabled]="editEntytyId > 0"
-                name="description"
+                name="defenitionofAssessment"
                 placeholder="Defenition of Assessment"
-                #description="ngModel"
-                [(ngModel)]="project.description"
+                #defenitionofAssessment="ngModel"
+                [(ngModel)]="project.defenitionofAssessment"
                 rows="5"
                 cols="130"
                 pInputTextarea
@@ -991,13 +991,13 @@
               </div>
               <div class="col-12 col-md-8" >
                 <div class="p-field" >
-                  <label for="subnatle3">Geographic Coverage</label>
+                  <label for="geographicCoverage">Geographic Coverage</label>
                   <textarea
                   [disabled]="editEntytyId > 0"
-                  name="objective"
+                  name="geographicCoverage"
                   placeholder="Geographic Coverage"
-                  #objective="ngModel"
-                  [(ngModel)]="project.objective"
+                  #geographicCoverage="ngModel"
+                  [(ngModel)]="project.geographicCoverage"
                   rows="5"
                   cols="130"
                   pInputTextarea
@@ -1256,9 +1256,10 @@
                 
                 <textarea
                 [disabled]="editEntytyId > 0"
-                name="description"
+                name="barriers"
+                #barriers="ngModel"
                 placeholder="Barriers"
-                
+                [(ngModel)]="project.barriers"
                 rows="5"
                 cols="130"
                 pInputTextarea
@@ -1284,9 +1285,10 @@
                 
                 <textarea
                 [disabled]="editEntytyId > 0"
-                name="description"
+                name="otherRelatedActivities"
                 placeholder="Other Related activities"
-                
+                #otherRelatedActivities="ngModel"
+                [(ngModel)]="project.otherRelatedActivities"
                 rows="5"
                 cols="130"
                 pInputTextarea
