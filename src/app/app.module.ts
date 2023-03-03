@@ -73,6 +73,7 @@ import {
   CountryControllerServiceProxy,
   SectorControllerServiceProxy,
   NdcControllerServiceProxy,
+  InstitutionControllerServiceProxy,
 } from 'shared/service-proxies/service-proxies';
 
 import { AUTH_API_BASE_URL, ServiceProxy as AuthServiceProxy, AuthControllerServiceProxy } from 'shared/service-proxies/auth-service-proxies';
@@ -81,6 +82,11 @@ import { ClimateActionComponent } from './climate-action/climate-action/climate-
 import { ViewComponent } from './climate-action/view/view.component';
 import { DocumentUploadComponent } from './shared/document-upload/document-upload.component';
 import {FileUploadModule} from 'primeng/fileupload';
+import { InstitutionComponent } from './institution/add-institution/institution.component';
+import { RoleGuardService } from './auth/role-guard.service';
+import { InstitutionListComponent } from './institution/institution-list/institution-list.component';
+import { EditInstitutionComponent } from './institution/edit-institution/edit-institution.component';
+import { ViewInstitutionComponent } from './institution/view-institution/view-institution.component';
 
 export function getRemoteServiceBaseUrl(): string {
   return environment.baseUrlAPI;
@@ -98,6 +104,10 @@ export function getAuthRemoteServiceBaseUrl(): string {
         ClimateActionComponent,
         ViewComponent,
         DocumentUploadComponent,
+        InstitutionComponent,
+        InstitutionListComponent,
+        EditInstitutionComponent,
+        ViewInstitutionComponent,
     ],
     imports: [
         FormsModule,
@@ -166,11 +176,12 @@ export function getAuthRemoteServiceBaseUrl(): string {
         CountryControllerServiceProxy,
         SectorControllerServiceProxy,
         NdcControllerServiceProxy,
+        InstitutionControllerServiceProxy,
         DatePipe,
         {provide: API_BASE_URL, useFactory: getRemoteServiceBaseUrl},
         {provide: AUTH_API_BASE_URL, useFactory: getAuthRemoteServiceBaseUrl},
         HttpClientModule,
-       
+        RoleGuardService,
         Location,
         DynamicDialogModule,
         {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
