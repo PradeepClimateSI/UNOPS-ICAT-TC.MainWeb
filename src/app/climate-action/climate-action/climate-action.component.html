@@ -329,6 +329,52 @@
               </ng-template>
               </div>
             </div>
+            <div class="col-12 col-md-6">
+              <div class="p-field">
+                <label for="projStatus"
+                  >Type of Action</label
+                >
+                <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlockprojStatus">
+                <p-dropdown
+                  [disabled]="editEntytyId > 0"
+                  placeholder="Please Select the type of action"
+                  name="projStatus"
+                  #projStatus="ngModel"
+                  [(ngModel)]="project.typeofAction"
+                  [ngModelOptions]="{ standalone: false }"
+                  [autoDisplayFirst]="false"
+                  
+                  optionLabel="name"
+                  [required]="true"
+                ></p-dropdown>
+                <p
+                  class="info-message text-danger"
+                  *ngIf="
+                    !project.projectStatus &&
+                    (fData.submitted || projStatus.touched || projStatus.dirty)
+                  "
+                >
+                  This is a mandatory field
+                </p>
+              </ng-container>
+              <ng-template #elseBlockprojStatus>
+                <input
+                [disabled]="editEntytyId > 0"
+                type="text"
+                maxlength="50"
+                name="typeofAction"
+                #typeofAction="ngModel"
+                class="p-inputtext"
+                [(ngModel)]="project.typeofAction"
+                [ngModelOptions]="{ standalone: true }"
+                pattern="^[a-zA-Z0-9 ]{1,64}$"
+                pInputText
+                
+              />
+              </ng-template>
+              </div>
+            </div>
+           
           </div>
           <div class="row p-2">
             <div class="col-12 col-md-6">
@@ -545,12 +591,6 @@
             </div>
             </div>
   
-  
-          
-  
-  
-  
-  
           <div class="row p-2">
             <div class="col-12 col-md-6">
               <div class="p-field">
@@ -584,6 +624,55 @@
               </div>
             </div>
           </div>
+          <div class="row p-2">
+          <div class="col-12 col-md-6">
+            <div class="p-field">
+              <label for="projectContext">Context of the Policy</label>
+              <textarea
+                [disabled]="editEntytyId > 0"
+                name="projectContext"
+                placeholder="Please enter context of the policy"
+                #projectContext="ngModel"
+                [(ngModel)]="project.contextOfPolicy"
+                rows="5"
+                cols="62"
+                pInputTextarea
+                length="500"
+                autoResize="autoResize"
+                class="p-inputtext"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+      <div class=" mt-2">
+        <div class="p-grid p-fluid col-sm-12">
+          <div class="p-2">
+            <h6>Assessment boundaries</h6>
+          </div>
+          <div class="row p-2">
+            <div class="col-12 col-md-6">
+              <div class="p-field">
+                <label for="impEntity">Defenition of Assessment</label>
+                <textarea
+                [disabled]="editEntytyId > 0"
+                name="defenitionofAssessment"
+                placeholder="Defenition of Assessment"
+                #defenitionofAssessment="ngModel"
+                [(ngModel)]="project.defenitionofAssessment"
+                rows="5"
+                cols="130"
+                pInputTextarea
+                autoResize="autoResize"
+                class="p-inputtext"
+              ></textarea>
+              </div>
+            </div>
+
+          </div>
+  
+          
         </div>
       </div>
       <div class="mt-2 overflow-visible" style="z-index: 1;">
@@ -793,8 +882,8 @@
              -->
           </div>
 
-          <div class="row row p-2">
-            <div class="col-md-9">
+          <div class="row p-2 ">
+            <div class="col-md-9 ">
              <div class="row ">
               <div class="col-12 col-md-4">
                 <div class="p-field">
@@ -900,6 +989,23 @@
                   </p-inputNumber>
                 </div>
               </div>
+              <div class="col-12 col-md-8" >
+                <div class="p-field" >
+                  <label for="geographicCoverage">Geographic Coverage</label>
+                  <textarea
+                  [disabled]="editEntytyId > 0"
+                  name="geographicCoverage"
+                  placeholder="Geographic Coverage"
+                  #geographicCoverage="ngModel"
+                  [(ngModel)]="project.geographicCoverage"
+                  rows="5"
+                  cols="130"
+                  pInputTextarea
+                  autoResize="autoResize"
+                  class="p-inputtext"
+                ></textarea>
+                </div>
+              </div>
 
              </div>
             </div>
@@ -959,24 +1065,7 @@
                 ></textarea>
               </div>
             </div>
-            <div class="col-12 col-md-6">
-              <div class="p-field">
-                <label for="projectContext">Context of the Policy</label>
-                <textarea
-                  [disabled]="editEntytyId > 0"
-                  name="projectContext"
-                  placeholder="Please enter context of the policy"
-                  #projectContext="ngModel"
-                  [(ngModel)]="project.contextOfPolicy"
-                  rows="5"
-                  cols="62"
-                  pInputTextarea
-                  length="500"
-                  autoResize="autoResize"
-                  class="p-inputtext"
-                ></textarea>
-              </div>
-            </div>
+           
   
             
           </div>
@@ -1076,6 +1165,8 @@
           </div>
         </div>
       </div>
+
+      
       <div class=" mt-2">
         <div class="p-grid p-fluid col-sm-12">
           <div class="p-2">
@@ -1152,6 +1243,64 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      <div class=" mt-2">
+        <div class="p-grid p-fluid col-sm-12">
+          <div class="p-2">
+            <h6>Barriers</h6>
+          </div>
+          <div class="row p-2">
+            <div class="col-12 col-md-6">
+              <div class="p-field">
+                
+                <textarea
+                [disabled]="editEntytyId > 0"
+                name="barriers"
+                #barriers="ngModel"
+                placeholder="Barriers"
+                [(ngModel)]="project.barriers"
+                rows="5"
+                cols="130"
+                pInputTextarea
+                autoResize="autoResize"
+                class="p-inputtext"
+              ></textarea>
+              </div>
+            </div>
+
+          </div>
+  
+          
+        </div>
+      </div>
+      <div class=" mt-2">
+        <div class="p-grid p-fluid col-sm-12">
+          <div class="p-2">
+            <h6>Other Related activities</h6>
+          </div>
+          <div class="row p-2">
+            <div class="col-12 col-md-6">
+              <div class="p-field">
+                
+                <textarea
+                [disabled]="editEntytyId > 0"
+                name="otherRelatedActivities"
+                placeholder="Other Related activities"
+                #otherRelatedActivities="ngModel"
+                [(ngModel)]="project.otherRelatedActivities"
+                rows="5"
+                cols="130"
+                pInputTextarea
+                autoResize="autoResize"
+                class="p-inputtext"
+              ></textarea>
+              </div>
+            </div>
+
+          </div>
+  
+          
         </div>
       </div>
       <div class=" mt-2">

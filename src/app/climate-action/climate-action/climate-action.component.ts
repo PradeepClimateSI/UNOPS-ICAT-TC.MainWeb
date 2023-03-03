@@ -101,7 +101,7 @@ export class ClimateActionComponent implements OnInit {
   selectedInstitution: Institution;
   selectedDocuments: Documents[] = [];
   counID:number;
-
+  a = this.project.otherRelatedActivities
   isSector: boolean = false;
 
   @ViewChild('gmap') gmap: any;
