@@ -1,6 +1,21 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
-import { MethodologyAssessmentControllerServiceProxy, ServiceProxy } from 'shared/service-proxies/service-proxies';
+import { MethodologyControllerServiceProxy } from 'shared/service-proxies/meth-service-proxies';
+import { MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, ServiceProxy } from 'shared/service-proxies/service-proxies';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import {  Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {Chart} from 'chart.js';
+interface CategoryInput {
+  id: number;
+  category: string;
+  characteristics: {
+    name: string;
+    relevance: string;
+    score: number;
+  }[];
+}
+
 
 
 @Component({
@@ -9,44 +24,57 @@ import { MethodologyAssessmentControllerServiceProxy, ServiceProxy } from 'share
   styleUrls: ['./methodology.component.css']
 })
 export class MethodologyComponent implements OnInit {
+  private apiUrl = 'http://localhost:7100/methodology/assessmentData';
+
+  @ViewChild('myCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
+
+
+
+  avg1 = 2;
+  avg2 = 2;
 
   constructor(
     private methassess : MethodologyAssessmentControllerServiceProxy,
-
+    private http: HttpClient,
+    private climateAction : ProjectControllerServiceProxy,
   ) { }
 
   selectedType = 'opentype';
   meth1:boolean;
 
   methList: any= [];
+  methListAll :any = [];
   categotyList :any = [];
   meth1Process :any = [];
   meth1Outcomes :any = [];
-  meth2Process :any = [];
-  meth2Outcomes :any = [];
+  characteristicsList : any = []
+  characteristicsArray : any= []
 
+  policyList : any = []
+  policyId : number;
 
+   averageProcess : number
+   averageOutcome : number
+   
 
+  methId :number;
 //Processess of change
   dropdownList: { item_id: number, item_text: string }[] = [];
-  selectedItems: { id: number, name: string }[] = [];
+ // selectedItems: { id: number, name: string }[] = [];
+  selectedItems: { id: number; name: string }[] = [];
   dropdownSettings: IDropdownSettings = {};
-
-//Outcomes of change
-  dropdownList2: { item_id: number, item_text: string }[] = [];
-  selectedItems2: { item_id: number, item_text: string }[] = [];
+  dropdownSettings2: IDropdownSettings = {};
 
 
-  dropdownList3: { item_id: number, item_text: string }[] = [];
-  selectedItems3: { item_id: number, item_text: string }[] = [];
+  dropdownList2: { id: number, policyName: string }[] = [];
+  
+  selectedItems2: { id: number, name: string }[] = [];
+  selectedItems3: { id: number, name: string }[] = [];
+  selectedItems4: { id: number, name: string }[] = [];
 
+  selectedPolicy: any 
 
-  dropdownList4: { item_id: number, item_text: string }[] = [];
-  selectedItems4: { item_id: number, item_text: string }[] = [];
-
-
-
-  categories = [
+ /*  categories = [
     {name: 'Category 1', characteristics: [
       {name: 'Characteristic 1', score: 0, relevance: '', selected:''},
       {name: 'Characteristic 2', score: 0, relevance: '', selected:''},
@@ -68,80 +96,7 @@ export class MethodologyComponent implements OnInit {
       {name: 'Characteristic 12', score: 0, relevance: '', selected:''}
     ]}
   ];
-
-
-  categories2 = [
-    {name: 'Category 5', characteristics: [
-      {name: 'Characteristic 13', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 14', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 15', score: 0, relevance: '', selected:''}
-    ]},
-    {name: 'Category 6', characteristics: [
-      {name: 'Characteristic 16', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 17', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 18', score: 0, relevance: '', selected:''}
-    ]},
-    {name: 'Category 7', characteristics: [
-      {name: 'Characteristic 19', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 20', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 21', score: 0, relevance: '', selected:''}
-    ]},
-    {name: 'Category 8', characteristics: [
-      {name: 'Characteristic 22', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 23', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 24', score: 0, relevance: '', selected:''}
-    ]}
-  ];
-
-
-  categories3 = [
-    {name: 'Category 1', cat_score: 0, characteristics: [
-      {name: 'Characteristic 1', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 2', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 3', score: 0, relevance: '', selected:''}
-    ]},
-    {name: 'Category 2', cat_score: 0, characteristics: [
-      {name: 'Characteristic 4', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 5', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 6', score: 0, relevance: '', selected:''}
-    ]},
-    {name: 'Category 3',cat_score: 0, characteristics: [
-      {name: 'Characteristic 7', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 8', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 9', score: 0, relevance: '', selected:''}
-    ]},
-    {name: 'Category 4',cat_score: 0, characteristics: [
-      {name: 'Characteristic 10', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 11', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 12', score: 0, relevance: '', selected:''}
-    ]}
-  ];
-
-
-  categories4 = [
-    {name: 'Category 5', cat_score: 0, characteristics: [
-      {name: 'Characteristic 13', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 14', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 15', score: 0, relevance: '', selected:''}
-    ]},
-    {name: 'Category 6', cat_score: 0, characteristics: [
-      {name: 'Characteristic 16', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 17', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 18', score: 0, relevance: '', selected:''}
-    ]},
-    {name: 'Category 7',cat_score: 0, characteristics: [
-      {name: 'Characteristic 19', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 20', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 21', score: 0, relevance: '', selected:''}
-    ]},
-    {name: 'Category 8',cat_score: 0, characteristics: [
-      {name: 'Characteristic 22', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 23', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 24', score: 0, relevance: '', selected:''}
-    ]}
-  ];
-
-
+ */
 
   characteristics :any = [];
 
@@ -152,82 +107,136 @@ export class MethodologyComponent implements OnInit {
     console.log("aaa",this.categories);
   }
    */
+
+
+  
+  chart(): void {
+    if (!this.canvasRef) {
+      console.error('Could not find canvas element');
+      return;
+    }
+
+    const canvas = this.canvasRef.nativeElement;
+    const ctx = canvas.getContext('2d');
+
+    if (!ctx) {
+      console.error('Could not get canvas context');
+      return;
+    }
+
+    const gradient = ctx.createLinearGradient(0, 0, 500, 500);
+    gradient.addColorStop(0, 'red');
+    gradient.addColorStop(0.5, 'yellow');
+    gradient.addColorStop(1, 'green');
+
+    const chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        datasets: [
+          {
+            label: 'My Dataset',
+            data: [{ x: this.averageOutcome, y: this.averageProcess }],
+            backgroundColor: gradient,
+            borderColor: 'black',
+            borderWidth: 1,
+            pointRadius: 5,
+            pointBackgroundColor: 'blue',
+            pointBorderColor: 'black',
+            pointBorderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          x: {
+            type: 'linear',
+            min: 0,
+            max: 5,
+            ticks: {
+              stepSize: 1
+            }
+          },
+          y: {
+            type: 'linear',
+            min: 0,
+            max: 5,
+            ticks: {
+              stepSize: 1
+            }
+          }
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: (context) => {
+                const data = context.dataset.data[context.dataIndex];
+                return `(${this.averageOutcome}, ${this.averageProcess})`;
+              },
+            },
+          },
+        },
+      },
+    });
+  }
  
 
   ngOnInit(): void {
 
+    this.policyList = [];
+    this.climateAction.findAllPolicies().subscribe((res: any) => {
+      console.log("policyList : ", res)
+      for(let data of res){
+        let policyObj = {
+          id : data.id,
+          policyName : data.policyName
+        }
+ 
+        this.policyList.push(policyObj)
+      }
+      
+      console.log("policyList : ", this.policyList)
+ 
+    });
+
     this.methList = [];
+    this.methListAll = [];
+    this.characteristicsList = [];
     this.methassess.findAllMethodologies().subscribe((res: any) => {
       console.log("ressss", res)
       for (let x of res) {
         this.methList.push(x.methodology_name);
+        this.methListAll.push(x);
       } 
 
     });
 
+   
+
     this.categotyList = [];
     this.meth1Process = [];
+    this.meth1Outcomes = [];
     this.methassess.findAllCategories().subscribe((res2: any) => {
       console.log("categoryList", res2)
       for (let x of res2) {
         //this.categotyList.push(x);
-        if( x.methodology.methodology_name=== 'Meth1'){
           if(x.type === 'process'){
             this.meth1Process.push(x)
           }
           if(x.type === 'outcome'){
             this.meth1Outcomes.push(x)
-          }
-        }
-        if( x.methodology.methodology_name=== 'Meth2'){
-          if(x.type === 'process'){
-            this.meth2Process.push(x)
-          }
-          if(x.type === 'outcome'){
-            this.meth2Outcomes.push(x)
-          }
-        }
-          
+          } 
       }  
-
       console.log("yyyy",this.selectedItems )
+    });
 
-
+    this.methassess.findAllCharacteristics().subscribe((res3: any) => {
+      console.log("ressss3333", res3)
+      this.characteristicsList = res3
 
     });
 
-    
-    
-
    // console.log("categotyList", this.categotyList)
-
-    this.dropdownList = [
-      { item_id: 1, item_text: 'Category 1' },
-      { item_id: 2, item_text: 'Category 2' },
-      { item_id: 3, item_text: 'Category 3' },
-      { item_id: 4, item_text: 'Category 4' }
-    ];
-
-    this.dropdownList2 = [
-      { item_id: 1, item_text: 'Category 5' },
-      { item_id: 2, item_text: 'Category 6' },
-      { item_id: 3, item_text: 'Category 7' },
-      { item_id: 4, item_text: 'Category 8' }
-    ];
-
-    this.dropdownList3 = [
-      { item_id: 1, item_text: 'Category 1' },
-      { item_id: 2, item_text: 'Category 2' },
-      { item_id: 3, item_text: 'Category 3' },
-      { item_id: 4, item_text: 'Category 4' }
-    ];
-
-    this.dropdownList4 = [
-      { item_id: 1, item_text: 'Category 5' },
-      { item_id: 2, item_text: 'Category 6' },
-      { item_id: 3, item_text: 'Category 7' },
-      { item_id: 4, item_text: 'Category 8' }
-    ];
+  
     
   
     this.dropdownSettings = {
@@ -240,17 +249,32 @@ export class MethodologyComponent implements OnInit {
       allowSearchFilter: true
     };
 
+    this.dropdownSettings2 = {
+      singleSelection: false,
+      idField: 'id',
+      textField: 'policyName',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      itemsShowLimit: 5,
+      allowSearchFilter: true
+    };
+
+
 
 
      // Initialize the list of characteristics based on the selected category
-     this.updateCharacteristics();
+    /*  this.updateCharacteristics(); */
   }
 
-  onSubmit(data:any){
+/*   onSubmit(data:any){
     console.log("dataaaa", data)
+   
 
+    this.methassess.methAssignDataSave(data).subscribe(res => {
+      console.log("saved data",res)
+    } )
   }
-
+ */
   onChange(event:any) {
     this.selectedType = event.target.value;
 
@@ -260,33 +284,31 @@ export class MethodologyComponent implements OnInit {
   }
 
   // Update the list of characteristics based on the selected category
-  updateCharacteristics() {
+/*   updateCharacteristics() {
     const selectedCategoryNames = new Set(this.selectedCategories);
     this.characteristics = this.categories
       .filter(category => selectedCategoryNames.has(category.name))
       .flatMap(category => category.characteristics);
+  } */
+  
+
+  getCategory(characteristics: any, category: any) {
+
+    /* const foundCategory = this.categories.find(c => c.name === category);
+    console.log("chaaaa",foundCategory ? foundCategory.characteristics : [])
+    return foundCategory ? foundCategory.characteristics : [];  */
+    this.characteristicsArray = [];
+    for (let x of this.characteristicsList) {
+      if (x.category.name === category) {
+        this.characteristicsArray.push(x)
+      }
+    }
+
+   // console.log("cha", this,this.characteristicsArray)
+    return this.characteristicsArray
+
   }
-  
-  
- getCategory(characteristics: any, category: any) {
-  const foundCategory = this.categories.find(c => c.name === category);
-  return foundCategory ? foundCategory.characteristics : [];
-}
 
-getCategory2(characteristics: any, category: any) {
-  const foundCategory = this.categories2.find(c => c.name === category);
-  return foundCategory ? foundCategory.characteristics : [];
-}
-
-getCategory3(characteristics: any, category: any) {
-  const foundCategory = this.categories3.find(c => c.name === category);
-  return foundCategory ? foundCategory.characteristics : [];
-}
-
-getCategory4(characteristics: any, category: any) {
-  const foundCategory = this.categories4.find(c => c.name === category);
-  return foundCategory ? foundCategory.characteristics : [];
-}
 
 //Processess of change
 onItemSelect(item: any) {
@@ -334,7 +356,7 @@ onSelectAll2(items: any) {
 }
 
  onItemDeSelect2(item: any) {
-  const index = this.selectedItems2.findIndex((selectedItem2) => selectedItem2.item_id === item.item_id);
+  const index = this.selectedItems2.findIndex((selectedItem2) => selectedItem2.id === item.item_id);
   this.selectedItems2.splice(index, 1);
 }
 
@@ -358,7 +380,7 @@ onSelectAll3(items: any) {
 }
 
  onItemDeSelect3(item: any) {
-  const index = this.selectedItems3.findIndex((selectedItem3) => selectedItem3.item_id === item.item_id);
+  const index = this.selectedItems3.findIndex((selectedItem3) => selectedItem3.id === item.item_id);
   this.selectedItems3.splice(index, 1);
 }
 
@@ -383,13 +405,172 @@ onSelectAll4(items: any) {
 }
 
  onItemDeSelect4(item: any) {
-  const index = this.selectedItems4.findIndex((selectedItem4) => selectedItem4.item_id === item.item_id);
+  const index = this.selectedItems4.findIndex((selectedItem4) => selectedItem4.id === item.item_id);
   this.selectedItems4.splice(index, 1);
 }
 
 
 onDeSelectAll4(item: any){
   this.selectedItems4 = [];
+}
+
+
+/* //////////////////////////////// */
+onSubmit(data: any) {
+
+  console.log("ddd: ", data)
+  let categoryDataArray: any[] = [];
+if( data.methodology === 'TC Uganda Geothermal'){
+  for (let category of this.selectedItems) {
+    let categoryData: any = {
+      categoryId :category.id,
+      category: category.name,
+      characteristics: []
+    };
+
+    for (let characteristic of this.getCategory(this.characteristicsList, category.name)) {
+      let charName = `${category.name}_${characteristic.name}`;
+      let charRelevance = `${category.name}_${characteristic.name}_relevance`;
+      let charScore = `${category.name}_${characteristic.name}_score`;
+
+      if (data[charName]) {
+        categoryData.characteristics.push({
+          id : characteristic.id,
+          name: characteristic.name,
+          relevance: data[charRelevance],
+          score: data[charScore]
+        });
+      }
+    }
+    console.log("kkk",categoryData);
+    categoryDataArray.push(categoryData);
+  }
+
+
+  for (let category of this.selectedItems2) {
+    let categoryData: any = {
+      categoryId :category.id,
+      category: category.name,
+      characteristics: []
+    };
+
+    for (let characteristic of this.getCategory(this.characteristicsList, category.name)) {
+      let charName = `${category.name}_${characteristic.name}`;
+      let charRelevance = `${category.name}_${characteristic.name}_relevance`;
+      let charScore = `${category.name}_${characteristic.name}_score`;
+
+      if (data[charName]) {
+        categoryData.characteristics.push({
+          id : characteristic.id,
+          name: characteristic.name,
+          relevance: data[charRelevance],
+          score: data[charScore]
+        });
+      }
+    }
+    console.log("kkk",categoryData);
+    categoryDataArray.push(categoryData);
+  }
+}
+  
+
+if( data.methodology === 'TC NACAG Initiative'){
+  for (let category of this.selectedItems3) {
+    let categoryData: any = {
+      categoryScore: data[`${category.name}_catscore`],
+      categoryId :category.id,
+      category: category.name,
+      characteristics: []
+    };
+
+    for (let characteristic of this.getCategory(this.characteristicsList, category.name)) {
+      let charName = `${category.name}_${characteristic.name}`;
+      let charRelevance = `${category.name}_${characteristic.name}_relevance`;
+      let charScore = `${category.name}_${characteristic.name}_score`;
+
+      if (data[charName]) {
+        categoryData.characteristics.push({
+          id : characteristic.id,
+          name: characteristic.name,
+          relevance: data[charRelevance],
+          score: data[charScore]
+        });
+      }
+    }
+    console.log("kkk",categoryData);
+    categoryDataArray.push(categoryData);
+  }
+
+
+  for (let category of this.selectedItems4) {
+    let categoryData: any = {
+      categoryScore: data[`${category.name}_catscore`],
+      categoryId :category.id,
+      category: category.name,
+      characteristics: []
+    };
+
+    for (let characteristic of this.getCategory(this.characteristicsList, category.name)) {
+      let charName = `${category.name}_${characteristic.name}`;
+      let charRelevance = `${category.name}_${characteristic.name}_relevance`;
+      let charScore = `${category.name}_${characteristic.name}_score`;
+
+      if (data[charName]) {
+        categoryData.characteristics.push({
+          id : characteristic.id,
+          name: characteristic.name,
+          relevance: data[charRelevance],
+          score: data[charScore]
+        });
+      }
+    }
+    console.log("kkk",categoryData);
+    categoryDataArray.push(categoryData);
+  }
+}
+  console.log("data",data)
+
+  for(let methdata of this.methListAll){
+    console.log("methdata",methdata)
+    if(data.methodology == methdata.methodology_name){
+       this.methId = methdata.id
+    }
+   
+  }
+
+  for(let policydata of this.policyList){
+    console.log("policydata",policydata)
+    if(data.policy == policydata.policyName){
+       this.policyId = policydata.id
+    }
+   
+  }
+
+  console.log("policy Selected Id : ", this.policyId)
+
+console.log("methiddd,", this.methId)
+  let allData: any = {
+    methodology : this.methId,
+    categoryData :categoryDataArray,
+    policyId : this.policyId
+  };
+  console.log("final array",allData);
+
+  // Send categoryDataArray to backend here
+
+   this.methassess.methAssignDataSave(allData).subscribe(res => {
+    console.log("saved data",res)
+
+    this.averageProcess = res.averageProcess
+    this.averageOutcome = res.averageOutcome
+
+    console.log("averageProcess1 : ", this.averageProcess)
+    console.log("averageOutcome1 : ", this.averageOutcome)
+
+    this.chart();
+  } ) 
+
+
 }
 
 

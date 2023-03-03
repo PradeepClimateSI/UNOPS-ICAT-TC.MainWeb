@@ -72,13 +72,13 @@
                             [disabled]="isView"
                             type="text"
                             name="telephone"
-                            [(ngModel)]="user.telephone"
+                            [(ngModel)]="user.landline"
                             class="form-control"
                             placeholder="Enter the pphone number"
                             required
                             #fTel="ngModel"
                         />
-                        <p class="info-message text-danger" *ngIf="(fTel.touched && !user.telephone) || (isSubmitted && !user.telephone)">
+                        <p class="info-message text-danger" *ngIf="(fTel.touched && !user.landline) || (isSubmitted && !user.landline)">
                             This is a mandatory field
                         </p>
                     </div>

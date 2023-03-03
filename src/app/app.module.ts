@@ -84,6 +84,8 @@ import { DocumentUploadComponent } from './shared/document-upload/document-uploa
 import {FileUploadModule} from 'primeng/fileupload';
 import { MethodologyComponent } from './methodology/methodology.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { ChartComponent } from './chart/chart.component';
+import { MethodologyControllerServiceProxy } from 'shared/service-proxies/meth-service-proxies';
 
 export function getRemoteServiceBaseUrl(): string {
   return environment.baseUrlAPI;
@@ -102,6 +104,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         ViewComponent,
         DocumentUploadComponent,
         MethodologyComponent,
+        ChartComponent,
     ],
     imports: [
         FormsModule,
@@ -172,6 +175,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         SectorControllerServiceProxy,
         NdcControllerServiceProxy,
         MethodologyAssessmentControllerServiceProxy,
+        MethodologyControllerServiceProxy,
         DatePipe,
         {provide: API_BASE_URL, useFactory: getRemoteServiceBaseUrl},
         {provide: AUTH_API_BASE_URL, useFactory: getAuthRemoteServiceBaseUrl},
