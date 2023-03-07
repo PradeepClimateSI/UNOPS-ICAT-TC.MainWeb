@@ -208,6 +208,7 @@ export class MethodologyComponent implements OnInit {
         this.methListAll.push(x);
       } 
 
+      console.log("policyList222 : ", this.policyList)
     });
 
    
