@@ -8,6 +8,8 @@ import { LoardMoreComponent } from './landing-page/loard-more/loard-more.compone
 import { DashboardBaseComponent } from './dashboard-base/dashboard-base.component';
 import { ClimateActionComponent } from './climate-action/climate-action/climate-action.component';
 import { ViewComponent } from './climate-action/view/view.component';
+import { MethodologyComponent } from './methodology/methodology.component';
+import { ChartComponent } from './chart/chart.component';
 // import { UnitComponent } from './unit_/unit.component';
 
 const routes: Routes = [
@@ -32,7 +34,21 @@ const routes: Routes = [
     loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}
-  }
+  },
+  {
+    path: 'app/methodology',
+    component: MethodologyComponent,
+    loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'app/chart',
+    component: ChartComponent,
+    loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
 ];
 
 @NgModule({

@@ -73,6 +73,7 @@ import {
   CountryControllerServiceProxy,
   SectorControllerServiceProxy,
   NdcControllerServiceProxy,
+  MethodologyAssessmentControllerServiceProxy,
   UserTypeControllerServiceProxy,
   InstitutionControllerServiceProxy,
 } from 'shared/service-proxies/service-proxies';
@@ -83,6 +84,10 @@ import { ClimateActionComponent } from './climate-action/climate-action/climate-
 import { ViewComponent } from './climate-action/view/view.component';
 import { DocumentUploadComponent } from './shared/document-upload/document-upload.component';
 import {FileUploadModule} from 'primeng/fileupload';
+import { MethodologyComponent } from './methodology/methodology.component';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { ChartComponent } from './chart/chart.component';
+import { MethodologyControllerServiceProxy } from 'shared/service-proxies/meth-service-proxies';
 import {StyleClassModule} from 'primeng/styleclass';
 import { UserModule } from './user/user.module';
 export function getRemoteServiceBaseUrl(): string {
@@ -101,6 +106,8 @@ export function getAuthRemoteServiceBaseUrl(): string {
         ClimateActionComponent,
         ViewComponent,
         DocumentUploadComponent,
+        MethodologyComponent,
+        ChartComponent,
     ],
     imports: [
         FormsModule,
@@ -158,6 +165,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         DialogModule,
         DashboardModule,  
         FileUploadModule,  
+        NgMultiSelectDropDownModule.forRoot(),
         UserModule 
     ],
     providers: [
@@ -171,6 +179,8 @@ export function getAuthRemoteServiceBaseUrl(): string {
         CountryControllerServiceProxy,
         SectorControllerServiceProxy,
         NdcControllerServiceProxy,
+        MethodologyAssessmentControllerServiceProxy,
+        MethodologyControllerServiceProxy,
         UserTypeControllerServiceProxy,
         InstitutionControllerServiceProxy,
         DatePipe,
