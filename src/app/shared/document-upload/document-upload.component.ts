@@ -33,7 +33,7 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
   loading: boolean;
   uploadedFiles: any[] = [];
   SERVER_URL = environment.baseUrlAPIDocUploadAPI; //"http://localhost:7080/document/upload2";
-  SERVER_URL_ANONYMOUS = environment.baseUrlAPIDocUploadAnonymousAPI;
+  SERVER_URL_ANONYMOUS = environment.baseUrlAPIDocUploadAPI;
   uploadURL: string;
   token: string;
   constructor(
