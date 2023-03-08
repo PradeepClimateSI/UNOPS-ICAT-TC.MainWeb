@@ -45,6 +45,13 @@ const routes: Routes = [
     canActivate: [],
     data: {}
   },
+  {
+    path: 'app',
+    component: DashboardBaseComponent,
+    loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
   { path: 'landing-page', component: LandingPageComponent },
   { path: 'loard-more', component: LoardMoreComponent },
   { path: 'climate-action', component: ClimateActionComponent },
@@ -68,13 +75,7 @@ const routes: Routes = [
   },
 
 
-  {
-    path: 'app',
-    component: DashboardBaseComponent,
-    loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
-    canActivate: [],
-    data: {}
-  }
+
 ];
 
 @NgModule({

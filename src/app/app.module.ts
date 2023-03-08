@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+// import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { NgImageSliderModule } from 'ng-image-slider';
 import { CarouselModule } from 'primeng/carousel';
@@ -46,9 +46,9 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { environment } from '../environments/environment';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { NbThemeModule,  NbLayoutModule,} from '@nebular/theme';
-import { FlexLayoutModule } from '@angular/flex-layout';
+// import { FlexLayoutModule } from '@angular/flex-layout';
 import { MessagesModule } from 'primeng/messages';
-import { TableModule } from 'primeng/table';
+// import { TableModule } from 'primeng/table';
 
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 
@@ -56,7 +56,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { LoardMoreComponent } from './landing-page/loard-more/loard-more.component';
 import { DatePipe } from '@angular/common';
-import {RippleModule} from "primeng/ripple";
+// import {RippleModule} from "primeng/ripple";
 import {InputTextModule} from "primeng/inputtext";
 // import { DashboardBaseComponent } from './dashboard-base/dashboard-base.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
@@ -87,6 +87,8 @@ import { RoleGuardService } from './auth/role-guard.service';
 import { InstitutionListComponent } from './institution/institution-list/institution-list.component';
 import { EditInstitutionComponent } from './institution/edit-institution/edit-institution.component';
 import { ViewInstitutionComponent } from './institution/view-institution/view-institution.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { BrowserModule } from '@angular/platform-browser/platform-browser';
 
 export function getRemoteServiceBaseUrl(): string {
   return environment.baseUrlAPI;
@@ -97,6 +99,9 @@ export function getRemoteServiceESBaseUrl(): string {
 export function getAuthRemoteServiceBaseUrl(): string {
   return environment.authBaseUrlAPI;
 }
+
+
+
 @NgModule({
     declarations: [
         AppComponent,

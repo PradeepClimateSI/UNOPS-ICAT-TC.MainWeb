@@ -78,6 +78,7 @@ export class InstitutionComponent implements OnInit {
 
   ngOnInit(): void {
 
+    console.log('+++++++++++++++++++++')
     const token = localStorage.getItem('access_token')!;
 
     const tokenPayload = decode<any>(token);
@@ -131,6 +132,7 @@ export class InstitutionComponent implements OnInit {
       0
     ).subscribe((res: any) => {
       this.selectedTypeList = res.data;
+      console.log("++++++",this.selectedTypeList)
       if(this.dataCollectionModuleStatus == 0){
         console.log('dataCollectionModuleStatus',this.dataCollectionModuleStatus)
         this.selectedTypeList = this.selectedTypeList.filter((o: any) => o.name != "Data provider" && o.name != "Data Collection Team"&& o.name != "QC Team");
