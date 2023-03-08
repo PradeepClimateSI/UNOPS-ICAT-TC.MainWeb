@@ -74,6 +74,8 @@ import {
   SectorControllerServiceProxy,
   NdcControllerServiceProxy,
   MethodologyAssessmentControllerServiceProxy,
+  UserTypeControllerServiceProxy,
+  InstitutionControllerServiceProxy,
 } from 'shared/service-proxies/service-proxies';
 
 import { AUTH_API_BASE_URL, ServiceProxy as AuthServiceProxy, AuthControllerServiceProxy } from 'shared/service-proxies/auth-service-proxies';
@@ -85,8 +87,9 @@ import {FileUploadModule} from 'primeng/fileupload';
 import { MethodologyComponent } from './methodology/methodology.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ChartComponent } from './chart/chart.component';
-import { MethodologyControllerServiceProxy } from 'shared/service-proxies/meth-service-proxies';
-
+//import { MethodologyControllerServiceProxy } from 'shared/service-proxies/meth-service-proxies';
+import {StyleClassModule} from 'primeng/styleclass';
+import { UserModule } from './user/user.module';
 export function getRemoteServiceBaseUrl(): string {
   return environment.baseUrlAPI;
 }
@@ -113,6 +116,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         BrowserAnimationsModule,
         FormsModule,
         HttpClientModule,
+        StyleClassModule,
 
         NgImageSliderModule,
         MultiSelectModule,
@@ -160,8 +164,9 @@ export function getAuthRemoteServiceBaseUrl(): string {
         InputTextModule,
         DialogModule,
         DashboardModule,  
-        FileUploadModule,   
+        FileUploadModule,  
         NgMultiSelectDropDownModule.forRoot(),
+        UserModule 
     ],
     providers: [
         ConfirmationService,
@@ -175,7 +180,9 @@ export function getAuthRemoteServiceBaseUrl(): string {
         SectorControllerServiceProxy,
         NdcControllerServiceProxy,
         MethodologyAssessmentControllerServiceProxy,
-        MethodologyControllerServiceProxy,
+        //MethodologyControllerServiceProxy,
+        UserTypeControllerServiceProxy,
+        InstitutionControllerServiceProxy,
         DatePipe,
         {provide: API_BASE_URL, useFactory: getRemoteServiceBaseUrl},
         {provide: AUTH_API_BASE_URL, useFactory: getAuthRemoteServiceBaseUrl},
