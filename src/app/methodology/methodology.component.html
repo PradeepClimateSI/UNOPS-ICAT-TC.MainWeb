@@ -65,17 +65,16 @@
                     <div class="col-12 col-md-8">
                       <div class="p-field">
                         <label for="category-select">Categories:</label>
-                        <ng-multiselect-dropdown
+                        <p-multiSelect
                                   [placeholder]="'Select Categories'"
-                                  [settings]="dropdownSettings"
-                                  [data]="meth1Process"
+                                  [options]="meth1Process"
                                   [(ngModel)]="selectedItems"
                                   (onSelect)="onItemSelect($event)"
                                   (onSelectAll)="onSelectAll($event)"
                                   (onDeSelect)="onItemDeSelect($event)"
                                   (onDeSelectAll)="onDeSelectAll($event)"
                                   >
-                                  </ng-multiselect-dropdown>
+                                  </p-multiSelect>
 
                       </div>
                     </div>
@@ -143,17 +142,16 @@
           <div class="col-12 col-md-8">
             <div class="p-field">
               <label for="category-select">Categories:</label>
-              <ng-multiselect-dropdown
+              <p-multiSelect
                         [placeholder]="'Select Categories'"
-                        [settings]="dropdownSettings"
-                        [data]="meth1Outcomes"
+                        [options]="meth1Outcomes"
                         [(ngModel)]="selectedItems2"
                         (onSelect)="onItemSelect2($event)"
                         (onSelectAll)="onSelectAll2($event)"
                         (onDeSelect)="onItemDeSelect2($event)"
                         (onDeSelectAll)="onDeSelectAll2($event)"
                         >
-                        </ng-multiselect-dropdown>
+                        </p-multiSelect>
 
 
             </div>
@@ -197,17 +195,16 @@
                 <div class="col-12 col-md-8">
                   <div class="p-field">
                     <label for="category-select">Categories:</label>
-                    <ng-multiselect-dropdown
+                    <p-multiSelect
                               [placeholder]="'Select Categories'"
-                              [settings]="dropdownSettings"
-                              [data]="meth1Process"
+                              [options]="meth1Process"
                               [(ngModel)]="selectedItems3"
                               (onSelect)="onItemSelect3($event)"
                               (onSelectAll)="onSelectAll3($event)"
                               (onDeSelect)="onItemDeSelect3($event)"
                               (onDeSelectAll)="onDeSelectAll3($event)"
                               >
-                              </ng-multiselect-dropdown>
+                              </p-multiSelect>
 
                   </div>
                 </div>
@@ -280,17 +277,16 @@
                 <div class="col-12 col-md-8">
                   <div class="p-field">
                     <label for="category-select">Categories:</label>
-                    <ng-multiselect-dropdown
+                    <p-multiSelect
                               [placeholder]="'Select Categories'"
-                              [settings]="dropdownSettings"
-                              [data]="meth1Outcomes"
+                              [options]="meth1Outcomes"
                               [(ngModel)]="selectedItems4"
                               (onSelect)="onItemSelect4($event)"
                               (onSelectAll)="onSelectAll4($event)"
                               (onDeSelect)="onItemDeSelect4($event)"
                               (onDeSelectAll)="onDeSelectAll4($event)"
                               >
-                              </ng-multiselect-dropdown>
+                              </p-multiSelect>
 
                   </div>
                 </div>

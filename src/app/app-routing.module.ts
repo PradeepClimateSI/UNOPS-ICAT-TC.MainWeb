@@ -13,6 +13,8 @@ import { InstitutionListComponent } from './institution/institution-list/institu
 import { EditInstitutionComponent } from './institution/edit-institution/edit-institution.component';
 import { ViewInstitutionComponent } from './institution/view-institution/view-institution.component';
 import { RoleGuardService } from './auth/role-guard.service';
+import { MethodologyComponent } from './methodology/methodology.component';
+import { ChartComponent } from './chart/chart.component';
 
 export enum CountryModule {
   CLIMATE_ACTION_MODULE = 0,
@@ -34,11 +36,10 @@ export enum UserRoles {
   INS_ADMIN = 'Institution Admin',
   DEO = 'Data Entry Operator',
 }
-import { MethodologyComponent } from './methodology/methodology.component';
-import { ChartComponent } from './chart/chart.component';
+
 // import { UnitComponent } from './unit_/unit.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   { path: '', redirectTo: '/app', pathMatch: 'full' },
   { path: 'landing-page', component: LandingPageComponent },
   { path: 'loard-more', component: LoardMoreComponent },
@@ -92,5 +93,8 @@ const routes: Routes = [
     data: {}
   },
 ];
-
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
+})
 export class AppRoutingModule {}

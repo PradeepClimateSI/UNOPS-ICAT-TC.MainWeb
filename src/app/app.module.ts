@@ -1,103 +1,78 @@
-import { NgModule } from '@angular/core';
-// import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
-import { NgImageSliderModule } from 'ng-image-slider';
-import { CarouselModule } from 'primeng/carousel';
-import { Location } from '@angular/common';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { NgModule } from "@angular/core";
+import { FormsModule } from "@angular/forms";
+import { BrowserModule } from "@angular/platform-browser";
+import { environment } from "environments/environment";
+import { ButtonModule } from "primeng/button";
+import { DropdownModule } from "primeng/dropdown";
+import { StyleClassModule } from "primeng/styleclass";
+// import { AppRoutingModule } from "./app-routing.module";
+import { AppComponent } from "./app.component";
+import { ChartComponent } from "./chart/chart.component";
+import { ClimateActionComponent } from "./climate-action/climate-action/climate-action.component";
+import { ViewComponent } from "./climate-action/view/view.component";
+import { DashboardBaseComponent } from "./dashboard-base/dashboard-base.component";
+import { InstitutionComponent } from "./institution/add-institution/institution.component";
+import { EditInstitutionComponent } from "./institution/edit-institution/edit-institution.component";
+import { InstitutionListComponent } from "./institution/institution-list/institution-list.component";
+import { ViewInstitutionComponent } from "./institution/view-institution/view-institution.component";
+import { MethodologyComponent } from "./methodology/methodology.component";
+import { DocumentUploadComponent } from "./shared/document-upload/document-upload.component";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-// import { TokenInterceptor } from 'src/shared/token-interceptor ';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { HttpClientModule } from '@angular/common/http';
-import { PaginatorModule } from 'primeng/paginator';
-import { AutoCompleteModule } from 'primeng/autocomplete';
+import { NgImageSliderModule } from 'ng-image-slider';
 import { ToastModule } from 'primeng/toast';
-import { ButtonModule } from 'primeng/button';
-import { DropdownModule } from 'primeng/dropdown';
-import { StepsModule } from 'primeng/steps';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { ToggleButtonModule } from 'primeng/togglebutton';
+import { SplitButtonModule } from 'primeng/splitbutton';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { StepsModule } from 'primeng/steps';
 import { CheckboxModule } from 'primeng/checkbox';
 import { CalendarModule } from 'primeng/calendar';
 import { DialogModule } from 'primeng/dialog';
 import { ListboxModule } from 'primeng/listbox';
+import { TableModule } from 'primeng/table';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { InputMaskModule } from 'primeng/inputmask';
 import { TabViewModule } from 'primeng/tabview';
 import { AccordionModule } from 'primeng/accordion';
 import { CardModule } from 'primeng/card';
 import { SliderModule } from 'primeng/slider';
-import { ToggleButtonModule } from 'primeng/togglebutton';
-import { SplitButtonModule } from 'primeng/splitbutton';
-import { SelectButtonModule } from 'primeng/selectbutton';
 import { TooltipModule } from 'primeng/tooltip';
 import { ProgressBarModule } from 'primeng/progressbar';
-import { InputNumberModule } from 'primeng/inputnumber';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmationService } from 'primeng/api';
-import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { ChartModule } from 'primeng/chart';
 import { TreeModule } from 'primeng/tree';
-
-
-import { GMapModule } from 'primeng/gmap';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
-
-import { environment } from '../environments/environment';
-import { MultiSelectModule } from 'primeng/multiselect';
-import { NbThemeModule,  NbLayoutModule,} from '@nebular/theme';
-// import { FlexLayoutModule } from '@angular/flex-layout';
 import { MessagesModule } from 'primeng/messages';
-// import { TableModule } from 'primeng/table';
-
-import { NbEvaIconsModule } from '@nebular/eva-icons';
-
-import { DashboardModule } from './dashboard/dashboard.module';
-import { LandingPageComponent } from './landing-page/landing-page.component';
-import { LoardMoreComponent } from './landing-page/loard-more/loard-more.component';
-import { DatePipe } from '@angular/common';
-// import {RippleModule} from "primeng/ripple";
-import {InputTextModule} from "primeng/inputtext";
-// import { DashboardBaseComponent } from './dashboard-base/dashboard-base.component';
-import { AuthInterceptor } from './auth/auth.interceptor';
-import { ErrorInterceptor } from './auth/error.interceptor';
-import { AuthGuard } from './auth/auth.guard';
-
-
-
 import {
-  API_BASE_URL,
-  DocumentControllerServiceProxy,
-  ServiceProxy,
-  ProjectControllerServiceProxy,
-  CountryControllerServiceProxy,
-  SectorControllerServiceProxy,
-  NdcControllerServiceProxy,
-  MethodologyAssessmentControllerServiceProxy,
-  UserTypeControllerServiceProxy,
-  InstitutionControllerServiceProxy,
-} from 'shared/service-proxies/service-proxies';
+  NbThemeModule,
+  NbLayoutModule,
+} from '@nebular/theme';
+import { DynamicDialogModule } from 'primeng/dynamicdialog';
+import { NbEvaIconsModule } from '@nebular/eva-icons';
+import { GMapModule } from 'primeng/gmap';
+import { PaginatorModule } from 'primeng/paginator';
+import { CarouselModule } from 'primeng/carousel';
+import { DashboardModule } from './dashboard/dashboard.module';
+import { FileUploadModule } from 'primeng/fileupload';
+import { ConfirmationService } from "primeng/api";
+import { API_BASE_URL, AuthControllerServiceProxy, CountryControllerServiceProxy, DocumentControllerServiceProxy, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, NdcControllerServiceProxy, ProjectControllerServiceProxy, SectorControllerServiceProxy, ServiceProxy, UserTypeControllerServiceProxy } from "shared/service-proxies/service-proxies";
+import { AUTH_API_BASE_URL, ServiceProxy as AuthServiceProxy, } from 'shared/service-proxies/auth-service-proxies';
 
-import { AUTH_API_BASE_URL, ServiceProxy as AuthServiceProxy, AuthControllerServiceProxy } from 'shared/service-proxies/auth-service-proxies';
-import { DashboardBaseComponent } from './dashboard-base/dashboard-base.component';
-import { ClimateActionComponent } from './climate-action/climate-action/climate-action.component';
-import { ViewComponent } from './climate-action/view/view.component';
-import { DocumentUploadComponent } from './shared/document-upload/document-upload.component';
-import {FileUploadModule} from 'primeng/fileupload';
-import { InstitutionComponent } from './institution/add-institution/institution.component';
-import { RoleGuardService } from './auth/role-guard.service';
-import { InstitutionListComponent } from './institution/institution-list/institution-list.component';
-import { EditInstitutionComponent } from './institution/edit-institution/edit-institution.component';
-import { ViewInstitutionComponent } from './institution/view-institution/view-institution.component';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { BrowserModule } from '@angular/platform-browser/platform-browser';
+import { RoleGuardService } from "./auth/role-guard.service";
+import { DatePipe } from "@angular/common";
+import { AuthInterceptor } from "./auth/auth.interceptor";
+import { AuthGuard } from "./auth/auth.guard";
+import { ErrorInterceptor } from "./auth/error.interceptor";
+import { FlexLayoutModule } from "@angular/flex-layout";
+import { RippleModule } from "primeng/ripple";
+import { InputTextModule } from "primeng/inputtext";
+import { AppRoutingModule } from "./app-routing.module";
+import { UserModule } from "./user/user.module";
+import { MultiSelectModule } from 'primeng/multiselect';
 
-import { MethodologyComponent } from './methodology/methodology.component';
-import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import { ChartComponent } from './chart/chart.component';
-//import { MethodologyControllerServiceProxy } from 'shared/service-proxies/meth-service-proxies';
-import {StyleClassModule} from 'primeng/styleclass';
-import { UserModule } from './user/user.module';
 export function getRemoteServiceBaseUrl(): string {
   return environment.baseUrlAPI;
 }
@@ -129,10 +104,9 @@ export function getAuthRemoteServiceBaseUrl(): string {
         BrowserModule,
         AppRoutingModule,
         BrowserAnimationsModule,
-        FormsModule,
         HttpClientModule,
         StyleClassModule,
-
+        MultiSelectModule,
         NgImageSliderModule,
         MultiSelectModule,
         ToastModule,
@@ -166,9 +140,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         FlexLayoutModule,
         BrowserModule,
         BrowserAnimationsModule,
-        AppRoutingModule,
-        MessagesModule,        
-        ToastModule,
+        MessagesModule, 
         NbThemeModule.forRoot({name: 'default'}),
         NbLayoutModule,
         NbEvaIconsModule,
@@ -180,8 +152,8 @@ export function getAuthRemoteServiceBaseUrl(): string {
         DialogModule,
         DashboardModule,  
         FileUploadModule,  
-        NgMultiSelectDropDownModule.forRoot(),
-        UserModule 
+        // NgMultiSelectDropDownModule.forRoot(),
+        UserModule,
     ],
     providers: [
         ConfirmationService,
