@@ -73,6 +73,7 @@ import {
   CountryControllerServiceProxy,
   SectorControllerServiceProxy,
   NdcControllerServiceProxy,
+  MethodologyAssessmentControllerServiceProxy,
 } from 'shared/service-proxies/service-proxies';
 
 import { AUTH_API_BASE_URL, ServiceProxy as AuthServiceProxy, AuthControllerServiceProxy } from 'shared/service-proxies/auth-service-proxies';
@@ -81,6 +82,10 @@ import { ClimateActionComponent } from './climate-action/climate-action/climate-
 import { ViewComponent } from './climate-action/view/view.component';
 import { DocumentUploadComponent } from './shared/document-upload/document-upload.component';
 import {FileUploadModule} from 'primeng/fileupload';
+import { MethodologyComponent } from './methodology/methodology.component';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { ChartComponent } from './chart/chart.component';
+import { MethodologyControllerServiceProxy } from 'shared/service-proxies/meth-service-proxies';
 
 export function getRemoteServiceBaseUrl(): string {
   return environment.baseUrlAPI;
@@ -98,6 +103,8 @@ export function getAuthRemoteServiceBaseUrl(): string {
         ClimateActionComponent,
         ViewComponent,
         DocumentUploadComponent,
+        MethodologyComponent,
+        ChartComponent,
     ],
     imports: [
         FormsModule,
@@ -154,6 +161,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         DialogModule,
         DashboardModule,  
         FileUploadModule,   
+        NgMultiSelectDropDownModule.forRoot(),
     ],
     providers: [
         ConfirmationService,
@@ -166,6 +174,8 @@ export function getAuthRemoteServiceBaseUrl(): string {
         CountryControllerServiceProxy,
         SectorControllerServiceProxy,
         NdcControllerServiceProxy,
+        MethodologyAssessmentControllerServiceProxy,
+        MethodologyControllerServiceProxy,
         DatePipe,
         {provide: API_BASE_URL, useFactory: getRemoteServiceBaseUrl},
         {provide: AUTH_API_BASE_URL, useFactory: getAuthRemoteServiceBaseUrl},
