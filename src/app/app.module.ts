@@ -107,6 +107,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         HttpClientModule,
         StyleClassModule,
         MultiSelectModule,
+
         NgImageSliderModule,
         MultiSelectModule,
         ToastModule,

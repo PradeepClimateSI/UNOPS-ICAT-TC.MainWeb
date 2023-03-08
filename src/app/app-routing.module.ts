@@ -37,7 +37,6 @@ export enum UserRoles {
   DEO = 'Data Entry Operator',
 }
 
-// import { UnitComponent } from './unit_/unit.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/app', pathMatch: 'full' },
@@ -56,31 +55,9 @@ export const routes: Routes = [
     canActivate: [],
     data: {}
   },
-  { path: 'landing-page', component: LandingPageComponent },
-  { path: 'loard-more', component: LoardMoreComponent },
-  { path: 'view-climate-action', component: ViewComponent },
-  { path: 'institution', component: InstitutionComponent },
-  { path: 'edit-institution', component: EditInstitutionComponent },
-  { path: 'view-institution', component: ViewInstitutionComponent },
-  {
-    path: 'institution-list',
-    component: InstitutionListComponent,
-    canActivate: [RoleGuardService],
-    // data: {
-    //   expectedRoles: [
-    //     UserRoles.COUNTRY_ADMIN,
-    //     UserRoles.SECTOR_ADMIN,
-    //     UserRoles.MRV_ADMIN,
-    //     UserRoles.TT,
-    //     UserRoles.DCT,
-    //   ],
-    // },
-  },
-
-
-
   {
     path: 'app/methodology',
+    component: MethodologyComponent,
     loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}
@@ -93,6 +70,8 @@ export const routes: Routes = [
     data: {}
   },
 ];
+
+
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
