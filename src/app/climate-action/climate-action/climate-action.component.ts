@@ -26,7 +26,6 @@ import {
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
-import jspdf from 'jspdf';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import decode from 'jwt-decode';
