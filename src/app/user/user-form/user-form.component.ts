@@ -322,21 +322,22 @@ export class UserFormComponent implements OnInit {
 
     console.log("ngonitit")
     const token = localStorage.getItem('access_token')!;
-  
-      const tokenPayload = decode<any>(token);
+    console.log("token",token)
+    
+      const tokenPayload = token ? decode<any>(token):'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3IiOiJzZWN0b3JhZG1pbjJAY2xpbWF0ZXNpLmNvbSIsImZuYW1lIjoiTWFkaHV3YW50aGEiLCJsbmFtZSI6IkhpbmRhZ29kYSIsImNvdW50cnlJZCI6MSwiaW5zdE5hbWUiOiJUcmFuc3BvcnQgTWluaXN0cnkiLCJtb2R1bGVMZXZlbHMiOlsxLDEsMSwxLDFdLCJzZWN0b3JJZCI6MSwicm9sZXMiOlsiU2VjdG9yIEFkbWluIl0sImlhdCI6MTY3ODE3MzM4MiwiZXhwIjoxNjc5MDM3MzgyfQ.0bpc5Jm3TxUhoOU8sNwnLGRtsonGAY4et1O2PlmicGA';
       this.countryId=tokenPayload.countryId;
 
       let country=new Country()
        country.id=this.countryId;
       // country.id=2;
       this.sectorId = tokenPayload.sectorId;
-      this.userRole = tokenPayload.roles[0]
+      //this.userRole = tokenPayload.roles[0]
       console.log("user role..",this.userRole)
 
     this.user.userType = undefined!;
     this.user.mobile = '';
     this.user.landline = '';
-    this.user.country=country;
+    //this.user.country=country;
 
     this.route.queryParams.subscribe((params) => {
       this.editUserId = params['id'];
@@ -360,63 +361,49 @@ export class UserFormComponent implements OnInit {
                                      "ae_id" : this.user.userType.id      }
             this.selectedUserTypesFordrop.push(this.selecteduserType)
             
-
-          
-
-          
-
-     
-
-            // this.institutions.forEach((ins) => {
-            //   if (ins.id == this.user.institution.id) {
-            //     this.user.institution = ins;
-            //     console.log('ins set =======================');
-            //   }
-            // });
           });
       }
     });
-
+    console.log('working' );
     this.UserTypeServiceProxy.getUserTypes().subscribe((res: any) => {
-      console.log('userTypes res ============', res);
       this.userTypes = res;
-      console.log('userTypes============', this.userTypes);
     });
+    
+    // this.instProxy.getAllInstitutions().subscribe((res: any) => {
+    //   console.log('institutions res ============', res);
+    //   this.institutions = res;
+    // });
+
 
     
-      this.instProxy.getInstitutionForManageUsers(0,0)
-      .subscribe((res) => {
-        console.log('institutions res ============', res);
-        this.institutions = res.items;
+      // this.instProxy.getInstitutionForManageUsers(0,0)
+      // .subscribe((res) => {
+      //   console.log('institutions res ============', res);
+      //   this.institutions = res.items;
 
-        if (this.user?.institution) {
-          this.institutions.forEach((ins: Institution) => {
-            if (ins.id == this.user.institution.id) {
-              let cat = ins.category;
-              let type = ins.type;
-              ins.category = new InstitutionCategory(cat)
-              ins.type = new InstitutionType(type)
-              let _ins = new Institution(ins)
-              console.log(_ins)
-              this.user.institution = _ins;
-              console.log('ins set =======================');
-            }
-          });
-        }
-        console.log('institutions============', this.institutions);
-        // remove UNFCCC Focal Point type institution
-        // this.institutions = this.institutions.filter((o)=> o.type.id != 1);
-
+      //   if (this.user?.institution) {
+      //     this.institutions.forEach((ins: Institution) => {
+      //       if (ins.id == this.user.institution.id) {
+      //         let cat = ins.category;
+      //         let type = ins.type;
+      //         ins.category = new InstitutionCategory(cat)
+      //         ins.type = new InstitutionType(type)
+      //         let _ins = new Institution(ins)
+      //         console.log(_ins)
+      //         this.user.institution = _ins;
+      //         console.log('ins set =======================');
+      //       }
+      //     });
+      //   }
+      //   console.log('institutions============', this.institutions);
         
-        
-
-       if(this.userRole == 'Data Collection Team')
-       {
-        this.institutions = this.institutions.filter((o)=>o.country.id == this.countryId && o.sectorId == this.sectorId && o.type.id == 3);
-       }
+      //  if(this.userRole == 'Data Collection Team')
+      //  {
+      //   this.institutions = this.institutions.filter((o)=>o.country.id == this.countryId && o.sectorId == this.sectorId && o.type.id == 3);
+      //  }
 
 
-      });
+      // });
   }
 
   onChangeUser(event: any) {
@@ -432,47 +419,12 @@ export class UserFormComponent implements OnInit {
       if (this.isNewUser) {
         this.isEmailUsed = false;
         this.usedEmail = '';
-
+        console.log('working' );
         let tempUsers = await this.serviceProxy
-          .getManyBaseUsersControllerUser(
-            undefined,
-            undefined,
-            ['email||$eq||' + this.user.email],
-            undefined,
-            ['firstName,ASC'],
-            ['institution'],
-            1,
-            0,
-            0,
-            0
-          )
-          .subscribe((res) => {
-            if (res.data.length > 0) {
-              this.isEmailUsed = true;
-              this.usedEmail = res.data[0].email;
-              // alert("Email address is already in use, please select a diffrent email address to create a new user.")
-              // this.confirmationService.confirm({
-              //   message:
-              //     'Email address is already in use, please select a diffrent email address to create a new user.!',
-              //   header: 'Error!',
-              //   //acceptIcon: 'icon-not-visible',
-              //   rejectIcon: 'icon-not-visible',
-              //   rejectVisible: false,
-              //   acceptLabel: 'Ok',
-              //   accept: () => {
-              //     // this.onBackClick();
-              //   },
-
-              //   reject: () => {},
-              // });
-              this.messageService.add({
-                severity: 'error',
-                summary: 'Error.',
-                detail: 'Email address is already in use, please select a diffrent email address to create a new user.!',
-                sticky: true,
-              });
-            } else {
+          
+           
               // create user
+              console.log('create user' );
               this.user.username = this.user.email;
               this.user.status = 0;
               // this.user.status = 1;
@@ -492,19 +444,7 @@ export class UserFormComponent implements OnInit {
                 .createOneBaseUsersControllerUser(this.user)
                 .subscribe(
                   (res) => {
-                    // this.confirmationService.confirm({
-                    //   message: 'User is created successfully!',
-                    //   header: 'Confirmation',
-                    //   //acceptIcon: 'icon-not-visible',
-                    //   rejectIcon: 'icon-not-visible',
-                    //   rejectVisible: false,
-                    //   acceptLabel: 'Ok',
-                    //   accept: () => {
-                    //     this.onBackClick();
-                    //   },
-
-                    //   reject: () => {},
-                    // });
+                  
                     this.messageService.add({
                       severity: 'success',
                       summary: 'Success',
@@ -524,28 +464,9 @@ export class UserFormComponent implements OnInit {
                 setTimeout(() => {
                   this.onBackClick();    
                 },1000);
-            }
-          });
-
-        // this.serviceProxy.createOneBaseUserv2ControllerUser(this.user).subscribe(res => {
-        //   alert("User created !");
-        //   //this.DisplayAlert('User created !', AlertType.Message);
-
-        //   console.log("edit user", res.id);
-
-        //   this.router.navigate(['/user'], { queryParams: { id: res.id } });
-
-        // }, error => {
-        //   alert("An error occurred, please try again.")
-        //   // this.DisplayAlert('An error occurred, please try again.', AlertType.Error);
-
-        //   console.log("Error", error);
-        // });
+       
       } else {
-        // let insTemp = this.user.institution
-        // this.user.institution = new Institution();
-        // this.user.institution.id = insTemp.id;
-        //update user
+       
         this.serviceProxy
           .updateOneBaseUsersControllerUser(this.user.id, this.user)
           .subscribe(
@@ -593,7 +514,7 @@ export class UserFormComponent implements OnInit {
   }
 
   onBackClick() {
-    this.router.navigate(['/user-list']);
+    this.router.navigate(['/app']);
   }
 
   onDeleteClick() {

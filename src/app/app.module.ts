@@ -87,7 +87,7 @@ import {FileUploadModule} from 'primeng/fileupload';
 import { MethodologyComponent } from './methodology/methodology.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ChartComponent } from './chart/chart.component';
-import { MethodologyControllerServiceProxy } from 'shared/service-proxies/meth-service-proxies';
+//import { MethodologyControllerServiceProxy } from 'shared/service-proxies/meth-service-proxies';
 import {StyleClassModule} from 'primeng/styleclass';
 import { UserModule } from './user/user.module';
 export function getRemoteServiceBaseUrl(): string {
@@ -180,7 +180,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         SectorControllerServiceProxy,
         NdcControllerServiceProxy,
         MethodologyAssessmentControllerServiceProxy,
-        MethodologyControllerServiceProxy,
+        //MethodologyControllerServiceProxy,
         UserTypeControllerServiceProxy,
         InstitutionControllerServiceProxy,
         DatePipe,
