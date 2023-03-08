@@ -3,7 +3,7 @@
   "defaultVariables": null,
   "documentGenerator": {
     "fromDocument": {
-      "url": "http://localhost:7080/api-json",
+      "url": "http://localhost:7100/api-json",
       "output": null
     }
   },
@@ -52,7 +52,7 @@
       "convertConstructorInterfaceData": false,
       "importRequiredTypes": true,
       "useGetBaseUrlMethod": false,
-      "baseUrlTokenName": "ES_API_BASE_URL",
+      "baseUrlTokenName": "AUTH_API_BASE_URL",
       "queryNullValue": "",
       "inlineNamedDictionaries": false,
       "inlineNamedAny": false,
@@ -62,7 +62,7 @@
       "enumNameGeneratorType": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "../src/shared/service-proxies/es-service-proxies.ts"
+      "output": "../src/shared/service-proxies/meth-service-proxies.ts"
     },
     "openApiToCSharpClient": {
       "clientBaseClass": null,

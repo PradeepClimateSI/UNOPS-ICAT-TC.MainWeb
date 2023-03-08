@@ -34,6 +34,9 @@ export enum UserRoles {
   INS_ADMIN = 'Institution Admin',
   DEO = 'Data Entry Operator',
 }
+import { MethodologyComponent } from './methodology/methodology.component';
+import { ChartComponent } from './chart/chart.component';
+// import { UnitComponent } from './unit_/unit.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/app', pathMatch: 'full' },
@@ -54,7 +57,6 @@ const routes: Routes = [
   },
   { path: 'landing-page', component: LandingPageComponent },
   { path: 'loard-more', component: LoardMoreComponent },
-  { path: 'climate-action', component: ClimateActionComponent },
   { path: 'view-climate-action', component: ViewComponent },
   { path: 'institution', component: InstitutionComponent },
   { path: 'edit-institution', component: EditInstitutionComponent },
@@ -76,10 +78,19 @@ const routes: Routes = [
 
 
 
+  {
+    path: 'app/methodology',
+    loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'app/chart',
+    component: ChartComponent,
+    loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
 ];
 
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
-})
 export class AppRoutingModule {}

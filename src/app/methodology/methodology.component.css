@@ -1,0 +1,22 @@
+.select-with-arrow {
+    background-image: url('assets/images/arrow.png');
+    background-repeat: no-repeat;
+  background-position: right 12px center; /* adjust as needed */
+  background-size: 16px 10px; /* adjust as needed */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding-right: 36px; /* adjust as needed */
+  text-align: left; /* align the select text to the right */
+  }
+  
+  .chart-canvas {
+    background: linear-gradient(to bottom right, rgba(255,0,0,0.5), rgba(255,255,0,0.5), rgba(0,255,0,0.5));
+    padding: 30px;
+
+  }
+/*   :host {
+    display: block;
+    width: 800px;
+    height: 800px;
+  }  */

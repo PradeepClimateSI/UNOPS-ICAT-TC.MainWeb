@@ -16,7 +16,8 @@ import { UserDetailsFormComponent } from './user-details-form/user-details-form.
 import {  UsersControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import { LoginProfileControllerServiceProxy } from 'shared/service-proxies/auth-service-proxies';
 import { AccountSettingComponent } from './account-setting/account-setting.component';
-
+import { StyleClassModule } from 'primeng/styleclass';
+import {InputMaskModule} from 'primeng/inputmask';
 
 const routes: Routes = [
   { path: '', redirectTo: '/list', pathMatch: 'full' },
@@ -61,7 +62,7 @@ const routes: Routes = [
     UserListComponent,
     UserFormComponent,
     UserDetailsFormComponent,
-    AccountSettingComponent
+    AccountSettingComponent,
   ],
   imports: [
     CommonModule,
@@ -75,6 +76,8 @@ const routes: Routes = [
     TableModule,
     TooltipModule,
     FormsModule,
+    StyleClassModule,
+    InputMaskModule,
   ],
   providers: [UsersControllerServiceProxy, LoginProfileControllerServiceProxy ]
 })
