@@ -56,8 +56,10 @@ export class LoginComponent implements OnInit {
         this.appService.steToken(res.accessToken);
         this.appService.steRefreshToken(res.refreshToken);
         // this.appService.steRole(res.role);
+        console.log("res",res)
         this.appService.steProfileId(res.loginProfileId);
         this.appService.steUserName(this.userName);
+        // this.appService.stecountryId()
         this.appService.startRefreshTokenTimer();
         this.appService.startIdleTimer();
         this.router.navigate(['../../app'], {});

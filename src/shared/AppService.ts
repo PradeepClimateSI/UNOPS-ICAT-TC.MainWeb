@@ -34,7 +34,9 @@ export enum AuthData{
   REFRESH_TOKEN = "REFRESH_TOKEN",
   LOGIN_PROFILE_ID = "LOGIN_PROFILE_ID",
   USER_NAME = "USER_NAME",
-  ROLE = "ROLE"
+  role = "ROLE",
+  countryId ="COUNTRY_ID",
+  sectorId = "SECTOR_ID,"
 }
 
 export enum ProfileStatus {    
@@ -195,13 +197,28 @@ export class AppService {
   }
 
   steRole(role: string): void {
-    localStorage.setItem(AuthData.ROLE, role)
+    localStorage.setItem(AuthData.role, role)
   }
 
   getRole(): string | null {
-    return localStorage.getItem(AuthData.ROLE);
+    return localStorage.getItem(AuthData.role);
   }
 
+  stecountryId(countryId: string): void {
+    localStorage.setItem(AuthData.countryId, countryId)
+  }
+
+  getCountryId(): string | null {
+    return localStorage.getItem(AuthData.countryId);
+  }
+
+  steSectotId(sectorId: string): void {
+    localStorage.setItem(AuthData.sectorId, sectorId)
+  }
+
+  getSectorId(): string | null {
+    return localStorage.getItem(AuthData.sectorId);
+  }
   steRefreshToken(tocken: string): void {
     localStorage.setItem(AuthData.REFRESH_TOKEN, tocken)
   }

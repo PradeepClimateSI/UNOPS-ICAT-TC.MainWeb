@@ -9,7 +9,6 @@ import { Institution, InstitutionControllerServiceProxy, ServiceProxy } from 'sh
   styleUrls: ['./institution-list.component.css']
 })
 export class InstitutionListComponent implements OnInit {
-
   institutions: Institution[];
 
   loading: boolean;
