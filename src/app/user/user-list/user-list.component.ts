@@ -1,8 +1,8 @@
-import { ServiceProxy, User } from 'shared/service-proxies/service-proxies';
+import { ServiceProxy, User,Institution, UsersControllerServiceProxy,UserType } from 'shared/service-proxies/service-proxies';
 import { LoginProfileControllerServiceProxy } from 'shared/service-proxies/auth-service-proxies';
 
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import {ConfirmationService, LazyLoadEvent, MessageService} from "primeng/api";
+import {ConfirmationService, LazyLoadEvent, MessageService,SelectItem} from "primeng/api";
 import { RecordStatus } from 'shared/AppService';
 import { ActivatedRoute, Router } from '@angular/router';
 @Component({
@@ -17,6 +17,27 @@ export class UserListComponent implements OnInit {
   totalRecords: number;
 
 
+
+  customers: User[];
+
+  itemsPerPage: number = 0;
+  userTypeSliceArray: any = [];
+
+  searchText: string = '';
+  searchEmailText: string;
+  searchLastText: string;
+
+  instuitutionList: Institution[];
+  selctedInstuitution: Institution;
+
+  userTypes: UserType[] = [];
+  selctedUserType: UserType;
+
+  searchBy: any = {
+    text: null,
+    usertype: null,
+  };
+
   constructor(
     private serviceProxy: ServiceProxy, 
     private cdr: ChangeDetectorRef,
@@ -24,6 +45,7 @@ export class UserListComponent implements OnInit {
     private router: Router,
     private messageService: MessageService,
     private activatedRoute:ActivatedRoute,
+    private userControllerService: UsersControllerServiceProxy,
     // private loginProfileControllerServiceProxy: LoginProfileControllerServiceProxy,
 
   ) { }
@@ -33,6 +55,41 @@ export class UserListComponent implements OnInit {
   }
   
   ngOnInit(): void {
+    this.serviceProxy
+      .getManyBaseInstitutionControllerInstitution(
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        ['name,ASC'],
+        undefined,
+        1000,
+        0,
+        0,
+        0
+      )
+      .subscribe((res) => {
+        this.instuitutionList = res.data;
+      });
+
+    this.serviceProxy
+      .getManyBaseUserTypeControllerUserType(
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        ['name,ASC'],
+        undefined,
+        1000,
+        0,
+        1,
+        0
+      )
+      .subscribe((res) => {
+        this.userTypes = res.data;
+        this.userTypes = this.userTypes.filter((e) => e.id != 1)
+       //console.log("my user types..",this.userTypes)
+      });
     
   }
 
@@ -70,9 +127,9 @@ export class UserListComponent implements OnInit {
 
   }
 
-  new(){
-    this.router.navigate(['../create'], {relativeTo:this.activatedRoute});
-  }
+  // new(){
+  //   this.router.navigate(['../create'], {relativeTo:this.activatedRoute});
+  // }
 
   edit(id: number) {
     this.router.navigate(['../edit'], {queryParams: { id: id }, relativeTo:this.activatedRoute });
@@ -121,5 +178,67 @@ export class UserListComponent implements OnInit {
       console.log(res)
     })
   }
+  onSearch() {
+    let event: any = {};
+    event.rows = this.rows;
+    event.first = 0;
+
+    this.loadCustomers(event);
+  }
+  loadCustomers(event: LazyLoadEvent) {
+    console.log('loadCustomers===', event);
+    this.loading = true;
+    this.totalRecords = 0;
+
+    let typeId = this.searchBy.userType ? this.searchBy.userType.id : 0;
+    console.log('eventby filter...', this.searchBy.userType);
+    let filterText = this.searchBy.text ? this.searchBy.text : '';
+
+    let pageNumber =
+      event.first === 0 || event.first == undefined
+        ? 1
+        : event.first / (event.rows == undefined ? 1 : event.rows) + 1;
+    this.rows = event.rows == undefined ? 10 : event.rows;
+    setTimeout(() => {
+      this.userControllerService
+        .allUserDetails(pageNumber, this.rows, filterText, typeId)
+        .subscribe((a) => {
+          this.customers = a.items;
+          this.totalRecords = a.meta.totalItems;
+          this.loading = false;
+          this.itemsPerPage = a.meta.itemsPerPage;
+          console.log('new cutomersss', a);
+          console.log('total..', this.totalRecords);
+        });
+    },1);
+  }
+  editUser(user: User) {
+    console.log('edit user', user);
+
+    this.router.navigate(['/create'], { queryParams: { id: user.id } });
+  }
+
+  viewUser(user: User) {
+    
+    this.router.navigate(['/view-user'], { queryParams: { id: user.id } });
+    console.log('hit',user.id);
+  }
+
+  EditUser(user: User) {
+    console.log('hit');
+    this.router.navigate(['/user'], { queryParams: { id: user.id } });
+  }
+  new() {
+    this.router.navigate(['/create']);
+  }
+
+  onTypeChange(event: any) {
+    this.searchBy.userType = event;
+    console.log('selesct from drop down...', this.searchBy.userType1);
+    //console.log('loading.....');
+    this.onSearch();
+    //console.log('resualt.....', event);
+  }
+
 
 }
