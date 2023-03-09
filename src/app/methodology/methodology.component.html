@@ -3,14 +3,14 @@
     <div class="mb-12">
         <h4 class="mt-4"> Methodology Assessment </h4>
     </div>
-  
+
     <!-- <p-toast></p-toast> -->
     <!-- <form #fLogin="ngForm" (ngSubmit)="saveCountry(fLogin)" novalidate> -->
-    
+
       <div class="card">
-  
+
         <form #userPost ="ngForm" (ngSubmit) = "onSubmit(userPost.value)">
-  
+
         <div class="row">
 
           <div class="p-grid p-fluid col-md-6 col-sm-12">
@@ -23,13 +23,13 @@
                     <option value="" disabled selected hidden>Select Policy</option>
                     <option *ngFor="let policy of policyList" [value]="policy.policyName">{{policy.policyName}}</option>
                   </select>
-                  
-                  
-      
+
+
+
                 </div>
               </div>
             </div>
-            
+
 
 
             <div class="row p-2">
@@ -40,9 +40,9 @@
                     <option value="" disabled selected hidden>Select Methodology</option>
                     <option *ngFor="let methodology of methList" [value]="methodology">{{methodology}}</option>
                   </select>
-                  
-                  
-      
+
+
+
                 </div>
               </div>
             </div>
@@ -50,8 +50,8 @@
 
             <div *ngIf="selectedType === 'TC Uganda Geothermal'" class="form-group">
 
-  
-          
+
+
 
                <!--  <div class="form-group">
                     <label for="category-select">Categories:</label>
@@ -65,23 +65,22 @@
                     <div class="col-12 col-md-8">
                       <div class="p-field">
                         <label for="category-select">Categories:</label>
-                        <ng-multiselect-dropdown
+                        <p-multiSelect
                                   [placeholder]="'Select Categories'"
-                                  [settings]="dropdownSettings"
-                                  [data]="meth1Process"
+                                  [options]="meth1Process"
                                   [(ngModel)]="selectedItems"
                                   (onSelect)="onItemSelect($event)"
                                   (onSelectAll)="onSelectAll($event)"
-                                  (onDeSelect)="onItemDeSelect($event)" 
+                                  (onDeSelect)="onItemDeSelect($event)"
                                   (onDeSelectAll)="onDeSelectAll($event)"
                                   >
-                                  </ng-multiselect-dropdown>
-            
+                                  </p-multiSelect>
+
                       </div>
                     </div>
                   </div>
 
-         
+
 
         <div class="row p-2">
                     <div class="col-12 col-md-8">
@@ -98,15 +97,15 @@
                               <option value="possible_relevant">Possible Relevant</option>
                             </select><br>
                             <label for="{{category.name}}_{{characteristic.name}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</label>
-                            <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel placeholder="Score"> <br> <br> 
+                            <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel placeholder="Score"> <br> <br>
                           </div>
-                          
+
                         </div>
                       </div>
                     </div>
-                  </div> 
+                  </div>
 
-<!-- 
+<!--
 
                   <div *ngFor="let category of selectedItems">
                     <br><br>
@@ -123,19 +122,19 @@
                         <option value="possible_relevant">Possible Relevant</option>
                       </select><br>
                       <label for="{{category.name}}_{{characteristic.name}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</label>
-                      <input type="number" name="{{category.name}}_{{characteristic.name}}_score" [(ngModel)]="characteristic.score" placeholder="Score"> <br> <br> 
+                      <input type="number" name="{{category.name}}_{{characteristic.name}}_score" [(ngModel)]="characteristic.score" placeholder="Score"> <br> <br>
                     </div>
                   </div>
                    -->
-                  
-                
-                  
-                
 
-                  
-                  
+
+
+
+
+
+
         <!--           <button (click)="showSelectedItems()">Show selected items</button> -->
-                
+
 
         <br><br>
         <h5>Outcomes of change</h5>
@@ -143,19 +142,18 @@
           <div class="col-12 col-md-8">
             <div class="p-field">
               <label for="category-select">Categories:</label>
-              <ng-multiselect-dropdown
+              <p-multiSelect
                         [placeholder]="'Select Categories'"
-                        [settings]="dropdownSettings"
-                        [data]="meth1Outcomes"
+                        [options]="meth1Outcomes"
                         [(ngModel)]="selectedItems2"
                         (onSelect)="onItemSelect2($event)"
                         (onSelectAll)="onSelectAll2($event)"
                         (onDeSelect)="onItemDeSelect2($event)"
-                        (onDeSelectAll)="onDeSelectAll2($event)" 
+                        (onDeSelectAll)="onDeSelectAll2($event)"
                         >
-                        </ng-multiselect-dropdown>
-                  
-  
+                        </p-multiSelect>
+
+
             </div>
           </div>
         </div>
@@ -176,13 +174,13 @@
                     <option value="possible_relevant">Possible Relevant</option>
                   </select><br>
                   <label for="{{category.name}}_{{characteristic.name}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</label>
-                  <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel placeholder="Score"> <br> <br> 
+                  <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel placeholder="Score"> <br> <br>
                 </div>
-                
+
               </div>
             </div>
           </div>
-        </div> 
+        </div>
 
 
 
@@ -197,24 +195,23 @@
                 <div class="col-12 col-md-8">
                   <div class="p-field">
                     <label for="category-select">Categories:</label>
-                    <ng-multiselect-dropdown
+                    <p-multiSelect
                               [placeholder]="'Select Categories'"
-                              [settings]="dropdownSettings"
-                              [data]="meth1Process"
+                              [options]="meth1Process"
                               [(ngModel)]="selectedItems3"
                               (onSelect)="onItemSelect3($event)"
                               (onSelectAll)="onSelectAll3($event)"
                               (onDeSelect)="onItemDeSelect3($event)"
-                              (onDeSelectAll)="onDeSelectAll3($event)" 
+                              (onDeSelectAll)="onDeSelectAll3($event)"
                               >
-                              </ng-multiselect-dropdown>
-        
+                              </p-multiSelect>
+
                   </div>
                 </div>
               </div>
 
 
-<!-- 
+<!--
 
                 <div class="row p-2">
                     <div class="col-12 col-md-8">
@@ -223,8 +220,8 @@
                           <h6>{{category.name}}</h6>
 
                               <label for="{{category.name}}_catscore">Category Score: &nbsp;</label>
-                              <input type="number" name="{{category.name}}_catscore" ngModel placeholder="Score"> <br> <br> 
-                              
+                              <input type="number" name="{{category.name}}_catscore" ngModel placeholder="Score"> <br> <br>
+
 
                           <label for="characteristics"><p style="font-size: medium; font-weight: bold;">Characteristics:</p></label>
                           <div *ngFor="let characteristic of getCategory(characteristics, category.name)">
@@ -236,9 +233,9 @@
                               <option value="possible_relevant">Possible Relevant</option>
                             </select><br>
                             <label for="{{category.name}}_{{characteristic}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</label>
-                            <input type="number" name="{{category.name}}_{{characteristic}}_score" ngModel placeholder="Score"> <br> <br> 
+                            <input type="number" name="{{category.name}}_{{characteristic}}_score" ngModel placeholder="Score"> <br> <br>
                           </div>
-                          
+
                         </div>
                       </div>
                     </div>
@@ -252,7 +249,7 @@
                           <h6>{{category.name}}</h6>
 
                           <label for="{{category.name}}_catscore">Category Score: &nbsp;</label>
-                          <input type="number" name="{{category.name}}_catscore" ngModel placeholder="Score"> <br> <br> 
+                          <input type="number" name="{{category.name}}_catscore" ngModel placeholder="Score"> <br> <br>
 
                           <label for="characteristics"><p style="font-size: medium; font-weight: bold;">Characteristics:</p></label>
                           <div *ngFor="let characteristic of getCategory(characteristics, category.name)">
@@ -264,13 +261,13 @@
                               <option value="possible_relevant">Possible Relevant</option>
                             </select><br>
                             <label for="{{category.name}}_{{characteristic.name}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</label>
-                            <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel placeholder="Score"> <br> <br> 
+                            <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel placeholder="Score"> <br> <br>
                           </div>
-                          
+
                         </div>
                       </div>
                     </div>
-                  </div> 
+                  </div>
 
 
 
@@ -280,18 +277,17 @@
                 <div class="col-12 col-md-8">
                   <div class="p-field">
                     <label for="category-select">Categories:</label>
-                    <ng-multiselect-dropdown
+                    <p-multiSelect
                               [placeholder]="'Select Categories'"
-                              [settings]="dropdownSettings"
-                              [data]="meth1Outcomes"
+                              [options]="meth1Outcomes"
                               [(ngModel)]="selectedItems4"
                               (onSelect)="onItemSelect4($event)"
                               (onSelectAll)="onSelectAll4($event)"
                               (onDeSelect)="onItemDeSelect4($event)"
-                              (onDeSelectAll)="onDeSelectAll4($event)" 
+                              (onDeSelectAll)="onDeSelectAll4($event)"
                               >
-                              </ng-multiselect-dropdown>
-        
+                              </p-multiSelect>
+
                   </div>
                 </div>
               </div>
@@ -305,7 +301,7 @@
                       <h6>{{category.name}}</h6>
 
                       <label for="{{category.name}}_catscore">Category Score: &nbsp;</label>
-                      <input type="number" name="{{category.name}}_catscore" ngModel placeholder="Score"> <br> <br> 
+                      <input type="number" name="{{category.name}}_catscore" ngModel placeholder="Score"> <br> <br>
 
                       <label for="characteristics"><p style="font-size: medium; font-weight: bold;">Characteristics:</p></label>
                       <div *ngFor="let characteristic of getCategory(characteristics, category.name)">
@@ -317,15 +313,15 @@
                           <option value="possible_relevant">Possible Relevant</option>
                         </select><br>
                         <label for="{{category.name}}_{{characteristic.name}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</label>
-                        <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel placeholder="Score"> <br> <br> 
+                        <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel placeholder="Score"> <br> <br>
                       </div>
-                      
+
                     </div>
                   </div>
                 </div>
-              </div> 
+              </div>
 
-<!-- 
+<!--
               <div class="row p-2">
                 <div class="col-12 col-md-8">
                   <div class="p-field">
@@ -333,7 +329,7 @@
                       <h6>{{category.name}}</h6>
 
                       <label for="{{category.name}}_catscore">Category Score: &nbsp;</label>
-                      <input type="number" name="{{category.name}}_catscore" ngModel placeholder="Score"> <br> <br> 
+                      <input type="number" name="{{category.name}}_catscore" ngModel placeholder="Score"> <br> <br>
 
                       <label for="characteristics"><p style="font-size: medium; font-weight: bold;">Characteristics:</p></label>
                       <div *ngFor="let characteristic of getCategory(characteristics, category.name)">
@@ -345,15 +341,15 @@
                           <option value="possible_relevant">Possible Relevant</option>
                         </select><br>
                         <label for="{{category.name}}_{{characteristic}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</label>
-                        <input type="number" name="{{category.name}}_{{characteristic}}_score" ngModel placeholder="Score"> <br> <br> 
+                        <input type="number" name="{{category.name}}_{{characteristic}}_score" ngModel placeholder="Score"> <br> <br>
                       </div>
-                      
+
                     </div>
                   </div>
                 </div>
               </div>  -->
 
-              
+
 
 
             </div>
@@ -363,7 +359,7 @@
 
 
 
-<!-- 
+<!--
             <div class="row p-2">
                 <div class="col-12 col-md-8">
                   <div class="p-field">
@@ -393,21 +389,21 @@
               </div>
  -->
 
-           
+
 
 
           </div>
 
 
     <!--     2nd side ------------------------------------------------------------------------------------------------------------------------ -->
-    
+
    <!--        <div class="p-grid p-fluid col-md-6 col-sm-12">
             <div class="row p-2">
               <div class="col-12 col-md-8">
                 <div class="p-field">
 
   <br>  <br>  <br>  <br>  <br>
-  
+
   <br>  <br>  <br>  <br>
                     <div class="row">
                         <div class="col">
@@ -424,33 +420,29 @@
           </div> -->
 
 
-       
-
-
-
         </div>
-  
 
-  
+
+
         <div class="d-flex flex-row-reverse mt-2 mb-2">
         <!--     <input type="submit" class="btn btn-primary btn-lg"  style="margin-top: 8%;margin-bottom: 8%; margin-left: 90%;" value="{{editMode ? 'Update' : 'Submit'}}" > -->
             <button pButton pRipple class="btn btn-primary btn-block text-uppercase" type='submit' >
                 Submit
               </button>
-  
+
       </div>
     </form>
 
-<!--     <div *ngIf="averageOutcome">
+    <div *ngIf="averageOutcome">
       <h4>Results</h4> <br>
       <h6>Average Process : {{ averageProcess }}</h6> <br>
       <h6>Average Outcome : {{ averageOutcome }}</h6> <br>
 
 
-      <app-chart [averageOutcome]="averageOutcome" [averageProcess]="averageProcess"></app-chart>
+    <app-chart [averageOutcome]="averageOutcome" [averageProcess]="averageProcess"></app-chart>
 
-    </div> -->
-  
+    </div>
+
 
   </div>
-  
+

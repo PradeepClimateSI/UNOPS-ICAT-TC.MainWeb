@@ -1,31 +1,25 @@
-
 <nb-layout>
-    <nb-layout-column class="p-0">
-      <div class="wrapper d-flex flex-row flex-grow-1">
-        <div class="sidebar d-flex flex-column customSB d-print-none" [ngClass]="{ open: togglemenu || innerWidth > 1280 }">
-          <div class="sidebar--button selectable" (click)="togglemenu = !togglemenu">
-            <i class="pi pi-arrow-right" *ngIf="!togglemenu"></i>
-            <i class="pi pi-arrow-left" *ngIf="togglemenu"></i>
-          </div>
-          <div class="sidebar--header">
-            <img style="height: 47px;padding-left: 20px" src="../assets/images/logo-new.png"/>
-          </div>
-          <div class="sidebar-items flex-grow-1">
-            <div data-ccs-admin-menu>
-              <div
-                class="sidebar-items--link align-items-start"
-                [routerLink]="['/app/']"
-                routerLinkActive="selected"
-              >
-                <div class=""></div>
-                Dashboard
-              </div>
-  
-              <div
-              class="sidebar-items--link align-items-start"
-              [routerLink]="['/app/register/list']"
+  <nb-layout-column class="p-0">
+    <div class="wrapper d-flex flex-row flex-grow-1">
+      <div class="sidebar d-flex flex-column customSB d-print-none"
+        [ngClass]="{ open: togglemenu || innerWidth > 1280 }">
+        <div class="sidebar--button selectable" (click)="togglemenu = !togglemenu">
+          <i class="pi pi-arrow-right" *ngIf="!togglemenu"></i>
+          <i class="pi pi-arrow-left" *ngIf="togglemenu"></i>
+        </div>
+        <div class="sidebar--header">
+          <img style="height: 47px;padding-left: 20px" src="../assets/images/logo-new.png" />
+        </div>
+        <div class="sidebar-items flex-grow-1">
+          <div data-ccs-admin-menu>
+            <div class="sidebar-items--link align-items-start" [routerLink]="['/app/']" routerLinkActive="selected">
+              <div class=""></div>
+              Dashboard
+            </div>
+
+            <div class="sidebar-items--link align-items-start" [routerLink]="['/app/register/list']"
               routerLinkActive="selected">
-  
+
               <div class=""></div>
               Registration
             </div>
@@ -47,28 +41,26 @@
                 <div class=""></div>
                 Landing Page
               </div> -->
-              <p-accordion>
-                <p-accordionTab data-assess>
-                  <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
-                    <div>
-                      <p class="mb-2">Policies</p>
-                    </div>
-                  </p-header>
-                  <div class="sidebar-items--link d-flex flex-column align-items-start"
-                      [routerLink]="['/view-climate-action']"
-                      routerLinkActive="selected">
-                    <p class="mb-0 ml-20">Manage policies</p>
+            <p-accordion>
+              <p-accordionTab data-assess>
+                <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
+                  <div>
+                    <p class="mb-2">Policies</p>
                   </div>
-  
-                  <div class="sidebar-items--link d-flex flex-column align-items-start"
-                      [routerLink]="[]"
-                      routerLinkActive="selected">
-                    <p class="mb-0 ml-20">Accepted policies</p>
-                  </div>
-                </p-accordionTab>
-              </p-accordion>
-  
-              <!-- <p-accordion>
+                </p-header>
+                <div class="sidebar-items--link d-flex flex-column align-items-start"
+                  [routerLink]="['/view-climate-action']" routerLinkActive="selected">
+                  <p class="mb-0 ml-20">Manage policies</p>
+                </div>
+
+                <div class="sidebar-items--link d-flex flex-column align-items-start" [routerLink]="[]"
+                  routerLinkActive="selected">
+                  <p class="mb-0 ml-20">Accepted policies</p>
+                </div>
+              </p-accordionTab>
+            </p-accordion>
+
+            <!-- <p-accordion>
                 <p-accordionTab data-assess>
                   <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
                     <div [routerLink]="['/app/unit']" routerLinkActive="selected">
@@ -89,7 +81,7 @@
                 </p-accordionTab>
               </p-accordion>
    -->
-              <!-- <p-accordion>
+            <!-- <p-accordion>
                 <p-accordionTab data-assess>
                   <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
                     <div routerLinkActive="selected">
@@ -150,76 +142,47 @@
                 </p-accordionTab>
               </p-accordion> -->
 
-              <!-- <p-accordion>
-                <p-accordionTab data-assess>
-                  <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
-                    <div [routerLink]="['/app/emission-factor']" routerLinkActive="selected">
-                      <p class="mb-2">EF-Management</p>
-                    </div>
-                  </p-header>
-  
-                  <div class="sidebar-items--link d-flex flex-column align-items-start"
-                      [routerLink]="['/app/emission-factor/fuel-factors']"
-                      routerLinkActive="selected">
-                    <p class="mb-0 ml-20">Fuel Factor</p>
+            <p-accordion>
+              <p-accordionTab data-assess>
+                <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
+                  <div [routerLink]="['/app/institution']" routerLinkActive="selected">
+                    <p class="mb-2">Institution</p>
                   </div>
-  
-                  <div class="sidebar-items--link d-flex flex-column align-items-start"
-                    [routerLink]="['/app/project/list']"
-                    routerLinkActive="selected">
-                    <p class="mb-0 ml-20">List</p>
-                  </div>
-  
-                </p-accordionTab>
-              </p-accordion> -->
-  
-              <!-- <p-accordion>
-                <p-accordionTab data-assess>
-                  <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
-                    <div [routerLink]="['/app/project']" routerLinkActive="selected">
-                      <p class="mb-2">Project</p>
-                    </div>
-                  </p-header>
-  
-                  <div class="sidebar-items--link d-flex flex-column align-items-start"
-                      [routerLink]="['/app/project/create']"
-                      routerLinkActive="selected">
-                    <p class="mb-0 ml-20">Create</p>
-                  </div>
-  
-                  <div class="sidebar-items--link d-flex flex-column align-items-start"
-                    [routerLink]="['/app/project/list']"
-                    routerLinkActive="selected">
-                    <p class="mb-0 ml-20">List</p>
-                  </div>
-  
-                </p-accordionTab>
-              </p-accordion> -->
+                </p-header>
 
-              <p-accordion>
-                <p-accordionTab data-assess>
-                  <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
-                    <div [routerLink]="['/app/user']" routerLinkActive="selected">
-                      <p class="mb-2">User</p>
-                    </div>
-                  </p-header>
-  
-                  <div class="sidebar-items--link d-flex flex-column align-items-start"
-                      [routerLink]="['/app/user/create']"
-                      routerLinkActive="selected">
-                    <p class="mb-0 ml-20">Create</p>
-                  </div>
-  
-                  <div class="sidebar-items--link d-flex flex-column align-items-start"
-                    [routerLink]="['/app/user/list']"
-                    routerLinkActive="selected">
-                    <p class="mb-0 ml-20">List</p>
-                  </div>
-  
-                </p-accordionTab>
-              </p-accordion>
+                <div class="sidebar-items--link d-flex flex-column align-items-start" [routerLink]="['/institution']"
+                  routerLinkActive="selected">
+                  <p class="mb-0 ml-20">Create Institution</p>
+                </div>
+                <div class="sidebar-items--link d-flex flex-column align-items-start" [routerLink]="['/view-institution']"
+                  routerLinkActive="selected">
+                  <p class="mb-0 ml-20">View Institution </p>
+                </div>
+              </p-accordionTab>
+            </p-accordion>
 
-              <!-- <div
+            <p-accordion>
+              <p-accordionTab data-assess>
+                <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
+                  <div [routerLink]="['/app/user']" routerLinkActive="selected">
+                    <p class="mb-2">User</p>
+                  </div>
+                </p-header>
+
+                <div class="sidebar-items--link d-flex flex-column align-items-start"
+                  [routerLink]="['/app/user/create']" routerLinkActive="selected">
+                  <p class="mb-0 ml-20">Create</p>
+                </div>
+
+                <div class="sidebar-items--link d-flex flex-column align-items-start" [routerLink]="['/app/user/list']"
+                  routerLinkActive="selected">
+                  <p class="mb-0 ml-20">List</p>
+                </div>
+
+              </p-accordionTab>
+            </p-accordion>
+
+            <!-- <div
                 class="sidebar-items--link align-items-start"
                 [routerLink]="['/app/verification/project-list']"
                 routerLinkActive="selected">
@@ -246,27 +209,27 @@
                 Sent Evidence Requests
               </div> -->
 
-            </div>
-          </div>
-  
-          <div class="sidebar--footer">
-            <div></div>
-            <div></div>
-            <div></div>
-             <div class="sidebar-items--link" [routerLink]="['/app/user/setting']" routerLinkActive="router-link-active">
-              <i class="pi pi-cog"></i> Account Settings
-            </div>  
-            <div class="sidebar-items--link" (click)="logout()">
-              <i class="pi pi-sign-out"></i> Logout
-            </div>
           </div>
         </div>
-        <div class="main d-flex flex-column flex-grow-1">
-          <div class="d-flex flex-column justify-content-end">
-            <div class="p-text-nowrap p-text-truncate m-0 pr-2 text-right">
-              <div class="top-panel d-flex justify-content-end">
-                <div class="d-flex mt-15 mr-20">
-                  <!-- <span class="mr-10">
+
+        <div class="sidebar--footer">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div class="sidebar-items--link" [routerLink]="['/app/user/setting']" routerLinkActive="router-link-active">
+            <i class="pi pi-cog"></i> Account Settings
+          </div>
+          <div class="sidebar-items--link" (click)="logout()">
+            <i class="pi pi-sign-out"></i> Logout
+          </div>
+        </div>
+      </div>
+      <div class="main d-flex flex-column flex-grow-1">
+        <div class="d-flex flex-column justify-content-end">
+          <div class="p-text-nowrap p-text-truncate m-0 pr-2 text-right">
+            <div class="top-panel d-flex justify-content-end">
+              <div class="d-flex mt-15 mr-20">
+                <!-- <span class="mr-10">
                     <img
                       src="https://github.com/mdo.png"
                       alt="mdo"
@@ -275,31 +238,31 @@
                       class="rounded-circle"
                     />
                   </span> -->
-                  <span>
-                    <div class="username">{{userName}}</div>
-                    <div class="userrole">{{userRole}}</div>
-                  </span>
+                <span>
+                  <div class="username">{{userName}}</div>
+                  <div class="userrole">{{userRole}}</div>
+                </span>
 
-                  <span>
-                    <div (click)="logout()" class="logout">
-                      <i class="pi pi-sign-out"></i>
-                    </div>                  
-                  </span>
-                </div>
+                <span>
+                  <div (click)="logout()" class="logout">
+                    <i class="pi pi-sign-out"></i>
+                  </div>
+                </span>
               </div>
             </div>
-            <div class="p-text-nowrap p-text-truncate m-0 mb-1 pr-2 text-right">
-              <!-- <small><b>Test</b></small> -->
-            </div>
           </div>
-          <router-outlet></router-outlet>
+          <div class="p-text-nowrap p-text-truncate m-0 mb-1 pr-2 text-right">
+            <!-- <small><b>Test</b></small> -->
+          </div>
         </div>
+        <router-outlet></router-outlet>
       </div>
-    </nb-layout-column>
-  
-    <nb-layout-footer fixed>
-    </nb-layout-footer>
-  </nb-layout>
+    </div>
+  </nb-layout-column>
+
+  <nb-layout-footer fixed>
+  </nb-layout-footer>
+</nb-layout>
 
 
-    <!-- <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog> -->
+<!-- <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog> -->
