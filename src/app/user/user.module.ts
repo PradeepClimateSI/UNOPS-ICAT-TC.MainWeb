@@ -35,19 +35,19 @@ const routes: Routes = [
     },
     component: UserFormComponent
   },
+  // {
+  //   path: 'edit',
+  //   data: {
+  //     title: 'User Edit',
+  //   },
+  //   component: UserFormComponent
+  // },
   {
-    path: 'edit',
-    data: {
-      title: 'User Edit',
-    },
-    component: UserFormComponent
-  },
-  {
-    path: 'view',
+    path: 'view-user',
     data: {
       title: 'User View',
     },
-    component: UserFormComponent
+    component: UserDetailsFormComponent
   },
   {
     path: 'setting',
