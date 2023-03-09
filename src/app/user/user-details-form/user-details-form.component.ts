@@ -54,8 +54,8 @@ export class UserDetailsFormComponent implements OnInit {
     // this.getUnits();
     const token = localStorage.getItem('access_token')!;
 
-   // const tokenPayload = decode<any>(token);
-    const tokenPayload = token ? decode<any>(token):'0';
+    const tokenPayload = decode<any>(token);
+    
     this.user.userType = undefined!;
     this.user.mobile = '';
     this.user.landline = '';

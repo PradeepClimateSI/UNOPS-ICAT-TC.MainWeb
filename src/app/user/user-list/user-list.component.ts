@@ -226,7 +226,7 @@ export class UserListComponent implements OnInit {
 
   EditUser(user: User) {
     console.log('hit');
-    this.router.navigate(['/user'], { queryParams: { id: user.id } });
+    this.router.navigate(['/user/create'], { queryParams: { id: user.id } });
   }
   new() {
     this.router.navigate(['/create']);

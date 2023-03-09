@@ -74,13 +74,13 @@
             </div>
           </th>
           <th></th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Institution</th>
           <th>Type</th>
+          <th>First Name</th>
+          <th>Institution</th>
+     
           <th>Contact Number</th>
           <th>Email</th>
-          <th>Status</th>
+          <!-- <th>Status</th> -->
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-customer>
@@ -110,9 +110,9 @@
               (click)="viewUser(customer)"
             ></i> -->
           </td>
-
+          <td>{{ customer.userType?.name }}</td>
           <td>{{ customer.firstName }}</td>
-          <td>{{ customer.lastName }}</td>
+          <!-- <td>{{ customer.lastName }}</td> -->
 
           <td
             pTooltip="{{ customer.institution?.name }}"
@@ -121,8 +121,8 @@
           >
             {{ customer.institution?.name }}
           </td>
-          <td>{{ customer.userType?.name }}</td>
-          <td>{{ customer.telephone }}</td>
+          
+          <td>{{ customer.mobile }}</td>
 
           <td
             pTooltip="{{ customer.email }}"
@@ -131,7 +131,7 @@
           >
             <a href="mailto:{{ customer.email }}">{{ customer.email }}</a>
           </td>
-          <td>{{ customer.status == 0 ? "Active" : "Deactivated" }}</td>
+          <!-- <td>{{ customer.status == 0 ? "Active" : "Deactivated" }}</td> -->
         </tr>
       </ng-template>
     </p-table>
