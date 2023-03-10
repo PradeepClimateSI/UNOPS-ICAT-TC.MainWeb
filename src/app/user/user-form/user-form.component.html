@@ -25,7 +25,7 @@
             <div class="p-field" *ngIf="!isNewUser">
               <label for="contatname">User Type*</label>
               <p-dropdown [options]="selectedUserTypesFordrop" name="usertype" [(ngModel)]="selecteduserType"
-                placeholder={{user.userType.name}} optionLabel="ae_name" #fut="ngModel"></p-dropdown>
+                placeholder={{user.userType?.name}} optionLabel="ae_name" #fut="ngModel"></p-dropdown>
 
               <p class="info-message text-danger" *ngIf="
                   !selecteduserType?.ae_id &&
@@ -109,25 +109,12 @@
                 [(ngModel)]="user.institution"
                 #finstitution="ngModel"
                 [filter]="true"
-                placeholder="dd"
+                placeholder="institution"
                 optionLabel="name"
                 (ngModelChange)="onInstitutionChange($event)"
                 [required]="true"
                 
               ></p-dropdown>
-              <p-dropdown
-             
-              appendTo="body"
-              name="countryDD"
-              placeholder="Country"
-              
-            
-              [autoDisplayFirst]="false"
-             
-              optionLabel="name"
-            
-              [required]="true"
-            ></p-dropdown>
               <p
                 class="info-message text-danger"
                 *ngIf="
