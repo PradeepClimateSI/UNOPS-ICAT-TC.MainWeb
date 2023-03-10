@@ -362,12 +362,16 @@ export class MethodologyComponent implements OnInit {
 
 //Processess of change
 onItemSelect(item: any) {
-  console.log(item);
-  this.selectedItems.push(item)
+  console.log("aaa",item);
+  this.selectedItems = [];
+  for(let x of item.value){
+    this.selectedItems.push(x)
+  }
+
   console.log("select", this.selectedItems);
 
 }
-onSelectAll(items: any) {
+/* onSelectAll(items: any) {
   this.selectedItems = [];
   for(let x of items){
     this.selectedItems.push(x)
@@ -376,28 +380,29 @@ onSelectAll(items: any) {
 }
 
  onItemDeSelect(item: any) {
-  // find the index of the deselected item in the selectedItems array
   const index = this.selectedItems.findIndex((selectedItem) => selectedItem.id === item.item_id);
-
-  // remove the item from the selectedItems array
   this.selectedItems.splice(index, 1);
 }
 
 
 onDeSelectAll(item: any){
   this.selectedItems = [];
-}
+} */
 
 
 
 //Outcomes of change
 onItemSelect2(item: any) {
-  console.log(item);
-  this.selectedItems2.push(item)
-  console.log("select2", this.selectedItems2);
+  console.log("aaa",item);
+  this.selectedItems2 = [];
+  for(let x of item.value){
+    this.selectedItems2.push(x)
+  }
 
+  console.log("select", this.selectedItems2);
 }
-onSelectAll2(items: any) {
+
+/* onSelectAll2(items: any) {
   this.selectedItems2 = [];
   for(let x of items){
     this.selectedItems2.push(x)
@@ -412,16 +417,21 @@ onSelectAll2(items: any) {
 
 onDeSelectAll2(item: any){
   this.selectedItems2 = [];
-}
+} */
 
 
 onItemSelect3(item: any) {
-  console.log(item);
-  this.selectedItems3.push(item)
-  console.log("select3", this.selectedItems3);
+  console.log("aaa",item);
+  this.selectedItems3 = [];
+  for(let x of item.value){
+    this.selectedItems3.push(x)
+  }
 
+  console.log("select", this.selectedItems3);
 }
-onSelectAll3(items: any) {
+
+
+/* onSelectAll3(items: any) {
   this.selectedItems3 = [];
   for(let x of items){
     this.selectedItems3.push(x)
@@ -437,16 +447,22 @@ onSelectAll3(items: any) {
 
 onDeSelectAll3(item: any){
   this.selectedItems3 = [];
-}
+} */
 
 
 onItemSelect4(item: any) {
-  console.log(item);
-  this.selectedItems4.push(item)
-  console.log("select4", this.selectedItems4);
+  console.log("aaa",item);
+  this.selectedItems4 = [];
+  for(let x of item.value){
+    this.selectedItems4.push(x)
+  }
+
+  console.log("select", this.selectedItems4);
 
 }
-onSelectAll4(items: any) {
+
+
+/* onSelectAll4(items: any) {
   this.selectedItems4 = [];
   for(let x of items){
     this.selectedItems4.push(x)
@@ -462,18 +478,21 @@ onSelectAll4(items: any) {
 
 onDeSelectAll4(item: any){
   this.selectedItems4 = [];
-}
+} */
 
 
 /* //////////////////////////////// */
 
 onItemSelect6(item: any) {
-  console.log(item);
-  this.selectedBarriers.push(item)
-  console.log("select6", this.selectedBarriers);
+  console.log("aaa",item);
+  this.selectedBarriers = [];
+  for(let x of item.value){
+    this.selectedBarriers.push(x)
+  }
+  console.log("select77", this.selectedBarriers);
 
 }
-onSelectAll6(items: any) {
+/* onSelectAll6(items: any) {
   this.selectedBarriers = [];
   for(let x of items){
     this.selectedBarriers.push(x)
@@ -492,16 +511,22 @@ onDeSelectAll6(item: any){
   this.selectedBarriers = [];
 
   console.log("select6", this.selectedBarriers);
-}
+} */
 
 
 onItemSelect7(item: any) {
-  console.log(item);
+/*   console.log(item);
   this.characAffectedByBarriers.push(item)
-  console.log("select7", this.characAffectedByBarriers);
+  console.log("select7", this.characAffectedByBarriers); */
+  console.log("aaa",item);
+  this.characAffectedByBarriers = [];
+  for(let x of item.value){
+    this.characAffectedByBarriers.push(x)
+  }
+  console.log("select77", this.characAffectedByBarriers);
 
 }
-onSelectAll7(items: any) {
+/* onSelectAll7(items: any) {
   this.characAffectedByBarriers = [];
   for(let x of items){
     this.characAffectedByBarriers.push(x)
@@ -520,7 +545,7 @@ onDeSelectAll7(item: any){
   this.characAffectedByBarriers = [];
 
   console.log("select7", this.characAffectedByBarriers);
-}
+} */
 
 
 onSubmit(data: any) {
