@@ -84,6 +84,13 @@ export const routes: Routes = [
     canActivate: [],
     data: {}
   },
+  {
+    path: 'app/view-institution',
+    component: ViewInstitutionComponent,
+    loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
 ];
 
 

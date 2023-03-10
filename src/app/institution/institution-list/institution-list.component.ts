@@ -122,11 +122,12 @@ setTimeout(() => {
 
   
   addInstitution() {
-    this.router.navigate(['/institution']);
+    this.router.navigate(['/app/add-institution']);
   }
 
   viewInstitution(institutions: Institution){
-    this.router.navigate(['/view-institution'],{
+    console.log(institutions)
+    this.router.navigate(['/app/view-institution'],{
       queryParams: { id: institutions.id},
     });
     console.log('id',institutions.id)

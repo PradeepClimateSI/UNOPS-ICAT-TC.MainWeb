@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import {NgForm} from "@angular/forms";
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import decode from 'jwt-decode';
 import { AppService } from 'shared/AppService';
-import { AuthControllerServiceProxy, AuthCredentialDto } from 'shared/service-proxies/auth-service-proxies';
+import { AuthControllerServiceProxy, AuthCredentialDto, ServiceProxy } from 'shared/service-proxies/auth-service-proxies';
+import { UsersControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-login',
@@ -15,6 +17,8 @@ export class LoginComponent implements OnInit {
   public isSubmitted: boolean=false;
   public userName: string="";
   public password: string="";
+  public countryId: string="";
+  public insId: string="";
 
   constructor(
     private messageService: MessageService,
@@ -22,6 +26,7 @@ export class LoginComponent implements OnInit {
     private authControllerServiceProxy: AuthControllerServiceProxy,
     private appService: AppService,
     private activatedRoute:ActivatedRoute,
+    private userControllerService: UsersControllerServiceProxy,
   ) { }
 
   ngOnInit(): void {
@@ -56,10 +61,8 @@ export class LoginComponent implements OnInit {
         this.appService.steToken(res.accessToken);
         this.appService.steRefreshToken(res.refreshToken);
         // this.appService.steRole(res.role);
-        console.log("res",res)
         this.appService.steProfileId(res.loginProfileId);
         this.appService.steUserName(this.userName);
-        // this.appService.stecountryId()
         this.appService.startRefreshTokenTimer();
         this.appService.startIdleTimer();
         this.router.navigate(['../../app'], {});

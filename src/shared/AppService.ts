@@ -36,7 +36,7 @@ export enum AuthData{
   USER_NAME = "USER_NAME",
   role = "ROLE",
   countryId ="COUNTRY_ID",
-  sectorId = "SECTOR_ID,"
+  InsID = "SECTOR_ID,"
 }
 
 export enum ProfileStatus {    
@@ -175,9 +175,10 @@ export class AppService {
   }
 
   logout(){
+    console.log("aaaaaaaaaaaa")
     this.clearData();
     this.stopRefreshTokenTimer();
-    this.router.navigate(['auth']);
+    this.router.navigate(['/auth/login']);
   }
 
   private clearData(){
@@ -212,12 +213,12 @@ export class AppService {
     return localStorage.getItem(AuthData.countryId);
   }
 
-  steSectotId(sectorId: string): void {
-    localStorage.setItem(AuthData.sectorId, sectorId)
+  steInsId(InsID: string): void {
+    localStorage.setItem(AuthData.InsID, InsID)
   }
 
-  getSectorId(): string | null {
-    return localStorage.getItem(AuthData.sectorId);
+  getInsId(): string | null {
+    return localStorage.getItem(AuthData.InsID);
   }
   steRefreshToken(tocken: string): void {
     localStorage.setItem(AuthData.REFRESH_TOKEN, tocken)
