@@ -56,10 +56,13 @@ export class MethodologyComponent implements OnInit {
   barriersList : any = []
   barrierId : number;
 
+  indicatorList :any = []
+
    averageProcess : number
 
    averageOutcome : number
 
+  relevantChaList : any = []
 
   methId :number;
 //Processess of change
@@ -84,6 +87,8 @@ export class MethodologyComponent implements OnInit {
   characAffectedByBarriers: { id: number, name: string }[] = [];
 
   selectedPolicy: any
+
+  assessmentId :number;
 
  /*  categories = [
     {name: 'Category 1', characteristics: [
@@ -195,22 +200,22 @@ export class MethodologyComponent implements OnInit {
 
     this.policyList = [];
     this.barriersList = [];
+    this.indicatorList = [];
 
     this.methassess.findAllBarriers().subscribe((res: any) => {
       console.log("barrierss : ", res)
-      /*  for(let data of res){
-         let barrierObj = {
-          id : data.id,
-          name : data.barrier
-        }
-
-        this.barriersList.push(barrierObj)
-      } */
-
       this.barriersList = res
       console.log("barriersList : ", this.barriersList)
 
     });
+
+    this.methassess.findAllIndicators().subscribe((res: any) => {
+      console.log("indicators : ", res)
+   /*    this.barriersList = res
+      console.log("barriersList : ", this.barriersList) */
+
+    });
+
 
     this.climateAction.findAllPolicies().subscribe((res: any) => {
       console.log("policyList : ", res)
@@ -550,6 +555,8 @@ onDeSelectAll7(item: any){
 
 onSubmit(data: any) {
 
+  this.assessmentId = 0;
+
   console.log("ddd: ", data)
   let categoryDataArray: any[] = [];
 if( data.methodology === 'TC Uganda Geothermal'){
@@ -692,18 +699,41 @@ console.log("methiddd,", this.methId)
   // Send categoryDataArray to backend here
 
    this.methassess.methAssignDataSave(allData).subscribe(res => {
-    console.log("saved data",res)
 
-    this.averageProcess = res.averageProcess
-    this.averageOutcome = res.averageOutcome
+
+    this.averageProcess = res.result.averageProcess
+    this.averageOutcome = res.result.averageOutcome
+    this.assessmentId = res.assesId
 
     console.log("averageProcess1 : ", this.averageProcess)
     console.log("averageOutcome1 : ", this.averageOutcome)
-
+    console.log("assessId : ", this.assessmentId)
     this.chart();
+
+
+    this.methassess.findByAssessIdAndRelevanceNotRelevant(this.assessmentId).subscribe(res => {
+      console.log("chaaaaaa2",res )
+      this.relevantChaList = res
+      } )
+
+
   } )
 
+}
 
+submitForm(){
+
+  let sendData:any = {
+    assessment : this.assessmentId,
+    characteristics : this.characAffectedByBarriers
+  }
+
+  this.methassess.assessCharacteristicsDataSave(sendData).subscribe(res => {
+    console.log("savetttt data",res)
+
+  } )
+
+  console.log("senddddd", sendData)
 }
 
 
