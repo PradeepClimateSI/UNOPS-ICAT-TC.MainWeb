@@ -22,6 +22,13 @@ import {
   User,
   SectorControllerServiceProxy,
   UsersControllerServiceProxy,
+  Barriers,
+  AssessmentControllerServiceProxy,
+  MethodologyAssessmentControllerServiceProxy,
+  Category,
+  BarriersCategory,
+  PolicyBarriers,
+  
 } from 'shared/service-proxies/service-proxies';
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -40,6 +47,7 @@ import decode from 'jwt-decode';
 export class ClimateActionComponent implements OnInit {
   isSaving: boolean = false;
   project: Project = new Project();
+  policyBar:PolicyBarriers[] = [];
   selectedcitie: any = {};
   ndcList: Ndc[];
   SubndcList :SubNdc []= [];
@@ -93,6 +101,11 @@ export class ClimateActionComponent implements OnInit {
   fullname: string = '';
   isGHG: number = 0;
   selectedApproch: string;
+  barriers:Barriers[];
+  setbarriers:any[]=[];
+  selectbarriers:any;
+  category:BarriersCategory[];
+  selectCategory:any;
   approachList: string[] = ['AR1', 'AR2', 'AR3', 'AR4', 'AR5'];
 
   institutionList: Institution[] = [];
@@ -128,6 +141,7 @@ export class ClimateActionComponent implements OnInit {
     private projectProxy: ProjectControllerServiceProxy,
     private sectorProxy: SectorControllerServiceProxy,
     private ndcProxy :NdcControllerServiceProxy,
+    private asses :MethodologyAssessmentControllerServiceProxy,
   ) // private usersControllerServiceProxy: UsersControllerServiceProxy,
   // private ndcProxy:NdcControllerServiceProxy
   {}
@@ -147,7 +161,13 @@ export class ClimateActionComponent implements OnInit {
         console.log("++++" ,this.sectorList)
       });
     } // countryid = 0
-    
+    this.asses.findAllBarriers().subscribe((res:any)=>{
+      this.barriers= res;
+    }) 
+
+    this.asses.findByAllCategories().subscribe((res:any) =>{
+      this.category = res;
+    })
 
     this.serviceProxy
       .getManyBaseUsersControllerUser(
@@ -779,6 +799,13 @@ export class ClimateActionComponent implements OnInit {
           .createOneBaseProjectControllerClimateAction(this.project)
           .subscribe(
             (res) => {
+              for(let b of this.selectbarriers){
+                let pb = new PolicyBarriers();
+                pb.climateAction = res
+                pb.barriers= b;
+                this.policyBar.push(pb);
+              }
+              this.projectProxy.policyBar(this.policyBar).subscribe();
               console.log('save', res);
               this.isSaving = true;
               this.messageService.add({
@@ -1097,6 +1124,15 @@ export class ClimateActionComponent implements OnInit {
 }
   onRowSelect(event: any) {
     this.selectedProject = event;
+  }
+
+  onCategoryChange(event: any){
+    this.setbarriers=[]
+    for(let o of event){      
+      let br = this.barriers.filter((a:any)=> o.id == a.barriersCategory.id)[0]
+      this.setbarriers.push(br);
+    }
+   
   }
 
   enableActionButtonsarea() {
