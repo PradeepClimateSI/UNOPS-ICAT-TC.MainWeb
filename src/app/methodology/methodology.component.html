@@ -32,8 +32,35 @@
               <div class="col-12 col-md-8">
                 <div class="p-field">
                   <label for="category-select">Characteristics Affected By Barriers:</label>
-                 <p-multiSelect>
+                 <!-- <p-multiSelect> -->
+                  <label for="category-select">Barriers:</label>
+            <!--     <ng-multiselect-dropdown
                             [placeholder]="'Select Barriers'"
+                            [settings]="dropdownSettings3"
+                            [data]="barriersList"
+                            [(ngModel)]="selectedBarriers"
+                            (onSelect)="onItemSelect6($event)"
+                            (onSelectAll)="onSelectAll6($event)"
+                            (onDeSelect)="onItemDeSelect6($event)"
+                            (onDeSelectAll)="onDeSelectAll6($event)"
+                            >
+                            </ng-multiselect-dropdown>  -->
+
+                            <p-multiSelect [options]="barriersList" [(ngModel)]="selectedBarriers" (onChange)="onItemSelect6($event)"
+                            defaultLabel= "Select Barriers" optionLabel="barrier"></p-multiSelect>
+
+                </div>
+              </div>
+            </div>
+
+
+
+        <!--     <div class="row p-2">
+              <div class="col-12 col-md-8">
+                <div class="p-field">
+                  <label for="category-select">Characteristics Affected By Barriers:</label>
+           <ng-multiselect-dropdown
+                            [placeholder]="'Select Characteristics'"
                             [settings]="dropdownSettings4"
                             [data]="characteristicsList"
                             [(ngModel)]="characAffectedByBarriers"
@@ -44,29 +71,14 @@
                             >
                             </p-multiSelect>
 
-                </div>
-              </div>
-            </div>
-
-            <div class="row p-2">
-              <div class="col-12 col-md-8">
-                <div class="p-field">
-                  <label for="category-select">Barriers:</label>
-                  <p-multiSelect>
-                            [placeholder]="'Select Barriers'"
-                            [settings]="dropdownSettings3"
-                            [data]="barriersList"
-                            [(ngModel)]="selectedBarriers"
-                            (onSelect)="onItemSelect6($event)"
-                            (onSelectAll)="onSelectAll6($event)"
-                            (onDeSelect)="onItemDeSelect6($event)"
-                            (onDeSelectAll)="onDeSelectAll6($event)"
-                            >
-                            </p-multiSelect>
+                            <p-multiSelect [options]="characteristicsList" [(ngModel)]="characAffectedByBarriers" (onChange)="onItemSelect7($event)"
+                            defaultLabel= "Select Characteristics" optionLabel="name"></p-multiSelect>
 
                 </div>
               </div>
-            </div>
+            </div> -->
+
+
 
 
 
@@ -123,7 +135,7 @@
                     <div class="col-12 col-md-8">
                       <div class="p-field">
                         <label for="category-select">Categories:</label>
-                        <p-multiSelect
+                        <!--  <ng-multiselect-dropdown
                                   [placeholder]="'Select Categories'"
                                   [options]="meth1Process"
                                   [(ngModel)]="selectedItems"
@@ -132,7 +144,9 @@
                                   (onDeSelect)="onItemDeSelect($event)"
                                   (onDeSelectAll)="onDeSelectAll($event)"
                                   >
-                                  </p-multiSelect>
+                                  </ng-multiselect-dropdown> -->
+         <p-multiSelect [options]="meth1Process" [(ngModel)]="selectedItems" (onChange)="onItemSelect($event)"
+          defaultLabel= "Select Categories" optionLabel="name"></p-multiSelect>
 
                       </div>
                     </div>
@@ -200,7 +214,7 @@
           <div class="col-12 col-md-8">
             <div class="p-field">
               <label for="category-select">Categories:</label>
-              <p-multiSelect
+             <!--  <ng-multiselect-dropdown
                         [placeholder]="'Select Categories'"
                         [options]="meth1Outcomes"
                         [(ngModel)]="selectedItems2"
@@ -209,9 +223,10 @@
                         (onDeSelect)="onItemDeSelect2($event)"
                         (onDeSelectAll)="onDeSelectAll2($event)"
                         >
-                        </p-multiSelect>
+                        </ng-multiselect-dropdown> -->
 
-
+                        <p-multiSelect [options]="meth1Outcomes" [(ngModel)]="selectedItems2" (onChange)="onItemSelect2($event)"
+          defaultLabel= "Select Categories" optionLabel="name"></p-multiSelect>
             </div>
           </div>
         </div>
@@ -253,7 +268,7 @@
                 <div class="col-12 col-md-8">
                   <div class="p-field">
                     <label for="category-select">Categories:</label>
-                    <p-multiSelect
+               <!--      <ng-multiselect-dropdown
                               [placeholder]="'Select Categories'"
                               [options]="meth1Process"
                               [(ngModel)]="selectedItems3"
@@ -262,8 +277,10 @@
                               (onDeSelect)="onItemDeSelect3($event)"
                               (onDeSelectAll)="onDeSelectAll3($event)"
                               >
-                              </p-multiSelect>
+                              </ng-multiselect-dropdown> -->
 
+          <p-multiSelect [options]="meth1Process" [(ngModel)]="selectedItems3" (onChange)="onItemSelect3($event)"
+           defaultLabel= "Select Categories" optionLabel="name"></p-multiSelect>
                   </div>
                 </div>
               </div>
@@ -335,7 +352,7 @@
                 <div class="col-12 col-md-8">
                   <div class="p-field">
                     <label for="category-select">Categories:</label>
-                    <p-multiSelect
+                   <!--  <ng-multiselect-dropdown
                               [placeholder]="'Select Categories'"
                               [options]="meth1Outcomes"
                               [(ngModel)]="selectedItems4"
@@ -344,7 +361,10 @@
                               (onDeSelect)="onItemDeSelect4($event)"
                               (onDeSelectAll)="onDeSelectAll4($event)"
                               >
-                              </p-multiSelect>
+                              </ng-multiselect-dropdown> -->
+
+                       <p-multiSelect [options]="meth1Outcomes" [(ngModel)]="selectedItems4" (onChange)="onItemSelect4($event)"
+                         defaultLabel= "Select Categories" optionLabel="name"></p-multiSelect>
 
                   </div>
                 </div>
@@ -500,6 +520,42 @@
     <app-chart [averageOutcome]="averageOutcome" [averageProcess]="averageProcess"></app-chart>
 
     </div>
+
+
+
+  <div class="row">
+      <div class="p-grid p-fluid col-md-6 col-sm-12">
+
+    <div *ngIf="assessmentId">
+      <h4>Neww</h4> <br>
+  <!--     <div class="row p-2">
+        <div class="col-12 col-md-8">
+          <div class="p-field">
+            <label for="category-select">Characteristics Affected By Barriers:</label>
+                      <p-multiSelect [options]="relevantChaList" [(ngModel)]="characAffectedByBarriers" (onChange)="onItemSelect7($event)"
+                      defaultLabel= "Select Characteristics" optionLabel="name"></p-multiSelect>
+
+          </div>
+        </div>
+      </div> -->
+
+
+      <div class="row p-2">
+        <div class="col-12 col-md-8">
+          <div class="p-field">
+            <label for="category-select">Select Characteristics Affected By Barriers:</label>
+            <p-multiSelect [options]="relevantChaList" [(ngModel)]="characAffectedByBarriers" (onChange)="onItemSelect7($event)" defaultLabel="Select Characteristics" optionLabel="name"></p-multiSelect>
+            <button type="submit" (click)="submitForm()">Submit</button>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+
 
 
   </div>
