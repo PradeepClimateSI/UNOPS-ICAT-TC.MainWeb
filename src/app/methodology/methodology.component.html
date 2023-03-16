@@ -526,7 +526,7 @@
       <div class="p-grid p-fluid col-md-6 col-sm-12">
 
     <div *ngIf="assessmentId">
-      <h4>Neww</h4> <br>
+      <h4>Assessment</h4> <br>
   <!--     <div class="row p-2">
         <div class="col-12 col-md-8">
           <div class="p-field">
@@ -548,6 +548,70 @@
           </div>
         </div>
       </div>
+
+
+      <!-- <div *ngFor="let characteristic of characAffectedByBarriers">
+        <h6>{{characteristic.name}}</h6>
+      </div> -->
+<div *ngIf="trigger">
+
+      <div class="row p-2">
+        <div class="col-12 col-md-8">
+          <div class="p-field">
+
+            <label for="policy">Characteristic</label>
+            <select class="form-control select-with-arrow" [(ngModel)]="selectChaAffectByBarriers" name="selectChaAffectByBarriers" id="exampleFormControlSelect1" (change)="handleSelectedCharacteristic($event)">
+              <option value="" disabled selected hidden>Select Characteristic</option>
+              <option *ngFor="let cha of characAffectedByBarriers" [value]="cha.name">{{cha.name}}</option>
+            </select>
+
+
+
+          <!--   <div *ngFor="let characteristic of characAffectedByBarriers"><br><br>
+              <h6>{{characteristic.name}}</h6>
+
+              <label for="{{characteristic.name}}_indicator">Select Indicator</label>
+                  <select class="form-control select-with-arrow"  ngModel name="{{characteristic.name}}_indicator" (change)="onChangeIndicator($event)" id="exampleFormControlSelect1">
+                    <option value="" disabled selected hidden>Select Indicator</option>
+                    <option *ngFor="let indicator of indicatorList" [value]="indicator.name">{{indicator.name}}</option>
+                  </select>
+            </div> -->
+
+              <!--  <div *ngFor="let characteristic of characAffectedByBarriers">
+              <h6>{{characteristic.name}}</h6>
+
+               <label for="{{characteristic.name}}_indicator">Select Indicator</label>
+              <select class="form-control select-with-arrow" [(ngModel)]="{{characteristic.name}}_indicator" name="{{characteristic.name}}_indicator" id="{{characteristic.name}}_indicator" (change)="onIndicatorSelected(characteristic.name, {{characteristic.name}}_indicator)">
+                <option value="" disabled selected hidden>Select Indicator</option>
+                <option *ngFor="let indicator of indicatorList" [value]="indicator.name">{{indicator.name}}</option>
+              </select>
+            </div> -->
+
+            <!-- pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp -->
+<br>
+     <div *ngIf="selectChaAffectByBarriers">
+
+              <label for="{{selectChaAffectByBarriers}}_indicator">Select Indicator</label>
+              <select class="form-control select-with-arrow" [ngModel]="[selectChaAffectByBarriers  + '_indicator']" name="{{selectChaAffectByBarriers}}_indicator" id="{{selectChaAffectByBarriers}}_indicator" (ngModelChange)="onIndicatorSelected(selectChaAffectByBarriers, $event)">
+                <option value="" disabled selected hidden>Select Indicator</option>
+                <option *ngFor="let indicator of indicatorList" [value]="indicator.name">{{indicator.name}}</option>
+              </select>
+              <br>
+             <!--  <label for="methodolog">Methodology</label>
+                  <select class="form-control select-with-arrow" [ngModel]="[selectChaAffectByBarriers  + '_methodology']" name="[characteristic.name  + '_methodology']" id="exampleFormControlSelect1">
+                    <option value="" disabled selected hidden>Select Methodology</option>
+                    <option *ngFor="let meth of filterMethList" [value]="meth.name">{{meth.name}}</option>
+                  </select> -->
+    </div>
+
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
 
 
     </div>

@@ -32,6 +32,7 @@ export class MethodologyComponent implements OnInit {
 
   avg1 = 2;
   avg2 = 2;
+selectedIndicator: string;
 
   constructor(
     private methassess : MethodologyAssessmentControllerServiceProxy,
@@ -49,9 +50,12 @@ export class MethodologyComponent implements OnInit {
   meth1Outcomes :any = [];
   characteristicsList : any = []
   characteristicsArray : any= []
+  methIndicatorsList :any = [];
 
   policyList : any = []
   policyId : number;
+
+trigger : boolean = false;
 
   barriersList : any = []
   barrierId : number;
@@ -89,6 +93,7 @@ export class MethodologyComponent implements OnInit {
   selectedPolicy: any
 
   assessmentId :number;
+  selectChaAffectByBarriers : string
 
  /*  categories = [
     {name: 'Category 1', characteristics: [
@@ -211,6 +216,7 @@ export class MethodologyComponent implements OnInit {
 
     this.methassess.findAllIndicators().subscribe((res: any) => {
       console.log("indicators : ", res)
+      this.indicatorList = res
    /*    this.barriersList = res
       console.log("barriersList : ", this.barriersList) */
 
@@ -271,6 +277,13 @@ export class MethodologyComponent implements OnInit {
     });
 
    // console.log("categotyList", this.categotyList)
+   this.methassess.findAllMethIndicators().subscribe((res: any) => {
+    console.log("ressssponseee", res)
+    this.methIndicatorsList = res
+   // this.characteristicsList = res
+
+  });
+
 
 
 
@@ -345,6 +358,8 @@ export class MethodologyComponent implements OnInit {
       .filter(category => selectedCategoryNames.has(category.name))
       .flatMap(category => category.characteristics);
   } */
+
+
 
 
   getCategory(characteristics: any, category: any) {
@@ -722,7 +737,6 @@ console.log("methiddd,", this.methId)
 }
 
 submitForm(){
-
   let sendData:any = {
     assessment : this.assessmentId,
     characteristics : this.characAffectedByBarriers
@@ -733,8 +747,38 @@ submitForm(){
 
   } )
 
+  this.trigger = true
+
   console.log("senddddd", sendData)
 }
+
+filterMethList :any  = []
+
+onIndicatorSelected(characteristicName: string, indicator: string) {
+  console.log('Selected indicator for', characteristicName);
+  console.log('Selected indicator for222', indicator);
+  this.filterMethList = []
+
+  for(let item of this.methIndicatorsList){
+    if(item.indicator.name === indicator){
+      this.filterMethList.push(item)
+    }
+  }
+
+  console.log("sl indii2222: ", this.filterMethList)
+
+  return this.filterMethList
+}
+
+
+
+
+handleSelectedCharacteristic(event: any) {
+  const selectedCharacteristic = event.target.value;
+  // Do something with the selected characteristic
+  console.log(selectedCharacteristic);
+}
+
 
 
 
