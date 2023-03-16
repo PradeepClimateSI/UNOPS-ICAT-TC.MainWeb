@@ -41,7 +41,7 @@
     "p-dropdown": "^0.0.13",
     "performance-now": "^2.1.0",
     "primeicons": "^5.0.0",
-    "primeng": "^13.0.4",
+    "primeng": "^13.4.1",
     "rxjs": "6.6.7",
     "token-interceptor": "^1.1.4",
     "tslib": "^2.5.0",
