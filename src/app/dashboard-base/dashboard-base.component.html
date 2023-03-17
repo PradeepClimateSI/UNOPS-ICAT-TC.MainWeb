@@ -23,17 +23,15 @@
               <div class=""></div>
               Registration
             </div>
-  
-            <div
-              class="sidebar-items--link align-items-start"
-              [routerLink]="['/app/methodology']"
+
+            <div class="sidebar-items--link align-items-start" [routerLink]="['/app/methodology']"
               routerLinkActive="selected">
-  
+
               <div class=""></div>
               Methodology
             </div>
 
-              <!-- <div
+            <!-- <div
                 class="sidebar-items--link align-items-start"
                 [routerLink]="['/app/landing-page']"
                 routerLinkActive="selected"
@@ -57,6 +55,10 @@
                   routerLinkActive="selected">
                   <p class="mb-0 ml-20">Accepted policies</p>
                 </div>
+                <div class="sidebar-items--link d-flex flex-column align-items-start" [routerLink]="['/app/add-polocies']"
+                routerLinkActive="selected">
+                <p class="mb-0 ml-20">Create policies</p>
+              </div>
               </p-accordionTab>
             </p-accordion>
 
@@ -150,12 +152,12 @@
                   </div>
                 </p-header>
 
-                <div class="sidebar-items--link d-flex flex-column align-items-start" [routerLink]="['/institution']"
-                  routerLinkActive="selected">
+                <div class="sidebar-items--link d-flex flex-column align-items-start"
+                  [routerLink]="['/app/add-institution']" routerLinkActive="selected">
                   <p class="mb-0 ml-20">Create Institution</p>
                 </div>
-                <div class="sidebar-items--link d-flex flex-column align-items-start" [routerLink]="['/view-institution']"
-                  routerLinkActive="selected">
+                <div class="sidebar-items--link d-flex flex-column align-items-start"
+                  [routerLink]="['/app/institutionlist']" routerLinkActive="selected">
                   <p class="mb-0 ml-20">View Institution </p>
                 </div>
               </p-accordionTab>
@@ -174,8 +176,8 @@
                   <p class="mb-0 ml-20">Create</p>
                 </div>
 
-                <div class="sidebar-items--link d-flex flex-column align-items-start" [routerLink]="['/app/user/list']"
-                  routerLinkActive="selected">
+                <div class="sidebar-items--link d-flex flex-column align-items-start" 
+                [routerLink]="['/app/user/list']" routerLinkActive="selected">
                   <p class="mb-0 ml-20">List</p>
                 </div>
 

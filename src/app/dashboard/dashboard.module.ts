@@ -24,6 +24,11 @@ import {
   NbLayoutModule,
 } from '@nebular/theme';
 import { AccordionModule } from 'primeng/accordion';
+import { InstitutionComponent } from 'app/institution/add-institution/institution.component';
+import { InstitutionListComponent } from 'app/institution/institution-list/institution-list.component';
+import { ViewInstitutionComponent } from 'app/institution/view-institution/view-institution.component';
+import { ClimateActionComponent } from 'app/climate-action/climate-action/climate-action.component';
+import { ViewComponent } from 'app/climate-action/view/view.component';
 
 
 
@@ -41,7 +46,42 @@ const routes: Routes = [
     loadChildren: () => import('../user/user.module').then((m) => m.UserModule),
     canActivate: [],
     data: {}
-  }
+  },
+  {
+    path: 'institutionlist',
+    component: InstitutionListComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'add-institution',
+    component: InstitutionComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'view-institution',
+    component: ViewInstitutionComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'add-polocies',
+    component: ClimateActionComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'view-polocies',
+    component: ViewComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
 ]
 
 @NgModule({

@@ -54,17 +54,20 @@ export class DashboardBaseComponent implements OnInit {
   // }
 
   logout(){
-
-    this.confirmationService.confirm({
-      message: 'Are you sure you want to login out?',
-      header: 'Confirmation',
-      acceptIcon: 'icon-not-visible',
-      rejectIcon: 'icon-not-visible',
-      accept: () => {
-        this.appService.logout();
-      },
-      reject: () => { },
-    });
+this.appService.logout();
+    // this.confirmationService.confirm({
+      
+    //   message: 'Are you sure you want to login out?',
+    //   header: 'Confirmation',
+    //   acceptIcon: 'icon-not-visible',
+    //   rejectIcon: 'icon-not-visible',
+    //   accept: () => {
+    //     console.log('aaaa')
+        
+    //   },
+    //   reject: () => { },
+    // });
+    
   }
 
 }

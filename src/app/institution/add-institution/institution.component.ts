@@ -78,15 +78,13 @@ export class InstitutionComponent implements OnInit {
 
   ngOnInit(): void {
 
-    console.log('+++++++++++++++++++++')
-    const token = localStorage.getItem('access_token')!;
-
+    
+    const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
-
-    this.usrrole = tokenPayload.roles[0];
+    this.usrrole = tokenPayload.role[0];
     this.sectorId = tokenPayload.sectorId;
     this.countryId = tokenPayload['countryId'];
-    this.dataCollectionModuleStatus =tokenPayload.moduleLevels[3];
+    // this.dataCollectionModuleStatus =tokenPayload.moduleLevels[3];
 
     if(this.usrrole == "Sector Admin" || this.usrrole =="MRV Admin"){
       this.internalTeam = true
@@ -133,12 +131,12 @@ export class InstitutionComponent implements OnInit {
     ).subscribe((res: any) => {
       this.selectedTypeList = res.data;
       console.log("++++++",this.selectedTypeList)
-      if(this.dataCollectionModuleStatus == 0){
-        console.log('dataCollectionModuleStatus',this.dataCollectionModuleStatus)
-        this.selectedTypeList = this.selectedTypeList.filter((o: any) => o.name != "Data provider" && o.name != "Data Collection Team"&& o.name != "QC Team");
+      // if(this.dataCollectionModuleStatus == 0){
+      //   console.log('dataCollectionModuleStatus',this.dataCollectionModuleStatus)
+      //   this.selectedTypeList = this.selectedTypeList.filter((o: any) => o.name != "Data provider" && o.name != "Data Collection Team"&& o.name != "QC Team");
      
      
-      }
+      // }
       if (this.usrrole == "Technical Team") {
 
         this.selectedTypeList1 = this.selectedTypeList.filter((o: any) => o.name != "UNFCCC Focal Point" && o.name != "NDC Unit" && o.name != "Technical Team" && o.name != "Data Collection Team" && o.name != "QC Team");
@@ -285,6 +283,7 @@ async saveForm(formData: NgForm) {
           },
 
           (err) => {
+            console.log('resss', err)
             this.messageService.add({
               severity: 'error',
               summary: 'Error.',
@@ -466,7 +465,7 @@ showConfirm() {
 
 
 onBackClick() {
-  this.router.navigate(['/institution-list']);
+  this.router.navigate(['/app/institutionlist']);
 }
 
 edit(institution: Institution) {
