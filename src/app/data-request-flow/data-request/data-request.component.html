@@ -369,49 +369,7 @@
       <label>{{selectedParameter?.name}}</label>
     </span>
   </div> -->
-    <p-card
-      subheader="{{ selectedParameter?.name }}"
-      [style]="{ width: '360px' }"
-      styleClass="p-card-shadow"
-    >
-      <ng-template pTemplate="header"> </ng-template>
-      <p-listbox
-        [options]="dataProviderList"
-        [(ngModel)]="selectedDataProvider"
-        [metaKeySelection]="false"
-        [checkbox]="true"
-        [filter]="true"
-        [listStyle]="{ 'max-height': '250px' }"
-        optionLabel="name"
-      >
-        <!-- <ng-template let-country pTemplate="item">
-          <div class="country-item">
-              <div>{{country.name}}</div>
-          </div>
-      </ng-template> -->
-      </p-listbox>
-      <small *ngIf="selectDataProvider" class="p-error"
-        >Please select Data provider.</small
-      >
-      <ng-template pTemplate="footer">
-        <div class="d-flex flex-row-reverse">
-          <p-button
-            label="Update"
-            (onClick)="updateDataProviders()"
-            icon="pi pi-check"
-          ></p-button>
-          <p-button
-            label="Cancel"
-            (onClick)="cancelDataProviders()"
-            icon="pi pi-times"
-            styleClass="p-button-secondary"
-            [style]="{ 'margin-right': '.5em' }"
-          ></p-button>
-        </div>
-        <!-- <p-button label="Save" icon="pi pi-check"></p-button>
-        <p-button label="Cancel" icon="pi pi-times" styleClass="p-button-secondary" [style]="{'margin-left': '.5em'}"></p-button> -->
-      </ng-template>
-    </p-card>
+   
   </p-dialog>
   <p-dialog
     header="Change alternativity"

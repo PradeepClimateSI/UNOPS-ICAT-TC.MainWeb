@@ -228,157 +228,157 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
   // /////////////////////////////////////////////
 
   showDataProviders(parameter: MethodologyAssessmentParameters) {
-    this.selectedParameter = parameter;
-    this.selectedDataProvider = this.selectedParameter.institution;
-    if (this.selectedDataProvider) {
-      this.dataProviderList = this.instuitutionList.filter(
-        (inst: Institution) => inst.id != this.selectedParameter.institution.id
-      );
-    } else {
-      this.dataProviderList = this.instuitutionList;
+    // this.selectedParameter = parameter;
+    // this.selectedDataProvider = this.selectedParameter.institution;
+    // if (this.selectedDataProvider) {
+    //   this.dataProviderList = this.instuitutionList.filter(
+    //     (inst: Institution) => inst.id != this.selectedParameter.institution.id
+    //   );
+    // } else {
+    //   this.dataProviderList = this.instuitutionList;
 
-    }
-    // console.log('parameter',parameter)
+    // }
+    // // console.log('parameter',parameter)
 
-    this.displayDataProvider = true;
+    // this.displayDataProvider = true;
   }
 
   updateDataProviders() {
     // console.log('workdata',this.selectedDataProvider)
-    if (
-      this.selectedDataProvider != undefined &&
-      this.selectedDataProvider.id != null &&
-      this.selectedDataProvider.id != this.selectedParameter.institution?.id
-    ) {
-      this.selectDataProvider = false;
+    // if (
+    //   this.selectedDataProvider != undefined &&
+    //   this.selectedDataProvider.id != null &&
+    //   this.selectedDataProvider.id != this.selectedParameter.institution?.id
+    // ) {
+    //   this.selectDataProvider = false;
 
-      this.selectedParameter.institution = this.selectedDataProvider;
-      this.serviceProxy
-        .updateOneBaseParameterControllerParameter(
-          this.selectedParameter.id,
-          this.selectedParameter
-        )
-        .subscribe(
-          (res) => {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Success',
-              detail: 'Data provider were updated successfully',
-            });
+    //   this.selectedParameter.institution = this.selectedDataProvider;
+    //   this.serviceProxy
+    //     .updateOneBaseParameterControllerParameter(
+    //       this.selectedParameter.id,
+    //       this.selectedParameter
+    //     )
+    //     .subscribe(
+    //       (res) => {
+    //         this.messageService.add({
+    //           severity: 'success',
+    //           summary: 'Success',
+    //           detail: 'Data provider were updated successfully',
+    //         });
 
-            let event: any = {};
-            event.rows = this.rows;
-            event.first = 0;
+    //         let event: any = {};
+    //         event.rows = this.rows;
+    //         event.first = 0;
 
-            this.loadgridData(event);
-            this.displayDataProvider = false;
-          },
-          (err) => {
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error.',
-              detail: 'Internal server error, please try again.',
-            });
-          }
-        );
-    } else {
-      this.selectDataProvider = true;
-    }
+    //         this.loadgridData(event);
+    //         this.displayDataProvider = false;
+    //       },
+    //       (err) => {
+    //         this.messageService.add({
+    //           severity: 'error',
+    //           summary: 'Error.',
+    //           detail: 'Internal server error, please try again.',
+    //         });
+    //       }
+    //     );
+    // } else {
+    //   this.selectDataProvider = true;
+    // }
   }
 
   showAlternativity(para: any) {
-    this.isAlternative = para.isAlternative ? para.isAlternative : false;
-    console.log('para', para);
-    if (para.isAlternative) {
-      console.log(para.ParentParameterId);
-      this.serviceProxy
-        .getOneBaseParameterControllerParameter(
-          para.ParentParameterId,
-          undefined,
-          undefined,
-          undefined
-        )
-        .subscribe((res) => {
-          console.log('parachild', res);
-          this.parentParameter = [res];
-          let filter1: string[] = [];
-          filter1.push('ParentParameterId||$eq||' + res.id);
-          this.serviceProxy
-            .getManyBaseParameterControllerParameter(
-              undefined,
-              undefined,
-              filter1,
-              undefined,
-              undefined,
-              undefined,
-              1000,
-              0,
-              0,
-              0
-            )
-            .subscribe((res) => {
-              console.log('para', res);
+    // this.isAlternative = para.isAlternative ? para.isAlternative : false;
+    // console.log('para', para);
+    // if (para.isAlternative) {
+    //   console.log(para.ParentParameterId);
+    //   this.serviceProxy
+    //     .getOneBaseParameterControllerParameter(
+    //       para.ParentParameterId,
+    //       undefined,
+    //       undefined,
+    //       undefined
+    //     )
+    //     .subscribe((res) => {
+    //       console.log('parachild', res);
+    //       this.parentParameter = [res];
+    //       let filter1: string[] = [];
+    //       filter1.push('ParentParameterId||$eq||' + res.id);
+    //       this.serviceProxy
+    //         .getManyBaseParameterControllerParameter(
+    //           undefined,
+    //           undefined,
+    //           filter1,
+    //           undefined,
+    //           undefined,
+    //           undefined,
+    //           1000,
+    //           0,
+    //           0,
+    //           0
+    //         )
+    //         .subscribe((res) => {
+    //           console.log('para', res);
 
-              this.childParameter = res.data;
-              this.disableButton =
-                this.childParameter.length < 1 ? true : false;
-            });
-        });
-    } else {
-      this.parentParameter = [para];
-      let filter1: string[] = [];
-      filter1.push('ParentParameterId||$eq||' + para.id);
-      this.serviceProxy
-        .getManyBaseParameterControllerParameter(
-          undefined,
-          undefined,
-          filter1,
-          undefined,
-          undefined,
-          undefined,
-          1000,
-          0,
-          0,
-          0
-        )
-        .subscribe((res) => {
-          console.log('para', res);
+    //           this.childParameter = res.data;
+    //           this.disableButton =
+    //             this.childParameter.length < 1 ? true : false;
+    //         });
+    //     });
+    // } else {
+    //   this.parentParameter = [para];
+    //   let filter1: string[] = [];
+    //   filter1.push('ParentParameterId||$eq||' + para.id);
+    //   this.serviceProxy
+    //     .getManyBaseParameterControllerParameter(
+    //       undefined,
+    //       undefined,
+    //       filter1,
+    //       undefined,
+    //       undefined,
+    //       undefined,
+    //       1000,
+    //       0,
+    //       0,
+    //       0
+    //     )
+    //     .subscribe((res) => {
+    //       console.log('para', res);
 
-          this.childParameter = res.data;
-          this.disableButton = this.childParameter.length < 1 ? true : false;
-        });
-    }
+    //       this.childParameter = res.data;
+    //       this.disableButton = this.childParameter.length < 1 ? true : false;
+    //     });
+    // }
 
-    this.parameterDisplay = true;
+    // this.parameterDisplay = true;
   }
   activateAlternativity(isAlternative: boolean) {
-    this.childParameter.map((a) => {
-      a.isEnabledAlternative = !isAlternative;
-      console.log('para alt', this.isAlternative);
-      return a;
-    });
-    console.log(this.childParameter);
-    this.parentParameter[0].isEnabledAlternative = !isAlternative;
-    this.parameterProxy
-      .updateParameterAlternative([
-        this.parentParameter[0],
-        ...this.childParameter,
-      ])
-      .subscribe(
-        (res) => {
-          if (res) {
-            let event: any = {};
-            event.rows = this.rows;
-            event.first = 0;
-            this.loadgridData(event);
+    // this.childParameter.map((a) => {
+    //   a.isEnabledAlternative = !isAlternative;
+    //   console.log('para alt', this.isAlternative);
+    //   return a;
+    // });
+    // console.log(this.childParameter);
+    // this.parentParameter[0].isEnabledAlternative = !isAlternative;
+    // this.parameterProxy
+    //   .updateParameterAlternative([
+    //     this.parentParameter[0],
+    //     ...this.childParameter,
+    //   ])
+    //   .subscribe(
+    //     (res) => {
+    //       if (res) {
+    //         let event: any = {};
+    //         event.rows = this.rows;
+    //         event.first = 0;
+    //         this.loadgridData(event);
 
-            this.parameterDisplay = false;
-            this.childParameter = [];
-            this.parentParameter = [];
-          }
-        },
-        (err) => { }
-      );
+    //         this.parameterDisplay = false;
+    //         this.childParameter = [];
+    //         this.parentParameter = [];
+    //       }
+    //     },
+    //     (err) => { }
+    //   );
   }
 
   cancelActiveAlternative() {
@@ -418,27 +418,27 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
         ? 1
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
-    setTimeout(() => {
-      this.parameterRqstProxy
-        .getNewDataRequest(
-          pageNumber,
-          this.rows,
-          filtertext,
-          climateActionId,
-          year,
-          institutionId,
-          '1234'
-        )
-        .subscribe((a) => {
-          console.log('aa', a);
-          if (a) {
-            this.dataRequestList = a.items;
-            console.log('data requests.....', this.dataRequestList);
-            this.totalRecords = a.meta.totalItems;
-          }
-          this.loading = false;
-        });
-    }, 1);
+    // setTimeout(() => {
+    //   this.parameterRqstProxy
+    //     .getNewDataRequest(
+    //       pageNumber,
+    //       this.rows,
+    //       filtertext,
+    //       climateActionId,
+    //       year,
+    //       institutionId,
+    //       '1234'
+    //     )
+    //     .subscribe((a) => {
+    //       console.log('aa', a);
+    //       if (a) {
+    //         this.dataRequestList = a.items;
+    //         console.log('data requests.....', this.dataRequestList);
+    //         this.totalRecords = a.meta.totalItems;
+    //       }
+    //       this.loading = false;
+    //     });
+    // }, 1);
   };
 
   addproject() {
@@ -462,20 +462,20 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
   }
 
   getInfo(obj: any) {
-    console.log('dataRequestList...', obj);
-    this.paraId = obj.parameter.id;
-    console.log('this.paraId...', this.paraId);
+    // console.log('dataRequestList...', obj);
+    // this.paraId = obj.parameter.id;
+    // console.log('this.paraId...', this.paraId);
 
-    // let x = 602;
-    this.prHistoryProxy
-      .getHistroyByid(this.paraId) // this.paraId
-      .subscribe((res) => {
-        this.requestHistoryList = res;
+    // // let x = 602;
+    // this.prHistoryProxy
+    //   .getHistroyByid(this.paraId) // this.paraId
+    //   .subscribe((res) => {
+    //     this.requestHistoryList = res;
 
-        console.log('this.requestHistoryList...', this.requestHistoryList);
-      });
+    //     console.log('this.requestHistoryList...', this.requestHistoryList);
+    //   });
 
-    this.displayHistory = true;
+    // this.displayHistory = true;
   }
 
   isLastPage(): boolean {
@@ -504,47 +504,47 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
     return str.replace(regex, '');
   }
   onClickSend(status: number) {
-    if (!this.selectedDeadline) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error.',
-        detail: 'Please select a valid date.',
-      });
-      return;
-    }
+    // if (!this.selectedDeadline) {
+    //   this.messageService.add({
+    //     severity: 'error',
+    //     summary: 'Error.',
+    //     detail: 'Please select a valid date.',
+    //   });
+    //   return;
+    // }
 
-    let idList = new Array<number>();
-    for (let index = 0; index < this.selectedParameters.length; index++) {
+    // let idList = new Array<number>();
+    // for (let index = 0; index < this.selectedParameters.length; index++) {
 
 
-      const element = this.selectedParameters[index];
-      idList.push(element.id);
-    }
+    //   const element = this.selectedParameters[index];
+    //   idList.push(element.id);
+    // }
 
-    let inputParameters = new UpdateDeadlineDto();
-    inputParameters.ids = idList;
-    inputParameters.status = status;
-    console.log('this.selectedDeadline', this.selectedDeadline);
-    inputParameters.deadline = moment(this.selectedDeadline);
-    this.parameterRqstProxy.updateDeadline(inputParameters).subscribe(
-      (res) => {
-        this.confirm1 = false;
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Deadline & Status were updated successfully',
-        });
-        this.selectedParameters = [];
-        this.onSearch();
-      },
-      (err) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error.',
-          detail: 'Internal server error, please try again.',
-        });
-      }
-    );
+    // let inputParameters = new UpdateDeadlineDto();
+    // inputParameters.ids = idList;
+    // inputParameters.status = status;
+    // console.log('this.selectedDeadline', this.selectedDeadline);
+    // inputParameters.deadline = moment(this.selectedDeadline);
+    // this.parameterRqstProxy.updateDeadline(inputParameters).subscribe(
+    //   (res) => {
+    //     this.confirm1 = false;
+    //     this.messageService.add({
+    //       severity: 'success',
+    //       summary: 'Success',
+    //       detail: 'Deadline & Status were updated successfully',
+    //     });
+    //     this.selectedParameters = [];
+    //     this.onSearch();
+    //   },
+    //   (err) => {
+    //     this.messageService.add({
+    //       severity: 'error',
+    //       summary: 'Error.',
+    //       detail: 'Internal server error, please try again.',
+    //     });
+    //   }
+    // );
   }
 }
 

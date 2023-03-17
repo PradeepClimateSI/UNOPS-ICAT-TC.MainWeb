@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DataRequestStatus } from 'app/Model/DataRequestStatus.enum';
-import { ParameterHistoryAction } from 'app/Model/ParameterHistoryAction.enum';
+// import { DataRequestStatus } from 'app/Model/DataRequestStatus.enum';
+// import { ParameterHistoryAction } from 'app/Model/ParameterHistoryAction.enum';
 import { ServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
@@ -11,8 +11,8 @@ import { ServiceProxy } from 'shared/service-proxies/service-proxies';
 })
 export class ViewDatarequestHistoryComponent implements OnInit {
 
-  ParameterHistoryActionEnum = ParameterHistoryAction;
-  DataRequestStatusEnum = DataRequestStatus;
+  // ParameterHistoryActionEnum = ParameterHistoryAction;
+  // DataRequestStatusEnum = DataRequestStatus;
 
   // ParameterHistoryAction: string[] = [
   //   ParameterHistoryAction[ParameterHistoryAction.QC],
