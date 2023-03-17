@@ -388,7 +388,7 @@ onItemSelect(item: any) {
     this.selectedItems.push(x)
   }
 
-  console.log("select", this.selectedItems);
+  console.log("select11", this.selectedItems);
 
 }
 /* onSelectAll(items: any) {
@@ -419,7 +419,7 @@ onItemSelect2(item: any) {
     this.selectedItems2.push(x)
   }
 
-  console.log("select", this.selectedItems2);
+  console.log("select22", this.selectedItems2);
 }
 
 /* onSelectAll2(items: any) {
