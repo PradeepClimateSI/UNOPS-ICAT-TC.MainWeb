@@ -72,6 +72,9 @@ import { InputTextModule } from "primeng/inputtext";
 import { AppRoutingModule } from "./app-routing.module";
 import { UserModule } from "./user/user.module";
 import { MultiSelectModule } from 'primeng/multiselect';
+import { DataRequestComponent } from './data-request-flow/data-request/data-request.component';
+import { AssignDataRequestComponent } from './data-request-flow/assign-data-request/assign-data-request.component';
+import { ViewDatarequestHistoryComponent } from './component/view-datarequest-history/view-datarequest-history.component';
 
 export function getRemoteServiceBaseUrl(): string {
   return environment.baseUrlAPI;
@@ -98,6 +101,9 @@ export function getAuthRemoteServiceBaseUrl(): string {
         ViewInstitutionComponent,
         MethodologyComponent,
         ChartComponent,
+        DataRequestComponent,
+        AssignDataRequestComponent,
+        ViewDatarequestHistoryComponent,
     ],
     imports: [
         FormsModule,

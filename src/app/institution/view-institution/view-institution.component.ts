@@ -345,7 +345,7 @@ export class ViewInstitutionComponent implements OnInit {
 
 
       onBackClick() {
-        this.router.navigate(['/institution-list']);
+        this.router.navigate(['/app/institutionlist']);
       }
     
       edit(institution: Institution){

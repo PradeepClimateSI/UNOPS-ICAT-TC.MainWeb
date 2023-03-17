@@ -6,12 +6,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { LoardMoreComponent } from './landing-page/loard-more/loard-more.component';
 import { DashboardBaseComponent } from './dashboard-base/dashboard-base.component';
-import { ClimateActionComponent } from './climate-action/climate-action/climate-action.component';
-import { ViewComponent } from './climate-action/view/view.component';
-import { InstitutionComponent } from './institution/add-institution/institution.component';
-import { InstitutionListComponent } from './institution/institution-list/institution-list.component';
-import { EditInstitutionComponent } from './institution/edit-institution/edit-institution.component';
-import { ViewInstitutionComponent } from './institution/view-institution/view-institution.component';
 import { RoleGuardService } from './auth/role-guard.service';
 import { MethodologyComponent } from './methodology/methodology.component';
 import { ChartComponent } from './chart/chart.component';
@@ -69,6 +63,8 @@ export const routes: Routes = [
     canActivate: [],
     data: {}
   },
+
+  
 ];
 
 
