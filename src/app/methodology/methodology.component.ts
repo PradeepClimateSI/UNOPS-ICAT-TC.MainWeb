@@ -382,13 +382,13 @@ trigger : boolean = false;
 
 //Processess of change
 onItemSelect(item: any) {
-  console.log("aaa",item);
+  console.log("aaa1",item);
   this.selectedItems = [];
   for(let x of item.value){
     this.selectedItems.push(x)
   }
 
-  console.log("select", this.selectedItems);
+  console.log("select1", this.selectedItems);
 
 }
 /* onSelectAll(items: any) {
@@ -413,13 +413,13 @@ onDeSelectAll(item: any){
 
 //Outcomes of change
 onItemSelect2(item: any) {
-  console.log("aaa",item);
+  console.log("aaa2",item);
   this.selectedItems2 = [];
   for(let x of item.value){
     this.selectedItems2.push(x)
   }
 
-  console.log("select", this.selectedItems2);
+  console.log("select2", this.selectedItems2);
 }
 
 /* onSelectAll2(items: any) {
@@ -447,7 +447,7 @@ onItemSelect3(item: any) {
     this.selectedItems3.push(x)
   }
 
-  console.log("select", this.selectedItems3);
+  console.log("select3", this.selectedItems3);
 }
 
 
@@ -477,7 +477,7 @@ onItemSelect4(item: any) {
     this.selectedItems4.push(x)
   }
 
-  console.log("select", this.selectedItems4);
+  console.log("select4", this.selectedItems4);
 
 }
 
