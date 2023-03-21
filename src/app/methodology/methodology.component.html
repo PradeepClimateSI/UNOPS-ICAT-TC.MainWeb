@@ -28,28 +28,18 @@
             </div>
           </div> -->
 
-          <div class="row p-2">
+          <!-- ppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp -->
+         <!--  <div class="row p-2">
             <div class="col-12 col-md-8">
               <div class="p-field">
                 <label for="category-select">Barriers:</label>
-          <!--     <ng-multiselect-dropdown
-                          [placeholder]="'Select Barriers'"
-                          [settings]="dropdownSettings3"
-                          [data]="barriersList"
-                          [(ngModel)]="selectedBarriers"
-                          (onSelect)="onItemSelect6($event)"
-                          (onSelectAll)="onSelectAll6($event)"
-                          (onDeSelect)="onItemDeSelect6($event)"
-                          (onDeSelectAll)="onDeSelectAll6($event)"
-                          >
-                          </ng-multiselect-dropdown>  -->
 
                           <p-multiSelect [options]="barriersList" [(ngModel)]="selectedBarriers" (onChange)="onItemSelect6($event)"
                           defaultLabel= "Select Barriers" optionLabel="barrier"></p-multiSelect>
 
               </div>
             </div>
-          </div>
+          </div> -->
 
 
 
@@ -104,7 +94,7 @@
             <div class="col-12 col-md-8">
               <div class="p-field">
                 <label for="methodology">Methodology</label>
-                <select class="form-control select-with-arrow" (change)="onChange($event)" ngModel name="methodology" id="exampleFormControlSelect1">
+                <select class="form-control select-with-arrow" ngModel name="methodology" id="exampleFormControlSelect1">
                   <option value="" disabled selected hidden>Select Methodology</option>
                   <option *ngFor="let methodology of methList" [value]="methodology">{{methodology}}</option>
                 </select>
@@ -526,7 +516,6 @@
     <div class="p-grid p-fluid col-md-6 col-sm-12">
 
   <div *ngIf="assessmentId">
-    <h4>Assessment</h4> <br>
 <!--     <div class="row p-2">
       <div class="col-12 col-md-8">
         <div class="p-field">
@@ -589,19 +578,20 @@
 
           <!-- pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp -->
 <br>
+
    <div *ngIf="selectChaAffectByBarriers">
 
             <label for="{{selectChaAffectByBarriers}}_indicator">Select Indicator</label>
             <select class="form-control select-with-arrow" [ngModel]="[selectChaAffectByBarriers  + '_indicator']" name="{{selectChaAffectByBarriers}}_indicator" id="{{selectChaAffectByBarriers}}_indicator" (ngModelChange)="onIndicatorSelected(selectChaAffectByBarriers, $event)">
               <option value="" disabled selected hidden>Select Indicator</option>
-              <option *ngFor="let indicator of indicatorList" [value]="indicator.name">{{indicator.name}}</option>
+              <option *ngFor="let indicator of filteredIndicatorList" [value]="indicator.name">{{indicator.name}}</option>
             </select>
             <br>
-           <!--  <label for="methodolog">Methodology</label>
+            <label for="methodolog">Methodology</label>
                 <select class="form-control select-with-arrow" [ngModel]="[selectChaAffectByBarriers  + '_methodology']" name="[characteristic.name  + '_methodology']" id="exampleFormControlSelect1">
                   <option value="" disabled selected hidden>Select Methodology</option>
                   <option *ngFor="let meth of filterMethList" [value]="meth.name">{{meth.name}}</option>
-                </select> -->
+                </select>
   </div>
 
 

@@ -55,6 +55,8 @@ selectedIndicator: string;
   policyList : any = []
   policyId : number;
 
+  filteredIndicatorList :any =[]
+
 trigger : boolean = false;
 
   barriersList : any = []
@@ -346,9 +348,9 @@ trigger : boolean = false;
   onChange(event:any) {
     this.selectedType = event.target.value;
 
-    if (this.selectedType === 'Meth1') {
+ /*    if (this.selectedType === 'Meth1') {
       this.meth1=true;
-    }
+    } */
   }
 
   // Update the list of characteristics based on the selected category
@@ -574,7 +576,7 @@ onSubmit(data: any) {
 
   console.log("ddd: ", data)
   let categoryDataArray: any[] = [];
-if( data.methodology === 'TC Uganda Geothermal'){
+if( data.policy === 'TC Uganda Geothermal'){
   for (let category of this.selectedItems) {
     let categoryData: any = {
       categoryId :category.id,
@@ -628,7 +630,7 @@ if( data.methodology === 'TC Uganda Geothermal'){
 }
 
 
-if( data.methodology === 'TC NACAG Initiative'){
+if( data.policy === 'TC NACAG Initiative'){
   for (let category of this.selectedItems3) {
     let categoryData: any = {
       categoryScore: data[`${category.name}_catscore`],
@@ -684,6 +686,8 @@ if( data.methodology === 'TC NACAG Initiative'){
 }
   console.log("data",data)
 
+  //pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
+
   for(let methdata of this.methListAll){
     console.log("methdata",methdata)
     if(data.methodology == methdata.methodology_name){
@@ -707,7 +711,7 @@ console.log("methiddd,", this.methId)
     methodology : this.methId,
     categoryData :categoryDataArray,
     policyId : this.policyId,
-    barriers : this.selectedBarriers
+   // barriers : this.selectedBarriers
   };
   console.log("final array",allData);
 
@@ -774,9 +778,18 @@ onIndicatorSelected(characteristicName: string, indicator: string) {
 
 
 handleSelectedCharacteristic(event: any) {
+  this.filteredIndicatorList = []
   const selectedCharacteristic = event.target.value;
   // Do something with the selected characteristic
   console.log(selectedCharacteristic);
+
+  for(let indicator of this.indicatorList){
+    if(indicator.characteristics.name === selectedCharacteristic){
+      this.filteredIndicatorList.push(indicator)
+    }
+  }
+
+
 }
 
 
