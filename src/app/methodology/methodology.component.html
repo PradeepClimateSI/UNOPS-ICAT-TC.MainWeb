@@ -532,7 +532,7 @@
       <div class="col-12 col-md-8">
         <div class="p-field">
           <label for="category-select">Select Characteristics Affected By Barriers:</label>
-          <p-multiSelect [options]="relevantChaList" [(ngModel)]="characAffectedByBarriers" (onChange)="onItemSelect7($event)" defaultLabel="Select Characteristics" optionLabel="name"></p-multiSelect>
+          <p-multiSelect [options]="relevantChaList" [(ngModel)]="selectChaAffectByBarriers" (onChange)="onItemSelectcha($event)" defaultLabel="Select Characteristics" optionLabel="name"></p-multiSelect>
           <button type="submit" (click)="submitForm()">Submit</button>
         </div>
       </div>
@@ -548,35 +548,37 @@
       <div class="col-12 col-md-8">
         <div class="p-field">
 
-          <label for="policy">Characteristic</label>
+
+     <!--      <p-multiSelect [options]="characAffectedByBarriers" [(ngModel)]="selectChaAffectByBarriers" (onChange)="onItemSelectcha($event)"
+          defaultLabel= "Select Characteristics" optionLabel="name"></p-multiSelect> -->
+
+          <div *ngFor="let characteristic of selectChaAffectByBarriers"><br><br>
+            <input type="checkbox" name="{{characteristic.name}}_barrier" ngModel>&nbsp; &nbsp;{{characteristic.name}}<br>
+
+            <select class="form-control select-with-arrow" [(ngModel)]="characteristic.indicator" >
+              <option value="" disabled selected hidden>Select Indicator</option>
+              <option *ngFor="let indicator of handleSelectedCharacteristic(characteristic.name)" [value]="indicator.name">{{indicator.name}}</option>
+            </select>
+
+            <!-- pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp -->
+         <!--    <label for="methodolog">Methodology</label>
+            <select class="form-control select-with-arrow" name="{{characteristic.name}}_methodology" ngModel  id="exampleFormControlSelect1">
+              <option value="" disabled selected hidden>Select Methodology</option>
+              <option *ngFor="let meth of onIndicatorSelected(characteristic.indicator)" [value]="meth.name">{{meth.name}}</option>
+            </select>
+
+          </div> -->
+
+            <!-- pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp -->
+
+
+
+<!--           <label for="policy">Characteristic</label>
           <select class="form-control select-with-arrow" [(ngModel)]="selectChaAffectByBarriers" name="selectChaAffectByBarriers" id="exampleFormControlSelect1" (change)="handleSelectedCharacteristic($event)">
             <option value="" disabled selected hidden>Select Characteristic</option>
             <option *ngFor="let cha of characAffectedByBarriers" [value]="cha.name">{{cha.name}}</option>
           </select>
 
-
-
-        <!--   <div *ngFor="let characteristic of characAffectedByBarriers"><br><br>
-            <h6>{{characteristic.name}}</h6>
-
-            <label for="{{characteristic.name}}_indicator">Select Indicator</label>
-                <select class="form-control select-with-arrow"  ngModel name="{{characteristic.name}}_indicator" (change)="onChangeIndicator($event)" id="exampleFormControlSelect1">
-                  <option value="" disabled selected hidden>Select Indicator</option>
-                  <option *ngFor="let indicator of indicatorList" [value]="indicator.name">{{indicator.name}}</option>
-                </select>
-          </div> -->
-
-            <!--  <div *ngFor="let characteristic of characAffectedByBarriers">
-            <h6>{{characteristic.name}}</h6>
-
-             <label for="{{characteristic.name}}_indicator">Select Indicator</label>
-            <select class="form-control select-with-arrow" [(ngModel)]="{{characteristic.name}}_indicator" name="{{characteristic.name}}_indicator" id="{{characteristic.name}}_indicator" (change)="onIndicatorSelected(characteristic.name, {{characteristic.name}}_indicator)">
-              <option value="" disabled selected hidden>Select Indicator</option>
-              <option *ngFor="let indicator of indicatorList" [value]="indicator.name">{{indicator.name}}</option>
-            </select>
-          </div> -->
-
-          <!-- pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp -->
 <br>
 
    <div *ngIf="selectChaAffectByBarriers">
@@ -593,7 +595,7 @@
                   <option *ngFor="let meth of filterMethList" [value]="meth.name">{{meth.name}}</option>
                 </select>
   </div>
-
+ -->
 
         </div>
       </div>

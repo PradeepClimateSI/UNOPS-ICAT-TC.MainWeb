@@ -56,6 +56,7 @@ selectedIndicator: string;
   policyId : number;
 
   filteredIndicatorList :any =[]
+  selectedIndicatorValue :any
 
 trigger : boolean = false;
 
@@ -95,7 +96,7 @@ trigger : boolean = false;
   selectedPolicy: any
 
   assessmentId :number;
-  selectChaAffectByBarriers : string
+  selectChaAffectByBarriers : any = []
 
  /*  categories = [
     {name: 'Category 1', characteristics: [
@@ -483,6 +484,16 @@ onItemSelect4(item: any) {
 
 }
 
+onItemSelectcha(item :any){
+  console.log("aaa333",item);
+  this.selectChaAffectByBarriers = [];
+  for(let x of item.value){
+    this.selectChaAffectByBarriers.push(x)
+  }
+
+  console.log("select", this.selectChaAffectByBarriers);
+
+}
 
 /* onSelectAll4(items: any) {
   this.selectedItems4 = [];
@@ -758,9 +769,8 @@ submitForm(){
 
 filterMethList :any  = []
 
-onIndicatorSelected(characteristicName: string, indicator: string) {
-  console.log('Selected indicator for', characteristicName);
-  console.log('Selected indicator for222', indicator);
+onIndicatorSelected( indicator: any) {
+  console.log('Selected indicator for22233:', indicator);
   this.filterMethList = []
 
   for(let item of this.methIndicatorsList){
@@ -779,7 +789,7 @@ onIndicatorSelected(characteristicName: string, indicator: string) {
 
 handleSelectedCharacteristic(event: any) {
   this.filteredIndicatorList = []
-  const selectedCharacteristic = event.target.value;
+  const selectedCharacteristic = event;
   // Do something with the selected characteristic
   console.log(selectedCharacteristic);
 
@@ -789,6 +799,7 @@ handleSelectedCharacteristic(event: any) {
     }
   }
 
+  return this.filteredIndicatorList
 
 }
 
