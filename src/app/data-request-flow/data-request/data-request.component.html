@@ -137,11 +137,11 @@
               </th>
               <th>Specific Climate Actions</th>
               <th>Assessment Type</th>
-              <th>Scenario</th>
-              <th>Parameter</th>
-              <th>Alternative/Parents Available</th>
+              <!-- <th>Scenario</th> -->
+              <!-- <th>Parameter</th> -->
+              <!-- <th>Alternative/Parents Available</th> -->
               <th>Data Provider</th>
-              <th>Year</th>
+              <!-- <th>Year</th> -->
               <th>Deadline</th>
               <th>Status</th>
               <th>Info</th>
@@ -157,20 +157,20 @@
                   class="might-overflow"
                   [pTooltip]="
                     dataRequestList?.parameter?.Assessment?.Prject
-                      ?.climateActionName
+                      ?.policyName
                   "
                   tooltipPosition="top"
                 >
                   {{
                     dataRequestList?.parameter?.Assessment?.Prject
-                      ?.climateActionName
+                      ?.policyName
                   }}
                 </div>
               </td>
               <td>
                 {{ dataRequestList?.parameter?.Assessment?.assessmentType }}
               </td>
-              <td>
+              <!-- <td>
                 {{
                   dataRequestList?.parameter.isAlternative ? "Alternative" : ""
                 }}
@@ -178,8 +178,8 @@
                 {{ dataRequestList?.parameter.isProject ? "Project" : "" }}
                 {{ dataRequestList?.parameter.isLekage ? "Lekage" : "" }}
                 {{ dataRequestList?.parameter.isProjection ? "Projection" : "" }}
-              </td>
-              <td>
+              </td> -->
+              <!-- <td>
                 <button
                   data-toggle="tooltip"
                   type="button"
@@ -194,8 +194,8 @@
                     {{ dataRequestList?.parameter?.name }}
                   </div>
                 </button>
-              </td>
-              <td>
+              </td> -->
+              <!-- <td>
                 <button
                   (click)="showAlternativity(dataRequestList.parameter)"
                   pRipple
@@ -210,7 +210,7 @@
                     style="font-size: 1rem; color: rgb(255, 255, 255)"
                   ></i>
                 </button>
-              </td>
+              </td> -->
               <td>
                 <div
                   class="might-overflow"
@@ -238,7 +238,7 @@
                   ></i>
                 </button>
               </td>
-              <td>
+              <!-- <td>
                 {{
                   dataRequestList.parameter.AssessmentYear
                     ? dataRequestList.parameter.AssessmentYear
@@ -246,7 +246,7 @@
                     ? dataRequestList.parameter.projectionYear
                     : dataRequestList.parameter.projectionBaseYear
                 }}
-              </td>
+              </td> -->
               <td>{{ dataRequestList.deadline | date: "dd-MM-yyyy " }}</td>
               <td>
                 {{
@@ -369,7 +369,6 @@
       <label>{{selectedParameter?.name}}</label>
     </span>
   </div> -->
-   
   </p-dialog>
   <p-dialog
     header="Change alternativity"
