@@ -1,21 +1,21 @@
 <div class="container pl-20 pr-20">
 
   <div class="mb-12">
-      <h4 class="mt-4"> Methodology Assessment </h4>
+    <h4 class="mt-4"> Methodology Assessment </h4>
   </div>
 
   <!-- <p-toast></p-toast> -->
   <!-- <form #fLogin="ngForm" (ngSubmit)="saveCountry(fLogin)" novalidate> -->
 
-    <div class="card" style="min-height: 600px;">
+  <div class="card" style="min-height: 600px;">
 
-      <form #userPost ="ngForm" (ngSubmit) = "onSubmit(userPost.value)">
+    <form #userPost="ngForm" (ngSubmit)="onSubmit(userPost.value)">
 
       <div class="row">
 
         <div class="p-grid p-fluid col-md-6 col-sm-12">
 
-         <!--  <div class="row p-2">
+          <!--  <div class="row p-2">
             <div class="col-12 col-md-8">
               <div class="p-field">
                 <label for="policy">Barriers</label>
@@ -34,8 +34,9 @@
               <div class="p-field">
                 <label for="category-select">Barriers:</label>
 
-                          <p-multiSelect [options]="barriersList" [(ngModel)]="selectedBarriers" (onChange)="onItemSelect6($event)"
-                          defaultLabel= "Select Barriers" optionLabel="barrier"></p-multiSelect>
+                <p-multiSelect [options]="barriersList" [(ngModel)]="selectedBarriers"
+                  (onChange)="onItemSelect6($event)" defaultLabel="Select Barriers"
+                  optionLabel="barrier"></p-multiSelect>
 
               </div>
             </div>
@@ -43,7 +44,7 @@
 
 
 
-      <!--     <div class="row p-2">
+          <!--     <div class="row p-2">
             <div class="col-12 col-md-8">
               <div class="p-field">
                 <label for="category-select">Characteristics Affected By Barriers:</label>
@@ -75,7 +76,8 @@
             <div class="col-12 col-md-8">
               <div class="p-field">
                 <label for="policy">Policies</label>
-                <select class="form-control select-with-arrow" (change)="onChange($event)" ngModel name="policy" id="exampleFormControlSelect1">
+                <select class="form-control select-with-arrow" (change)="onChange($event)" ngModel name="policy"
+                  id="exampleFormControlSelect1">
                   <option value="" disabled selected hidden>Select Policy</option>
                   <option *ngFor="let policy of policyList" [value]="policy.policyName">{{policy.policyName}}</option>
                 </select>
@@ -111,19 +113,19 @@
 
 
 
-             <!--  <div class="form-group">
+            <!--  <div class="form-group">
                   <label for="category-select">Categories:</label>
                   <select id="category-select" class="form-control" [(ngModel)]="selectedCategories" (ngModelChange)="updateCharacteristics()" multiple>
                     <option *ngFor="let category of categories" [value]="category.name">{{ category.name }}</option>
                   </select>
                 </div> -->
-                <br><br>
-                <h5>Processess of change</h5>
-                <div class="row p-2">
-                  <div class="col-12 col-md-8">
-                    <div class="p-field">
-                      <label for="category-select">Categories:</label>
-                      <!--  <ng-multiselect-dropdown
+            <br><br>
+            <h5>Processess of change</h5>
+            <div class="row p-2">
+              <div class="col-12 col-md-8">
+                <div class="p-field">
+                  <label for="UprosesCat">Categories:</label>
+                  <!--  <ng-multiselect-dropdown
                                 [placeholder]="'Select Categories'"
                                 [options]="meth1Process"
                                 [(ngModel)]="selectedItems"
@@ -133,39 +135,46 @@
                                 (onDeSelectAll)="onDeSelectAll($event)"
                                 >
                                 </ng-multiselect-dropdown> -->
-       <p-multiSelect [options]="meth1Process" [(ngModel)]="selectedItems" (onChange)="onItemSelect($event)"
-        defaultLabel= "Select Categories" optionLabel="name"></p-multiSelect>
+                  <p-multiSelect name="UprosesCat" [options]="meth1Process" [(ngModel)]="selectedItems"
+                    (onChange)="onItemSelect($event)" defaultLabel="Select Categories"
+                    optionLabel="name"></p-multiSelect>
 
+                </div>
+              </div>
+            </div>
+
+
+
+            <div class="row p-2">
+              <div class="col-12 col-md-8">
+                <div class="p-field">
+                  <div *ngFor="let category of selectedItems"><br><br>
+                    <h6>{{category.name}}</h6>
+                    <label for="characteristics">
+                      <p style="font-size: medium; font-weight: bold;">Characteristics:</p>
+                    </label>
+                    <div *ngFor="let characteristic of getCategory(characteristics, category.name)">
+                      <input type="checkbox" name="{{category.name}}_{{characteristic.name}}" ngModel>&nbsp;
+                      &nbsp;{{characteristic.name}}<br>
+                      <label for="{{category.name}}_{{characteristic.name}}_relevance">Relevance: &nbsp; &nbsp;</label>
+                      <select id="{{characteristic.name}}_relevance"
+                        name="{{category.name}}_{{characteristic.name}}_relevance" ngModel>
+                        <option value="relevant">Relevant</option>
+                        <option value="not_relevant">Not Relevant</option>
+                        <option value="possible_relevant">Possible Relevant</option>
+                      </select><br>
+                      <label for="{{category.name}}_{{characteristic.name}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp;
+                        &nbsp; &nbsp;</label>
+                      <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel
+                        placeholder="Score"> <br> <br>
                     </div>
+
                   </div>
                 </div>
+              </div>
+            </div>
 
-
-
-      <div class="row p-2">
-                  <div class="col-12 col-md-8">
-                    <div class="p-field">
-                      <div *ngFor="let category of selectedItems"><br><br>
-                        <h6>{{category.name}}</h6>
-                        <label for="characteristics"><p style="font-size: medium; font-weight: bold;">Characteristics:</p></label>
-                        <div *ngFor="let characteristic of getCategory(characteristics, category.name)">
-                          <input type="checkbox" name="{{category.name}}_{{characteristic.name}}" ngModel>&nbsp; &nbsp;{{characteristic.name}}<br>
-                          <label for="{{category.name}}_{{characteristic.name}}_relevance">Relevance: &nbsp; &nbsp;</label>
-                          <select id="{{characteristic.name}}_relevance" name="{{category.name}}_{{characteristic.name}}_relevance" ngModel>
-                            <option value="relevant">Relevant</option>
-                            <option value="not_relevant">Not Relevant</option>
-                            <option value="possible_relevant">Possible Relevant</option>
-                          </select><br>
-                          <label for="{{category.name}}_{{characteristic.name}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</label>
-                          <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel placeholder="Score"> <br> <br>
-                        </div>
-
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-<!--
+            <!--
 
                 <div *ngFor="let category of selectedItems">
                   <br><br>
@@ -193,16 +202,16 @@
 
 
 
-      <!--           <button (click)="showSelectedItems()">Show selected items</button> -->
+            <!--           <button (click)="showSelectedItems()">Show selected items</button> -->
 
 
-      <br><br>
-      <h5>Outcomes of change</h5>
-      <div class="row p-2">
-        <div class="col-12 col-md-8">
-          <div class="p-field">
-            <label for="category-select">Categories:</label>
-           <!--  <ng-multiselect-dropdown
+            <br><br>
+            <h5>Outcomes of change</h5>
+            <div class="row p-2">
+              <div class="col-12 col-md-8">
+                <div class="p-field">
+                  <label for="uoutcomecat">Categories:</label>
+                  <!--  <ng-multiselect-dropdown
                       [placeholder]="'Select Categories'"
                       [options]="meth1Outcomes"
                       [(ngModel)]="selectedItems2"
@@ -213,41 +222,48 @@
                       >
                       </ng-multiselect-dropdown> -->
 
-                      <p-multiSelect [options]="meth1Outcomes" [(ngModel)]="selectedItems2" (onChange)="onItemSelect2($event)"
-        defaultLabel= "Select Categories" optionLabel="name"></p-multiSelect>
-          </div>
-        </div>
-      </div>
-
-
-      <div class="row p-2">
-        <div class="col-12 col-md-8">
-          <div class="p-field">
-            <div *ngFor="let category of selectedItems2"><br><br>
-              <h6>{{category.name}}</h6>
-              <label for="characteristics"><p style="font-size: medium; font-weight: bold;">Characteristics:</p></label>
-              <div *ngFor="let characteristic of getCategory(characteristics, category.name)">
-                <input type="checkbox" name="{{category.name}}_{{characteristic.name}}" ngModel>&nbsp; &nbsp;{{characteristic.name}}<br>
-                <label for="{{category.name}}_{{characteristic.name}}_relevance">Relevance: &nbsp; &nbsp;</label>
-                <select id="{{characteristic.name}}_relevance" name="{{category.name}}_{{characteristic.name}}_relevance" ngModel>
-                  <option value="relevant">Relevant</option>
-                  <option value="not_relevant">Not Relevant</option>
-                  <option value="possible_relevant">Possible Relevant</option>
-                </select><br>
-                <label for="{{category.name}}_{{characteristic.name}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</label>
-                <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel placeholder="Score"> <br> <br>
+                  <p-multiSelect name="uoutcomecat" [options]="meth1Outcomes" [(ngModel)]="selectedItems2"
+                    (onChange)="onItemSelect2($event)" defaultLabel="Select Categories"
+                    optionLabel="name"></p-multiSelect>
+                </div>
               </div>
-
             </div>
-          </div>
-        </div>
-      </div>
+
+
+            <div class="row p-2">
+              <div class="col-12 col-md-8">
+                <div class="p-field">
+                  <div *ngFor="let category of selectedItems2"><br><br>
+                    <h6>{{category.name}}</h6>
+                    <label for="characteristics">
+                      <p style="font-size: medium; font-weight: bold;">Characteristics:</p>
+                    </label>
+                    <div *ngFor="let characteristic of getCategory(characteristics, category.name)">
+                      <input type="checkbox" name="{{category.name}}_{{characteristic.name}}" ngModel>&nbsp;
+                      &nbsp;{{characteristic.name}}<br>
+                      <label for="{{category.name}}_{{characteristic.name}}_relevance">Relevance: &nbsp; &nbsp;</label>
+                      <select id="{{characteristic.name}}_relevance"
+                        name="{{category.name}}_{{characteristic.name}}_relevance" ngModel>
+                        <option value="relevant">Relevant</option>
+                        <option value="not_relevant">Not Relevant</option>
+                        <option value="possible_relevant">Possible Relevant</option>
+                      </select><br>
+                      <label for="{{category.name}}_{{characteristic.name}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp;
+                        &nbsp; &nbsp;</label>
+                      <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel
+                        placeholder="Score"> <br> <br>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
 
 
 
           </div> <!--  end of meth1 form -->
 
-        <!--   start of meth 2 form data -->
+          <!--   start of meth 2 form data -->
           <div *ngIf="selectedType === 'TC NACAG Initiative'" class="form-group">
 
             <br><br>
@@ -255,8 +271,8 @@
             <div class="row p-2">
               <div class="col-12 col-md-8">
                 <div class="p-field">
-                  <label for="category-select">Categories:</label>
-             <!--      <ng-multiselect-dropdown
+                  <label for="nprocescat">Categories:</label>
+                  <!--      <ng-multiselect-dropdown
                             [placeholder]="'Select Categories'"
                             [options]="meth1Process"
                             [(ngModel)]="selectedItems3"
@@ -267,14 +283,15 @@
                             >
                             </ng-multiselect-dropdown> -->
 
-        <p-multiSelect [options]="meth1Process" [(ngModel)]="selectedItems3" (onChange)="onItemSelect3($event)"
-         defaultLabel= "Select Categories" optionLabel="name"></p-multiSelect>
+                  <p-multiSelect name="nprocescat" [options]="meth1Process" [(ngModel)]="selectedItems3"
+                    (onChange)="onItemSelect3($event)" defaultLabel="Select Categories"
+                    optionLabel="name"></p-multiSelect>
                 </div>
               </div>
             </div>
 
 
-<!--
+            <!--
 
               <div class="row p-2">
                   <div class="col-12 col-md-8">
@@ -305,32 +322,38 @@
                 </div>  -->
 
 
-                <div class="row p-2">
-                  <div class="col-12 col-md-8">
-                    <div class="p-field">
-                      <div *ngFor="let category of selectedItems3"><br><br>
-                        <h6>{{category.name}}</h6>
+            <div class="row p-2">
+              <div class="col-12 col-md-8">
+                <div class="p-field">
+                  <div *ngFor="let category of selectedItems3"><br><br>
+                    <h6>{{category.name}}</h6>
 
-                        <label for="{{category.name}}_catscore">Category Score: &nbsp;</label>
-                        <input type="number" name="{{category.name}}_catscore" ngModel placeholder="Score"> <br> <br>
+                    <label for="{{category.name}}_catscore">Category Score: &nbsp;</label>
+                    <input type="number" name="{{category.name}}_catscore" ngModel placeholder="Score"> <br> <br>
 
-                        <label for="characteristics"><p style="font-size: medium; font-weight: bold;">Characteristics:</p></label>
-                        <div *ngFor="let characteristic of getCategory(characteristics, category.name)">
-                          <input type="checkbox" name="{{category.name}}_{{characteristic.name}}" ngModel>&nbsp; &nbsp;{{characteristic.name}}<br>
-                          <label for="{{category.name}}_{{characteristic.name}}_relevance">Relevance: &nbsp; &nbsp;</label>
-                          <select id="{{characteristic.name}}_relevance" name="{{category.name}}_{{characteristic.name}}_relevance" ngModel>
-                            <option value="relevant">Relevant</option>
-                            <option value="not_relevant">Not Relevant</option>
-                            <option value="possible_relevant">Possible Relevant</option>
-                          </select><br>
-                          <label for="{{category.name}}_{{characteristic.name}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</label>
-                          <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel placeholder="Score"> <br> <br>
-                        </div>
-
-                      </div>
+                    <label for="characteristics">
+                      <p style="font-size: medium; font-weight: bold;">Characteristics:</p>
+                    </label>
+                    <div *ngFor="let characteristic of getCategory(characteristics, category.name)">
+                      <input type="checkbox" name="{{category.name}}_{{characteristic.name}}" ngModel>&nbsp;
+                      &nbsp;{{characteristic.name}}<br>
+                      <label for="{{category.name}}_{{characteristic.name}}_relevance">Relevance: &nbsp; &nbsp;</label>
+                      <select id="{{characteristic.name}}_relevance"
+                        name="{{category.name}}_{{characteristic.name}}_relevance" ngModel>
+                        <option value="relevant">Relevant</option>
+                        <option value="not_relevant">Not Relevant</option>
+                        <option value="possible_relevant">Possible Relevant</option>
+                      </select><br>
+                      <label for="{{category.name}}_{{characteristic.name}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp;
+                        &nbsp; &nbsp;</label>
+                      <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel
+                        placeholder="Score"> <br> <br>
                     </div>
+
                   </div>
                 </div>
+              </div>
+            </div>
 
 
 
@@ -339,8 +362,8 @@
             <div class="row p-2">
               <div class="col-12 col-md-8">
                 <div class="p-field">
-                  <label for="category-select">Categories:</label>
-                 <!--  <ng-multiselect-dropdown
+                  <label for="noutcat">Categories:</label>
+                  <!--  <ng-multiselect-dropdown
                             [placeholder]="'Select Categories'"
                             [options]="meth1Outcomes"
                             [(ngModel)]="selectedItems4"
@@ -351,8 +374,9 @@
                             >
                             </ng-multiselect-dropdown> -->
 
-                     <p-multiSelect [options]="meth1Outcomes" [(ngModel)]="selectedItems4" (onChange)="onItemSelect4($event)"
-                       defaultLabel= "Select Categories" optionLabel="name"></p-multiSelect>
+                  <p-multiSelect name="noutcat" [options]="meth1Outcomes" [(ngModel)]="selectedItems4"
+                    (onChange)="onItemSelect4($event)" defaultLabel="Select Categories"
+                    optionLabel="name"></p-multiSelect>
 
                 </div>
               </div>
@@ -369,17 +393,23 @@
                     <label for="{{category.name}}_catscore">Category Score: &nbsp;</label>
                     <input type="number" name="{{category.name}}_catscore" ngModel placeholder="Score"> <br> <br>
 
-                    <label for="characteristics"><p style="font-size: medium; font-weight: bold;">Characteristics:</p></label>
+                    <label for="characteristics">
+                      <p style="font-size: medium; font-weight: bold;">Characteristics:</p>
+                    </label>
                     <div *ngFor="let characteristic of getCategory(characteristics, category.name)">
-                      <input type="checkbox" name="{{category.name}}_{{characteristic.name}}" ngModel>&nbsp; &nbsp;{{characteristic.name}}<br>
+                      <input type="checkbox" name="{{category.name}}_{{characteristic.name}}" ngModel>&nbsp;
+                      &nbsp;{{characteristic.name}}<br>
                       <label for="{{category.name}}_{{characteristic.name}}_relevance">Relevance: &nbsp; &nbsp;</label>
-                      <select id="{{characteristic.name}}_relevance" name="{{category.name}}_{{characteristic.name}}_relevance" ngModel>
+                      <select id="{{characteristic.name}}_relevance"
+                        name="{{category.name}}_{{characteristic.name}}_relevance" ngModel>
                         <option value="relevant">Relevant</option>
                         <option value="not_relevant">Not Relevant</option>
                         <option value="possible_relevant">Possible Relevant</option>
                       </select><br>
-                      <label for="{{category.name}}_{{characteristic.name}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</label>
-                      <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel placeholder="Score"> <br> <br>
+                      <label for="{{category.name}}_{{characteristic.name}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp;
+                        &nbsp; &nbsp;</label>
+                      <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel
+                        placeholder="Score"> <br> <br>
                     </div>
 
                   </div>
@@ -387,7 +417,7 @@
               </div>
             </div>
 
-<!--
+            <!--
             <div class="row p-2">
               <div class="col-12 col-md-8">
                 <div class="p-field">
@@ -425,7 +455,7 @@
 
 
 
-<!--
+          <!--
           <div class="row p-2">
               <div class="col-12 col-md-8">
                 <div class="p-field">
@@ -435,7 +465,7 @@
               </div>
             </div> -->
 
-    <!--         <div class="row p-2">
+          <!--         <div class="row p-2">
               <div class="col-12 col-md-8">
                 <div class="p-field">
                   <label for="cumulativecost">Cumulative Cost</label>
@@ -461,9 +491,9 @@
         </div>
 
 
-  <!--     2nd side ------------------------------------------------------------------------------------------------------------------------ -->
+        <!--     2nd side ------------------------------------------------------------------------------------------------------------------------ -->
 
- <!--        <div class="p-grid p-fluid col-md-6 col-sm-12">
+        <!--        <div class="p-grid p-fluid col-md-6 col-sm-12">
           <div class="row p-2">
             <div class="col-12 col-md-8">
               <div class="p-field">
@@ -491,29 +521,29 @@
 
 
       <div class="d-flex flex-row-reverse mt-2 mb-2">
-      <!--     <input type="submit" class="btn btn-primary btn-lg"  style="margin-top: 8%;margin-bottom: 8%; margin-left: 90%;" value="{{editMode ? 'Update' : 'Submit'}}" > -->
-          <button pButton pRipple class="btn btn-primary btn-block text-uppercase" type='submit' >
-              Submit
-            </button>
+        <!--     <input type="submit" class="btn btn-primary btn-lg"  style="margin-top: 8%;margin-bottom: 8%; margin-left: 90%;" value="{{editMode ? 'Update' : 'Submit'}}" > -->
+        <button pButton pRipple class="btn btn-primary btn-block text-uppercase" type='submit'>
+          Submit
+        </button>
+
+      </div>
+    </form>
+
+    <div *ngIf="averageOutcome">
+      <h4>Results</h4> <br>
+      <h6>Average Process : {{ averageProcess }}</h6> <br>
+      <h6>Average Outcome : {{ averageOutcome }}</h6> <br>
+
+
+      <app-chart [averageOutcome]="averageOutcome" [averageProcess]="averageProcess"></app-chart>
 
     </div>
-  </form>
-
-  <div *ngIf="averageOutcome">
-    <h4>Results</h4> <br>
-    <h6>Average Process : {{ averageProcess }}</h6> <br>
-    <h6>Average Outcome : {{ averageOutcome }}</h6> <br>
-
-
-  <app-chart [averageOutcome]="averageOutcome" [averageProcess]="averageProcess"></app-chart>
-
-  </div>
 
 
 
 
-<div class="row">
-    <div class="p-grid p-fluid col-md-6 col-sm-12">
+    <div class="row">
+      <div class="p-grid p-fluid col-md-6 col-sm-12">
 
   <div *ngIf="assessmentId">
 <!--     <div class="row p-2">
@@ -539,14 +569,14 @@
     </div>
 
 
-    <!-- <div *ngFor="let characteristic of characAffectedByBarriers">
+          <!-- <div *ngFor="let characteristic of characAffectedByBarriers">
       <h6>{{characteristic.name}}</h6>
     </div> -->
-<div *ngIf="trigger">
+          <div *ngIf="trigger">
 
-    <div class="row p-2">
-      <div class="col-12 col-md-8">
-        <div class="p-field">
+            <div class="row p-2">
+              <div class="col-12 col-md-8">
+                <div class="p-field">
 
 
      <!--      <p-multiSelect [options]="characAffectedByBarriers" [(ngModel)]="selectChaAffectByBarriers" (onChange)="onItemSelectcha($event)"
@@ -601,17 +631,7 @@
       </div>
     </div>
 
-  </div>
-
 
 
 
   </div>
-</div>
-</div>
-
-
-
-
-</div>
-

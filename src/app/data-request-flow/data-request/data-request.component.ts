@@ -3,6 +3,9 @@ import {
   InstitutionControllerServiceProxy,
   MethodologyAssessmentParameters,
   MethodologyAssessmentControllerServiceProxy,
+  ParameterRequestControllerServiceProxy,
+  ParameterHistoryControllerServiceProxy,
+  UpdateDeadlineDto,
   // ParameterHistoryControllerServiceProxy,
   // ParameterRequestControllerServiceProxy,
   // UpdateDeadlineDto,
@@ -82,11 +85,11 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
     private router: Router,
     private serviceProxy: ServiceProxy,
     private parameterProxy: MethodologyAssessmentControllerServiceProxy,
-    // private parameterRqstProxy: ParameterRequestControllerServiceProxy,
+    private parameterRqstProxy: ParameterRequestControllerServiceProxy,
     private cdr: ChangeDetectorRef,
     // private assessmentYearProxy: AssessmentYearControllerServiceProxy,
     private messageService: MessageService,
-    // private prHistoryProxy: ParameterHistoryControllerServiceProxy,
+    private prHistoryProxy: ParameterHistoryControllerServiceProxy,
     private institutionProxy: InstitutionControllerServiceProxy
   ) { }
   ngAfterViewInit(): void {
@@ -96,45 +99,46 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
   async ngOnInit(): Promise<void> {
 
 
-    // this.parameterRqstProxy
-    //   .getNewDataRequestForClimateList(0, 0, '', 0, '', 0, '1234').subscribe(res => {
-    //     for (let a of res.items) {
+    this.parameterRqstProxy
+      .getNewDataRequestForClimateList(0, 0, '', 0, '', 0, '1234').subscribe(res => {
+        this.loading=true
+        for (let a of res.items) {
 
-    //       if (a.parameter.Assessment !== null) {
-    //         if (
-    //           !this.assignCAArray.includes(
-    //             a.parameter.Assessment.Prject
-    //               .climateActionName
-    //           )
-    //         ) {
+          if (a.parameter.Assessment !== null) {
+            if (
+              !this.assignCAArray.includes(
+                a.parameter.Assessment.Prject
+                  .climateActionName
+              )
+            ) {
 
-    //           this.assignCAArray.push(
-    //             a.parameter.Assessment.Prject
-    //               .climateActionName
-    //           );
-    //           this.dataReqAssignCA.push(
-    //             a.parameter.Assessment.Prject
-    //           );
-    //         }
-    //       }
-    //     }
+              this.assignCAArray.push(
+                a.parameter.Assessment.Prject
+                  .climateActionName
+              );
+              this.dataReqAssignCA.push(
+                a.parameter.Assessment.Prject
+              );
+            }
+          }
+        }
 
-    //   })
-    // setTimeout(() => {
-    //   this.parameterRqstProxy
-    //     .getNewDataRequest(1, this.rows, '', 0, '', 0, '1234')
-    //     .subscribe((a) => {
-    //       console.log('aa', a);
-    //       if (a) {
-    //         this.dataRequestList = a.items;
-    //         console.log('ttttttttt', this.dataRequestList);
-    //         console.log('dataReqAssignCA===', this.dataReqAssignCA);
+      })
+    setTimeout(() => {
+      this.parameterRqstProxy
+        .getNewDataRequest(1, this.rows, '', 0, '', 0, '1234')
+        .subscribe((a) => {
+          console.log('aa', a);
+          if (a) {
+            this.dataRequestList = a.items;
+            console.log('ttttttttt', this.dataRequestList);
+            console.log('dataReqAssignCA===', this.dataReqAssignCA);
 
-    //         console.log('assignCAArray===', this.assignCAArray);
-    //       }
-    //     });
-    // }, 10);
-    let req = await this.institutionProxy.getInstitutionDataProvider(1, 1000, '', 0).toPromise();
+            console.log('assignCAArray===', this.assignCAArray);
+          }
+        });
+    }, 10);
+    let req = await this.institutionProxy.getInstitutionDataProvider(1, 1000, '', 1).toPromise();
 
     this.instuitutionList = req.items;
 
@@ -228,19 +232,19 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
   // /////////////////////////////////////////////
 
   showDataProviders(parameter: MethodologyAssessmentParameters) {
-    // this.selectedParameter = parameter;
-    // this.selectedDataProvider = this.selectedParameter.institution;
-    // if (this.selectedDataProvider) {
-    //   this.dataProviderList = this.instuitutionList.filter(
-    //     (inst: Institution) => inst.id != this.selectedParameter.institution.id
-    //   );
-    // } else {
-    //   this.dataProviderList = this.instuitutionList;
+    this.selectedParameter = parameter;
+    this.selectedDataProvider = this.selectedParameter.institution;
+    if (this.selectedDataProvider) {
+      this.dataProviderList = this.instuitutionList.filter(
+        (inst: Institution) => inst.id != this.selectedParameter.institution.id
+      );
+    } else {
+      this.dataProviderList = this.instuitutionList;
 
-    // }
-    // // console.log('parameter',parameter)
+    }
+    // console.log('parameter',parameter)
 
-    // this.displayDataProvider = true;
+    this.displayDataProvider = true;
   }
 
   updateDataProviders() {
@@ -418,27 +422,29 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
         ? 1
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
-    // setTimeout(() => {
-    //   this.parameterRqstProxy
-    //     .getNewDataRequest(
-    //       pageNumber,
-    //       this.rows,
-    //       filtertext,
-    //       climateActionId,
-    //       year,
-    //       institutionId,
-    //       '1234'
-    //     )
-    //     .subscribe((a) => {
-    //       console.log('aa', a);
-    //       if (a) {
-    //         this.dataRequestList = a.items;
-    //         console.log('data requests.....', this.dataRequestList);
-    //         this.totalRecords = a.meta.totalItems;
-    //       }
-    //       this.loading = false;
-    //     });
-    // }, 1);
+    // this.loading = false;
+    setTimeout(() => {
+      this.parameterRqstProxy
+        .getNewDataRequest(
+          pageNumber,
+          this.rows,
+          filtertext,
+          climateActionId,
+          year,
+          institutionId,
+          '1234'
+        )
+        .subscribe((a) => {
+          console.log('aa', a);
+          if (a) {
+            this.dataRequestList = a.items;
+            console.log('data requests.....', this.dataRequestList);
+            this.totalRecords = a.meta.totalItems;
+          }
+          this.loading = false;
+        });
+    }, 1);
+
   };
 
   addproject() {
@@ -462,20 +468,20 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
   }
 
   getInfo(obj: any) {
-    // console.log('dataRequestList...', obj);
-    // this.paraId = obj.parameter.id;
-    // console.log('this.paraId...', this.paraId);
+    console.log('dataRequestList...', obj);
+    this.paraId = obj.parameter.id;
+    console.log('this.paraId...', this.paraId);
 
-    // // let x = 602;
-    // this.prHistoryProxy
-    //   .getHistroyByid(this.paraId) // this.paraId
-    //   .subscribe((res) => {
-    //     this.requestHistoryList = res;
+    // let x = 602;
+    this.prHistoryProxy
+      .getHistroyByid(this.paraId) // this.paraId
+      .subscribe((res) => {
+        this.requestHistoryList = res;
 
-    //     console.log('this.requestHistoryList...', this.requestHistoryList);
-    //   });
+        console.log('this.requestHistoryList...', this.requestHistoryList);
+      });
 
-    // this.displayHistory = true;
+    this.displayHistory = true;
   }
 
   isLastPage(): boolean {
@@ -504,47 +510,47 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
     return str.replace(regex, '');
   }
   onClickSend(status: number) {
-    // if (!this.selectedDeadline) {
-    //   this.messageService.add({
-    //     severity: 'error',
-    //     summary: 'Error.',
-    //     detail: 'Please select a valid date.',
-    //   });
-    //   return;
-    // }
+    if (!this.selectedDeadline) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error.',
+        detail: 'Please select a valid date.',
+      });
+      return;
+    }
 
-    // let idList = new Array<number>();
-    // for (let index = 0; index < this.selectedParameters.length; index++) {
+    let idList = new Array<number>();
+    for (let index = 0; index < this.selectedParameters.length; index++) {
 
 
-    //   const element = this.selectedParameters[index];
-    //   idList.push(element.id);
-    // }
+      const element = this.selectedParameters[index];
+      idList.push(element.id);
+    }
 
-    // let inputParameters = new UpdateDeadlineDto();
-    // inputParameters.ids = idList;
-    // inputParameters.status = status;
-    // console.log('this.selectedDeadline', this.selectedDeadline);
-    // inputParameters.deadline = moment(this.selectedDeadline);
-    // this.parameterRqstProxy.updateDeadline(inputParameters).subscribe(
-    //   (res) => {
-    //     this.confirm1 = false;
-    //     this.messageService.add({
-    //       severity: 'success',
-    //       summary: 'Success',
-    //       detail: 'Deadline & Status were updated successfully',
-    //     });
-    //     this.selectedParameters = [];
-    //     this.onSearch();
-    //   },
-    //   (err) => {
-    //     this.messageService.add({
-    //       severity: 'error',
-    //       summary: 'Error.',
-    //       detail: 'Internal server error, please try again.',
-    //     });
-    //   }
-    // );
+    let inputParameters = new UpdateDeadlineDto();
+    inputParameters.ids = idList;
+    inputParameters.status = status;
+    console.log('this.selectedDeadline', this.selectedDeadline);
+    inputParameters.deadline = moment(this.selectedDeadline);
+    this.parameterRqstProxy.updateDeadline(inputParameters).subscribe(
+      (res) => {
+        this.confirm1 = false;
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Deadline & Status were updated successfully',
+        });
+        this.selectedParameters = [];
+        this.onSearch();
+      },
+      (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error.',
+          detail: 'Internal server error, please try again.',
+        });
+      }
+    );
   }
 }
 
