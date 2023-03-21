@@ -29,6 +29,8 @@ import { InstitutionListComponent } from 'app/institution/institution-list/insti
 import { ViewInstitutionComponent } from 'app/institution/view-institution/view-institution.component';
 import { ClimateActionComponent } from 'app/climate-action/climate-action/climate-action.component';
 import { ViewComponent } from 'app/climate-action/view/view.component';
+import { DataRequestComponent } from 'app/data-request-flow/data-request/data-request.component';
+import { AssignDataRequestComponent } from 'app/data-request-flow/assign-data-request/assign-data-request.component';
 
 
 
@@ -71,6 +73,20 @@ const routes: Routes = [
   {
     path: 'add-polocies',
     component: ClimateActionComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'data-request',
+    component: DataRequestComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'assign-data-request',
+    component: AssignDataRequestComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}
