@@ -687,50 +687,11 @@ export class ClimateActionComponent implements OnInit {
       this.project.actionArea = subned;
       console.log("action area", this.project.actionArea)
     }
-
-    // if (this.project.institution) {
-    //   let insti = new Institution();
-    //   insti.id = this.project.mappedInstitution?.id;
-    //   this.project.mappedInstitution = insti;
-    // }
-
     if (formData.form.valid && this.project.id > 0) {
       if (this.anonymousEditEntytyId > 0) {
         let prAprSts = new ProjectApprovalStatus();
         prAprSts.id = 4;
-        // this.project.projectApprovalStatus = prAprSts;
-        // this.projectProxy.updateProjectAnonymous(this.project).subscribe(
-        //   (res) => {
-        //     if (res == true) {
-        //       this.isSaving = true;
-        //       console.log('update', res);
-        //       this.messageService.add({
-        //         severity: 'success',
-        //         summary: 'Success',
-        //         detail: 'Project has updated successfully ',
-        //         closable: true,
-        //       });
-        //     } else {
-        //       this.messageService.add({
-        //         severity: 'error',
-        //         summary: 'Error.',
-        //         detail: 'Internal server error, please try again.',
-        //         sticky: true,
-        //       });
-        //     }
-        //   },
-
-        //   (err) => {
-        //     this.messageService.add({
-        //       severity: 'error',
-        //       summary: 'Error.',
-        //       detail: 'Internal server error, please try again.',
-        //       sticky: true,
-        //     });
-        //   }
-        // );
       } else {
-        // console.log('formData.form.valid', formData.form.valid);
         this.serviceProxy
           .updateOneBaseProjectControllerClimateAction(this.project.id, this.project)
           .subscribe(
@@ -753,46 +714,10 @@ export class ClimateActionComponent implements OnInit {
                 sticky: true,
               });
             }
-            // (res) => {
-            //   this.confirmationService.confirm({
-            //     message: 'Save success !',
-            //     header: 'Save',
-            //     acceptIcon: 'icon-not-visible',
-            //     rejectIcon: 'icon-not-visible',
-            //     rejectButtonStyleClass: 'p-button-text',
-            //     rejectVisible: false,
-            //     acceptLabel: 'Ok',
-            //     accept: () => {
-            //       //this.onBackClick();
-            //     },
-            //     reject: () => {},
-            //   });
-            // },
-            // (error) => {
-            //   this.confirmationService.confirm({
-            //     message: 'An error occurred, please try again.',
-            //     header: 'Error',
-            //     acceptIcon: 'icon-not-visible',
-            //     rejectIcon: 'icon-not-visible',
-            //     rejectButtonStyleClass: 'p-button-text',
-            //     rejectVisible: false,
-            //     acceptLabel: 'Ok',
-            //     accept: () => {
-            //       //this.onBackClick();
-            //     },
-            //     reject: () => {},
-            //   });
-
-            //   console.log('Error', error);
-            //   this.isSaving = false;
-            // }
           );
       }
     } else {
       if (formData.form.valid) {
-        // let prAprSts = new ProjectApprovalStatus();
-        // prAprSts.id = 4;
-        // this.project.projectApprovalStatus = prAprSts;
 
         this.messageService.clear();
         this.serviceProxy
