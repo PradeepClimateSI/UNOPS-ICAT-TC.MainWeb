@@ -75,6 +75,9 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { DataRequestComponent } from './data-request-flow/data-request/data-request.component';
 import { AssignDataRequestComponent } from './data-request-flow/assign-data-request/assign-data-request.component';
 import { ViewDatarequestHistoryComponent } from './component/view-datarequest-history/view-datarequest-history.component';
+import { PortfolioComponent } from "./Tool/portfolio/portfolio.component";
+import { InvestorComponent } from "./Tool/investor/investor.component";
+import { CarbonComponent } from "./Tool/carbon/carbon.component";
 
 export function getRemoteServiceBaseUrl(): string {
   return environment.baseUrlAPI;
@@ -104,6 +107,9 @@ export function getAuthRemoteServiceBaseUrl(): string {
         DataRequestComponent,
         AssignDataRequestComponent,
         ViewDatarequestHistoryComponent,
+        PortfolioComponent,
+        CarbonComponent,
+        InvestorComponent
     ],
     imports: [
         FormsModule,
@@ -147,7 +153,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         FlexLayoutModule,
         BrowserModule,
         BrowserAnimationsModule,
-        MessagesModule, 
+        MessagesModule,
         NbThemeModule.forRoot({name: 'default'}),
         NbLayoutModule,
         NbEvaIconsModule,
@@ -157,8 +163,8 @@ export function getAuthRemoteServiceBaseUrl(): string {
         RippleModule,
         InputTextModule,
         DialogModule,
-        DashboardModule,  
-        FileUploadModule,  
+        DashboardModule,
+        FileUploadModule,
         // NgMultiSelectDropDownModule.forRoot(),
         UserModule,
     ],
