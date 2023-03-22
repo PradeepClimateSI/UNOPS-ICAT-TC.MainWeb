@@ -86,19 +86,14 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
   }
 
   async ngOnInit(): Promise<void> {
-    // this.totalRecords = 0;
-   
-
-    // let res2:any;
-    this.climateActionListFromBackend = await this.parameterProxy.getClimateActionByDataRequestStatus().toPromise();
-
-    console.log('===========',this.climateActionListFromBackend)
-
-    // this.userName = localStorage.getItem('user_name')!;
-    const token = localStorage.getItem('accessToken')!;
+    const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
+    this.userName =tokenPayload.username;
     this.userCountryId = tokenPayload.countryId;
     this.userSectorId = tokenPayload.sectorId;
+
+    this.climateActionListFromBackend = await this.parameterProxy.getClimateActionByDataRequestStatus().toPromise();
+
     let filter2: string[] = new Array();
 
     filter2.push('projectApprovalStatus.id||$eq||' + 5);
@@ -112,7 +107,6 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
         "1234"
       )
       .subscribe((res) => {
-
         for (let a of res.items) {
           // console.log("test countrya",a)
 
@@ -197,7 +191,7 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
     this.rows = event.rows === undefined ? 10 : event.rows;
     setTimeout(() => {
       console.log('climateActionId', climateActionId);
-
+      console.log('this.userName', this.userName);
       this.parameterProxy
         .getAssignDateRequest(
           pageNumber,
