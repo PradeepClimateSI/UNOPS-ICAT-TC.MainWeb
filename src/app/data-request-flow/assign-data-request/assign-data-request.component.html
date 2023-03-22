@@ -99,10 +99,10 @@
               <td>
                 {{
                   assignDataRequestList?.parameterId!.Assessment?.Prject!
-                    ?.climateActionName!
+                    ?.policyName!
                 }}
               </td>
-              <td>{{ assignDataRequestList.parameterId?.name! }}</td>
+              <td>{{ assignDataRequestList.parameterId?.characteristics.name! }}</td>
   
   
               <ng-container *ngIf=" assignDataRequestList.parameterId?.DefaultValue?.year! == undefined ; else elseBlockYear">
