@@ -1,4 +1,3 @@
-
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 //import { MethodologyControllerServiceProxy } from 'shared/service-proxies/meth-service-proxies';
 import { MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, ServiceProxy } from 'shared/service-proxies/service-proxies';
@@ -6,6 +5,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {  Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {Chart} from 'chart.js';
+
+
 interface CategoryInput {
   id: number;
   category: string;
@@ -19,11 +20,12 @@ interface CategoryInput {
 
 
 @Component({
-  selector: 'app-methodology',
-  templateUrl: './methodology.component.html',
-  styleUrls: ['./methodology.component.css']
+  selector: 'app-carbon',
+  templateUrl: './carbon.component.html',
+  styleUrls: ['./carbon.component.css']
 })
-export class MethodologyComponent implements OnInit {
+export class CarbonComponent implements OnInit {
+
   private apiUrl = 'http://localhost:7100/methodology/assessmentData';
 
   @ViewChild('myCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
@@ -722,6 +724,12 @@ console.log("methiddd,", this.methId)
     methodology : this.methId,
     categoryData :categoryDataArray,
     policyId : this.policyId,
+    tool : 'carbon market tool',
+    assessment_type : data.assessment_type,
+    date1 : data.date1,
+    date2 : data.date2,
+    assessment_method : data.assessment_method,
+    assessment_approach : data.assessment_approach,
    // barriers : this.selectedBarriers
   };
   console.log("final array",allData);
@@ -802,8 +810,6 @@ handleSelectedCharacteristic(event: any) {
   return this.filteredIndicatorList
 
 }
-
-
 
 
 }

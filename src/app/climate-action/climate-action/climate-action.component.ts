@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Location } from '@angular/common';
-import {} from 'googlemaps';
+import { } from 'googlemaps';
 import {
   //CaActionHistory,
   Country,
@@ -28,7 +28,7 @@ import {
   Category,
   BarriersCategory,
   PolicyBarriers,
-  
+
 } from 'shared/service-proxies/service-proxies';
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -47,10 +47,10 @@ import decode from 'jwt-decode';
 export class ClimateActionComponent implements OnInit {
   isSaving: boolean = false;
   project: Project = new Project();
-  policyBar:PolicyBarriers[] = [];
+  policyBar: PolicyBarriers[] = [];
   selectedcitie: any = {};
   ndcList: Ndc[];
-  SubndcList :SubNdc []= [];
+  SubndcList: SubNdc[] = [];
   options: any;
   relatedItem: Project[] = [];
   exsistingPrpject: boolean = false;
@@ -101,18 +101,18 @@ export class ClimateActionComponent implements OnInit {
   fullname: string = '';
   isGHG: number = 0;
   selectedApproch: string;
-  barriers:Barriers[];
-  setbarriers:any[]=[];
-  selectbarriers:any;
-  category:BarriersCategory[];
-  selectCategory:any;
+  barriers: Barriers[];
+  setbarriers: any[] = [];
+  selectbarriers: any;
+  category: BarriersCategory[];
+  selectCategory: any;
   approachList: string[] = ['AR1', 'AR2', 'AR3', 'AR4', 'AR5'];
 
   institutionList: Institution[] = [];
   institutionTypeID: number = 3;
   selectedInstitution: Institution;
   selectedDocuments: Documents[] = [];
-  counID:number;
+  counID: number;
   a = this.project.otherRelatedActivities
   isSector: boolean = false;
 
@@ -140,32 +140,32 @@ export class ClimateActionComponent implements OnInit {
     private messageService: MessageService,
     private projectProxy: ProjectControllerServiceProxy,
     private sectorProxy: SectorControllerServiceProxy,
-    private ndcProxy :NdcControllerServiceProxy,
-    private asses :MethodologyAssessmentControllerServiceProxy,
+    private ndcProxy: NdcControllerServiceProxy,
+    private asses: MethodologyAssessmentControllerServiceProxy,
   ) // private usersControllerServiceProxy: UsersControllerServiceProxy,
   // private ndcProxy:NdcControllerServiceProxy
-  {}
+  { }
 
   ngOnInit(): void {
     const token = localStorage.getItem('access_token')!;
     const countryId = token ? decode<any>(token).countryId : 0;
-    this.counID= countryId;
+    this.counID = countryId;
     this.userName = localStorage.getItem('user_name')!;
     let filterUser: string[] = [];
     filterUser.push('username||$eq||' + this.userName);
-    
 
-    if (countryId>0){
+
+    if (countryId > 0) {
       this.sectorProxy.getCountrySector(countryId).subscribe((res: any) => {
         this.sectorList = res;
-        console.log("++++" ,this.sectorList)
+        console.log("++++", this.sectorList)
       });
     } // countryid = 0
-    this.asses.findAllBarriers().subscribe((res:any)=>{
-      this.barriers= res;
-    }) 
+    this.asses.findAllBarriers().subscribe((res: any) => {
+      this.barriers = res;
+    })
 
-    this.asses.findByAllCategories().subscribe((res:any) =>{
+    this.asses.findByAllCategories().subscribe((res: any) => {
       this.category = res;
     })
 
@@ -200,12 +200,12 @@ export class ClimateActionComponent implements OnInit {
       } else if (this.anonymousEditEntytyId > 0) {
         this.documentOwnerId = this.anonymousEditEntytyId;
       }
-      
+
       this.flag = params['flag'];
       if (this.flag == 1) {
         this.isDownloading = false;
-        console.log("flag",this.flag ,"this.editEntytyId", this.editEntytyId)
-       
+        console.log("flag", this.flag, "this.editEntytyId", this.editEntytyId)
+
       }
     });
 
@@ -224,7 +224,7 @@ export class ClimateActionComponent implements OnInit {
         });
     } else {
       this.project.country = new Country();
-      console.log("pr",this.project)   // working
+      console.log("pr", this.project)   // working
     }
     // this.project.country = new Country();
 
@@ -271,7 +271,7 @@ export class ClimateActionComponent implements OnInit {
         0
       )
       .subscribe((res: any) => {
-        
+
         this.countryList = res.data;
         // console.log("countrylist all",this.countryList) //  working
       });
@@ -326,11 +326,11 @@ export class ClimateActionComponent implements OnInit {
         0
       )
       .subscribe((res: any) => {
-        
+
         // this.sectorList = res.data;
 
         // if (token && this.editEntytyId && this.editEntytyId > 0) {
-          if ( this.editEntytyId && this.editEntytyId > 0) {
+        if (this.editEntytyId && this.editEntytyId > 0) {
           this.serviceProxy
             .getOneBaseProjectControllerClimateAction(
               this.editEntytyId,
@@ -341,7 +341,7 @@ export class ClimateActionComponent implements OnInit {
             .subscribe(async (res1) => {
               this.project = res1;
               this.project.aggregatedAction = res1.aggregatedAction;
-              this.project.sector =res1.sector;
+              this.project.sector = res1.sector;
               const latitude = parseFloat(this.project.latitude + '');
               const longitude = parseFloat(this.project.longitude + '');
               await this.addMarker(longitude, latitude);
@@ -552,8 +552,8 @@ export class ClimateActionComponent implements OnInit {
       )
       .subscribe((res: any) => {
         this.projectApprovalStatus = res.data;
-        
-        
+
+
       });
 
     this.serviceProxy
@@ -596,7 +596,7 @@ export class ClimateActionComponent implements OnInit {
         // this.project.mappedInstitution
       });
 
-    if (this.editEntytyId && this.editEntytyId !== 0 ) {
+    if (this.editEntytyId && this.editEntytyId !== 0) {
       let docFilter: string[] = new Array();
 
       docFilter.push('documentOwnerId||$eq||' + this.editEntytyId);
@@ -620,7 +620,7 @@ export class ClimateActionComponent implements OnInit {
     }
 
     //Anonymous form
-    if ( this.anonymousEditEntytyId && this.anonymousEditEntytyId != 0) {
+    if (this.anonymousEditEntytyId && this.anonymousEditEntytyId != 0) {
       let docFilter: string[] = new Array();
 
       docFilter.push('documentOwnerId||$eq||' + this.anonymousEditEntytyId);
@@ -660,7 +660,7 @@ export class ClimateActionComponent implements OnInit {
       sector.id = this.project.sector.id;
       this.project.sector = sector;
     }
-   
+
 
     this.project.proposeDateofCommence = moment(this.proposeDateofCommence);
     //this.project.endDateofCommence = moment(this.endDateofCommence);
@@ -676,7 +676,7 @@ export class ClimateActionComponent implements OnInit {
       let ndc = new Ndc();
       ndc.id = this.project.aggregatedAction?.id;
       this.project.aggregatedAction = ndc;
-      console.log("aggregatedAction",this.project.aggregatedAction)
+      console.log("aggregatedAction", this.project.aggregatedAction)
     }
 
     if (this.project.actionArea) {
@@ -685,52 +685,13 @@ export class ClimateActionComponent implements OnInit {
       let subned = new SubNdc();
       subned.id = this.project.actionArea?.id;
       this.project.actionArea = subned;
-      console.log("action area",this.project.actionArea)
+      console.log("action area", this.project.actionArea)
     }
-
-    // if (this.project.institution) {
-    //   let insti = new Institution();
-    //   insti.id = this.project.mappedInstitution?.id;
-    //   this.project.mappedInstitution = insti;
-    // }
-
     if (formData.form.valid && this.project.id > 0) {
       if (this.anonymousEditEntytyId > 0) {
         let prAprSts = new ProjectApprovalStatus();
         prAprSts.id = 4;
-        // this.project.projectApprovalStatus = prAprSts;
-        // this.projectProxy.updateProjectAnonymous(this.project).subscribe(
-        //   (res) => {
-        //     if (res == true) {
-        //       this.isSaving = true;
-        //       console.log('update', res);
-        //       this.messageService.add({
-        //         severity: 'success',
-        //         summary: 'Success',
-        //         detail: 'Project has updated successfully ',
-        //         closable: true,
-        //       });
-        //     } else {
-        //       this.messageService.add({
-        //         severity: 'error',
-        //         summary: 'Error.',
-        //         detail: 'Internal server error, please try again.',
-        //         sticky: true,
-        //       });
-        //     }
-        //   },
-
-        //   (err) => {
-        //     this.messageService.add({
-        //       severity: 'error',
-        //       summary: 'Error.',
-        //       detail: 'Internal server error, please try again.',
-        //       sticky: true,
-        //     });
-        //   }
-        // );
       } else {
-        // console.log('formData.form.valid', formData.form.valid);
         this.serviceProxy
           .updateOneBaseProjectControllerClimateAction(this.project.id, this.project)
           .subscribe(
@@ -753,56 +714,20 @@ export class ClimateActionComponent implements OnInit {
                 sticky: true,
               });
             }
-            // (res) => {
-            //   this.confirmationService.confirm({
-            //     message: 'Save success !',
-            //     header: 'Save',
-            //     acceptIcon: 'icon-not-visible',
-            //     rejectIcon: 'icon-not-visible',
-            //     rejectButtonStyleClass: 'p-button-text',
-            //     rejectVisible: false,
-            //     acceptLabel: 'Ok',
-            //     accept: () => {
-            //       //this.onBackClick();
-            //     },
-            //     reject: () => {},
-            //   });
-            // },
-            // (error) => {
-            //   this.confirmationService.confirm({
-            //     message: 'An error occurred, please try again.',
-            //     header: 'Error',
-            //     acceptIcon: 'icon-not-visible',
-            //     rejectIcon: 'icon-not-visible',
-            //     rejectButtonStyleClass: 'p-button-text',
-            //     rejectVisible: false,
-            //     acceptLabel: 'Ok',
-            //     accept: () => {
-            //       //this.onBackClick();
-            //     },
-            //     reject: () => {},
-            //   });
-
-            //   console.log('Error', error);
-            //   this.isSaving = false;
-            // }
           );
       }
     } else {
       if (formData.form.valid) {
-        // let prAprSts = new ProjectApprovalStatus();
-        // prAprSts.id = 4;
-        // this.project.projectApprovalStatus = prAprSts;
 
         this.messageService.clear();
         this.serviceProxy
           .createOneBaseProjectControllerClimateAction(this.project)
           .subscribe(
             (res) => {
-              for(let b of this.selectbarriers){
+              for (let b of this.selectbarriers) {
                 let pb = new PolicyBarriers();
                 pb.climateAction = res
-                pb.barriers= b;
+                pb.barriers = b;
                 this.policyBar.push(pb);
               }
               this.projectProxy.policyBar(this.policyBar).subscribe();
@@ -855,10 +780,10 @@ export class ClimateActionComponent implements OnInit {
     //   orfilter.push('climateActionName||$cont||' + w.trim());
     // }
     let filter: string[] = new Array();
-    if(this.counID > 0){
+    if (this.counID > 0) {
       filter.push('country.id||$eq||' + this.counID);
     }
-    
+
 
     filter.push('climateActionName||$cont||' + searchText);
 
@@ -906,11 +831,11 @@ export class ClimateActionComponent implements OnInit {
     this.getUserEnterdCountry = this.project.country;
 
     this.onSectorChange(event);
-    
+
 
     this.sectorProxy.getCountrySector(this.project.country.id).subscribe((res: any) => {
       this.sectorList = res;
-      console.log("++++" ,this.sectorList)
+      console.log("++++", this.sectorList)
     });
   }
 
@@ -935,14 +860,14 @@ export class ClimateActionComponent implements OnInit {
         .subscribe((res: any) => {
           this.ndcList = res.data;
           // this.onNdcChnage(event);
-          console.log("this.ndcList",  this.ndcList)
+          console.log("this.ndcList", this.ndcList)
           // console.log("event11",  event)
           if (event === true) {
             var ndc = this.ndcList?.find((a) => a.id === this.project?.aggregatedAction?.id);
             this.project.aggregatedAction = ndc !== undefined ? ndc : new Ndc();
-            console.log("this.ndcList",  this.project.aggregatedAction)
+            console.log("this.ndcList", this.project.aggregatedAction)
             if (this.project.actionArea) {
-              console.log(" this.ndcList",  this.ndcList)
+              console.log(" this.ndcList", this.ndcList)
               var subNdc: SubNdc = this.project.aggregatedAction.actionArea?.find(
                 (a) => a.id === this.project.aggregatedAction.id
               )!;
@@ -954,13 +879,13 @@ export class ClimateActionComponent implements OnInit {
       this.ndcList = [];
     }
   }
-  onNdcChnage(event:any) :void {
-    console.log("this.project" ,this.project)
-    
+  onNdcChnage(event: any): void {
+    console.log("this.project", this.project)
+
     this.ndcProxy.getSubNdc(this.project.aggregatedAction?.id).subscribe((res: any) => {
       this.SubndcList = res;
       console.log("SubndcList", this.SubndcList)
-      console.log("this.project" ,this.project)
+      console.log("this.project", this.project)
     });
   }
 
@@ -1102,446 +1027,447 @@ export class ClimateActionComponent implements OnInit {
   back() {
     this.location.back();
   }
-  confirmBack(label:string) {
-    if (label==='back'){
+  confirmBack(label: string) {
+    if (label === 'back') {
       this.location.back();
 
     }
     else {
       this.confirmationService.confirm({
-        message:(label=='cancel'?'Your filled data will be lost. ':'') + 'Are you sure that you want to proceed?',
+        message: (label == 'cancel' ? 'Your filled data will be lost. ' : '') + 'Are you sure that you want to proceed?',
         header: 'Confirmation',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
           this.location.back();
         },
         reject: (type: any) => {
-           
+
         }
-    });
+      });
     }
-    
-}
+
+  }
   onRowSelect(event: any) {
     this.selectedProject = event;
   }
 
-  onCategoryChange(event: any){
-    this.setbarriers=[]
-    for(let o of event){      
-      let br = this.barriers.filter((a:any)=> o.id == a.barriersCategory.id)[0]
-      this.setbarriers.push(br);
+  onCategoryChange(event: any) {
+    this.setbarriers = []
+    for (let o of event) {
+      let br = this.barriers.filter((a: any) => o.id == a.barriersCategory.id)
+      for (let b of br) {
+        this.setbarriers.push(b);
+      }
+  }
+}
+
+enableActionButtonsarea() {
+  this.isActionButtonSectionEnabled = true;
+}
+
+updateProjectApprovalStatus(project: Project, aprovalStatus: number) {
+  if (this.isMapped != undefined) {
+    this.originalApprovalStatus =
+      project.projectApprovalStatus === undefined
+        ? 'Propose'
+        : project.projectApprovalStatus.name;
+
+    if (aprovalStatus == 1) {
+      this.updatedApprovalStatus = 'Accept';
     }
-   
+    if (aprovalStatus == 2) {
+      this.updatedApprovalStatus = 'Reject';
+    }
+    if (aprovalStatus == 3) {
+      this.updatedApprovalStatus = 'Data Request';
+    }
+
+    let status = this.projectApprovalStatus.find(
+      (a) => a.id === aprovalStatus
+    );
+
+    // project.projectApprovalStatus = status === undefined ? (null as any) : status;
+    if (aprovalStatus === 1) {
+      // window.alert(project.projectApprovalStatus.name)
+      this.confirmationService.confirm({
+        message:
+          'Are you sure you want to approve ' +
+          project.policyName +
+          ' ?',
+        accept: () => {
+          //window.alert(project.projectApprovalStatus)
+          project.projectApprovalStatus =
+            status === undefined ? (null as any) : status;
+          console.log('my project..,', project);
+          this.updateStatus(project, aprovalStatus);
+        },
+        reject: () => { },
+      });
+    }
+    if (aprovalStatus === 2) {
+      this.confirmationService.confirm({
+        message:
+          'Are you sure you want to reject ' +
+          project.policyName +
+          ' ?',
+        accept: () => {
+          project.projectApprovalStatus =
+            status === undefined ? (null as any) : status;
+          this.updateStatus(project, aprovalStatus);
+        },
+        reject: () => { },
+      });
+    }
+    if (aprovalStatus === 3) {
+      this.confirmationService.confirm({
+        message:
+          'Are you sure you want to data request ' +
+          project.policyName +
+          ' ?',
+        accept: () => {
+          project.projectApprovalStatus =
+            status === undefined ? (null as any) : status;
+          this.updateStatus(project, aprovalStatus);
+        },
+        reject: () => { },
+      });
+    }
+  } else {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail:
+        'Please check whether Aggregated Actions and Action areas is correctly mapped or not',
+      closable: true,
+    });
+  }
+}
+
+updateStatus(project: Project, aprovalStatus: number) {
+  let sector = new Sector();
+  sector.id = project.sector.id;
+  project.sector = sector;
+
+  project.proposeDateofCommence = moment(this.proposeDateofCommence);
+  //project.endDateofCommence = moment(this.endDateofCommence);
+  // this.project.mappedInstitution=this.selectedInstitution;/
+
+  //     console.log("project")
+  //  console.log(this.project)
+  //  console.log(this.selectedInstitution)
+
+  if (project.aggregatedAction) {
+    let ndc = new Ndc();
+    ndc.id = project.aggregatedAction?.id;
+    project.aggregatedAction = ndc;
   }
 
-  enableActionButtonsarea() {
-    this.isActionButtonSectionEnabled = true;
+  if (project.actionArea) {
+    let subned = new SubNdc();
+    subned.id = project.actionArea?.id;
+    project.actionArea = subned;
   }
 
-  updateProjectApprovalStatus(project: Project, aprovalStatus: number) {
+  // if (project.institution) {
+  //   let insti = new Institution();
+  //   insti.id = project.mappedInstitution?.id;
+  //   project.mappedInstitution = insti;
+  // }
+
+  // project.politicalPreference = this.isPoliticalPreference;
+  // project.likelyhood = this.likelyHood;
+  // project.availabilityOfTechnology = this.isAvailabiltyOfTEch;
+  // project.financialFecialbility = this.isFinancialFeciability;
+  // // project.actionJustification = this.commentForJustification;
+  // project.isMappedCorrectly = this.isMapped;
+  // console.log('project.actionJustification..', project.actionJustification);
+
+  this.serviceProxy
+    .updateOneBaseProjectControllerClimateAction(project.id, project)
+  // .subscribe(
+  //   (res) => {
+  //     // window.alert("yess..")
+  //     // console.log(res);
+
+  //     let actionObject = new CaActionHistory();
+  //     actionObject.isApprovalAction = 1;
+  //     actionObject.previousAction = this.originalApprovalStatus;
+  //     actionObject.currentAction = this.updatedApprovalStatus;
+  //     actionObject.actionUser = this.fullname;
+  //     //  actionObject.isNdcAndSubNdc = 1;
+  //     //  actionObject.currentNdcs = this.project.currentNdc;
+  //     //  actionObject.previousNdcs = this.project.previousNdc;
+  //     //  actionObject.currentSubNdcs = this.project.currentSubNdc;
+  //     //  actionObject.previousSubNdcs = this.project.previousSubNdc;
+  //     actionObject.project = this.project;
+
+  //     this.serviceProxy
+  //       .createOneBaseCaActionHistoryControllerCaActionHistory(actionObject)
+  //       .subscribe(
+  //         (res) => {
+  //           console.log('save', res);
+  //           // this.messageService.add({
+  //           //   severity: 'success',
+  //           //   summary: 'Success',
+  //           //   detail: 'project  has save successfully',
+  //           //   closable: true,
+  //           // });
+  //         }
+
+  //         // (err) => {
+  //         //   this.messageService.add({
+  //         //     severity: 'error',
+  //         //     summary: 'Error.',
+  //         //     detail: 'Internal server error, please try again.',
+  //         //     sticky: true,
+  //         //   });
+  //         // }
+  //       );
+
+  //     this.messageService.add({
+  //       severity: 'success',
+  //       summary: 'Success',
+  //       detail:
+  //         aprovalStatus === 1 || aprovalStatus === 2
+  //           ? project.climateActionName +
+  //             ' is successfully ' +
+  //             (aprovalStatus === 1 ? 'Approved.' : 'Rejected')
+  //           : 'Data request sent successfully.',
+  //       closable: true,
+  //     });
+  //   },
+  //   (err) => {
+  //     //window.alert("nooo..")
+  //     this.messageService.add({
+  //       severity: 'error',
+  //       summary: 'Error.',
+  //       detail: 'Internal server error, please try again.',
+  //       sticky: true,
+  //     });
+  //   }
+  // );
+}
+
+drWithComment() {
+  if (
+    this.drComment === '' ||
+    this.drComment === null ||
+    this.drComment === undefined
+  ) {
+    this.drCommentRequried = true;
+  } else {
+    this.selectedProject.projectDataRequsetComment = this.drComment;
+
     if (this.isMapped != undefined) {
-      this.originalApprovalStatus =
-        project.projectApprovalStatus === undefined
-          ? 'Propose'
-          : project.projectApprovalStatus.name;
-
-      if (aprovalStatus == 1) {
-        this.updatedApprovalStatus = 'Accept';
-      }
-      if (aprovalStatus == 2) {
-        this.updatedApprovalStatus = 'Reject';
-      }
-      if (aprovalStatus == 3) {
-        this.updatedApprovalStatus = 'Data Request';
-      }
-
-      let status = this.projectApprovalStatus.find(
-        (a) => a.id === aprovalStatus
-      );
-
-      // project.projectApprovalStatus = status === undefined ? (null as any) : status;
-      if (aprovalStatus === 1) {
-        // window.alert(project.projectApprovalStatus.name)
-        this.confirmationService.confirm({
-          message:
-            'Are you sure you want to approve ' +
-            project.policyName +
-            ' ?',
-          accept: () => {
-            //window.alert(project.projectApprovalStatus)
-            project.projectApprovalStatus =
-              status === undefined ? (null as any) : status;
-            console.log('my project..,', project);
-            this.updateStatus(project, aprovalStatus);
-          },
-          reject: () => {},
-        });
-      }
-      if (aprovalStatus === 2) {
-        this.confirmationService.confirm({
-          message:
-            'Are you sure you want to reject ' +
-            project.policyName +
-            ' ?',
-          accept: () => {
-            project.projectApprovalStatus =
-              status === undefined ? (null as any) : status;
-            this.updateStatus(project, aprovalStatus);
-          },
-          reject: () => {},
-        });
-      }
-      if (aprovalStatus === 3) {
-        this.confirmationService.confirm({
-          message:
-            'Are you sure you want to data request ' +
-            project.policyName +
-            ' ?',
-          accept: () => {
-            project.projectApprovalStatus =
-              status === undefined ? (null as any) : status;
-            this.updateStatus(project, aprovalStatus);
-          },
-          reject: () => {},
-        });
-      }
+      this.updateProjectApprovalStatus(this.selectedProject, 3);
     } else {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
         detail:
-          'Please check whether Aggregated Actions and Action areas is correctly mapped or not',
+          'Please check whether Aggregated Actions and Action Areas is correctly mapped or not',
         closable: true,
       });
     }
   }
+}
 
-  updateStatus(project: Project, aprovalStatus: number) {
-    let sector = new Sector();
-    sector.id = project.sector.id;
-    project.sector = sector;
+rejectWithComment() {
+  if (
+    this.rejectComment === '' ||
+    this.rejectComment === null ||
+    this.rejectComment === undefined
+  ) {
+    this.rejectCommentRequried = true;
+  } else {
+    this.selectedProject.projectRejectComment = this.rejectComment;
+    //this.updateProjectApprovalStatus(this.selectedProject, 2);
+  }
+}
 
-    project.proposeDateofCommence = moment(this.proposeDateofCommence);
-    //project.endDateofCommence = moment(this.endDateofCommence);
-    // this.project.mappedInstitution=this.selectedInstitution;/
+OnShowOerlayDR() {
+  this.drComment = '';
+  this.drCommentRequried = false;
+}
+OnShowOerlay() {
+  this.rejectComment = '';
+  this.rejectCommentRequried = false;
+}
+onConfirm() {
+  this.messageService.clear('c');
+}
 
-    //     console.log("project")
-    //  console.log(this.project)
-    //  console.log(this.selectedInstitution)
+onReject() {
+  this.messageService.clear('c');
+}
 
-    if (project.aggregatedAction) {
-      let ndc = new Ndc();
-      ndc.id = project.aggregatedAction?.id;
-      project.aggregatedAction = ndc;
-    }
+showConfirm() {
+  this.messageService.clear();
+  this.messageService.add({
+    key: 'c',
+    sticky: true,
+    severity: 'warn',
+    summary: 'Are you sure?',
+    detail: 'Confirm to proceed',
+  });
+}
 
-    if (project.actionArea) {
-      let subned = new SubNdc();
-      subned.id = project.actionArea?.id;
-      project.actionArea = subned;
-    }
+toUpdateNdcs() {
+  console.log('this.project....', this.project);
 
-    // if (project.institution) {
-    //   let insti = new Institution();
-    //   insti.id = project.mappedInstitution?.id;
-    //   project.mappedInstitution = insti;
-    // }
+  let sector = new Sector();
+  sector.id = this.project.sector.id;
+  sector.name = this.project.sector.name;
+  this.project.sector = sector;
 
-    // project.politicalPreference = this.isPoliticalPreference;
-    // project.likelyhood = this.likelyHood;
-    // project.availabilityOfTechnology = this.isAvailabiltyOfTEch;
-    // project.financialFecialbility = this.isFinancialFeciability;
-    // // project.actionJustification = this.commentForJustification;
-    // project.isMappedCorrectly = this.isMapped;
-    // console.log('project.actionJustification..', project.actionJustification);
+  this.project.proposeDateofCommence = moment(this.proposeDateofCommence);
+  //this.project.endDateofCommence = moment(this.endDateofCommence);
+  // this.project.mappedInstitution=this.selectedInstitution;/
 
+  //     console.log("project")
+  //  console.log(this.project)
+  //  console.log(this.selectedInstitution)
+
+  if (this.project.aggregatedAction) {
+    // this.project.currentNdc = this.project.aggregatedAction.name;
+    // this.project.previousNdc = this.originalNdc;
+    this.originalNdc = this.project.aggregatedAction.name;
+
+    let ndc = new Ndc();
+    ndc.id = this.project.aggregatedAction?.id;
+    ndc.name = this.project.aggregatedAction?.name;
+    this.project.aggregatedAction = ndc;
+  }
+
+  if (this.project.actionArea) {
+    // this.project.currentSubNdc = this.project.subNdc.name;
+    // this.project.previousSubNdc = this.originalSubNdc;
+    this.originalSubNdc = this.project.actionArea.name;
+
+    let subned = new SubNdc();
+    subned.id = this.project.actionArea?.id;
+    subned.name = this.project.actionArea?.name;
+    this.project.actionArea = subned;
+  }
+
+  // if (this.project.institution) {
+  //   let insti = new Institution();
+  //   insti.id = this.project.mappedInstitution?.id;
+  //   this.project.mappedInstitution = insti;
+  // }
+
+
+  if (this.project.id > 0) {
     this.serviceProxy
-      .updateOneBaseProjectControllerClimateAction(project.id, project)
-      // .subscribe(
-      //   (res) => {
-      //     // window.alert("yess..")
-      //     // console.log(res);
+      .updateOneBaseProjectControllerClimateAction(this.project.id, this.project)
+    // .subscribe(
+    //   (res) => {
+    //     let historyObject = new CaActionHistory();
+    //     historyObject.isNdcAndSubNdc = 1;
+    //     historyObject.currentNdcs = this.project.currentNdc;
+    //     historyObject.previousNdcs = this.project.previousNdc;
+    //     historyObject.currentSubNdcs = this.project.currentSubNdc;
+    //     historyObject.previousSubNdcs = this.project.previousSubNdc;
+    //     historyObject.actionUser = this.fullname;
+    //     historyObject.project = this.project;
 
-      //     let actionObject = new CaActionHistory();
-      //     actionObject.isApprovalAction = 1;
-      //     actionObject.previousAction = this.originalApprovalStatus;
-      //     actionObject.currentAction = this.updatedApprovalStatus;
-      //     actionObject.actionUser = this.fullname;
-      //     //  actionObject.isNdcAndSubNdc = 1;
-      //     //  actionObject.currentNdcs = this.project.currentNdc;
-      //     //  actionObject.previousNdcs = this.project.previousNdc;
-      //     //  actionObject.currentSubNdcs = this.project.currentSubNdc;
-      //     //  actionObject.previousSubNdcs = this.project.previousSubNdc;
-      //     actionObject.project = this.project;
+    //     this.serviceProxy
+    //       .createOneBaseCaActionHistoryControllerCaActionHistory(
+    //         historyObject
+    //       )
+    //       .subscribe(
+    //         (res) => {
+    //           console.log('save', res);
+    //           // this.messageService.add({
+    //           //   severity: 'success',
+    //           //   summary: 'Success',
+    //           //   detail: 'project  has save successfully',
+    //           //   closable: true,
+    //           // });
+    //         }
 
-      //     this.serviceProxy
-      //       .createOneBaseCaActionHistoryControllerCaActionHistory(actionObject)
-      //       .subscribe(
-      //         (res) => {
-      //           console.log('save', res);
-      //           // this.messageService.add({
-      //           //   severity: 'success',
-      //           //   summary: 'Success',
-      //           //   detail: 'project  has save successfully',
-      //           //   closable: true,
-      //           // });
-      //         }
+    //         // (err) => {
+    //         //   this.messageService.add({
+    //         //     severity: 'error',
+    //         //     summary: 'Error.',
+    //         //     detail: 'Internal server error, please try again.',
+    //         //     sticky: true,
+    //         //   });
+    //         // }
+    //       );
 
-      //         // (err) => {
-      //         //   this.messageService.add({
-      //         //     severity: 'error',
-      //         //     summary: 'Error.',
-      //         //     detail: 'Internal server error, please try again.',
-      //         //     sticky: true,
-      //         //   });
-      //         // }
-      //       );
+    //     console.log('update....', res, this.project);
+    //     this.isMapped = 1
+    //     this.messageService.add({
+    //       severity: 'success',
+    //       summary: 'Success',
+    //       detail: 'Aggregated Actions and SubNdc  has updated successfully ',
+    //       closable: true,
+    //     });
+    //   },
 
-      //     this.messageService.add({
-      //       severity: 'success',
-      //       summary: 'Success',
-      //       detail:
-      //         aprovalStatus === 1 || aprovalStatus === 2
-      //           ? project.climateActionName +
-      //             ' is successfully ' +
-      //             (aprovalStatus === 1 ? 'Approved.' : 'Rejected')
-      //           : 'Data request sent successfully.',
-      //       closable: true,
-      //     });
-      //   },
-      //   (err) => {
-      //     //window.alert("nooo..")
-      //     this.messageService.add({
-      //       severity: 'error',
-      //       summary: 'Error.',
-      //       detail: 'Internal server error, please try again.',
-      //       sticky: true,
-      //     });
-      //   }
-      // );
+    //   (err) => {
+    //     this.messageService.add({
+    //       severity: 'error',
+    //       summary: 'Error.',
+    //       detail: 'Internal server error, please try again.',
+    //       sticky: true,
+    //     });
+    //   }
+    // );
   }
+}
 
-  drWithComment() {
-    if (
-      this.drComment === '' ||
-      this.drComment === null ||
-      this.drComment === undefined
-    ) {
-      this.drCommentRequried = true;
-    } else {
-      this.selectedProject.projectDataRequsetComment = this.drComment;
+toDownload() {
+  this.isDownloadMode = 1;
+  this.isDownloading = true;
 
-      if (this.isMapped != undefined) {
-        this.updateProjectApprovalStatus(this.selectedProject, 3);
-      } else {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail:
-            'Please check whether Aggregated Actions and Action Areas is correctly mapped or not',
-          closable: true,
-        });
-      }
-    }
-  }
+  setTimeout(() => {
+    // var data = document.getElementById('content')!;
 
-  rejectWithComment() {
-    if (
-      this.rejectComment === '' ||
-      this.rejectComment === null ||
-      this.rejectComment === undefined
-    ) {
-      this.rejectCommentRequried = true;
-    } else {
-      this.selectedProject.projectRejectComment = this.rejectComment;
-      //this.updateProjectApprovalStatus(this.selectedProject, 2);
-    }
-  }
+    //  html2canvas(data).then((canvas) => {
+    //    var imaWidth = 120; //123
+    //    var pageHeight = 400; //500
+    //   // var imgHeight = (canvas.height * imaWidth) / canvas.width;
+    //   var imgHeight = 800;
+    //   // console.log('size', canvas.height); // 4346
+    //   // console.log('size....', canvas.width); //2006
+    //    var heightLeft = imgHeight;
+    //    var text =
+    //      'Downolad date ' +
+    //      moment().format('YYYY-MM-DD HH:mm:ss');
 
-  OnShowOerlayDR() {
-    this.drComment = '';
-    this.drCommentRequried = false;
-  }
-  OnShowOerlay() {
-    this.rejectComment = '';
-    this.rejectCommentRequried = false;
-  }
-  onConfirm() {
-    this.messageService.clear('c');
-  }
+    //    const contentDataURL = canvas.toDataURL('image/png');
+    //    let pdf = new jsPDF('p', 'mm', 'a4');
+    //    var position = 0;
+    //    pdf.addImage(contentDataURL, 'PNG', 10, position, imaWidth, imgHeight);
+    //    pdf.text(text, 297, 297);
+    //    pdf.save('');
+    //  });
 
-  onReject() {
-    this.messageService.clear('c');
-  }
+    // var divHeight = $('#pdfTable').height();
+    // var divWidth = $('#pdfTable').width();
 
-  showConfirm() {
-    this.messageService.clear();
-    this.messageService.add({
-      key: 'c',
-      sticky: true,
-      severity: 'warn',
-      summary: 'Are you sure?',
-      detail: 'Confirm to proceed',
-    });
-  }
+    var data = document.getElementById('content')!;
 
-  toUpdateNdcs() {
-    console.log('this.project....', this.project);
+    html2canvas(data).then((canvas) => {
+      const componentWidth = data.offsetWidth;
+      const componentHeight = data.offsetHeight;
 
-    let sector = new Sector();
-    sector.id = this.project.sector.id;
-    sector.name = this.project.sector.name;
-    this.project.sector = sector;
+      const orientation = componentWidth >= componentHeight ? 'l' : 'p';
 
-    this.project.proposeDateofCommence = moment(this.proposeDateofCommence);
-    //this.project.endDateofCommence = moment(this.endDateofCommence);
-    // this.project.mappedInstitution=this.selectedInstitution;/
-
-    //     console.log("project")
-    //  console.log(this.project)
-    //  console.log(this.selectedInstitution)
-
-    if (this.project.aggregatedAction) {
-      // this.project.currentNdc = this.project.aggregatedAction.name;
-      // this.project.previousNdc = this.originalNdc;
-      this.originalNdc = this.project.aggregatedAction.name;
-
-      let ndc = new Ndc();
-      ndc.id = this.project.aggregatedAction?.id;
-      ndc.name = this.project.aggregatedAction?.name;
-      this.project.aggregatedAction = ndc;
-    }
-
-    if (this.project.actionArea) {
-      // this.project.currentSubNdc = this.project.subNdc.name;
-      // this.project.previousSubNdc = this.originalSubNdc;
-      this.originalSubNdc = this.project.actionArea.name;
-
-      let subned = new SubNdc();
-      subned.id = this.project.actionArea?.id;
-      subned.name = this.project.actionArea?.name;
-      this.project.actionArea = subned;
-    }
-
-    // if (this.project.institution) {
-    //   let insti = new Institution();
-    //   insti.id = this.project.mappedInstitution?.id;
-    //   this.project.mappedInstitution = insti;
-    // }
-
-
-    if (this.project.id > 0) {
-      this.serviceProxy
-        .updateOneBaseProjectControllerClimateAction(this.project.id, this.project)
-        // .subscribe(
-        //   (res) => {
-        //     let historyObject = new CaActionHistory();
-        //     historyObject.isNdcAndSubNdc = 1;
-        //     historyObject.currentNdcs = this.project.currentNdc;
-        //     historyObject.previousNdcs = this.project.previousNdc;
-        //     historyObject.currentSubNdcs = this.project.currentSubNdc;
-        //     historyObject.previousSubNdcs = this.project.previousSubNdc;
-        //     historyObject.actionUser = this.fullname;
-        //     historyObject.project = this.project;
-
-        //     this.serviceProxy
-        //       .createOneBaseCaActionHistoryControllerCaActionHistory(
-        //         historyObject
-        //       )
-        //       .subscribe(
-        //         (res) => {
-        //           console.log('save', res);
-        //           // this.messageService.add({
-        //           //   severity: 'success',
-        //           //   summary: 'Success',
-        //           //   detail: 'project  has save successfully',
-        //           //   closable: true,
-        //           // });
-        //         }
-
-        //         // (err) => {
-        //         //   this.messageService.add({
-        //         //     severity: 'error',
-        //         //     summary: 'Error.',
-        //         //     detail: 'Internal server error, please try again.',
-        //         //     sticky: true,
-        //         //   });
-        //         // }
-        //       );
-
-        //     console.log('update....', res, this.project);
-        //     this.isMapped = 1
-        //     this.messageService.add({
-        //       severity: 'success',
-        //       summary: 'Success',
-        //       detail: 'Aggregated Actions and SubNdc  has updated successfully ',
-        //       closable: true,
-        //     });
-        //   },
-
-        //   (err) => {
-        //     this.messageService.add({
-        //       severity: 'error',
-        //       summary: 'Error.',
-        //       detail: 'Internal server error, please try again.',
-        //       sticky: true,
-        //     });
-        //   }
-        // );
-    }
-  }
-
-  toDownload() {
-    this.isDownloadMode = 1;
-    this.isDownloading = true;
-
-    setTimeout(() => {
-      // var data = document.getElementById('content')!;
-
-      //  html2canvas(data).then((canvas) => {
-      //    var imaWidth = 120; //123
-      //    var pageHeight = 400; //500
-      //   // var imgHeight = (canvas.height * imaWidth) / canvas.width;
-      //   var imgHeight = 800;
-      //   // console.log('size', canvas.height); // 4346
-      //   // console.log('size....', canvas.width); //2006
-      //    var heightLeft = imgHeight;
-      //    var text =
-      //      'Downolad date ' +
-      //      moment().format('YYYY-MM-DD HH:mm:ss');
-
-      //    const contentDataURL = canvas.toDataURL('image/png');
-      //    let pdf = new jsPDF('p', 'mm', 'a4');
-      //    var position = 0;
-      //    pdf.addImage(contentDataURL, 'PNG', 10, position, imaWidth, imgHeight);
-      //    pdf.text(text, 297, 297);
-      //    pdf.save('');
-      //  });
-
-      // var divHeight = $('#pdfTable').height();
-      // var divWidth = $('#pdfTable').width();
-
-      var data = document.getElementById('content')!;
-
-      html2canvas(data).then((canvas) => {
-        const componentWidth = data.offsetWidth;
-        const componentHeight = data.offsetHeight;
-
-        const orientation = componentWidth >= componentHeight ? 'l' : 'p';
-
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF({
-          orientation,
-          unit: 'px',
-        });
-
-        pdf.internal.pageSize.width = componentWidth;
-        pdf.internal.pageSize.height = componentHeight;
-
-        pdf.addImage(imgData, 'PNG', 0, 0, componentWidth, componentHeight);
-        pdf.save('download.pdf');
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation,
+        unit: 'px',
       });
-    }, 1);
-  }
+
+      pdf.internal.pageSize.width = componentWidth;
+      pdf.internal.pageSize.height = componentHeight;
+
+      pdf.addImage(imgData, 'PNG', 0, 0, componentWidth, componentHeight);
+      pdf.save('download.pdf');
+    });
+  }, 1);
+}
 }

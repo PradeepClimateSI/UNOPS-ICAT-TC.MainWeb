@@ -1,7 +1,7 @@
 <div class="container pl-20 pr-20">
 
   <div class="mb-12">
-    <h4 class="mt-4"> Methodology Assessment </h4>
+    <h4 class="mt-4"> Assess Carbon Market Transformation Change</h4>
   </div>
 
   <!-- <p-toast></p-toast> -->
@@ -90,6 +90,70 @@
 
 
 
+          <div class="row p-2">
+            <div class="col-12 col-md-8">
+              <div class="p-field">
+                <label for="assessment_type">Assessment Type</label>
+                <select class="form-control select-with-arrow"  ngModel name="assessment_type"
+                  id="exampleFormControlSelect1">
+                  <option value="" disabled selected hidden>Select Assessment Type</option>
+                  <option>Ex-ante</option>
+                  <option>Ex-post</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+
+
+          <div class="row p-2">
+            <div class="col-12 col-md-8">
+              <div class="p-field">
+                <div class="field col-12 md:col-4">
+                  <label for="date1">Assessment Period</label>
+                  <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">
+                      <i class="pi pi-calendar"></i>
+                    </span>
+                    <p-calendar dateFormat="mm-dd-yy" inputId="date1" placeholder="From" ngModel name="date1"></p-calendar>
+                    <span class="p-inputgroup-addon">to</span>
+                    <p-calendar dateFormat="mm-dd-yy" inputId="date2" placeholder="To" ngModel name="date2"></p-calendar>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="row p-2">
+            <div class="col-12 col-md-8">
+              <div class="p-field">
+                <label for="assessment_method">Assessment Method</label>
+                <select class="form-control select-with-arrow"  ngModel name="assessment_method"
+                  id="exampleFormControlSelect1">
+                  <option value="" disabled selected hidden>Select Assessment Method</option>
+                  <option>Track 1</option>
+                  <option>Track 2</option>
+                  <option>Track 3</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="row p-2">
+            <div class="col-12 col-md-8">
+              <div class="p-field">
+                <label for="assessment_approach">Assessment Approach</label>
+                <select class="form-control select-with-arrow"  ngModel name="assessment_approach"
+                  id="exampleFormControlSelect1">
+                  <option value="" disabled selected hidden>Select Assessment Approach</option>
+                  <option>Direct</option>
+                  <option>Indirect</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
 
 
           <div class="row p-2">
@@ -100,9 +164,6 @@
                   <option value="" disabled selected hidden>Select Methodology</option>
                   <option *ngFor="let methodology of methList" [value]="methodology">{{methodology}}</option>
                 </select>
-
-
-
               </div>
             </div>
           </div>
