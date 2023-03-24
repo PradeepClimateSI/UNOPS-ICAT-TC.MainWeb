@@ -77,6 +77,10 @@ import { AssignDataRequestComponent } from './data-request-flow/assign-data-requ
 import { ViewDatarequestHistoryComponent } from './component/view-datarequest-history/view-datarequest-history.component';
 import { EnterDataComponent } from './data-request-flow/enter-data/enter-data.component';
 import { ReviewDataComponent } from './data-request-flow/review-data/review-data.component';
+import { PortfolioComponent } from "./Tool/portfolio/portfolio.component";
+import { InvestorComponent } from "./Tool/investor/investor.component";
+import { CarbonComponent } from "./Tool/carbon/carbon.component";
+import { AssessmentResultComponent } from './assessment-result/assessment-result.component';
 
 export function getRemoteServiceBaseUrl(): string {
   return environment.baseUrlAPI;
@@ -109,7 +113,12 @@ export function getAuthRemoteServiceBaseUrl(): string {
         ViewDatarequestHistoryComponent,
         EnterDataComponent,
         ReviewDataComponent,
+        PortfolioComponent,
+        CarbonComponent,
+        InvestorComponent,
+        AssessmentResultComponent,
     ],
+       
     imports: [
         FormsModule,
         BrowserModule,
@@ -152,7 +161,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         FlexLayoutModule,
         BrowserModule,
         BrowserAnimationsModule,
-        MessagesModule, 
+        MessagesModule,
         NbThemeModule.forRoot({name: 'default'}),
         NbLayoutModule,
         NbEvaIconsModule,
@@ -162,8 +171,8 @@ export function getAuthRemoteServiceBaseUrl(): string {
         RippleModule,
         InputTextModule,
         DialogModule,
-        DashboardModule,  
-        FileUploadModule,  
+        DashboardModule,
+        FileUploadModule,
         // NgMultiSelectDropDownModule.forRoot(),
         UserModule,
     ],
