@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {  Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {Chart} from 'chart.js';
+import { Router } from '@angular/router';
 
 
 interface CategoryInput {
@@ -40,7 +41,10 @@ selectedIndicator: string;
     private methassess : MethodologyAssessmentControllerServiceProxy,
     private http: HttpClient,
     private climateAction : ProjectControllerServiceProxy,
-  ) { }
+    private router: Router,
+  ) {
+
+  }
 
   selectedType = 'opentype';
   meth1:boolean;
@@ -64,7 +68,7 @@ trigger : boolean = false;
 
   barriersList : any = []
   barrierId : number;
-
+  barrierListobject :any = []
   indicatorList :any = []
 
    averageProcess : number
@@ -100,6 +104,10 @@ trigger : boolean = false;
   assessmentId :number;
   selectChaAffectByBarriers : any = []
 
+  policyBarriersList : any = []
+  selectedPolicyBarriersList : any = []
+
+  sendBarriers : any = []
  /*  categories = [
     {name: 'Category 1', characteristics: [
       {name: 'Characteristic 1', score: 0, relevance: '', selected:''},
@@ -212,12 +220,25 @@ trigger : boolean = false;
     this.barriersList = [];
     this.indicatorList = [];
 
-    this.methassess.findAllBarriers().subscribe((res: any) => {
+  this.methassess.findAllBarriers().subscribe((res: any) => {
       console.log("barrierss : ", res)
-      this.barriersList = res
+      this.barrierListobject = res
+      for(let x of res){
+        this.barriersList.push(x.barrier)
+      }
       console.log("barriersList : ", this.barriersList)
 
     });
+
+    this.methassess.findAllPolicyBarriers().subscribe((res: any) => {
+      console.log("policybarrierssList : ", res)
+      this.policyBarriersList = res
+
+
+    });
+
+
+
 
     this.methassess.findAllIndicators().subscribe((res: any) => {
       console.log("indicators : ", res)
@@ -348,13 +369,53 @@ trigger : boolean = false;
     } )
   }
  */
-  onChange(event:any) {
-    this.selectedType = event.target.value;
 
- /*    if (this.selectedType === 'Meth1') {
-      this.meth1=true;
-    } */
+  flag : boolean = false
+
+   onChange(event:any) {
+
+    this.flag = false
+   //this.onChange2(event)
+    this.selectedType = event.target.value;
+    this.selectedPolicyBarriersList = []
+
+     for(let x of this.policyBarriersList){
+        if(x.policyName === this.selectedType){
+          for(let barriersss of this.barriersList){
+              if(x.barriers.barrier === barriersss)
+
+            this.selectedPolicyBarriersList.push(barriersss)
+          }
+
+        }
+    }
+    console.log("selectedPolicyBarriersList: ", this.selectedPolicyBarriersList)
+
+    setTimeout(() => {
+      this.flag = true;
+    }, 500);
   }
+
+
+  /* async onChange2(event:any) {
+
+
+    this.selectedType = event.target.value;
+    this.selectedPolicyBarriersList = []
+
+     for(let x of this.policyBarriersList){
+        if(x.policyName === this.selectedType){
+          for(let barriersss of this.barriersList){
+              if(x.barriers.barrier === barriersss)
+
+            this.selectedPolicyBarriersList.push(barriersss)
+          }
+
+        }
+    }
+    console.log("selectedPolicyBarriersList: ", this.selectedPolicyBarriersList)
+  } */
+
 
   // Update the list of characteristics based on the selected category
 /*   updateCharacteristics() {
@@ -394,6 +455,17 @@ onItemSelect(item: any) {
   }
 
   console.log("select11", this.selectedItems);
+
+}
+
+onItemSelectBarriers(item: any){
+  console.log("bbbbb",item);
+  this.selectedPolicyBarriersList = [];
+  for(let x of item.value){
+    this.selectedPolicyBarriersList.push(x)
+  }
+
+  console.log("policyBarriersList99999999", this.selectedPolicyBarriersList);
 
 }
 /* onSelectAll(items: any) {
@@ -583,7 +655,7 @@ onDeSelectAll7(item: any){
 } */
 
 
-onSubmit(data: any) {
+ onSubmit(data: any) {
 
   this.assessmentId = 0;
 
@@ -717,6 +789,15 @@ if( data.policy === 'TC NACAG Initiative'){
 
   }
 
+  for(let barr of this.barrierListobject){
+    for(let x of data.selectedBarriers){
+      if(x=== barr.barrier){
+        this.sendBarriers.push(barr)
+      }
+    }
+  }
+
+
   console.log("policy Selected Id : ", this.policyId)
 
 console.log("methiddd,", this.methId)
@@ -724,19 +805,20 @@ console.log("methiddd,", this.methId)
     methodology : this.methId,
     categoryData :categoryDataArray,
     policyId : this.policyId,
-    tool : 'carbon market tool',
+    tool : 'Carbon Market Tool',
     assessment_type : data.assessment_type,
     date1 : data.date1,
     date2 : data.date2,
     assessment_method : data.assessment_method,
     assessment_approach : data.assessment_approach,
+    selectedBarriers : this.sendBarriers
    // barriers : this.selectedBarriers
   };
   console.log("final array",allData);
 
   // Send categoryDataArray to backend here
 
-   this.methassess.methAssignDataSave(allData).subscribe(res => {
+   this.methassess.methAssignDataSave(allData).subscribe( res => {
 
 
     this.averageProcess = res.result.averageProcess
@@ -749,13 +831,18 @@ console.log("methiddd,", this.methId)
     this.chart();
 
 
-    this.methassess.findByAssessIdAndRelevanceNotRelevant(this.assessmentId).subscribe(res => {
+   this.methassess.findByAssessIdAndRelevanceNotRelevant(this.assessmentId).subscribe(res => {
       console.log("chaaaaaa2",res )
       this.relevantChaList = res
       } )
 
 
   } )
+
+     setTimeout(() => {
+      this.router.navigate(['/assessment-result',this.assessmentId], { queryParams: { assessmentId: this.assessmentId,
+        averageProcess : this.averageProcess , averageOutcome: this.averageOutcome} });
+    }, 1000);
 
 }
 

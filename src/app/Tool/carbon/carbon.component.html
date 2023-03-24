@@ -81,12 +81,41 @@
                   <option value="" disabled selected hidden>Select Policy</option>
                   <option *ngFor="let policy of policyList" [value]="policy.policyName">{{policy.policyName}}</option>
                 </select>
-
-
-
               </div>
             </div>
           </div>
+
+ <div *ngIf="flag">
+  <div class="row p-2">
+            <div class="col-12 col-md-8">
+              <div class="p-field">
+                <label for="selectedBarriers">Barriers:</label>
+                <p-multiSelect name="selectedBarriers" [options]="barriersList"
+                  [(ngModel)]="selectedPolicyBarriersList" (onChange)="onItemSelectBarriers($event)"
+                  defaultLabel="Select Barriers"  >
+                </p-multiSelect>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+
+         <!--  <div class="row p-2">
+            <div class="col-12 col-md-8">
+              <div class="p-field">
+          <p-listbox [options]="barriersList" optionLabel="barrier" [(ngModel)]="selectedPolicyBarriersList"
+          [metaKeySelection]="false"  [checkbox]="true" [filter]="true"
+          [multiple]="true" [listStyle]="{ 'max-height': '350px' }">
+          <ng-template let-group pTemplate="group">
+              <div class="p-d-flex p-ai-center">
+                  <span>{{ group.label }}</span>
+              </div>
+          </ng-template>
+      </p-listbox>
+    </div>
+  </div>
+</div> -->
 
 
 
@@ -624,7 +653,7 @@
         <div class="p-field">
           <label for="category-select">Select Characteristics Affected By Barriers:</label>
           <p-multiSelect [options]="relevantChaList" [(ngModel)]="selectChaAffectByBarriers" (onChange)="onItemSelectcha($event)" defaultLabel="Select Characteristics" optionLabel="name"></p-multiSelect>
-          <button type="submit" (click)="submitForm()">Submit</button>
+          <button type="submit" (click)="submitForm()" >Submit</button>
         </div>
       </div>
     </div>

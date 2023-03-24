@@ -16,7 +16,7 @@ export enum CountryModule {
   MAC_MODULE = 2,
   DATACOLLECTION_MODULE = 3,
   DATACOLLECTION_GHG_MODULE = 4
-  
+
 }
 
 export enum UserRoles {
@@ -64,7 +64,8 @@ export const routes: Routes = [
     data: {}
   },
 
-  
+
+
 ];
 
 
