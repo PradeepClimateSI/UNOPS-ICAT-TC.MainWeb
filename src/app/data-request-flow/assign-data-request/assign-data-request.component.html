@@ -4,7 +4,7 @@
       <div class="row mb-4">
         <div class="col-md-6">
           <div class="p-field">
-            <label for="projStatus">Specific Climate Actions</label>
+            <label for="projStatus">Intervention</label>
             <p-dropdown
               name="climateActiontype"
               [options]="climateactionsList"
@@ -80,14 +80,14 @@
               <th style="width: 3rem">
                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
               </th>
-              <th>Specific Climate Actions</th>
-              <th>Parameter</th>
-              <th>Year</th>
-              <th>Deadline for Sector Admin</th>
-              <th>Assign To</th>
-              <th>Deadline for DEO</th>
+              <th>INTERVENTION</th>
+              <th>CATEGORY</th>
+              <th>CHARACTERISTICS</th>
+              <th>RELENANCY</th>
+              <th>ASSIGNEE</th>
+              <!-- <th>Deadline for DEO</th> -->
               <th>Status</th>
-              <th>Info</th>
+              <!-- <th>Info</th> -->
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-assignDataRequestList>
@@ -98,30 +98,30 @@
               </td>
               <td>
                 {{
-                  assignDataRequestList?.parameterId!.Assessment?.Prject!
-                    ?.policyName!
+                  assignDataRequestList?.parameterId!.Assessment?.Prject!?.policyName!
                 }}
               </td>
+              <td>{{ assignDataRequestList.parameterId?.category.name! }}</td>
               <td>{{ assignDataRequestList.parameterId?.characteristics.name! }}</td>
   
   
               <ng-container *ngIf=" assignDataRequestList.parameterId?.DefaultValue?.year! == undefined ; else elseBlockYear">
-              <td>
+              <!-- <td>
                 {{
                   assignDataRequestList.parameterId.AssessmentYear?assignDataRequestList.parameterId.AssessmentYear:assignDataRequestList.parameterId.projectionYear?assignDataRequestList.parameterId.projectionYear:assignDataRequestList.parameterId.projectionBaseYear
                 
                 }}
-              </td>
+              </td> -->
              </ng-container>
              <ng-template #elseBlockYear>  
-              <td>
+              <!-- <td>
                 {{
                   assignDataRequestList.parameterId?.DefaultValue?.year!
                 }}
-              </td>
+              </td> -->
              </ng-template>
-  
-              <td>{{ assignDataRequestList.deadline | date: "dd-MM-yyyy " }}</td>
+             <td>{{ assignDataRequestList.parameterId?.relevance}}</td>
+              <!-- <td>{{ assignDataRequestList.deadline | date: "dd-MM-yyyy " }}</td> -->
               <td>
                 {{
                   assignDataRequestList.parameterId?.Assessment!?.User!
@@ -129,11 +129,11 @@
                     : ""
                 }}
               </td>
-              <td>
+              <!-- <td>
                 {{
                   assignDataRequestList.deadlineDataEntry | date: "dd-MM-yyyy "
                 }}
-              </td>
+              </td> -->
               <td>
                 {{
                   assignDataRequestList.dataRequestStatus == 2
