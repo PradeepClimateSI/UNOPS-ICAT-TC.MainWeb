@@ -31,6 +31,8 @@ import { ClimateActionComponent } from 'app/climate-action/climate-action/climat
 import { ViewComponent } from 'app/climate-action/view/view.component';
 import { DataRequestComponent } from 'app/data-request-flow/data-request/data-request.component';
 import { AssignDataRequestComponent } from 'app/data-request-flow/assign-data-request/assign-data-request.component';
+import { EnterDataComponent } from 'app/data-request-flow/enter-data/enter-data.component';
+import { ReviewDataComponent } from 'app/data-request-flow/review-data/review-data.component';
 import { CarbonComponent } from 'app/Tool/carbon/carbon.component';
 import { PortfolioComponent } from 'app/Tool/portfolio/portfolio.component';
 import { InvestorComponent } from 'app/Tool/investor/investor.component';
@@ -91,6 +93,20 @@ const routes: Routes = [
   {
     path: 'assign-data-request',
     component: AssignDataRequestComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'enter-data',
+    component: EnterDataComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'view-data',
+    component: ReviewDataComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}

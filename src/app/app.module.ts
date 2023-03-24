@@ -75,6 +75,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { DataRequestComponent } from './data-request-flow/data-request/data-request.component';
 import { AssignDataRequestComponent } from './data-request-flow/assign-data-request/assign-data-request.component';
 import { ViewDatarequestHistoryComponent } from './component/view-datarequest-history/view-datarequest-history.component';
+import { EnterDataComponent } from './data-request-flow/enter-data/enter-data.component';
+import { ReviewDataComponent } from './data-request-flow/review-data/review-data.component';
 import { PortfolioComponent } from "./Tool/portfolio/portfolio.component";
 import { InvestorComponent } from "./Tool/investor/investor.component";
 import { CarbonComponent } from "./Tool/carbon/carbon.component";
@@ -106,13 +108,17 @@ export function getAuthRemoteServiceBaseUrl(): string {
         MethodologyComponent,
         ChartComponent,
         DataRequestComponent,
+        EnterDataComponent,
         AssignDataRequestComponent,
         ViewDatarequestHistoryComponent,
+        EnterDataComponent,
+        ReviewDataComponent,
         PortfolioComponent,
         CarbonComponent,
         InvestorComponent,
         AssessmentResultComponent,
-   ],
+    ],
+       
     imports: [
         FormsModule,
         BrowserModule,
