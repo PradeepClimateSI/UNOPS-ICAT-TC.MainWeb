@@ -55,33 +55,39 @@
                   routerLinkActive="selected">
                   <p class="mb-0 ml-20">Accepted policies</p>
                 </div>
-                <div class="sidebar-items--link d-flex flex-column align-items-start" [routerLink]="['/app/add-polocies']"
-                routerLinkActive="selected">
-                <p class="mb-0 ml-20">Create policies</p>
-              </div>
+                <div class="sidebar-items--link d-flex flex-column align-items-start"
+                  [routerLink]="['/app/add-polocies']" routerLinkActive="selected">
+                  <p class="mb-0 ml-20">Create policies</p>
+                </div>
               </p-accordionTab>
             </p-accordion>
 
             <p-accordion>
-                <p-accordionTab data-assess>
-                  <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
-                    <div [routerLink]="['/app/data-request']" routerLinkActive="selected">
-                      <p class="mb-2">Data request</p>
-                    </div>
-                  </p-header>
-                  <div class="sidebar-items--link d-flex flex-column align-items-start"
-                      [routerLink]="['/app/data-request']"
-                      routerLinkActive="selected">
-                    <p class="mb-0 ml-20">Manage</p>
+              <p-accordionTab data-assess>
+                <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
+                  <div [routerLink]="['/app/data-request']" routerLinkActive="selected">
+                    <p class="mb-2">Data request</p>
                   </div>
+                </p-header>
+                <div class="sidebar-items--link d-flex flex-column align-items-start"
+                  [routerLink]="['/app/data-request']" routerLinkActive="selected">
+                  <p class="mb-0 ml-20">Manage</p>
+                </div>
 
-                  <div class="sidebar-items--link d-flex flex-column align-items-start"
-                      [routerLink]="['/app/assign-data-request']"
-                      routerLinkActive="selected">
-                    <p class="mb-0 ml-20">assign-data-request</p>
-                  </div>
-                </p-accordionTab>
-              </p-accordion>
+                <div class="sidebar-items--link d-flex flex-column align-items-start"
+                  [routerLink]="['/app/assign-data-request']" routerLinkActive="selected">
+                  <p class="mb-0 ml-20">assign-data-request</p>
+                </div>
+                <div class="sidebar-items--link d-flex flex-column align-items-start"
+                  [routerLink]="['/app/enter-data']" routerLinkActive="selected">
+                  <p class="mb-0 ml-20">Enter Data</p>
+                </div>
+                <div class="sidebar-items--link d-flex flex-column align-items-start"
+                [routerLink]="['/app/view-data']" routerLinkActive="selected">
+                <p class="mb-0 ml-20">Review Data</p>
+              </div>
+              </p-accordionTab>
+            </p-accordion>
 
             <!-- <p-accordion>
                 <p-accordionTab data-assess>
@@ -200,8 +206,8 @@
                   <p class="mb-0 ml-20">Create</p>
                 </div>
 
-                <div class="sidebar-items--link d-flex flex-column align-items-start"
-                [routerLink]="['/app/user/list']" routerLinkActive="selected">
+                <div class="sidebar-items--link d-flex flex-column align-items-start" [routerLink]="['/app/user/list']"
+                  routerLinkActive="selected">
                   <p class="mb-0 ml-20">List</p>
                 </div>
 

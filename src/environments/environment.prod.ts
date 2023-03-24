@@ -9,7 +9,8 @@ export const environment = {
   authBaseUrlAPI: 'http://65.0.7.85:7090',
   baseUrlAPIDocUploadAPI: 'http://65.0.7.85:7081/document/upload2',
   baseUrlJsonFile: 'http://35.154.205.109:3600/filename',
-  baseUrlAPIDocUploadAnonymousAPI: 'http://65.0.7.85:7081/document/upload2'
+  baseUrlAPIDocUploadAnonymousAPI: 'http://65.0.7.85:7081/document/upload2',
+  baseUrlExcelUpload:  'http://65.0.7.85:7080/parameter/upload',
 };
 // baseUrlAPI: 'http://3.110.188.89:7080',
 /*

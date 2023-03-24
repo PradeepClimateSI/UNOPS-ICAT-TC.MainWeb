@@ -1,5 +1,5 @@
 <div class="container pl-20 pr-20">
-    <h4 class="mt-4">Data Request</h4>
+    <h4 class="mt-4"> Request Data </h4>
     <div class="p-grid p-fluid card">
       <div class="row mb-3">
         <div class="col-md-4"></div>
@@ -29,7 +29,7 @@
           <div class="col-12">
             <div class="p-field">
               <!--climateactions-->
-              <label for="projStatus">Specific Climate Actions</label>
+              <label for="projStatus">Intervention </label>
               <!-- <p-dropdown
                 name="climateActiontype"
                 [options]="dataReqAssignCA"
@@ -135,15 +135,15 @@
               <th style="width: 3rem">
                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
               </th>
-              <th>Specific Climate Actions</th>
-              <th>Assessment Type</th>
-              <!-- <th>Scenario</th> -->
-              <!-- <th>Parameter</th> -->
+              <th >INTERVENTION</th>
+              <th>CATEGORY</th>
+              <th>CHARACTERISTICS</th>
+              <th>RELAVANCY</th>
               <!-- <th>Alternative/Parents Available</th> -->
-              <th>Data Provider</th>
+              <th>REQUESTED FROM</th>
               <!-- <th>Year</th> -->
-              <th>Deadline</th>
-              <th>Status</th>
+              <th>DEADLINE</th>
+              <!-- <th>Status</th> -->
               <th>Info</th>
             </tr>
           </ng-template>
@@ -168,17 +168,16 @@
                 </div>
               </td>
               <td>
-                {{ dataRequestList?.parameter?.Assessment?.assessmentType }}
+                {{ dataRequestList?.parameter?.category?.name }}
               </td>
-              <!-- <td>
+              <td>
                 {{
-                  dataRequestList?.parameter.isAlternative ? "Alternative" : ""
-                }}
-                {{ dataRequestList?.parameter.isBaseline ? "Baseline" : "" }}
-                {{ dataRequestList?.parameter.isProject ? "Project" : "" }}
-                {{ dataRequestList?.parameter.isLekage ? "Lekage" : "" }}
-                {{ dataRequestList?.parameter.isProjection ? "Projection" : "" }}
-              </td> -->
+                  dataRequestList?.parameter.characteristics?.name}}
+              </td>
+              <td>
+                {{
+                  dataRequestList?.parameter.relevance}}
+              </td>
               <!-- <td>
                 <button
                   data-toggle="tooltip"
@@ -248,14 +247,14 @@
                 }}
               </td> -->
               <td>{{ dataRequestList.deadline | date: "dd-MM-yyyy " }}</td>
-              <td>
+              <!-- <td>
                 {{
                   dataRequestList.dataRequestStatus == -1 ? "Just Created" : ""
                 }}
                 {{ dataRequestList.dataRequestStatus == 1 ? "Saved" : "" }}
                 {{ dataRequestList.dataRequestStatus == 30 ? "Rejected(QC)" : "" }}
                 {{ dataRequestList.dataRequestStatus == -6? "Rejected(IA)" : "" }}
-              </td>
+              </td> -->
               <td>
                 <i
                   class="pi pi-ellipsis-v"
