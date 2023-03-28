@@ -222,7 +222,7 @@ trigger : boolean = false;
 
   ngOnInit(): void {
 
-    const token = localStorage.getItem('access_token')!;
+    const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
     this.userCountryId  = tokenPayload.countryId;
 
