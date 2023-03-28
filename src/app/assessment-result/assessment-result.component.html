@@ -1,12 +1,139 @@
-<div class="container pl-20 pr-20">
+ <div class="container pl-20 pr-20">
 
   <div class="mb-12">
     <h4 class="mt-4"> Result of Transformational Change Assessment</h4>
   </div>
 
   <div class="card" style="min-height: 600px;">
+    <div style="display: flex; flex-direction: row;">
+      <div style="flex-basis: 30%;">
+        <p><strong>Intervention</strong></p>
+        <p><strong>Assessment Type</strong></p>
+        <p><strong>Assessment Approach</strong></p>
+        <p><strong>Assessment Method</strong></p>
+        <p><strong>Tool</strong></p>
+        <p><strong>Assessment Period</strong></p>
+        <p><strong>Barriers</strong></p>
+      </div>
+      <div style="flex-basis: 50%;">
+        <p>{{policyName}}</p>
+        <p>{{assessmentType}}</p>
+        <p>{{assessment_approach}}</p>
+        <p>{{assessment_method}}</p>
+        <p>{{tool}}</p>
+        <p>{{date1 | date:'yyyy-MM-dd'}} to {{date2 | date:'yyyy-MM-dd'}}</p>
+        <p>{{barriersList.join(', ')}}</p>
+      </div>
+    </div>
+
+
+
+
+
+<div *ngIf="load">
+
+<!-- pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp -->
+<!-- <p-table [value]="outcomeCategory" [tableStyle]="{ 'min-width': '50rem' }">
+  <ng-template pTemplate="header">
+      <tr>
+          <th>Code</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Quantity</th>
+      </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-outcomeCategory>
+      <tr>
+          <td>{{ outcomeCategory.category }}</td>
+          <td>{{ outcomeCategory.chaName }}</td>
+          <td>{{ outcomeCategory.score }}</td>
+          <td>{{ outcomeCategory.score }}</td>
+      </tr>
+  </ng-template>
+</p-table>
+</div> -->
+
+<br><br><br>
+<h5>Process of Change</h5><br>
+
+<p-table [value]="processCategory" rowGroupMode="rowspan" groupRowsBy="category" sortField="category" sortMode="single"  [tableStyle]="{'min-width': '75rem'}">
+  <ng-template pTemplate="header">
+      <tr style="height:4rem;">
+
+          <th>  <strong style="color: black;">CATEGORY</strong></th>
+          <th>  <strong style="color: black;">CHARACTERISTIC</strong></th>
+          <th>  <strong style="color: black;">RELEVANCY</strong></th>
+          <th>  <strong style="color: black;">VALUE</strong></th>
+
+      </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-processCategory let-rowIndex="rowIndex" let-rowgroup="rowgroup" let-rowspan="rowspan">
+      <tr>
+
+          <td *ngIf="rowgroup" [attr.rowspan]="rowspan">
+              <span class="font-bold ml-2">{{processCategory.category}}</span>
+          </td>
+          <td>
+              {{processCategory.chaName}}
+          </td>
+          <td>
+              {{processCategory.relevance}}
+          </td>
+          <td>
+            {{processCategory.score}}
+          </td>
+      </tr>
+  </ng-template>
+</p-table>
+
+
+<br><br><br>
+
+
+
+
+<h5>Outcome of Change</h5><br>
+
+<p-table [value]="outcomeCategory" rowGroupMode="rowspan" groupRowsBy="category" sortField="category" sortMode="single"  [tableStyle]="{'min-width': '75rem'}">
+  <ng-template pTemplate="header">
+    <tr style="height:4rem;">
+
+      <th>  <strong style="color: black;">CATEGORY</strong></th>
+      <th>  <strong style="color: black;">CHARACTERISTIC</strong></th>
+      <th>  <strong style="color: black;">RELEVANCY</strong></th>
+      <th>  <strong style="color: black;">VALUE</strong></th>
+
+  </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-outcomeCategory let-rowIndex="rowIndex" let-rowgroup="rowgroup" let-rowspan="rowspan">
+      <tr>
+
+          <td *ngIf="rowgroup" [attr.rowspan]="rowspan">
+              <span class="font-bold ml-2">{{outcomeCategory.category}}</span>
+          </td>
+          <td>
+              {{outcomeCategory.chaName}}
+          </td>
+          <td>
+              {{outcomeCategory.relevance}}
+          </td>
+          <td>
+            {{outcomeCategory.score}}
+          </td>
+      </tr>
+  </ng-template>
+</p-table>
+<!-- ppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp -->
+<br><br><br>
+<div *ngIf="averageOutcome">
+  <h6>Transformational Impact Mapping</h6> <br>
+  <p>Process of Change : {{ averageProcess }}</p> <br>
+  <p>Outcome of Change : {{ averageOutcome }}</p> <br>
+
+
+  <app-chart [averageOutcome]="averageOutcome" [averageProcess]="averageProcess"></app-chart>
+
+</div>
 
   </div>
 </div>
-
-
