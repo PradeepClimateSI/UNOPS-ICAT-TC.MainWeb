@@ -81,6 +81,7 @@ import { PortfolioComponent } from "./Tool/portfolio/portfolio.component";
 import { InvestorComponent } from "./Tool/investor/investor.component";
 import { CarbonComponent } from "./Tool/carbon/carbon.component";
 import { AssessmentResultComponent } from './assessment-result/assessment-result.component';
+import { ManagedatastatusComponent } from './data-request-flow/managedatastatus/managedatastatus.component';
 
 export function getRemoteServiceBaseUrl(): string {
   return environment.baseUrlAPI;
@@ -117,6 +118,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         CarbonComponent,
         InvestorComponent,
         AssessmentResultComponent,
+        ManagedatastatusComponent,
     ],
        
     imports: [
