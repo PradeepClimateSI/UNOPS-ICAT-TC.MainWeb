@@ -1,6 +1,6 @@
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 //import { MethodologyControllerServiceProxy } from 'shared/service-proxies/meth-service-proxies';
-import { Institution, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, ServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Institution, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, ServiceProxy } from 'shared/service-proxies/service-proxies';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {  Component, ElementRef, OnInit, ViewChild } from '@angular/core';
@@ -44,6 +44,7 @@ selectedIndicator: string;
     private climateAction : ProjectControllerServiceProxy,
     private router: Router,
     private serviceProxy: ServiceProxy,
+    private instituionProxy: InstitutionControllerServiceProxy,
     private route: ActivatedRoute,
     private httpClient: HttpClient, private messageService: MessageService
   ) {
@@ -234,28 +235,11 @@ trigger : boolean = false;
 
     intTypeFilter.push('type.id||$eq||' + 3);
 
-    this.serviceProxy
-      .getManyBaseInstitutionControllerInstitution(
-        undefined,
-        undefined,
-        undefined,
-        intTypeFilter,
-        ['name,ASC'],
-        undefined,
-        1000,
-        0,
-        0,
-        0
-      )
-      .subscribe((res: any) => {
-        this.instiTutionList = res.data;
-        this.instiTutionList = this.instiTutionList.filter((o)=>o.country.id == this.userCountryId);
-      });
+    this.instituionProxy.getInstituion(3,this.userCountryId,1000,0).subscribe((res: any) => {
+      this.instiTutionList = res;
+      console.log( this.instiTutionList)
+    });
 
-    // this.methassess.dataCollectionInstitution().subscribe((res: any) => {
-    //  console.log("countryIddd : ", res)
-
-    // });
 
   this.methassess.findAllBarriers().subscribe((res: any) => {
       console.log("barrierss : ", res)
