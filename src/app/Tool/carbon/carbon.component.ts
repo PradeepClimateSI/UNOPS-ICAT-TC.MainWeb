@@ -111,6 +111,7 @@ trigger : boolean = false;
   selectedPolicyBarriersList : any = []
 
   sendBarriers : any = []
+  isSubmitted : boolean= false;
  /*  categories = [
     {name: 'Category 1', characteristics: [
       {name: 'Characteristic 1', score: 0, relevance: '', selected:''},
@@ -223,10 +224,10 @@ trigger : boolean = false;
     this.barriersList = [];
     this.indicatorList = [];
 
-    this.methassess.dataCollectionInstitution().subscribe((res: any) => {
+ /*    this.methassess.dataCollectionInstitution().subscribe((res: any) => {
      console.log("countryIddd : ", res)
 
-    });
+    }); */
 
   this.methassess.findAllBarriers().subscribe((res: any) => {
       console.log("barrierss : ", res)
@@ -664,8 +665,11 @@ onDeSelectAll7(item: any){
 
 
  onSubmit(data: any) {
-
+  this.isSubmitted = false;
   this.assessmentId = 0;
+  if(data.assessment_approach === 'Indirect' && data.assessment_method === 'Track 1'){
+  this.isSubmitted = true;
+  }
 
   console.log("ddd: ", data)
   let categoryDataArray: any[] = [];
@@ -891,10 +895,13 @@ console.log("methiddd,", this.methId)
 
   } )
 
-     setTimeout(() => {
+  if(data.assessment_approach === 'Direct' && data.assessment_method === 'Track 1'){
+    setTimeout(() => {
       this.router.navigate(['/assessment-result',this.assessmentId], { queryParams: { assessmentId: this.assessmentId,
         averageProcess : this.averageProcess , averageOutcome: this.averageOutcome} });
-    }, 1000);
+    }, 2000);
+  }
+
 
 
 
@@ -955,6 +962,8 @@ handleSelectedCharacteristic(event: any) {
 uploadedFiles: any[] = [];
 showMsg2: boolean = false;
 fileDataArray : any =[]
+selectedTrack : any
+selectedApproach : any
 
 async myUploader(event: any, chaName : any) {
 
@@ -999,6 +1008,17 @@ onUpload(event :any) {
       console.log("hello")
 
 }
+
+onChangeTrack(event : any){
+  this.selectedTrack = event.target.value;
+  console.log("selectedTrack : ", this.selectedTrack)
+}
+
+onChangeApproach(event : any){
+  this.selectedApproach = event.target.value;
+  console.log("selectedApproach : ", this.selectedApproach)
+}
+
 
 
 
