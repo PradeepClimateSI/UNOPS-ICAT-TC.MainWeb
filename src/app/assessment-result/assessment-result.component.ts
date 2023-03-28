@@ -48,6 +48,16 @@ load: boolean
       console.log("daaaaa111:",this.averageProcess)
       console.log("daaaaa222:",this.averageOutcome)
 
+      this.methassess.findByAllAssessmentBarriers().subscribe((res: any) => {
+        console.log("findByAllAssessmentBarriers : ", res)
+
+        for(let item of res){
+          if(item.assessment.id == this.assessmentId){
+               this.barriersList.push(item.barriers.barrier)
+          }
+        }
+      });
+
       this.methassess.assessmentDetails().subscribe((res: any) => {
         console.log("assessmentData : ", res)
         this.assessmentData = res

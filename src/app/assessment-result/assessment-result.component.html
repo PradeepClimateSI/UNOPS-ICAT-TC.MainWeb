@@ -5,17 +5,26 @@
   </div>
 
   <div class="card" style="min-height: 600px;">
-    <p><span>Intervention &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      &nbsp;&nbsp;&nbsp;</span><span>{{policyName}}</span></p>
-   <!--  <p style="font-size: 18px;">Intervention:&nbsp;&nbsp;{{policyName}}</p> -->
-   <p><span>Assessment Type &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span>{{assessmentType}}</span></p>
-   <p><span>Assessment Approach </span><span>{{ assessment_approach}}</span></p>
-   <p><span>Assessment Method  &nbsp;&nbsp;&nbsp;</span><span>{{assessment_method}}</span></p>
-   <p><span>Tool &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-   </span><span>{{tool}}</span></p>
-   <p><span>Assessment Period &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span>{{date1 | date:'yyyy-MM-dd'}}
-    &nbsp; to &nbsp; {{date2 | date:'yyyy-MM-dd'}}</span> </p>
+    <div style="display: flex; flex-direction: row;">
+      <div style="flex-basis: 30%;">
+        <p><strong>Intervention</strong></p>
+        <p><strong>Assessment Type</strong></p>
+        <p><strong>Assessment Approach</strong></p>
+        <p><strong>Assessment Method</strong></p>
+        <p><strong>Tool</strong></p>
+        <p><strong>Assessment Period</strong></p>
+        <p><strong>Barriers</strong></p>
+      </div>
+      <div style="flex-basis: 50%;">
+        <p>{{policyName}}</p>
+        <p>{{assessmentType}}</p>
+        <p>{{assessment_approach}}</p>
+        <p>{{assessment_method}}</p>
+        <p>{{tool}}</p>
+        <p>{{date1 | date:'yyyy-MM-dd'}} to {{date2 | date:'yyyy-MM-dd'}}</p>
+        <p>{{barriersList.join(', ')}}</p>
+      </div>
+    </div>
 
 
 

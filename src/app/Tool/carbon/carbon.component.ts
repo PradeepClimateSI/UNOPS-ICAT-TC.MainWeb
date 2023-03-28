@@ -5,8 +5,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {  Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {Chart} from 'chart.js';
-import { Router } from '@angular/router';
-
+import { ActivatedRoute, Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import { environment } from 'environments/environment';
 
 interface CategoryInput {
   id: number;
@@ -32,16 +33,17 @@ export class CarbonComponent implements OnInit {
   @ViewChild('myCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
 
 
-
+  baseURL:string=environment.baseUrlAPI;
   avg1 = 2;
   avg2 = 2;
 selectedIndicator: string;
 
   constructor(
     private methassess : MethodologyAssessmentControllerServiceProxy,
-    private http: HttpClient,
     private climateAction : ProjectControllerServiceProxy,
     private router: Router,
+    private route: ActivatedRoute,
+    private httpClient: HttpClient, private messageService: MessageService
   ) {
 
   }
@@ -75,6 +77,7 @@ trigger : boolean = false;
 
    averageOutcome : number
 
+   filename : string
   relevantChaList : any = []
 
   methId :number;
@@ -219,6 +222,11 @@ trigger : boolean = false;
     this.policyList = [];
     this.barriersList = [];
     this.indicatorList = [];
+
+    this.methassess.dataCollectionInstitution().subscribe((res: any) => {
+     console.log("countryIddd : ", res)
+
+    });
 
   this.methassess.findAllBarriers().subscribe((res: any) => {
       console.log("barrierss : ", res)
@@ -673,13 +681,24 @@ if( data.policy === 'TC Uganda Geothermal'){
       let charName = `${category.name}_${characteristic.name}`;
       let charRelevance = `${category.name}_${characteristic.name}_relevance`;
       let charScore = `${category.name}_${characteristic.name}_score`;
+      let comment = `${category.name}_${characteristic.name}_comment`;
+
+      this.filename = ''
+
+      for(let x of this.fileDataArray){
+        if(x.characteristic === characteristic.name){
+          this.filename = x.filename
+        }
+      }
 
       if (data[charName]) {
         categoryData.characteristics.push({
           id : characteristic.id,
           name: characteristic.name,
           relevance: data[charRelevance],
-          score: data[charScore]
+          score: data[charScore],
+          comment: data[comment],
+          filename : this.filename
         });
       }
     }
@@ -699,13 +718,24 @@ if( data.policy === 'TC Uganda Geothermal'){
       let charName = `${category.name}_${characteristic.name}`;
       let charRelevance = `${category.name}_${characteristic.name}_relevance`;
       let charScore = `${category.name}_${characteristic.name}_score`;
+      let comment = `${category.name}_${characteristic.name}_comment`;
+
+      this.filename = ''
+
+      for(let x of this.fileDataArray){
+        if(x.characteristic === characteristic.name){
+          this.filename = x.filename
+        }
+      }
 
       if (data[charName]) {
         categoryData.characteristics.push({
           id : characteristic.id,
           name: characteristic.name,
           relevance: data[charRelevance],
-          score: data[charScore]
+          score: data[charScore],
+          comment: data[comment],
+          filename : this.filename
         });
       }
     }
@@ -728,13 +758,24 @@ if( data.policy === 'TC NACAG Initiative'){
       let charName = `${category.name}_${characteristic.name}`;
       let charRelevance = `${category.name}_${characteristic.name}_relevance`;
       let charScore = `${category.name}_${characteristic.name}_score`;
+      let comment = `${category.name}_${characteristic.name}_comment`;
+
+      this.filename = ''
+
+      for(let x of this.fileDataArray){
+        if(x.characteristic === characteristic.name){
+          this.filename = x.filename
+        }
+      }
 
       if (data[charName]) {
         categoryData.characteristics.push({
           id : characteristic.id,
           name: characteristic.name,
           relevance: data[charRelevance],
-          score: data[charScore]
+          score: data[charScore],
+          comment: data[comment],
+          filename : this.filename
         });
       }
     }
@@ -755,13 +796,24 @@ if( data.policy === 'TC NACAG Initiative'){
       let charName = `${category.name}_${characteristic.name}`;
       let charRelevance = `${category.name}_${characteristic.name}_relevance`;
       let charScore = `${category.name}_${characteristic.name}_score`;
+      let comment = `${category.name}_${characteristic.name}_comment`;
+
+      this.filename = ''
+
+      for(let x of this.fileDataArray){
+        if(x.characteristic === characteristic.name){
+          this.filename = x.filename
+        }
+      }
 
       if (data[charName]) {
         categoryData.characteristics.push({
           id : characteristic.id,
           name: characteristic.name,
           relevance: data[charRelevance],
-          score: data[charScore]
+          score: data[charScore],
+          comment: data[comment],
+          filename : this.filename
         });
       }
     }
@@ -844,6 +896,8 @@ console.log("methiddd,", this.methId)
         averageProcess : this.averageProcess , averageOutcome: this.averageOutcome} });
     }, 1000);
 
+
+
 }
 
 submitForm(){
@@ -897,6 +951,55 @@ handleSelectedCharacteristic(event: any) {
   return this.filteredIndicatorList
 
 }
+
+uploadedFiles: any[] = [];
+showMsg2: boolean = false;
+fileDataArray : any =[]
+
+async myUploader(event: any, chaName : any) {
+
+  console.log("chaaNamee", chaName)
+
+  for (let file of event.files) {
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    let fullUrl =`${this.baseURL}/methodology-assessment/uploadtest`
+    this.showMsg2= true;
+
+    this.httpClient.post<any>(fullUrl, formData).subscribe(
+      res => {
+
+        let fileData: any = {
+          filename : res.location,
+          characteristic : chaName
+        }
+
+        this.fileDataArray.push(fileData)
+        console.log("nameeee", fileData);
+        console.log("fileDataArray", this.fileDataArray);
+        for(let file of event.files) {
+          this.uploadedFiles.push(file);
+        }
+        this.messageService.add({severity: 'info', summary: 'File Uploaded', detail: ''});
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
+
+}
+
+onUpload(event :any) {
+  for(let file of event.files) {
+      this.uploadedFiles.push(file);
+  }
+      console.log("hello")
+
+}
+
 
 
 }
