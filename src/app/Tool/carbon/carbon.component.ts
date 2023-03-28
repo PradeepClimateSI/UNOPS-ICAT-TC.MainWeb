@@ -1,6 +1,6 @@
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 //import { MethodologyControllerServiceProxy } from 'shared/service-proxies/meth-service-proxies';
-import { MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, ServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Institution, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, ServiceProxy } from 'shared/service-proxies/service-proxies';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {  Component, ElementRef, OnInit, ViewChild } from '@angular/core';
@@ -8,6 +8,7 @@ import {Chart} from 'chart.js';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { environment } from 'environments/environment';
+import decode from 'jwt-decode';
 
 interface CategoryInput {
   id: number;
@@ -42,6 +43,7 @@ selectedIndicator: string;
     private methassess : MethodologyAssessmentControllerServiceProxy,
     private climateAction : ProjectControllerServiceProxy,
     private router: Router,
+    private serviceProxy: ServiceProxy,
     private route: ActivatedRoute,
     private httpClient: HttpClient, private messageService: MessageService
   ) {
@@ -72,6 +74,7 @@ trigger : boolean = false;
   barrierId : number;
   barrierListobject :any = []
   indicatorList :any = []
+  instiTutionList: Institution[];
 
    averageProcess : number
 
@@ -109,7 +112,7 @@ trigger : boolean = false;
 
   policyBarriersList : any = []
   selectedPolicyBarriersList : any = []
-
+  userCountryId:number = 0;
   sendBarriers : any = []
  /*  categories = [
     {name: 'Category 1', characteristics: [
@@ -219,14 +222,40 @@ trigger : boolean = false;
 
   ngOnInit(): void {
 
+    const token = localStorage.getItem('access_token')!;
+    const tokenPayload = decode<any>(token);
+    this.userCountryId  = tokenPayload.countryId;
+
     this.policyList = [];
     this.barriersList = [];
     this.indicatorList = [];
 
-    this.methassess.dataCollectionInstitution().subscribe((res: any) => {
-     console.log("countryIddd : ", res)
+    let intTypeFilter: string[] = new Array();
 
-    });
+    intTypeFilter.push('type.id||$eq||' + 3);
+
+    this.serviceProxy
+      .getManyBaseInstitutionControllerInstitution(
+        undefined,
+        undefined,
+        undefined,
+        intTypeFilter,
+        ['name,ASC'],
+        undefined,
+        1000,
+        0,
+        0,
+        0
+      )
+      .subscribe((res: any) => {
+        this.instiTutionList = res.data;
+        this.instiTutionList = this.instiTutionList.filter((o)=>o.country.id == this.userCountryId);
+      });
+
+    // this.methassess.dataCollectionInstitution().subscribe((res: any) => {
+    //  console.log("countryIddd : ", res)
+
+    // });
 
   this.methassess.findAllBarriers().subscribe((res: any) => {
       console.log("barrierss : ", res)
