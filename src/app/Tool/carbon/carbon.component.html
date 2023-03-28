@@ -236,7 +236,7 @@
 
 
             <div class="row p-2">
-              <div class="col-12 col-md-8">
+              <div class="col-12 col-md-12">
                 <div class="p-field">
                   <div *ngFor="let category of selectedItems"><br><br>
                     <h6>{{category.name}}</h6>
@@ -257,6 +257,14 @@
                         &nbsp; &nbsp;</label>
                       <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel
                         placeholder="Score"> <br> <br>
+
+                        <label for="{{category.name}}_{{characteristic.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
+                          &nbsp; &nbsp;</label>
+                        <input type="text" name="{{category.name}}_{{characteristic.name}}_comment" ngModel
+                          placeholder="Comment"> <br> <br>
+
+
+                      <br>  <br>
                     </div>
 
                   </div>
@@ -321,7 +329,7 @@
 
 
             <div class="row p-2">
-              <div class="col-12 col-md-8">
+              <div class="col-12 col-md-12">
                 <div class="p-field">
                   <div *ngFor="let category of selectedItems2"><br><br>
                     <h6>{{category.name}}</h6>
@@ -342,6 +350,15 @@
                         &nbsp; &nbsp;</label>
                       <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel
                         placeholder="Score"> <br> <br>
+
+                        <label for="{{category.name}}_{{characteristic.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
+                          &nbsp; &nbsp;</label>
+                        <input type="text" name="{{category.name}}_{{characteristic.name}}_comment" ngModel
+                          placeholder="Comment"> <br> <br>
+
+                      <br>  <br>
+
+
                     </div>
 
                   </div>
@@ -413,7 +430,7 @@
 
 
             <div class="row p-2">
-              <div class="col-12 col-md-8">
+              <div class="col-12 col-md-12">
                 <div class="p-field">
                   <div *ngFor="let category of selectedItems3"><br><br>
                     <h6>{{category.name}}</h6>
@@ -438,6 +455,15 @@
                         &nbsp; &nbsp;</label>
                       <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel
                         placeholder="Score"> <br> <br>
+
+                        <label for="{{category.name}}_{{characteristic.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
+                          &nbsp; &nbsp;</label>
+                        <input type="text" name="{{category.name}}_{{characteristic.name}}_comment" ngModel
+                          placeholder="Comment"> <br> <br>
+
+
+                      <br>  <br>
+
                     </div>
 
                   </div>
@@ -475,7 +501,7 @@
 
 
             <div class="row p-2">
-              <div class="col-12 col-md-8">
+              <div class="col-12 col-md-12">
                 <div class="p-field">
                   <div *ngFor="let category of selectedItems4"><br><br>
                     <h6>{{category.name}}</h6>
@@ -500,6 +526,27 @@
                         &nbsp; &nbsp;</label>
                       <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel
                         placeholder="Score"> <br> <br>
+
+                        <label for="{{category.name}}_{{characteristic.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
+                          &nbsp; &nbsp;</label>
+                        <input type="text" name="{{category.name}}_{{characteristic.name}}_comment" ngModel
+                          placeholder="Comment"> <br> <br>
+
+                       <!--  <label class="mr-4">Upload Document : </label>
+                        <p-fileUpload
+                        name="file"
+                        [customUpload]="true"
+                        (uploadHandler)="myUploader($event,characteristic.name)"
+                        url="{{ baseURL }}/methodology-assessment/uploadtest"
+                        (onUpload)="onUpload($event)"
+                        [multiple]="true"
+                        [maxFileSize]="5000000"
+                        styleClass="custom-file-upload"
+                      ></p-fileUpload> -->
+                      <br>  <br>
+
+
+
                     </div>
 
                   </div>
