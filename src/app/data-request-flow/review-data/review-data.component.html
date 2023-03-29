@@ -19,7 +19,7 @@
                         <label for="projStatus">FILTER BY INTERVENTION</label>
                         <p-dropdown name="climateActiontype" [options]="climateactionsList"
                             [(ngModel)]="searchBy.climateaction" #fsector="ngModel" [showClear]="true" [filter]="true"
-                            placeholder="Select .." optionLabel="climateActionName"
+                            placeholder="Select .." optionLabel="policyName"
                             (ngModelChange)="onCAChange($event)">
                         </p-dropdown>
 

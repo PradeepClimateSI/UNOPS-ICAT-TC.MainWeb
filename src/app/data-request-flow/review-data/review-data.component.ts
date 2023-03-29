@@ -8,6 +8,8 @@ import {
   UpdateDeadlineDto,
   User,
   UsersControllerServiceProxy,
+  ClimateAction,
+  ProjectControllerServiceProxy,
 } from './../../../shared/service-proxies/service-proxies';
 import {
   AfterViewInit,
@@ -88,6 +90,7 @@ export class ReviewDataComponent implements OnInit {
     private usersControllerServiceProxy: UsersControllerServiceProxy,
     private confirmationService: ConfirmationService,
     private prHistoryProxy : ParameterHistoryControllerServiceProxy,
+    private projectsevice : ProjectControllerServiceProxy
   ) {}
   ngAfterViewInit(): void {
     this.cdr.detectChanges();
@@ -104,28 +107,15 @@ export class ReviewDataComponent implements OnInit {
 
     this.userName = tokenPayload.username;
     this.climateActionListFromBackend =  await this.parameterProxy.getClimateActionByDataRequestStatusSix().toPromise();
-
-    let filter2: string[] = new Array();
-
-    filter2.push('projectApprovalStatus.id||$eq||' + 5);
-  
-    this.serviceProxy.getManyBaseProjectControllerClimateAction(
-      // .getManyBaseProjectControllerProject(
-        undefined,
-        undefined,
-        filter2,
-        undefined,
-        undefined,
-        undefined,
-        1000,
-        0,
-        0,
-        0
-      )
-      .subscribe((res: any) => {
-        this.climateactions = res.data;
-        this.climateactions = this.climateActionListFromBackend;
-      });
+    // let filter2: string[] = new Array();
+    let filter2: number;
+    filter2 =5;
+     this.projectsevice.allProjectApprove(filter2 ,1000,0)
+     .subscribe((res: any) => {
+      console.log("===========",res)
+          this.climateactions = res.data;
+          this.climateactions = this.climateActionListFromBackend;
+        });
 
       this.parameterProxy
         .getReviewDataRequest(

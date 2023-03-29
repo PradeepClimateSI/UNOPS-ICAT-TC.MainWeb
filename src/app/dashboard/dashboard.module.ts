@@ -37,6 +37,7 @@ import { CarbonComponent } from 'app/Tool/carbon/carbon.component';
 import { PortfolioComponent } from 'app/Tool/portfolio/portfolio.component';
 import { InvestorComponent } from 'app/Tool/investor/investor.component';
 import { AssessmentResultComponent } from 'app/assessment-result/assessment-result.component';
+import { ManagedatastatusComponent } from 'app/data-request-flow/managedatastatus/managedatastatus.component';
 
 
 
@@ -107,6 +108,13 @@ const routes: Routes = [
   {
     path: 'view-data',
     component: ReviewDataComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'manage-data',
+    component: ManagedatastatusComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}
