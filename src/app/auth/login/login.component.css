@@ -34,3 +34,16 @@ h2 {
 .pass-icon{
   cursor: pointer;
 }
+.signup-line{
+    margin-top: 5%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    line-height:normal;
+    text-align: center;
+    background-color: rgb(233, 225, 214);
+    
+}
+.signup-line a{
+    color: blue !important;
+    
+}
