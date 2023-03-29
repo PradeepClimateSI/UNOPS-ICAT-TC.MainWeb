@@ -61,14 +61,14 @@
                 <label class="font-weight-bold">Confirm Password</label>
                 <br>
                 <span class="p-input-icon-right col-12" >
-                    <i *ngIf="passwordType=='password'" class="pi pi-eye pass-icon" (click)="togglePassword()"></i>
-                    <i *ngIf="passwordType=='text'" class="pi pi-eye-slash pass-icon" (click)="togglePassword()"></i>
-                    <input required pInputText [type]="passwordType" #fpassowrd="ngModel" name="confirmRegPassword" [(ngModel)]="confirmRegPassword"
+                    <i *ngIf="confirmPasswordType=='password'" class="pi pi-eye pass-icon" (click)="toggleConfirmPassword()"></i>
+                    <i *ngIf="confirmPasswordType=='text'" class="pi pi-eye-slash pass-icon" (click)="toggleConfirmPassword()"></i>
+                    <input required pInputText [type]="confirmPasswordType" #confirmpassowrd="ngModel" name="confirmRegPassword" [(ngModel)]="confirmRegPassword"
                         placeholder="Password" class="form-control" />
                 </span>
                 <p class="info-message text-danger" *ngIf="
-                        (fpassowrd.errors?.['required'] && (fpassowrd.touched || fpassowrd.dirty)) ||
-                        (fpassowrd.errors?.['required'] && isSubmitted  )">
+                        (confirmpassowrd.errors?.['required'] && (confirmpassowrd.touched || confirmpassowrd.dirty)) ||
+                        (confirmpassowrd.errors?.['required'] && isSubmitted  )">
                     Password is required
                 </p>
             </div>

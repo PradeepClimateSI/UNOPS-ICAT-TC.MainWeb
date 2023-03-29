@@ -13,6 +13,7 @@ import { UsersControllerServiceProxy } from 'shared/service-proxies/service-prox
 })
 export class RegisterUserComponent implements OnInit {
   passwordType: string = "password";
+  confirmPasswordType: string = "password";
   isSubmitted: boolean=false;
   fName: string="";
   lName: string="";
@@ -37,6 +38,13 @@ export class RegisterUserComponent implements OnInit {
       this.passwordType="password"
     }else {
       this.passwordType="text";
+    }
+  }
+  toggleConfirmPassword(){
+    if (this.confirmPasswordType=="text"){
+      this.confirmPasswordType="password"
+    }else {
+      this.confirmPasswordType="text";
     }
   }
   showPasswordResetForm() {
