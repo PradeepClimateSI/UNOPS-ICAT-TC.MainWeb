@@ -20,6 +20,7 @@ export class RegisterUserComponent implements OnInit {
   email:string="";
   RegPassword: string="";
   confirmRegPassword: string="";
+  pwConfirmation:boolean= false;
 
   constructor(
     private messageService: MessageService,
@@ -83,5 +84,15 @@ export class RegisterUserComponent implements OnInit {
       }
     }
   }
+  onChange(event:any){
+    if (this.RegPassword !== this.confirmRegPassword ||this.RegPassword===''||this.confirmRegPassword==='') {
+      this.pwConfirmation= false;
+      
+    }
+    else{
+      this.pwConfirmation= true;
+    }
+  }
+  
 
 }
