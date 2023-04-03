@@ -299,6 +299,25 @@
               <label for="{{category.name}}_catscore">Category Score: &nbsp;</label>
               <input type="number" name="{{category.name}}_catscore" ngModel placeholder="Score"> <br> <br>
 
+              <label for="{{category.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
+                &nbsp; &nbsp;</label>
+              <input type="text" name="{{category.name}}_comment" ngModel
+                placeholder="Comment"> <br> <br>
+
+              <label class="mr-4">Upload Document : </label>
+              <p-fileUpload
+              name="file"
+              [customUpload]="true"
+              (uploadHandler)="myUploader($event,category.name)"
+              url="{{ baseURL }}/methodology-assessment/uploadtest"
+              (onUpload)="onUpload($event)"
+              [multiple]="true"
+              [maxFileSize]="5000000"
+              styleClass="custom-file-upload"
+            ></p-fileUpload>
+            <br>  <br>
+
+
               <label for="characteristics">
                 <p style="font-size: medium; font-weight: bold;">Characteristics:</p>
               </label>
@@ -368,6 +387,24 @@
 
               <label for="{{category.name}}_catscore">Category Score: &nbsp;</label>
               <input type="number" name="{{category.name}}_catscore" ngModel placeholder="Score"> <br> <br>
+
+              <label for="{{category.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
+                &nbsp; &nbsp;</label>
+              <input type="text" name="{{category.name}}_comment" ngModel
+                placeholder="Comment"> <br> <br>
+
+              <label class="mr-4">Upload Document : </label>
+              <p-fileUpload
+              name="file"
+              [customUpload]="true"
+              (uploadHandler)="myUploader($event,category.name)"
+              url="{{ baseURL }}/methodology-assessment/uploadtest"
+              (onUpload)="onUpload($event)"
+              [multiple]="true"
+              [maxFileSize]="5000000"
+              styleClass="custom-file-upload"
+            ></p-fileUpload>
+            <br>  <br>
 
               <label for="characteristics">
                 <p style="font-size: medium; font-weight: bold;">Characteristics:</p>
@@ -456,12 +493,17 @@
                   <option value="not_relevant">Not Relevant</option>
                   <option value="possible_relevant">Possible Relevant</option>
                 </select><br>
-                <label for="{{category.name}}_{{characteristic.name}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp;
-                  &nbsp; &nbsp;</label>
-                <input [disabled]="isSubmitted" type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel
-                  placeholder="Score"> <br> <br>
 
-                  <label for="{{category.name}}_{{characteristic.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
+
+                  <label for="{{category.name}}_{{characteristic.name}}_institution" >Institution &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</label>
+                  <select [disabled]="isSubmitted"  (change)="onChangeInstitution($event)" ngModel
+                  name="{{category.name}}_{{characteristic.name}}_institution"
+                    id="{{category.name}}_{{characteristic.name}}_institution">
+                    <option value="" disabled selected hidden>Select Institution</option>
+                    <option *ngFor="let institu of instiTutionList" [value]="institu.id">{{institu.name}}</option>
+                  </select> <br>
+
+                  <label for="{{category.name}}_{{characteristic.name}}_comment">Comment:   &nbsp;
                     &nbsp; &nbsp;</label>
                   <input [disabled]="isSubmitted" type="text" name="{{category.name}}_{{characteristic.name}}_comment" ngModel
                     placeholder="Comment"> <br> <br>
@@ -531,10 +573,13 @@
                   <option value="not_relevant">Not Relevant</option>
                   <option value="possible_relevant">Possible Relevant</option>
                 </select><br>
-                <label for="{{category.name}}_{{characteristic.name}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp;
-                  &nbsp; &nbsp;</label>
-                <input [disabled]="isSubmitted" type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel
-                  placeholder="Score"> <br> <br>
+                <label for="{{category.name}}_{{characteristic.name}}_institution" >Institution &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</label>
+                  <select [disabled]="isSubmitted"  (change)="onChangeInstitution($event)" ngModel
+                  name="{{category.name}}_{{characteristic.name}}_institution"
+                    id="{{category.name}}_{{characteristic.name}}_institution">
+                    <option value="" disabled selected hidden>Select Institution</option>
+                    <option *ngFor="let institu of instiTutionList" [value]="institu.id">{{institu.name}}</option>
+                  </select> <br>
 
                   <label for="{{category.name}}_{{characteristic.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
                     &nbsp; &nbsp;</label>
@@ -590,8 +635,38 @@
             <div *ngFor="let category of selectedItems3"><br><br>
               <h6>{{category.name}}</h6>
 
-              <label for="{{category.name}}_catscore">Category Score: &nbsp;</label>
-              <input [disabled]="isSubmitted" type="number" name="{{category.name}}_catscore" ngModel placeholder="Score"> <br> <br>
+             <!--  <label for="{{category.name}}_catscore">Category Score: &nbsp;</label>
+              <input [disabled]="isSubmitted" type="number" name="{{category.name}}_catscore" ngModel placeholder="Score"> <br>  -->
+              <br>
+
+              <label for="{{category.name}}_institution" >Institution for category &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</label>
+                  <select [disabled]="isSubmitted"  (change)="onChangeInstitution($event)" ngModel
+                  name="{{category.name}}_institution"
+                    id="{{category.name}}_institution">
+                    <option value="" disabled selected hidden>Select Institution</option>
+                    <option *ngFor="let institu of instiTutionList" [value]="institu.id">{{institu.name}}</option>
+                  </select> <br><br>
+
+                  <label for="{{category.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
+                    &nbsp; &nbsp;</label>
+                  <input [disabled]="isSubmitted" type="text" name="{{category.name}}_comment" ngModel
+                    placeholder="Comment"> <br> <br>
+
+                  <label class="mr-4">Upload Document : </label>
+                  <p-fileUpload
+                  name="file"
+                  [customUpload]="true"
+                  (uploadHandler)="myUploader($event,category.name)"
+                  url="{{ baseURL }}/methodology-assessment/uploadtest"
+                  (onUpload)="onUpload($event)"
+                  [multiple]="true"
+                  [maxFileSize]="5000000"
+                  styleClass="custom-file-upload"
+                  [disabled]="isSubmitted"
+                ></p-fileUpload>
+                <br>  <br>
+
+
 
               <label for="characteristics">
                 <p style="font-size: medium; font-weight: bold;">Characteristics:</p>
@@ -606,10 +681,14 @@
                   <option value="not_relevant">Not Relevant</option>
                   <option value="possible_relevant">Possible Relevant</option>
                 </select><br>
-                <label for="{{category.name}}_{{characteristic.name}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp;
-                  &nbsp; &nbsp;</label>
-                <input [disabled]="isSubmitted" type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel
-                  placeholder="Score"> <br> <br>
+
+                <label for="{{category.name}}_{{characteristic.name}}_institution" >Institution &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</label>
+                  <select [disabled]="isSubmitted"  (change)="onChangeInstitution($event)" ngModel
+                  name="{{category.name}}_{{characteristic.name}}_institution"
+                    id="{{category.name}}_{{characteristic.name}}_institution">
+                    <option value="" disabled selected hidden>Select Institution</option>
+                    <option *ngFor="let institu of instiTutionList" [value]="institu.id">{{institu.name}}</option>
+                  </select> <br>
 
                   <label for="{{category.name}}_{{characteristic.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
                     &nbsp; &nbsp;</label>
@@ -661,8 +740,37 @@
             <div *ngFor="let category of selectedItems4"><br><br>
               <h6>{{category.name}}</h6>
 
-              <label for="{{category.name}}_catscore">Category Score: &nbsp;</label>
-              <input [disabled]="isSubmitted" type="number" name="{{category.name}}_catscore" ngModel placeholder="Score"> <br> <br>
+             <!--  <label for="{{category.name}}_catscore">Category Score: &nbsp;</label>
+              <input [disabled]="isSubmitted" type="number" name="{{category.name}}_catscore" ngModel placeholder="Score">  -->
+              <br>
+
+              <label for="{{category.name}}_institution" >Institution for category &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</label>
+                  <select [disabled]="isSubmitted"  (change)="onChangeInstitution($event)" ngModel
+                  name="{{category.name}}_institution"
+                    id="{{category.name}}_institution">
+                    <option value="" disabled selected hidden>Select Institution</option>
+                    <option *ngFor="let institu of instiTutionList" [value]="institu.id">{{institu.name}}</option>
+                  </select> <br><br>
+
+                  <label for="{{category.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
+                    &nbsp; &nbsp;</label>
+                  <input [disabled]="isSubmitted" type="text" name="{{category.name}}_comment" ngModel
+                    placeholder="Comment"> <br> <br>
+
+                  <label class="mr-4">Upload Document : </label>
+                  <p-fileUpload
+                  name="file"
+                  [customUpload]="true"
+                  (uploadHandler)="myUploader($event,category.name)"
+                  url="{{ baseURL }}/methodology-assessment/uploadtest"
+                  (onUpload)="onUpload($event)"
+                  [multiple]="true"
+                  [maxFileSize]="5000000"
+                  styleClass="custom-file-upload"
+                  [disabled]="isSubmitted"
+                ></p-fileUpload>
+                <br>  <br>
+
 
               <label for="characteristics">
                 <p style="font-size: medium; font-weight: bold;">Characteristics:</p>
@@ -677,10 +785,14 @@
                   <option value="not_relevant">Not Relevant</option>
                   <option value="possible_relevant">Possible Relevant</option>
                 </select><br>
-                <label for="{{category.name}}_{{characteristic.name}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp;
-                  &nbsp; &nbsp;</label>
-                <input [disabled]="isSubmitted" type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel
-                  placeholder="Score"> <br> <br>
+
+                <label for="{{category.name}}_{{characteristic.name}}_institution" >Institution &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</label>
+                  <select [disabled]="isSubmitted"  (change)="onChangeInstitution($event)" ngModel
+                  name="{{category.name}}_{{characteristic.name}}_institution"
+                    id="{{category.name}}_{{characteristic.name}}_institution">
+                    <option value="" disabled selected hidden>Select Institution</option>
+                    <option *ngFor="let institu of instiTutionList" [value]="institu.id">{{institu.name}}</option>
+                  </select> <br>
 
                   <label for="{{category.name}}_{{characteristic.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
                     &nbsp; &nbsp;</label>

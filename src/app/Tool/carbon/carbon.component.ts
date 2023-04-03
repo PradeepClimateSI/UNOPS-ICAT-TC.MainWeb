@@ -82,6 +82,7 @@ trigger : boolean = false;
    averageOutcome : number
 
    filename : string
+   categoryFilename : string
   relevantChaList : any = []
 
   methId :number;
@@ -238,7 +239,7 @@ trigger : boolean = false;
 
     this.instituionProxy.getInstituion(3,this.userCountryId,1000,0).subscribe((res: any) => {
       this.instiTutionList = res;
-      console.log( this.instiTutionList)
+      console.log( "listtt",this.instiTutionList)
     });
 
 
@@ -699,6 +700,7 @@ if( data.policy === 'TC Uganda Geothermal'){
       let charRelevance = `${category.name}_${characteristic.name}_relevance`;
       let charScore = `${category.name}_${characteristic.name}_score`;
       let comment = `${category.name}_${characteristic.name}_comment`;
+      let institution = `${category.name}_${characteristic.name}_institution`;
 
       this.filename = ''
 
@@ -715,7 +717,8 @@ if( data.policy === 'TC Uganda Geothermal'){
           relevance: data[charRelevance],
           score: data[charScore],
           comment: data[comment],
-          filename : this.filename
+          filename : this.filename,
+          institution : data[institution]
         });
       }
     }
@@ -736,6 +739,7 @@ if( data.policy === 'TC Uganda Geothermal'){
       let charRelevance = `${category.name}_${characteristic.name}_relevance`;
       let charScore = `${category.name}_${characteristic.name}_score`;
       let comment = `${category.name}_${characteristic.name}_comment`;
+      let institution = `${category.name}_${characteristic.name}_institution`;
 
       this.filename = ''
 
@@ -752,7 +756,8 @@ if( data.policy === 'TC Uganda Geothermal'){
           relevance: data[charRelevance],
           score: data[charScore],
           comment: data[comment],
-          filename : this.filename
+          filename : this.filename,
+          institution : data[institution]
         });
       }
     }
@@ -764,10 +769,22 @@ if( data.policy === 'TC Uganda Geothermal'){
 
 if( data.policy === 'TC NACAG Initiative'){
   for (let category of this.selectedItems3) {
+
+    this.categoryFilename = ''
+
+    for(let x of this.fileDataArray){
+      if(x.characteristic === category.name){
+        this.categoryFilename = x.filename
+      }
+    }
+
     let categoryData: any = {
       categoryScore: data[`${category.name}_catscore`],
+      categoryInstitution : data[`${category.name}_institution`],
+      categoryComment : data[`${category.name}_comment`],
       categoryId :category.id,
       category: category.name,
+      categoryFile : this.categoryFilename,
       characteristics: []
     };
 
@@ -776,6 +793,7 @@ if( data.policy === 'TC NACAG Initiative'){
       let charRelevance = `${category.name}_${characteristic.name}_relevance`;
       let charScore = `${category.name}_${characteristic.name}_score`;
       let comment = `${category.name}_${characteristic.name}_comment`;
+      let institution = `${category.name}_${characteristic.name}_institution`;
 
       this.filename = ''
 
@@ -792,7 +810,8 @@ if( data.policy === 'TC NACAG Initiative'){
           relevance: data[charRelevance],
           score: data[charScore],
           comment: data[comment],
-          filename : this.filename
+          filename : this.filename,
+          institution : data[institution]
         });
       }
     }
@@ -802,10 +821,22 @@ if( data.policy === 'TC NACAG Initiative'){
 
 
   for (let category of this.selectedItems4) {
+
+    this.categoryFilename = ''
+
+    for(let x of this.fileDataArray){
+      if(x.characteristic === category.name){
+        this.categoryFilename = x.filename
+      }
+    }
+
     let categoryData: any = {
       categoryScore: data[`${category.name}_catscore`],
+      categoryInstitution : data[`${category.name}_institution`],
+      categoryComment : data[`${category.name}_comment`],
       categoryId :category.id,
       category: category.name,
+      categoryFile : this.categoryFilename,
       characteristics: []
     };
 
@@ -814,6 +845,7 @@ if( data.policy === 'TC NACAG Initiative'){
       let charRelevance = `${category.name}_${characteristic.name}_relevance`;
       let charScore = `${category.name}_${characteristic.name}_score`;
       let comment = `${category.name}_${characteristic.name}_comment`;
+      let institution = `${category.name}_${characteristic.name}_institution`;
 
       this.filename = ''
 
@@ -830,7 +862,8 @@ if( data.policy === 'TC NACAG Initiative'){
           relevance: data[charRelevance],
           score: data[charScore],
           comment: data[comment],
-          filename : this.filename
+          filename : this.filename,
+          institution : data[institution]
         });
       }
     }
@@ -1030,6 +1063,11 @@ onChangeTrack(event : any){
 onChangeApproach(event : any){
   this.selectedApproach = event.target.value;
   console.log("selectedApproach : ", this.selectedApproach)
+}
+
+
+onChangeInstitution(event : any){
+  console.log("selectedInstitution: ", event.target.value)
 }
 
 
