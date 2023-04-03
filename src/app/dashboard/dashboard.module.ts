@@ -39,6 +39,8 @@ import { InvestorComponent } from 'app/Tool/investor/investor.component';
 import { AssessmentResultComponent } from 'app/assessment-result/assessment-result.component';
 import { ManagedatastatusComponent } from 'app/data-request-flow/managedatastatus/managedatastatus.component';
 import { ApproveDataComponent } from 'app/data-request-flow/approve-data/approve-data.component';
+import { Assessment } from 'shared/service-proxies/service-proxies';
+import { AssessmentComponent } from 'app/assessment/assessment.component';
 
 
 
@@ -158,6 +160,13 @@ const routes: Routes = [
   {
     path: 'assessment-result/:id',
     component: AssessmentResultComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'assessment-results',
+    component: AssessmentComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}

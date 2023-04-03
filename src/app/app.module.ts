@@ -84,6 +84,9 @@ import { AssessmentResultComponent } from './assessment-result/assessment-result
 import { ManagedatastatusComponent } from './data-request-flow/managedatastatus/managedatastatus.component';
 import { ApproveDataComponent } from './data-request-flow/approve-data/approve-data.component';
 import { QualityCheckComponent } from './quality-check/quality-check.component';
+import { AssessmentComponent } from './assessment/assessment.component';
+
+
 
 export function getRemoteServiceBaseUrl(): string {
   return environment.baseUrlAPI;
@@ -123,8 +126,10 @@ export function getAuthRemoteServiceBaseUrl(): string {
         ManagedatastatusComponent,
         ApproveDataComponent,
         QualityCheckComponent,
+        AssessmentComponent,
     ],
        
+      
     imports: [
         FormsModule,
         BrowserModule,
