@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { MethodologyAssessmentParameters } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-verify-parameter',
@@ -7,7 +8,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class VerifyParameterComponent implements OnInit {
 
-  parameters: any[]
+  @Input() parameters: MethodologyAssessmentParameters[]
+  @Input() verificationStatus: any
   loading: boolean = false
 
   flag: number;

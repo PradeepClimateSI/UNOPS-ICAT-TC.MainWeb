@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Assessment, AssessmentControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, MethodologyAssessmentParameters, ServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-verification-detail',
@@ -8,18 +10,43 @@ import { Component, OnInit } from '@angular/core';
 export class VerificationDetailComponent implements OnInit {
 
   public card: any[] = []
+  assessmentId: any;
+  assessment: Assessment
+  verificationStatus: any;
+  flag: any;
+  public parameters: MethodologyAssessmentParameters[];
 
-  constructor() { }
+  constructor(
+    private route: ActivatedRoute,
+    private serviceProxy: ServiceProxy,
+    private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
+    private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy
+  ) { }
 
   ngOnInit(): void {
-    this.card = [
-      {title: 'Intervention', value: 'Geothermal Energy Development Policy in Uganda'},
-      {title: 'Assessment Type ', value: 'Ex-Post'},
-      {title: 'Assessment Period ', value: '31/12/2022     to       31/12/2025'},
-      {title: 'Barriers ', value: 'Barrier 1,Barrier 2'},
-      {title: 'Methodology', value: 'Method 1'},
-      {title: 'Assessment Method', value: 'Track 1'},
-    ]
+    
+
+    this.route.queryParams.subscribe(async (params) => {
+      this.assessmentId = params['id'];
+      this.verificationStatus = params['verificationStatus'];
+      this.flag = params['flag'];
+
+      // this.serviceProxy.getOneBase
+      this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+      this.card = [
+        {title: 'Intervention', value: this.assessment.climateAction.policyName},
+        {title: 'Assessment Type ', value: this.assessment.assessmentType},
+        {title: 'Assessment Period ', value: this.assessment.from + '  to ' + this.assessment.to},
+        {title: 'Barriers ', value: this.assessment.climateAction.barriers},
+        {title: 'Methodology', value: this.assessment.methodology.methodology_name},
+        {title: 'Assessment Method', value: 'Track 1'},
+      ]
+
+      
+      this.parameters = await this.methodologyAssessmentControllerServiceProxy.findAssessmentParameters(this.assessment.id).toPromise()
+      console.log(this.parameters)
+
+    })
   }
 
 }

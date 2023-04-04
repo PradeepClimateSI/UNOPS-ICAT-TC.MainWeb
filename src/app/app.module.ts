@@ -58,7 +58,7 @@ import { CarouselModule } from 'primeng/carousel';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ConfirmationService } from "primeng/api";
-import { API_BASE_URL, AssessmentControllerServiceProxy, AuthControllerServiceProxy, CountryControllerServiceProxy, DocumentControllerServiceProxy, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, NdcControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequestControllerServiceProxy, ProjectControllerServiceProxy, SectorControllerServiceProxy, ServiceProxy, UserTypeControllerServiceProxy } from "shared/service-proxies/service-proxies";
+import { API_BASE_URL, AssessmentControllerServiceProxy, AuthControllerServiceProxy, CountryControllerServiceProxy, DocumentControllerServiceProxy, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, NdcControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequestControllerServiceProxy, ProjectControllerServiceProxy, SectorControllerServiceProxy, ServiceProxy, UserTypeControllerServiceProxy, VerificationControllerServiceProxy } from "shared/service-proxies/service-proxies";
 import { AUTH_API_BASE_URL, ServiceProxy as AuthServiceProxy, } from 'shared/service-proxies/auth-service-proxies';
 
 import { RoleGuardService } from "./auth/role-guard.service";
@@ -210,6 +210,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         UserTypeControllerServiceProxy,
         InstitutionControllerServiceProxy,
         AssessmentControllerServiceProxy,
+        VerificationControllerServiceProxy,
         DatePipe,
         {provide: API_BASE_URL, useFactory: getRemoteServiceBaseUrl},
         {provide: AUTH_API_BASE_URL, useFactory: getAuthRemoteServiceBaseUrl},

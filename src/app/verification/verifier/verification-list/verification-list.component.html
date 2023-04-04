@@ -42,11 +42,11 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-c>
                     <tr>
-                        <td>{{c.ca}}</td>
-                        <td>{{c.type}}</td>
-                        <td>{{c.period}}</td>
-                        <td>{{c.status}}</td>
-                        <td>{{c.Date}}</td>
+                        <td>{{c.climateAction.policyName}}</td>
+                        <td>{{c.assessmentType}}</td>
+                        <td>{{c.from}} - {{c.to}}</td>
+                        <td>{{VerificationStatusEnum[c?.verificationStatus]}}</td>
+                        <td>{{c.editedOn | date: "yyyy-MM-dd "}}</td>
                         <td>
                             <button pButton pRipple type="button" label="View" (click)="statusClick($event, c)"
                                 class="p-button-info"></button>

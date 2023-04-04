@@ -24,8 +24,9 @@
                 ResultLabel="Baseline emission" [ResultValue]="assessmentResult.baselineResult |  number: '2.0-5'"
                 [verificationDetails]="verificationDetails" [isBaseline]="true" [isAccept]="isBaseAccept" [flag]="flag"
                 [verificationStatus]="verificationStatus"></app-verify-parameter-section> -->
-            <app-verify-parameter>
-                
-            </app-verify-parameter>
+            <app-verify-parameter
+            [parameters]="parameters"
+            [verificationStatus]="verificationStatus"
+            ></app-verify-parameter>
         </div>
     </div>
