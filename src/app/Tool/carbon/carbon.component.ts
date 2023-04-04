@@ -82,6 +82,7 @@ trigger : boolean = false;
    averageOutcome : number
 
    filename : string
+   categoryFilename : string
   relevantChaList : any = []
 
   methId :number;
@@ -115,6 +116,7 @@ trigger : boolean = false;
   selectedPolicyBarriersList : any = []
   userCountryId:number = 0;
   sendBarriers : any = []
+  isSubmitted : boolean= false;
  /*  categories = [
     {name: 'Category 1', characteristics: [
       {name: 'Characteristic 1', score: 0, relevance: '', selected:''},
@@ -237,7 +239,7 @@ trigger : boolean = false;
 
     this.instituionProxy.getInstituion(3,this.userCountryId,1000,0).subscribe((res: any) => {
       this.instiTutionList = res;
-      console.log( this.instiTutionList)
+      console.log( "listtt",this.instiTutionList)
     });
 
 
@@ -677,8 +679,11 @@ onDeSelectAll7(item: any){
 
 
  onSubmit(data: any) {
-
+  this.isSubmitted = false;
   this.assessmentId = 0;
+  if(data.assessment_approach === 'Indirect' && data.assessment_method === 'Track 1'){
+  this.isSubmitted = true;
+  }
 
   console.log("ddd: ", data)
   let categoryDataArray: any[] = [];
@@ -695,6 +700,7 @@ if( data.policy === 'TC Uganda Geothermal'){
       let charRelevance = `${category.name}_${characteristic.name}_relevance`;
       let charScore = `${category.name}_${characteristic.name}_score`;
       let comment = `${category.name}_${characteristic.name}_comment`;
+      let institution = `${category.name}_${characteristic.name}_institution`;
 
       this.filename = ''
 
@@ -711,7 +717,8 @@ if( data.policy === 'TC Uganda Geothermal'){
           relevance: data[charRelevance],
           score: data[charScore],
           comment: data[comment],
-          filename : this.filename
+          filename : this.filename,
+          institution : data[institution]
         });
       }
     }
@@ -732,6 +739,7 @@ if( data.policy === 'TC Uganda Geothermal'){
       let charRelevance = `${category.name}_${characteristic.name}_relevance`;
       let charScore = `${category.name}_${characteristic.name}_score`;
       let comment = `${category.name}_${characteristic.name}_comment`;
+      let institution = `${category.name}_${characteristic.name}_institution`;
 
       this.filename = ''
 
@@ -748,7 +756,8 @@ if( data.policy === 'TC Uganda Geothermal'){
           relevance: data[charRelevance],
           score: data[charScore],
           comment: data[comment],
-          filename : this.filename
+          filename : this.filename,
+          institution : data[institution]
         });
       }
     }
@@ -760,10 +769,22 @@ if( data.policy === 'TC Uganda Geothermal'){
 
 if( data.policy === 'TC NACAG Initiative'){
   for (let category of this.selectedItems3) {
+
+    this.categoryFilename = ''
+
+    for(let x of this.fileDataArray){
+      if(x.characteristic === category.name){
+        this.categoryFilename = x.filename
+      }
+    }
+
     let categoryData: any = {
       categoryScore: data[`${category.name}_catscore`],
+      categoryInstitution : data[`${category.name}_institution`],
+      categoryComment : data[`${category.name}_comment`],
       categoryId :category.id,
       category: category.name,
+      categoryFile : this.categoryFilename,
       characteristics: []
     };
 
@@ -772,6 +793,7 @@ if( data.policy === 'TC NACAG Initiative'){
       let charRelevance = `${category.name}_${characteristic.name}_relevance`;
       let charScore = `${category.name}_${characteristic.name}_score`;
       let comment = `${category.name}_${characteristic.name}_comment`;
+      let institution = `${category.name}_${characteristic.name}_institution`;
 
       this.filename = ''
 
@@ -788,7 +810,8 @@ if( data.policy === 'TC NACAG Initiative'){
           relevance: data[charRelevance],
           score: data[charScore],
           comment: data[comment],
-          filename : this.filename
+          filename : this.filename,
+          institution : data[institution]
         });
       }
     }
@@ -798,10 +821,22 @@ if( data.policy === 'TC NACAG Initiative'){
 
 
   for (let category of this.selectedItems4) {
+
+    this.categoryFilename = ''
+
+    for(let x of this.fileDataArray){
+      if(x.characteristic === category.name){
+        this.categoryFilename = x.filename
+      }
+    }
+
     let categoryData: any = {
       categoryScore: data[`${category.name}_catscore`],
+      categoryInstitution : data[`${category.name}_institution`],
+      categoryComment : data[`${category.name}_comment`],
       categoryId :category.id,
       category: category.name,
+      categoryFile : this.categoryFilename,
       characteristics: []
     };
 
@@ -810,6 +845,7 @@ if( data.policy === 'TC NACAG Initiative'){
       let charRelevance = `${category.name}_${characteristic.name}_relevance`;
       let charScore = `${category.name}_${characteristic.name}_score`;
       let comment = `${category.name}_${characteristic.name}_comment`;
+      let institution = `${category.name}_${characteristic.name}_institution`;
 
       this.filename = ''
 
@@ -826,7 +862,8 @@ if( data.policy === 'TC NACAG Initiative'){
           relevance: data[charRelevance],
           score: data[charScore],
           comment: data[comment],
-          filename : this.filename
+          filename : this.filename,
+          institution : data[institution]
         });
       }
     }
@@ -904,10 +941,13 @@ console.log("methiddd,", this.methId)
 
   } )
 
-     setTimeout(() => {
+  if(data.assessment_approach === 'Direct' && data.assessment_method === 'Track 1'){
+    setTimeout(() => {
       this.router.navigate(['/assessment-result',this.assessmentId], { queryParams: { assessmentId: this.assessmentId,
         averageProcess : this.averageProcess , averageOutcome: this.averageOutcome} });
-    }, 1000);
+    }, 2000);
+  }
+
 
 
 
@@ -968,6 +1008,8 @@ handleSelectedCharacteristic(event: any) {
 uploadedFiles: any[] = [];
 showMsg2: boolean = false;
 fileDataArray : any =[]
+selectedTrack : any
+selectedApproach : any
 
 async myUploader(event: any, chaName : any) {
 
@@ -1012,6 +1054,22 @@ onUpload(event :any) {
       console.log("hello")
 
 }
+
+onChangeTrack(event : any){
+  this.selectedTrack = event.target.value;
+  console.log("selectedTrack : ", this.selectedTrack)
+}
+
+onChangeApproach(event : any){
+  this.selectedApproach = event.target.value;
+  console.log("selectedApproach : ", this.selectedApproach)
+}
+
+
+onChangeInstitution(event : any){
+  console.log("selectedInstitution: ", event.target.value)
+}
+
 
 
 

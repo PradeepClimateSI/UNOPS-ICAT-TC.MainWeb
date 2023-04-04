@@ -34,6 +34,7 @@ export class ManagedatastatusComponent implements OnInit {
 
   constructor(private serviceProxy: ServiceProxy,
     // private assesmentProxy: AssessmentControllerServiceProxy,
+    private assesmentProxy: AssessmentControllerServiceProxy,
     private parameterProxy: ParameterRequestControllerServiceProxy,
     private cdr: ChangeDetectorRef,
     private router: Router,
@@ -95,7 +96,7 @@ export class ManagedatastatusComponent implements OnInit {
 
   directToApprovePage(datarequests: any) {
     let assenmentYearId = datarequests.assenmentYearId
-    this.router.navigate(['/app-approve-data'], {
+    this.router.navigate(['/app/app-approve-data'], {
       queryParams: { id: assenmentYearId },
     });
   }
@@ -127,32 +128,60 @@ export class ManagedatastatusComponent implements OnInit {
     console.log("pageNumber", pageNumber)
     console.log('this.rows', this.rows)
     console.log('totalRecords', this.totalRecords)
-    // this.assYearProxy.assessmentYearForManageDataStatus(
-    //   pageNumber,
-    //   this.rows,
-    //   filterText,
-    //   projectStatusId,
-    //   this.projectApprovalStatusId,
-    //   0
-    // ).subscribe(res => {
+    this.assesmentProxy.assessmentYearForManageDataStatus(
+      pageNumber,
+      this.rows,
+      filterText,
+      projectStatusId,
+      this.projectApprovalStatusId,
+      0).subscribe(res => {
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa", res)
+        this.loading = false;
+        this.totalRecords = res.meta.totalItems;
+        this.datarequests = [];
+        for (let assement of res.items) {
+          let datarequests1: datarequest = {
+            name: "",
+            type: '',
+            year: "",
+            assenmentYearId: 0,
+            totalreqCount: 0,
+            pendingreqCount: 0,
+            pendingdataentries: 0,
+            recieved: 0,
+            qaStatus: 0
+          };
+          datarequests1.name = assement.climateAction.policyName;
+          datarequests1.year = assement.assessmentYear ? assement.year : "";
+          datarequests1.type = assement.assessmentType;
+          datarequests1.assenmentYearId = assement.id;
+          // datarequests1.qaStatus = assement.qaStatus;
 
-    //   console.log('assessmentYearForManageDataStatus', res)
-    //   this.loading = false;
 
-    //   this.totalRecords = res.meta.totalItems;
-    //   this.datarequests = [];
-    //   for (let assementYear of res.items) {
-    //     let datarequests1: datarequest = {
-    //       name: "",
-    //       type: '',
-    //       year: "",
-    //       assenmentYearId: 0,
-    //       totalreqCount: 0,
-    //       pendingreqCount: 0,
-    //       pendingdataentries: 0,
-    //       recieved: 0,
-    //       qaStatus:0
-    //     };
+          this.parameterProxy
+            .getDateRequestToManageDataStatus(assement.id, 1)
+            .subscribe(re => {
+              console.log("dr_dataRequestStatus", re)
+              datarequests1.totalreqCount = re.length;
+
+              for (let dr of re) {
+                if (dr.dr_dataRequestStatus == -1 || dr.dr_dataRequestStatus == 1 || dr.dr_dataRequestStatus == 2) {
+                  ++datarequests1.pendingreqCount;
+                }
+                if (dr.dr_dataRequestStatus == 3 || dr.dr_dataRequestStatus == -9 || dr.dr_dataRequestStatus == 4
+                  || dr.dr_dataRequestStatus == 5 || dr.dr_dataRequestStatus == 6 || dr.dr_dataRequestStatus == -6 || dr.dr_dataRequestStatus == -8) {
+                  ++datarequests1.pendingdataentries;
+                }
+                if (dr.dr_dataRequestStatus == 9 || dr.dr_dataRequestStatus == 8 || dr.dr_dataRequestStatus == 9 || dr.dr_dataRequestStatus == 11) {
+                  ++datarequests1.recieved;
+                }
+              }
+            })
+
+          this.datarequests.push(datarequests1);
+        }
+      })
+
 
     //     datarequests1.name = assementYear.assesment.project.climateActionName;
     //     datarequests1.year = assementYear.assessmentYear ? assementYear.assessmentYear : "";
@@ -230,5 +259,5 @@ export interface datarequest {
   pendingreqCount: number,
   pendingdataentries: number,
   recieved: number,
-  qaStatus:number
+  qaStatus: number
 };

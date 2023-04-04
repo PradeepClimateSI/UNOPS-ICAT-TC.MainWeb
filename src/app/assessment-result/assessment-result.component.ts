@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MethodologyAssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 import { DatePipe } from '@angular/common';
+import { DomSanitizer } from '@angular/platform-browser';
+import  {jsPDF} from "jspdf"
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-assessment-result',
@@ -11,6 +14,8 @@ import { DatePipe } from '@angular/common';
 })
 export class AssessmentResultComponent implements OnInit {
 
+  @ViewChild('content', {static:false}) el! : ElementRef;
+  title = "Angular CLI and isPDF"
   assessmentId: number
   averageProcess : number
   averageOutcome : number
@@ -33,7 +38,8 @@ export class AssessmentResultComponent implements OnInit {
 load: boolean
   constructor( private route: ActivatedRoute,
     private methassess : MethodologyAssessmentControllerServiceProxy,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private sanitizer: DomSanitizer
     ) { }
 
     ngOnInit() {
@@ -161,6 +167,40 @@ load: boolean
 
 
   }
+
+  /*  makePDF() {
+    const element = document.getElementById('content');
+    if (element) {
+      html2canvas(element).then(canvas => {
+        const imgWidth = 208;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        const contentDataURL = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const position = 0;
+        pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+        pdf.save('assessment-result.pdf');
+      });
+    }
+  } */
+
+  makePDF() {
+    const element = document.getElementById('content');
+    if (element) {
+      html2canvas(element, { scale: 2 }).then(canvas => {
+        const imgWidth = 208;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        const contentDataURL = canvas.toDataURL('image/jpeg', 1.0);
+        const pdf = new jsPDF('p', 'mm', 'a4', false);
+        const position = 0;
+        pdf.addImage(contentDataURL, 'JPEG', 0, position, imgWidth, imgHeight);
+        pdf.save('assessment-result.pdf');
+      });
+    }
+  }
+
+
+
+
 
 }
 

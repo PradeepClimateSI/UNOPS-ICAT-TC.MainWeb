@@ -58,7 +58,7 @@ import { CarouselModule } from 'primeng/carousel';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ConfirmationService } from "primeng/api";
-import { API_BASE_URL, AuthControllerServiceProxy, CountryControllerServiceProxy, DocumentControllerServiceProxy, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, NdcControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequestControllerServiceProxy, ProjectControllerServiceProxy, SectorControllerServiceProxy, ServiceProxy, UserTypeControllerServiceProxy } from "shared/service-proxies/service-proxies";
+import { API_BASE_URL, AssessmentControllerServiceProxy, AuthControllerServiceProxy, CountryControllerServiceProxy, DocumentControllerServiceProxy, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, NdcControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequestControllerServiceProxy, ProjectControllerServiceProxy, SectorControllerServiceProxy, ServiceProxy, UserTypeControllerServiceProxy } from "shared/service-proxies/service-proxies";
 import { AUTH_API_BASE_URL, ServiceProxy as AuthServiceProxy, } from 'shared/service-proxies/auth-service-proxies';
 
 import { RoleGuardService } from "./auth/role-guard.service";
@@ -83,6 +83,11 @@ import { CarbonComponent } from "./Tool/carbon/carbon.component";
 import { AssessmentResultComponent } from './assessment-result/assessment-result.component';
 import { ManagedatastatusComponent } from './data-request-flow/managedatastatus/managedatastatus.component';
 import { VerificationListComponent } from './verification/verifier/verification-list/verification-list.component';
+import { ApproveDataComponent } from './data-request-flow/approve-data/approve-data.component';
+import { QualityCheckComponent } from './quality-check/quality-check.component';
+import { AssessmentComponent } from './assessment/assessment.component';
+
+
 
 export function getRemoteServiceBaseUrl(): string {
   return environment.baseUrlAPI;
@@ -121,8 +126,12 @@ export function getAuthRemoteServiceBaseUrl(): string {
         AssessmentResultComponent,
         ManagedatastatusComponent,
         VerificationListComponent,
+        ApproveDataComponent,
+        QualityCheckComponent,
+        AssessmentComponent,
     ],
        
+      
     imports: [
         FormsModule,
         BrowserModule,
@@ -196,6 +205,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         ParameterHistoryControllerServiceProxy,
         UserTypeControllerServiceProxy,
         InstitutionControllerServiceProxy,
+        AssessmentControllerServiceProxy,
         DatePipe,
         {provide: API_BASE_URL, useFactory: getRemoteServiceBaseUrl},
         {provide: AUTH_API_BASE_URL, useFactory: getAuthRemoteServiceBaseUrl},
