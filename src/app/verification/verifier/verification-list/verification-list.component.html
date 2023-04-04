@@ -1,8 +1,7 @@
 <div class="container pl-20 pr-20">
     <h4 class="mt-4">Verification of Assessments</h4>
     <div class="p-grid p-fluid card">
-
-        <!-- <div class="row mb-3">
+        <div class="row mb-3">
             <div class="col-md-6">
                 <div class="col-12">
                     <div class="p-field">
@@ -11,11 +10,9 @@
                             #projStatus="ngModel" [showClear]="true" [filter]="true" placeholder="Select .."
                             (ngModelChange)="onStatusChange($event)">
                         </p-dropdown>
-
                     </div>
                 </div>
             </div>
-
             <div class="col-md-6">
                 <div class="p-inputgroup pt-4">
                     <input placeholder="Type Your Keyword" [(ngModel)]="searchBy.text" #nameClimate="ngModel"
@@ -23,10 +20,8 @@
                     <button type="button" pButton pRipple label="Search" (click)="onSearch()"></button>
                 </div>
             </div>
-        </div> -->
+        </div>
 
-
-        <!-- <div> {{climateactions|json}} </div> -->
         <div class="row p-2">
             <p-table #table [value]="assessments" [lazy]="true" (onLazyLoad)="loadgridData($event)" [paginator]="true"
                 [rows]="rows" [showCurrentPageReport]="true"
@@ -42,23 +37,21 @@
                         <th>Period</th>
                         <th>Verification Status</th>
                         <th>Updated Date</th>
-                        <th>Actionse</th>
+                        <th>Actions</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-c>
                     <tr>
-                        <td style="text-align: center">
-                        </td>
-                        <td>test</td>
-                        <td>test</td>
-                        <td>test</td>
-                        <td>test</td>
-                        <td>test</td>
+                        <td>{{c.ca}}</td>
+                        <td>{{c.type}}</td>
+                        <td>{{c.period}}</td>
+                        <td>{{c.status}}</td>
+                        <td>{{c.Date}}</td>
                         <td>
                             <button pButton pRipple type="button" label="View" (click)="statusClick($event, c)"
                                 class="p-button-info"></button>
-                            <button pButton pRipple type="button" label="Verify" (click)="statusClick($event, c)"
-                                class="p-button-info"></button>
+                            <!-- <button pButton pRipple type="button" label="Verify" (click)="statusClick($event, c)"
+                                class="p-button-info"></button> -->
                         </td>
                     </tr>
                 </ng-template>

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { VerificationStatus } from 'app/Model/VerificationStatus.enum';
 import { LazyLoadEvent } from 'primeng/api';
 import { ServiceProxy } from 'shared/service-proxies/service-proxies';
 
@@ -12,6 +13,23 @@ export class VerificationListComponent implements OnInit {
   assessments: any[]
   rows: number
   loading: boolean
+
+  searchBy: any = {
+    status: null,
+    text: null,
+  };
+
+  VerificationStatusEnum = VerificationStatus;
+
+  verificationStatus: string[] = [
+    VerificationStatus[VerificationStatus.Pending],
+    VerificationStatus[VerificationStatus['Pre Assessment']],
+    VerificationStatus[VerificationStatus['NC Recieved']],
+    VerificationStatus[VerificationStatus['Initial Assessment']],
+    VerificationStatus[VerificationStatus['Final Assessment']],
+    VerificationStatus[VerificationStatus.Fail],
+    VerificationStatus[VerificationStatus['Pass']],
+  ];
 
   constructor(
     private serviceProxy: ServiceProxy
@@ -44,16 +62,30 @@ export class VerificationListComponent implements OnInit {
     //     this.totalRecords = this.paras.length;
     //     // this.loading = false;
     //   });
-    this.assessments = []
+    this.assessments = [
+      {ca: 'Test Intervention', type: "Test type", period: "", status: "",  date: ""}
+    ]
 
-    this.serviceProxy.getManyBaseProjectControllerClimateAction(undefined, undefined, undefined, undefined, undefined, undefined, 1000, 0, 1, 0)
-    .subscribe(res => {
-      this.assessments = res.data
-      this.totalRecords = res.total
-      console.log(this.assessments)
-    })
+    // this.serviceProxy.getManyBaseProjectControllerClimateAction(undefined, undefined, undefined, undefined, undefined, undefined, 1000, 0, 1, 0)
+    // .subscribe(res => {
+    //   this.assessments = res.data
+    //   this.totalRecords = res.total
+    //   console.log(this.assessments)
+    // })
     
   };
+
+  onStatusChange($event: any) {
+    this.onSearch();
+  }
+
+  onSearch() {
+    let event: any = {};
+    event.rows = this.rows;
+    event.first = 0;
+
+    this.loadgridData(event);
+  }
 
   statusClick(event: any, object: any) {
     
