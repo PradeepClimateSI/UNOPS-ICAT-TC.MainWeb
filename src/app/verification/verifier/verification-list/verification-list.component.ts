@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { VerificationStatus } from 'app/Model/VerificationStatus.enum';
 import { LazyLoadEvent } from 'primeng/api';
 import { ServiceProxy } from 'shared/service-proxies/service-proxies';
@@ -32,7 +33,8 @@ export class VerificationListComponent implements OnInit {
   ];
 
   constructor(
-    private serviceProxy: ServiceProxy
+    private serviceProxy: ServiceProxy,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -88,14 +90,12 @@ export class VerificationListComponent implements OnInit {
   }
 
   statusClick(event: any, object: any) {
-    
-
-    // this.router.navigate(['/verification-verifier/detail'], {
-    //   queryParams: {
-    //     id: object.id,
-    //     verificationStatus: object.verificationStatus,
-    //   },
-    // });
+    this.router.navigate(['app/verification/detail'], {
+      queryParams: {
+        id: object.id,
+        verificationStatus: object.verificationStatus,
+      },
+    });
   }
 
 }

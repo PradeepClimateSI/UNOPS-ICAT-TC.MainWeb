@@ -1,0 +1,31 @@
+<div class="container">
+    <h4 class="mt-4">
+        <!-- {{
+        this.assementYear !== undefined
+        ? "Verification " +
+        VerificationStatusEnum[this.assementYear.verificationStatus]
+        : "Verification "
+        }} -->
+        Verification (Round 1)
+    </h4>
+    <div class="p-grid p-fluid card">
+        <div class="row mb-3">
+            <ng-container *ngFor="let row of card">
+                <div class="col-12 row"  style="margin-bottom: 10px;">
+                    <div class="col-3">{{row.title}}</div>
+                    <div class="col-9">{{row.value}}</div>
+                </div>
+            </ng-container>
+        </div>
+
+        <div class="row mb-3">
+            <!-- <app-verify-parameter-section header="Baseline Parameter" [assessmentYear]="assementYear"
+                [scenario]="assementYear.assessment.baselineScenario" [parameters]="baselineParameters"
+                ResultLabel="Baseline emission" [ResultValue]="assessmentResult.baselineResult |  number: '2.0-5'"
+                [verificationDetails]="verificationDetails" [isBaseline]="true" [isAccept]="isBaseAccept" [flag]="flag"
+                [verificationStatus]="verificationStatus"></app-verify-parameter-section> -->
+            <app-verify-parameter>
+                
+            </app-verify-parameter>
+        </div>
+    </div>

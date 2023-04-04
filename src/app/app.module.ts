@@ -86,6 +86,8 @@ import { VerificationListComponent } from './verification/verifier/verification-
 import { ApproveDataComponent } from './data-request-flow/approve-data/approve-data.component';
 import { QualityCheckComponent } from './quality-check/quality-check.component';
 import { AssessmentComponent } from './assessment/assessment.component';
+import { VerificationDetailComponent } from './verification/verifier/verification-detail/verification-detail.component';
+import { VerifyParameterComponent } from './verification/verifier/verify-parameter/verify-parameter.component';
 
 
 
@@ -129,6 +131,8 @@ export function getAuthRemoteServiceBaseUrl(): string {
         ApproveDataComponent,
         QualityCheckComponent,
         AssessmentComponent,
+        VerificationDetailComponent,
+        VerifyParameterComponent,
     ],
        
       

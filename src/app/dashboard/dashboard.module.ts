@@ -42,6 +42,7 @@ import { VerificationListComponent } from 'app/verification/verifier/verificatio
 import { ApproveDataComponent } from 'app/data-request-flow/approve-data/approve-data.component';
 import { Assessment } from 'shared/service-proxies/service-proxies';
 import { AssessmentComponent } from 'app/assessment/assessment.component';
+import { VerificationDetailComponent } from 'app/verification/verifier/verification-detail/verification-detail.component';
 
 
 
@@ -168,6 +169,13 @@ const routes: Routes = [
   {
     path: 'verification/list',
     component: VerificationListComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'verification/detail',
+    component: VerificationDetailComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}
