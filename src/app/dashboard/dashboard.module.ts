@@ -38,6 +38,7 @@ import { PortfolioComponent } from 'app/Tool/portfolio/portfolio.component';
 import { InvestorComponent } from 'app/Tool/investor/investor.component';
 import { AssessmentResultComponent } from 'app/assessment-result/assessment-result.component';
 import { ManagedatastatusComponent } from 'app/data-request-flow/managedatastatus/managedatastatus.component';
+import { VerificationListComponent } from 'app/verification/verifier/verification-list/verification-list.component';
 
 
 
@@ -150,6 +151,13 @@ const routes: Routes = [
   {
     path: 'assessment-result/:id',
     component: AssessmentResultComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'verification/list',
+    component: VerificationListComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}
