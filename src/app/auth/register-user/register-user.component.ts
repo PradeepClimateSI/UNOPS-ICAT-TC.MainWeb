@@ -3,8 +3,8 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AppService } from 'shared/AppService';
-import { AuthControllerServiceProxy, AuthCredentialDto } from 'shared/service-proxies/auth-service-proxies';
-import { UsersControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { AuthControllerServiceProxy, AuthCredentialDto, LoginProfile, LoginProfileControllerServiceProxy } from 'shared/service-proxies/auth-service-proxies';
+import { User, UsersControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-register-user',
@@ -14,85 +14,105 @@ import { UsersControllerServiceProxy } from 'shared/service-proxies/service-prox
 export class RegisterUserComponent implements OnInit {
   passwordType: string = "password";
   confirmPasswordType: string = "password";
-  isSubmitted: boolean=false;
-  fName: string="";
-  lName: string="";
-  email:string="";
-  RegPassword: string="";
-  confirmRegPassword: string="";
-  pwConfirmation:boolean= false;
+  isSubmitted: boolean = false;
+  fName: string = "";
+  lName: string = "";
+  email: string = "";
+  RegPassword: string = "";
+  confirmRegPassword: string = "";
+  pwConfirmation: boolean;
 
   constructor(
     private messageService: MessageService,
     private router: Router,
     private authControllerServiceProxy: AuthControllerServiceProxy,
     private appService: AppService,
-    private activatedRoute:ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private userControllerService: UsersControllerServiceProxy,
+    private loginprofileControllerServiceProxy: LoginProfileControllerServiceProxy,
   ) { }
 
   ngOnInit(): void {
   }
-  
-  togglePassword(){
-    if (this.passwordType=="text"){
-      this.passwordType="password"
-    }else {
-      this.passwordType="text";
+
+  togglePassword() {
+    if (this.passwordType == "text") {
+      this.passwordType = "password"
+    } else {
+      this.passwordType = "text";
     }
   }
-  toggleConfirmPassword(){
-    if (this.confirmPasswordType=="text"){
-      this.confirmPasswordType="password"
-    }else {
-      this.confirmPasswordType="text";
+  toggleConfirmPassword() {
+    if (this.confirmPasswordType == "text") {
+      this.confirmPasswordType = "password"
+    } else {
+      this.confirmPasswordType = "text";
     }
   }
   showPasswordResetForm() {
-    this.router.navigate(['../forgot'], {relativeTo:this.activatedRoute});
+    this.router.navigate(['../forgot'], { relativeTo: this.activatedRoute });
   }
-  async login(form: NgForm) {
-    const a = new AuthCredentialDto();
-    if(!this.RegPassword  || !this.fName){
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Required',
-        detail: 'Fill All the fields',
+  async userCreate(form: NgForm) {
+    console.log(form.value)
+
+    let newUser = new User();
+
+    newUser.password = form.value.RegPassword;
+    newUser.email = form.value.email;
+    newUser.firstName = form.value.fName;
+    newUser.lastName = form.value.lName;
+    console.log(newUser)
+
+    let newProfile = new LoginProfile();
+    newProfile.password = form.value.RegPassword;
+    newProfile.userName = form.value.email;
+    
+ 
+      const b = await this.loginprofileControllerServiceProxy.create(newProfile).subscribe((res) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: '',
+          detail: 'successfully registered user',
+          closable: true,
+        });
+        setTimeout(() => {
+          this.router.navigate(['../login'], {relativeTo:this.activatedRoute});
+        }
+        , 2000);
+  
+      },(err)=>{
+        this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Email is existing',
         closable: true,
-      });
-    }else{
-      a.password = this.RegPassword;
-      a.username = this.fName;
-      try{
-        const res = await this.authControllerServiceProxy.login(a).toPromise();
-        this.appService.steToken(res.accessToken);
-        this.appService.steRefreshToken(res.refreshToken);
-        // this.appService.steRole(res.role);
-        this.appService.steProfileId(res.loginProfileId);
-        this.appService.steUserName(this.fName);
-        this.appService.startRefreshTokenTimer();
-        this.appService.startIdleTimer();
-        this.router.navigate(['../../app'], {});
-      }catch(err){
-        console.error(err);
+      });})
+    
+
+      try {
+        const a = await this.userControllerService.createExternalUser(newUser).toPromise()
+        
+      } catch (error) {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'Please check email and password',
+          detail: 'Username is existing',
           closable: true,
         });
       }
-    }
+    
   }
-  onChange(event:any){
-    if (this.RegPassword !== this.confirmRegPassword ||this.RegPassword===''||this.confirmRegPassword==='') {
-      this.pwConfirmation= false;
-      
+  onChange(event: any) {
+    this.pwConfirmation = false;
+    if (this.RegPassword !== this.confirmRegPassword || this.RegPassword === '' || this.confirmRegPassword === '') {
+      this.pwConfirmation = false;
+
     }
-    else{
-      this.pwConfirmation= true;
+    else {
+      this.pwConfirmation = true;
     }
+
   }
-  
+
 
 }
