@@ -1,0 +1,57 @@
+<div class="container pl-20 pr-20">
+
+  <div class="card" style="min-height: 600px;">
+    <p-toast></p-toast>
+
+    <div class="mb-12">
+      <h4 class="mt-4">Assessments</h4>
+    </div>
+
+<p-table #dt2 [value]="results" [tableStyle]="{'min-width': '50rem'}"
+currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+[globalFilterFields]="['meth', 'method', 'approach', 'assessmentType', 'tool']">
+  <ng-template pTemplate="caption">
+    <div class="d-flex justify-content-end">
+        <span class="p-input-icon-left ml-auto">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="onInput($event, dt2)" placeholder="Search keyword" />
+        </span>
+    </div>
+</ng-template>
+
+
+  <ng-template pTemplate="header">
+      <tr  style="height:4rem;">
+          <th pSortableColumn="meth" >Intervention <p-sortIcon field="meth"></p-sortIcon></th>
+          <th pSortableColumn="method" >Assessment Method <p-sortIcon field="method"></p-sortIcon></th>
+          <th pSortableColumn="approach">Assessment Approach <p-sortIcon field="approach"></p-sortIcon></th>
+          <th pSortableColumn="assessmentType" >Assessment Type <p-sortIcon field="assessmentType"></p-sortIcon></th>
+          <th pSortableColumn="tool" >Tool <p-sortIcon field="tool"></p-sortIcon></th>
+          <th>Action</th>
+      </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-results>
+      <tr>
+        <td>{{results.meth}}</td>
+        <td>{{results.method}}</td>
+        <td>{{results.approach}}</td>
+        <td>{{results.assessmentType}}</td>
+        <td>{{results.tool}}</td>
+        <td>
+          <button pButton pRipple class="btn btn-primary btn-block text-uppercase" type='submit' (click)="myFunction(results.assessId, results.averageProcess, results.averageOutcome)"> View</button>
+
+        </td>
+
+      </tr>
+  </ng-template>
+</p-table>
+
+
+
+
+
+
+
+
+  </div>
+</div>

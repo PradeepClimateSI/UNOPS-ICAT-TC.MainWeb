@@ -23,13 +23,21 @@
               <div class=""></div>
               Registration
             </div>
+            
+            <div class="sidebar-items--link align-items-start" [routerLink]="['/app/quality-controller']"
+              routerLinkActive="selected">
 
-            <div class="sidebar-items--link align-items-start" [routerLink]="['/app/methodology']"
+              <div class=""></div>
+              Quality Control
+            </div>
+
+
+            <!--  <div class="sidebar-items--link align-items-start" [routerLink]="['/app/methodology']"
               routerLinkActive="selected">
 
               <div class=""></div>
               Methodology
-            </div>
+            </div> -->
 
             <!-- <div
                 class="sidebar-items--link align-items-start"
@@ -47,7 +55,7 @@
                   </div>
                 </p-header>
                 <div class="sidebar-items--link d-flex flex-column align-items-start"
-                  [routerLink]="['/view-climate-action']" routerLinkActive="selected">
+                  [routerLink]="['/app/view-polocies']" routerLinkActive="selected">
                   <p class="mb-0 ml-20">Manage policies</p>
                 </div>
 
@@ -61,7 +69,16 @@
                 </div>
               </p-accordionTab>
             </p-accordion>
-
+            <!-- <p-accordion>
+              <p-accordionTab data-assess>
+                <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
+                  <div [routerLink]="['/app/quality-controller']" routerLinkActive="selected">
+                    <p class="mb-2">Quality Control</p>
+                  </div>
+                </p-header>
+              </p-accordionTab>
+            </p-accordion> -->
+            
             <p-accordion>
               <p-accordionTab data-assess>
                 <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
@@ -78,18 +95,22 @@
                   [routerLink]="['/app/assign-data-request']" routerLinkActive="selected">
                   <p class="mb-0 ml-20">assign-data-request</p>
                 </div>
-                <div class="sidebar-items--link d-flex flex-column align-items-start"
-                  [routerLink]="['/app/enter-data']" routerLinkActive="selected">
+                <div class="sidebar-items--link d-flex flex-column align-items-start" [routerLink]="['/app/enter-data']"
+                  routerLinkActive="selected">
                   <p class="mb-0 ml-20">Enter Data</p>
                 </div>
+                <div class="sidebar-items--link d-flex flex-column align-items-start" [routerLink]="['/app/view-data']"
+                  routerLinkActive="selected">
+                  <p class="mb-0 ml-20">Review Data</p>
+                </div>
                 <div class="sidebar-items--link d-flex flex-column align-items-start"
-                [routerLink]="['/app/view-data']" routerLinkActive="selected">
-                <p class="mb-0 ml-20">Review Data</p>
-              </div>
-              <div class="sidebar-items--link d-flex flex-column align-items-start"
-              [routerLink]="['/app/manage-data']" routerLinkActive="selected">
+                  [routerLink]="['/app/manage-data']" routerLinkActive="selected">
+                  <p class="mb-0 ml-20">Manage Data</p>
+                </div>
+                <!-- <div class="sidebar-items--link d-flex flex-column align-items-start"
+              [routerLink]="['/app/app-approve-data']" routerLinkActive="selected">
               <p class="mb-0 ml-20">Manage Data</p>
-            </div>
+            </div> -->
               </p-accordionTab>
             </p-accordion>
 
@@ -154,29 +175,37 @@
                 </p-accordionTab>
               </p-accordion> -->
 
-              <p-accordion>
-                <p-accordionTab data-assess>
-                  <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
-                    <div [routerLink]="['/app/Tool']" routerLinkActive="selected">
-                      <p class="mb-2">Tools</p>
-                    </div>
-                  </p-header>
+            <p-accordion>
+              <p-accordionTab data-assess>
+                <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
+                  <div [routerLink]="['/app/Tool']" routerLinkActive="selected">
+                    <p class="mb-2">Tools</p>
+                  </div>
+                </p-header>
 
-                  <div class="sidebar-items--link d-flex flex-column align-items-start"
-                    [routerLink]="['/app/portfolio-tool']" routerLinkActive="selected">
-                    <p class="mb-0 ml-20">Portfolio Tool</p>
-                  </div>
-                  <div class="sidebar-items--link d-flex flex-column align-items-start"
-                    [routerLink]="['/app/carbon-market-tool']" routerLinkActive="selected">
-                    <p class="mb-0 ml-20">Carbon Market Tool</p>
-                  </div>
-                  <div class="sidebar-items--link d-flex flex-column align-items-start"
-                    [routerLink]="['/app/investor-tool']" routerLinkActive="selected">
-                    <p class="mb-0 ml-20">Investor & Private Sector Tool</p>
-                  </div>
+                <div class="sidebar-items--link d-flex flex-column align-items-start"
+                  [routerLink]="['/app/portfolio-tool']" routerLinkActive="selected">
+                  <p class="mb-0 ml-20">Portfolio Tool</p>
+                </div>
+                <div class="sidebar-items--link d-flex flex-column align-items-start"
+                  [routerLink]="['/app/carbon-market-tool']" routerLinkActive="selected">
+                  <p class="mb-0 ml-20">Carbon Market Tool</p>
+                </div>
+                <div class="sidebar-items--link d-flex flex-column align-items-start"
+                  [routerLink]="['/app/investor-tool']" routerLinkActive="selected">
+                  <p class="mb-0 ml-20">Investor & Private Sector Tool</p>
+                </div>
 
-                </p-accordionTab>
-              </p-accordion>
+              </p-accordionTab>
+            </p-accordion>
+
+
+            <!--    <div class="sidebar-items--link align-items-start" [routerLink]="['/app/assessment-results']"
+              routerLinkActive="selected">
+              Assessment
+            </div>
+ -->
+
 
             <p-accordion>
               <p-accordionTab data-assess>
