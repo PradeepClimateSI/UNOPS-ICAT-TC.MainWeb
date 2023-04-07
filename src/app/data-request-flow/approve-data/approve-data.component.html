@@ -1,0 +1,309 @@
+<div class="container">
+    <h4 class="mt-4">Approve Data</h4>
+    <div class="p-grid p-fluid card">
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <div class="col-12">
+            <div class="p-field">
+              <label for="projStatus">Intervention</label>
+              <input
+                [disabled]="true"
+                type="text"
+                name="ndc"
+                #chgEmission="ngModel"
+                [(ngModel)]="headerlcimateActionName"
+                class="p-inputtext"
+                pInputText
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="headerAssessmentType !='MAC' ">
+        <div class="col-md-6">
+          <div class="col-12">
+            <div class="p-field">
+              <label for="projStatus">Assessment Type</label>
+              <input
+              [disabled]="true"
+              type="text"
+              name="ndc"
+              #chgEmission="ngModel"
+              [(ngModel)]="headerAssessmentType"
+              class="p-inputtext"
+              pInputText
+            />
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="row mb-3">
+  
+        <div class="col-md-6">
+          <div class="col-5">
+            <label for="projStatus"
+              >Assessment Period</label>
+              <input
+                [disabled]="true"
+                type="text"
+                name="asseyear"
+                #asseyear="ngModel"
+                [(ngModel)]="headerAssessmentYear"
+                class="p-inputtext"
+                pInputText
+              />
+          </div>
+          
+        </div>
+      </div>
+
+      
+      <div class="row mb-3">
+  
+        <div class="col-md-6">
+          <div class="col-5">
+            <label for="projStatus"
+              >Barriers</label>
+              <input
+                [disabled]="true"
+                type="text"
+                name="asseyear"
+                #asseyear="ngModel"
+                [(ngModel)]="headerAssessmentYear"
+                class="p-inputtext"
+                pInputText
+              />
+          </div>
+          
+        </div>
+      </div>
+  
+      <div class="row mb-3" *ngIf="baselineParameters.length > 0">
+        <h4 class="mt-4 ml-3">Parameters</h4>
+        <p-table
+          #table
+          [value]="baselineParameters"
+          [lazy]="true"
+          [paginator]="false"
+          [showCurrentPageReport]="false"
+          [rowsPerPageOptions]="[1, 10, 25, 50]"
+          [loading]="loading"
+          [responsive]="true"
+          [(selection)]="selectedBaselineParameters"
+        >
+          <ng-template pTemplate="header">
+         
+  
+            <tr>
+              <th style="width: 3rem">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+              </th>
+              <th>Category</th>
+              <th>Characteristics</th>
+              <th>Relavancy</th>
+              <th>Data Provider</th>
+              <th>Value</th>
+              <th>Info</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-baselineParameters>
+            <tr>
+              <td>
+                <p-tableCheckbox [value]="baselineParameters"> </p-tableCheckbox>
+              </td>
+              <td>{{ baselineParameters.category.name }}</td>
+              <td>{{ baselineParameters.characteristics.name }}</td>
+  
+              <td>
+                {{ baselineParameters.relevance }}
+              </td>
+              <td>
+                {{ baselineParameters.institution.name }}
+              </td>
+  
+              <td>
+                {{ baselineParameters.score }}
+              </td>
+              <td>
+                <i class="pi pi-ellipsis-v" style="font-size: 2rem" (click)="getInfo(baselineParameters)"></i>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+  
+  
+      <div class="row mb-3" *ngIf="hideAllButtons != 4">
+        <div
+          class="d-flex justify-content-end align-content-center flex-wrap mb-15 mr-10"
+        >
+          <button
+            class="btn btn-primary text-uppercase"
+            type="submit"
+            [disabled]="isHideRejectButton || enableQCButton"
+            (click)="onAcceptClick()"
+          >
+            Accept
+          </button>
+          <div *ngIf="isHideRejectButton == false">
+          <button
+            class="btn btn-primary text-uppercase ml-5"
+            type="submit"
+            [disabled]="isRejectButtonDisable"
+            (click)="onRejectClick()"
+            
+          >
+            Reject
+            <!-- {{parameters.find(m => m.parameterRequest.qaStatus !== 4) === undefined ? 'Calculate' :  'Submit'}} -->
+          </button>
+           </div>
+          <button
+            class="btn btn-primary text-uppercase ml-5"
+            type="submit"
+            [disabled]="!enableQCButton"
+            (click)="onOpenPopUP()"
+          >
+          {{this.buttonLabel}}
+            <!-- {{parameters.find(m => m.parameterRequest.qaStatus !== 4) === undefined ? 'Calculate' :  'Submit'}} -->
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p-dialog [(visible)]="confirm1" header="Reject Data">
+    <div class="container" style="width: 600px; height: 500px">
+      <div class="row mb-2">
+        <div class="col-3">Data Provider</div>
+        <div class="col-4">
+          <p-dropdown
+            name="dataProvider"
+            [options]="institutionList"
+            [(ngModel)]="selectedInstitution"
+            #fsector="ngModel"
+            [showClear]="true"
+            [filter]="true"
+            placeholder="Select .."
+            optionLabel="name"
+          >
+          </p-dropdown>
+        </div>
+        <div class="col-5"></div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-3">New Deadline</div>
+        <div class="col-4">
+          <p-calendar
+            [minDate]="minDate"
+            [(ngModel)]="selectedDeadline"
+            placeholder="DD/MM/YYYY"
+            dateFormat="dd/mm/yy"
+          ></p-calendar>
+        </div>
+        <div class="col-5"></div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-3">Reason</div>
+        <div class="col-4">
+          <textarea
+            rows="4"
+            cols="35"
+            placeholder="Reason for Reject"
+            type="text"
+            class="p-inputtext"
+            [(ngModel)]="reasonForReject"
+            pInputTextarea
+          ></textarea>
+        </div>
+        <div class="col-5"></div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-3"></div>
+        <div class="col-4">
+          <button
+            type="button"
+            pButton
+            pRipple
+            label="Reject"
+            style="margin-right: 10px"
+            (click)="onRejectConfirm()"
+          ></button>
+  
+          <button type="button" pButton pRipple label="Cancel"></button>
+        </div>
+        <div class="col-5"></div>
+      </div>
+    </div>
+  </p-dialog>
+  
+  
+  
+  <p-dialog [(visible)]="isOpenPopUp" header="Assign deadline and send to QC">
+    <div class="container" style="width: 600px; height: 500px">
+      <!-- <div class="row mb-2">
+        <div class="col-3">Data Provider</div>
+        <div class="col-4">
+          <p-dropdown
+            name="dataProvider"
+            [options]="institutionList"
+            [(ngModel)]="selectedInstitution"
+            #fsector="ngModel"
+            [showClear]="true"
+            [filter]="true"
+            placeholder="Select .."
+            optionLabel="name"
+          >
+          </p-dropdown>
+        </div>
+        <div class="col-5"></div>
+      </div> -->
+      <div class="row mb-2">
+        <div class="col-3">New Deadline</div>
+        <div class="col-4">
+          <p-calendar
+            [minDate]="minDate"
+            [(ngModel)]="selectedQCDeadline"
+            placeholder="DD/MM/YYYY"
+            dateFormat="dd/mm/yy"
+          ></p-calendar>
+        </div>
+        <div class="col-5"></div>
+      </div>
+      
+      <div class="row mb-2">
+        <div class="col-3"></div>
+        <div class="col-4">
+          <button
+            type="button"
+            pButton
+            pRipple
+            label="Send"
+            style="margin-right: 10px"
+            (click)="onClickQC()"
+          ></button>
+  
+          
+        </div>
+        <div class="col-5"></div>
+      </div>
+    </div>
+  </p-dialog>
+  
+  <p-dialog
+    header="Data Request History"
+    [(visible)]="displayHistory"
+    appendTo="body"
+  >
+  <div class="container" style="width: 600px; height: 500px">
+    <app-view-datarequest-history
+      [parameterId]="paraId"
+      [listOfHistory] = "requestHistoryList"
+      
+    >
+  
+    </app-view-datarequest-history>
+  </div>
+  </p-dialog>
+  
+  <p-toast position="top-right"></p-toast>
+  

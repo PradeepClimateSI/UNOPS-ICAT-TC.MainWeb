@@ -38,8 +38,11 @@ import { PortfolioComponent } from 'app/Tool/portfolio/portfolio.component';
 import { InvestorComponent } from 'app/Tool/investor/investor.component';
 import { AssessmentResultComponent } from 'app/assessment-result/assessment-result.component';
 import { ManagedatastatusComponent } from 'app/data-request-flow/managedatastatus/managedatastatus.component';
+import { ApproveDataComponent } from 'app/data-request-flow/approve-data/approve-data.component';
 import { Assessment } from 'shared/service-proxies/service-proxies';
 import { AssessmentComponent } from 'app/assessment/assessment.component';
+import { QualityCheckComponent } from 'app/quality-check/quality-check.component';
+import { QualityCheckDetailComponent } from 'app/quality-check-detail/quality-check-detail.component';
 
 
 
@@ -122,6 +125,13 @@ const routes: Routes = [
     data: {}
   },
   {
+    path: 'app-approve-data',
+    component: ApproveDataComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
     path: 'view-polocies',
     component: ViewComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
@@ -159,6 +169,20 @@ const routes: Routes = [
   {
     path: 'assessment-results',
     component: AssessmentComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'quality-controller',
+    component: QualityCheckComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'qc/detail',
+    component: QualityCheckDetailComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}

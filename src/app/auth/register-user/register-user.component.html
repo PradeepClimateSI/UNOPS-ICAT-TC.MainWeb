@@ -4,7 +4,7 @@
         <div class="text-center">
             <h3> Register</h3>
         </div>
-        <form #fData="ngForm" (ngSubmit)="login(fData)">
+        <form #fData="ngForm" (ngSubmit)="userCreate(fData)">
             <div class="form-group mb-25">
                 <label class="font-weight-bold">First name</label>
                 <input required type="text" #firstName="ngModel" name="fName" [(ngModel)]="fName"
@@ -80,7 +80,7 @@
             <div class="signup-line col-12">
                 <a [routerLink]="['../login']">&lt;&lt; Back to login</a>
             </div>
-            <button [disabled]="!fData.form.valid" class="btn btn-primary btn-block text-uppercase btn-lg"
+            <button [disabled]="!fData.form.valid || !pwConfirmation " class="btn btn-primary btn-block text-uppercase btn-lg"
                 type="submit">Register</button>
         </form>
 

@@ -58,7 +58,7 @@ import { CarouselModule } from 'primeng/carousel';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ConfirmationService } from "primeng/api";
-import { API_BASE_URL, AuthControllerServiceProxy, CountryControllerServiceProxy, DocumentControllerServiceProxy, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, NdcControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequestControllerServiceProxy, ProjectControllerServiceProxy, SectorControllerServiceProxy, ServiceProxy, UserTypeControllerServiceProxy } from "shared/service-proxies/service-proxies";
+import { API_BASE_URL, AssessmentControllerServiceProxy, AuthControllerServiceProxy, CountryControllerServiceProxy, DocumentControllerServiceProxy, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, NdcControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequestControllerServiceProxy, ProjectControllerServiceProxy, QualityCheckControllerServiceProxy, SectorControllerServiceProxy, ServiceProxy, UserTypeControllerServiceProxy } from "shared/service-proxies/service-proxies";
 import { AUTH_API_BASE_URL, ServiceProxy as AuthServiceProxy, } from 'shared/service-proxies/auth-service-proxies';
 
 import { RoleGuardService } from "./auth/role-guard.service";
@@ -82,7 +82,10 @@ import { InvestorComponent } from "./Tool/investor/investor.component";
 import { CarbonComponent } from "./Tool/carbon/carbon.component";
 import { AssessmentResultComponent } from './assessment-result/assessment-result.component';
 import { ManagedatastatusComponent } from './data-request-flow/managedatastatus/managedatastatus.component';
+import { ApproveDataComponent } from './data-request-flow/approve-data/approve-data.component';
+import { QualityCheckComponent } from './quality-check/quality-check.component';
 import { AssessmentComponent } from './assessment/assessment.component';
+import { QualityCheckDetailComponent } from './quality-check-detail/quality-check-detail.component';
 
 
 
@@ -122,9 +125,13 @@ export function getAuthRemoteServiceBaseUrl(): string {
         InvestorComponent,
         AssessmentResultComponent,
         ManagedatastatusComponent,
+        ApproveDataComponent,
+        QualityCheckComponent,
         AssessmentComponent,
-   ],
-
+        QualityCheckDetailComponent,
+    ],
+       
+      
     imports: [
         FormsModule,
         BrowserModule,
@@ -198,6 +205,8 @@ export function getAuthRemoteServiceBaseUrl(): string {
         ParameterHistoryControllerServiceProxy,
         UserTypeControllerServiceProxy,
         InstitutionControllerServiceProxy,
+        AssessmentControllerServiceProxy,
+        QualityCheckControllerServiceProxy,
         DatePipe,
         {provide: API_BASE_URL, useFactory: getRemoteServiceBaseUrl},
         {provide: AUTH_API_BASE_URL, useFactory: getAuthRemoteServiceBaseUrl},
