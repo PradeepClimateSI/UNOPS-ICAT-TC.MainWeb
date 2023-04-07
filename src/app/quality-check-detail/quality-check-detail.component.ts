@@ -1,8 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DataRequestComponent } from 'app/data-request-flow/data-request/data-request.component';
 import {
   MethodologyAssessmentControllerServiceProxy,
-  MethodologyAssessmentParameters as Parameters
+  ParameterHistoryControllerServiceProxy,
+  MethodologyAssessmentParameters as Parameters,
+  ServiceProxy
 } from 'shared/service-proxies/service-proxies';
 
 @Component({
@@ -29,7 +32,9 @@ export class QualityCheckDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private metAssesment: MethodologyAssessmentControllerServiceProxy
+    private metAssesment: MethodologyAssessmentControllerServiceProxy,
+    private dataReq: ParameterHistoryControllerServiceProxy,
+    private service :ServiceProxy,
   ) { }
 
   ngOnInit(): void {
@@ -55,6 +60,8 @@ export class QualityCheckDetailComponent implements OnInit {
     this.selectedParam.push(...this.selectedParameters)
     for (let p of this.selectedParam) {
       p.parameterRequest.qaStatus = 4
+
+
     }
     console.log('selectedParameters', this.selectedParam);
     this.selectedParam =[]
@@ -63,6 +70,7 @@ export class QualityCheckDetailComponent implements OnInit {
   onRejectClick() {
     this.selectedParam.push(...this.selectedParameters)
     for (let p of this.selectedParam) {
+      
       p.parameterRequest.qaStatus = 3
     }
     console.log('selectedParameters', this.selectedParam);
