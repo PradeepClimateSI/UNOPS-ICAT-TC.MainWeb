@@ -117,29 +117,7 @@ trigger : boolean = false;
   userCountryId:number = 0;
   sendBarriers : any = []
   isSubmitted : boolean= false;
- /*  categories = [
-    {name: 'Category 1', characteristics: [
-      {name: 'Characteristic 1', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 2', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 3', score: 0, relevance: '', selected:''}
-    ]},
-    {name: 'Category 2', characteristics: [
-      {name: 'Characteristic 4', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 5', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 6', score: 0, relevance: '', selected:''}
-    ]},
-    {name: 'Category 3', characteristics: [
-      {name: 'Characteristic 7', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 8', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 9', score: 0, relevance: '', selected:''}
-    ]},
-    {name: 'Category 4', characteristics: [
-      {name: 'Characteristic 10', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 11', score: 0, relevance: '', selected:''},
-      {name: 'Characteristic 12', score: 0, relevance: '', selected:''}
-    ]}
-  ];
- */
+  assessBarrierchaList : any = []
 
   characteristics :any = [];
 
@@ -676,281 +654,391 @@ onDeSelectAll7(item: any){
 
   console.log("select7", this.characAffectedByBarriers);
 } */
-
+dataArray : any= []
+track3Direct : boolean = false
+allData: any
 
  onSubmit(data: any) {
+  this.allData = ""
   this.isSubmitted = false;
   this.assessmentId = 0;
-  if(data.assessment_approach === 'Indirect' && data.assessment_method === 'Track 1'){
-  this.isSubmitted = true;
-  }
+  this.dataArray = []
+  this.sendBarriers = []
+  this.track3Direct = false
 
-  console.log("ddd: ", data)
-  let categoryDataArray: any[] = [];
-if( data.policy === 'TC Uganda Geothermal'){
-  for (let category of this.selectedItems) {
-    let categoryData: any = {
-      categoryId :category.id,
-      category: category.name,
-      characteristics: []
+
+  if(data.assessment_approach === 'Direct' && data.assessment_method === 'Track 3'){
+
+    this.track3Direct = true
+    for (let barriers of this.selectedPolicyBarriersList) {
+
+      for( let x of this.barrierListobject){
+        if(barriers === x.barrier){
+
+          let barrier = x.barrier
+          let cha = `${barriers}_charac`;
+          let barrierScore = `${barriers}_score`;
+          let barrierComment = `${barriers}_comment`;
+
+            this.dataArray.push({
+              barrier: barrier,
+              chaId: data[cha],
+              barrierScore: data[barrierScore],
+              barrierComment : data[barrierComment],
+              barrierWeight : 0,
+              bWeightComment : ""
+
+            });
+        }
+      }
+    }
+    console.log("dataArray",this.dataArray)
+
+    for(let methdata of this.methListAll){
+      console.log("methdata",methdata)
+      if(data.methodology == methdata.methodology_name){
+         this.methId = methdata.id
+      }
+
+    }
+
+    for(let policydata of this.policyList){
+      console.log("policydata",policydata)
+      if(data.policy == policydata.policyName){
+         this.policyId = policydata.id
+      }
+
+    }
+
+    for(let barr of this.barrierListobject){
+      for(let x of data.selectedBarriers){
+        if(x=== barr.barrier){
+          this.sendBarriers.push(barr)
+        }
+      }
+    }
+
+     this.allData = {
+      methodology : this.methId,
+      barrierData :this.dataArray,
+      policyId : this.policyId,
+      tool : 'Carbon Market Tool',
+      assessment_type : data.assessment_type,
+      date1 : data.date1,
+      date2 : data.date2,
+      assessment_method : data.assessment_method,
+      assessment_approach : data.assessment_approach,
+      selectedBarriers : this.sendBarriers
+     // barriers : this.selectedBarriers
     };
 
-    for (let characteristic of this.getCategory(this.characteristicsList, category.name)) {
-      let charName = `${category.name}_${characteristic.name}`;
-      let charRelevance = `${category.name}_${characteristic.name}_relevance`;
-      let charScore = `${category.name}_${characteristic.name}_score`;
-      let comment = `${category.name}_${characteristic.name}_comment`;
-      let institution = `${category.name}_${characteristic.name}_institution`;
 
-      this.filename = ''
+    /*   this.methassess.barrierCharacteristics(this.allData).subscribe( res => {
+        this.assessmentId = res
+        console.log("assessIddd",this.assessmentId)
+        } ) */
 
-      for(let x of this.fileDataArray){
-        if(x.characteristic === characteristic.name){
-          this.filename = x.filename
+        console.log("rrrr",this.dataArray)
+
+
+
+
+  }
+  else{
+    if(data.assessment_approach === 'Indirect' && data.assessment_method === 'Track 1'){
+      this.isSubmitted = true;
+      }
+
+      console.log("ddd: ", data)
+      let categoryDataArray: any[] = [];
+    if( data.policy === 'TC Uganda Geothermal'){
+      for (let category of this.selectedItems) {
+        let categoryData: any = {
+          categoryId :category.id,
+          category: category.name,
+          characteristics: []
+        };
+
+        for (let characteristic of this.getCategory(this.characteristicsList, category.name)) {
+          let charName = `${category.name}_${characteristic.name}`;
+          let charRelevance = `${category.name}_${characteristic.name}_relevance`;
+          let charScore = `${category.name}_${characteristic.name}_score`;
+          let comment = `${category.name}_${characteristic.name}_comment`;
+          let institution = `${category.name}_${characteristic.name}_institution`;
+
+          this.filename = ''
+
+          for(let x of this.fileDataArray){
+            if(x.characteristic === characteristic.name){
+              this.filename = x.filename
+            }
+          }
+
+          if (data[charName]) {
+            categoryData.characteristics.push({
+              id : characteristic.id,
+              name: characteristic.name,
+              relevance: data[charRelevance],
+              score: data[charScore],
+              comment: data[comment],
+              filename : this.filename,
+              institution : data[institution]
+            });
+          }
+        }
+        console.log("kkk",categoryData);
+        categoryDataArray.push(categoryData);
+      }
+
+
+      for (let category of this.selectedItems2) {
+        let categoryData: any = {
+          categoryId :category.id,
+          category: category.name,
+          characteristics: []
+        };
+
+        for (let characteristic of this.getCategory(this.characteristicsList, category.name)) {
+          let charName = `${category.name}_${characteristic.name}`;
+          let charRelevance = `${category.name}_${characteristic.name}_relevance`;
+          let charScore = `${category.name}_${characteristic.name}_score`;
+          let comment = `${category.name}_${characteristic.name}_comment`;
+          let institution = `${category.name}_${characteristic.name}_institution`;
+
+          this.filename = ''
+
+          for(let x of this.fileDataArray){
+            if(x.characteristic === characteristic.name){
+              this.filename = x.filename
+            }
+          }
+
+          if (data[charName]) {
+            categoryData.characteristics.push({
+              id : characteristic.id,
+              name: characteristic.name,
+              relevance: data[charRelevance],
+              score: data[charScore],
+              comment: data[comment],
+              filename : this.filename,
+              institution : data[institution]
+            });
+          }
+        }
+        console.log("kkk",categoryData);
+        categoryDataArray.push(categoryData);
+      }
+    }
+
+
+    if( data.policy === 'TC NACAG Initiative'){
+      for (let category of this.selectedItems3) {
+
+        this.categoryFilename = ''
+
+        for(let x of this.fileDataArray){
+          if(x.characteristic === category.name){
+            this.categoryFilename = x.filename
+          }
+        }
+
+        let categoryData: any = {
+          categoryScore: data[`${category.name}_catscore`],
+          categoryInstitution : data[`${category.name}_institution`],
+          categoryComment : data[`${category.name}_comment`],
+          categoryId :category.id,
+          category: category.name,
+          categoryFile : this.categoryFilename,
+          characteristics: []
+        };
+
+        for (let characteristic of this.getCategory(this.characteristicsList, category.name)) {
+          let charName = `${category.name}_${characteristic.name}`;
+          let charRelevance = `${category.name}_${characteristic.name}_relevance`;
+          let charScore = `${category.name}_${characteristic.name}_score`;
+          let comment = `${category.name}_${characteristic.name}_comment`;
+          let institution = `${category.name}_${characteristic.name}_institution`;
+
+          this.filename = ''
+
+          for(let x of this.fileDataArray){
+            if(x.characteristic === characteristic.name){
+              this.filename = x.filename
+            }
+          }
+
+          if (data[charName]) {
+            categoryData.characteristics.push({
+              id : characteristic.id,
+              name: characteristic.name,
+              relevance: data[charRelevance],
+              score: data[charScore],
+              comment: data[comment],
+              filename : this.filename,
+              institution : data[institution]
+            });
+          }
+        }
+        console.log("kkk",categoryData);
+        categoryDataArray.push(categoryData);
+      }
+
+
+      for (let category of this.selectedItems4) {
+
+        this.categoryFilename = ''
+
+        for(let x of this.fileDataArray){
+          if(x.characteristic === category.name){
+            this.categoryFilename = x.filename
+          }
+        }
+
+        let categoryData: any = {
+          categoryScore: data[`${category.name}_catscore`],
+          categoryInstitution : data[`${category.name}_institution`],
+          categoryComment : data[`${category.name}_comment`],
+          categoryId :category.id,
+          category: category.name,
+          categoryFile : this.categoryFilename,
+          characteristics: []
+        };
+
+        for (let characteristic of this.getCategory(this.characteristicsList, category.name)) {
+          let charName = `${category.name}_${characteristic.name}`;
+          let charRelevance = `${category.name}_${characteristic.name}_relevance`;
+          let charScore = `${category.name}_${characteristic.name}_score`;
+          let comment = `${category.name}_${characteristic.name}_comment`;
+          let institution = `${category.name}_${characteristic.name}_institution`;
+
+          this.filename = ''
+
+          for(let x of this.fileDataArray){
+            if(x.characteristic === characteristic.name){
+              this.filename = x.filename
+            }
+          }
+
+          if (data[charName]) {
+            categoryData.characteristics.push({
+              id : characteristic.id,
+              name: characteristic.name,
+              relevance: data[charRelevance],
+              score: data[charScore],
+              comment: data[comment],
+              filename : this.filename,
+              institution : data[institution]
+            });
+          }
+        }
+        console.log("kkk",categoryData);
+        categoryDataArray.push(categoryData);
+      }
+    }
+      console.log("data",data)
+
+      //pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
+
+      for(let methdata of this.methListAll){
+        console.log("methdata",methdata)
+        if(data.methodology == methdata.methodology_name){
+           this.methId = methdata.id
+        }
+
+      }
+
+      for(let policydata of this.policyList){
+        console.log("policydata",policydata)
+        if(data.policy == policydata.policyName){
+           this.policyId = policydata.id
+        }
+
+      }
+
+      for(let barr of this.barrierListobject){
+        for(let x of data.selectedBarriers){
+          if(x=== barr.barrier){
+            this.sendBarriers.push(barr)
+          }
         }
       }
 
-      if (data[charName]) {
-        categoryData.characteristics.push({
-          id : characteristic.id,
-          name: characteristic.name,
-          relevance: data[charRelevance],
-          score: data[charScore],
-          comment: data[comment],
-          filename : this.filename,
-          institution : data[institution]
-        });
-      }
-    }
-    console.log("kkk",categoryData);
-    categoryDataArray.push(categoryData);
-  }
+
+      console.log("policy Selected Id : ", this.policyId)
+
+    console.log("methiddd,", this.methId)
+      let allData: any = {
+        methodology : this.methId,
+        categoryData :categoryDataArray,
+        policyId : this.policyId,
+        tool : 'Carbon Market Tool',
+        assessment_type : data.assessment_type,
+        date1 : data.date1,
+        date2 : data.date2,
+        assessment_method : data.assessment_method,
+        assessment_approach : data.assessment_approach,
+        selectedBarriers : this.sendBarriers
+       // barriers : this.selectedBarriers
+      };
+      console.log("final array",allData);
+
+      // Send categoryDataArray to backend here
+
+       this.methassess.methAssignDataSave(allData).subscribe( res => {
 
 
-  for (let category of this.selectedItems2) {
-    let categoryData: any = {
-      categoryId :category.id,
-      category: category.name,
-      characteristics: []
-    };
+        this.averageProcess = res.result.averageProcess
+        this.averageOutcome = res.result.averageOutcome
+        this.assessmentId = res.assesId
 
-    for (let characteristic of this.getCategory(this.characteristicsList, category.name)) {
-      let charName = `${category.name}_${characteristic.name}`;
-      let charRelevance = `${category.name}_${characteristic.name}_relevance`;
-      let charScore = `${category.name}_${characteristic.name}_score`;
-      let comment = `${category.name}_${characteristic.name}_comment`;
-      let institution = `${category.name}_${characteristic.name}_institution`;
-
-      this.filename = ''
-
-      for(let x of this.fileDataArray){
-        if(x.characteristic === characteristic.name){
-          this.filename = x.filename
-        }
-      }
-
-      if (data[charName]) {
-        categoryData.characteristics.push({
-          id : characteristic.id,
-          name: characteristic.name,
-          relevance: data[charRelevance],
-          score: data[charScore],
-          comment: data[comment],
-          filename : this.filename,
-          institution : data[institution]
-        });
-      }
-    }
-    console.log("kkk",categoryData);
-    categoryDataArray.push(categoryData);
-  }
-}
+        console.log("averageProcess1 : ", this.averageProcess)
+        console.log("averageOutcome1 : ", this.averageOutcome)
+        console.log("assessId : ", this.assessmentId)
+        this.chart();
 
 
-if( data.policy === 'TC NACAG Initiative'){
-  for (let category of this.selectedItems3) {
-
-    this.categoryFilename = ''
-
-    for(let x of this.fileDataArray){
-      if(x.characteristic === category.name){
-        this.categoryFilename = x.filename
-      }
-    }
-
-    let categoryData: any = {
-      categoryScore: data[`${category.name}_catscore`],
-      categoryInstitution : data[`${category.name}_institution`],
-      categoryComment : data[`${category.name}_comment`],
-      categoryId :category.id,
-      category: category.name,
-      categoryFile : this.categoryFilename,
-      characteristics: []
-    };
-
-    for (let characteristic of this.getCategory(this.characteristicsList, category.name)) {
-      let charName = `${category.name}_${characteristic.name}`;
-      let charRelevance = `${category.name}_${characteristic.name}_relevance`;
-      let charScore = `${category.name}_${characteristic.name}_score`;
-      let comment = `${category.name}_${characteristic.name}_comment`;
-      let institution = `${category.name}_${characteristic.name}_institution`;
-
-      this.filename = ''
-
-      for(let x of this.fileDataArray){
-        if(x.characteristic === characteristic.name){
-          this.filename = x.filename
-        }
-      }
-
-      if (data[charName]) {
-        categoryData.characteristics.push({
-          id : characteristic.id,
-          name: characteristic.name,
-          relevance: data[charRelevance],
-          score: data[charScore],
-          comment: data[comment],
-          filename : this.filename,
-          institution : data[institution]
-        });
-      }
-    }
-    console.log("kkk",categoryData);
-    categoryDataArray.push(categoryData);
-  }
+       this.methassess.findByAssessIdAndRelevanceNotRelevant(this.assessmentId).subscribe(res => {
+          console.log("chaaaaaa2",res )
+          this.relevantChaList = res
+          } )
 
 
-  for (let category of this.selectedItems4) {
-
-    this.categoryFilename = ''
-
-    for(let x of this.fileDataArray){
-      if(x.characteristic === category.name){
-        this.categoryFilename = x.filename
-      }
-    }
-
-    let categoryData: any = {
-      categoryScore: data[`${category.name}_catscore`],
-      categoryInstitution : data[`${category.name}_institution`],
-      categoryComment : data[`${category.name}_comment`],
-      categoryId :category.id,
-      category: category.name,
-      categoryFile : this.categoryFilename,
-      characteristics: []
-    };
-
-    for (let characteristic of this.getCategory(this.characteristicsList, category.name)) {
-      let charName = `${category.name}_${characteristic.name}`;
-      let charRelevance = `${category.name}_${characteristic.name}_relevance`;
-      let charScore = `${category.name}_${characteristic.name}_score`;
-      let comment = `${category.name}_${characteristic.name}_comment`;
-      let institution = `${category.name}_${characteristic.name}_institution`;
-
-      this.filename = ''
-
-      for(let x of this.fileDataArray){
-        if(x.characteristic === characteristic.name){
-          this.filename = x.filename
-        }
-      }
-
-      if (data[charName]) {
-        categoryData.characteristics.push({
-          id : characteristic.id,
-          name: characteristic.name,
-          relevance: data[charRelevance],
-          score: data[charScore],
-          comment: data[comment],
-          filename : this.filename,
-          institution : data[institution]
-        });
-      }
-    }
-    console.log("kkk",categoryData);
-    categoryDataArray.push(categoryData);
-  }
-}
-  console.log("data",data)
-
-  //pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
-
-  for(let methdata of this.methListAll){
-    console.log("methdata",methdata)
-    if(data.methodology == methdata.methodology_name){
-       this.methId = methdata.id
-    }
-
-  }
-
-  for(let policydata of this.policyList){
-    console.log("policydata",policydata)
-    if(data.policy == policydata.policyName){
-       this.policyId = policydata.id
-    }
-
-  }
-
-  for(let barr of this.barrierListobject){
-    for(let x of data.selectedBarriers){
-      if(x=== barr.barrier){
-        this.sendBarriers.push(barr)
-      }
-    }
-  }
-
-
-  console.log("policy Selected Id : ", this.policyId)
-
-console.log("methiddd,", this.methId)
-  let allData: any = {
-    methodology : this.methId,
-    categoryData :categoryDataArray,
-    policyId : this.policyId,
-    tool : 'Carbon Market Tool',
-    assessment_type : data.assessment_type,
-    date1 : data.date1,
-    date2 : data.date2,
-    assessment_method : data.assessment_method,
-    assessment_approach : data.assessment_approach,
-    selectedBarriers : this.sendBarriers
-   // barriers : this.selectedBarriers
-  };
-  console.log("final array",allData);
-
-  // Send categoryDataArray to backend here
-
-   this.methassess.methAssignDataSave(allData).subscribe( res => {
-
-
-    this.averageProcess = res.result.averageProcess
-    this.averageOutcome = res.result.averageOutcome
-    this.assessmentId = res.assesId
-
-    console.log("averageProcess1 : ", this.averageProcess)
-    console.log("averageOutcome1 : ", this.averageOutcome)
-    console.log("assessId : ", this.assessmentId)
-    this.chart();
-
-
-   this.methassess.findByAssessIdAndRelevanceNotRelevant(this.assessmentId).subscribe(res => {
-      console.log("chaaaaaa2",res )
-      this.relevantChaList = res
       } )
 
-
-  } )
-
-  if(data.assessment_approach === 'Direct' && data.assessment_method === 'Track 1'){
-    setTimeout(() => {
-      this.router.navigate(['/assessment-result',this.assessmentId], { queryParams: { assessmentId: this.assessmentId,
-        averageProcess : this.averageProcess , averageOutcome: this.averageOutcome} });
-    }, 2000);
+      if(data.assessment_approach === 'Direct' && data.assessment_method === 'Track 1'){
+        setTimeout(() => {
+          this.router.navigate(['/assessment-result',this.assessmentId], { queryParams: { assessmentId: this.assessmentId,
+            averageProcess : this.averageProcess , averageOutcome: this.averageOutcome} });
+        }, 2000);
+      }
   }
 
 
 
+}
 
+submitBarrierData(dataArray : any){
+  console.log("xxxxxxx", dataArray)
+
+  for (let item of dataArray) {
+    for (let x of this.barrierListobject) {
+      if (item.barrier === x.barrier) {
+        item.barrier = x.id
+      }
+    }
+  }
+
+  let obj :any = {
+    dataArray : dataArray,
+    alldata : this.allData
+  }
+
+  console.log("objjjj", obj)
+
+  this.methassess.barrierCharacteristics(obj).subscribe(res => {
+    console.log("newww data",res)
+
+  } )
 }
 
 submitForm(){
@@ -1070,6 +1158,9 @@ onChangeInstitution(event : any){
   console.log("selectedInstitution: ", event.target.value)
 }
 
+onChangeCha(event : any){
+  console.log("selectedCharacteristic: ", event.target.value)
+}
 
 
 

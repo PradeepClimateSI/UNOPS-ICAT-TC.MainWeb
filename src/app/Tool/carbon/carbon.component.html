@@ -1123,283 +1123,53 @@
   </div>
 </div>
 
-  <!--   <div *ngIf="selectedType === 'TC Uganda Geothermal'" class="form-group">
+<div *ngIf="selectedTrack === 'Track 3'">
+  <div *ngIf="selectedApproach === 'Direct'">
+<br>
 
-            <br><br>
-            <h5>Processess of change</h5>
-            <div class="row p-2">
-              <div class="col-12 col-md-8">
-                <div class="p-field">
-                  <label for="UprosesCat">Categories:</label>
-                  <p-multiSelect name="UprosesCat" [options]="meth1Process" [(ngModel)]="selectedItems"
-                    (onChange)="onItemSelect($event)" defaultLabel="Select Categories"
-                    optionLabel="name"></p-multiSelect>
+<div *ngFor="let barrier of selectedPolicyBarriersList ">
+<h6>{{barrier}}</h6>
 
-                </div>
-              </div>
-            </div>
+      <div class="row p-2">
+        <div class="col-12 col-md-8">
+          <div class="p-field">
+            <label for="{{barrier}}_score">Barrier Score: &nbsp; &nbsp; &nbsp; &nbsp;
+              &nbsp; &nbsp;</label>
+            <input type="number" name="{{barrier}}_score" ngModel placeholder="Score">
+          </div>
+        </div>
+      </div>
 
-
-
-            <div class="row p-2">
-              <div class="col-12 col-md-12">
-                <div class="p-field">
-                  <div *ngFor="let category of selectedItems"><br><br>
-                    <h6>{{category.name}}</h6>
-                    <label for="characteristics">
-                      <p style="font-size: medium; font-weight: bold;">Characteristics:</p>
-                    </label>
-                    <div *ngFor="let characteristic of getCategory(characteristics, category.name)">
-                      <input type="checkbox" name="{{category.name}}_{{characteristic.name}}" ngModel>&nbsp;
-                      &nbsp;{{characteristic.name}}<br>
-                      <label for="{{category.name}}_{{characteristic.name}}_relevance">Relevance: &nbsp; &nbsp;</label>
-                      <select id="{{characteristic.name}}_relevance"
-                        name="{{category.name}}_{{characteristic.name}}_relevance" ngModel>
-                        <option value="relevant">Relevant</option>
-                        <option value="not_relevant">Not Relevant</option>
-                        <option value="possible_relevant">Possible Relevant</option>
-                      </select><br>
-                      <label for="{{category.name}}_{{characteristic.name}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp;
-                        &nbsp; &nbsp;</label>
-                      <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel
-                        placeholder="Score"> <br> <br>
-
-                        <label for="{{category.name}}_{{characteristic.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
-                          &nbsp; &nbsp;</label>
-                        <input type="text" name="{{category.name}}_{{characteristic.name}}_comment" ngModel
-                          placeholder="Comment"> <br> <br>
+      <div class="row p-2">
+        <div class="col-12 col-md-8">
+          <div class="p-field">
+            <label for="{{barrier}}_comment">Comment for Barrier Score: &nbsp; &nbsp; &nbsp; &nbsp;
+              &nbsp; &nbsp;</label>
+            <input type="text" name="{{barrier}}_comment" ngModel placeholder="Comment">
+          </div>
+        </div>
+      </div>
 
 
-                        <label class="mr-4">Upload Document : </label>
-                        <p-fileUpload
-                        name="file"
-                        [customUpload]="true"
-                        (uploadHandler)="myUploader($event,characteristic.name)"
-                        url="{{ baseURL }}/methodology-assessment/uploadtest"
-                        (onUpload)="onUpload($event)"
-                        [multiple]="true"
-                        [maxFileSize]="5000000"
-                        styleClass="custom-file-upload"
-                      ></p-fileUpload>
-                      <br>  <br>
-                    </div>
+      <div class="row p-2">
+        <div class="col-12 col-md-8">
+          <div class="p-field">
+            <label for="{{barrier}}_charac">Characteristics</label>
+            <select class="form-control select-with-arrow" (change)="onChangeCha($event)" ngModel name="{{barrier}}_charac"
+              id="exampleFormControlSelect1">
+              <option value="" disabled selected hidden>Select Characteristic</option>
+              <option *ngFor="let cha of characteristicsList" [value]="cha.id">{{cha.name}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
 
-                  </div>
-                </div>
-              </div>
-            </div>
+<br><br>
+</div>
 
+  </div>
+</div>
 
-            <br><br>
-            <h5>Outcomes of change</h5>
-            <div class="row p-2">
-              <div class="col-12 col-md-8">
-                <div class="p-field">
-                  <label for="uoutcomecat">Categories:</label>
-
-                  <p-multiSelect name="uoutcomecat" [options]="meth1Outcomes" [(ngModel)]="selectedItems2"
-                    (onChange)="onItemSelect2($event)" defaultLabel="Select Categories"
-                    optionLabel="name"></p-multiSelect>
-                </div>
-              </div>
-            </div>
-
-
-            <div class="row p-2">
-              <div class="col-12 col-md-12">
-                <div class="p-field">
-                  <div *ngFor="let category of selectedItems2"><br><br>
-                    <h6>{{category.name}}</h6>
-                    <label for="characteristics">
-                      <p style="font-size: medium; font-weight: bold;">Characteristics:</p>
-                    </label>
-                    <div *ngFor="let characteristic of getCategory(characteristics, category.name)">
-                      <input type="checkbox" name="{{category.name}}_{{characteristic.name}}" ngModel>&nbsp;
-                      &nbsp;{{characteristic.name}}<br>
-                      <label for="{{category.name}}_{{characteristic.name}}_relevance">Relevance: &nbsp; &nbsp;</label>
-                      <select id="{{characteristic.name}}_relevance"
-                        name="{{category.name}}_{{characteristic.name}}_relevance" ngModel>
-                        <option value="relevant">Relevant</option>
-                        <option value="not_relevant">Not Relevant</option>
-                        <option value="possible_relevant">Possible Relevant</option>
-                      </select><br>
-                      <label for="{{category.name}}_{{characteristic.name}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp;
-                        &nbsp; &nbsp;</label>
-                      <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel
-                        placeholder="Score"> <br> <br>
-
-                        <label for="{{category.name}}_{{characteristic.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
-                          &nbsp; &nbsp;</label>
-                        <input type="text" name="{{category.name}}_{{characteristic.name}}_comment" ngModel
-                          placeholder="Comment"> <br> <br>
-
-                        <label class="mr-4">Upload Document : </label>
-                        <p-fileUpload
-                        name="file"
-                        [customUpload]="true"
-                        (uploadHandler)="myUploader($event,characteristic.name)"
-                        url="{{ baseURL }}/methodology-assessment/uploadtest"
-                        (onUpload)="onUpload($event)"
-                        [multiple]="true"
-                        [maxFileSize]="5000000"
-                        styleClass="custom-file-upload"
-                      ></p-fileUpload><br>  <br>
-
-
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
-
-          </div> -->
-           <!--  end of meth1 form -->
-
-          <!--   start of meth 2 form data -->
-<!--           <div *ngIf="selectedType === 'TC NACAG Initiative'" class="form-group">
-
-            <br><br>
-            <h5>Processess of change</h5>
-            <div class="row p-2">
-              <div class="col-12 col-md-8">
-                <div class="p-field">
-                  <label for="nprocescat">Categories:</label>
-
-                  <p-multiSelect name="nprocescat" [options]="meth1Process" [(ngModel)]="selectedItems3"
-                    (onChange)="onItemSelect3($event)" defaultLabel="Select Categories"
-                    optionLabel="name"></p-multiSelect>
-                </div>
-              </div>
-            </div>
-
-
-            <div class="row p-2">
-              <div class="col-12 col-md-12">
-                <div class="p-field">
-                  <div *ngFor="let category of selectedItems3"><br><br>
-                    <h6>{{category.name}}</h6>
-
-                    <label for="{{category.name}}_catscore">Category Score: &nbsp;</label>
-                    <input type="number" name="{{category.name}}_catscore" ngModel placeholder="Score"> <br> <br>
-
-                    <label for="characteristics">
-                      <p style="font-size: medium; font-weight: bold;">Characteristics:</p>
-                    </label>
-                    <div *ngFor="let characteristic of getCategory(characteristics, category.name)">
-                      <input type="checkbox" name="{{category.name}}_{{characteristic.name}}" ngModel>&nbsp;
-                      &nbsp;{{characteristic.name}}<br>
-                      <label for="{{category.name}}_{{characteristic.name}}_relevance">Relevance: &nbsp; &nbsp;</label>
-                      <select id="{{characteristic.name}}_relevance"
-                        name="{{category.name}}_{{characteristic.name}}_relevance" ngModel>
-                        <option value="relevant">Relevant</option>
-                        <option value="not_relevant">Not Relevant</option>
-                        <option value="possible_relevant">Possible Relevant</option>
-                      </select><br>
-                      <label for="{{category.name}}_{{characteristic.name}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp;
-                        &nbsp; &nbsp;</label>
-                      <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel
-                        placeholder="Score"> <br> <br>
-
-                        <label for="{{category.name}}_{{characteristic.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
-                          &nbsp; &nbsp;</label>
-                        <input type="text" name="{{category.name}}_{{characteristic.name}}_comment" ngModel
-                          placeholder="Comment"> <br> <br>
-
-                        <label class="mr-4">Upload Document : </label>
-                        <p-fileUpload
-                        name="file"
-                        [customUpload]="true"
-                        (uploadHandler)="myUploader($event,characteristic.name)"
-                        url="{{ baseURL }}/methodology-assessment/uploadtest"
-                        (onUpload)="onUpload($event)"
-                        [multiple]="true"
-                        [maxFileSize]="5000000"
-                        styleClass="custom-file-upload"
-                      ></p-fileUpload>
-                      <br>  <br>
-
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
-
-            <br><br>
-            <h5>Outcomes of change</h5>
-            <div class="row p-2">
-              <div class="col-12 col-md-8">
-                <div class="p-field">
-                  <label for="noutcat">Categories:</label>
-                  <p-multiSelect name="noutcat" [options]="meth1Outcomes" [(ngModel)]="selectedItems4"
-                    (onChange)="onItemSelect4($event)" defaultLabel="Select Categories"
-                    optionLabel="name"></p-multiSelect>
-
-                </div>
-              </div>
-            </div>
-
-
-
-            <div class="row p-2">
-              <div class="col-12 col-md-12">
-                <div class="p-field">
-                  <div *ngFor="let category of selectedItems4"><br><br>
-                    <h6>{{category.name}}</h6>
-
-                    <label for="{{category.name}}_catscore">Category Score: &nbsp;</label>
-                    <input type="number" name="{{category.name}}_catscore" ngModel placeholder="Score"> <br> <br>
-
-                    <label for="characteristics">
-                      <p style="font-size: medium; font-weight: bold;">Characteristics:</p>
-                    </label>
-                    <div *ngFor="let characteristic of getCategory(characteristics, category.name)">
-                      <input type="checkbox" name="{{category.name}}_{{characteristic.name}}" ngModel>&nbsp;
-                      &nbsp;{{characteristic.name}}<br>
-                      <label for="{{category.name}}_{{characteristic.name}}_relevance">Relevance: &nbsp; &nbsp;</label>
-                      <select id="{{characteristic.name}}_relevance"
-                        name="{{category.name}}_{{characteristic.name}}_relevance" ngModel>
-                        <option value="relevant">Relevant</option>
-                        <option value="not_relevant">Not Relevant</option>
-                        <option value="possible_relevant">Possible Relevant</option>
-                      </select><br>
-                      <label for="{{category.name}}_{{characteristic.name}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp;
-                        &nbsp; &nbsp;</label>
-                      <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel
-                        placeholder="Score"> <br> <br>
-
-                        <label for="{{category.name}}_{{characteristic.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
-                          &nbsp; &nbsp;</label>
-                        <input type="text" name="{{category.name}}_{{characteristic.name}}_comment" ngModel
-                          placeholder="Comment"> <br> <br>
-
-                        <label class="mr-4">Upload Document : </label>
-                        <p-fileUpload
-                        name="file"
-                        [customUpload]="true"
-                        (uploadHandler)="myUploader($event,characteristic.name)"
-                        url="{{ baseURL }}/methodology-assessment/uploadtest"
-                        (onUpload)="onUpload($event)"
-                        [multiple]="true"
-                        [maxFileSize]="5000000"
-                        styleClass="custom-file-upload"
-                      ></p-fileUpload><br>  <br>
-
-
-
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> -->
-          <!--  end of meth2 form -->
 
         </div>
       </div>
@@ -1408,6 +1178,41 @@
         <button pButton pRipple class="btn btn-primary btn-block text-uppercase" type='submit'>Submit</button>
       </div>
     </form>
+
+
+      <div *ngIf="track3Direct">
+
+        <div *ngFor="let cha of characteristicsList">
+          <h6>{{cha.name}}</h6>
+          <div *ngFor="let item of dataArray">
+            <div *ngIf="cha.id == item.chaId">
+              <h6>Barrier :{{item.barrier}}</h6>
+              <p>Barrier Score: {{item.barrierScore}}</p>
+              <p>Barrier Comment : {{item.barrierComment}}</p>
+
+              <label for="{{item.barrier}}_weight">Barrier Weight: &nbsp; &nbsp; &nbsp; &nbsp;
+                &nbsp; &nbsp;</label>
+              <input type="number" name="{{item.barrier}}_weight" [(ngModel)]="item.barrierWeight" placeholder="Weight"><br>
+
+
+              <label for="{{item.barrier}}_Weightcomment">Comment for Barrier Weight: &nbsp; &nbsp; &nbsp; &nbsp;
+                &nbsp; &nbsp;</label>
+              <input type="text" name="{{item.barrier}}_Weightcomment" [(ngModel)]="item.bWeightComment"
+                placeholder="Comment">
+
+              <br> <br>
+
+            </div>
+
+
+
+          </div>
+        </div>
+
+
+
+        <button type="submit" (click)="submitBarrierData(dataArray)">Submit</button>
+      </div>
 
 <!-- Result loaded -->
 <!--     <div *ngIf="averageOutcome">
@@ -1423,61 +1228,63 @@
       <div class="p-grid p-fluid col-md-6 col-sm-12">
 
         <div *ngIf="!isSubmitted">
-    <div *ngIf="assessmentId">
-
-      <div class="row p-2">
-        <div class="col-12 col-md-8">
-          <div class="p-field">
-            <label for="category-select">Select Characteristics Affected By Barriers:</label>
-            <p-multiSelect [options]="relevantChaList" [(ngModel)]="selectChaAffectByBarriers"
-              (onChange)="onItemSelectcha($event)" defaultLabel="Select Characteristics" optionLabel="name"></p-multiSelect>
-            <button type="submit" (click)="submitForm()">Submit</button>
-          </div>
-        </div>
-      </div>
-
-      <div *ngIf="trigger">
-
-        <div class="row p-2">
-          <div class="col-12 col-md-8">
-            <div class="p-field">
-
-
-              <!--      <p-multiSelect [options]="characAffectedByBarriers" [(ngModel)]="selectChaAffectByBarriers" (onChange)="onItemSelectcha($event)"
-              defaultLabel= "Select Characteristics" optionLabel="name"></p-multiSelect> -->
-
-              <div *ngFor="let characteristic of selectChaAffectByBarriers"><br><br>
-                <input type="checkbox" name="{{characteristic.name}}_barrier" ngModel>&nbsp;
-                &nbsp;{{characteristic.name}}<br>
-
-                <label for="methodolog">Indicator</label>
-                <select class="form-control select-with-arrow" [(ngModel)]="characteristic.indicator">
-                  <option value="" disabled selected hidden>Select Indicator</option>
-                  <option *ngFor="let indicator of handleSelectedCharacteristic(characteristic.name)"
-                    [value]="indicator.name">{{indicator.name}}</option>
-                </select><br>
-
-
-                <label for="methodolog">Methodology</label>
-                <select class="form-control select-with-arrow" name="{{characteristic.name}}_methodology" ngModel
-                  id="exampleFormControlSelect1">
-                  <option value="" disabled selected hidden>Select Methodology</option>
-                  <option *ngFor="let meth of onIndicatorSelected(characteristic.indicator)" [value]="meth.name">
-                    {{meth.name}}</option>
-                </select>
-
+          <div *ngIf="assessmentId">
+            <div *ngIf="!track3Direct">
+              <div class="row p-2">
+                <div class="col-12 col-md-8">
+                  <div class="p-field">
+                    <label for="category-select">Select Characteristics Affected By Barriers:</label>
+                    <p-multiSelect [options]="relevantChaList" [(ngModel)]="selectChaAffectByBarriers"
+                      (onChange)="onItemSelectcha($event)" defaultLabel="Select Characteristics"
+                      optionLabel="name"></p-multiSelect>
+                    <button type="submit" (click)="submitForm()">Submit</button>
+                  </div>
+                </div>
               </div>
 
+              <div *ngIf="trigger">
+
+                <div class="row p-2">
+                  <div class="col-12 col-md-8">
+                    <div class="p-field">
+
+
+                      <!--      <p-multiSelect [options]="characAffectedByBarriers" [(ngModel)]="selectChaAffectByBarriers" (onChange)="onItemSelectcha($event)"
+                      defaultLabel= "Select Characteristics" optionLabel="name"></p-multiSelect> -->
+
+                      <div *ngFor="let characteristic of selectChaAffectByBarriers"><br><br>
+                        <input type="checkbox" name="{{characteristic.name}}_barrier" ngModel>&nbsp;
+                        &nbsp;{{characteristic.name}}<br>
+
+                        <label for="methodolog">Indicator</label>
+                        <select class="form-control select-with-arrow" [(ngModel)]="characteristic.indicator">
+                          <option value="" disabled selected hidden>Select Indicator</option>
+                          <option *ngFor="let indicator of handleSelectedCharacteristic(characteristic.name)"
+                            [value]="indicator.name">{{indicator.name}}</option>
+                        </select><br>
+
+
+                        <label for="methodolog">Methodology</label>
+                        <select class="form-control select-with-arrow" name="{{characteristic.name}}_methodology" ngModel
+                          id="exampleFormControlSelect1">
+                          <option value="" disabled selected hidden>Select Methodology</option>
+                          <option *ngFor="let meth of onIndicatorSelected(characteristic.indicator)" [value]="meth.name">
+                            {{meth.name}}</option>
+                        </select>
+
+                      </div>
 
 
 
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
             </div>
           </div>
         </div>
-
-    </div>
-  </div>
-</div>
 
 </div>
 </div>

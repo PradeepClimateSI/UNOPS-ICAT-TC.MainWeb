@@ -15,7 +15,8 @@ export class AssessmentComponent implements OnInit {
 
   results : any = []
 data2 : any
-loading: boolean = true;
+loading: boolean ;
+totalRecords : number
 
 dt2 : Table
   constructor(
@@ -63,6 +64,7 @@ dt2 : Table
       }
 
     });
+
 
       console.log("resultdataa",this.results)
 
