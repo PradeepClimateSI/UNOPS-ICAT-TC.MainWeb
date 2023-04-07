@@ -8,7 +8,9 @@
     </div>
 
 <p-table #dt2 [value]="results" [tableStyle]="{'min-width': '50rem'}"
-currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+          [paginator]="true"
+          [rows]="5" [totalRecords]="results.length"
+
 [globalFilterFields]="['meth', 'method', 'approach', 'assessmentType', 'tool']">
   <ng-template pTemplate="caption">
     <div class="d-flex justify-content-end">
