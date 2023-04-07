@@ -4,27 +4,83 @@
         <div class="col-md-6">
             <div class="col-12">
                 <div class="p-field">
-                    <label for="projStatus">Aggregated Actions</label>
-                    <input [disabled]="true" type="text" name="ndc" class="p-inputtext" pInputText />
+                    <label for="projStatus">Intervention</label>
+                    <input [disabled]="true" type="text" name="ndc" #chgEmission="ngModel"
+                        [(ngModel)]="headerlcimateActionName" class="p-inputtext" pInputText />
                 </div>
             </div>
         </div>
         <div class="col-md-6">
             <div class="col-12">
                 <div class="p-field">
-                    <label for="projStatus">Action Areas</label>
-                    <input [disabled]="true" type="text" name="subNDc" class="p-inputtext" pInputText />
+                    <label for="projStatus">Assessment Type</label>
+                    <input [disabled]="true" type="text" name="ndc" #chgEmission="ngModel"
+                        [(ngModel)]="headerAssessmentType" class="p-inputtext" pInputText />
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row mb-3">
         <div class="col-md-10">
             <div class="col-12">
                 <div class="p-field">
-                    <label for="projStatus">Specific Climate Action</label>
+                    <label for="projStatus">Assessment Period</label>
+                    <input [disabled]="true" type="text" name="asseyear" #asseyear="ngModel" [(ngModel)]="from"
+                        class="p-inputtext" pInputText />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div class="col-12">
+                <div class="p-field">
+                    <label for="projStatus">Barriers</label>
                     <input [disabled]="true" type="text" name="ndc" class="p-inputtext" pInputText />
                 </div>
             </div>
         </div>
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <!-- <h6>{{ scenario }}</h6> -->
+            </div>
+        </div>
+        <div class="row p-2">
+            <p-table #table [value]="param" [lazy]="true" [paginator]="false" [showCurrentPageReport]="false"
+                [rowsPerPageOptions]="[1, 10, 25, 50]" [loading]="loading" [responsive]="true"
+                [(selection)]="selectedParameters">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th>Category</th>
+                        <th>Characteristics</th>
+                        <th>Relavancy</th>
+                        <th>Data Provider</th>
+                        <th>Value</th>
+                        <th>QC Status</th>
+
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-param>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="param"> </p-tableCheckbox>
+                        </td>
+                        <td>{{ param.category.name }}</td>
+                        <td>{{ param.characteristics.name }}</td>
+                        <td>{{ param.relevance }}</td>
+                        <td>{{ param.institution.name }}</td>
+                        <td>{{ param.score }}</td>
+                        <td> {{param.parameterRequest?.qaStatus == 1 ? "Pending" : param.parameterRequest?.qaStatus == 2
+                            ? "InProgress": param.parameterRequest?.qaStatus == 3 ? "Fail":
+                            param.parameterRequest?.qaStatus == 4 ? "Pass" :""}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <div class="col-md-6 offset-6 mt-3 d-flex">
+                <button class="mt-2 mr-10" type="button" pButton pRipple label="Accept"
+                    (click)="onAcceptClick()"></button>
+                <button class="mt-2" type="button" pButton pRipple label="Reject" (click)="onRejectClick()"></button>
+            </div>
+        </div>
+
     </div>
