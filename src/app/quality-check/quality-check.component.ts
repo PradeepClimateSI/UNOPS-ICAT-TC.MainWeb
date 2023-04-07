@@ -167,7 +167,7 @@ export class QualityCheckComponent implements OnInit {
 
   statusClick(event: any, object: Assessment) {
     console.log("button status..", object)
-    this.router.navigate(['/qc/detail'], {
+    this.router.navigate(['/app/qc/detail'], {
       queryParams: { id: object.id, flag: object.qaStatus },
     });
   }
