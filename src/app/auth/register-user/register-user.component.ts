@@ -93,12 +93,12 @@ export class RegisterUserComponent implements OnInit {
         const a = await this.userControllerService.createExternalUser(newUser).toPromise()
         
       } catch (error) {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Username is existing',
-          closable: true,
-        });
+        // this.messageService.add({
+        //   severity: 'error',
+        //   summary: 'Error',
+        //   detail: 'Username is existing',
+        //   closable: true,
+        // });
       }
     
   }

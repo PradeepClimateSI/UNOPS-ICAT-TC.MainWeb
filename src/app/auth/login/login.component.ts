@@ -59,7 +59,8 @@ export class LoginComponent implements OnInit {
       try{
         const res = await this.authControllerServiceProxy.login(a).toPromise();
         console.log("returned user data",res);
-        this.appService.steToken(res.accessToken);
+        if(res.isEmailConfirmed){
+          this.appService.steToken(res.accessToken);
         this.appService.steRefreshToken(res.refreshToken);
         // this.appService.steRole(res.role);
         this.appService.steProfileId(res.loginProfileId);
@@ -67,12 +68,24 @@ export class LoginComponent implements OnInit {
         this.appService.startRefreshTokenTimer();
         this.appService.startIdleTimer();
         this.router.navigate(['../../app'], {});
+        }
+        else{
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Please verify email before login',
+            closable: true,
+          });
+
+        }
+        
+       
       }catch(err){
         console.error(err);
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'Please verify email before login',
+          detail: 'Please check email and password',
           closable: true,
         });
       }
