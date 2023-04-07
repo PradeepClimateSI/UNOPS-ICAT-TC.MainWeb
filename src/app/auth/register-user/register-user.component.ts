@@ -76,7 +76,7 @@ export class RegisterUserComponent implements OnInit {
           closable: true,
         });
         setTimeout(() => {
-          this.router.navigate(['../login'], {relativeTo:this.activatedRoute});
+          this.router.navigate(['../confirm-email'], {relativeTo:this.activatedRoute});
         }
         , 2000);
   

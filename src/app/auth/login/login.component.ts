@@ -58,6 +58,7 @@ export class LoginComponent implements OnInit {
       a.username = this.userName;
       try{
         const res = await this.authControllerServiceProxy.login(a).toPromise();
+        console.log("returned user data",res);
         this.appService.steToken(res.accessToken);
         this.appService.steRefreshToken(res.refreshToken);
         // this.appService.steRole(res.role);
@@ -71,7 +72,7 @@ export class LoginComponent implements OnInit {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'Please check email and password',
+          detail: 'Please verify email before login',
           closable: true,
         });
       }
