@@ -43,6 +43,8 @@ import { ApproveDataComponent } from 'app/data-request-flow/approve-data/approve
 import { Assessment } from 'shared/service-proxies/service-proxies';
 import { AssessmentComponent } from 'app/assessment/assessment.component';
 import { VerificationDetailComponent } from 'app/verification/verifier/verification-detail/verification-detail.component';
+import { QualityCheckComponent } from 'app/quality-check/quality-check.component';
+import { QualityCheckDetailComponent } from 'app/quality-check-detail/quality-check-detail.component';
 
 
 
@@ -183,6 +185,20 @@ const routes: Routes = [
   {
     path: 'assessment-results',
     component: AssessmentComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'quality-controller',
+    component: QualityCheckComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'qc/detail',
+    component: QualityCheckDetailComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}

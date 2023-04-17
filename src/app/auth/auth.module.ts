@@ -12,6 +12,7 @@ import { OtpComponent } from './otp/otp.component';
 import { ResetComponent } from './reset/reset.component';
 import { AuthControllerServiceProxy } from 'shared/service-proxies/auth-service-proxies';
 import { RegisterUserComponent } from './register-user/register-user.component';
+import { EmailConfirmComponent } from './email-confirm/email-confirm.component';
 
 
 const routes: Routes = [
@@ -36,6 +37,10 @@ const routes: Routes = [
     path: 'register-user',
     component: RegisterUserComponent
   },
+  {
+    path: 'confirm-email',
+    component: EmailConfirmComponent
+  },
 ]
 
 @NgModule({
@@ -44,7 +49,8 @@ const routes: Routes = [
     ForgotPasswordComponent,
     OtpComponent,
     ResetComponent,
-    RegisterUserComponent
+    RegisterUserComponent,
+    EmailConfirmComponent
   ],
     imports: [
         CommonModule,
