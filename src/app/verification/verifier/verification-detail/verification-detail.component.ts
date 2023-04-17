@@ -73,13 +73,13 @@ export class VerificationDetailComponent implements OnInit {
   }
 
   toNonConformance() {
-    // this.router.navigate(['/non-conformance'], {
-    //   queryParams: {
-    //     id: this.assementYear.id,
-    //     isVerificationHistory: this.flag,
-    //     vStatus: this.verificationStatus,
-    //   },
-    // });
+    this.router.navigate(['/app/non-conformance'], {
+      queryParams: {
+        id: this.assessment.id,
+        isVerificationHistory: this.flag,
+        vStatus: this.verificationStatus,
+      },
+    });
   }
 
   getVerificationRound() {

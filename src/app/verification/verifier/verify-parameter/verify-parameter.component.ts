@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { Assessment, MethodologyAssessmentControllerServiceProxy, MethodologyAssessmentParameters, ServiceProxy, UsersControllerServiceProxy, VerificationControllerServiceProxy, VerificationDetail } from 'shared/service-proxies/service-proxies';
+import { Assessment, MethodologyAssessmentControllerServiceProxy, MethodologyAssessmentParameters, ParameterHistoryControllerServiceProxy, ServiceProxy, UsersControllerServiceProxy, VerificationControllerServiceProxy, VerificationDetail } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-verify-parameter',
@@ -27,6 +27,9 @@ export class VerifyParameterComponent implements OnInit {
   concernVerificationDetails: VerificationDetail[];
   concernParam: MethodologyAssessmentParameters | undefined;
   displayConcern: boolean = false;
+  paraId: any;
+  requestHistoryList: any;
+  displayHistory: boolean;
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -34,11 +37,31 @@ export class VerifyParameterComponent implements OnInit {
     private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
     private usersControllerServiceProxy: UsersControllerServiceProxy,
     private verificationProxy: VerificationControllerServiceProxy,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private prHistoryProxy : ParameterHistoryControllerServiceProxy,
   ) { }
 
   async ngOnInit(): Promise<void> {
     await this.loadUser()
+  }
+
+  getInfo(obj: any)
+  {
+       console.log("dataRequestList...",obj)
+       this.paraId = obj.id;
+       console.log("this.paraId...",this.paraId)
+
+       this.prHistoryProxy
+       .getHistroyByid(this.paraId)  // this.paraId
+       .subscribe((res) => {
+         
+        this.requestHistoryList =res;
+         
+       console.log('this.requestHistoryList...', this.requestHistoryList);
+       
+       });
+
+       this.displayHistory = true;
   }
 
   async loadUser() {

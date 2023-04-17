@@ -27,6 +27,7 @@
           <th>Value</th>
           <th>Verification Status</th>
           <th></th>
+          <th></th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-param>
@@ -61,9 +62,9 @@
               (click)="raiseConcern($event, param)" class="p-button-info"></button>
 
           </td>
-          <!-- <td>
-                                        <i class="pi pi-ellipsis-v" style="font-size: 2rem" (click)="getInfo(param)"></i>
-                                    </td> -->
+          <td>
+            <i class="pi pi-ellipsis-v" style="font-size: 2rem" (click)="getInfo(param)"></i>
+          </td>
           <!-- </tr> -->
       </ng-template>
     </p-table>
@@ -131,11 +132,11 @@
             [parameter]="concernParam!" ></app-raise-concern>
     </div>
 </p-dialog>
-<!-- <p-dialog header="Data Request History" [(visible)]="displayHistory" appendTo="body" [style]="{ width: '50vw' }"
+<p-dialog header="Data Request History" [(visible)]="displayHistory" appendTo="body" [style]="{ width: '50vw' }"
     [draggable]="false" [resizable]="false">
     <div class="container" style="width: 600px; height: 500px">
         <app-view-datarequest-history [parameterId]="paraId" [listOfHistory]="requestHistoryList">
 
         </app-view-datarequest-history>
     </div>
-</p-dialog> -->
+</p-dialog>
