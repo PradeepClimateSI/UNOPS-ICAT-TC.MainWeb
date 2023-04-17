@@ -22,12 +22,14 @@ import {
 } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 
+
 @Component({
-  selector: 'app-view',
-  templateUrl: './view.component.html',
-  styleUrls: ['./view.component.css']
+  selector: 'app-accepted-policies',
+  templateUrl: './accepted-policies.component.html',
+  styleUrls: ['./accepted-policies.component.css']
 })
-export class ViewComponent implements OnInit, AfterViewInit {
+
+export class AcceptedPoliciesComponent implements OnInit, AfterViewInit {
   climateactions: Project[];
   selectedClimateActions: Project[];
   climateaction: Project = new Project();
@@ -254,7 +256,8 @@ export class ViewComponent implements OnInit, AfterViewInit {
     this.totalRecords = 0;
 
     let sectorId = this.searchBy.sector ? this.searchBy.sector.id : 0;
-    let statusId = this.searchBy.status ? this.searchBy.status.id : 0;
+    let statusId =  this.searchBy.status ? this.searchBy.status.id : 0;
+    let approvalId =1; // accepted policies
     let filtertext = this.searchBy.text ? this.searchBy.text : '';
     let mitTypeId = this.searchBy.mitigationAction
       ? this.searchBy.mitigationAction.id
@@ -271,21 +274,18 @@ export class ViewComponent implements OnInit, AfterViewInit {
     this.rows = event.rows === undefined ? 10 : event.rows;
     setTimeout(() => {
       this.projectProxy
-        .getClimateActionDetails(
-          pageNumber,
+        .allProjectApprove(
+          approvalId,
           this.rows,
-          sectorId,
-          statusId,
-          mitTypeId,
-          editedOn,
-          filtertext
+          pageNumber,
+         
           
         )
         
         .subscribe((a) => {
           console.log( a," this.climateactions")
           this.climateactions = a.items
-           this.totalRecords=a.meta.totalItems
+          //  this.totalRecords=a.meta.totalItems
           this.loading = false;
         }, err => {this.loading = false;});
     }, 1000);

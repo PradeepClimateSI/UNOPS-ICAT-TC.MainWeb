@@ -43,6 +43,7 @@ import { Assessment } from 'shared/service-proxies/service-proxies';
 import { AssessmentComponent } from 'app/assessment/assessment.component';
 import { QualityCheckComponent } from 'app/quality-check/quality-check.component';
 import { QualityCheckDetailComponent } from 'app/quality-check-detail/quality-check-detail.component';
+import { AcceptedPoliciesComponent } from 'app/climate-action/accepted-policies/accepted-policies.component';
 
 
 
@@ -85,6 +86,13 @@ const routes: Routes = [
   {
     path: 'add-polocies',
     component: ClimateActionComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'accepted-policies',
+    component: AcceptedPoliciesComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}
