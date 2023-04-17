@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { Assessment, MethodologyAssessmentControllerServiceProxy, MethodologyAssessmentParameters, ServiceProxy, VerificationControllerServiceProxy, VerificationDetail } from 'shared/service-proxies/service-proxies';
+import { Assessment, MethodologyAssessmentControllerServiceProxy, MethodologyAssessmentParameters, ServiceProxy, UsersControllerServiceProxy, VerificationControllerServiceProxy, VerificationDetail } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-verify-parameter',
@@ -21,42 +21,32 @@ export class VerifyParameterComponent implements OnInit {
   flag: number;
   selectedParameter: any = [];
   public loggedUser: any;
+  raiseConcernSection: any;
+  isParameter: boolean;
+  isValue: boolean;
+  concernVerificationDetails: VerificationDetail[];
+  concernParam: MethodologyAssessmentParameters | undefined;
+  displayConcern: boolean = false;
 
   constructor(
     private confirmationService: ConfirmationService,
     private serviceProxy: ServiceProxy,
     private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
+    private usersControllerServiceProxy: UsersControllerServiceProxy,
     private verificationProxy: VerificationControllerServiceProxy,
     private messageService: MessageService
   ) { }
 
-  ngOnInit(): void {
-    this.loadUser()
+  async ngOnInit(): Promise<void> {
+    await this.loadUser()
   }
 
-  loadUser() {
+  async loadUser() {
     let userName = localStorage.getItem('USER_NAME')!;
 
-    let filter1: string[] = [];
-    filter1.push('username||$eq||' + userName);
-
-    this.serviceProxy
-      .getManyBaseUsersControllerUser(
-        undefined,
-        undefined,
-        filter1,
-        undefined,
-        undefined,
-        undefined,
-        1000,
-        0,
-        0,
-        0
-      )
-      .subscribe((res: any) => {
-        this.loggedUser = res.data[0];
-        console.log("loggedUser", this.loggedUser)
-      });
+    let user = await this.usersControllerServiceProxy.findUserByEmail(userName).toPromise()
+    console.log("user", user)
+    this.loggedUser = user
   }
 
   checkboxCheck(event: any, param: MethodologyAssessmentParameters) {
@@ -70,21 +60,22 @@ export class VerifyParameterComponent implements OnInit {
 
   raiseConcern(event: any, parameter: MethodologyAssessmentParameters) {
     // console.log("my para...",parameter);
-    // this.raiseConcernSection = parameter.name;
-    // this.isParameter = true;
-    // this.isValue = false;
+    console.log(parameter)
+    this.raiseConcernSection = parameter.category.name + ' - ' + parameter.characteristics.name
+    this.isParameter = true;
+    this.isValue = false;
 
-    // console.log('gggggggggggggggggggg');
+    console.log('gggggggggggggggggggg');
 
-    // if (this.verificationDetails) {
-    //   this.concernVerificationDetails = this.verificationDetails.filter(
-    //     (a) => !a.isResult && a.parameter && a.parameter.id == parameter.id
-    //   );
-    // }
+    if (this.verificationDetails) {
+      this.concernVerificationDetails = this.verificationDetails.filter(
+        (a) => a.parameter && a.parameter.id == parameter.id
+      );
+    }
 
-    // this.concernParam = parameter;
+    this.concernParam = parameter;
 
-    // this.displayConcern = true;
+    this.displayConcern = true;
   }
 
   parameterAccept() {
@@ -109,7 +100,7 @@ export class VerifyParameterComponent implements OnInit {
 
     this.selectedParameter.map((v: any) => {
 
-      v.isAcceptedByVerifier = 1;
+      v.isAcceptedByVerifier = true;
 
       this.methodologyAssessmentControllerServiceProxy
         .updateParameter(
@@ -136,7 +127,7 @@ export class VerifyParameterComponent implements OnInit {
       } else {
         vd.userVerifier = this.loggedUser.id;
         vd.assessment = this.assessment
-        vd.year = Number(this.assessment.year);
+        vd.year = Number(this.assessment.year.split('-')[0]);
         vd.createdOn = moment();
 
         let param = new MethodologyAssessmentParameters();

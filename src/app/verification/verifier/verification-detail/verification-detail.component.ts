@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Assessment, AssessmentControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, MethodologyAssessmentParameters, ServiceProxy, VerificationControllerServiceProxy, VerificationDetail } from 'shared/service-proxies/service-proxies';
 
 @Component({
@@ -17,13 +17,15 @@ export class VerificationDetailComponent implements OnInit {
   public parameters: MethodologyAssessmentParameters[];
   isAccepted = true
   verificationDetails: VerificationDetail[]
+  verificationRound: number;
 
   constructor(
     private route: ActivatedRoute,
     private serviceProxy: ServiceProxy,
     private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
     private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
-    private verificationControllerServiceProxy: VerificationControllerServiceProxy
+    private verificationControllerServiceProxy: VerificationControllerServiceProxy,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -50,9 +52,11 @@ export class VerificationDetailComponent implements OnInit {
           this.isAccepted = false
         }
       }
+
+      this.getVerificationRound()
+      this.getVerificationDetails()
     })
 
-    this.getVerificationDetails()
   }
 
   getVerificationDetails() {
@@ -62,6 +66,35 @@ export class VerificationDetailComponent implements OnInit {
           this.verificationDetails = res
         }
       })
+  }
+
+  back() {
+    this.router.navigate(['/app/verification/list']);
+  }
+
+  toNonConformance() {
+    // this.router.navigate(['/non-conformance'], {
+    //   queryParams: {
+    //     id: this.assementYear.id,
+    //     isVerificationHistory: this.flag,
+    //     vStatus: this.verificationStatus,
+    //   },
+    // });
+  }
+
+  getVerificationRound() {
+    if (this.assessment && this.assessment !== undefined) {
+      if (
+        this.assessment.verificationStatus === 1 ||
+        this.assessment.verificationStatus === 2 ||
+        this.assessment.verificationStatus === 3
+      ) {
+        this.verificationRound = 1;
+      } else if (this.assessment.verificationStatus === 4) {
+        this.verificationRound = 2;
+      } else if (this.assessment.verificationStatus === 5)
+        this.verificationRound = 3;
+    }
   }
 
 }

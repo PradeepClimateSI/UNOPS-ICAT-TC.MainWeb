@@ -1,12 +1,11 @@
 <div class="container">
     <h4 class="mt-4">
-        <!-- {{
-        this.assementYear !== undefined
-        ? "Verification " +
-        VerificationStatusEnum[this.assementYear.verificationStatus]
+        {{
+        verificationRound !== undefined
+        ? "Verification (Round " + verificationRound +")"
         : "Verification "
-        }} -->
-        Verification (Round 1)
+        }}
+
     </h4>
     <div class="p-grid p-fluid card">
         <div class="row mb-3">
@@ -19,11 +18,6 @@
         </div>
 
         <div class="row mb-3">
-            <!-- <app-verify-parameter-section header="Baseline Parameter" [assessmentYear]="assementYear"
-                [scenario]="assementYear.assessment.baselineScenario" [parameters]="baselineParameters"
-                ResultLabel="Baseline emission" [ResultValue]="assessmentResult.baselineResult |  number: '2.0-5'"
-                [verificationDetails]="verificationDetails" [isBaseline]="true" [isAccept]="isBaseAccept" [flag]="flag"
-                [verificationStatus]="verificationStatus"></app-verify-parameter-section> -->
             <app-verify-parameter
             [parameters]="parameters"
             [verificationStatus]="verificationStatus"
@@ -32,4 +26,25 @@
             [verificationDetails]="verificationDetails"
             ></app-verify-parameter>
         </div>
+
+        <div class="row mb-3">
+            <div
+              class="d-flex justify-content-end align-content-center flex-wrap mb-15 mr-10"
+            >
+              <button
+                class="btn btn-primary text-uppercase"
+                type="submit"
+                (click)="back()"
+              >
+                Back
+              </button>
+              <button
+                class="btn btn-primary text-uppercase ml-5"
+                type="submit"
+                (click)="toNonConformance()"
+              >
+                Report
+              </button>
+            </div>
+          </div>
     </div>

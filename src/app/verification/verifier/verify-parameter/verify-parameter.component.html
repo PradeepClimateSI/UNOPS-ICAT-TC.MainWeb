@@ -124,15 +124,14 @@
 
 </div>
 
-<!-- <p-dialog header="Raise Concern" [(visible)]="displayConcern" appendTo="body">
+<p-dialog header="Raise Concern" [(visible)]="displayConcern" appendTo="body">
     <div class="container" style="width: 600px; height: 500px">
         <app-raise-concern [area]="raiseConcernSection" [verificationDetails]="concernVerificationDetails"
-            [assesmentYear]="assessmentYear" [isParameter]="isParameter" [isResult]="isValue"
-            [parameter]="concernParam!" [isBaseline]="isBaseline" [isLekage]="isLekage" [isProject]="isProject"
-            [isProjection]="isProjection"></app-raise-concern>
+            [assessment]="assessment" [isParameter]="isParameter" [isResult]="isValue"
+            [parameter]="concernParam!" ></app-raise-concern>
     </div>
 </p-dialog>
-<p-dialog header="Data Request History" [(visible)]="displayHistory" appendTo="body" [style]="{ width: '50vw' }"
+<!-- <p-dialog header="Data Request History" [(visible)]="displayHistory" appendTo="body" [style]="{ width: '50vw' }"
     [draggable]="false" [resizable]="false">
     <div class="container" style="width: 600px; height: 500px">
         <app-view-datarequest-history [parameterId]="paraId" [listOfHistory]="requestHistoryList">
