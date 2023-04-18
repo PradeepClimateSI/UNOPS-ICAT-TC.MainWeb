@@ -4,8 +4,8 @@
   width: 200px;
   height: 10px;
 }
-/*
-<div *ngIf="selectedTrack === 'Track 3'">
+
+/* <div *ngIf="selectedTrack === 'Track 2'">
   <div *ngIf="selectedApproach === 'Indirect'">
 <br>
 

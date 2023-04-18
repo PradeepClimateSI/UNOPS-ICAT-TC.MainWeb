@@ -672,7 +672,7 @@ allData: any
   this.track3Direct = false
   this.track3Indirect = false
 
-  if((data.assessment_approach === 'Direct' || data.assessment_approach === 'Indirect' ) && data.assessment_method === 'Track 3'){
+  if((data.assessment_approach === 'Direct' || data.assessment_approach === 'Indirect' ) && data.assessment_method === 'Track 2'){
 
     if((data.assessment_approach === 'Direct' ) ){
       this.track3Direct = true
