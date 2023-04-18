@@ -122,7 +122,11 @@ trigger : boolean = false;
   characteristics :any = [];
 
   selectedCategories: string[] = ['Category 1', 'Category 2'];
-
+  categoryWeightOption : string
+  categoryWeight : any
+  characteristicWeightOption : string
+  characteristicWeightOptionOutcome : string
+  categoryWeightOptionOutcome: string
 
 /*   showSelectedItems() {
     console.log("aaa",this.categories);
@@ -656,6 +660,7 @@ onDeSelectAll7(item: any){
 } */
 dataArray : any= []
 track3Direct : boolean = false
+track3Indirect : boolean = false
 allData: any
 
  onSubmit(data: any) {
@@ -665,11 +670,17 @@ allData: any
   this.dataArray = []
   this.sendBarriers = []
   this.track3Direct = false
+  this.track3Indirect = false
 
+  if((data.assessment_approach === 'Direct' || data.assessment_approach === 'Indirect' ) && data.assessment_method === 'Track 3'){
 
-  if(data.assessment_approach === 'Direct' && data.assessment_method === 'Track 3'){
+    if((data.assessment_approach === 'Direct' ) ){
+      this.track3Direct = true
+    }
+    if((data.assessment_approach === 'Indirect' ) ){
+      this.track3Indirect = true
+    }
 
-    this.track3Direct = true
     for (let barriers of this.selectedPolicyBarriersList) {
 
       for( let x of this.barrierListobject){
@@ -679,14 +690,17 @@ allData: any
           let cha = `${barriers}_charac`;
           let barrierScore = `${barriers}_score`;
           let barrierComment = `${barriers}_comment`;
+          let barrierInstitution =  `${barrier}_institution`;
 
             this.dataArray.push({
-              barrier: barrier,
+              barrier: x.id,
+              barrierName : barrier,
               chaId: data[cha],
               barrierScore: data[barrierScore],
               barrierComment : data[barrierComment],
               barrierWeight : 0,
-              bWeightComment : ""
+              bWeightComment : "",
+              barrierScoreInstitution : data[barrierInstitution],
 
             });
         }
@@ -1017,8 +1031,13 @@ allData: any
 
 }
 
+
+submitData : boolean = false
+
 submitBarrierData(dataArray : any){
   console.log("xxxxxxx", dataArray)
+
+  this.submitData = true
 
   for (let item of dataArray) {
     for (let x of this.barrierListobject) {
@@ -1035,10 +1054,137 @@ submitBarrierData(dataArray : any){
 
   console.log("objjjj", obj)
 
-  this.methassess.barrierCharacteristics(obj).subscribe(res => {
+/*   this.methassess.barrierCharacteristics(obj).subscribe(res => {
     console.log("newww data",res)
+  } ) */
+}
 
-  } )
+onSubmitCatData(data : any){
+console.log("daaaaneeeww", data)
+let categoryDataArray: any[] = [];
+
+for (let category of this.selectedItems3) {
+
+  this.categoryFilename = ''
+
+  for(let x of this.fileDataArray){
+    if(x.characteristic === category.name){
+      this.categoryFilename = x.filename
+    }
+  }
+
+  let categoryData: any = {
+    categoryWeight: Number(data[`${category.name}_catweight`]),
+    categoryInstitution : data[`${category.name}_institution`],
+    categoryComment : data[`${category.name}_comment`],
+    categoryId :category.id,
+    category: category.name,
+    categoryFile : this.categoryFilename,
+    characteristics: []
+  };
+
+  for (let characteristic of this.getCategory(this.characteristicsList, category.name)) {
+    let charName = `${category.name}_${characteristic.name}`;
+    let charWeight = `${category.name}_${characteristic.name}_weight`;
+    let charScore = `${category.name}_${characteristic.name}_score`;
+    let comment = `${category.name}_${characteristic.name}_comment`;
+    let institution = `${category.name}_${characteristic.name}_institution`;
+
+    this.filename = ''
+
+    for(let x of this.fileDataArray){
+      if(x.characteristic === characteristic.name){
+        this.filename = x.filename
+      }
+    }
+
+    if (data[charName]) {
+      categoryData.characteristics.push({
+        id : characteristic.id,
+        name: characteristic.name,
+        weight: Number(data[charWeight]),
+        score: data[charScore],
+        comment: data[comment],
+        filename : this.filename,
+        institution : data[institution]
+      });
+    }
+  }
+  console.log("kkk",categoryData);
+  categoryDataArray.push(categoryData);
+}
+
+
+for (let category of this.selectedItems4) {
+
+  this.categoryFilename = ''
+
+  for(let x of this.fileDataArray){
+    if(x.characteristic === category.name){
+      this.categoryFilename = x.filename
+    }
+  }
+
+  let categoryData: any = {
+    categoryWeight: Number(data[`${category.name}_catweight`]),
+    categoryInstitution : data[`${category.name}_institution`],
+    categoryComment : data[`${category.name}_comment`],
+    categoryId :category.id,
+    category: category.name,
+    categoryFile : this.categoryFilename,
+    characteristics: []
+  };
+
+  for (let characteristic of this.getCategory(this.characteristicsList, category.name)) {
+    let charName = `${category.name}_${characteristic.name}`;
+    let charWeight = `${category.name}_${characteristic.name}_weight`;
+    let charScore = `${category.name}_${characteristic.name}_score`;
+    let comment = `${category.name}_${characteristic.name}_comment`;
+    let institution = `${category.name}_${characteristic.name}_institution`;
+
+    this.filename = ''
+
+    for(let x of this.fileDataArray){
+      if(x.characteristic === characteristic.name){
+        this.filename = x.filename
+      }
+    }
+
+    if (data[charName]) {
+      categoryData.characteristics.push({
+        id : characteristic.id,
+        name: characteristic.name,
+        weight: Number(data[charWeight]),
+        score: data[charScore],
+        comment: data[comment],
+        filename : this.filename,
+        institution : data[institution]
+      });
+    }
+  }
+  console.log("kkk",categoryData);
+  categoryDataArray.push(categoryData);
+}
+
+let assessData : any = {
+  dataArray : this.dataArray,
+  alldata : this.allData,
+  categoryData : categoryDataArray
+}
+
+    this.methassess.barrierCharacteristics(assessData).subscribe(res => {
+      console.log("newww data",res)
+
+    /*   setTimeout(() => {
+        this.router.navigate(['/assessment-result',res.assesId], { queryParams: { assessmentId: res.assesId,
+          averageProcess : res.result.averageProcess , averageOutcome: res.result.averageOutcome} });
+      }, 2000); */
+    } )
+
+console.log("assessData",assessData)
+
+
+
 }
 
 submitForm(){
