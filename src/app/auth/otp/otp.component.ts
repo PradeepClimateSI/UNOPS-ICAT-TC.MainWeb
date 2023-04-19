@@ -41,10 +41,12 @@ export class OtpComponent implements OnInit {
   checkOTP(form: NgForm){
     if(this.userName){
       this.authControllerServiceProxy.submitOTP(this.userName, this.otp).subscribe(res => {
+        //@ts-ignore
         if(res.status){
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
+            //@ts-ignore
             detail: res.message,
             closable: true,
           });
@@ -53,6 +55,7 @@ export class OtpComponent implements OnInit {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
+            //@ts-ignore
             detail: res.message,
             closable: true,
           });

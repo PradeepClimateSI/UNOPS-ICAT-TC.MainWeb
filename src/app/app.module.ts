@@ -58,7 +58,7 @@ import { CarouselModule } from 'primeng/carousel';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ConfirmationService } from "primeng/api";
-import { API_BASE_URL, AssessmentControllerServiceProxy, AuthControllerServiceProxy, CountryControllerServiceProxy, DocumentControllerServiceProxy, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, NdcControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequestControllerServiceProxy, ProjectControllerServiceProxy, QualityCheckControllerServiceProxy, SectorControllerServiceProxy, ServiceProxy, UserTypeControllerServiceProxy } from "shared/service-proxies/service-proxies";
+import { API_BASE_URL, AssessmentControllerServiceProxy, AuthControllerServiceProxy, CountryControllerServiceProxy, DocumentControllerServiceProxy, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, NdcControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequestControllerServiceProxy, ProjectControllerServiceProxy, QualityCheckControllerServiceProxy, SectorControllerServiceProxy, ServiceProxy, UserTypeControllerServiceProxy, VerificationControllerServiceProxy } from "shared/service-proxies/service-proxies";
 import { AUTH_API_BASE_URL, ServiceProxy as AuthServiceProxy, } from 'shared/service-proxies/auth-service-proxies';
 
 import { RoleGuardService } from "./auth/role-guard.service";
@@ -82,10 +82,16 @@ import { InvestorComponent } from "./Tool/investor/investor.component";
 import { CarbonComponent } from "./Tool/carbon/carbon.component";
 import { AssessmentResultComponent } from './assessment-result/assessment-result.component';
 import { ManagedatastatusComponent } from './data-request-flow/managedatastatus/managedatastatus.component';
+import { VerificationListComponent } from './verification/verifier/verification-list/verification-list.component';
 import { ApproveDataComponent } from './data-request-flow/approve-data/approve-data.component';
 import { QualityCheckComponent } from './quality-check/quality-check.component';
 import { AssessmentComponent } from './assessment/assessment.component';
+import { VerificationDetailComponent } from './verification/verifier/verification-detail/verification-detail.component';
+import { VerifyParameterComponent } from './verification/verifier/verify-parameter/verify-parameter.component';
 import { QualityCheckDetailComponent } from './quality-check-detail/quality-check-detail.component';
+import { RaiseConcernComponent } from './component/raise-concern/raise-concern.component';
+import { RaiseConcernSectionComponent } from './component/raise-concern-section/raise-concern-section.component';
+import { NonconformanceReportComponent } from './nonconformance-report/nonconformance-report.component';
 
 
 
@@ -125,10 +131,16 @@ export function getAuthRemoteServiceBaseUrl(): string {
         InvestorComponent,
         AssessmentResultComponent,
         ManagedatastatusComponent,
+        VerificationListComponent,
         ApproveDataComponent,
         QualityCheckComponent,
         AssessmentComponent,
+        VerificationDetailComponent,
+        VerifyParameterComponent,
         QualityCheckDetailComponent,
+        RaiseConcernComponent,
+        RaiseConcernSectionComponent,
+        NonconformanceReportComponent,
     ],
        
       
@@ -206,6 +218,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         UserTypeControllerServiceProxy,
         InstitutionControllerServiceProxy,
         AssessmentControllerServiceProxy,
+        VerificationControllerServiceProxy,
         QualityCheckControllerServiceProxy,
         DatePipe,
         {provide: API_BASE_URL, useFactory: getRemoteServiceBaseUrl},
