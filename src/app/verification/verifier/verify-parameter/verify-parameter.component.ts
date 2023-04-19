@@ -26,10 +26,11 @@ export class VerifyParameterComponent implements OnInit {
   isValue: boolean;
   concernVerificationDetails: VerificationDetail[];
   concernParam: MethodologyAssessmentParameters | undefined;
-  displayConcern: boolean = false;
+  displayRaiseConcern: boolean = false;
   paraId: any;
   requestHistoryList: any;
   displayHistory: boolean;
+  displayViewConcern: boolean;
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -81,7 +82,7 @@ export class VerifyParameterComponent implements OnInit {
     }
   }
 
-  raiseConcern(event: any, parameter: MethodologyAssessmentParameters) {
+  raiseConcern(event: any, parameter: MethodologyAssessmentParameters, type: string) {
     // console.log("my para...",parameter);
     console.log(parameter)
     this.raiseConcernSection = parameter.category.name + ' - ' + parameter.characteristics.name
@@ -98,7 +99,12 @@ export class VerifyParameterComponent implements OnInit {
 
     this.concernParam = parameter;
 
-    this.displayConcern = true;
+    if (type === 'raise') {
+      this.displayRaiseConcern = true;
+    } else if (type === 'view'){
+      this.displayViewConcern = true;
+    }
+
   }
 
   parameterAccept() {

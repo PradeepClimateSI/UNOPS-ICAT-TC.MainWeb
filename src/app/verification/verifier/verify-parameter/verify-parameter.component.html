@@ -59,7 +59,10 @@
 
             <button *ngIf="verificationStatus !=3" pButton pRipple
               [disabled]="param.isAcceptedByVerifier == 1?true:false" type="button" label="Raise Concern"
-              (click)="raiseConcern($event, param)" class="p-button-info"></button>
+              (click)="raiseConcern($event, param, 'raise')" class="p-button-info"></button>
+            <button *ngIf="verificationStatus !=3" pButton pRipple
+              [disabled]="param.isAcceptedByVerifier == 1?true:false" type="button" label="View Concern"
+              (click)="raiseConcern($event, param, 'view')" class="p-button-info"></button>
 
           </td>
           <td>
@@ -125,13 +128,22 @@
 
 </div>
 
-<p-dialog header="Raise Concern" [(visible)]="displayConcern" appendTo="body">
+<p-dialog header="Raise Concern" [(visible)]="displayRaiseConcern" appendTo="body">
     <div class="container" style="width: 600px; height: 500px">
         <app-raise-concern [area]="raiseConcernSection" [verificationDetails]="concernVerificationDetails"
             [assessment]="assessment" [isParameter]="isParameter" [isResult]="isValue"
-            [parameter]="concernParam!" ></app-raise-concern>
+            [parameter]="concernParam!" [isView]="false"></app-raise-concern>
     </div>
 </p-dialog>
+
+<p-dialog header="View Concern" [(visible)]="displayViewConcern" appendTo="body">
+    <div class="container" style="width: 600px; height: 500px">
+        <app-raise-concern [area]="raiseConcernSection" [verificationDetails]="concernVerificationDetails"
+            [assessment]="assessment" [isParameter]="isParameter" [isResult]="isValue"
+            [parameter]="concernParam!" [isView]="true"></app-raise-concern>
+    </div>
+</p-dialog>
+
 <p-dialog header="Data Request History" [(visible)]="displayHistory" appendTo="body" [style]="{ width: '50vw' }"
     [draggable]="false" [resizable]="false">
     <div class="container" style="width: 600px; height: 500px">

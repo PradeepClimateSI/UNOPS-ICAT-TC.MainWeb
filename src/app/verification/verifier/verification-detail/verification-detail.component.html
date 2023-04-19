@@ -38,12 +38,21 @@
               >
                 Back
               </button>
+              <!-- *ngIf="loggedUserRole === 'Verifier'" -->
               <button
                 class="btn btn-primary text-uppercase ml-5"
                 type="submit"
                 (click)="toNonConformance()"
               >
                 Report
+              </button>
+              <button
+                *ngIf="assessment?.verificationStatus == 1 && loggedUserRole === 'Sector Admin'"
+                class="btn btn-primary text-uppercase ml-5"
+                type="submit"
+                (click)="sendForVerification()"
+              >
+                Send for verification
               </button>
             </div>
           </div>
