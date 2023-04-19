@@ -730,6 +730,7 @@ export class ClimateActionComponent implements OnInit {
                 pb.barriers = b;
                 this.policyBar.push(pb);
               }
+              //@ts-ignore
               this.projectProxy.policyBar(this.policyBar).subscribe();
               console.log('save', res);
               this.isSaving = true;
