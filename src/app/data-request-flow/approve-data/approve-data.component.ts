@@ -252,6 +252,7 @@ export class ApproveDataComponent implements OnInit {
     this.isHideRejectButton = true; 
     console.log('selected qc dead line..', this.selectedQCDeadline);
     let dto = new UpdateAssessmentDto()
+    //@ts-ignore
     dto.deadline = this.selectedQCDeadline;
     console.log('qc dead line..', this.assementYear);
     this.assesmentProxy.update(this.assementYear.id,dto)
