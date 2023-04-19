@@ -90,6 +90,8 @@ export class RaiseConcernComponent implements OnInit {
   ngOnChanges(changes: any) {
     this.commentRequried = false;
     this.comment = '';
+    this.rootCause = '';
+    this.correctiveAction = '';
     if (this.assessment && this.assessment !== undefined) {
       if (
         this.assessment.verificationStatus === 1 ||
@@ -119,6 +121,8 @@ export class RaiseConcernComponent implements OnInit {
       if (this.verificationDetail) {
         this.hasVerificationDetail = true
         this.comment = this.verificationDetail.explanation;
+        this.rootCause = this.verificationDetail.rootCause;
+        this.correctiveAction = this.verificationDetail.correctiveAction
       } else {
         this.hasVerificationDetail = false
       }

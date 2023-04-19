@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Assessment, MethodologyAssessmentControllerServiceProxy, MethodologyAssessmentParameters, ParameterHistoryControllerServiceProxy, ServiceProxy, UsersControllerServiceProxy, VerificationControllerServiceProxy, VerificationDetail } from 'shared/service-proxies/service-proxies';
-
+import decode from 'jwt-decode';
 @Component({
   selector: 'app-verify-parameter',
   templateUrl: './verify-parameter.component.html',
@@ -31,6 +31,7 @@ export class VerifyParameterComponent implements OnInit {
   requestHistoryList: any;
   displayHistory: boolean;
   displayViewConcern: boolean;
+  loggedUserRole: any
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -43,6 +44,9 @@ export class VerifyParameterComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
+    const token = localStorage.getItem('ACCESS_TOKEN')!;
+    const tokenPayload = decode<any>(token);
+    this.loggedUserRole=tokenPayload.role[0]
     await this.loadUser()
   }
 
@@ -212,6 +216,52 @@ export class VerifyParameterComponent implements OnInit {
     }
 
     return stage;
+  }
+
+  parameterAction(event: any, parameter: MethodologyAssessmentParameters) {
+    let verificationDetails: VerificationDetail[] = [];
+
+    let verificationDetail = undefined;
+
+    if (this.verificationDetails) {
+      verificationDetail = this.verificationDetails.find(
+        (a) =>
+          a.parameter &&
+          a.parameter.id == parameter.id &&
+          a.verificationStage == this.getverificationStage()
+      );
+    }
+    let vd = new VerificationDetail();
+    if (verificationDetail) {
+      vd = verificationDetail;
+    } else {
+      vd.assessment = this.assessment
+      vd.year = Number(this.assessment.year.split('-')[0]);
+      vd.createdOn = moment();
+      vd.isAccepted = false;
+      let param = new MethodologyAssessmentParameters();
+      param.id = parameter.id;
+      vd.parameter = param;
+
+    }
+
+    vd.editedOn = moment();
+    vd.updatedDate = moment();
+    vd.verificationStage = this.getverificationStage();
+    vd.verificationStatus = Number(this.assessment.year.split('-')[0]);
+    vd.isDataRequested = true;
+    verificationDetails.push(vd);
+
+    this.verificationProxy
+      .saveVerificationDetails(verificationDetails)
+      .subscribe((a) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'successfully Save.',
+          closable: true,
+        });
+      });
   }
 
 }

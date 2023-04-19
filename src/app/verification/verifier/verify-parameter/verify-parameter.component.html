@@ -57,12 +57,21 @@
 
           <td>
 
-            <button *ngIf="verificationStatus !=3" pButton pRipple
+            <button *ngIf="verificationStatus !=3 && loggedUserRole === 'Verifier'" pButton pRipple
               [disabled]="param.isAcceptedByVerifier == 1?true:false" type="button" label="Raise Concern"
               (click)="raiseConcern($event, param, 'raise')" class="p-button-info"></button>
-            <button *ngIf="verificationStatus !=3" pButton pRipple
-              [disabled]="param.isAcceptedByVerifier == 1?true:false" type="button" label="View Concern"
-              (click)="raiseConcern($event, param, 'view')" class="p-button-info"></button>
+            <div class="row">
+              <div class="col-5">
+                  <button *ngIf="verificationStatus !=3 && loggedUserRole === 'Sector Admin'"
+                   pButton pRipple type="button" label="Action" (click)="parameterAction($event, param)"
+                  class="p-button-info"></button>
+              </div>
+              <div class="col-7">
+                <button *ngIf="verificationStatus !=3 && loggedUserRole === 'Sector Admin'" pButton pRipple
+                   type="button" label="View Concern"(click)="raiseConcern($event, param, 'view')" class="p-button-info">
+                </button>
+              </div>
+            </div>
 
           </td>
           <td>

@@ -119,6 +119,8 @@ export class NonconformanceReportComponent implements OnInit {
       this.roundTwoList= this.verificationList.filter((o: any)=>o.verificationStage == 2 && o.isAccepted == 0);
       this.roundThreeList= this.verificationList.filter((o: any)=>o.verificationStage == 3 && o.isAccepted == 0);
 
+      console.log("roundOneList", this.roundOneList)
+
       this.roundOneHeadTable = this.verificationList?.find((o: any)=>o.verificationStage == 1);
       if (this.roundOneHeadTable != null) {
         let verifierId = this.roundOneHeadTable.userVerifier;
