@@ -1176,7 +1176,7 @@
                   <button type="button" pButton pRipple
                     [disabled]="project.projectApprovalStatus?.id == 1 || project.projectApprovalStatus?.id == 2? true: false"
                     class="p-btn-sm" (click)="updateProjectApprovalStatus(project, 1)">
-                    {{project.projectApprovalStatus?.id === 1 ? "Accepted" : "Accpt" }}
+                    {{project.projectApprovalStatus?.id === 1 ? "Accepted" : "Accept" }}
                   </button>
                 </ng-template>
               </div>
