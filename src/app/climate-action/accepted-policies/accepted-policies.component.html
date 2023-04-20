@@ -1,5 +1,5 @@
 <div class="container pl-20 pr-20">
-    <h4 class="mt-4"> Policies and Actions</h4>
+    <h4 class="mt-4"> Accepted policies</h4>
     <div class="p-grid p-fluid card">
       <div class="row mb-3">
         <div class="col-md-4">
@@ -45,7 +45,6 @@
           [showCurrentPageReport]="true"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
           [rowsPerPageOptions]="[1, 10, 25, 50]"
-          [totalRecords]="totalRecords"
           [loading]="loading"
           [responsive]="true"
         >
@@ -138,4 +137,3 @@
   <p-dialog header={{this.titleInDialog}} [(visible)]="display" [style]="{width: '40vw'}">
     {{this.reason}}
   </p-dialog>
-  

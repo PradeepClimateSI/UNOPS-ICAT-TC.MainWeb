@@ -19,16 +19,17 @@ import {
   CountryControllerServiceProxy,
   ServiceProxy,
   User,
-  ProjectApprovalStatus,
 } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 
+
 @Component({
-  selector: 'app-view',
-  templateUrl: './view.component.html',
-  styleUrls: ['./view.component.css']
+  selector: 'app-accepted-policies',
+  templateUrl: './accepted-policies.component.html',
+  styleUrls: ['./accepted-policies.component.css']
 })
-export class ViewComponent implements OnInit, AfterViewInit {
+
+export class AcceptedPoliciesComponent implements OnInit, AfterViewInit {
   climateactions: Project[];
   selectedClimateActions: Project[];
   climateaction: Project = new Project();
@@ -62,6 +63,7 @@ export class ViewComponent implements OnInit, AfterViewInit {
     mitigationAction: null,
     editedOn: null,
   };
+  sectorId: number = 0;
 
   first = 0;
   userName: string;
@@ -249,48 +251,31 @@ export class ViewComponent implements OnInit, AfterViewInit {
 
   // /////////////////////////////////////////////
 
-  loadgridData = (event: LazyLoadEvent) => {
-    console.log('event Date', event);
-    this.loading = true;
+ loadgridData = (event: LazyLoadEvent) => {
+    //console.log("below loarding data")
+  //  this.loading = true;
     this.totalRecords = 0;
-
-    let sectorId = this.searchBy.sector ? this.searchBy.sector.id : 0;
     let statusId = this.searchBy.status ? this.searchBy.status.id : 0;
+    let currentProgress = this.searchBy.currentProgress ? this.searchBy.currentProgress : '';
+   // console.log("status",statusId)
+    let projectApprovalStatusId = 1; // acccepted =1
+   // console.log("projectApprovalStatusId",projectApprovalStatusId)
     let filtertext = this.searchBy.text ? this.searchBy.text : '';
-    let mitTypeId = this.searchBy.mitigationAction
-      ? this.searchBy.mitigationAction.id
-      : 0;
-
-    let editedOn = this.searchBy.editedOn
-      ? moment(this.searchBy.editedOn).format('YYYY-MM-DD')
-      : '';
-
     let pageNumber =
       event.first === 0 || event.first === undefined
         ? 1
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
+    
     setTimeout(() => {
       this.projectProxy
-        .getAllClimateActionList(
-          pageNumber,
-          this.rows,
-          filtertext,
-          statusId,
-          0,
-          0,
-          sectorId,
-          
-        )
-        
+        .getAllClimateActionList(pageNumber, this.rows, filtertext, statusId,projectApprovalStatusId,currentProgress,this.sectorId)
         .subscribe((a) => {
-          console.log( a," this.climateactions")
-          this.climateactions = a.items
-           this.totalRecords=a.meta.totalItems
-          this.loading = false;
-        }, err => {this.loading = false;});
-    }, 1000);
-   
+          this.climateactions = a.items;
+          this.totalRecords = a.meta.totalItems;
+          console.log('first time climation',this.climateactions);
+        });
+    });
   };
   addproject() {
     this.router.navigate(['/add-polocies']);
@@ -360,4 +345,3 @@ export class ViewComponent implements OnInit, AfterViewInit {
   }
 
 }
-
