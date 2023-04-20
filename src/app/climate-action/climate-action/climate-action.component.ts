@@ -723,7 +723,7 @@ export class ClimateActionComponent implements OnInit {
       }
     } else {
       if (formData.form.valid) {
-
+        this.project.projectApprovalStatus.id=4; // proposed
         this.messageService.clear();
         this.serviceProxy
           .createOneBaseProjectControllerClimateAction(this.project)
@@ -1072,7 +1072,8 @@ enableActionButtonsarea() {
 }
 
 updateProjectApprovalStatus(project: Project, aprovalStatus: number) {
-  if (this.isMapped != undefined) {
+  if (project) {
+    
     this.originalApprovalStatus =
       project.projectApprovalStatus === undefined
         ? 'Propose'
@@ -1080,6 +1081,7 @@ updateProjectApprovalStatus(project: Project, aprovalStatus: number) {
 
     if (aprovalStatus == 1) {
       this.updatedApprovalStatus = 'Accept';
+      console.log("333333333")
     }
     if (aprovalStatus == 2) {
       this.updatedApprovalStatus = 'Reject';
@@ -1151,7 +1153,7 @@ updateProjectApprovalStatus(project: Project, aprovalStatus: number) {
 
 updateStatus(project: Project, aprovalStatus: number) {
   let sector = new Sector();
-  sector.id = project.sector.id;
+  // sector.id = project.sector.id;
   project.sector = sector;
 
   project.proposeDateofCommence = moment(this.proposeDateofCommence);
@@ -1190,68 +1192,68 @@ updateStatus(project: Project, aprovalStatus: number) {
 
   this.serviceProxy
     .updateOneBaseProjectControllerClimateAction(project.id, project)
-  // .subscribe(
-  //   (res) => {
-  //     // window.alert("yess..")
-  //     // console.log(res);
+  .subscribe(
+    (res) => {
+      // window.alert("yess..")
+      // console.log(res);
 
-  //     let actionObject = new CaActionHistory();
-  //     actionObject.isApprovalAction = 1;
-  //     actionObject.previousAction = this.originalApprovalStatus;
-  //     actionObject.currentAction = this.updatedApprovalStatus;
-  //     actionObject.actionUser = this.fullname;
-  //     //  actionObject.isNdcAndSubNdc = 1;
-  //     //  actionObject.currentNdcs = this.project.currentNdc;
-  //     //  actionObject.previousNdcs = this.project.previousNdc;
-  //     //  actionObject.currentSubNdcs = this.project.currentSubNdc;
-  //     //  actionObject.previousSubNdcs = this.project.previousSubNdc;
-  //     actionObject.project = this.project;
+      // let actionObject = new CaActionHistory();
+      // actionObject.isApprovalAction = 1;
+      // actionObject.previousAction = this.originalApprovalStatus;
+      // actionObject.currentAction = this.updatedApprovalStatus;
+      // actionObject.actionUser = this.fullname;
+      //  actionObject.isNdcAndSubNdc = 1;
+      //  actionObject.currentNdcs = this.project.currentNdc;
+      //  actionObject.previousNdcs = this.project.previousNdc;
+      //  actionObject.currentSubNdcs = this.project.currentSubNdc;
+      //  actionObject.previousSubNdcs = this.project.previousSubNdc;
+      // actionObject.project = this.project;
 
-  //     this.serviceProxy
-  //       .createOneBaseCaActionHistoryControllerCaActionHistory(actionObject)
-  //       .subscribe(
-  //         (res) => {
-  //           console.log('save', res);
-  //           // this.messageService.add({
-  //           //   severity: 'success',
-  //           //   summary: 'Success',
-  //           //   detail: 'project  has save successfully',
-  //           //   closable: true,
-  //           // });
-  //         }
+      // this.serviceProxy
+      //   .createOneBaseCaActionHistoryControllerCaActionHistory(actionObject)
+      //   .subscribe(
+      //     (res) => {
+      //       console.log('save', res);
+      //       // this.messageService.add({
+      //       //   severity: 'success',
+      //       //   summary: 'Success',
+      //       //   detail: 'project  has save successfully',
+      //       //   closable: true,
+      //       // });
+      //     }
 
-  //         // (err) => {
-  //         //   this.messageService.add({
-  //         //     severity: 'error',
-  //         //     summary: 'Error.',
-  //         //     detail: 'Internal server error, please try again.',
-  //         //     sticky: true,
-  //         //   });
-  //         // }
-  //       );
+      //     // (err) => {
+      //     //   this.messageService.add({
+      //     //     severity: 'error',
+      //     //     summary: 'Error.',
+      //     //     detail: 'Internal server error, please try again.',
+      //     //     sticky: true,
+      //     //   });
+      //     // }
+      //   );
 
-  //     this.messageService.add({
-  //       severity: 'success',
-  //       summary: 'Success',
-  //       detail:
-  //         aprovalStatus === 1 || aprovalStatus === 2
-  //           ? project.climateActionName +
-  //             ' is successfully ' +
-  //             (aprovalStatus === 1 ? 'Approved.' : 'Rejected')
-  //           : 'Data request sent successfully.',
-  //       closable: true,
-  //     });
-  //   },
-  //   (err) => {
-  //     //window.alert("nooo..")
-  //     this.messageService.add({
-  //       severity: 'error',
-  //       summary: 'Error.',
-  //       detail: 'Internal server error, please try again.',
-  //       sticky: true,
-  //     });
-  //   }
-  // );
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail:
+          aprovalStatus === 1 || aprovalStatus === 2
+            ? project.policyName +
+              ' is successfully ' +
+              (aprovalStatus === 1 ? 'Approved.' : 'Rejected')
+            : 'Data request sent successfully.',
+        closable: true,
+      });
+    },
+    (err) => {
+      //window.alert("nooo..")
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error.',
+        detail: 'Internal server error, please try again.',
+        sticky: true,
+      });
+    }
+  );
 }
 
 drWithComment() {

@@ -46,6 +46,7 @@ import { VerificationDetailComponent } from 'app/verification/verifier/verificat
 import { QualityCheckComponent } from 'app/quality-check/quality-check.component';
 import { QualityCheckDetailComponent } from 'app/quality-check-detail/quality-check-detail.component';
 import { NonconformanceReportComponent } from 'app/nonconformance-report/nonconformance-report.component';
+import { AcceptedPoliciesComponent } from 'app/climate-action/accepted-policies/accepted-policies.component';
 
 
 
@@ -88,6 +89,13 @@ const routes: Routes = [
   {
     path: 'add-polocies',
     component: ClimateActionComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'accepted-policies',
+    component: AcceptedPoliciesComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}
