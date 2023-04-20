@@ -8,70 +8,50 @@
           ? "Verification (Round " + verificationRound +")"
           : "Verification "
           }}
-  
-      </h4>
+
+        </h4>
       </div>
     </div>
     <div class="col-md-2 d-flex align-items-center" *ngIf="assessment?.verificationStatus! > 1">
       <div class="col-12">
-        <button
-          type="button"
-          pButton
-          pRipple
-          label="View NC"
-          (click)="toNonConformance()"
-        ></button>
+        <button type="button" pButton pRipple label="View NC" (click)="toNonConformance()"></button>
       </div>
     </div>
   </div>
-    
-    <div class="p-grid p-fluid card">
-        <div class="row mb-3">
-            <ng-container *ngFor="let row of card">
-                <div class="col-12 row"  style="margin-bottom: 10px;">
-                    <div class="col-3">{{row.title}}</div>
-                    <div class="col-9">{{row.value}}</div>
-                </div>
-            </ng-container>
-        </div>
 
-        <div class="row mb-3">
-            <app-verify-parameter
-            [parameters]="parameters"
-            [verificationStatus]="verificationStatus"
-            [isAccepted]="isAccepted"
-            [assessment]="assessment"
-            [verificationDetails]="verificationDetails"
-            ></app-verify-parameter>
+  <div class="p-grid p-fluid card">
+    <div class="row mb-3">
+      <ng-container *ngFor="let row of card">
+        <div class="col-12 row" style="margin-bottom: 10px;">
+          <div class="col-3">{{row.title}}</div>
+          <div class="col-9">{{row.value}}</div>
         </div>
-
-        <div class="row mb-3">
-            <div
-              class="d-flex justify-content-end align-content-center flex-wrap mb-15 mr-10"
-            >
-              <button
-                class="btn btn-primary text-uppercase"
-                type="submit"
-                (click)="back()"
-              >
-                Back
-              </button>
-              <!-- *ngIf="loggedUserRole === 'Verifier'" -->
-              <button
-                class="btn btn-primary text-uppercase ml-5"
-                type="submit"
-                (click)="toNonConformance()"
-              >
-                Report
-              </button>
-              <button
-                *ngIf="assessment?.verificationStatus == 1 && loggedUserRole === 'Sector Admin'"
-                class="btn btn-primary text-uppercase ml-5"
-                type="submit"
-                (click)="sendForVerification()"
-              >
-                Send for verification
-              </button>
-            </div>
-          </div>
+      </ng-container>
     </div>
+
+    <div class="row mb-3">
+      <app-verify-parameter [parameters]="parameters" [verificationStatus]="verificationStatus"
+        [isAccepted]="isAccepted" [assessment]="assessment"
+        [verificationDetails]="verificationDetails"></app-verify-parameter>
+    </div>
+
+    <div class="row mb-3">
+      <app-chart [averageOutcome]="averageOutcome" [averageProcess]="averageProcess"></app-chart>
+    </div>
+
+    <div class="row mb-3">
+      <div class="d-flex justify-content-end align-content-center flex-wrap mb-15 mr-10">
+        <button class="btn btn-primary text-uppercase" type="submit" (click)="back()">
+          Back
+        </button>
+        <!-- *ngIf="loggedUserRole === 'Verifier'" -->
+        <button class="btn btn-primary text-uppercase ml-5" type="submit" (click)="toNonConformance()">
+          Report
+        </button>
+        <button *ngIf="assessment?.verificationStatus == 1 && loggedUserRole === 'Sector Admin'"
+          class="btn btn-primary text-uppercase ml-5" type="submit" (click)="sendForVerification()">
+          Send for verification
+        </button>
+      </div>
+    </div>
+  </div>

@@ -22,6 +22,8 @@ export class VerificationDetailComponent implements OnInit {
   verificationDetails: VerificationDetail[]
   verificationRound: number;
   loggedUserRole: any
+  averageOutcome: any
+  averageProcess: any
 
   constructor(
     private route: ActivatedRoute,
@@ -68,6 +70,7 @@ export class VerificationDetailComponent implements OnInit {
 
       this.getVerificationRound()
       this.getVerificationDetails()
+      await this.getResult()
     })
 
   }
@@ -79,6 +82,12 @@ export class VerificationDetailComponent implements OnInit {
           this.verificationDetails = res
         }
       })
+  }
+
+  async getResult(){
+   let result = await this.methodologyAssessmentControllerServiceProxy.getResultByAssessment(this.assessment.id).toPromise()
+   this.averageOutcome = result.averageOutcome
+   this.averageProcess = result.averageProcess
   }
 
   back() {
@@ -136,6 +145,15 @@ export class VerificationDetailComponent implements OnInit {
           window.location.reload();
         }, 1000);
       });
+  }
+
+  checkboxCheck(event: any) {
+    // if (event.checked) {
+    //   this.selectedParameter.push(param);
+    // } else {
+    //   const index = this.selectedParameter.indexOf(param);
+    //   this.selectedParameter.splice(index, 1);
+    // }
   }
 
 }

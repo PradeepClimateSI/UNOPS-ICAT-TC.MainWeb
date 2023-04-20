@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { Assessment, MethodologyAssessmentControllerServiceProxy, MethodologyAssessmentParameters, ParameterHistoryControllerServiceProxy, ServiceProxy, UsersControllerServiceProxy, VerificationControllerServiceProxy, VerificationDetail } from 'shared/service-proxies/service-proxies';
+import { Assessment, MethodologyAssessmentControllerServiceProxy, MethodologyAssessmentParameters, ParameterHistoryControllerServiceProxy, Results, ServiceProxy, UsersControllerServiceProxy, VerificationControllerServiceProxy, VerificationDetail } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 @Component({
   selector: 'app-verify-parameter',
@@ -32,6 +32,9 @@ export class VerifyParameterComponent implements OnInit {
   displayHistory: boolean;
   displayViewConcern: boolean;
   loggedUserRole: any
+  result: Results
+  acceptResult: boolean = false
+  isAcceptenabled: boolean = false
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -48,6 +51,8 @@ export class VerifyParameterComponent implements OnInit {
     const tokenPayload = decode<any>(token);
     this.loggedUserRole=tokenPayload.role[0]
     await this.loadUser()
+    await this.getResult()
+    console.log(this.result)
   }
 
   getInfo(obj: any)
@@ -77,12 +82,24 @@ export class VerifyParameterComponent implements OnInit {
     this.loggedUser = user
   }
 
-  checkboxCheck(event: any, param: MethodologyAssessmentParameters) {
+  async getResult(){
+    this.result = await this.methodologyAssessmentControllerServiceProxy.getResultByAssessment(this.assessment.id).toPromise()
+   }
+
+  checkboxCheck(event: any, param?: MethodologyAssessmentParameters) {
     if (event.checked) {
-      this.selectedParameter.push(param);
+      if (param){
+        this.selectedParameter.push(param);
+      } else {
+        this.acceptResult = true
+      }
     } else {
-      const index = this.selectedParameter.indexOf(param);
-      this.selectedParameter.splice(index, 1);
+      if (param){
+        const index = this.selectedParameter.indexOf(param);
+        this.selectedParameter.splice(index, 1);
+      } else {
+        this.acceptResult = false
+      }
     }
   }
 
@@ -127,78 +144,121 @@ export class VerifyParameterComponent implements OnInit {
     this.acceptParametrs();
   }
 
-  acceptParametrs() {
+  async acceptParametrs() {
     console.log("acceptParametrs")
     let verificationDetails: VerificationDetail[] = [];
 
-    this.selectedParameter.map((v: any) => {
-
-      v.isAcceptedByVerifier = true;
-
-      this.methodologyAssessmentControllerServiceProxy
-        .updateParameter(
-          v.id,
-          v
-        )
-        .subscribe(
-          (res) => {
-
-          });
-
-
-      let verificationDetail = undefined;
-
-      if (this.verificationDetails) {
-        verificationDetail = this.verificationDetails.find(
-          (a) => a.parameter && a.parameter.id == v.id
-        );
-      }
-      let vd = new VerificationDetail();
-
-      if (verificationDetail) {
-        vd = verificationDetail;
-      } else {
-        vd.userVerifier = this.loggedUser.id;
-        vd.assessment = this.assessment
-        vd.year = Number(this.assessment.year.split('-')[0]);
-        vd.createdOn = moment();
-
-        let param = new MethodologyAssessmentParameters();
-        param.id = v.id;
-        vd.parameter = param;
-
-        // if (this.header == 'Baseline Parameter') {
-        //   vd.isBaseline = true;
-        // }
-      }
-
-      vd.editedOn = moment();
-      vd.updatedDate = moment();
-      vd.isAccepted = true;
-      vd.verificationStage = this.getverificationStage();
-      vd.verificationStatus = Number(this.assessment.verificationStatus);
-
-      verificationDetails.push(vd);
-    });
-
-    this.verificationProxy
-      .saveVerificationDetails(verificationDetails)
-      .subscribe((a) => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'successfully Save.',
-          closable: true,
-        });
-        this.isAccepted=true
-      },error => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'failed Save.',
-          closable: true,
-        });
+    if (this.acceptResult){
+      verificationDetails.push(await this.acceptResultValue())
+    }
+    if (this.selectedParameter.length > 0){
+      this.selectedParameter.map((v: any) => {
+  
+        v.isAcceptedByVerifier = true;
+  
+        this.methodologyAssessmentControllerServiceProxy
+          .updateParameter(
+            v.id,
+            v
+          )
+          .subscribe(
+            (res) => {
+  
+            });
+  
+  
+        let verificationDetail = undefined;
+  
+        if (this.verificationDetails) {
+          verificationDetail = this.verificationDetails.find(
+            (a) => a.parameter && a.parameter.id == v.id
+          );
+        }
+        let vd = new VerificationDetail();
+  
+        if (verificationDetail) {
+          vd = verificationDetail;
+        } else {
+          vd.userVerifier = this.loggedUser.id;
+          vd.assessment = this.assessment
+          vd.year = Number(this.assessment.year.split('-')[0]);
+          vd.createdOn = moment();
+  
+          let param = new MethodologyAssessmentParameters();
+          param.id = v.id;
+          vd.parameter = param;
+  
+          // if (this.header == 'Baseline Parameter') {
+          //   vd.isBaseline = true;
+          // }
+        }
+  
+        vd.editedOn = moment();
+        vd.updatedDate = moment();
+        vd.isAccepted = true;
+        vd.verificationStage = this.getverificationStage();
+        vd.verificationStatus = Number(this.assessment.verificationStatus);
+  
+        verificationDetails.push(vd);
       });
+    }
+
+    if (verificationDetails.length > 0){
+      this.verificationProxy
+        .saveVerificationDetails(verificationDetails)
+        .subscribe((a) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'successfully Save.',
+            closable: true,
+          });
+          this.isAccepted=true
+        },error => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'failed Save.',
+            closable: true,
+          });
+        });
+    }
+
+
+  }
+
+  async acceptResultValue(){
+    this.result.isAcceptedByVerifier = true
+
+    console.log(this.result)
+
+    this.methodologyAssessmentControllerServiceProxy.updateResult(this.result.id, this.result)
+      .subscribe(res => {
+
+      })
+
+    let vd = new VerificationDetail()
+    let detail = undefined;
+
+    if (this.verificationDetails){
+      detail = this.verificationDetails.find(o => o.assessment.id === this.assessment.id && o.isResult)
+    }
+    if (detail){
+      vd = detail
+    } else {
+      vd.userVerifier = this.loggedUser.id;
+      vd.assessment = this.assessment
+      vd.year = Number(this.assessment.year.split('-')[0]);
+      vd.createdOn = moment();
+      vd.isResult = true
+    }
+    vd.editedOn = moment();
+    vd.updatedDate = moment();
+    vd.isAccepted = true;
+    vd.verificationStage = this.getverificationStage();
+    vd.verificationStatus = Number(this.assessment.verificationStatus);
+
+    return vd
   }
 
   getverificationStage() {
@@ -262,6 +322,20 @@ export class VerifyParameterComponent implements OnInit {
           closable: true,
         });
       });
+  }
+
+  disableAccept(){
+    if (this.isAccepted){
+      return true
+    } else {
+      if (this.selectedParameter.length > 0){
+        return false
+      } else if (this.acceptResult) {
+        return false
+      } else {
+        return true
+      }
+    }
   }
 
 }
