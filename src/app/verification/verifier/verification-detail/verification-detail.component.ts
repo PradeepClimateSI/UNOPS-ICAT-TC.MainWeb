@@ -4,6 +4,7 @@ import { Assessment, AssessmentControllerServiceProxy, MethodologyAssessmentCont
 import decode from 'jwt-decode';
 import { MessageService } from 'primeng/api';
 import * as moment from 'moment';
+import { AppService } from 'shared/AppService';
 
 @Component({
   selector: 'app-verification-detail',
@@ -32,14 +33,12 @@ export class VerificationDetailComponent implements OnInit {
     private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
     private verificationControllerServiceProxy: VerificationControllerServiceProxy,
     private router: Router,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private appService: AppService
   ) { }
 
   ngOnInit(): void {
-    const token = localStorage.getItem('ACCESS_TOKEN')!;
-    const tokenPayload = decode<any>(token);
-    console.log(tokenPayload)
-    this.loggedUserRole=tokenPayload.role[0]
+    this.loggedUserRole= this.appService.getLoggedUserRole()
 
     console.log(this.loggedUserRole)
 

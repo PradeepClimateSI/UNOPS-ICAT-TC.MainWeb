@@ -92,6 +92,7 @@ import { QualityCheckDetailComponent } from './quality-check-detail/quality-chec
 import { RaiseConcernComponent } from './component/raise-concern/raise-concern.component';
 import { RaiseConcernSectionComponent } from './component/raise-concern-section/raise-concern-section.component';
 import { NonconformanceReportComponent } from './nonconformance-report/nonconformance-report.component';
+import { AssignVerifierComponent } from './data-request-flow/assign-verifier/assign-verifier.component';
 
 
 
@@ -141,6 +142,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         RaiseConcernComponent,
         RaiseConcernSectionComponent,
         NonconformanceReportComponent,
+        AssignVerifierComponent,
     ],
        
       

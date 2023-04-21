@@ -3,6 +3,7 @@ import * as moment from 'moment';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Assessment, MethodologyAssessmentControllerServiceProxy, MethodologyAssessmentParameters, ParameterHistoryControllerServiceProxy, Results, ServiceProxy, UsersControllerServiceProxy, VerificationControllerServiceProxy, VerificationDetail } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
+import { AppService } from 'shared/AppService';
 @Component({
   selector: 'app-verify-parameter',
   templateUrl: './verify-parameter.component.html',
@@ -44,12 +45,11 @@ export class VerifyParameterComponent implements OnInit {
     private verificationProxy: VerificationControllerServiceProxy,
     private messageService: MessageService,
     private prHistoryProxy : ParameterHistoryControllerServiceProxy,
+    private appService: AppService
   ) { }
 
   async ngOnInit(): Promise<void> {
-    const token = localStorage.getItem('ACCESS_TOKEN')!;
-    const tokenPayload = decode<any>(token);
-    this.loggedUserRole=tokenPayload.role[0]
+    this.loggedUserRole= this.appService.getLoggedUserRole()
     await this.loadUser()
     await this.getResult()
     console.log(this.result)

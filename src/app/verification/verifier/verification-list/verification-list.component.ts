@@ -4,6 +4,7 @@ import { VerificationStatus } from 'app/Model/VerificationStatus.enum';
 import { LazyLoadEvent } from 'primeng/api';
 import { VerificationControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
+import { AppService } from 'shared/AppService';
 
 @Component({
   selector: 'app-verification-list',
@@ -36,14 +37,13 @@ export class VerificationListComponent implements OnInit {
 
   constructor(
     private verificationControllerServiceProxy: VerificationControllerServiceProxy,
-    private router: Router
+    private router: Router,
+    private appService: AppService
   ) { }
 
   ngOnInit(): void {
-    const token = localStorage.getItem('ACCESS_TOKEN')!;
-    const tokenPayload = decode<any>(token);
-    console.log(tokenPayload)
-    this.loggedUserRole=tokenPayload.role[0]
+    this.loggedUserRole = this.appService.getLoggedUserRole()
+    console.log(this.loggedUserRole)
   }
 
   loadgridData = (event: LazyLoadEvent) => {
