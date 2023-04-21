@@ -20,13 +20,13 @@
       <ng-template pTemplate="header">
         <tr>
          <th></th>
-          <th>Category</th>
-          <th>Characteristic</th>
+          <th style="width: 15%;">Category</th>
+          <th style="width: 25%;">Characteristic</th>
           <th>Relevancy</th>
           <th>Data Provider</th>
           <th>Value</th>
           <th>Verification Status</th>
-          <th></th>
+          <th style="width: 24%"></th>
           <th></th>
         </tr>
       </ng-template>
@@ -45,12 +45,12 @@
         
           <ng-container *ngIf=" param.isAcceptedByVerifier == true; else elseBlockvery">
             <td>
-              <i class="pi pi-check" style="font-size: 1rem"></i>
+              <i class="pi pi-check" style="font-size: 1rem; color: green;"></i>
             </td>
           </ng-container>
           <ng-template #elseBlockvery>
             <td>
-              <i class="pi pi-times" style="font-size: 1rem"></i>
+              <i class="pi pi-times" style="font-size: 1rem; color: red;"></i>
             </td>
           </ng-template>
         
@@ -77,27 +77,28 @@
           </td>
         </tr>
       </ng-template>
-      <ng-template pTemplate="footer" >
-        <tr *ngIf="result?.id">
-          <div>
-            <td>
-              <p-checkbox [binary]="true" (onChange)="checkboxCheck($event)" name="groupname" value="check"></p-checkbox>
-            </td>
-            <td colspan="2">Transformational Impact Mapping</td>
-            <ng-container *ngIf=" result.isAcceptedByVerifier == true; else elseBlockvery">
-              <td>
-                <i class="pi pi-check" style="font-size: 1rem"></i>
-              </td>
-            </ng-container>
-            <ng-template #elseBlockvery>
-              <td>
-                <i class="pi pi-times" style="font-size: 1rem"></i>
-              </td>
-            </ng-template>
-          </div>
-        </tr>
-      </ng-template>
     </p-table>
+
+    <div class="row p-2" style="margin-top: 5%;" *ngIf="result?.id">
+      <div class="col-md-1">
+        <p-checkbox [binary]="true" (onChange)="checkboxCheck($event)" name="groupname" value="check"></p-checkbox>
+      </div>
+      <div class="col-md-6">
+        <label for="result" class="label">Transformational Impact Mapping</label>
+      </div>
+      <div class="col-md-2">
+        <ng-container *ngIf=" result.isAcceptedByVerifier == true; else elseBlockvery">
+          <td>
+            <i class="pi pi-check" style="font-size: 1rem; color: green;"></i>
+          </td>
+        </ng-container>
+        <ng-template #elseBlockvery>
+          <td>
+            <i class="pi pi-times" style="font-size: 1rem; color: red;"></i>
+          </td>
+        </ng-template>
+      </div>
+    </div>
 
     <!-- <p-overlayPanel
         #opDR

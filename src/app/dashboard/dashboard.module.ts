@@ -46,6 +46,7 @@ import { VerificationDetailComponent } from 'app/verification/verifier/verificat
 import { QualityCheckComponent } from 'app/quality-check/quality-check.component';
 import { QualityCheckDetailComponent } from 'app/quality-check-detail/quality-check-detail.component';
 import { NonconformanceReportComponent } from 'app/nonconformance-report/nonconformance-report.component';
+import { AssignVerifierComponent } from 'app/data-request-flow/assign-verifier/assign-verifier.component';
 
 
 
@@ -207,6 +208,13 @@ const routes: Routes = [
   {
     path: 'qc/detail',
     component: QualityCheckDetailComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'assign-verifier',
+    component: AssignVerifierComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}
