@@ -48,6 +48,7 @@ import { QualityCheckDetailComponent } from 'app/quality-check-detail/quality-ch
 import { NonconformanceReportComponent } from 'app/nonconformance-report/nonconformance-report.component';
 import { AssignVerifierComponent } from 'app/data-request-flow/assign-verifier/assign-verifier.component';
 import { AcceptedPoliciesComponent } from 'app/climate-action/accepted-policies/accepted-policies.component';
+import { CarbonMarketAssessmentComponent } from 'app/Tool/carbon-market/carbon-market-assessment/carbon-market-assessment.component';
 
 
 
@@ -150,9 +151,16 @@ const routes: Routes = [
     canActivate: [],
     data: {}
   },
+  // {
+  //   path: 'carbon-market-tool',
+  //   component: CarbonComponent,
+  //   loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+  //   canActivate: [],
+  //   data: {}
+  // },
   {
     path: 'carbon-market-tool',
-    component: CarbonComponent,
+    component: CarbonMarketAssessmentComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}

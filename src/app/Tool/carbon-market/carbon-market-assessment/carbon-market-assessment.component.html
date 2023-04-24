@@ -1,0 +1,90 @@
+<div class="container pl-20 pr-20">
+    <div class="mb-12">
+        <h4 class="mt-4"> Assess Carbon Market Transformation Change</h4>
+    </div>
+    <form #fData="ngForm" (ngSubmit)="save(fData)">
+        <div class="card" style="min-height: 600px;">
+            <div class="p-grid p-fluid col-md-6 col-sm-12">
+                <div class="row p-2">
+                    <div class="col-12 col-md-8">
+                        <div class="p-field p-2">
+                            <label for="policy">Select Intervetion *</label>
+                            <p-dropdown name="policy" #policy="ngModel" placeholder="Select Policy"
+                                [(ngModel)]="assessment.climateAction" appendTo="body" [options]="policies" optionLabel="policyName"
+                                [required]="true"></p-dropdown>
+                            <p class="info-message text-danger" *ngIf="
+                                !assessment.climateAction &&
+                                (fData.submitted || policy.touched)
+                              ">
+                                This is a mandatory field
+                            </p>
+                        </div>
+                        <div class="p-field p-2">
+                            <label for="policy">Assessment Type *</label>
+                            <p-dropdown name="type" #type="ngModel" placeholder="Select Assessment Type"
+                                [(ngModel)]="assessment.assessmentType" [options]="assessment_types" optionLabel="name"
+                                [required]="true"></p-dropdown>
+                            <p class="info-message text-danger" *ngIf="
+                                !assessment.assessmentType &&
+                                (fData.submitted || type.touched)
+                              ">
+                                This is a mandatory field
+                            </p>
+                        </div>
+                        <div class="p-field p-2">
+                            <label for="policy">Assessment Boundaries *</label>
+                            <input type="text" name="boundrary" #boundrary="ngModel" [(ngModel)]="cm_detail.boundraries"
+                                class="form-control" placeholder="Enter Assessment Boundraries" required />
+                            <p class="info-message text-danger" *ngIf="
+                                                                !cm_detail.boundraries &&
+                                                                (fData.submitted || boundrary.touched)
+                                                              ">
+                                This is a mandatory field
+                            </p>
+                        </div>
+                        <div class="p-field p-2">
+                            <label for="policy">Impact Types</label>
+                            <p-multiSelect name="impact_types" placeholder="Select .." appendTo="body" [options]="impact_types"
+                                [(ngModel)]="selected_impact_types" optionLabel="name">
+                            </p-multiSelect>
+                        </div>
+                        <div class="p-field p-2">
+                            <label for="policy">Impact Categories</label>
+                            <p-multiSelect name="impact_categories" placeholder="Select .." appendTo="body" [options]="impact_categories"
+                                [(ngModel)]="selected_impact_categories" optionLabel="name">
+                            </p-multiSelect>
+                        </div>
+                        <div class="p-field p-2">
+                            <label for="policy">Impact Characteristics</label>
+                            <p-multiSelect name="impact_characteristics" placeholder="Select .." appendTo="body" [options]="impact_characteristics"
+                                [(ngModel)]="selected_impact_characteristics" optionLabel="name">
+                            </p-multiSelect>
+                        </div>
+                        <div class="p-field p-2">
+                            <label for="policy">Impact Indicators</label>
+                            <input type="text" name="boundrary" #boundrary="ngModel" [(ngModel)]="cm_detail.impact_indicators"
+                            class="form-control" placeholder="Enter Assessment Boundraries" required />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-grid p-fluid col-md-6 col-sm-12">
+                <app-cm-section></app-cm-section>
+            </div>
+            <div class="row justify-content-end">
+                <div class="row p-grid p-fluid col-md-6 col-sm-6">
+                  <!-- <div class="d-flex col-4 justify-content-start p-button-vertical mb-0 pl-2">
+                    <button class="btn btn-secondary text-uppercase" (click)="onBackClick()">
+                      Back
+                    </button>
+                  </div> -->
+                  <div class="d-flex col-4 justify-content-end p-button-vertical mb-0 pl-2">
+                    <button [disabled]="" class="btn btn-primary text-uppercase" type="submit">
+                      Save
+                    </button>
+                  </div>
+                </div>
+              </div>
+        </div>
+    </form>
+</div>

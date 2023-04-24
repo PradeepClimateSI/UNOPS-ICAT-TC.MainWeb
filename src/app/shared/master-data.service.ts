@@ -19,6 +19,10 @@ export class MasterDataService {
   private _industries: {name: string, id: number}[] = []
   private _tieres: {name: string, id: number}[] = []
   private _currencies: {name: string, id: number}[] = []
+  private _assessment_type: {name: string, id: number}[] = []
+  private _impact_types: {name: string, id: number}[] = []
+  private _impact_categories: {name: string, id: number}[] = []
+  private _impact_characteristics: {name: string, id: number}[] = []
 
 
 
@@ -110,10 +114,26 @@ export class MasterDataService {
 
     this.currencies = [
       { id: 1, name: "USD($)" },
-      { id: 2 , name: "EUR(€)" },
+      { id: 2, name: "EUR(€)" },
       { id: 3, name: "LKR(Rs)" },
       { id: 4, name: "INR(₹)" }]
 
+    this.assessment_type = [
+      { id: 1, name: "Ex-ante" },
+      { id: 2, name: "Ex-post" }
+    ]
+    this.impact_types = [
+      { id: 1, name: "Ex-ante" },
+      { id: 2, name: "Ex-post" }
+    ]
+    this.impact_categories = [
+      { id: 1, name: "Ex-ante" },
+      { id: 2, name: "Ex-post" }
+    ]
+    this.impact_characteristics = [
+      { id: 1, name: "Ex-ante" },
+      { id: 2, name: "Ex-post" }
+    ]
   }
 
 
@@ -230,5 +250,37 @@ export class MasterDataService {
 
   get currencies(): { name: string; id: number }[] {
     return this._currencies;
+  }
+
+  set assessment_type(value: { name: string; id: number }[]) {
+    this._assessment_type = value;
+  }
+
+  get assessment_type(): { name: string; id: number }[] {
+    return this._assessment_type;
+  }
+
+  set impact_types(value: { name: string; id: number }[]) {
+    this._impact_types = value;
+  }
+
+  get impact_types(): { name: string; id: number }[] {
+    return this._impact_types;
+  }
+
+  set impact_categories(value: { name: string; id: number }[]) {
+    this._impact_categories = value;
+  }
+
+  get impact_categories(): { name: string; id: number }[] {
+    return this._impact_categories;
+  }
+
+  set impact_characteristics(value: { name: string; id: number }[]) {
+    this._impact_characteristics = value;
+  }
+
+  get impact_characteristics(): { name: string; id: number }[] {
+    return this._impact_characteristics;
   }
 }

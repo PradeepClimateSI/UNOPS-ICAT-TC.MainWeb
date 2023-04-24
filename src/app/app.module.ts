@@ -94,6 +94,8 @@ import { RaiseConcernComponent } from './component/raise-concern/raise-concern.c
 import { RaiseConcernSectionComponent } from './component/raise-concern-section/raise-concern-section.component';
 import { NonconformanceReportComponent } from './nonconformance-report/nonconformance-report.component';
 import { AssignVerifierComponent } from './data-request-flow/assign-verifier/assign-verifier.component';
+import { CarbonMarketAssessmentComponent } from './Tool/carbon-market/carbon-market-assessment/carbon-market-assessment.component';
+import { CmSectionComponent } from './Tool/carbon-market/cm-section/cm-section.component';
 
 
 
@@ -145,6 +147,8 @@ export function getAuthRemoteServiceBaseUrl(): string {
         RaiseConcernSectionComponent,
         NonconformanceReportComponent,
         AssignVerifierComponent,
+        CarbonMarketAssessmentComponent,
+        CmSectionComponent,
     ],
        
       
