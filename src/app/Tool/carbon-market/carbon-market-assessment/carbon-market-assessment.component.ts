@@ -22,6 +22,8 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   selected_impact_categories: string[] = []
   selected_impact_characteristics: string[] = []
 
+  showSections: boolean = false
+
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
     private masterDataService: MasterDataService
@@ -43,6 +45,10 @@ export class CarbonMarketAssessmentComponent implements OnInit {
 
   save(form: NgForm){
 
+  }
+
+  selectAssessmentType(e: any){
+    this.showSections = true
   }
 
 }

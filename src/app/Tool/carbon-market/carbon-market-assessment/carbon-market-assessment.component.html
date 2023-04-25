@@ -23,7 +23,7 @@
                             <label for="policy">Assessment Type *</label>
                             <p-dropdown name="type" #type="ngModel" placeholder="Select Assessment Type"
                                 [(ngModel)]="assessment.assessmentType" [options]="assessment_types" optionLabel="name"
-                                [required]="true"></p-dropdown>
+                                [required]="true" (onChange)="selectAssessmentType($event)"></p-dropdown>
                             <p class="info-message text-danger" *ngIf="
                                 !assessment.assessmentType &&
                                 (fData.submitted || type.touched)
@@ -68,7 +68,7 @@
                     </div>
                 </div>
             </div>
-            <div class="p-grid p-fluid col-md-6 col-sm-12">
+            <div class="p-grid p-fluid col-sm-12"  *ngIf="showSections">
                 <app-cm-section></app-cm-section>
             </div>
             <div class="row justify-content-end">
