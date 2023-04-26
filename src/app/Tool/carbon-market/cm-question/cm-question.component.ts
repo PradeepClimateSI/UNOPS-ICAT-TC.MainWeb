@@ -13,6 +13,7 @@ export class CmQuestionComponent implements OnInit {
 
   answers: CMAnswer[] = []
   selectedAnswers: any
+  comment: string
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy
@@ -27,7 +28,15 @@ export class CmQuestionComponent implements OnInit {
   }
 
   onSelectAnswer(e: any, type: string) {
-    this.prev_answer.emit({answer: e.value, type: type})
+    if (type === 'COMMENT'){
+      this.prev_answer.emit({comment: this.comment, type: type})
+    } else {
+      this.prev_answer.emit({answer: e.value, type: type})
+    }
+  }
+
+  keyup(e: any){
+    alert(e)
   }
 
 }

@@ -21,6 +21,8 @@ export class CmSectionComponent implements OnInit {
 
   recievedQuestions: number[] = []
 
+  result: any 
+
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy
   ) { }
@@ -32,6 +34,24 @@ export class CmSectionComponent implements OnInit {
     this.shownCriterias[0] = []
     this.shownCriterias[0].push(true)
     this.shownSections.push(true)
+
+    this.result = {
+      sections: [
+        {
+          id: 0,
+          criteria: [
+            {
+              id: 0,
+              questions: [
+                {
+                  id: 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
 
   }
 
@@ -51,6 +71,7 @@ export class CmSectionComponent implements OnInit {
       })
     )
     this.criterias.push(_criterias)
+
   }
 
   async onOpenTab(e: any){
@@ -58,36 +79,80 @@ export class CmSectionComponent implements OnInit {
     await this.getCriteriaBySection(section.id)
   }
 
-  onAnswer(e: any, criteria: any, idx: number, sectionIdx: number) {
-    this.prev_answer = e.answer
-    let question = criteria.questions[idx + 1]
-    
-    if (criteria.questions.length === idx + 1 && !this.recievedQuestions.includes(idx)) {
-      if (this.criterias[sectionIdx]?.length === this.shownCriterias[sectionIdx].length){
-        // this.openAccordion = this.openAccordion + 1
-        this.shownSections.push(true)
-        this.shownCriterias[sectionIdx+1] = [true]
-      }
-      this.shownCriterias[sectionIdx].push(true)
-      this.recievedQuestions = []
+  onAnswer(e: any, criteria: any, sectionIdx: number, criteriaIdx: number, idx: number ) {
+    console.log(this.result)
+    if (e.type === 'COMMENT'){
+      this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['comment'] = e.comment
     } else {
-      if (e.type === 'MULTI' && !this.recievedQuestions.includes(idx)){
-        this.shownQuestions.push(true)
-      } else {
-        if (question && question.prev_answer_to_generate) {
-          if (this.prev_answer.id === question.prev_answer_to_generate.id) {
-            this.shownQuestions.push(true)
+
+      this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['answer'] = e.answer
+
+      this.prev_answer = e.answer
+      let question = criteria.questions[idx + 1]
+      
+      if (criteria.questions.length === idx + 1 && !this.recievedQuestions.includes(idx)) {
+        if (e.type === 'MULTI') {
+          if (this.criterias[sectionIdx]?.length === this.shownCriterias[sectionIdx].length){
+            // this.openAccordion = this.openAccordion + 1
+            this.shownSections.push(true)
+            this.shownCriterias[sectionIdx+1] = [true]
+            if (!this.result.sections[sectionIdx+1] && this.result.sections.length !== this.sections.length){
+              this.result.sections.push({id: sectionIdx+1})
+              this.result.sections[sectionIdx+1]['criteria'] = [{id: 0}]
+              this.result.sections[sectionIdx+1].criteria[0]['questions'] = [{id: 0}]
+            }
           } else {
-            this.shownQuestions.splice(idx + 1, this.shownQuestions.length - (idx + 1) )
+            this.shownCriterias[sectionIdx].push(true)
+            if (!this.result.sections[sectionIdx].criteria[criteriaIdx+1]){
+              this.result.sections[sectionIdx].criteria.push({id: criteriaIdx+1})
+              this.result.sections[sectionIdx].criteria[criteriaIdx+1]['questions'] = [{id: 0}]
+            } 
+          }
+  
+          this.recievedQuestions = []
+        } else {
+          if (this.prev_answer.isPassing){
+            if (this.criterias[sectionIdx]?.length === this.shownCriterias[sectionIdx].length){
+              this.shownSections.push(true)
+              this.shownCriterias[sectionIdx+1] = [true]
+              if (!this.result.sections[sectionIdx+1] && this.result.sections.length !== this.sections.length){
+                this.result.sections.push({id: sectionIdx+1})
+                this.result.sections[sectionIdx+1]['criteria'] = [{id: 0}]
+                this.result.sections[sectionIdx+1].criteria[0]['questions'] = [{id: 0}]
+              }
+            } else {
+              this.shownCriterias[sectionIdx].push(true)
+              if (!this.result.sections[sectionIdx].criteria[criteriaIdx+1]){
+                this.result.sections[sectionIdx].criteria.push({id: criteriaIdx+1})
+                this.result.sections[sectionIdx].criteria[criteriaIdx+1]['questions'] = [{id: 0}]
+              } 
+            }
+    
+            this.recievedQuestions = []
+          } else {
+            alert("TC score is 0")
+          }
+        }
+      } else {
+        if (e.type === 'MULTI' && !this.recievedQuestions.includes(idx)){
+          this.shownQuestions.push(true)
+          if (!this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx+1]){
+            this.result.sections[sectionIdx].criteria[criteriaIdx].questions.push({id: idx+1})
           }
         } else {
-          this.shownQuestions.push(true)
+            if (this.prev_answer.isPassing) {
+              this.shownQuestions.push(true)
+              if (!this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx+1]){
+                this.result.sections[sectionIdx].criteria[criteriaIdx].questions.push({id: idx+1})
+              }
+            } else {
+              alert("TC score is 0")
+              this.shownQuestions.splice(idx + 1, this.shownQuestions.length - (idx + 1) )
+            }
         }
+        this.recievedQuestions.push(idx)
       }
-      this.recievedQuestions.push(idx)
     }
-
-
   }
 
 }

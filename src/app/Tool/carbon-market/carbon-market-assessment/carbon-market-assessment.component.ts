@@ -44,11 +44,11 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   }
 
   save(form: NgForm){
-
+    this.showSections = true
   }
 
   selectAssessmentType(e: any){
-    this.showSections = true
+   
   }
 
 }

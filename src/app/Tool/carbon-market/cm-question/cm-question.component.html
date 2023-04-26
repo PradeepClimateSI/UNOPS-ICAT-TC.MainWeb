@@ -4,7 +4,7 @@
         <label for="ans">Answer</label>
     </div>
     <div class="col-8" *ngIf="question.answer_type === 'SINGLE'">
-        <p-dropdown [options]="answers" optionLabel="label"  (onChange)="onSelectAnswer($event, question.answer_type)"> </p-dropdown>
+        <p-dropdown placeholder="Select answer" [options]="answers" optionLabel="label"  (onChange)="onSelectAnswer($event, question.answer_type)"> </p-dropdown>
     </div>
     <div class="col-8" *ngIf="question.answer_type === 'MULTI'">
         <p-multiSelect [options]="answers" optionLabel="label" [(ngModel)]="selectedAnswers" (onChange)="onSelectAnswer($event, question.answer_type)"> </p-multiSelect>
@@ -12,6 +12,6 @@
 </div><div class="row">
     <div class="col-4">Rationale</div>
     <div class="col-8">
-        <textarea pInputTextarea [rows]="5" [cols]="30" required maxlength="500"></textarea>
+        <textarea pInputTextarea [rows]="5" [cols]="30" required maxlength="500" [(ngModel)]="comment" (change)="onSelectAnswer($event, 'COMMENT')"></textarea>
     </div>
 </div>

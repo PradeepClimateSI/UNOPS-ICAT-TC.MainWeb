@@ -7,7 +7,8 @@
                         <div class="row p-2" *ngIf="shownCriterias[idxs][idxc]">
                             <label >{{criteria.name}}</label>
                             <ng-container *ngFor="let question of criteria.questions;let idx=index;">
-                                <app-cm-question [question]="question" (prev_answer)="onAnswer($event, criteria, idx, idxs)" *ngIf="shownQuestions[idx]"></app-cm-question>
+                                <app-cm-question [question]="question" (prev_answer)="onAnswer($event, criteria,idxs, idxc, idx )"
+                                    *ngIf="shownQuestions[idx]"></app-cm-question>
                             </ng-container>
                         </div>
                     </ng-container>
