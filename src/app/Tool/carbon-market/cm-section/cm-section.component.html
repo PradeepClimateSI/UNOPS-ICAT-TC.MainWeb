@@ -3,14 +3,14 @@
         <p-accordion [activeIndex]="openAccordion" (onOpen)="onOpenTab($event)">
             <ng-container *ngFor="let section of sections; let idxs = index;">
                 <p-accordionTab *ngIf="shownSections[idxs]"   header="{{section.name}}">
-                    <div class="row p-2">
-                        <ng-container *ngFor="let criteria of criterias[idxs]; let idxc = index;">
-                            <label *ngIf="idxc === 0 || (criterias[idxc-1].questions?.length ===shownQuestions.length ) ">{{criteria.name}}</label>
+                    <ng-container *ngFor="let criteria of criterias[idxs]; let idxc = index;">
+                        <div class="row p-2" *ngIf="shownCriterias[idxs][idxc]">
+                            <label >{{criteria.name}}</label>
                             <ng-container *ngFor="let question of criteria.questions;let idx=index;">
                                 <app-cm-question [question]="question" (prev_answer)="onAnswer($event, criteria, idx, idxs)" *ngIf="shownQuestions[idx]"></app-cm-question>
                             </ng-container>
-                        </ng-container>
-                    </div>
+                        </div>
+                    </ng-container>
                 </p-accordionTab>
             </ng-container>
         </p-accordion>

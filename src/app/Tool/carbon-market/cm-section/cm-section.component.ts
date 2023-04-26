@@ -16,7 +16,7 @@ export class CmSectionComponent implements OnInit {
   prev_answer: CMAnswer
 
   shownQuestions: boolean[] = []
-  shownCriterias: boolean[] = []
+  shownCriterias: any[] = []
   shownSections: boolean[] = []
 
   recievedQuestions: number[] = []
@@ -29,7 +29,8 @@ export class CmSectionComponent implements OnInit {
     await this.getSections()
     this.onOpenTab({index: 0})
     this.shownQuestions.push(true)
-    this.shownCriterias.push(true)
+    this.shownCriterias[0] = []
+    this.shownCriterias[0].push(true)
     this.shownSections.push(true)
 
   }
@@ -60,12 +61,15 @@ export class CmSectionComponent implements OnInit {
   onAnswer(e: any, criteria: any, idx: number, sectionIdx: number) {
     this.prev_answer = e.answer
     let question = criteria.questions[idx + 1]
+    
     if (criteria.questions.length === idx + 1 && !this.recievedQuestions.includes(idx)) {
-      this.shownCriterias.push(true)
-      if (this.criterias[sectionIdx]?.length === this.shownCriterias.length){
+      if (this.criterias[sectionIdx]?.length === this.shownCriterias[sectionIdx].length){
         // this.openAccordion = this.openAccordion + 1
         this.shownSections.push(true)
+        this.shownCriterias[sectionIdx+1] = [true]
       }
+      this.shownCriterias[sectionIdx].push(true)
+      this.recievedQuestions = []
     } else {
       if (e.type === 'MULTI' && !this.recievedQuestions.includes(idx)){
         this.shownQuestions.push(true)
@@ -80,9 +84,9 @@ export class CmSectionComponent implements OnInit {
           this.shownQuestions.push(true)
         }
       }
+      this.recievedQuestions.push(idx)
     }
 
-    this.recievedQuestions.push(idx)
 
   }
 
