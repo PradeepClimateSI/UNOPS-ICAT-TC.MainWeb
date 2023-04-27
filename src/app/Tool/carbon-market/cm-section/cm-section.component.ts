@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { CMAnswer, CMQuestion, CMQuestionControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Component, Input, OnInit } from '@angular/core';
+import { MessageService } from 'primeng/api';
+import { Assessment, CMAnswer, CMAssessmentQuestion, CMAssessmentQuestionControllerServiceProxy, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Criteria, SaveCMResultDto } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-cm-section',
@@ -7,6 +8,8 @@ import { CMAnswer, CMQuestion, CMQuestionControllerServiceProxy } from 'shared/s
   styleUrls: ['./cm-section.component.css']
 })
 export class CmSectionComponent implements OnInit {
+
+  @Input() assessment: Assessment
 
   openAccordion = 0
 
@@ -24,7 +27,9 @@ export class CmSectionComponent implements OnInit {
   result: any 
 
   constructor(
-    private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy
+    private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
+    private cMAssessmentQuestionControllerServiceProxy: CMAssessmentQuestionControllerServiceProxy,
+    private messageService: MessageService
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -34,6 +39,7 @@ export class CmSectionComponent implements OnInit {
     this.shownCriterias[0] = []
     this.shownCriterias[0].push(true)
     this.shownSections.push(true)
+
 
     this.result = {
       sections: [
@@ -81,15 +87,14 @@ export class CmSectionComponent implements OnInit {
 
   onAnswer(e: any, criteria: any, sectionIdx: number, criteriaIdx: number, idx: number ) {
     console.log(this.result)
+    this.prev_answer = e.answer
+    let question = criteria.questions[idx]
     if (e.type === 'COMMENT'){
       this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['comment'] = e.comment
     } else {
-
       this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['answer'] = e.answer
+      this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['question'] = question
 
-      this.prev_answer = e.answer
-      let question = criteria.questions[idx + 1]
-      
       if (criteria.questions.length === idx + 1 && !this.recievedQuestions.includes(idx)) {
         if (e.type === 'MULTI') {
           if (this.criterias[sectionIdx]?.length === this.shownCriterias[sectionIdx].length){
@@ -153,6 +158,45 @@ export class CmSectionComponent implements OnInit {
         this.recievedQuestions.push(idx)
       }
     }
+  }
+
+
+  save(){
+    let result: SaveCMResultDto = new SaveCMResultDto()
+    result.result = []
+    this.result.sections.forEach((section: any) => {
+      section.criteria.forEach((cr: any) => {
+        cr.questions.forEach((q:any) => {
+          let item = new CMResultDto()
+          item.answer = q.answer
+          item.comment = q.comment
+          item.question = q.question
+          result.result.push(item)
+        })
+      })
+    })
+    result.assessment = this.assessment
+
+    console.log(result)
+
+    this.cMAssessmentQuestionControllerServiceProxy.saveResult(result)
+    .subscribe(res => {
+      if (res) {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Assessment created successfully',
+          closable: true,
+        })
+      }
+    }, error => {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Error in result saving',
+        closable: true,
+      })
+    })
   }
 
 }

@@ -123,16 +123,37 @@ export class MasterDataService {
       { id: 2, name: "Ex-post" }
     ]
     this.impact_types = [
-      { id: 1, name: "Ex-ante" },
-      { id: 2, name: "Ex-post" }
+      { id: 1, name: "Process" },
+      { id: 2, name: "outcomes" }
     ]
     this.impact_categories = [
-      { id: 1, name: "Ex-ante" },
-      { id: 2, name: "Ex-post" }
+      { id: 1, name: "Technology" },
+      { id: 2, name: "Agents" },
+      { id: 3, name: "Incentives" },
+      { id: 4, name: "Norms" },
+      { id: 5, name: "Scale of outcome" },
+      { id: 6, name: "Sustained nature of outcome" }
     ]
     this.impact_characteristics = [
-      { id: 1, name: "Ex-ante" },
-      { id: 2, name: "Ex-post" }
+      { id: 1, name: "Research and development" },
+      { id: 2, name: "Adoption" },
+      { id: 3, name: "Scale-up" },
+      { id: 4, name: "Entrepreneurs" },
+      { id: 5, name: "Coalitions of advocates" },
+      { id: 6, name: "Beneficiaries" },
+      { id: 7, name: "Economic and non-economic" },
+      { id: 8, name: "Disincentives" },
+      { id: 9, name: "Institutional and regulatory" },
+      { id: 10, name: "Awareness" },
+      { id: 11, name: "Behaviour" },
+      { id: 12, name: "Social norms" },
+      { id: 13, name: "Macro level" },
+      { id: 14, name: "Medium level" },
+      { id: 15, name: "Micro level" },
+      { id: 16, name: "Long term" },
+      { id: 17, name: "Medium term" },
+      { id: 18, name: "Short term" },
+      { id: 19, name: "Other" }
     ]
   }
 

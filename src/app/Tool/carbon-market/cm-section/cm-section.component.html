@@ -1,19 +1,30 @@
-<div class="p-2" style="min-height: 600px;">
-    <div class="p-grid p-fluid  col-sm-12">
-        <p-accordion [activeIndex]="openAccordion" (onOpen)="onOpenTab($event)">
-            <ng-container *ngFor="let section of sections; let idxs = index;">
-                <p-accordionTab *ngIf="shownSections[idxs]"   header="{{section.name}}">
-                    <ng-container *ngFor="let criteria of criterias[idxs]; let idxc = index;">
-                        <div class="row p-2" *ngIf="shownCriterias[idxs][idxc]">
-                            <label >{{criteria.name}}</label>
-                            <ng-container *ngFor="let question of criteria.questions;let idx=index;">
-                                <app-cm-question [question]="question" (prev_answer)="onAnswer($event, criteria,idxs, idxc, idx )"
-                                    *ngIf="shownQuestions[idx]"></app-cm-question>
-                            </ng-container>
-                        </div>
-                    </ng-container>
-                </p-accordionTab>
-            </ng-container>
-        </p-accordion>
+<div class="card" style="min-height: 600px;">
+    <div class="p-2" style="min-height: 600px;">
+        <div class="p-grid p-fluid  col-sm-12">
+            <p-accordion [activeIndex]="openAccordion" (onOpen)="onOpenTab($event)">
+                <ng-container *ngFor="let section of sections; let idxs = index;">
+                    <p-accordionTab *ngIf="shownSections[idxs]"   header="{{section.name}}">
+                        <ng-container *ngFor="let criteria of criterias[idxs]; let idxc = index;">
+                            <div class="row p-2" *ngIf="shownCriterias[idxs][idxc]">
+                                <label >{{criteria.name}}</label>
+                                <ng-container *ngFor="let question of criteria.questions;let idx=index;">
+                                    <app-cm-question [question]="question" (prev_answer)="onAnswer($event, criteria,idxs, idxc, idx )"
+                                        *ngIf="shownQuestions[idx]"></app-cm-question>
+                                </ng-container>
+                            </div>
+                        </ng-container>
+                    </p-accordionTab>
+                </ng-container>
+            </p-accordion>
+        </div>
+        <div class="row justify-content-end" >
+            <div class="row p-grid p-fluid col-sm-12">
+                <div class="d-flex col-4 justify-content-end p-button-vertical mb-0 pl-2">
+                    <button class="btn btn-primary text-uppercase" type="submit" (click)="save()">
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
