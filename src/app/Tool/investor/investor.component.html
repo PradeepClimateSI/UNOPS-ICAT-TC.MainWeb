@@ -1750,31 +1750,29 @@
 
 
                         <label for="methodolog">Methodology</label>
-                        <select class="form-control select-with-arrow" #methodology name="{{characteristic.name}}_methodology" ngModel (change)="onMethSelected(methodology.value)"
+                        <select class="form-control select-with-arrow" #methodology name="{{characteristic.name}}_methodology" [(ngModel)]="characteristic.selectedMethodology" (change)="onMethSelected(methodology.value,characteristic)"
                           id="exampleFormControlSelect1">
                           <option value="" disabled selected hidden>Select Methodology</option>
                           <option *ngFor="let meth of onIndicatorSelected(characteristic.indicator) " [value]="meth.name" >
                             {{meth.name}}</option>
                         </select>
-                        <form #paramData="ngForm" (ngSubmit)="submitParams(paramData.value)">
-                        <div *ngIf="filterParamList.length!==0 && filterMethList.length!==0">
+                        <div *ngIf="characteristic.parameters.length!==0 ">
                           <label for="parameters">Parameters</label>
-                        <div *ngFor="let param of filterParamList ">
+                        <div *ngFor="let param of characteristic.parameters ">
                          <div>
                           <label for="{{param.name}}">{{param.name}} ({{param.unit}}): &nbsp; &nbsp; &nbsp; &nbsp;
                             &nbsp; &nbsp;</label>
-                          <input type="number" name="{{param.name}}" ngModel
-                            placeholder="enter value"> <br> <br>
+                          <input type="number" name="{{param.name}}" [(ngModel)] ="param.value" 
+                            placeholder="Enter value"> <br> <br>
         
                          </div>
                         </div>
-                        <button pButton pRipple class="btn btn-primary btn-block text-uppercase" type='submit'>Calculate</button>
+                        <button pButton pRipple class="btn btn-primary btn-block text-uppercase" (click)="submitParams(characteristic)" type='submit'>Calculate</button>
                         <div class="mt-3" *ngIf="result">
                           Result:{{result}}
                         </div> 
                       </div>
                        
-                      </form>
                       
 
                         

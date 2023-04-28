@@ -114,6 +114,8 @@ trigger : boolean = false;
 
   assessmentId :number;
   selectChaAffectByBarriers : any = []
+  // selectChaAffectByBarriersOnlyForNgModel : any = []
+
 
   policyBarriersList : any = []
   selectedPolicyBarriersList : any = []
@@ -573,10 +575,11 @@ onItemSelect4(item: any) {
 
 onItemSelectcha(item :any){
   console.log("aaa333",item);
-  this.selectChaAffectByBarriers = [];
-  for(let x of item.value){
-    this.selectChaAffectByBarriers.push(x)
-  }
+  // this.selectChaAffectByBarriers = [];
+  // for(let x of item.value){
+  //   this.selectChaAffectByBarriers.push(x)
+  //   // this.selectChaAffectByBarriers.push({category:x.name,categoryID:x.id,indicator:x.indicator})
+  // }
 
   console.log("select", this.selectChaAffectByBarriers);
 
@@ -1021,7 +1024,11 @@ allData: any
 
        this.methassess.findByAssessIdAndRelevanceNotRelevant(this.assessmentId).subscribe(res => {
           console.log("chaaaaaa2",res )
-          this.relevantChaList = res
+          this.relevantChaList=[];
+          for(let x of res){
+            this.relevantChaList.push({name:x.name,categoryID:x.id,selectedMethodology:'',parameters:[]})
+            
+          }
           } )
 
 
@@ -1214,7 +1221,7 @@ submitForm(){
 filterMethList :any  = []
 
 onIndicatorSelected( indicator: any) {
-  console.log('Selected indicator for22233:', indicator);
+  //console.log('Selected indicator for22233:', indicator);
   this.filterMethList = []
 
   for(let item of this.methIndicatorsList){
@@ -1223,25 +1230,36 @@ onIndicatorSelected( indicator: any) {
     }
   }
 
-  console.log("sl indii2222: ", this.filterMethList)
+  //console.log("sl indii2222: ", this.filterMethList)
   return this.filterMethList
 }
-filterParamList :any  = []
-onMethSelected(value:string){
-  this.filterParamList = []
+// filterParamList :any  = []
+onMethSelected(value:any,characteristic:any){
+  console.log("value",value)
+
+ 
+  // this.filterParamList = []
+ characteristic.parameters =[];
   for(let item of this.methParametersList){
     if(item.methodology.name === value){
-      this.filterParamList.push(item)
+      // this.filterParamList.push(item)
+      characteristic.parameters.push({name:item.name,value:''})
     }
   }
-  console.log("methName: ", value,"filterParamList", this.filterParamList)
+  console.log("selectChaAffectByBarriers: ",this.selectChaAffectByBarriers)
 }
 
 result:number;
 submitParams(value:any){
 console.log("value",value)
-this.result = (value.ER_i/value.TER_i)*100
-return this.result
+this.result= value.parameters[0].value/value.parameters[1].value*100;
+console.log("result",this.result)
+this.methassess.assessParameterSave(value).subscribe((res: any) => {
+  console.log("policybarrierssList : ", res)
+  this.policyBarriersList = res
+
+
+});
 
 }
 
@@ -1252,7 +1270,7 @@ handleSelectedCharacteristic(event: any) {
   this.filteredIndicatorList = []
   const selectedCharacteristic = event;
   // Do something with the selected characteristic
-  console.log(selectedCharacteristic);
+  //console.log(selectedCharacteristic);
 
   for(let indicator of this.indicatorList){
     if(indicator.characteristics.name === selectedCharacteristic){

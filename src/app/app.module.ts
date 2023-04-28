@@ -93,6 +93,7 @@ import { AcceptedPoliciesComponent } from './climate-action/accepted-policies/ac
 import { RaiseConcernComponent } from './component/raise-concern/raise-concern.component';
 import { RaiseConcernSectionComponent } from './component/raise-concern-section/raise-concern-section.component';
 import { NonconformanceReportComponent } from './nonconformance-report/nonconformance-report.component';
+import { InvestorToolComponent } from './Tool/investor-tool/investor-tool.component';
 
 
 
@@ -143,6 +144,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         RaiseConcernComponent,
         RaiseConcernSectionComponent,
         NonconformanceReportComponent,
+        InvestorToolComponent,
     ],
        
       

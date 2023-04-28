@@ -47,6 +47,7 @@ import { QualityCheckComponent } from 'app/quality-check/quality-check.component
 import { QualityCheckDetailComponent } from 'app/quality-check-detail/quality-check-detail.component';
 import { NonconformanceReportComponent } from 'app/nonconformance-report/nonconformance-report.component';
 import { AcceptedPoliciesComponent } from 'app/climate-action/accepted-policies/accepted-policies.component';
+import { InvestorToolComponent } from 'app/Tool/investor-tool/investor-tool.component';
 
 
 
@@ -166,6 +167,13 @@ const routes: Routes = [
   {
     path: 'investor-tool',
     component: InvestorComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'investor-tool-new',
+    component: InvestorToolComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}
