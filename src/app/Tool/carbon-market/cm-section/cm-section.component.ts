@@ -19,7 +19,7 @@ export class CmSectionComponent implements OnInit {
 
   prev_answer: CMAnswer
 
-  shownQuestions: boolean[] = []
+  shownQuestions: any[] = []
   shownCriterias: any[] = []
   shownSections: boolean[] = []
 
@@ -38,7 +38,10 @@ export class CmSectionComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     await this.getSections()
     this.onOpenTab({index: 0})
-    this.shownQuestions.push(true)
+    this.shownQuestions[0] = []
+    this.shownQuestions[0].push([])
+    this.shownQuestions[0][0] = []
+    this.shownQuestions[0][0].push(true)
     this.shownCriterias[0] = []
     this.shownCriterias[0].push(true)
     this.shownSections.push(true)
@@ -104,6 +107,7 @@ export class CmSectionComponent implements OnInit {
             // this.openAccordion = this.openAccordion + 1
             this.shownSections.push(true)
             this.shownCriterias[sectionIdx+1] = [true]
+            this.shownQuestions[sectionIdx+1][0] = [true]
             if (!this.result.sections[sectionIdx+1] && this.result.sections.length !== this.sections.length){
               this.result.sections.push({id: sectionIdx+1})
               this.result.sections[sectionIdx+1]['criteria'] = [{id: 0}]
@@ -111,6 +115,7 @@ export class CmSectionComponent implements OnInit {
             }
           } else {
             this.shownCriterias[sectionIdx].push(true)
+            this.shownQuestions[sectionIdx][criteriaIdx+1] = [true]
             if (!this.result.sections[sectionIdx].criteria[criteriaIdx+1]){
               this.result.sections[sectionIdx].criteria.push({id: criteriaIdx+1})
               this.result.sections[sectionIdx].criteria[criteriaIdx+1]['questions'] = [{id: 0}]
@@ -123,6 +128,8 @@ export class CmSectionComponent implements OnInit {
             if (this.criterias[sectionIdx]?.length === this.shownCriterias[sectionIdx].length){
               this.shownSections.push(true)
               this.shownCriterias[sectionIdx+1] = [true]
+              this.shownQuestions[sectionIdx+1] = []
+              this.shownQuestions[sectionIdx+1][0] = [true]
               if (!this.result.sections[sectionIdx+1] && this.result.sections.length !== this.sections.length){
                 this.result.sections.push({id: sectionIdx+1})
                 this.result.sections[sectionIdx+1]['criteria'] = [{id: 0}]
@@ -130,6 +137,8 @@ export class CmSectionComponent implements OnInit {
               }
             } else {
               this.shownCriterias[sectionIdx].push(true)
+              this.shownQuestions[sectionIdx][criteriaIdx+1] = [true]
+              this.shownQuestions.push(true)
               if (!this.result.sections[sectionIdx].criteria[criteriaIdx+1]){
                 this.result.sections[sectionIdx].criteria.push({id: criteriaIdx+1})
                 this.result.sections[sectionIdx].criteria[criteriaIdx+1]['questions'] = [{id: 0}]
@@ -143,19 +152,19 @@ export class CmSectionComponent implements OnInit {
         }
       } else {
         if (e.type === 'MULTI' && !this.recievedQuestions.includes(idx)){
-          this.shownQuestions.push(true)
+          this.shownQuestions[sectionIdx][criteriaIdx].push(true)
           if (!this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx+1]){
             this.result.sections[sectionIdx].criteria[criteriaIdx].questions.push({id: idx+1})
           }
         } else {
             if (this.prev_answer.isPassing) {
-              this.shownQuestions.push(true)
+              this.shownQuestions[sectionIdx][criteriaIdx].push(true)
               if (!this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx+1]){
                 this.result.sections[sectionIdx].criteria[criteriaIdx].questions.push({id: idx+1})
               }
             } else {
               alert("TC score is 0")
-              this.shownQuestions.splice(idx + 1, this.shownQuestions.length - (idx + 1) )
+              this.shownQuestions[sectionIdx][criteriaIdx].splice(idx + 1, this.shownQuestions[sectionIdx][criteriaIdx].length - (idx + 1) )
             }
         }
         this.recievedQuestions.push(idx)
