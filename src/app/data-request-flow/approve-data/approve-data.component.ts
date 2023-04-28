@@ -110,6 +110,7 @@ export class ApproveDataComponent implements OnInit {
       .subscribe((res)=>{
         this.baselineParameters  =res
         console.log("LLLLLLLLLLLLLLLLLL",res)
+        console.log("LLLLLLLLLLLLLLLLLL",this.finalQC?.qaStatus)
         if (this.finalQC?.qaStatus == null) {
           this.checkQC();
         }
@@ -128,10 +129,10 @@ export class ApproveDataComponent implements OnInit {
 
 
   getAssesment() {
+    console.log('assessment', this.finalQC);
     this.assesmentProxy
       .getAssessmentsForApproveData(
-        this.assementYear.assessment.id,
-        this.assementYear.assessmentYear,
+        this.finalQC.id,
         this.userName
       )
       .subscribe((res) => {
@@ -164,9 +165,10 @@ export class ApproveDataComponent implements OnInit {
   }
 
   checkQC() {
+    console.log('checkAssessmentReadyForQC',this.assementYear);
     this.assesmentProxy
       .checkAssessmentReadyForQC(
-        this.assementYear.assessment.id,
+        this.assementYear.id,
         this.assementYear.assessmentYear
       )
       .subscribe((r) => {
@@ -250,6 +252,7 @@ export class ApproveDataComponent implements OnInit {
     this.isHideRejectButton = true;
     console.log('selected qc dead line..', this.selectedQCDeadline);
     let dto = new UpdateAssessmentDto()
+    //@ts-ignore
     dto.deadline = this.selectedQCDeadline;
     console.log('qc dead line..', this.assementYear);
     this.assesmentProxy.update(this.assementYear.id,dto)
@@ -320,11 +323,12 @@ export class ApproveDataComponent implements OnInit {
           idList.push(element.parameterRequest.id);
         }
       }
+      console.log('Review parameter Accept', idList);
       if (idList.length > 0) {
         let inputParameters = new UpdateDeadlineDto();
         inputParameters.ids = idList;
         inputParameters.status = 11;
-        console.log('inputParameters', inputParameters);
+        
         this.parameterProxy.acceptReviewData(inputParameters).subscribe(
           (res) => {
             this.messageService.add({
@@ -332,8 +336,9 @@ export class ApproveDataComponent implements OnInit {
               summary: 'Success',
               detail: 'Data is approved successfully',
             });
-            this.clearParameters();
+            // this.clearParameters();
             this.getAssesment();
+            console.log('1111', inputParameters);
             this.checkQC();
           },
           (err) => {

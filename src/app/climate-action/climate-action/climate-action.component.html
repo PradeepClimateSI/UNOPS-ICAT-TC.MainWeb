@@ -918,7 +918,7 @@
 
       <div class="card mt-2" *ngIf="flag == 1">
         <div class="p-grid p-fluid col-sm-12">
-          <div class="p-2">
+          <!-- <div class="p-2">
             <h6>Approval Check List</h6>
           </div>
 
@@ -962,7 +962,7 @@
             </div>
 
 
-          </div>
+          </div> -->
 
 
 
@@ -1114,13 +1114,13 @@
 
           <div class="row p-2">
 
-            <!-- <div class="col-12 col-md-6">
+            <div class="col-12 col-md-6">
             <div class="p-field">
               <textarea
               
               name="justification"
               placeholder="Please type a justification for your action"
-              [(ngModel)]="project.actionJustification"
+              [(ngModel)]="project.justification"
               #justification="ngModel"
               rows="5"
               cols="62"
@@ -1131,7 +1131,7 @@
               (ngModelChange)="enableActionButtonsarea()"
             ></textarea>
             </div>
-          </div> -->
+          </div>
 
             <div class="col-12 col-md-2">
               <div class="p-field">

@@ -59,7 +59,8 @@
                   <p class="mb-0 ml-20">Manage policies</p>
                 </div>
 
-                <div class="sidebar-items--link d-flex flex-column align-items-start" [routerLink]="[]"
+                <div class="sidebar-items--link d-flex flex-column align-items-start" 
+                  [routerLink]="['/app/accepted-policies']"
                   routerLinkActive="selected">
                   <p class="mb-0 ml-20">Accepted policies</p>
                 </div>
@@ -246,6 +247,13 @@
 
               </p-accordionTab>
             </p-accordion>
+
+            <div class="sidebar-items--link align-items-start" [routerLink]="['/app/verification/list']"
+              routerLinkActive="selected">
+
+              <div class=""></div>
+              Verification
+            </div>
 
             <!-- <div
                 class="sidebar-items--link align-items-start"
