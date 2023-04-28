@@ -58,7 +58,7 @@ import { CarouselModule } from 'primeng/carousel';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ConfirmationService } from "primeng/api";
-import { API_BASE_URL, AssessmentControllerServiceProxy, AuthControllerServiceProxy, CountryControllerServiceProxy, DocumentControllerServiceProxy, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, NdcControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequestControllerServiceProxy, ProjectControllerServiceProxy, QualityCheckControllerServiceProxy, SectorControllerServiceProxy, ServiceProxy, UserTypeControllerServiceProxy, VerificationControllerServiceProxy } from "shared/service-proxies/service-proxies";
+import { API_BASE_URL, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, AuthControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CMQuestionControllerServiceProxy, CountryControllerServiceProxy, DocumentControllerServiceProxy, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, NdcControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequestControllerServiceProxy, ProjectControllerServiceProxy, QualityCheckControllerServiceProxy, SectorControllerServiceProxy, ServiceProxy, UserTypeControllerServiceProxy, VerificationControllerServiceProxy } from "shared/service-proxies/service-proxies";
 import { AUTH_API_BASE_URL, ServiceProxy as AuthServiceProxy, } from 'shared/service-proxies/auth-service-proxies';
 
 import { RoleGuardService } from "./auth/role-guard.service";
@@ -94,6 +94,11 @@ import { RaiseConcernComponent } from './component/raise-concern/raise-concern.c
 import { RaiseConcernSectionComponent } from './component/raise-concern-section/raise-concern-section.component';
 import { NonconformanceReportComponent } from './nonconformance-report/nonconformance-report.component';
 import { InvestorToolComponent } from './Tool/investor-tool/investor-tool.component';
+import { AssignVerifierComponent } from './data-request-flow/assign-verifier/assign-verifier.component';
+import { CarbonMarketAssessmentComponent } from './Tool/carbon-market/carbon-market-assessment/carbon-market-assessment.component';
+import { CmSectionComponent } from './Tool/carbon-market/cm-section/cm-section.component';
+import { CmQuestionComponent } from './Tool/carbon-market/cm-question/cm-question.component';
+import { CmResultComponent } from './Tool/carbon-market/cm-result/cm-result.component';
 
 
 
@@ -144,6 +149,11 @@ export function getAuthRemoteServiceBaseUrl(): string {
         RaiseConcernComponent,
         RaiseConcernSectionComponent,
         NonconformanceReportComponent,
+        AssignVerifierComponent,
+        CarbonMarketAssessmentComponent,
+        CmSectionComponent,
+        CmQuestionComponent,
+        CmResultComponent
         InvestorToolComponent,
     ],
        
@@ -233,7 +243,10 @@ export function getAuthRemoteServiceBaseUrl(): string {
         DynamicDialogModule,
         {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
         {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
-        AuthGuard
+        AuthGuard,
+        CMQuestionControllerServiceProxy,
+        CMAssessmentQuestionControllerServiceProxy,
+        AssessmentCMDetailControllerServiceProxy
     ],
     bootstrap: [AppComponent],
     exports: [

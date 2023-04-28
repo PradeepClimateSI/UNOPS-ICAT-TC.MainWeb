@@ -35,13 +35,20 @@ export class RaiseConcernComponent implements OnInit {
   @Input()
   parameter: MethodologyAssessmentParameters;
 
+  @Input()
+  isView: boolean
+
   lastConcernDate: Date = new Date();
 
   commentRequried: boolean = false;
   comment: string = '';
+  rootCause: string = '';
+  correctiveAction: string = ''
   verificationRound: number = 0;
   verificationDetail: VerificationDetail | undefined;
   loggedUser: User;
+  isSubmit = false
+  hasVerificationDetail: boolean = false
 
   constructor(
     private verificationProxy: VerificationControllerServiceProxy,
@@ -83,6 +90,8 @@ export class RaiseConcernComponent implements OnInit {
   ngOnChanges(changes: any) {
     this.commentRequried = false;
     this.comment = '';
+    this.rootCause = '';
+    this.correctiveAction = '';
     if (this.assessment && this.assessment !== undefined) {
       if (
         this.assessment.verificationStatus === 1 ||
@@ -110,71 +119,114 @@ export class RaiseConcernComponent implements OnInit {
       );
 
       if (this.verificationDetail) {
+        this.hasVerificationDetail = true
         this.comment = this.verificationDetail.explanation;
+        this.rootCause = this.verificationDetail.rootCause;
+        this.correctiveAction = this.verificationDetail.correctiveAction
+      } else {
+        this.hasVerificationDetail = false
       }
     }
   }
 
   onComplete() {
-    if (!this.comment || this.comment == '') {
-      this.commentRequried = true;
-      return;
+    this.isSubmit = true
+    if (this.isView && this.hasVerificationDetail){
+      this.onCompleteView()
     } else {
-      this.commentRequried = false;
-    }
-
-    let verificationDetails: VerificationDetail[] = [];
-
-    let vd = new VerificationDetail();
-
-    if (this.verificationDetail) {
-      vd = this.verificationDetail;
-      vd.updatedDate = moment();
-    } else {
-      vd.createdOn = moment();
-      vd.assessment = this.assessment;
-      vd.userVerifier = this.loggedUser.id;
-      vd.year = Number(this.assessment.year.split('-')[0]);
-      vd.updatedDate = moment()
-
-      // if (this.isNdC) {
-      //   vd.isNDC = true;
-      // }
-      // if (this.isMethodology) {
-      //   vd.isMethodology = true;
-      // }
-
-      if (this.isParameter) {
-        let param = new MethodologyAssessmentParameters();
-        param.id = this.parameter.id;
-        vd.parameter = param;
+      if (!this.comment || this.comment == '') {
+        this.commentRequried = true;
+        return;
+      } else {
+        this.commentRequried = false;
       }
-
-      vd.verificationStatus = Number(this.assessment.verificationStatus);
-    }
-
-    vd.explanation = this.comment;
-    vd.verificationStage = this.verificationRound;
-    vd.isAccepted = false;
-
-    verificationDetails.push(vd);
-
-    this.verificationProxy
-      .saveVerificationDetails(verificationDetails)
-      .subscribe((a) => {
-        console.log(4);
-
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'successfully Save.',
-          closable: true,
+  
+      let verificationDetails: VerificationDetail[] = [];
+  
+      let vd = new VerificationDetail();
+  
+      if (this.verificationDetail) {
+        vd = this.verificationDetail;
+        vd.updatedDate = moment();
+      } else {
+        vd.createdOn = moment();
+        vd.assessment = this.assessment;
+        vd.userVerifier = this.loggedUser.id;
+        vd.year = Number(this.assessment.year.split('-')[0]);
+        vd.updatedDate = moment()
+  
+        // if (this.isNdC) {
+        //   vd.isNDC = true;
+        // }
+        // if (this.isMethodology) {
+        //   vd.isMethodology = true;
+        // }
+  
+        if (this.isParameter) {
+          let param = new MethodologyAssessmentParameters();
+          param.id = this.parameter.id;
+          vd.parameter = param;
+        }
+  
+        vd.verificationStatus = Number(this.assessment.verificationStatus);
+      }
+  
+      vd.explanation = this.comment;
+      vd.verificationStage = this.verificationRound;
+      vd.isAccepted = false;
+  
+      verificationDetails.push(vd);
+  
+      this.verificationProxy
+        .saveVerificationDetails(verificationDetails)
+        .subscribe((a) => {
+          console.log(4);
+  
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'successfully Save.',
+            closable: true,
+          });
         });
-      });
+      this.isSubmit = false
+    }
 
     // this.router.navigate(['/non-conformance'], {
     //    queryParams: { id: this.assessmentYear.id },
     //  });
+  }
+
+  onCompleteView(){
+    console.log("onCompleteView")
+
+    let verificationDetails: VerificationDetail[] = [];
+  
+    let vd: VerificationDetail
+    if (this.verificationDetail) {
+      vd = this.verificationDetail;
+      vd.updatedDate = moment();
+      vd.rootCause = this.rootCause
+      vd.correctiveAction = this.correctiveAction
+      vd.verificationStage = this.verificationRound;
+      vd.isAccepted = false;
+  
+      verificationDetails.push(vd);
+  
+      this.verificationProxy
+        .saveVerificationDetails(verificationDetails)
+        .subscribe((a) => {
+          console.log(4);
+  
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'successfully Save.',
+            closable: true,
+          });
+        });
+    } 
+
   }
 
 }
