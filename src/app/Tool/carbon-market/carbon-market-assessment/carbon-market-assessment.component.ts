@@ -63,7 +63,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
         .subscribe(res => {
           console.log(res)
           if (res) {
-            this.cm_detail.assessment = res
+            this.cm_detail.cmassessment = res
             this.cm_detail.impact_categories = this.selected_impact_categories.join(',')
             this.cm_detail.impact_characteristics = this.selected_impact_characteristics.join(',')
             this.cm_detail.impact_types = this.selected_impact_types.join(',')

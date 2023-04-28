@@ -49,6 +49,7 @@ import { NonconformanceReportComponent } from 'app/nonconformance-report/nonconf
 import { AssignVerifierComponent } from 'app/data-request-flow/assign-verifier/assign-verifier.component';
 import { AcceptedPoliciesComponent } from 'app/climate-action/accepted-policies/accepted-policies.component';
 import { CarbonMarketAssessmentComponent } from 'app/Tool/carbon-market/carbon-market-assessment/carbon-market-assessment.component';
+import { CmResultComponent } from 'app/Tool/carbon-market/cm-result/cm-result.component';
 
 
 
@@ -161,6 +162,13 @@ const routes: Routes = [
   {
     path: 'carbon-market-tool',
     component: CarbonMarketAssessmentComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'carbon-market-tool-result',
+    component: CmResultComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}

@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Assessment, CMAnswer, CMAssessmentQuestion, CMAssessmentQuestionControllerServiceProxy, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Criteria, SaveCMResultDto } from 'shared/service-proxies/service-proxies';
 
@@ -29,7 +30,9 @@ export class CmSectionComponent implements OnInit {
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
     private cMAssessmentQuestionControllerServiceProxy: CMAssessmentQuestionControllerServiceProxy,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private activatedRoute:ActivatedRoute,
+    private router: Router,
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -188,6 +191,7 @@ export class CmSectionComponent implements OnInit {
           detail: 'Assessment created successfully',
           closable: true,
         })
+        this.router.navigate(['../carbon-market-tool-result'], {queryParams: { id: this.assessment.id }, relativeTo:this.activatedRoute});
       }
     }, error => {
       this.messageService.add({
