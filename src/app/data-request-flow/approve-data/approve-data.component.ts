@@ -125,7 +125,7 @@ export class ApproveDataComponent implements OnInit {
     });
   }
 
-  
+
 
   getAssesment() {
     this.assesmentProxy
@@ -247,7 +247,7 @@ export class ApproveDataComponent implements OnInit {
   }
 
   onClickQC() {
-    this.isHideRejectButton = true; 
+    this.isHideRejectButton = true;
     console.log('selected qc dead line..', this.selectedQCDeadline);
     let dto = new UpdateAssessmentDto()
     dto.deadline = this.selectedQCDeadline;

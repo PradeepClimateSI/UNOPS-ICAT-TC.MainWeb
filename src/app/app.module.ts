@@ -86,6 +86,7 @@ import { ApproveDataComponent } from './data-request-flow/approve-data/approve-d
 import { QualityCheckComponent } from './quality-check/quality-check.component';
 import { AssessmentComponent } from './assessment/assessment.component';
 import { QualityCheckDetailComponent } from './quality-check-detail/quality-check-detail.component';
+import { AssessmentResultTrack2Component } from './assessment-result-track2/assessment-result-track2.component';
 
 
 
@@ -129,6 +130,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         QualityCheckComponent,
         AssessmentComponent,
         QualityCheckDetailComponent,
+        AssessmentResultTrack2Component,
     ],
        
       

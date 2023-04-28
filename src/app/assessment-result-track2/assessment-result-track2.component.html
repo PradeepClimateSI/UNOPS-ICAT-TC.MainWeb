@@ -1,0 +1,204 @@
+<div id="content" #content>
+  <div class="container pl-20 pr-20">
+
+   <div class="mb-12">
+     <h4 class="mt-4"> Result of Transformational Change Assessment</h4>
+   </div>
+
+   <div class="card" style="min-height: 600px;">
+     <div style="display: flex; flex-direction: row;">
+       <div style="flex-basis: 30%;">
+         <p><strong>Intervention</strong></p>
+         <p><strong>Assessment Type</strong></p>
+         <p><strong>Assessment Approach</strong></p>
+         <p><strong>Assessment Method</strong></p>
+         <p><strong>Tool</strong></p>
+         <p><strong>Assessment Period</strong></p>
+         <p><strong>Barriers</strong></p>
+       </div>
+       <div style="flex-basis: 50%;">
+         <p>{{policyName}}</p>
+         <p>{{assessmentType}}</p>
+         <p>{{assessment_approach}}</p>
+         <p>{{assessment_method}} - Mathematical Model</p>
+         <p>{{tool}}</p>
+         <p>{{date1 | date:'yyyy-MM-dd'}} to {{date2 | date:'yyyy-MM-dd'}}</p>
+         <p>{{barriersList.join(', ')}}</p>
+       </div>
+     </div>
+
+     <!-- ppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp -->
+     <br><br>
+     <h6>Assess Barriers for the Transformational Change</h6>
+     <p-table [value]="barriersData" [tableStyle]="{ 'min-width': '50rem' }">
+      <ng-template pTemplate="header">
+          <tr>
+              <th>Barrier</th>
+              <th>Characteristic Affected</th>
+              <th>Barrier Score</th>
+              <th>Rationale</th>
+              <th>Barrier Directly Targeted By Policy of Action</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-barriersData>
+          <tr>
+              <td>{{ barriersData.barriers.barrier }}</td>
+              <td>{{ barriersData.characteristics.name }}</td>
+              <td>{{ barriersData.barrier_score }}</td>
+              <td>{{ barriersData.bscore_comment }}</td>
+              <td>{{ barriersData.barrier_target }}</td>
+          </tr>
+      </ng-template>
+    </p-table>
+    <br><br>
+
+
+<h6>Aggregated Impact of Barriers</h6><br>
+<div *ngFor="let cha of characteristicsList">
+  <div *ngIf="hasMatchingBarriers(cha)">
+    <h6 style="font-size: 18px;">{{cha.name}}</h6>
+
+    <div> <p style="font-size: 18px;">Aggregated Barrier Score for the Characteristic: {{ getCharacteristicScore(cha.id)  | number:'1.4-4'}}</p></div>
+    <p-table [value]="getMatchingBarriers(cha)" [tableStyle]="{ 'min-width': '60rem' }">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Barrier</th>
+          <th>Barrier Score</th>
+          <th>User Specific Weighting Factor</th>
+          <th>Rationale</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-ba>
+        <tr>
+          <td>{{ ba.barriers.barrier }}</td>
+          <td>{{ ba.barrier_score }}</td>
+          <td>{{ ba.barrier_weight }}</td>
+          <td>{{ ba.bscore_comment }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <br> <br>
+  </div>
+</div>
+
+
+ <div *ngIf="load">
+
+
+ <!-- pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp -->
+ <!-- <p-table [value]="outcomeCategory" [tableStyle]="{ 'min-width': '50rem' }">
+   <ng-template pTemplate="header">
+       <tr>
+           <th>Code</th>
+           <th>Name</th>
+           <th>Category</th>
+           <th>Quantity</th>
+       </tr>
+   </ng-template>
+   <ng-template pTemplate="body" let-outcomeCategory>
+       <tr>
+           <td>{{ outcomeCategory.category }}</td>
+           <td>{{ outcomeCategory.chaName }}</td>
+           <td>{{ outcomeCategory.score }}</td>
+           <td>{{ outcomeCategory.score }}</td>
+       </tr>
+   </ng-template>
+ </p-table>
+ </div> -->
+
+ <br><br><br>
+ <h5>Aggregated Characteristic</h5><br>
+ <h5>Process of Change : {{ averageProcess }}</h5><br>
+
+ <p-table [value]="processCategory" rowGroupMode="rowspan" groupRowsBy="category" sortField="category" sortMode="single"  [tableStyle]="{'min-width': '75rem'}">
+   <ng-template pTemplate="header">
+       <tr style="height:4rem;">
+
+           <th>  <strong style="color: black;">Category</strong></th>
+           <th>  <strong style="color: black;">Characteristic</strong></th>
+           <th>  <strong style="color: black;">User Specific Weighting Factor</strong></th>
+           <th>  <strong style="color: black;">Score</strong></th>
+
+       </tr>
+   </ng-template>
+   <ng-template pTemplate="body" let-processCategory let-rowIndex="rowIndex" let-rowgroup="rowgroup" let-rowspan="rowspan">
+       <tr>
+
+           <td *ngIf="rowgroup" [attr.rowspan]="rowspan">
+               <span class="font-bold ml-2">{{processCategory.category}}</span>
+           </td>
+           <td>
+               {{processCategory.chaName}}
+           </td>
+           <td>
+               {{processCategory.weight * 100}}%
+           </td>
+           <td>
+             {{processCategory.score}}
+           </td>
+       </tr>
+   </ng-template>
+ </p-table>
+
+
+ <br><br><br>
+
+
+
+
+ <h5>Outcome of Change : {{ averageOutcome }}</h5><br>
+
+ <p-table [value]="outcomeCategory" rowGroupMode="rowspan" groupRowsBy="category" sortField="category" sortMode="single"  [tableStyle]="{'min-width': '75rem'}">
+   <ng-template pTemplate="header">
+     <tr style="height:4rem;">
+
+           <th>  <strong style="color: black;">Category</strong></th>
+           <th>  <strong style="color: black;">Characteristic</strong></th>
+           <th>  <strong style="color: black;">User Specific Weighting Factor</strong></th>
+           <th>  <strong style="color: black;">Score</strong></th>
+
+   </tr>
+   </ng-template>
+   <ng-template pTemplate="body" let-outcomeCategory let-rowIndex="rowIndex" let-rowgroup="rowgroup" let-rowspan="rowspan">
+       <tr>
+
+           <td *ngIf="rowgroup" [attr.rowspan]="rowspan">
+               <span class="font-bold ml-2">{{outcomeCategory.category}}</span>
+           </td>
+           <td>
+               {{outcomeCategory.chaName}}
+           </td>
+           <td>
+               {{outcomeCategory.weight * 100}}%
+           </td>
+           <td>
+             {{outcomeCategory.score}}
+           </td>
+       </tr>
+   </ng-template>
+ </p-table>
+ <!-- ppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp -->
+ <br><br><br>
+ <div *ngIf="averageOutcome">
+   <h6>Transformational Impact Mapping</h6> <br>
+ <!--   <p>Process of Change : {{ averageProcess }}</p> <br>
+   <p>Outcome of Change : {{ averageOutcome }}</p> <br> -->
+
+
+   <app-chart [averageOutcome]="averageOutcome" [averageProcess]="averageProcess"></app-chart>
+
+ </div>
+
+   </div>
+
+ </div>
+ </div>
+
+ <div class="container pl-20 pr-20">
+
+
+ <div class="d-flex flex-row-reverse mt-2 mb-2">
+   <button (click)="makePDF()" pButton pRipple class="btn btn-primary btn-block text-uppercase" type='submit'>Download as PDF</button>
+ </div>
+
+ </div>
