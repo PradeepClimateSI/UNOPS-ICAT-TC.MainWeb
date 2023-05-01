@@ -48,8 +48,11 @@
                         <td>{{VerificationStatusEnum[c?.verificationStatus]}}</td>
                         <td>{{c.editedOn | date: "yyyy-MM-dd "}}</td>
                         <td>
-                            <button pButton pRipple type="button" label="View" (click)="statusClick($event, c)"
-                                class="p-button-info"></button>
+                            <button pButton pRipple type="button"  (click)="statusClick($event, c)"
+                                class="p-button-info">
+                                <!-- {{getButtonLabel(c)}} -->
+                                View
+                            </button>
                             <!-- <button pButton pRipple type="button" label="Verify" (click)="statusClick($event, c)"
                                 class="p-button-info"></button> -->
                         </td>

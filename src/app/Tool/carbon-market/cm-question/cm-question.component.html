@@ -1,0 +1,18 @@
+<label for="q">{{question.label}}</label>
+<div class="row p-2">
+    <div class="col-4">
+        <label for="ans">Answer</label>
+    </div>
+    <div class="col-8" *ngIf="question.answer_type === 'SINGLE'">
+        <p-dropdown placeholder="Select answer" [options]="answers" optionLabel="label"  (onChange)="onSelectAnswer($event, question.answer_type)"> </p-dropdown>
+    </div>
+    <div class="col-8" *ngIf="question.answer_type === 'MULTI'">
+        <p-multiSelect [options]="answers" optionLabel="label" [(ngModel)]="selectedAnswers" (onChange)="onSelectAnswer($event, question.answer_type)"> </p-multiSelect>
+    </div>
+</div>
+<div class="row p-2">
+    <div class="col-4">Rationale</div>
+    <div class="col-8">
+        <textarea pInputTextarea [rows]="5" [cols]="91" required maxlength="500" [(ngModel)]="comment" (change)="onSelectAnswer($event, 'COMMENT')"></textarea>
+    </div>
+</div>
