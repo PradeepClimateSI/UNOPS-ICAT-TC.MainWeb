@@ -58,9 +58,9 @@ import { CarouselModule } from 'primeng/carousel';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ConfirmationService } from "primeng/api";
-import { API_BASE_URL, AssessmentControllerServiceProxy, AuthControllerServiceProxy, CountryControllerServiceProxy, DocumentControllerServiceProxy, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, NdcControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequestControllerServiceProxy, ProjectControllerServiceProxy, QualityCheckControllerServiceProxy, SectorControllerServiceProxy, ServiceProxy, UserTypeControllerServiceProxy, VerificationControllerServiceProxy } from "shared/service-proxies/service-proxies";
+import { API_BASE_URL, AssessmentControllerServiceProxy, AuthControllerServiceProxy, CountryControllerServiceProxy, DocumentControllerServiceProxy, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, NdcControllerServiceProxy, NotificationControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequestControllerServiceProxy, ProjectControllerServiceProxy, QualityCheckControllerServiceProxy, SectorControllerServiceProxy, ServiceProxy, UserTypeControllerServiceProxy, VerificationControllerServiceProxy } from "shared/service-proxies/service-proxies";
 import { AUTH_API_BASE_URL, ServiceProxy as AuthServiceProxy, } from 'shared/service-proxies/auth-service-proxies';
-
+import { BadgeModule } from 'primeng/badge';
 import { RoleGuardService } from "./auth/role-guard.service";
 import { DatePipe } from "@angular/common";
 import { AuthInterceptor } from "./auth/auth.interceptor";
@@ -147,6 +147,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
        
       
     imports: [
+      BadgeModule,
         FormsModule,
         BrowserModule,
         AppRoutingModule,
@@ -222,6 +223,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         AssessmentControllerServiceProxy,
         VerificationControllerServiceProxy,
         QualityCheckControllerServiceProxy,
+        NotificationControllerServiceProxy,
         DatePipe,
         {provide: API_BASE_URL, useFactory: getRemoteServiceBaseUrl},
         {provide: AUTH_API_BASE_URL, useFactory: getAuthRemoteServiceBaseUrl},
