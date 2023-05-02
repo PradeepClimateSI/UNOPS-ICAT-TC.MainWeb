@@ -140,6 +140,12 @@ export function getAuthRemoteServiceBaseUrl(): string {
         VerificationDetailComponent,
         VerifyParameterComponent,
         QualityCheckDetailComponent,
+        AssessmentResultTrack2Component,
+        ClimateActionComponent,
+        AcceptedPoliciesComponent,
+        RaiseConcernComponent,
+        RaiseConcernSectionComponent,
+        NonconformanceReportComponent
     ],
 
 
@@ -150,9 +156,6 @@ export function getAuthRemoteServiceBaseUrl(): string {
         BrowserAnimationsModule,
         HttpClientModule,
         StyleClassModule,
-        MultiSelectModule,
-
-        NgImageSliderModule,
         MultiSelectModule,
         ToastModule,
         ButtonModule,
