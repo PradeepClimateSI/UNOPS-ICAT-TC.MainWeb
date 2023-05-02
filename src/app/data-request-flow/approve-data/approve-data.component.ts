@@ -126,7 +126,7 @@ export class ApproveDataComponent implements OnInit {
     });
   }
 
-  
+
 
   getAssesment() {
     console.log('assessment', this.finalQC);
@@ -249,7 +249,7 @@ export class ApproveDataComponent implements OnInit {
   }
 
   onClickQC() {
-    this.isHideRejectButton = true; 
+    this.isHideRejectButton = true;
     console.log('selected qc dead line..', this.selectedQCDeadline);
     let dto = new UpdateAssessmentDto()
     //@ts-ignore

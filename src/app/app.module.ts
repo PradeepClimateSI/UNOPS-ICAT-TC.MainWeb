@@ -89,6 +89,7 @@ import { AssessmentComponent } from './assessment/assessment.component';
 import { VerificationDetailComponent } from './verification/verifier/verification-detail/verification-detail.component';
 import { VerifyParameterComponent } from './verification/verifier/verify-parameter/verify-parameter.component';
 import { QualityCheckDetailComponent } from './quality-check-detail/quality-check-detail.component';
+import { AssessmentResultTrack2Component } from './assessment-result-track2/assessment-result-track2.component';
 import { AcceptedPoliciesComponent } from './climate-action/accepted-policies/accepted-policies.component';
 import { RaiseConcernComponent } from './component/raise-concern/raise-concern.component';
 import { RaiseConcernSectionComponent } from './component/raise-concern-section/raise-concern-section.component';
@@ -154,8 +155,8 @@ export function getAuthRemoteServiceBaseUrl(): string {
         CmQuestionComponent,
         CmResultComponent
     ],
-       
-      
+
+
     imports: [
         FormsModule,
         BrowserModule,
