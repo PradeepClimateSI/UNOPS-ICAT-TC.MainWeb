@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { VerificationStatus } from 'app/Model/VerificationStatus.enum';
 import { LazyLoadEvent } from 'primeng/api';
-import { ServiceProxy, VerificationControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { VerificationControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import decode from 'jwt-decode';
+import { AppService } from 'shared/AppService';
 
 @Component({
   selector: 'app-verification-list',
@@ -31,13 +33,17 @@ export class VerificationListComponent implements OnInit {
     VerificationStatus[VerificationStatus.Fail],
     VerificationStatus[VerificationStatus['Pass']],
   ];
+  loggedUserRole: any;
 
   constructor(
     private verificationControllerServiceProxy: VerificationControllerServiceProxy,
-    private router: Router
+    private router: Router,
+    private appService: AppService
   ) { }
 
   ngOnInit(): void {
+    this.loggedUserRole = this.appService.getLoggedUserRole()
+    console.log(this.loggedUserRole)
   }
 
   loadgridData = (event: LazyLoadEvent) => {
@@ -54,14 +60,23 @@ export class VerificationListComponent implements OnInit {
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
     let Active = 0;
-    this.verificationControllerServiceProxy
-      .getVerifierParameters(pageNumber, this.rows, statusId, filtertext)
+    if (this.loggedUserRole === 'Sector Admin'){
+      this.verificationControllerServiceProxy.getVRParameters(pageNumber, this.rows, statusId, filtertext)
       .subscribe(res => {
-        console.log(res)
         this.assessments = res.items
         this.totalRecords = res.meta.totalItems
         this.loading = false
       })
+    } else {
+      this.verificationControllerServiceProxy
+        .getVerifierParameters(pageNumber, this.rows, statusId, filtertext)
+        .subscribe(res => {
+          console.log(res)
+          this.assessments = res.items
+          this.totalRecords = res.meta.totalItems
+          this.loading = false
+        })
+    }
     
   };
 

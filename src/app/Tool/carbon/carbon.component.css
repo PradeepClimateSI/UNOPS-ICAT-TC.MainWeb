@@ -5,58 +5,9 @@
   height: 10px;
 }
 
-/* <div *ngIf="selectedTrack === 'Track 2'">
-  <div *ngIf="selectedApproach === 'Indirect'">
-<br>
-
-<div *ngFor="let barrier of selectedPolicyBarriersList ">
-<h6>{{barrier}}</h6>
-
-      <div class="row p-2">
-        <div class="col-12 col-md-8">
-          <div class="p-field">
-           <!--  <label for="{{barrier}}_score">Barrier Score: &nbsp; &nbsp; &nbsp; &nbsp;
-              &nbsp; &nbsp;</label>
-            <input type="number" name="{{barrier}}_score" ngModel placeholder="Score"> -->
+.narrow-file-upload {
+  max-width: 300px; /* set the maximum width to 300 pixels */
+}
 
 
-            <label for="{{barrier}}_institution" >Institution for barrier score &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</label>
-                  <select  (change)="onChangeInstitution($event)" ngModel
-                  name="{{barrier}}_institution"
-                    id="{{barrier}}_institution">
-                    <option value="" disabled selected hidden>Select Institution</option>
-                    <option *ngFor="let institu of instiTutionList" [value]="institu.id">{{institu.name}}</option>
-                  </select> <br><br>
-          </div>
-        </div>
-      </div>
 
-      <div class="row p-2">
-        <div class="col-12 col-md-8">
-          <div class="p-field">
-            <label for="{{barrier}}_comment">Comment for Barrier Score: &nbsp; &nbsp; &nbsp; &nbsp;
-              &nbsp; &nbsp;</label>
-            <input type="text" name="{{barrier}}_comment" ngModel placeholder="Comment">
-          </div>
-        </div>
-      </div>
-
-
-      <div class="row p-2">
-        <div class="col-12 col-md-8">
-          <div class="p-field">
-            <label for="{{barrier}}_charac">Characteristics</label>
-            <select class="form-control select-with-arrow" (change)="onChangeCha($event)" ngModel name="{{barrier}}_charac"
-              id="exampleFormControlSelect1">
-              <option value="" disabled selected hidden>Select Characteristic</option>
-              <option *ngFor="let cha of characteristicsList" [value]="cha.id">{{cha.name}}</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-<br><br>
-</div>
-
-  </div>
-</div> */
