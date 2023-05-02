@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Assessment, AssessmentControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, MethodologyAssessmentParameters, ServiceProxy, VerificationControllerServiceProxy, VerificationDetail } from 'shared/service-proxies/service-proxies';
+import { Assessment, AssessmentControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, MethodologyAssessmentParameters, ServiceProxy, UpdateAssessmentDto, VerificationControllerServiceProxy, VerificationDetail } from 'shared/service-proxies/service-proxies';
+import decode from 'jwt-decode';
+import { MessageService } from 'primeng/api';
+import * as moment from 'moment';
+import { AppService } from 'shared/AppService';
 
 @Component({
   selector: 'app-verification-detail',
@@ -18,6 +22,9 @@ export class VerificationDetailComponent implements OnInit {
   isAccepted = true
   verificationDetails: VerificationDetail[]
   verificationRound: number;
+  loggedUserRole: any
+  averageOutcome: any
+  averageProcess: any
 
   constructor(
     private route: ActivatedRoute,
@@ -25,10 +32,16 @@ export class VerificationDetailComponent implements OnInit {
     private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
     private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
     private verificationControllerServiceProxy: VerificationControllerServiceProxy,
-    private router: Router
+    private router: Router,
+    private messageService: MessageService,
+    private appService: AppService
   ) { }
 
   ngOnInit(): void {
+    this.loggedUserRole= this.appService.getLoggedUserRole()
+
+    console.log(this.loggedUserRole)
+
     this.route.queryParams.subscribe(async (params) => {
       this.assessmentId = params['id'];
       this.verificationStatus = params['verificationStatus'];
@@ -36,6 +49,7 @@ export class VerificationDetailComponent implements OnInit {
 
       // this.serviceProxy.getOneBase
       this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+      console.log(this.assessment)
       this.card = [
         {title: 'Intervention', value: this.assessment.climateAction.policyName},
         {title: 'Assessment Type ', value: this.assessment.assessmentType},
@@ -55,6 +69,7 @@ export class VerificationDetailComponent implements OnInit {
 
       this.getVerificationRound()
       this.getVerificationDetails()
+      await this.getResult()
     })
 
   }
@@ -68,17 +83,32 @@ export class VerificationDetailComponent implements OnInit {
       })
   }
 
+  async getResult(){
+   let result = await this.methodologyAssessmentControllerServiceProxy.getResultByAssessment(this.assessment.id).toPromise()
+   this.averageOutcome = result.averageOutcome
+   this.averageProcess = result.averageProcess
+  }
+
   back() {
     this.router.navigate(['/app/verification/list']);
   }
 
   toNonConformance() {
-    this.router.navigate(['/app/non-conformance'], {
-      queryParams: {
+    let data
+    if (this.loggedUserRole === 'Sector Admin'){
+      data = {
+        id: this.assessment.id,
+        flag: 'sec-admin'
+      }
+    } else {
+      data = {
         id: this.assessment.id,
         isVerificationHistory: this.flag,
         vStatus: this.verificationStatus,
-      },
+      }
+    }
+    this.router.navigate(['/app/non-conformance'], {
+      queryParams: data,
     });
   }
 
@@ -95,6 +125,34 @@ export class VerificationDetailComponent implements OnInit {
       } else if (this.assessment.verificationStatus === 5)
         this.verificationRound = 3;
     }
+  }
+
+  sendForVerification() {
+    this.assessment.verificationStatus = 2;
+    // this.assementYear.assessmentAssumption = this.assumption;
+
+
+    let dto = new UpdateAssessmentDto()
+    dto.editedOn = moment()
+    dto.verificationStatus = 2
+
+    this.assessmentControllerServiceProxy.update(this.assessmentId, dto)
+      .subscribe((a) => {
+
+        this.messageService.add({ severity: 'success', summary: 'Confirmed', detail: 'Successfully sent to verification' });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      });
+  }
+
+  checkboxCheck(event: any) {
+    // if (event.checked) {
+    //   this.selectedParameter.push(param);
+    // } else {
+    //   const index = this.selectedParameter.indexOf(param);
+    //   this.selectedParameter.splice(index, 1);
+    // }
   }
 
 }

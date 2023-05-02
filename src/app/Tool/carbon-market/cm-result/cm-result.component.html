@@ -1,0 +1,74 @@
+<div class="container pl-20 pr-20" id="content">
+    <div class="mb-12">
+        <h4 class="mt-4"> Result - {{intervention?.policyName}}</h4>
+    </div>
+    <div class="card" style="min-height: 600px;">
+        <div class="p-grid p-fluid col-md-12 col-sm-12 text-title">
+            <div class="row p-2" *ngFor="let item of card">
+                <div class="col-3">{{item.title}} :</div>
+                <div class="col-9">{{item.data}}</div>
+            </div>
+        </div>
+        <hr>
+        <div class="p-grid p-fluid col-md-12 col-sm-12" *ngFor="let section of keys ">
+            <div class="row p-2">
+                <label class="text" for=""><u ><b>{{section}}</b> </u></label>
+            </div>
+            <div class="row p-2">
+                <p-table [value]="results[section]" rowGroupMode="subheader" groupRowsBy="criteria" dataKey="criteria" [expandedRowKeys]="expandedRows">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th >
+                                Question
+                            </th>
+                            <th >
+                                Answer
+                            </th>
+                            <th >
+                                Rationale
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="groupheader" let-company let-isExpanded="expanded">
+                        <tr>
+                            <td colspan="3">
+                                <button type="button" pButton pRipple [pRowToggler]="company" class="p-button-text 
+                        p-button-rounded p-button-plain mr-4" [icon]="isExpanded ? 
+                        'pi pi-chevron-down' : 
+                        'pi pi-chevron-right'">
+                                </button>
+                                <span class="font-bold">{{company.criteria}}</span>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="rowexpansion" let-company>
+                        <tr>
+                            <td >{{company.question}}</td>
+                            <td > {{company.answer}}</td>
+                            <td >{{company.comment}}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+        <div class="p-grid p-fluid col-md-6 col-sm-12">
+            <div class="row p-2 text">
+                <div class="col-5">Transformational Change: </div>
+                <div class="col-4">{{score}}</div>
+            </div>
+        </div>
+        <div class="p-grid p-fluid col-md-12 col-sm-12">
+            <div class="row p-2">
+                <div class="col-8"></div>
+                <div class="col-2">
+                    <button pButton pRipple type="button" label="Download Excel" (click)="toDownloadExcel()"
+                    class="p-button-info"></button>
+                </div>
+                <div class="col-2">
+                    <button pButton pRipple type="button" label="Download PDF" (click)="toDownloadPdf()"
+                    class="p-button-info"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
