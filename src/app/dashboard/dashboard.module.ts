@@ -51,6 +51,7 @@ import { AssignVerifierComponent } from 'app/data-request-flow/assign-verifier/a
 import { AcceptedPoliciesComponent } from 'app/climate-action/accepted-policies/accepted-policies.component';
 import { CarbonMarketAssessmentComponent } from 'app/Tool/carbon-market/carbon-market-assessment/carbon-market-assessment.component';
 import { CmResultComponent } from 'app/Tool/carbon-market/cm-result/cm-result.component';
+import { ReportComponent } from 'app/report/report.component';
 
 
 
@@ -247,6 +248,13 @@ const routes: Routes = [
   {
     path: 'assign-verifier',
     component: AssignVerifierComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'report',
+    component: ReportComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}
