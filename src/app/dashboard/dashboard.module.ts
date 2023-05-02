@@ -45,6 +45,7 @@ import { AssessmentComponent } from 'app/assessment/assessment.component';
 import { VerificationDetailComponent } from 'app/verification/verifier/verification-detail/verification-detail.component';
 import { QualityCheckComponent } from 'app/quality-check/quality-check.component';
 import { QualityCheckDetailComponent } from 'app/quality-check-detail/quality-check-detail.component';
+import { AssessmentResultTrack2Component } from 'app/assessment-result-track2/assessment-result-track2.component';
 import { NonconformanceReportComponent } from 'app/nonconformance-report/nonconformance-report.component';
 import { AssignVerifierComponent } from 'app/data-request-flow/assign-verifier/assign-verifier.component';
 import { AcceptedPoliciesComponent } from 'app/climate-action/accepted-policies/accepted-policies.component';
@@ -218,6 +219,13 @@ const routes: Routes = [
   {
     path: 'assessment-results',
     component: AssessmentComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'assessment-result-track2/:id',
+    component: AssessmentResultTrack2Component,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}
