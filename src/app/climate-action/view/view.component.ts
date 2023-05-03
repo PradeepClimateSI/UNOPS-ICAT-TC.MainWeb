@@ -19,6 +19,7 @@ import {
   CountryControllerServiceProxy,
   ServiceProxy,
   User,
+  ProjectApprovalStatus,
 } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 
@@ -271,19 +272,19 @@ export class ViewComponent implements OnInit, AfterViewInit {
     this.rows = event.rows === undefined ? 10 : event.rows;
     setTimeout(() => {
       this.projectProxy
-        .getClimateActionDetails(
+        .getAllClimateActionList(
           pageNumber,
           this.rows,
-          sectorId,
+          filtertext,
           statusId,
-          mitTypeId,
-          editedOn,
-          filtertext
+          0,
+          0,
+          sectorId,
           
         )
         
         .subscribe((a) => {
-          //console.log( a," this.climateactions")
+          console.log( a," this.climateactions")
           this.climateactions = a.items
            this.totalRecords=a.meta.totalItems
           this.loading = false;
@@ -292,13 +293,13 @@ export class ViewComponent implements OnInit, AfterViewInit {
    
   };
   addproject() {
-    this.router.navigate(['/climate-action']);
+    this.router.navigate(['/add-polocies']);
   }
 
 
   detail(climateactions: Project) {
     console.log("climateactions",climateactions )
-    this.router.navigate(['/climate-action'], {
+    this.router.navigate(['/add-polocies'], {
       
     queryParams: { id: climateactions.id ,flag:this.flag},
     
@@ -359,3 +360,4 @@ export class ViewComponent implements OnInit, AfterViewInit {
   }
 
 }
+

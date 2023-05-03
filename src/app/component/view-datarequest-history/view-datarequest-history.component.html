@@ -6,7 +6,7 @@
 <!-- <p><b>{{this.listOfHistory[0]?.parameterName}}</b></p> -->
 <br><br>
 
-<ng-container *ngIf="this.listOfHistory.length != 0; else elseBlock1">
+<ng-container *ngIf="this.listOfHistory?.length != 0; else elseBlock1">
 <div *ngFor="let item of this.listOfHistory; let i = index">
     
     <p><b>Date </b>  {{item?.createdOn | date: "yyyy-MM-dd"}}</p>

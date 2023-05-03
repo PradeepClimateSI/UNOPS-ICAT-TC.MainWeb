@@ -38,9 +38,20 @@ import { PortfolioComponent } from 'app/Tool/portfolio/portfolio.component';
 import { InvestorComponent } from 'app/Tool/investor/investor.component';
 import { AssessmentResultComponent } from 'app/assessment-result/assessment-result.component';
 import { ManagedatastatusComponent } from 'app/data-request-flow/managedatastatus/managedatastatus.component';
+import { VerificationListComponent } from 'app/verification/verifier/verification-list/verification-list.component';
 import { ApproveDataComponent } from 'app/data-request-flow/approve-data/approve-data.component';
 import { Assessment } from 'shared/service-proxies/service-proxies';
 import { AssessmentComponent } from 'app/assessment/assessment.component';
+import { VerificationDetailComponent } from 'app/verification/verifier/verification-detail/verification-detail.component';
+import { QualityCheckComponent } from 'app/quality-check/quality-check.component';
+import { QualityCheckDetailComponent } from 'app/quality-check-detail/quality-check-detail.component';
+import { AssessmentResultTrack2Component } from 'app/assessment-result-track2/assessment-result-track2.component';
+import { NonconformanceReportComponent } from 'app/nonconformance-report/nonconformance-report.component';
+import { AssignVerifierComponent } from 'app/data-request-flow/assign-verifier/assign-verifier.component';
+import { AcceptedPoliciesComponent } from 'app/climate-action/accepted-policies/accepted-policies.component';
+import { CarbonMarketAssessmentComponent } from 'app/Tool/carbon-market/carbon-market-assessment/carbon-market-assessment.component';
+import { CmResultComponent } from 'app/Tool/carbon-market/cm-result/cm-result.component';
+import { ReportComponent } from 'app/report/report.component';
 
 
 
@@ -83,6 +94,13 @@ const routes: Routes = [
   {
     path: 'add-polocies',
     component: ClimateActionComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'accepted-policies',
+    component: AcceptedPoliciesComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}
@@ -136,9 +154,23 @@ const routes: Routes = [
     canActivate: [],
     data: {}
   },
+  // {
+  //   path: 'carbon-market-tool',
+  //   component: CarbonComponent,
+  //   loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+  //   canActivate: [],
+  //   data: {}
+  // },
   {
     path: 'carbon-market-tool',
-    component: CarbonComponent,
+    component: CarbonMarketAssessmentComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'carbon-market-tool-result',
+    component: CmResultComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}
@@ -165,8 +197,64 @@ const routes: Routes = [
     data: {}
   },
   {
+    path: 'verification/list',
+    component: VerificationListComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'verification/detail',
+    component: VerificationDetailComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'non-conformance',
+    component: NonconformanceReportComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
     path: 'assessment-results',
     component: AssessmentComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'assessment-result-track2/:id',
+    component: AssessmentResultTrack2Component,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'quality-controller',
+    component: QualityCheckComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'qc/detail',
+    component: QualityCheckDetailComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'assign-verifier',
+    component: AssignVerifierComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'report',
+    component: ReportComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}

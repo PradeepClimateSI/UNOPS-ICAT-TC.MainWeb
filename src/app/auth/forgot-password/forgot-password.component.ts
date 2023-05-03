@@ -27,11 +27,13 @@ export class ForgotPasswordComponent implements OnInit {
   requestOTP(form: NgForm){
     localStorage.setItem('reset-key', this.userName)
     this.authControllerServiceProxy.forgotPassword(this.userName).subscribe(res => {
-      if(res['status']){
+      //@ts-ignore
+      if(res.status){
         this.messageService.add({
           severity: 'success',
-          summary: 'Success',
-          detail: res['message'],
+          summary: 'Success', 
+          //@ts-ignore
+          detail: res.message,
           closable: true,
         });
         this.goOTP();
@@ -39,7 +41,8 @@ export class ForgotPasswordComponent implements OnInit {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: res['message'],
+          //@ts-ignore
+          detail: res.message,
           closable: true,
         });
       }

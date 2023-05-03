@@ -1,0 +1,182 @@
+<div class="p-grid p-fluid card">
+  <div class="row">
+    <div class="col-10"></div>
+    <div class="col-2" *ngIf="flag != 1">
+      <button *ngIf="verificationStatus !==3" type="button" [disabled]="disableAccept()" pButton
+        pRipple (click)="parameterAccept()">
+        <!-- Accept -->
+        {{isAccepted ? "Accepted" : "Accept"}}
+      </button>
+      <button *ngIf="verificationStatus ===3" type="button" [disabled]="true" pButton pRipple (click)="parameterAccept()">
+        <p>{{verificationStatus}}</p>
+        <!-- Accept -->
+        {{isAccepted ? "Accepted" : "Accept"}}
+      </button>
+    </div>
+  </div>
+
+  <div class="row p-2">
+    <p-table #table [value]="parameters" [loading]="loading" [responsive]="true" selectionMode="single">
+      <ng-template pTemplate="header">
+        <tr>
+         <th></th>
+          <th style="width: 15%;">Category</th>
+          <th style="width: 25%;">Characteristic</th>
+          <th>Relevancy</th>
+          <th>Data Provider</th>
+          <th>Value</th>
+          <th>Verification Status</th>
+          <th style="width: 24%"></th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-param>
+        <tr>
+          <div *ngIf="flag != 1">
+            <td>
+              <p-checkbox [binary]="true" (onChange)="checkboxCheck($event, param)" name="groupname" value="check"></p-checkbox>
+            </td>
+          </div>
+          <td>{{ param.category?.name }}</td>
+          <td>{{ param.characteristics?.name }}</td>
+          <td>{{ param.relevance }}</td>
+          <td>{{ param.institution?.name }}</td>
+          <td>{{ param.score| number: '2.0-5' }}</td>
+        
+          <ng-container *ngIf=" param.isAcceptedByVerifier == true; else elseBlockvery">
+            <td>
+              <i class="pi pi-check" style="font-size: 1rem; color: green;"></i>
+            </td>
+          </ng-container>
+          <ng-template #elseBlockvery>
+            <td>
+              <i class="pi pi-times" style="font-size: 1rem; color: red;"></i>
+            </td>
+          </ng-template>
+        
+          <td>
+        
+            <button *ngIf="verificationStatus !=3 && loggedUserRole === 'Verifier'" pButton pRipple
+              [disabled]="param.isAcceptedByVerifier == 1?true:false" type="button" label="Raise Concern"
+              (click)="raiseConcern($event, param, 'raise')" class="p-button-info"></button>
+            <div class="row">
+              <div class="col-5">
+                <button *ngIf="verificationStatus !=3 && loggedUserRole === 'Sector Admin'" pButton pRipple type="button"
+                  label="Action" (click)="parameterAction($event, param)" class="p-button-info"></button>
+              </div>
+              <div class="col-7">
+                <button *ngIf="verificationStatus !=3 && loggedUserRole === 'Sector Admin'" pButton pRipple type="button"
+                  label="View Concern" (click)="raiseConcern($event, param, 'view')" class="p-button-info">
+                </button>
+              </div>
+            </div>
+        
+          </td>
+          <td>
+            <i class="pi pi-ellipsis-v" style="font-size: 2rem" (click)="getInfo(param)"></i>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <div class="row p-2" style="margin-top: 5%;" *ngIf="result?.id">
+      <div class="col-md-1">
+        <p-checkbox [binary]="true" (onChange)="checkboxCheck($event)" name="groupname" value="check"></p-checkbox>
+      </div>
+      <div class="col-md-6">
+        <label for="result" class="label">Transformational Impact Mapping</label>
+      </div>
+      <div class="col-md-2">
+        <ng-container *ngIf=" result.isAcceptedByVerifier == true; else elseBlockvery">
+          <td>
+            <i class="pi pi-check" style="font-size: 1rem; color: green;"></i>
+          </td>
+        </ng-container>
+        <ng-template #elseBlockvery>
+          <td>
+            <i class="pi pi-times" style="font-size: 1rem; color: red;"></i>
+          </td>
+        </ng-template>
+      </div>
+    </div>
+
+    <!-- <p-overlayPanel
+        #opDR
+        [showCloseIcon]="true"
+        [style]="{ width: '50vw' }"
+        (onShow)="OnShowOerlayDR()"
+      >
+        <ng-template pTemplate>
+          <div
+            class="d-flex justify-content-start align-content-center flex-wrap mb-15"
+          >
+            <div class="col-12">
+              <div class="p-field">
+                <label for="scopeTA">Comment</label>
+                <textarea
+                  name="scopeTA"
+                  class="form-control"
+                  class="form-control"
+                  style="width: 100%"
+                  pInputTextarea
+                  [(ngModel)]="drComment"
+                  #fscope="ngModel"
+                  [rows]="5"
+                  [cols]="30"
+                  required
+                  maxlength="500"
+                ></textarea>
+                <p class="info-message text-danger" *ngIf="commentRequried">
+                  This is a mandatory field
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="d-flex justify-content-end align-content-center flex-wrap mb-15 mr-10" 
+          >
+            <button
+              class="btn btn-primary text-uppercase"
+              type="submit"
+              (click)="drWithComment()"
+            >
+              Complete
+            </button>
+            <button
+              class="btn btn-primary text-uppercase ml-5"
+              type="submit"
+              (click)="opDR.hide()"
+            >
+              Cancel
+            </button>
+          </div>
+        </ng-template>
+      </p-overlayPanel> -->
+  </div>
+
+</div>
+
+<p-dialog header="Raise Concern" [(visible)]="displayRaiseConcern" appendTo="body">
+    <div class="container" style="width: 600px; height: 500px">
+        <app-raise-concern [area]="raiseConcernSection" [verificationDetails]="concernVerificationDetails"
+            [assessment]="assessment" [isParameter]="isParameter" [isResult]="isValue"
+            [parameter]="concernParam!" [isView]="false"></app-raise-concern>
+    </div>
+</p-dialog>
+
+<p-dialog header="View Concern" [(visible)]="displayViewConcern" appendTo="body">
+    <div class="container" style="width: 600px; height: 500px">
+        <app-raise-concern [area]="raiseConcernSection" [verificationDetails]="concernVerificationDetails"
+            [assessment]="assessment" [isParameter]="isParameter" [isResult]="isValue"
+            [parameter]="concernParam!" [isView]="true"></app-raise-concern>
+    </div>
+</p-dialog>
+
+<p-dialog header="Data Request History" [(visible)]="displayHistory" appendTo="body" [style]="{ width: '50vw' }"
+    [draggable]="false" [resizable]="false">
+    <div class="container" style="width: 600px; height: 500px">
+        <app-view-datarequest-history [parameterId]="paraId" [listOfHistory]="requestHistoryList">
+
+        </app-view-datarequest-history>
+    </div>
+</p-dialog>

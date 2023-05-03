@@ -54,56 +54,48 @@ load: boolean
       console.log("daaaaa111:",this.averageProcess)
       console.log("daaaaa222:",this.averageOutcome)
 
-      this.methassess.findByAllAssessmentBarriers().subscribe((res: any) => {
-        console.log("findByAllAssessmentBarriers : ", res)
 
-        for(let item of res){
-          if(item.assessment.id == this.assessmentId){
-               this.barriersList.push(item.barriers.barrier)
-          }
+      //new
+      this.methassess.barriesByassessId( this.assessmentId).subscribe((res: any) => {
+        console.log("barriesByassessId : ", res)
+        for(let x of res){
+          this.barriersList.push(x.barriers.barrier)
         }
+
       });
 
-      this.methassess.assessmentDetails().subscribe((res: any) => {
-        console.log("assessmentData : ", res)
-        this.assessmentData = res
-
-        for(let assess of res){
-          if(assess.id == this.assessmentId){
-            this.policyName= assess.climateAction.policyName
-            this.assessmentType = assess.assessmentType
-            this.date1 = assess.from
-            this.date2 = assess.to
-          }
-        }
+      //new
+      this.methassess.findAllBarrierData( this.assessmentId).subscribe((res: any) => {
+        console.log("findAllBarrierData : ", res)
       });
 
-      this.methassess.findByAllAssessmentData().subscribe( (res: any) => {
+      //new
+      this.methassess.assessmentParameters( this.assessmentId).subscribe((res: any) => {
         console.log("assessmentParameters : ", res)
-        this.assessmentParameters =res
+        this.filteredData = res
+        this.myFunction();
+      });
 
-        for(let data of res){
-          if(data.assessment.id == this.assessmentId){
-            this.tool = data.assessment.tool
-            this.assessment_approach = data.assessment.assessment_approach
-            this.assessment_method= data.assessment.assessment_method
 
-            this.filteredData.push(data) //filter dataaaa
+      //new
+      this.methassess.assessmentData( this.assessmentId).subscribe((res: any) => {
+        console.log("assessmentDataaaaa: ", res)
+        for (let x of res){
+          this.policyName = x.climateAction.policyName
+          this.assessmentType = x.assessmentType
+          this.date1 = x.from
+            this.date2 = x.to
+            this.tool = x.tool
+            this.assessment_approach = x.assessment_approach
+            this.assessment_method= x.assessment_method
 
-          }
         }
 
-        // Move myFunction() call inside subscribe() callback function
-        this.myFunction();
-        console.log("filteredData : ", this.filteredData);
-        console.log("processCategory : ", this.processCategory);
-        console.log("outcomeCategory : ", this.outcomeCategory);
-        this.load = true
       });
 
       setTimeout(() => {
         this.load = true;
-      }, 5000);
+      }, 1000);
     }
 
 
@@ -168,21 +160,6 @@ load: boolean
 
   }
 
-  /*  makePDF() {
-    const element = document.getElementById('content');
-    if (element) {
-      html2canvas(element).then(canvas => {
-        const imgWidth = 208;
-        const imgHeight = canvas.height * imgWidth / canvas.width;
-        const contentDataURL = canvas.toDataURL('image/png');
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const position = 0;
-        pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
-        pdf.save('assessment-result.pdf');
-      });
-    }
-  } */
-
   makePDF() {
     const element = document.getElementById('content');
     if (element) {
@@ -197,7 +174,6 @@ load: boolean
       });
     }
   }
-
 
 
 

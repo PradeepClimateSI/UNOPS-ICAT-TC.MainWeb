@@ -4,3 +4,10 @@
   width: 200px;
   height: 10px;
 }
+
+.narrow-file-upload {
+  max-width: 300px; /* set the maximum width to 300 pixels */
+}
+
+
+

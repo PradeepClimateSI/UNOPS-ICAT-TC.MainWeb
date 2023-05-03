@@ -68,12 +68,14 @@ export class ResetComponent implements OnInit {
       a.password = this.password;
       a.username = this.userName;
       try{
-        const res = await this.authControllerServiceProxy.resetPassword(a).toPromise();   
-        if(res['status']){
+        const res = await this.authControllerServiceProxy.resetPassword(a).toPromise();  
+        //@ts-ignore 
+        if(res.status){
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: res['message'],
+            //@ts-ignore
+            detail: res.message,
             closable: true,
           });
           this.router.navigate(['../../auth'], {});
@@ -81,7 +83,8 @@ export class ResetComponent implements OnInit {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: res['message'],
+            //@ts-ignore
+            detail: res.message,
             closable: true,
           });
         }     

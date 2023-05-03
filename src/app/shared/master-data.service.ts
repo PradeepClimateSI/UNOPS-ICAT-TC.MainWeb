@@ -19,6 +19,10 @@ export class MasterDataService {
   private _industries: {name: string, id: number}[] = []
   private _tieres: {name: string, id: number}[] = []
   private _currencies: {name: string, id: number}[] = []
+  private _assessment_type: {name: string, id: number}[] = []
+  private _impact_types: {name: string, id: number}[] = []
+  private _impact_categories: {name: string, id: number}[] = []
+  private _impact_characteristics: {name: string, id: number}[] = []
 
 
 
@@ -110,10 +114,47 @@ export class MasterDataService {
 
     this.currencies = [
       { id: 1, name: "USD($)" },
-      { id: 2 , name: "EUR(€)" },
+      { id: 2, name: "EUR(€)" },
       { id: 3, name: "LKR(Rs)" },
       { id: 4, name: "INR(₹)" }]
 
+    this.assessment_type = [
+      { id: 1, name: "Ex-ante" },
+      { id: 2, name: "Ex-post" }
+    ]
+    this.impact_types = [
+      { id: 1, name: "Process" },
+      { id: 2, name: "outcomes" }
+    ]
+    this.impact_categories = [
+      { id: 1, name: "Technology" },
+      { id: 2, name: "Agents" },
+      { id: 3, name: "Incentives" },
+      { id: 4, name: "Norms" },
+      { id: 5, name: "Scale of outcome" },
+      { id: 6, name: "Sustained nature of outcome" }
+    ]
+    this.impact_characteristics = [
+      { id: 1, name: "Research and development" },
+      { id: 2, name: "Adoption" },
+      { id: 3, name: "Scale-up" },
+      { id: 4, name: "Entrepreneurs" },
+      { id: 5, name: "Coalitions of advocates" },
+      { id: 6, name: "Beneficiaries" },
+      { id: 7, name: "Economic and non-economic" },
+      { id: 8, name: "Disincentives" },
+      { id: 9, name: "Institutional and regulatory" },
+      { id: 10, name: "Awareness" },
+      { id: 11, name: "Behaviour" },
+      { id: 12, name: "Social norms" },
+      { id: 13, name: "Macro level" },
+      { id: 14, name: "Medium level" },
+      { id: 15, name: "Micro level" },
+      { id: 16, name: "Long term" },
+      { id: 17, name: "Medium term" },
+      { id: 18, name: "Short term" },
+      { id: 19, name: "Other" }
+    ]
   }
 
 
@@ -230,5 +271,37 @@ export class MasterDataService {
 
   get currencies(): { name: string; id: number }[] {
     return this._currencies;
+  }
+
+  set assessment_type(value: { name: string; id: number }[]) {
+    this._assessment_type = value;
+  }
+
+  get assessment_type(): { name: string; id: number }[] {
+    return this._assessment_type;
+  }
+
+  set impact_types(value: { name: string; id: number }[]) {
+    this._impact_types = value;
+  }
+
+  get impact_types(): { name: string; id: number }[] {
+    return this._impact_types;
+  }
+
+  set impact_categories(value: { name: string; id: number }[]) {
+    this._impact_categories = value;
+  }
+
+  get impact_categories(): { name: string; id: number }[] {
+    return this._impact_categories;
+  }
+
+  set impact_characteristics(value: { name: string; id: number }[]) {
+    this._impact_characteristics = value;
+  }
+
+  get impact_characteristics(): { name: string; id: number }[] {
+    return this._impact_characteristics;
   }
 }

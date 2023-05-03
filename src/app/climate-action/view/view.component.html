@@ -59,7 +59,7 @@
           
                 
                 <th>
-                  <button
+                  <!-- <button
                   pRipple
                   class="fas fa-plus"
                   pButton
@@ -72,7 +72,7 @@
                     style="font-size: 1rem; color: #000"
                   ></i>
                 </button>
-                  
+                   -->
 
                   <!-- <button (click)="addproject()" class="button-plus" icon="pi pi-plus" iconPos="left"></button> -->
                 POLICY </th>
@@ -109,7 +109,7 @@
                 </td>
               </ng-container> -->
               <td>
-                None
+                {{(climateactions.projectApprovalStatus?.id == undefined || climateactions.projectApprovalStatus?.id == 4)?'Proposed':(climateactions.projectApprovalStatus.id == 3?'Data Requested':(climateactions.projectApprovalStatus.id == 1?'Accept':(climateactions.projectApprovalStatus.id == 5?'Active':'Reject')))}}
               </td>
               <td>
                 <!-- <button 

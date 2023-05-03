@@ -80,7 +80,7 @@
       </div>
   
       <div class="row mb-3" *ngIf="baselineParameters.length > 0">
-        <h4 class="mt-4 ml-3">Baseline Parameter</h4>
+        <h4 class="mt-4 ml-3">Parameters</h4>
         <p-table
           #table
           [value]="baselineParameters"
@@ -92,36 +92,18 @@
           [responsive]="true"
           [(selection)]="selectedBaselineParameters"
         >
-          <!-- Table header start search -->
-  
-          <!-- <p-table #tt [value]="climateactions" [columns]="cols" placeholder="Global Filter" [filter]="true" filterMatchMode="contains" >                                                          
-        <ng-template pTemplate="caption">
-            <div style="text-align: right">        
-                <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
-                <input type="text" pInputText size="50" style="width:auto">
-            </div>
-        </ng-template> -->
-  
-          <!-- Table header END Search -->
-  
           <ng-template pTemplate="header">
-            <!-- <tr> 
-            <th *ngFor="let col of columns" [ngSwitch]="col.field">
-              <input *ngSwitchCase="'climateActionName'" pInputText type="text"
-                (input)="dt.filter($event.target.value, col.field, 'contains')" />
-            </th>
-          </tr> -->
+         
   
             <tr>
               <th style="width: 3rem">
                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
               </th>
-              <th>Parameter</th>
+              <th>Category</th>
+              <th>Characteristics</th>
+              <th>Relavancy</th>
               <th>Data Provider</th>
-              <!-- <th>Acceptable Range</th> -->
               <th>Value</th>
-              <th>Unit</th>
-              <th>Status</th>
               <th>Info</th>
             </tr>
           </ng-template>
@@ -130,308 +112,27 @@
               <td>
                 <p-tableCheckbox [value]="baselineParameters"> </p-tableCheckbox>
               </td>
-              <td>{{ baselineParameters.name }}</td>
-              <td>{{ baselineParameters.institution.name }}</td>
+              <td>{{ baselineParameters.category.name }}</td>
+              <td>{{ baselineParameters.characteristics.name }}</td>
   
               <td>
-                {{ baselineParameters.value }}
+                {{ baselineParameters.relevance }}
               </td>
               <td>
-                {{ baselineParameters.uomDataEntry }}
+                {{ baselineParameters.institution.name }}
               </td>
   
               <td>
-                {{
-                  baselineParameters.parameterRequest.dataRequestStatus == 9
-                    ? "Pending"
-                    : ""
-                }}
-                {{
-                  baselineParameters.parameterRequest.dataRequestStatus == 11
-                    ? "Accepted"
-                    : ""
-                }}
-                {{
-                  baselineParameters.parameterRequest.dataRequestStatus == -9
-                    ? "Rejected"
-                    : ""
-                }}
+                {{ baselineParameters.score }}
               </td>
               <td>
                 <i class="pi pi-ellipsis-v" style="font-size: 2rem" (click)="getInfo(baselineParameters)"></i>
               </td>
-              <!-- <td>{{ dataRequestList.id }}</td> -->
             </tr>
           </ng-template>
         </p-table>
       </div>
   
-      <div class="row mb-3" *ngIf="projectParameters.length > 0">
-        <h4 class="mt-4">Project Parameter</h4>
-        <p-table
-          #table
-          [value]="projectParameters"
-          [lazy]="true"
-          [paginator]="false"
-          [showCurrentPageReport]="false"
-          [rowsPerPageOptions]="[1, 10, 25, 50]"
-          [loading]="loading"
-          [responsive]="true"
-          [(selection)]="selectedProjectParameters"
-        >
-          <!-- Table header start search -->
-  
-          <!-- <p-table #tt [value]="climateactions" [columns]="cols" placeholder="Global Filter" [filter]="true" filterMatchMode="contains" >                                                          
-        <ng-template pTemplate="caption">
-            <div style="text-align: right">        
-                <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
-                <input type="text" pInputText size="50" style="width:auto">
-            </div>
-        </ng-template> -->
-  
-          <!-- Table header END Search -->
-  
-          <ng-template pTemplate="header">
-            <!-- <tr> 
-            <th *ngFor="let col of columns" [ngSwitch]="col.field">
-              <input *ngSwitchCase="'climateActionName'" pInputText type="text"
-                (input)="dt.filter($event.target.value, col.field, 'contains')" />
-            </th>
-          </tr> -->
-  
-            <tr>
-              <th style="width: 3rem">
-                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-              </th>
-              <th>Parameter</th>
-              <th>Data Provider</th>
-              <!-- <th>Acceptable Range</th> -->
-              <th>Value</th>
-              <th>Unit</th>
-              <th>Status</th>
-              <th>Info</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-projectParameters>
-            <tr>
-              <td>
-                <p-tableCheckbox [value]="projectParameters"> </p-tableCheckbox>
-              </td>
-              <td>{{ projectParameters.name }}</td>
-              <td>{{ projectParameters.institution.name }}</td>
-  
-              <td>
-                {{ projectParameters.value }}
-              </td>
-              <td>
-                {{ projectParameters.uomDataEntry }}
-              </td>
-  
-              <td>
-                {{
-                  projectParameters.parameterRequest.dataRequestStatus == 9
-                    ? "Pending"
-                    : ""
-                }}
-                {{
-                  projectParameters.parameterRequest.dataRequestStatus == 11
-                    ? "Accepted"
-                    : ""
-                }}
-                {{
-                  projectParameters.parameterRequest.dataRequestStatus == -9
-                    ? "Rejected"
-                    : ""
-                }}
-              </td>
-              <td>
-                <i class="pi pi-ellipsis-v" style="font-size: 2rem" (click)="getInfo(projectParameters)"></i>
-              </td>
-              <!-- <td>{{ dataRequestList.id }}</td> -->
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
-  
-      <div class="row mb-3" *ngIf="lekageParameters.length > 0">
-        <h4 class="mt-4">Leakage Parameter</h4>
-        <p-table
-          #table
-          [value]="lekageParameters"
-          [lazy]="true"
-          [paginator]="false"
-          [showCurrentPageReport]="false"
-          [rowsPerPageOptions]="[1, 10, 25, 50]"
-          [loading]="loading"
-          [responsive]="true"
-          [(selection)]="selectedLeakageParameters"
-        >
-          <!-- Table header start search -->
-  
-          <!-- <p-table #tt [value]="climateactions" [columns]="cols" placeholder="Global Filter" [filter]="true" filterMatchMode="contains" >                                                          
-        <ng-template pTemplate="caption">
-            <div style="text-align: right">        
-                <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
-                <input type="text" pInputText size="50" style="width:auto">
-            </div>
-        </ng-template> -->
-  
-          <!-- Table header END Search -->
-  
-          <ng-template pTemplate="header">
-            <!-- <tr> 
-            <th *ngFor="let col of columns" [ngSwitch]="col.field">
-              <input *ngSwitchCase="'climateActionName'" pInputText type="text"
-                (input)="dt.filter($event.target.value, col.field, 'contains')" />
-            </th>
-          </tr> -->
-  
-            <tr>
-              <th style="width: 3rem">
-                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-              </th>
-              <th>Parameter</th>
-              <th>Data Provider</th>
-              <!-- <th>Acceptable Range</th> -->
-              <th>Value</th>
-              <th>Unit</th>
-              <th>Status</th>
-              <th>Info</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-lekageParameters>
-            <tr>
-              <td>
-                <p-tableCheckbox [value]="lekageParameters"> </p-tableCheckbox>
-              </td>
-              <td>{{ lekageParameters.name }}</td>
-              <td>{{ lekageParameters.institution.name }}</td>
-  
-              <td>
-                {{ lekageParameters.value }}
-              </td>
-              <td>
-                {{ lekageParameters.uomDataEntry }}
-              </td>
-  
-              <td>
-                {{
-                  lekageParameters.parameterRequest.dataRequestStatus == 9
-                    ? "Pending"
-                    : ""
-                }}
-                {{
-                  lekageParameters.parameterRequest.dataRequestStatus == 11
-                    ? "Accepted"
-                    : ""
-                }}
-                {{
-                  lekageParameters.parameterRequest.dataRequestStatus == -9
-                    ? "Rejected"
-                    : ""
-                }}
-              </td>
-              <td>
-                <i class="pi pi-ellipsis-v" style="font-size: 2rem" (click)="getInfo(lekageParameters)"></i>
-              </td>
-              <!-- <td>{{ dataRequestList.id }}</td> -->
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
-  
-      <div class="row mb-3" *ngIf="projectionParameters.length > 0">
-        <h4 class="mt-4">Projection Parameter</h4>
-        <p-table
-          #table
-          [value]="projectionParameters"
-          [lazy]="true"
-          [paginator]="false"
-          [showCurrentPageReport]="false"
-          [rowsPerPageOptions]="[1, 10, 25, 50]"
-          [loading]="loading"
-          [responsive]="true"
-          [(selection)]="selectedProjectionParameters"
-        >
-          <!-- Table header start search -->
-  
-          <!-- <p-table #tt [value]="climateactions" [columns]="cols" placeholder="Global Filter" [filter]="true" filterMatchMode="contains" >                                                          
-        <ng-template pTemplate="caption">
-            <div style="text-align: right">        
-                <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
-                <input type="text" pInputText size="50" style="width:auto">
-            </div>
-        </ng-template> -->
-  
-          <!-- Table header END Search -->
-  
-          <ng-template pTemplate="header">
-            <!-- <tr> 
-            <th *ngFor="let col of columns" [ngSwitch]="col.field">
-              <input *ngSwitchCase="'climateActionName'" pInputText type="text"
-                (input)="dt.filter($event.target.value, col.field, 'contains')" />
-            </th>
-          </tr> -->
-  
-            <tr>
-              <th style="width: 3rem">
-                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-              </th>
-              <th>Parameter</th>
-              <th>Data Provider</th>
-              <!-- <th>Acceptable Range</th> -->
-              <th>Value</th>
-              <th>Unit</th>
-              <th>Status</th>
-              <th>Info</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-projectionParameters>
-            <tr>
-              <td>
-                <p-tableCheckbox [value]="projectionParameters">
-                </p-tableCheckbox>
-              </td>
-              <td>{{ projectionParameters.name }}</td>
-              <td>
-                {{
-                  projectionParameters.institution
-                    ? projectionParameters.institution.name
-                    : ""
-                }}
-              </td>
-              <td>
-                {{ projectionParameters.value }}
-              </td>
-              <td>
-                {{ projectionParameters.uomDataEntry }}
-              </td>
-  
-              <td>
-                {{
-                  projectionParameters.parameterRequest.dataRequestStatus == 9
-                    ? "Pending"
-                    : ""
-                }}
-                {{
-                  projectionParameters.parameterRequest.dataRequestStatus == 11
-                    ? "Accepted"
-                    : ""
-                }}
-                {{
-                  projectionParameters.parameterRequest.dataRequestStatus == -9
-                    ? "Rejected"
-                    : ""
-                }}
-              </td>
-              <td>
-                <i class="pi pi-ellipsis-v" style="font-size: 2rem" (click)="getInfo(projectionParameters)"></i>
-              </td>
-              <!-- <td>{{ dataRequestList.id }}</td> -->
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
   
       <div class="row mb-3" *ngIf="hideAllButtons != 4">
         <div

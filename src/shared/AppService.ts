@@ -8,7 +8,7 @@ import { ServiceProxy } from './service-proxies/service-proxies';
 import { UserIdleService } from "angular-user-idle";
 import { ConfirmationService } from 'primeng/api';
 import { User } from './service-proxies/service-proxies';
-
+import decode from 'jwt-decode';
 
 export enum RecordStatus {
   Deleted = -20,
@@ -149,6 +149,15 @@ export class AppService {
   //       this.startRefreshTokenTimer();
   //     }))
   // }
+
+  getLoggedUserRole(){
+    const token = localStorage.getItem('ACCESS_TOKEN')!;
+    const tokenPayload = decode<any>(token);
+    console.log(tokenPayload)
+    return tokenPayload.role[0]
+  }
+
+
 
   async getUser(): Promise<User | null>{
 
