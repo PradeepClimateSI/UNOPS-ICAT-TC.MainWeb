@@ -1479,8 +1479,15 @@
                 url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)" [multiple]="true"
                 [disabled]="categoryFileUploaded[category.name]"
                 [maxFileSize]="5000000" styleClass="custom-file-upload"></p-fileUpload> -->
+                <app-document-upload [doucmentList]="documents"
+                  [documentOwnerId]="-4" [showUpload]="true" [showDeleteButton]="true" name="nc"
+                   [documentOwner]="documentsDocumentOwnerProject">
+                </app-document-upload>
 
-                <p-fileUpload name="file" [customUpload]="true" (uploadHandler)="myUploader($event,category.name)"
+                <p-fileUpload 
+                name="file" 
+                [customUpload]="true" 
+                (uploadHandler)="myUploader($event,category.name)"
                 url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)" [multiple]="true"
                 [disabled]="categoryFileUploaded[category.name]"
                 [maxFileSize]="5000000" styleClass="custom-file-upload" class="narrow-file-upload"
