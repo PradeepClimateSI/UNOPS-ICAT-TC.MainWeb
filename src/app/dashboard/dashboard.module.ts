@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { CASADashboardComponent } from './ca-sa-dashboard/ca-sa-dashboard.component';
 import { TableModule } from 'primeng/table';
 import { ChartModule } from 'primeng/chart';
-import {NgxOrgChartModule} from "ngx-org-chart";
+import { NgxOrgChartModule } from "ngx-org-chart";
 import { RouterModule, Routes } from '@angular/router';
 
 import {
@@ -57,7 +57,7 @@ import { ReportComponent } from 'app/report/report.component';
 
 const routes: Routes = [
   {
-  path: '',
+    path: '',
     component: DashboardComponent
   },
   {
@@ -161,6 +161,13 @@ const routes: Routes = [
   //   canActivate: [],
   //   data: {}
   // },
+  {
+    path: 'carbon-market-tool-test',
+    component: CarbonComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
   {
     path: 'carbon-market-tool',
     component: CarbonMarketAssessmentComponent,
