@@ -23,6 +23,9 @@ export class MasterDataService {
   private _impact_types: {name: string, id: number}[] = []
   private _impact_categories: {name: string, id: number}[] = []
   private _impact_characteristics: {name: string, id: number}[] = []
+  private _level_of_implemetation: {name: string, id: number}[] = []
+  private _impact_covered: {name: string, id: number}[] = []
+  private _assessment_method: {name: string, id: number}[] = []
 
 
 
@@ -155,6 +158,32 @@ export class MasterDataService {
       { id: 18, name: "Short term" },
       { id: 19, name: "Other" }
     ]
+
+    this.level_of_implemetation = [
+      { id: 1, name: "International" },
+      { id: 2, name: "National" },
+      { id: 3, name: "Sub-national" },
+      
+    ]
+
+    this.impact_covered = [
+      { id: 1, name: "CC Mitigation" },
+      { id: 2, name: "Water quality" },
+      { id: 3, name: "Soil quality" },
+      { id: 4, name: "Energy" },
+      { id: 5, name: "Standard of living" },
+      { id: 6, name: "Jobs" },
+      { id: 7, name: "Racial equality" },
+     
+    ]
+    this.assessment_method = [
+      { id: 1, name: "Track 1" },
+      { id: 2, name: "Track 2" },
+      { id: 3, name: "Track 3" },
+      
+    ]
+    
+    
   }
 
 
@@ -303,5 +332,28 @@ export class MasterDataService {
 
   get impact_characteristics(): { name: string; id: number }[] {
     return this._impact_characteristics;
+  }
+  set level_of_implemetation (value: { name: string; id: number }[]) {
+    this._level_of_implemetation = value;
+  }
+
+  get level_of_implemetation (): { name: string; id: number }[] {
+    return this._level_of_implemetation;
+  }
+
+  set impact_covered(value: { name: string; id: number }[]) {
+    this._impact_covered = value;
+  }
+
+  get impact_covered (): { name: string; id: number }[] {
+    return this._impact_covered;
+  }
+
+  set assessment_method(value: { name: string; id: number }[]) {
+    this._assessment_method = value;
+  }
+
+  get assessment_method (): { name: string; id: number }[] {
+    return this._assessment_method;
   }
 }
