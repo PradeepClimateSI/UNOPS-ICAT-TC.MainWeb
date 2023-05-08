@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import { Assessment, ClimateAction, CreateInvestorToolDto, ImpactCovered, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, ImpactCovered, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 @Component({
   selector: 'app-investor-tool',
@@ -27,6 +27,11 @@ export class InvestorToolComponent implements OnInit {
   countryID:number;
   sectorList:any[]=[];
   createInvestorToolDto:CreateInvestorToolDto = new CreateInvestorToolDto();
+  meth1Process: Characteristics[]=[];
+  meth1Outcomes:  Characteristics[]=[];
+  characteristicsList: any;
+  processData: any[]=[];
+  outcomeData: any[]=[];
   
 
   constructor(
@@ -61,7 +66,8 @@ export class InvestorToolComponent implements OnInit {
     } // countryid = 0
 
     await this.getPolicies();
-    await this.getAllImpactsCovered()
+    await this.getAllImpactsCovered();
+    await this.getCharacteristics();
     console.log(this.policies)
     console.log(this.assessment)
   }
@@ -70,6 +76,38 @@ export class InvestorToolComponent implements OnInit {
   }
   async getAllImpactsCovered(){
     this.impactCovered = await this.investorToolControllerproxy.findAllImpactCovered().toPromise()
+  }
+
+  async getCharacteristics(){
+    this.methodologyAssessmentControllerServiceProxy.findAllCategories().subscribe((res2: any) => {
+      console.log("categoryList", res2)
+      for (let x of res2) {
+        //this.categotyList.push(x);
+          if(x.type === 'process'){
+            this.meth1Process.push(x)
+            
+              this.processData.push({type:'process', CategoryName:x.name,categoryID:x.id,data:[{Characteristic:'',data:[]}],})
+              
+              
+            
+          }
+          if(x.type === 'outcome'){
+            this.meth1Outcomes.push(x);
+            
+              this.outcomeData.push({type:'outcome', CategoryName:x.name,categoryID:x.id,data:[{Characteristic:'',data:[]}],})
+              
+            
+          }
+          
+      }
+      console.log("processdata",this.processData)
+    });
+
+    this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().subscribe((res3: any) => {
+      // console.log("ressss3333", res3)
+      this.characteristicsList = res3
+
+    });
   }
 
   save(form: NgForm) {
@@ -138,6 +176,8 @@ export class InvestorToolComponent implements OnInit {
     
   }
 
+
+
   selectAssessmentType(e: any){
    
   }
@@ -150,6 +190,13 @@ export class InvestorToolComponent implements OnInit {
   onItemSelectImpacts(event:any){
     // console.log("ipacts",this.impactArray,this.impactCovered)
 
+  }
+
+  onMainTabChange(event:any){
+    console.log("maintab",event.index)
+  }
+  onCategoryTabChange(event:any){
+    console.log("categorytab",event)
   }
 
 }

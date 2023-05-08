@@ -102,6 +102,7 @@ import { CmResultComponent } from './Tool/carbon-market/cm-result/cm-result.comp
 
 
 
+
 export function getRemoteServiceBaseUrl(): string {
   return environment.baseUrlAPI;
 }

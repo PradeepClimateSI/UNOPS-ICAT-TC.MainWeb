@@ -65,7 +65,7 @@
 
                             <p-multiSelect name="sectors" #type="ngModel" placeholder="Select Sectors Covered"
                                 [(ngModel)]="sectorArray" [options]="sectorList"
-                                (ngModelChange) ="onItemSelectSectors($event)" optionLabel="name" 
+                                (ngModelChange)="onItemSelectSectors($event)" optionLabel="name"
                                 [required]="true"></p-multiSelect>
                             <p class="info-message text-danger" *ngIf="
                                 sectorArray.length===0 &&
@@ -96,19 +96,19 @@
                                 <span class="p-inputgroup-addon">
                                     <i class="pi pi-calendar"></i>
                                 </span>
-                                <p-calendar dateFormat="mm-dd-yy" inputId="date1" placeholder="From"   [(ngModel)]="assessment.from"
-                                    name="date1"></p-calendar>
+                                <p-calendar dateFormat="mm-dd-yy" inputId="date1" placeholder="From"
+                                    [(ngModel)]="assessment.from" name="date1"></p-calendar>
                                 <span class="p-inputgroup-addon">to</span>
-                                <p-calendar dateFormat="mm-dd-yy" inputId="date2" placeholder="To" [(ngModel)]="assessment.to"
-                                    name="date2"></p-calendar>
+                                <p-calendar dateFormat="mm-dd-yy" inputId="date2" placeholder="To"
+                                    [(ngModel)]="assessment.to" name="date2"></p-calendar>
                             </div>
                         </div>
 
                         <div class="p-field p-2">
                             <label for="Sectors Covered">Assessment Method*</label>
                             <p-dropdown name="type" #type="ngModel" placeholder="Select Assessment Method"
-                                [(ngModel)]="assessment.assessment_method" [options]="assessmentMethods" optionLabel="name"
-                                optionValue="name" ></p-dropdown>
+                                [(ngModel)]="assessment.assessment_method" [options]="assessmentMethods"
+                                optionLabel="name" optionValue="name"></p-dropdown>
                             <!-- <p class="info-message text-danger" *ngIf="
                                 !assessment.assessment_method &&
                                 (fData.submitted || type.touched)
@@ -123,7 +123,7 @@
             <div class="row justify-content-end" *ngIf="!isSavedAssessment">
                 <div>
 
-                    <div class="d-flex col-1 justify-content-end p-button-vertical mb-0 pl-2">
+                    <div class="d-flex flex-row-reverse  ">
                         <button class="btn btn-primary text-uppercase" type="submit">
                             Continue
                         </button>
@@ -135,4 +135,53 @@
     <!-- <div class="p-grid p-fluid col-sm-12" *ngIf="showSections">
         <app-cm-section [assessment]="assessmentres"></app-cm-section>
     </div> -->
+    <div class="card">
+        <p-tabView (onChange)="onMainTabChange($event) " >
+
+            <p-tabPanel header="Process of Change" >
+                 <!-- <div *ngFor="let characteristic of meth1Process"> -->
+
+                <p-tabView  >
+                   
+                        <p-tabPanel (onChange)="onCategoryTabChange($event)"  *ngFor="let characteristic of processData"  header={{characteristic.CategoryName}}>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                                labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                                laboris nisi ut aliquip ex ea commodo
+                                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
+                                officia deserunt mollit anim id est laborum.
+                            </p>
+                        </p-tabPanel>
+                        
+                   
+                    
+
+                </p-tabView>
+                 <!-- </div> -->
+            </p-tabPanel>
+            <p-tabPanel header="Outcome of Change">
+                <p-tabView (onChange)="onCategoryTabChange($event)" >
+                   
+                    <p-tabPanel  *ngFor="let characteristic of outcomeData"  header={{characteristic.CategoryName}}>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                            laboris nisi ut aliquip ex ea commodo
+                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                            fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
+                            officia deserunt mollit anim id est laborum.
+                        </p>
+                    </p-tabPanel>
+                    
+               
+                
+
+            </p-tabView>
+            </p-tabPanel>
+
+        </p-tabView>
+    </div>
+
+
 </div>
