@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { CASADashboardComponent } from './ca-sa-dashboard/ca-sa-dashboard.component';
 import { TableModule } from 'primeng/table';
 import { ChartModule } from 'primeng/chart';
-import {NgxOrgChartModule} from "ngx-org-chart";
+import { NgxOrgChartModule } from "ngx-org-chart";
 import { RouterModule, Routes } from '@angular/router';
 
 import {
@@ -53,12 +53,14 @@ import { CarbonMarketAssessmentComponent } from 'app/Tool/carbon-market/carbon-m
 import { CmResultComponent } from 'app/Tool/carbon-market/cm-result/cm-result.component';
 import { AuditComponent } from 'app/audit/audit.component';
 import { AuditControllerServiceProxy } from 'shared/service-proxies-auditlog/service-proxies';
+import { ReportComponent } from 'app/report/report.component';
+import { InvestorToolComponent } from 'app/Tool/investor-tool/investor-tool.component';
 
 
 
 const routes: Routes = [
   {
-  path: '',
+    path: '',
     component: DashboardComponent
   },
   {
@@ -163,6 +165,13 @@ const routes: Routes = [
      data: {}
    },
   {
+    path: 'carbon-market-tool-test',
+    component: CarbonComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
     path: 'carbon-market-tool',
     component: CarbonMarketAssessmentComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
@@ -194,6 +203,13 @@ const routes: Routes = [
     path: 'audit-log',
     component: AuditComponent,
    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'investor-tool-new',
+    component: InvestorToolComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}
   },
@@ -256,6 +272,13 @@ const routes: Routes = [
   {
     path: 'assign-verifier',
     component: AssignVerifierComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'report',
+    component: ReportComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}

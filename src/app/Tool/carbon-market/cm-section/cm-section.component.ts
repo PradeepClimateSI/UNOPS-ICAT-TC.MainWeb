@@ -24,6 +24,7 @@ export class CmSectionComponent implements OnInit {
   shownSections: boolean[] = []
 
   recievedQuestions: number[] = []
+  visible: boolean = false
 
   result: any 
 
@@ -147,7 +148,8 @@ export class CmSectionComponent implements OnInit {
     
             this.recievedQuestions = []
           } else {
-            alert("TC score is 0")
+            // alert("TC score is 0")
+            this.visible = true
           }
         }
       } else {
@@ -163,7 +165,8 @@ export class CmSectionComponent implements OnInit {
                 this.result.sections[sectionIdx].criteria[criteriaIdx].questions.push({id: idx+1})
               }
             } else {
-              alert("TC score is 0")
+              // alert("TC score is 0")
+              this.visible = true
               this.shownQuestions[sectionIdx][criteriaIdx].splice(idx + 1, this.shownQuestions[sectionIdx][criteriaIdx].length - (idx + 1) )
             }
         }
@@ -210,6 +213,9 @@ export class CmSectionComponent implements OnInit {
         closable: true,
       })
     })
+  }
+  okay(){
+    this.visible=false
   }
 
 }
