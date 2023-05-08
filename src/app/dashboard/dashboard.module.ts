@@ -51,6 +51,8 @@ import { AssignVerifierComponent } from 'app/data-request-flow/assign-verifier/a
 import { AcceptedPoliciesComponent } from 'app/climate-action/accepted-policies/accepted-policies.component';
 import { CarbonMarketAssessmentComponent } from 'app/Tool/carbon-market/carbon-market-assessment/carbon-market-assessment.component';
 import { CmResultComponent } from 'app/Tool/carbon-market/cm-result/cm-result.component';
+import { AuditComponent } from 'app/audit/audit.component';
+import { AuditControllerServiceProxy } from 'shared/service-proxies-auditlog/service-proxies';
 
 
 
@@ -153,13 +155,13 @@ const routes: Routes = [
     canActivate: [],
     data: {}
   },
-  // {
-  //   path: 'carbon-market-tool',
-  //   component: CarbonComponent,
-  //   loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
-  //   canActivate: [],
-  //   data: {}
-  // },
+   {
+     path: 'carbon-market-tool-test',
+     component: CarbonComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+     canActivate: [],
+     data: {}
+   },
   {
     path: 'carbon-market-tool',
     component: CarbonMarketAssessmentComponent,
@@ -185,6 +187,13 @@ const routes: Routes = [
     path: 'investor-tool',
     component: InvestorComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+   {
+    path: 'audit-log',
+    component: AuditComponent,
+   loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}
   },

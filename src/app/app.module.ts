@@ -99,6 +99,8 @@ import { CarbonMarketAssessmentComponent } from './Tool/carbon-market/carbon-mar
 import { CmSectionComponent } from './Tool/carbon-market/cm-section/cm-section.component';
 import { CmQuestionComponent } from './Tool/carbon-market/cm-question/cm-question.component';
 import { CmResultComponent } from './Tool/carbon-market/cm-result/cm-result.component';
+import { AuditComponent } from "./audit/audit.component";
+import { AuditControllerServiceProxy } from "shared/service-proxies-auditlog/service-proxies";
 
 
 
@@ -155,7 +157,8 @@ export function getAuthRemoteServiceBaseUrl(): string {
         CarbonMarketAssessmentComponent,
         CmSectionComponent,
         CmQuestionComponent,
-        CmResultComponent
+        CmResultComponent,
+        AuditComponent
     ],
 
 
@@ -244,7 +247,8 @@ export function getAuthRemoteServiceBaseUrl(): string {
         AuthGuard,
         CMQuestionControllerServiceProxy,
         CMAssessmentQuestionControllerServiceProxy,
-        AssessmentCMDetailControllerServiceProxy
+        AssessmentCMDetailControllerServiceProxy,
+        AuditControllerServiceProxy,
     ],
     bootstrap: [AppComponent],
     exports: [

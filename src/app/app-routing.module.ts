@@ -9,6 +9,7 @@ import { DashboardBaseComponent } from './dashboard-base/dashboard-base.componen
 import { RoleGuardService } from './auth/role-guard.service';
 import { MethodologyComponent } from './methodology/methodology.component';
 import { ChartComponent } from './chart/chart.component';
+import { AuditComponent } from './audit/audit.component';
 
 export enum CountryModule {
   CLIMATE_ACTION_MODULE = 0,
@@ -63,6 +64,13 @@ export const routes: Routes = [
     canActivate: [],
     data: {}
   },
+  /*  {
+    path: 'app/audit-log',
+    component: AuditComponent,
+   loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  }, */
 
 
 
