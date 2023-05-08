@@ -26,6 +26,8 @@ export class MasterDataService {
   private _level_of_implemetation: {name: string, id: number}[] = []
   private _impact_covered: {name: string, id: number}[] = []
   private _assessment_method: {name: string, id: number}[] = []
+  private _relevance: {name: string, value: number}[] = []
+  private _likelihood: {id: number, value: number}[] = []
 
 
 
@@ -181,6 +183,21 @@ export class MasterDataService {
       { id: 2, name: "Track 2" },
       { id: 3, name: "Track 3" },
       
+    ]
+
+    this.relevance = [
+      {  name: "Relevant",value:2 },
+      {  name: "Possibly Relevant",value:1 },
+      {  name: "Not Relevant",value:0 },
+    ]
+
+    this.likelihood = [
+      {  id: 1,value:0 },
+      {  id: 2,value:1 },
+      {  id: 3,value:2 },
+      {  id: 4,value:3 },
+      {  id: 5,value:4 },
+    
     ]
     
     
@@ -356,4 +373,23 @@ export class MasterDataService {
   get assessment_method (): { name: string; id: number }[] {
     return this._assessment_method;
   }
+
+  set relevance(value: { name: string; value: number }[]) {
+    this._relevance = value;
+  }
+
+  get relevance (): { name: string; value: number }[] {
+    return this._relevance;
+  }
+
+  set likelihood(value: { id: number; value: number }[]) {
+    this._likelihood = value;
+  }
+
+  get likelihood (): { id: number; value: number }[] {
+    return this._likelihood;
+  }
+
+
+
 }

@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import { Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, ImpactCovered, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, ImpactCovered, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
+import { TabView } from 'primeng/tabview';
+
 @Component({
   selector: 'app-investor-tool',
   templateUrl: './investor-tool.component.html',
@@ -13,26 +15,49 @@ import decode from 'jwt-decode';
 export class InvestorToolComponent implements OnInit {
 
   assessment: Assessment = new Assessment();
-  investorAssessment:InvestorTool=new InvestorTool();
-  sectorArray:Sector[]=[];
-  impactArray:ImpactCovered[]=[];
+  investorAssessment: InvestorTool = new InvestorTool();
+  sectorArray: Sector[] = [];
+  impactArray: ImpactCovered[] = [];
   assessment_types: any[];
   policies: ClimateAction[];
   isSavedAssessment: boolean = false;
-  levelOfImplementation:any[]=[];
-  geographicalAreasCovered:any[]=[];
-  sectorsCovered:any[]=[];
-  impactCovered:any[]=[];
-  assessmentMethods:any[]=[];
-  countryID:number;
-  sectorList:any[]=[];
-  createInvestorToolDto:CreateInvestorToolDto = new CreateInvestorToolDto();
-  meth1Process: Characteristics[]=[];
-  meth1Outcomes:  Characteristics[]=[];
-  characteristicsList: any;
-  processData: any[]=[];
-  outcomeData: any[]=[];
-  
+  levelOfImplementation: any[] = [];
+  geographicalAreasCovered: any[] = [];
+  sectorsCovered: any[] = [];
+  impactCovered: any[] = [];
+  assessmentMethods: any[] = [];
+  countryID: number;
+  sectorList: any[] = [];
+  createInvestorToolDto: CreateInvestorToolDto = new CreateInvestorToolDto();
+  meth1Process: Characteristics[] = [];
+  meth1Outcomes: Characteristics[] = [];
+  characteristicsList: Characteristics[]=[];
+  characteristicsArray : Characteristics[] = [];
+  selectedIndex = 0;
+  likelihood:any[]=[];
+  relevance:any[]=[];
+
+  yesNoAnswer:any[] =[{id:1,name:"Yes"},{id:2,name:"No"}];
+
+
+  processData: {
+    type: string,
+    CategoryName: string,
+    categoryID: number,
+    data: InvestorAssessment[]
+  }[] = [];
+
+  outcomeData: {
+    type: string,
+    CategoryName: string,
+    categoryID: number,
+    data: InvestorAssessment[]
+  }[] = [];
+  //class variable
+  @ViewChild(TabView) tabView: TabView;
+
+  tabName: string = '';
+
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -46,23 +71,26 @@ export class InvestorToolComponent implements OnInit {
   async ngOnInit(): Promise<void> {
 
     this.assessment_types = this.masterDataService.assessment_type;
-    this.levelOfImplementation =this.masterDataService.level_of_implemetation;
-    this.geographicalAreasCovered =this.masterDataService.level_of_implemetation;
-    
-    this.assessmentMethods =this.masterDataService.assessment_method;
-    
+    this.levelOfImplementation = this.masterDataService.level_of_implemetation;
+    this.geographicalAreasCovered = this.masterDataService.level_of_implemetation;
+    this.likelihood = this.masterDataService.likelihood;
+    this.relevance = this.masterDataService.relevance;
+
+    this.assessmentMethods = this.masterDataService.assessment_method;
+
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const countryId = token ? decode<any>(token).countryId : 0;
     console.log("country", countryId)
     this.countryID = countryId;
-    console.log("ipacts",this.impactArray)
+    console.log("tabName", this.tabName)
+    // this.getSelectedHeader();
 
 
     if (countryId > 0) {
       this.sectorList = await this.sectorProxy.getCountrySector(countryId).toPromise()
-        
-        // console.log("++++", this.sectorList)
-      
+
+      // console.log("++++", this.sectorList)
+
     } // countryid = 0
 
     await this.getPolicies();
@@ -70,37 +98,45 @@ export class InvestorToolComponent implements OnInit {
     await this.getCharacteristics();
     console.log(this.policies)
     console.log(this.assessment)
+
+
   }
-  async getPolicies(){
+  async getPolicies() {
     this.policies = await this.projectControllerServiceProxy.findAllPolicies().toPromise()
   }
-  async getAllImpactsCovered(){
+  async getAllImpactsCovered() {
     this.impactCovered = await this.investorToolControllerproxy.findAllImpactCovered().toPromise()
   }
 
-  async getCharacteristics(){
+  async getCharacteristics() {
     this.methodologyAssessmentControllerServiceProxy.findAllCategories().subscribe((res2: any) => {
       console.log("categoryList", res2)
       for (let x of res2) {
         //this.categotyList.push(x);
-          if(x.type === 'process'){
-            this.meth1Process.push(x)
-            
-              this.processData.push({type:'process', CategoryName:x.name,categoryID:x.id,data:[{Characteristic:'',data:[]}],})
-              
-              
-            
-          }
-          if(x.type === 'outcome'){
-            this.meth1Outcomes.push(x);
-            
-              this.outcomeData.push({type:'outcome', CategoryName:x.name,categoryID:x.id,data:[{Characteristic:'',data:[]}],})
-              
-            
-          }
-          
+        if (x.type === 'process') {
+          this.meth1Process.push(x)
+
+          this.processData.push({
+            type: 'process', CategoryName: x.name, categoryID: x.id,
+            data: []
+          })
+
+
+
+        }
+        if (x.type === 'outcome') {
+          this.meth1Outcomes.push(x);
+
+          this.outcomeData.push({
+            type: 'outcome', CategoryName: x.name, categoryID: x.id,
+            data: []
+          })
+
+
+        }
+
       }
-      console.log("processdata",this.processData)
+      console.log("processdata", this.processData)
     });
 
     this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().subscribe((res3: any) => {
@@ -111,7 +147,7 @@ export class InvestorToolComponent implements OnInit {
   }
 
   save(form: NgForm) {
-    console.log("form",form)
+    console.log("form", form)
     // this.showSections = true
     //save assessment
     this.assessment.tool = 'Investment & Private Sector Tool'
@@ -120,20 +156,20 @@ export class InvestorToolComponent implements OnInit {
     if (form.valid) {
       this.methodologyAssessmentControllerServiceProxy.saveAssessment(this.assessment)
         .subscribe(res => {
-          console.log("res",res)
-          
-          if (res) {
-            
+          console.log("res", res)
 
-            this.investorAssessment.assessment=res;
-            
-           this.createInvestorToolDto.sectors=this.sectorArray;
-           this.createInvestorToolDto.impacts =this.impactArray;
-           this.createInvestorToolDto.investortool=this.investorAssessment;
+          if (res) {
+
+
+            this.investorAssessment.assessment = res;
+
+            this.createInvestorToolDto.sectors = this.sectorArray;
+            this.createInvestorToolDto.impacts = this.impactArray;
+            this.createInvestorToolDto.investortool = this.investorAssessment;
 
             this.investorToolControllerproxy.createinvestorToolAssessment(this.createInvestorToolDto)
               .subscribe(_res => {
-                console.log("res final",_res)
+                console.log("res final", _res)
                 if (_res) {
                   console.log(_res)
                   this.messageService.add({
@@ -143,7 +179,7 @@ export class InvestorToolComponent implements OnInit {
                     closable: true,
                   })
                   this.isSavedAssessment = true
-                  
+
                 }
                 // form.reset();
               }, error => {
@@ -173,30 +209,46 @@ export class InvestorToolComponent implements OnInit {
         closable: true,
       })
     }
-    
+
   }
 
 
 
-  selectAssessmentType(e: any){
-   
+  selectAssessmentType(e: any) {
+
   }
 
-  onItemSelectSectors(event:any){
+  onItemSelectSectors(event: any) {
     // console.log("sector",this.sectorArray)
     // this.createInvestorToolDto.impacts =[]
     // this.createInvestorToolDto.impacts.push(event.value)
   }
-  onItemSelectImpacts(event:any){
+  onItemSelectImpacts(event: any) {
     // console.log("ipacts",this.impactArray,this.impactCovered)
 
   }
 
-  onMainTabChange(event:any){
-    console.log("maintab",event.index)
+  onMainTabChange(event: any) {
+    console.log("maintab", event.index)
   }
-  onCategoryTabChange(event:any){
-    console.log("categorytab",event)
+  onCategoryTabChange(event: any, tabview: TabView) {
+    this.tabName = tabview.tabs[event.index].header
+    // this.processData.map(x=>x.data.length=0)
+    this.outcomeData.map(x=>x.data.length=0)
+    for (let x of this.characteristicsList) {
+      if (x.category.name === this.tabName) {
+        // console.log("ssssss",this.processData,this.tabName)
+        // this.characteristicsArray.push(x)
+        this.processData.map(y=>y.data.forEach(z=>z.characteristics =x))
+        this.outcomeData.map(y=>y.data.map(z=>z.characteristics =x))
+      }
+    }
+    console.log("tabview", this.characteristicsArray)
+    console.log("processdata", this.processData)
+
+  }
+  getSelectedHeader() {
+    console.log("tabnaaame", this.tabView.tabs[this.selectedIndex].header);
   }
 
 }
