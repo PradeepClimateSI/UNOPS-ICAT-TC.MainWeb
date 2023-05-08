@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { CASADashboardComponent } from './ca-sa-dashboard/ca-sa-dashboard.component';
 import { TableModule } from 'primeng/table';
 import { ChartModule } from 'primeng/chart';
-import {NgxOrgChartModule} from "ngx-org-chart";
+import { NgxOrgChartModule } from "ngx-org-chart";
 import { RouterModule, Routes } from '@angular/router';
 
 import {
@@ -45,18 +45,20 @@ import { AssessmentComponent } from 'app/assessment/assessment.component';
 import { VerificationDetailComponent } from 'app/verification/verifier/verification-detail/verification-detail.component';
 import { QualityCheckComponent } from 'app/quality-check/quality-check.component';
 import { QualityCheckDetailComponent } from 'app/quality-check-detail/quality-check-detail.component';
+import { AssessmentResultTrack2Component } from 'app/assessment-result-track2/assessment-result-track2.component';
 import { NonconformanceReportComponent } from 'app/nonconformance-report/nonconformance-report.component';
 import { AssignVerifierComponent } from 'app/data-request-flow/assign-verifier/assign-verifier.component';
 import { AcceptedPoliciesComponent } from 'app/climate-action/accepted-policies/accepted-policies.component';
 import { CarbonMarketAssessmentComponent } from 'app/Tool/carbon-market/carbon-market-assessment/carbon-market-assessment.component';
 import { CmResultComponent } from 'app/Tool/carbon-market/cm-result/cm-result.component';
+import { ReportComponent } from 'app/report/report.component';
 import { InvestorToolComponent } from 'app/Tool/investor-tool/investor-tool.component';
 
 
 
 const routes: Routes = [
   {
-  path: '',
+    path: '',
     component: DashboardComponent
   },
   {
@@ -161,6 +163,13 @@ const routes: Routes = [
   //   data: {}
   // },
   {
+    path: 'carbon-market-tool-test',
+    component: CarbonComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
     path: 'carbon-market-tool',
     component: CarbonMarketAssessmentComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
@@ -231,6 +240,13 @@ const routes: Routes = [
     data: {}
   },
   {
+    path: 'assessment-result-track2/:id',
+    component: AssessmentResultTrack2Component,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
     path: 'quality-controller',
     component: QualityCheckComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
@@ -247,6 +263,13 @@ const routes: Routes = [
   {
     path: 'assign-verifier',
     component: AssignVerifierComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'report',
+    component: ReportComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}

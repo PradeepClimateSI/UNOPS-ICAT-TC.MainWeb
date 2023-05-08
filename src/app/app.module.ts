@@ -58,7 +58,7 @@ import { CarouselModule } from 'primeng/carousel';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ConfirmationService } from "primeng/api";
-import { API_BASE_URL, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, AuthControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CMQuestionControllerServiceProxy, CountryControllerServiceProxy, DocumentControllerServiceProxy, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, NdcControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequestControllerServiceProxy, ProjectControllerServiceProxy, QualityCheckControllerServiceProxy, SectorControllerServiceProxy, ServiceProxy, UserTypeControllerServiceProxy, VerificationControllerServiceProxy } from "shared/service-proxies/service-proxies";
+import { API_BASE_URL, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, AuthControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CMQuestionControllerServiceProxy, CountryControllerServiceProxy, DocumentControllerServiceProxy, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, NdcControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequestControllerServiceProxy, ProjectControllerServiceProxy, QualityCheckControllerServiceProxy, ReportControllerServiceProxy, SectorControllerServiceProxy, ServiceProxy, UserTypeControllerServiceProxy, VerificationControllerServiceProxy } from "shared/service-proxies/service-proxies";
 import { AUTH_API_BASE_URL, ServiceProxy as AuthServiceProxy, } from 'shared/service-proxies/auth-service-proxies';
 
 import { RoleGuardService } from "./auth/role-guard.service";
@@ -89,6 +89,7 @@ import { AssessmentComponent } from './assessment/assessment.component';
 import { VerificationDetailComponent } from './verification/verifier/verification-detail/verification-detail.component';
 import { VerifyParameterComponent } from './verification/verifier/verify-parameter/verify-parameter.component';
 import { QualityCheckDetailComponent } from './quality-check-detail/quality-check-detail.component';
+import { AssessmentResultTrack2Component } from './assessment-result-track2/assessment-result-track2.component';
 import { AcceptedPoliciesComponent } from './climate-action/accepted-policies/accepted-policies.component';
 import { RaiseConcernComponent } from './component/raise-concern/raise-concern.component';
 import { RaiseConcernSectionComponent } from './component/raise-concern-section/raise-concern-section.component';
@@ -99,6 +100,7 @@ import { CarbonMarketAssessmentComponent } from './Tool/carbon-market/carbon-mar
 import { CmSectionComponent } from './Tool/carbon-market/cm-section/cm-section.component';
 import { CmQuestionComponent } from './Tool/carbon-market/cm-question/cm-question.component';
 import { CmResultComponent } from './Tool/carbon-market/cm-result/cm-result.component';
+import { ReportComponent } from './report/report.component';
 
 
 
@@ -146,6 +148,8 @@ export function getAuthRemoteServiceBaseUrl(): string {
         VerificationDetailComponent,
         VerifyParameterComponent,
         QualityCheckDetailComponent,
+        AssessmentResultTrack2Component,
+        ClimateActionComponent,
         AcceptedPoliciesComponent,
         RaiseConcernComponent,
         RaiseConcernSectionComponent,
@@ -155,10 +159,11 @@ export function getAuthRemoteServiceBaseUrl(): string {
         CmSectionComponent,
         CmQuestionComponent,
         CmResultComponent,
+        ReportComponent,
         InvestorToolComponent,
     ],
-       
-      
+
+
     imports: [
         FormsModule,
         BrowserModule,
@@ -166,9 +171,6 @@ export function getAuthRemoteServiceBaseUrl(): string {
         BrowserAnimationsModule,
         HttpClientModule,
         StyleClassModule,
-        MultiSelectModule,
-
-        NgImageSliderModule,
         MultiSelectModule,
         ToastModule,
         ButtonModule,
@@ -249,7 +251,8 @@ export function getAuthRemoteServiceBaseUrl(): string {
         AuthGuard,
         CMQuestionControllerServiceProxy,
         CMAssessmentQuestionControllerServiceProxy,
-        AssessmentCMDetailControllerServiceProxy
+        AssessmentCMDetailControllerServiceProxy,
+        ReportControllerServiceProxy
     ],
     bootstrap: [AppComponent],
     exports: [

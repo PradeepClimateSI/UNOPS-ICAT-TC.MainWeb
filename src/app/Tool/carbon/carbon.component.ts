@@ -9,6 +9,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { environment } from 'environments/environment';
 import decode from 'jwt-decode';
+import { AbstractControl, ValidatorFn } from '@angular/forms';
+
 
 interface CategoryInput {
   id: number;
@@ -19,6 +21,32 @@ interface CategoryInput {
     score: number;
   }[];
 }
+
+interface CategoryFileUploaded {
+  [key: string]: boolean;
+}
+
+interface CategoryWeight {
+  [key: string]: number;
+}
+
+interface ChaChecked {
+  [key: string]: boolean;
+}
+
+interface CharacteristicWeight {
+  [key: string]: number;
+}
+
+interface ChaCategoryWeightTotal {
+  [key: string]: number;
+}
+
+interface ChaCategoryTotalEqualsTo1 {
+  [key: string]: boolean;
+}
+
+
 
 
 
@@ -65,6 +93,7 @@ selectedIndicator: string;
 
   policyList : any = []
   policyId : number;
+  catWeightTotal : number = 0
 
   filteredIndicatorList :any =[]
   selectedIndicatorValue :any
@@ -114,6 +143,7 @@ trigger : boolean = false;
 
   policyBarriersList : any = []
   selectedPolicyBarriersList : any = []
+  selectedObjectivesList : any = []
   userCountryId:number = 0;
   sendBarriers : any = []
   isSubmitted : boolean= false;
@@ -127,6 +157,7 @@ trigger : boolean = false;
   characteristicWeightOption : string
   characteristicWeightOptionOutcome : string
   categoryWeightOptionOutcome: string
+  objectivesList : any = []
 
 /*   showSelectedItems() {
     console.log("aaa",this.categories);
@@ -205,6 +236,7 @@ trigger : boolean = false;
   }
 
 
+
   ngOnInit(): void {
 
     const token = localStorage.getItem('ACCESS_TOKEN')!;
@@ -238,11 +270,12 @@ trigger : boolean = false;
     this.methassess.findAllPolicyBarriers().subscribe((res: any) => {
       console.log("policybarrierssList : ", res)
       this.policyBarriersList = res
-
-
     });
 
-
+    this.methassess.findAllObjectives().subscribe((res: any) => {
+      console.log("objectivesList : ", res)
+      this.objectivesList = res
+    });
 
 
     this.methassess.findAllIndicators().subscribe((res: any) => {
@@ -402,37 +435,6 @@ trigger : boolean = false;
   }
 
 
-  /* async onChange2(event:any) {
-
-
-    this.selectedType = event.target.value;
-    this.selectedPolicyBarriersList = []
-
-     for(let x of this.policyBarriersList){
-        if(x.policyName === this.selectedType){
-          for(let barriersss of this.barriersList){
-              if(x.barriers.barrier === barriersss)
-
-            this.selectedPolicyBarriersList.push(barriersss)
-          }
-
-        }
-    }
-    console.log("selectedPolicyBarriersList: ", this.selectedPolicyBarriersList)
-  } */
-
-
-  // Update the list of characteristics based on the selected category
-/*   updateCharacteristics() {
-    const selectedCategoryNames = new Set(this.selectedCategories);
-    this.characteristics = this.categories
-      .filter(category => selectedCategoryNames.has(category.name))
-      .flatMap(category => category.characteristics);
-  } */
-
-
-
-
   getCategory(characteristics: any, category: any) {
 
     /* const foundCategory = this.categories.find(c => c.name === category);
@@ -469,9 +471,17 @@ onItemSelectBarriers(item: any){
   for(let x of item.value){
     this.selectedPolicyBarriersList.push(x)
   }
-
   console.log("policyBarriersList99999999", this.selectedPolicyBarriersList);
+}
 
+
+onItemSelectObjectives(item: any){
+  console.log("kkkkkkk",item);
+  this.selectedObjectivesList = [];
+  for(let x of item.value){
+    this.selectedObjectivesList.push(x)
+  }
+  console.log("selectedObjectivesListttt", this.selectedObjectivesList);
 }
 /* onSelectAll(items: any) {
   this.selectedItems = [];
@@ -673,7 +683,7 @@ allData: any
   this.track3Indirect = false
 
   if((data.assessment_approach === 'Direct' || data.assessment_approach === 'Indirect' ) && data.assessment_method === 'Track 2'){
-
+   // this.fileDataArray = ''
     if((data.assessment_approach === 'Direct' ) ){
       this.track3Direct = true
     }
@@ -689,6 +699,7 @@ allData: any
           let barrier = x.barrier
           let cha = `${barriers}_charac`;
           let barrierScore = `${barriers}_score`;
+          let barrierTarget = `${barriers}_target`;
           let barrierComment = `${barriers}_comment`;
           let barrierInstitution =  `${barrier}_institution`;
 
@@ -701,6 +712,7 @@ allData: any
               barrierWeight : 0,
               bWeightComment : "",
               barrierScoreInstitution : data[barrierInstitution],
+              barrierTarget : data[barrierTarget],
 
             });
         }
@@ -742,7 +754,13 @@ allData: any
       date2 : data.date2,
       assessment_method : data.assessment_method,
       assessment_approach : data.assessment_approach,
-      selectedBarriers : this.sendBarriers
+      selectedBarriers : this.sendBarriers,
+      selectedObjectives : this.selectedObjectivesList,
+      person : data.person,
+      opportunities : data.opportunities,
+      audience : data.audience,
+      assessBoundry: data.assessBoundry,
+      impactsCovered : data.impactsCovered
      // barriers : this.selectedBarriers
     };
 
@@ -753,9 +771,6 @@ allData: any
         } ) */
 
         console.log("rrrr",this.dataArray)
-
-
-
 
   }
   else{
@@ -768,8 +783,12 @@ allData: any
     if( data.policy === 'TC Uganda Geothermal'){
       for (let category of this.selectedItems) {
         let categoryData: any = {
+          categoryScore: data[`${category.name}_catscore`],
+          categoryInstitution : data[`${category.name}_institution`],
+          categoryComment : data[`${category.name}_comment`],
           categoryId :category.id,
           category: category.name,
+          categoryFile : this.categoryFilename,
           characteristics: []
         };
 
@@ -779,6 +798,8 @@ allData: any
           let charScore = `${category.name}_${characteristic.name}_score`;
           let comment = `${category.name}_${characteristic.name}_comment`;
           let institution = `${category.name}_${characteristic.name}_institution`;
+          let chaDescription = `${category.name}_${characteristic.name}_description`;
+          let chaRelJustification = `${category.name}_${characteristic.name}_relevanceJustification`;
 
           this.filename = ''
 
@@ -796,7 +817,9 @@ allData: any
               score: data[charScore],
               comment: data[comment],
               filename : this.filename,
-              institution : data[institution]
+              institution : data[institution],
+              chaDescription :  data[chaDescription],
+              chaRelJustification :  data[chaRelJustification],
             });
           }
         }
@@ -807,8 +830,12 @@ allData: any
 
       for (let category of this.selectedItems2) {
         let categoryData: any = {
+          categoryScore: data[`${category.name}_catscore`],
+          categoryInstitution : data[`${category.name}_institution`],
+          categoryComment : data[`${category.name}_comment`],
           categoryId :category.id,
           category: category.name,
+          categoryFile : this.categoryFilename,
           characteristics: []
         };
 
@@ -818,6 +845,8 @@ allData: any
           let charScore = `${category.name}_${characteristic.name}_score`;
           let comment = `${category.name}_${characteristic.name}_comment`;
           let institution = `${category.name}_${characteristic.name}_institution`;
+          let chaDescription = `${category.name}_${characteristic.name}_description`;
+          let chaRelJustification = `${category.name}_${characteristic.name}_relevanceJustification`;
 
           this.filename = ''
 
@@ -835,7 +864,9 @@ allData: any
               score: data[charScore],
               comment: data[comment],
               filename : this.filename,
-              institution : data[institution]
+              institution : data[institution],
+              chaDescription :  data[chaDescription],
+              chaRelJustification :  data[chaRelJustification],
             });
           }
         }
@@ -872,6 +903,9 @@ allData: any
           let charScore = `${category.name}_${characteristic.name}_score`;
           let comment = `${category.name}_${characteristic.name}_comment`;
           let institution = `${category.name}_${characteristic.name}_institution`;
+          let chaDescription = `${category.name}_${characteristic.name}_description`;
+          let chaRelJustification = `${category.name}_${characteristic.name}_relevanceJustification`;
+
 
           this.filename = ''
 
@@ -889,7 +923,9 @@ allData: any
               score: data[charScore],
               comment: data[comment],
               filename : this.filename,
-              institution : data[institution]
+              institution : data[institution],
+              chaDescription :  data[chaDescription],
+              chaRelJustification :  data[chaRelJustification],
             });
           }
         }
@@ -924,6 +960,8 @@ allData: any
           let charScore = `${category.name}_${characteristic.name}_score`;
           let comment = `${category.name}_${characteristic.name}_comment`;
           let institution = `${category.name}_${characteristic.name}_institution`;
+          let chaDescription = `${category.name}_${characteristic.name}_description`;
+          let chaRelJustification = `${category.name}_${characteristic.name}_relevanceJustification`;
 
           this.filename = ''
 
@@ -941,7 +979,9 @@ allData: any
               score: data[charScore],
               comment: data[comment],
               filename : this.filename,
-              institution : data[institution]
+              institution : data[institution],
+              chaDescription :  data[chaDescription],
+              chaRelJustification :  data[chaRelJustification],
             });
           }
         }
@@ -991,7 +1031,13 @@ allData: any
         date2 : data.date2,
         assessment_method : data.assessment_method,
         assessment_approach : data.assessment_approach,
-        selectedBarriers : this.sendBarriers
+        selectedBarriers : this.sendBarriers,
+        selectedObjectives : this.selectedObjectivesList,
+        person : data.person,
+        opportunities : data.opportunities,
+        audience : data.audience,
+        assessBoundry: data.assessBoundry,
+        impactsCovered : data.impactsCovered
        // barriers : this.selectedBarriers
       };
       console.log("final array",allData);
@@ -1016,7 +1062,7 @@ allData: any
           this.relevantChaList = res
           } )
 
-
+       //   this.fileDataArray = ''
       } )
 
       if(data.assessment_approach === 'Direct' && data.assessment_method === 'Track 1'){
@@ -1175,10 +1221,13 @@ let assessData : any = {
     this.methassess.barrierCharacteristics(assessData).subscribe(res => {
       console.log("newww data",res)
 
-    /*   setTimeout(() => {
-        this.router.navigate(['/assessment-result',res.assesId], { queryParams: { assessmentId: res.assesId,
+     if(this.allData.assessment_approach === 'Direct'){
+      setTimeout(() => {
+        this.router.navigate(['/assessment-result-track2',res.assesId], { queryParams: { assessmentId: res.assesId,
           averageProcess : res.result.averageProcess , averageOutcome: res.result.averageOutcome} });
-      }, 2000); */
+      }, 2000);
+      }
+
     } )
 
 console.log("assessData",assessData)
@@ -1220,9 +1269,6 @@ onIndicatorSelected( indicator: any) {
   return this.filterMethList
 }
 
-
-
-
 handleSelectedCharacteristic(event: any) {
   this.filteredIndicatorList = []
   const selectedCharacteristic = event;
@@ -1244,6 +1290,13 @@ showMsg2: boolean = false;
 fileDataArray : any =[]
 selectedTrack : any
 selectedApproach : any
+categoryFileUploaded: CategoryFileUploaded = {};
+categoryWeightscore: CategoryWeight = {};
+
+characteristicWeightScore :CharacteristicWeight = {};
+chaCategoryTotalEqualsTo1 : ChaCategoryTotalEqualsTo1 = {};
+
+ chaChecked : ChaChecked = {};
 
 async myUploader(event: any, chaName : any) {
 
@@ -1268,6 +1321,9 @@ async myUploader(event: any, chaName : any) {
         this.fileDataArray.push(fileData)
         console.log("nameeee", fileData);
         console.log("fileDataArray", this.fileDataArray);
+
+        this.categoryFileUploaded[chaName] = true;
+
         for(let file of event.files) {
           this.uploadedFiles.push(file);
         }
@@ -1308,6 +1364,93 @@ onChangeCha(event : any){
   console.log("selectedCharacteristic: ", event.target.value)
 }
 
+isBarrierWeightValid(chaId: number): boolean {
+  const chaBarriers = this.dataArray.filter((b: { chaId: number; }) => b.chaId == chaId);
+  const totalWeight = chaBarriers.reduce((sum: any, b: { barrierWeight: any; }) => sum + b.barrierWeight, 0);
+  return totalWeight === 1;
+}
 
+isAllBarrierWeightValid() {
+  for (const cha of this.characteristicsList) {
+    const barriers = this.dataArray.filter((b: { chaId: number; }) => b.chaId == cha.id);
+    const weightSum = barriers.reduce((sum: any, b: { barrierWeight: any; }) => sum + b.barrierWeight, 0);
+    if (barriers.length && weightSum !== 1) {
+      return false;
+    }
+  }
+  return true;
+}
+
+hasBarriers(cha: any): boolean {
+  return this.dataArray.some((item: { chaId: number; }) => item.chaId == cha.id);
+}
+
+getBarriersForCha(cha: any): any[] {
+  return this.dataArray.filter((item: { chaId: number; }) => item.chaId === cha.id);
+}
+
+catWeightEqualTo1 : boolean = true
+catWeightEqualTo1Outcome : boolean = true
+catWeightTotalOutcome : number = 0
+chaWeightTotalProcess : number = 0
+chaCategoryWeightTotal : ChaCategoryWeightTotal = {};
+
+onCatWeightChange(categoryName: string, catWeight: number) {
+  this.categoryWeightscore[categoryName] = catWeight
+  this.catWeightEqualTo1 = false
+  this.catWeightTotal = 0
+
+  for(let category of this.selectedItems3){
+    this.catWeightTotal = this.catWeightTotal  + this.categoryWeightscore[category.name]
+  }
+
+  if(this.catWeightTotal ==1 ){
+    this.catWeightEqualTo1 = true
+  }
+
+}
+
+onCatWeightChangeOutcome(categoryName: string, catWeight: number) {
+  this.categoryWeightscore[categoryName] = catWeight
+  this.catWeightEqualTo1Outcome = false
+  this.catWeightTotalOutcome = 0
+
+  for(let category of this.selectedItems4){
+    this.catWeightTotalOutcome = this.catWeightTotalOutcome  + this.categoryWeightscore[category.name]
+  }
+
+  if(this.catWeightTotalOutcome ==1 ){
+    this.catWeightEqualTo1Outcome = true
+  }
+}
+
+onCharacteristicChange(characteristicName: string, isChecked: any) {
+  this.chaChecked[characteristicName] = isChecked.target.checked
+  console.log('Characteristic Name:', characteristicName);
+  console.log('Checkbox State:', isChecked.target.checked);
+}
+
+
+
+onChaWeightChange(categoryName: string, characteristicName : string, chaWeight: number) {
+  this.characteristicWeightScore[characteristicName] = chaWeight
+  this.chaCategoryWeightTotal[categoryName] = 0
+  this.chaCategoryTotalEqualsTo1[categoryName] = false
+
+ for(let cha of  this.getCategory(characteristicName, categoryName)) {
+  if( this.chaChecked[cha.name]){
+    this.chaCategoryWeightTotal[categoryName] =  this.chaCategoryWeightTotal[categoryName] +  this.characteristicWeightScore[cha.name]
+
+    console.log('Characteristicrrrrrrr:',  this.characteristicWeightScore[cha.name]);
+  }
+ }
+
+ if( this.chaCategoryWeightTotal[categoryName] == 1){
+  this.chaCategoryTotalEqualsTo1[categoryName] = true
+ }
+ console.log('Characteristic Name:', characteristicName, 'chaWeight:', chaWeight);
+  console.log( 'category :',categoryName,' Total: ',  this.chaCategoryWeightTotal[categoryName]);
+
+}
 
 }

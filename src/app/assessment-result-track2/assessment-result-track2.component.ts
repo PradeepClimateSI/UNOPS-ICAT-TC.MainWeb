@@ -1,18 +1,17 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MethodologyAssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
-
 import { DatePipe } from '@angular/common';
 import { DomSanitizer } from '@angular/platform-browser';
 import  {jsPDF} from "jspdf"
 import html2canvas from 'html2canvas';
 
 @Component({
-  selector: 'app-assessment-result',
-  templateUrl: './assessment-result.component.html',
-  styleUrls: ['./assessment-result.component.css']
+  selector: 'app-assessment-result-track2',
+  templateUrl: './assessment-result-track2.component.html',
+  styleUrls: ['./assessment-result-track2.component.css']
 })
-export class AssessmentResultComponent implements OnInit {
+export class AssessmentResultTrack2Component implements OnInit {
 
   @ViewChild('content', {static:false}) el! : ElementRef;
   title = "Angular CLI and isPDF"
@@ -32,9 +31,12 @@ export class AssessmentResultComponent implements OnInit {
   assessment_approach : string
   assessment_method : string
   filteredData : any = []
+  barriersData : any = []
 
   processCategory : any = []
   outcomeCategory : any = []
+  characteristicsList  : any = []
+  assessategory : any = []
 load: boolean
   constructor( private route: ActivatedRoute,
     private methassess : MethodologyAssessmentControllerServiceProxy,
@@ -64,16 +66,47 @@ load: boolean
 
       });
 
+
+      this.methassess.getAssessCategory(this.assessmentId).subscribe((res3: any) => {
+        console.log("getAssessCategory", res3)
+        this.assessategory = res3
+
+      });
+
+
       //new
       this.methassess.findAllBarrierData( this.assessmentId).subscribe((res: any) => {
         console.log("findAllBarrierData : ", res)
+        this.barriersData =res
       });
 
       //new
       this.methassess.assessmentParameters( this.assessmentId).subscribe((res: any) => {
         console.log("assessmentParameters : ", res)
-        this.filteredData = res
+        console.log("assessategory2222 : ", res)
+        for(let x of res){
+          if(x.isCategory == 1)
+          {
+            for(let y of this.assessategory){
+              if(x.category.id == y.category.id){
+                x.score = y.categoryScore
+              }
+            }
+
+          }
+
+          this.filteredData.push(x)
+        }
+
+        console.log("fffffilteredData", this.filteredData)
+
         this.myFunction();
+      });
+
+      this.methassess.findAllCharacteristics().subscribe((res3: any) => {
+        console.log("ressss3333", res3)
+        this.characteristicsList = res3
+
       });
 
 
@@ -93,6 +126,9 @@ load: boolean
 
       });
 
+      console.log("processCategory: ", this.processCategory)
+      console.log("outcomeCategory: ", this.outcomeCategory)
+
       setTimeout(() => {
         this.load = true;
       }, 1000);
@@ -111,7 +147,8 @@ load: boolean
           category : data.category.name,
           chaName : data.characteristics.name,
           score : data.score,
-          relevance : data.relevance
+          relevance : data.relevance,
+          weight : data.weight
         }
         this.processCategory.push(value)
        }
@@ -122,7 +159,8 @@ load: boolean
           category : data.category.name,
           /* chaName : "Null", */
           score : data.score,
-          relevance : data.relevance
+          relevance : data.relevance,
+          weight : data.weight
         }
         this.processCategory.push(value3)
        }
@@ -137,7 +175,8 @@ load: boolean
            category : data.category.name,
            chaName : data.characteristics.name,
            score : data.score,
-           relevance : data.relevance
+           relevance : data.relevance,
+           weight : data.weight
          }
          this.outcomeCategory.push(value2)
         }
@@ -148,7 +187,8 @@ load: boolean
            category : data.category.name,
            /* chaName : "Null", */
            score : data.score,
-           relevance : data.relevance
+           relevance : data.relevance,
+           weight : data.weight
          }
          this.outcomeCategory.push(value4)
         }
@@ -176,8 +216,28 @@ load: boolean
   }
 
 
+hasMatchingBarriers(cha: any) {
+  return this.barriersData.some((ba: { characteristics: { id: any; }; }) => cha.id == ba.characteristics.id);
+}
+
+getMatchingBarriers(cha : any) {
+  return this.barriersData.filter((ba: { characteristics: { id: any; }; }) => cha.id == ba.characteristics.id);
+}
+
+
+getCharacteristicScore(characteristicId: any) {
+  let totalScore = 0;
+  this.barriersData.forEach((ba: { characteristics: { id: any; }; barrier_score: number; barrier_weight: number; }) => {
+    if (ba.characteristics.id === characteristicId) {
+      totalScore += ba.barrier_score * ba.barrier_weight;
+    }
+  });
+  return totalScore;
+}
+
 
 
 }
+
 
 
