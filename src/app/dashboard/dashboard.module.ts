@@ -55,6 +55,7 @@ import { AuditComponent } from 'app/audit/audit.component';
 import { AuditControllerServiceProxy } from 'shared/service-proxies-auditlog/service-proxies';
 import { ReportComponent } from 'app/report/report.component';
 import { InvestorToolComponent } from 'app/Tool/investor-tool/investor-tool.component';
+import { AssessmentResultInvestorComponent } from 'app/assessment-result-investor/assessment-result-investor.component';
 
 
 
@@ -251,6 +252,13 @@ const routes: Routes = [
   {
     path: 'assessment-result-track2/:id',
     component: AssessmentResultTrack2Component,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'assessment-result-investor/:id',
+    component: AssessmentResultInvestorComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}

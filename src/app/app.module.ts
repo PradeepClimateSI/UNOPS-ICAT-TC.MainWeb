@@ -103,6 +103,7 @@ import { CmResultComponent } from './Tool/carbon-market/cm-result/cm-result.comp
 import { AuditComponent } from "./audit/audit.component";
 import { AuditControllerServiceProxy } from "shared/service-proxies-auditlog/service-proxies";
 import { ReportComponent } from './report/report.component';
+import { AssessmentResultInvestorComponent } from './assessment-result-investor/assessment-result-investor.component';
 
 
 
@@ -164,6 +165,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         AuditComponent,
         ReportComponent,
         InvestorToolComponent,
+        AssessmentResultInvestorComponent,
     ],
 
 
