@@ -28,6 +28,7 @@ import {
   Category,
   BarriersCategory,
   PolicyBarriers,
+  CountryControllerServiceProxy,
 
 } from 'shared/service-proxies/service-proxies';
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
@@ -36,6 +37,7 @@ import * as moment from 'moment';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import decode from 'jwt-decode';
+import { Token } from '@angular/compiler';
 
 /// <reference types="googlemaps" />
 
@@ -142,6 +144,7 @@ export class ClimateActionComponent implements OnInit {
     private sectorProxy: SectorControllerServiceProxy,
     private ndcProxy: NdcControllerServiceProxy,
     private asses: MethodologyAssessmentControllerServiceProxy,
+    private countryProxy: CountryControllerServiceProxy,
   ) // private usersControllerServiceProxy: UsersControllerServiceProxy,
   // private ndcProxy:NdcControllerServiceProxy
   { }
@@ -168,6 +171,13 @@ export class ClimateActionComponent implements OnInit {
 
     this.asses.findByAllCategories().subscribe((res: any) => {
       this.category = res;
+    })
+
+
+    this.countryProxy.getCountry(this.counID).subscribe((res:any)=>{
+      console.log('++++++++++++++++',res)
+      this.countryList.push(res);
+      this.project.country =this.countryList[0];
     })
 
     this.serviceProxy
@@ -219,7 +229,7 @@ export class ClimateActionComponent implements OnInit {
           undefined
         )
         .subscribe((res) => {
-          this.project.country = res;
+          this.project.country = this.countryList[0];
           this.isSector = true;
           // console.log('tokenPayloadmasssge',res);
         });
@@ -258,24 +268,25 @@ export class ClimateActionComponent implements OnInit {
     //     console.log(res.data);
     //   });
 
-    this.serviceProxy
-      .getManyBaseCountryControllerCountry(
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        ['name,ASC'],
-        undefined,
-        1000,
-        0,
-        0,
-        0
-      )
-      .subscribe((res: any) => {
+    // this.serviceProxy
+    //   .getManyBaseCountryControllerCountry(
+    //     undefined,
+    //     undefined,
+    //     undefined,
+    //     undefined,
+    //     ['name,ASC'],
+    //     undefined,
+    //     1000,
+    //     0,
+    //     0,
+    //     0
+    //   )
+    //   .subscribe((res: any) => {
 
-        this.countryList = res.data;
-        // console.log("countrylist all",this.countryList) //  working
-      });
+    //     this.countryList = res.data;
+    //     // console.log("countrylist all",this.countryList) //  working
+    //   });
+
 
     this.serviceProxy
       .getManyBaseProjectOwnerControllerProjectOwner(

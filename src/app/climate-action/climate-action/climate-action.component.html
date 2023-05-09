@@ -159,13 +159,13 @@
 
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="nameClimate">Country of implementation</label>
+                  <label for="nameClimate">Country of implementation  </label>
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocknameClimate">
                     <div>
-                      <p-dropdown [disabled]="editEntytyId > 0 || isSector" appendTo="body" name="countryDD"
-                        placeholder="Country" #countryDD="ngModel" [(ngModel)]="project.country"
-                        [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false" [options]="countryList"
-                        optionLabel="name" (ngModelChange)="onCountryChnage()" [required]="true"></p-dropdown>
+                      <p-dropdown [disabled]="editEntytyId > 0 || isSector" placeholder="Country" name="countryDD"
+                         #countryDD="ngModel" [(ngModel)]="project.country" appendTo="body" [autoDisplayFirst]="false"
+                         [options]="countryList" optionLabel="name" [ngModelOptions]="{ standalone: false }"  
+                         (ngModelChange)="onCountryChnage()" [required]="true"></p-dropdown>
                     </div>
                     <p class="info-message text-danger" *ngIf="
                     getUserEnterdCountry == '' &&
@@ -214,7 +214,7 @@
                     <p-dropdown [disabled]="editEntytyId > 0" placeholder="Please Select the type of intervention"
                       name="projStatus" #projStatus="ngModel" [(ngModel)]="project.typeofAction"
                       [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false" optionLabel="name"
-                      [required]="true"></p-dropdown>
+                      [required]="false"></p-dropdown>
                     <p class="info-message text-danger" *ngIf="
                     !project.projectStatus &&
                     (fData.submitted || projStatus.touched || projStatus.dirty)
@@ -234,7 +234,7 @@
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="sector">Sectors Targeted</label>
+                  <label for="sector">Sectors Targeted {{project.sector}}</label>
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocksector">
                     <p-dropdown [disabled]="editEntytyId > 0" placeholder="Select Sector" name="sector"
                       #sector="ngModel" [(ngModel)]="project.sector" [autoDisplayFirst]="false" [options]="sectorList"
