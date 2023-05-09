@@ -29,7 +29,7 @@ export class CmQuestionComponent implements OnInit {
         this.weight = ans.weight
       }
       if (this.weight !== 0) {
-        this.tooltip = "Transformational change criteria weight is " + this.weight + '%'
+        this.tooltip = "Weight transformational change criteria is " + this.weight + '%'
       } else {
         this.tooltip = "No weight for this question"
       }
