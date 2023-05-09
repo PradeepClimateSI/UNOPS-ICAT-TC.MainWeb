@@ -27,7 +27,7 @@ export class MasterDataService {
   private _impact_covered: {name: string, id: number}[] = []
   private _assessment_method: {name: string, id: number}[] = []
   private _relevance: {name: string, value: number}[] = []
-  private _likelihood: {id: number, value: number}[] = []
+  private _likelihood: {id: string, value: number}[] = []
 
 
 
@@ -193,11 +193,11 @@ export class MasterDataService {
     ]
 
     this.likelihood = [
-      {  id: 1,value:0 },
-      {  id: 2,value:1 },
-      {  id: 3,value:2 },
-      {  id: 4,value:3 },
-      {  id: 5,value:4 },
+      {  id: "0",value:0 },
+      {  id: "1",value:1 },
+      {  id: "2",value:2 },
+      {  id: "3",value:3 },
+      {  id: "4",value:4 },
 
     ]
 
@@ -383,11 +383,11 @@ export class MasterDataService {
     return this._relevance;
   }
 
-  set likelihood(value: { id: number; value: number }[]) {
+  set likelihood(value: { id: string; value: number }[]) {
     this._likelihood = value;
   }
 
-  get likelihood (): { id: number; value: number }[] {
+  get likelihood (): { id: string; value: number }[] {
     return this._likelihood;
   }
 

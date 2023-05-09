@@ -6,6 +6,7 @@ import { MessageService } from 'primeng/api';
 import { Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, ImpactCovered, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-investor-tool',
@@ -72,6 +73,10 @@ export class InvestorToolComponent implements OnInit {
     private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
     private sectorProxy: SectorControllerServiceProxy,
     private investorToolControllerproxy: InvestorToolControllerServiceProxy,
+    private router: Router,
+
+
+
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -251,27 +256,11 @@ export class InvestorToolComponent implements OnInit {
 
   onMainTabChange(event: any) {
     this.mainTabIndex =event.index;
-    console.log("main index", event.index)
+    console.log("main index", this.mainTabIndex)
   }
   onCategoryTabChange(event: any, tabview: TabView) {
     this.categoryTabIndex =event.index;
-
-    // console.log("tabview",tabview)
-    // this.tabName = (event!==undefined && tabview !==undefined)? tabview.tabs[event.index].header:'Research and Development'
-    // // this.processData.map(x=>x.data.length=0)
-    // // this.outcomeData.map(x=>x.data.length=0)
-
-    // for (let x of this.characteristicsList) {
-    //   if (x.category.name === this.tabName) {
-    //     let newCharData = new InvestorAssessment();
-    //     newCharData.characteristics =x;
-    //     // this.characteristicsArray.push(x)
-    //     // this.processData.map(y=>y.data.push(newCharData))
-    //     // this.outcomeData.map(y=>y.data.push(newCharData))
-    //   }
-    // }
-
-    // console.log("processdata", this.processData,this.outcomeData)
+    console.log("category index", this.categoryTabIndex)
 
   }
   getSelectedHeader() {
@@ -287,7 +276,7 @@ export class InvestorToolComponent implements OnInit {
     this.investorToolControllerproxy.createFinalAssessment(finalArray)
     .subscribe(_res => {
       console.log("res final", _res)
-      if (_res) {
+     
         console.log(_res)
         this.messageService.add({
           severity: 'success',
@@ -298,7 +287,7 @@ export class InvestorToolComponent implements OnInit {
         this.isSavedAssessment = true
         this.onCategoryTabChange('', this.tabView);
 
-      }
+      
       // form.reset();
     }, error => {
       console.log(error)
@@ -316,7 +305,12 @@ export class InvestorToolComponent implements OnInit {
   }
 
   showResults(){
-    
+    setTimeout(() => {
+
+       this.router.navigate(['/assessment-result-investor',this.mainAssessment.id], { queryParams: { assessmentId: this.mainAssessment.id} });
+      
+       }, 2000);
+
   }
 
 }

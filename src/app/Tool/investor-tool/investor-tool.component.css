@@ -13,3 +13,10 @@
 .question{
     font-size: 14px;
 }
+
+
+ :host ::ng-deep .p-tabview p {
+    line-height: 1.5;
+    margin: 0;
+}
+ 

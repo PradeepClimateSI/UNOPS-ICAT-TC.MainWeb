@@ -137,16 +137,16 @@
     <!-- <div class="p-grid p-fluid col-sm-12" *ngIf="showSections">
         <app-cm-section [assessment]="assessmentres"></app-cm-section>
     </div> -->
-    <!-- <div class="card" *ngIf="isSavedAssessment"> -->
-        <div class="card" >
+    <div class="card" *ngIf="isSavedAssessment">
+        <!-- <div class="card" > -->
         <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)">
-        <p-tabView (onChange)="onMainTabChange($event) ">
+        <p-tabView  (onChange)="onMainTabChange($event) ">
 
-            <p-tabPanel header="Process of Change">
+            <p-tabPanel  header="Process of Change">
                 <!-- <div *ngFor="let characteristic of meth1Process"> -->
 
-                <p-tabView #tabView (onChange)="onCategoryTabChange($event, tabView)" [(activeIndex)]="activeIndex "  >
-
+                <p-tabView #tabView (onChange)="onCategoryTabChange($event, tabView)" [(activeIndex)]="activeIndex "    >
+                    
                     <p-tabPanel [header]="category.CategoryName" *ngFor="let category of processData" >
 
                        
@@ -478,8 +478,8 @@
                                                                 <p-dropdown name="data.charData.likelihood"
                                                                     #type="ngModel" placeholder="Select Likelihood"
                                                                     [(ngModel)]="data.likelihood"
-                                                                    [options]="relevance" optionLabel="name"
-                                                                    optionValue="name" [required]="true"></p-dropdown>
+                                                                    [options]="likelihood" optionLabel="id"
+                                                                    optionValue="value" [required]="true"></p-dropdown>
                                                             </div>
                                                         </div>
 
@@ -806,7 +806,7 @@
 
         </p-tabView>
 
-        <div class="row justify-content-end">
+        <div  *ngIf="categoryTabIndex===3 && mainTabIndex===1" class="row justify-content-end">
             <div>
 
                 <div 
