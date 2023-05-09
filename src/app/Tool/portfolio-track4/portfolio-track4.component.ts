@@ -7,6 +7,7 @@ import { Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, Impa
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { Dropdown } from 'primeng/dropdown';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-portfolio-track4',
@@ -40,7 +41,7 @@ export class PortfolioTrack4Component implements OnInit {
   relevance: any[] = [];
 
   description = ''
-
+  load : boolean = false
   yesNoAnswer: any[] = [{ id: 1, name: "Yes" }, { id: 2, name: "No" }];
 
 
@@ -71,6 +72,7 @@ export class PortfolioTrack4Component implements OnInit {
     private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
     private sectorProxy: SectorControllerServiceProxy,
     private investorToolControllerproxy: InvestorToolControllerServiceProxy,
+    private router: Router,
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -127,7 +129,7 @@ export class PortfolioTrack4Component implements OnInit {
     this.methodologyAssessmentControllerServiceProxy.findAllCategories().subscribe((res2: any) => {
       console.log("categoryList", res2)
       for (let x of res2) {
-        let categoryArray: InvestorAssessment[] =[];
+        let categoryArray: InvestorAssessment[] = [];
         for (let z of this.characteristicsList) {
 
           if (z.category.name === x.name) {
@@ -143,7 +145,7 @@ export class PortfolioTrack4Component implements OnInit {
         if (x.type === 'process') {
           this.processData.push({
             type: 'process', CategoryName: x.name, categoryID: x.id,
-            data:categoryArray
+            data: categoryArray
           })
 
 
@@ -155,7 +157,7 @@ export class PortfolioTrack4Component implements OnInit {
 
           this.outcomeData.push({
             type: 'outcome', CategoryName: x.name, categoryID: x.id,
-            data:categoryArray
+            data: categoryArray
           })
 
 
@@ -168,10 +170,12 @@ export class PortfolioTrack4Component implements OnInit {
 
   }
 
+
   save(form: NgForm) {
     console.log("form", form)
     // this.showSections = true
     //save assessment
+    this.load = true
     this.assessment.tool = 'Portfolio Tool'
     this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
 
@@ -184,7 +188,7 @@ export class PortfolioTrack4Component implements OnInit {
 
 
             this.investorAssessment.assessment = res;
-            this.mainAssessment =res
+            this.mainAssessment = res
             this.createInvestorToolDto.sectors = this.sectorArray;
             this.createInvestorToolDto.impacts = this.impactArray;
             this.createInvestorToolDto.investortool = this.investorAssessment;
@@ -251,67 +255,71 @@ export class PortfolioTrack4Component implements OnInit {
 
   }
 
+  mainTabIndex: any
+  categoryTabIndex: any
+
   onMainTabChange(event: any) {
-    console.log("maintab", event.index)
+    this.mainTabIndex = event.index;
+    console.log("main index", this.mainTabIndex)
   }
+
   onCategoryTabChange(event: any, tabview: TabView) {
-    // console.log("tabview",tabview)
-    // this.tabName = (event!==undefined && tabview !==undefined)? tabview.tabs[event.index].header:'Research and Development'
-    // // this.processData.map(x=>x.data.length=0)
-    // // this.outcomeData.map(x=>x.data.length=0)
+    this.categoryTabIndex = event.index;
+    console.log("category index", this.categoryTabIndex)
 
-    // for (let x of this.characteristicsList) {
-    //   if (x.category.name === this.tabName) {
-    //     let newCharData = new InvestorAssessment();
-    //     newCharData.characteristics =x;
-    //     // this.characteristicsArray.push(x)
-    //     // this.processData.map(y=>y.data.push(newCharData))
-    //     // this.outcomeData.map(y=>y.data.push(newCharData))
-    //   }
-    // }
 
-    // console.log("processdata", this.processData,this.outcomeData)
+
 
   }
+
   getSelectedHeader() {
     console.log("tabnaaame", this.tabView.tabs[this.selectedIndex].header);
   }
 
-  onsubmit(form: NgForm){
 
-  let finalArray= this.processData.concat(this.outcomeData)
-  finalArray.map(x=>x.data.map(y=>y.assessment=this.mainAssessment))
-  // finalArray.map(x=>x.data.map(y=>y.investorTool=this.mainAssessment))
-  console.log("finalArray",finalArray)
+  onsubmit(form: NgForm) {
+
+    let finalArray = this.processData.concat(this.outcomeData)
+    finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
+    // finalArray.map(x=>x.data.map(y=>y.investorTool=this.mainAssessment))
+    console.log("finalArray", finalArray)
     this.investorToolControllerproxy.createFinalAssessment(finalArray)
-    .subscribe(_res => {
-      console.log("res final", _res)
-      if (_res) {
-        console.log(_res)
+      .subscribe(_res => {
+        console.log("res final", _res)
+        if (_res) {
+          console.log(_res)
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Assessment created successfully',
+            closable: true,
+          })
+         // this.isSavedAssessment = true
+          this.onCategoryTabChange('', this.tabView);
+
+        }
+        // form.reset();
+      }, error => {
+        console.log(error)
         this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Assessment created successfully',
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Assessment detail saving failed',
           closable: true,
         })
-        this.isSavedAssessment = true
-        this.onCategoryTabChange('', this.tabView);
-
-      }
-      // form.reset();
-    }, error => {
-      console.log(error)
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Assessment detail saving failed',
-        closable: true,
       })
-    })
 
 
-    console.log("+++++++++++",this.processData)
-    console.log("-----------",this.outcomeData)
+    console.log("+++++++++++", this.processData)
+    console.log("-----------", this.outcomeData)
+  }
+
+
+  showResults() {
+
+    setTimeout(() => {
+      this.router.navigate(['/assessment-result-investor', this.mainAssessment.id], { queryParams: { assessmentId: this.mainAssessment.id } });
+    }, 2000);
   }
 
 }

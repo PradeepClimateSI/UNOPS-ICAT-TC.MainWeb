@@ -6,6 +6,7 @@ import { MessageService } from 'primeng/api';
 import { Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, ImpactCovered, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-investor-tool',
@@ -70,6 +71,7 @@ export class InvestorToolComponent implements OnInit {
     private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
     private sectorProxy: SectorControllerServiceProxy,
     private investorToolControllerproxy: InvestorToolControllerServiceProxy,
+    private router: Router,
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -126,23 +128,23 @@ export class InvestorToolComponent implements OnInit {
       for (let x of res2) {
         let categoryArray: InvestorAssessment[] =[];
         for (let z of this.characteristicsList) {
-          
+
           if (z.category.name === x.name) {
             let newCharData = new InvestorAssessment();
             newCharData.characteristics = z;
-            
+
             categoryArray.push(newCharData);
-            
+
           }
         }
-        
+
         //this.categotyList.push(x);
         if (x.type === 'process') {
           this.processData.push({
             type: 'process', CategoryName: x.name, categoryID: x.id,
             data:categoryArray
           })
-         
+
 
 
 
@@ -162,7 +164,7 @@ export class InvestorToolComponent implements OnInit {
       console.log("processdata", this.processData)
     });
 
-    
+
   }
 
   save(form: NgForm) {
@@ -248,28 +250,20 @@ export class InvestorToolComponent implements OnInit {
 
   }
 
-  onMainTabChange(event: any) {
-    console.log("maintab", event.index)
-  }
-  onCategoryTabChange(event: any, tabview: TabView) {
-    // console.log("tabview",tabview)
-    // this.tabName = (event!==undefined && tabview !==undefined)? tabview.tabs[event.index].header:'Research and Development'
-    // // this.processData.map(x=>x.data.length=0)
-    // // this.outcomeData.map(x=>x.data.length=0)
+  mainTabIndex : any
+  categoryTabIndex : any
 
-    // for (let x of this.characteristicsList) {
-    //   if (x.category.name === this.tabName) {
-    //     let newCharData = new InvestorAssessment();
-    //     newCharData.characteristics =x;
-    //     // this.characteristicsArray.push(x)
-    //     // this.processData.map(y=>y.data.push(newCharData))
-    //     // this.outcomeData.map(y=>y.data.push(newCharData))
-    //   }
-    // }
+onMainTabChange(event: any) {
+    this.mainTabIndex =event.index;
+     console.log("main index", this.mainTabIndex)
+    }
 
-    // console.log("processdata", this.processData,this.outcomeData)
+onCategoryTabChange(event: any, tabview: TabView) {
+     this.categoryTabIndex =event.index;
+    console.log("category index", this.categoryTabIndex)
+ }
 
-  }
+
   getSelectedHeader() {
     console.log("tabnaaame", this.tabView.tabs[this.selectedIndex].header);
   }
@@ -305,10 +299,16 @@ export class InvestorToolComponent implements OnInit {
         closable: true,
       })
     })
-    
+
 
     console.log("+++++++++++",this.processData)
     console.log("-----------",this.outcomeData)
   }
+
+  showResults(){
+
+    setTimeout(() => {
+   this.router.navigate(['/assessment-result-investor',this.mainAssessment.id], { queryParams: { assessmentId: this.mainAssessment.id} });
+   }, 2000);}
 
 }
