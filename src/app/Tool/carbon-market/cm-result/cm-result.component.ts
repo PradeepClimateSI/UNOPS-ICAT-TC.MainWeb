@@ -19,8 +19,9 @@ export class CmResultComponent implements OnInit {
   results: any;
   criterias: any;
   keys: string[]
-  score: number
+  score: string
   expandedRows: any = {}
+  isDownloading: boolean = false
 
   constructor(
     private route: ActivatedRoute,
@@ -44,7 +45,10 @@ export class CmResultComponent implements OnInit {
         ...[
           { title: 'Intervention', data: this.intervention.policyName },
           { title: 'Assessment Type', data: this.assessment.assessmentType },
-          { title: 'Assessment Boundaries', data: this.assessmentCMDetail.boundraries },
+          // { title: 'Assessment Boundaries', data: this.assessmentCMDetail.boundraries },
+          { title: 'Sectoral Boundary', data: this.assessmentCMDetail.sectoral_boundary },
+          { title: 'Temporal Boundary', data: this.assessmentCMDetail.temporal_boundary },
+          { title: 'Geographical Boundary', data: this.assessmentCMDetail.geographical_boundary },
           { title: 'Impact Types', data: this.assessmentCMDetail.impact_types },
           { title: 'Impact Categories', data: this.assessmentCMDetail.impact_categories },
           { title: 'Impact Characteristics', data: this.assessmentCMDetail.impact_characteristics },
@@ -69,7 +73,8 @@ export class CmResultComponent implements OnInit {
     let req = new CalculateDto()
     req.assessmentId = this.assessment.id
 
-    this.score = await this.cMAssessmentQuestionControllerServiceProxy.calculateResult(req).toPromise()
+    let response = await this.cMAssessmentQuestionControllerServiceProxy.calculateResult(req).toPromise()
+    this.score = response.score
   }
 
   toDownloadExcel(){
@@ -94,6 +99,7 @@ export class CmResultComponent implements OnInit {
   }
 
   async toDownloadPdf(){
+    this.isDownloading = true
     this.criterias.forEach((c: any) => {
       this.expandedRows[c] = true
     })
@@ -120,6 +126,7 @@ export class CmResultComponent implements OnInit {
       pdf.addImage(imgData, 'PNG', 0, 0, componentWidth, componentHeight)
       pdf.save('download.pdf')
     })
+    this.isDownloading = false
   }
 
 }

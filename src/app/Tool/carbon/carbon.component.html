@@ -35,10 +35,10 @@
           <div class="row p-2">
             <div class="col-12 col-md-8">
               <div class="p-field">
-                <label for="policy">Policies</label>
+                <label for="policy">Interventions</label>
                 <select [disabled]="isSubmitted" class="form-control select-with-arrow" (change)="onChange($event)" ngModel name="policy"
                   id="exampleFormControlSelect1">
-                  <option value="" disabled selected hidden>Select Policy</option>
+                  <option value="" disabled selected hidden>Select Intervention</option>
                   <option *ngFor="let policy of policyList" [value]="policy.policyName">{{policy.policyName}}</option>
                 </select>
               </div>
