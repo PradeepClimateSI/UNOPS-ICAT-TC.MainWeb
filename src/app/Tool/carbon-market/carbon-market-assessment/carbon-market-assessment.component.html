@@ -9,7 +9,7 @@
                     <div class="col-12 col-md-8">
                         <div class="p-field p-2">
                             <label for="policy">Select Intervetion *</label>
-                            <p-dropdown name="policy" #policy="ngModel" placeholder="Select Policy"
+                            <p-dropdown name="policy" #policy="ngModel" placeholder="Select intervention"
                                 [(ngModel)]="assessment.climateAction" appendTo="body" [options]="policies"
                                 optionLabel="policyName" [required]="true"></p-dropdown>
                             <p class="info-message text-danger" *ngIf="
