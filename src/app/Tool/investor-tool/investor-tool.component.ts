@@ -34,6 +34,7 @@ export class InvestorToolComponent implements OnInit {
   characteristicsList: Characteristics[]=[];
   characteristicsArray : Characteristics[] = [];
   selectedIndex = 0;
+  activeIndex = 0;
   likelihood:any[]=[];
   relevance:any[]=[];
 
@@ -44,14 +45,14 @@ export class InvestorToolComponent implements OnInit {
     type: string,
     CategoryName: string,
     categoryID: number,
-    data: InvestorAssessment[]
+    data: any[]
   }[] = [];
 
   outcomeData: {
     type: string,
     CategoryName: string,
     categoryID: number,
-    data: InvestorAssessment[]
+    data: any[]
   }[] = [];
   //class variable
   @ViewChild(TabView) tabView: TabView;
@@ -77,6 +78,7 @@ export class InvestorToolComponent implements OnInit {
     this.relevance = this.masterDataService.relevance;
 
     this.assessmentMethods = this.masterDataService.assessment_method;
+    
 
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const countryId = token ? decode<any>(token).countryId : 0;
@@ -179,6 +181,7 @@ export class InvestorToolComponent implements OnInit {
                     closable: true,
                   })
                   this.isSavedAssessment = true
+                  this.onCategoryTabChange('',this.tabView);
 
                 }
                 // form.reset();
@@ -232,19 +235,22 @@ export class InvestorToolComponent implements OnInit {
     console.log("maintab", event.index)
   }
   onCategoryTabChange(event: any, tabview: TabView) {
-    this.tabName = tabview.tabs[event.index].header
-    // this.processData.map(x=>x.data.length=0)
+    console.log("tabview",tabview)
+    this.tabName = (event!==undefined && tabview !==undefined)? tabview.tabs[event.index].header:'Research and Development'
+    this.processData.map(x=>x.data.length=0)
     this.outcomeData.map(x=>x.data.length=0)
+    
     for (let x of this.characteristicsList) {
       if (x.category.name === this.tabName) {
-        // console.log("ssssss",this.processData,this.tabName)
+        let newCharData = new InvestorAssessment();
+        newCharData.characteristics =x;
         // this.characteristicsArray.push(x)
-        this.processData.map(y=>y.data.forEach(z=>z.characteristics =x))
-        this.outcomeData.map(y=>y.data.map(z=>z.characteristics =x))
+        this.processData.map(y=>y.data.push(newCharData))
+        this.outcomeData.map(y=>y.data.push(newCharData))
       }
     }
-    console.log("tabview", this.characteristicsArray)
-    console.log("processdata", this.processData)
+   
+    console.log("processdata", this.processData,this.outcomeData)
 
   }
   getSelectedHeader() {

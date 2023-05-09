@@ -138,14 +138,14 @@
         <app-cm-section [assessment]="assessmentres"></app-cm-section>
     </div> -->
     <div class="card">
-        <p-tabView (onChange)="onMainTabChange($event) ">
+        <p-tabView (onChange)="onMainTabChange($event)  ">
 
             <p-tabPanel header="Process of Change">
                 <!-- <div *ngFor="let characteristic of meth1Process"> -->
 
-                <p-tabView #tabView (onChange)="onCategoryTabChange($event, tabView)">
+                <p-tabView #tabView (onChange)="onCategoryTabChange($event, tabView)" [(activeIndex)]="activeIndex "  >
 
-                    <p-tabPanel [header]="category.CategoryName" *ngFor="let category of processData">
+                    <p-tabPanel [header]="category.CategoryName" *ngFor="let category of processData" >
 
 
 
@@ -535,7 +535,7 @@
                 <!-- </div> -->
             </p-tabPanel>
             <p-tabPanel header="Outcome of Change">
-                <p-tabView #tabView2 (onChange)="onCategoryTabChange($event, tabView2)">
+                <p-tabView #tabView2 (onChange)="onCategoryTabChange($event, tabView2) " [(activeIndex)]="activeIndex">
 
                     <p-tabPanel [header]="category.CategoryName" *ngFor="let category of outcomeData">
 
