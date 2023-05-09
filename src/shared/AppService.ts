@@ -9,6 +9,8 @@ import { UserIdleService } from "angular-user-idle";
 import { ConfirmationService } from 'primeng/api';
 import { User } from './service-proxies/service-proxies';
 import decode from 'jwt-decode';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'environments/environment';
 
 export enum RecordStatus {
   Deleted = -20,
@@ -69,6 +71,7 @@ export class AppService {
     private router: Router, 
     // private authControllerServiceProxy: AuthControllerServiceProxy,
     private serviceProxy: ServiceProxy,
+    private httpClient: HttpClient
   ) {
     const token = this.getToken();
     this._isAuthenticated = token!==null;
@@ -133,7 +136,7 @@ export class AppService {
       const jwtToken = JSON.parse(atob(token.split('.')[1]));
       const expires = new Date(jwtToken.exp * 1000);
       const timeout = time === null ? expires.getTime() - ( Date.now() + (60 * 1 * 1000)): time;
-      // this.refreshTokenTimeout = setTimeout(() => this.refreshToken().subscribe(), timeout);
+      this.refreshTokenTimeout = setTimeout(() => this.refreshToken2().subscribe(), timeout);
     }    
   }
 
@@ -149,6 +152,19 @@ export class AppService {
   //       this.startRefreshTokenTimer();
   //     }))
   // }
+
+  private refreshToken2() {
+    let url = environment.authBaseUrlAPI + '/auth/refresh'
+    let formData = new RefreshReqRes();
+    let token = this.getRefreshToken()
+    if (token) {
+      formData.token = `${token}`;
+    }
+    return this.httpClient.post<any>(url, formData).pipe(map(res => {
+      this.steToken(res.token);
+      this.startRefreshTokenTimer();
+    }))
+  }
 
   getLoggedUserRole(){
     const token = localStorage.getItem('ACCESS_TOKEN')!;
