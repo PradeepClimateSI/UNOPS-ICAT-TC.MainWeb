@@ -7,7 +7,6 @@ import { Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, Impa
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { Router } from '@angular/router';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-investor-tool',
