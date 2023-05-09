@@ -284,7 +284,7 @@ export class InvestorToolComponent implements OnInit {
           detail: 'Assessment created successfully',
           closable: true,
         })
-        this.isSavedAssessment = true
+        // this.isSavedAssessment = true
         this.onCategoryTabChange('', this.tabView);
 
       
