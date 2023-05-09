@@ -317,19 +317,7 @@ export class ClimateActionComponent implements OnInit {
         // console.log("projectStatusList all", this.projectOwnerList) //  working
       });
 
-    this.serviceProxy
-      .getManyBaseSectorControllerSector(
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        ['name,ASC'],
-        undefined,
-        1000,
-        0,
-        0,
-        0
-      )
+    this.sectorProxy.findAllSector()
       .subscribe((res: any) => {
 
         // this.sectorList = res.data;

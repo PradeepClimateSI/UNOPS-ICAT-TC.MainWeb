@@ -8,7 +8,7 @@
           <i class="pi pi-arrow-left" *ngIf="togglemenu"></i>
         </div>
         <div class="sidebar--header">
-          <img style="height: 47px;padding-left: 20px" src="../assets/images/logo-new.png" />
+          <img style="height: 47px;padding-left: 20px" src="../country/assets/images/logo-new.png" />
         </div>
         <div class="sidebar-items flex-grow-1">
           <div data-ccs-admin-menu>
@@ -183,9 +183,13 @@
                   </div>
                 </p-header>
 
-                <div class="sidebar-items--link d-flex flex-column align-items-start"
+                <!-- <div class="sidebar-items--link d-flex flex-column align-items-start"
                   [routerLink]="['/app/portfolio-tool']" routerLinkActive="selected">
                   <p class="mb-0 ml-20">Portfolio Tool</p>
+                </div> -->
+                <div class="sidebar-items--link d-flex flex-column align-items-start" 
+                  [routerLink]="['/app/carbon-market-tool-test']" routerLinkActive="selected">
+                  <p class="mb-0 ml-20">Portfolio Tool - New </p>
                 </div>
                 <div class="sidebar-items--link d-flex flex-column align-items-start"
                   [routerLink]="['/app/carbon-market-tool']" routerLinkActive="selected">
@@ -247,6 +251,12 @@
               </p-accordionTab>
             </p-accordion>
 
+            <div class="sidebar-items--link align-items-start" [routerLink]="['/app/report']"
+              routerLinkActive="selected">
+
+              <div class=""></div>
+              Report
+            </div>
             <div class="sidebar-items--link align-items-start" [routerLink]="['/app/verification/list']"
               routerLinkActive="selected">
 

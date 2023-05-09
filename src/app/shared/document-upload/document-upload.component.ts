@@ -9,9 +9,11 @@ import {
 } from '../../../shared/service-proxies/service-proxies';
 import {
   Component,
+  EventEmitter,
   Input,
   OnChanges,
   OnInit,
+  Output,
   SimpleChanges,
 } from '@angular/core';
 import { environment } from '../../../environments/environment';
@@ -29,6 +31,7 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
   @Input() showDeleteButton: boolean = true;
   @Input() showUpload: boolean = true;
   @Input() id: number = 0;
+  @Output() valueClicked = new EventEmitter<any>();
 
   loading: boolean;
   uploadedFiles: any[] = [];
@@ -60,7 +63,7 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     // this.token = localStorage.getItem('access_token')!;
 
-    // console.log("documentOwnerId..",this.documentOwnerId);
+    console.log("documentOwnerId..",this.documentOwner);
 
     if (this.documentOwner) {
       this.uploadURL =
@@ -96,10 +99,12 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
           );
       } else {
         console.log('token124', this.token);
+     
         await this.docService
           .getDocuments(this.documentOwnerId, this.documentOwner)
           .subscribe(
             (res) => {
+              this.valueClicked.emit({ data: res, res})
               this.doucmentList = res;
               this.loading = false;
             },
@@ -135,8 +140,11 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
         '/' +
         this.documentOwner.toString();
       console.log('this.uploadURL', this.uploadURL);
+
+      
       this.httpClient.post<any>(fullUrl, formData).subscribe(
         (res) => {
+          this.valueClicked.emit({ data: res, fullUrl})
           this.load();
         },
         (err) => {
@@ -145,6 +153,7 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
         }
       );
     }
+     
     console.log('timecheck2');
   }
 

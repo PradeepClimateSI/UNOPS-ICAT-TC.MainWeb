@@ -1479,19 +1479,18 @@
                 url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)" [multiple]="true"
                 [disabled]="categoryFileUploaded[category.name]"
                 [maxFileSize]="5000000" styleClass="custom-file-upload"></p-fileUpload> -->
-                <app-document-upload [doucmentList]="documents"
+                <!-- <app-document-upload [doucmentList]="documents"
                   [documentOwnerId]="-4" [showUpload]="true" [showDeleteButton]="true" name="nc"
                    [documentOwner]="documentsDocumentOwnerProject">
-                </app-document-upload>
+                </app-document-upload> -->
 
                 <p-fileUpload 
-                name="file" 
-                [customUpload]="true" 
-                (uploadHandler)="myUploader($event,category.name)"
-                url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)" [multiple]="true"
-                [disabled]="categoryFileUploaded[category.name]"
-                [maxFileSize]="5000000" styleClass="custom-file-upload" class="narrow-file-upload"
-                 [showUploadButton]="!categoryFileUploaded[category.name]"></p-fileUpload>
+                name="file" [customUpload]="true"  (uploadHandler)="myUploader($event,category.name)"
+                url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)" [multiple]="false"
+                [maxFileSize]="5000000" styleClass="custom-file-upload" class="narrow-file-upload" 
+                 [disabled]="categoryFileUploaded[category.name]"
+                 [showUploadButton]="!categoryFileUploaded[category.name]"  cancelLabel="Delete" 
+                 [showCancelButton]="categoryFileUploaded[category.name]" (onRemove)="onRemove($event,1)"></p-fileUpload>
 
               <br> <br>
 
