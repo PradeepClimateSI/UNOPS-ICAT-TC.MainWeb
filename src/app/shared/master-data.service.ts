@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class MasterDataService {
-  
+
   private _months: {name: string, value: number}[] = []
   private _gWP_RGs: {name: string, id: number}[] = []
   private _fuel: {name: string, id: number}[] = []
@@ -23,6 +23,11 @@ export class MasterDataService {
   private _impact_types: {name: string, id: number, code: string}[] = []
   private _impact_categories: {name: string, id: number, code: string, type: string}[] = []
   private _impact_characteristics: {name: string, id: number, code: string, type: string[]}[] = []
+  private _level_of_implemetation: {name: string, id: number}[] = []
+  private _impact_covered: {name: string, id: number}[] = []
+  private _assessment_method: {name: string, id: number}[] = []
+  private _relevance: {name: string, value: number}[] = []
+  private _likelihood: {id: string, value: number}[] = []
 
 
 
@@ -75,11 +80,11 @@ export class MasterDataService {
     this.purposes =  [
     { id: 1, name: "purpose 1" },
     { id: 2, name: "purpose 2" }]
-    
-    
-    
+
+
+
     this.units = [
-    { id: 1, name: "l" }, 
+    { id: 1, name: "l" },
     { id: 2, name: "m3" },
     { id: 2, name: "LKR" }]
 
@@ -87,29 +92,29 @@ export class MasterDataService {
       { id: 1, name: "kWh" }
     ]
 
-     
+
     this.sources = [
-      { id: 1, name: "Stationary" }, 
+      { id: 1, name: "Stationary" },
       { id: 2, name: "Mobile" },
-      
+
     ]
 
     this.industries = [
-      { id: 1, name: "Energy" }, 
+      { id: 1, name: "Energy" },
       { id: 2, name: "Manufacturing and Construction" },
       { id: 2, name: "Commercial/Institutional" },
       { id: 2, name: "Residential and Agriculture/Foresty/Fishing" },
     ]
 
     this.tieres = [
-      { id: 1, name: "Tier1" }, 
+      { id: 1, name: "Tier1" },
       { id: 2, name: "Tier2" },
       { id: 2, name: "Tier3" },
     ]
     this.countries = [
-      { id: 1, name: "SriLanka" ,code:"LK"}, 
-      { id: 2, name: "India" ,code:"IND"}, 
-  
+      { id: 1, name: "SriLanka" ,code:"LK"},
+      { id: 2, name: "India" ,code:"IND"},
+
     ]
 
     this.currencies = [
@@ -155,6 +160,48 @@ export class MasterDataService {
       { id: 18, name: "Short term", code: "SHORT_TERM", type: ["SUSTAINED_NATURE_OF_OUTCOME"] },
       { id: 19, name: "Other", code: "OTHER" , type: ["TECHNOLOGY", "AGENTS", "INCENTIVES","NORMS"]},
     ]
+
+    this.level_of_implemetation = [
+      { id: 1, name: "International" },
+      { id: 2, name: "National" },
+      { id: 3, name: "Sub-national" },
+
+    ]
+
+    this.impact_covered = [
+      { id: 1, name: "CC Mitigation" },
+      { id: 2, name: "Water quality" },
+      { id: 3, name: "Soil quality" },
+      { id: 4, name: "Energy" },
+      { id: 5, name: "Standard of living" },
+      { id: 6, name: "Jobs" },
+      { id: 7, name: "Racial equality" },
+
+    ]
+    this.assessment_method = [
+      { id: 1, name: "Track 1" },
+      { id: 2, name: "Track 2" },
+      { id: 3, name: "Track 3" },
+      { id: 4, name: "Track 4" },
+
+    ]
+
+    this.relevance = [
+      {  name: "Relevant",value:2 },
+      {  name: "Possibly Relevant",value:1 },
+      {  name: "Not Relevant",value:0 },
+    ]
+
+    this.likelihood = [
+      {  id: "0",value:0 },
+      {  id: "1",value:1 },
+      {  id: "2",value:2 },
+      {  id: "3",value:3 },
+      {  id: "4",value:4 },
+
+    ]
+
+
   }
 
 
@@ -304,4 +351,46 @@ export class MasterDataService {
   get impact_characteristics(): { name: string; id: number, code: string, type: string[] }[] {
     return this._impact_characteristics;
   }
+  set level_of_implemetation (value: { name: string; id: number }[]) {
+    this._level_of_implemetation = value;
+  }
+
+  get level_of_implemetation (): { name: string; id: number }[] {
+    return this._level_of_implemetation;
+  }
+
+  set impact_covered(value: { name: string; id: number }[]) {
+    this._impact_covered = value;
+  }
+
+  get impact_covered (): { name: string; id: number }[] {
+    return this._impact_covered;
+  }
+
+  set assessment_method(value: { name: string; id: number }[]) {
+    this._assessment_method = value;
+  }
+
+  get assessment_method (): { name: string; id: number }[] {
+    return this._assessment_method;
+  }
+
+  set relevance(value: { name: string; value: number }[]) {
+    this._relevance = value;
+  }
+
+  get relevance (): { name: string; value: number }[] {
+    return this._relevance;
+  }
+
+  set likelihood(value: { id: string; value: number }[]) {
+    this._likelihood = value;
+  }
+
+  get likelihood (): { id: string; value: number }[] {
+    return this._likelihood;
+  }
+
+
+
 }

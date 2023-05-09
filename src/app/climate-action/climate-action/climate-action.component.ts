@@ -147,8 +147,9 @@ export class ClimateActionComponent implements OnInit {
   { }
 
   ngOnInit(): void {
-    const token = localStorage.getItem('access_token')!;
+    const token = localStorage.getItem('ACCESS_TOKEN')!;
     const countryId = token ? decode<any>(token).countryId : 0;
+    console.log("country", countryId)
     this.counID = countryId;
     this.userName = localStorage.getItem('user_name')!;
     let filterUser: string[] = [];
