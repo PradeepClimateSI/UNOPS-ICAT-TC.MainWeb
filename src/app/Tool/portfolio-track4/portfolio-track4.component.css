@@ -1,0 +1,38 @@
+/*
+
+<div class="row p-2">
+<div class="col-12 col-lg-12">
+  <div class="p-field">
+    <label for="indicator">Indicator</label>
+      <input type="text" pInputText
+          [(ngModel)]="data.indicator"
+          placeholder="Indicator Name"
+          name="indicator" />
+  </div>
+</div>
+</div>
+
+<div class="row p-2">
+<div class="col-12 col-lg-6">
+    <div class="p-field">
+        <label for="Relevance">Indicator Starting Situation Value</label>
+        <p-inputNumber
+            [(ngModel)]="data.indicatorStartingVal"
+            placeholder="Value at the Starting Situation" inputId="locale-us" mode="decimal" locale="en-US" [minFractionDigits]="2"
+           >
+        </p-inputNumber>
+    </div>
+</div>
+
+<div class="col-12 col-lg-6">
+    <div class="p-field">
+        <label for="Relevance">Indicator Expected Value</label>
+        <p-inputNumber
+            [(ngModel)]="data.indicatorExpectedVal"
+            placeholder="Expected Value" inputId="locale-us" mode="decimal" locale="en-US" [minFractionDigits]="2"
+           >
+        </p-inputNumber>
+
+    </div>
+</div>
+</div> */

@@ -57,6 +57,7 @@ interface ChaCategoryTotalEqualsTo1 {
 })
 export class CarbonComponent implements OnInit {
 
+
   private apiUrl = 'http://localhost:7100/methodology/assessmentData';
 
   @ViewChild('myCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
@@ -1347,9 +1348,15 @@ onUpload(event :any) {
 
 }
 
+track4Select : boolean = false
 onChangeTrack(event : any){
+  this.track4Select = false
   this.selectedTrack = event.target.value;
   console.log("selectedTrack : ", this.selectedTrack)
+
+  if(this.selectedTrack === 'Track 4'){
+    this.track4Select = true
+  }
 }
 
 onChangeApproach(event : any){

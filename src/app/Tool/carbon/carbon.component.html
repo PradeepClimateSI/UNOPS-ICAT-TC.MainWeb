@@ -4,7 +4,7 @@
     <h4 class="mt-4"> Assess the Transformational Change due to a Portfolio of Interventions</h4>
   </div>
 
-
+  <div *ngIf="!track4Select">
   <div class="card" style="min-height: 600px;">
 
     <form #userPost="ngForm" (ngSubmit)="onSubmit(userPost.value)">
@@ -12,6 +12,23 @@
       <div class="row">
 
         <div class="p-grid p-fluid col-md-6 col-sm-12">
+
+
+          <div class="row p-2">
+            <div class="col-12 col-md-8">
+              <div class="p-field">
+                <label for="assessment_method">Assessment Method</label>
+                <select [disabled]="isSubmitted" class="form-control select-with-arrow" (change)="onChangeTrack($event)"   ngModel name="assessment_method"
+                  id="exampleFormControlSelect1">
+                  <option value="" disabled selected hidden>Select Assessment Method</option>
+                  <option>Track 1</option>
+                  <option>Track 2</option>
+                  <option>Track 3</option>
+                  <option>Track 4</option>
+                </select>
+              </div>
+            </div>
+          </div>
 
 
 
@@ -134,23 +151,6 @@
               </div>
             </div>
           </div>
-
-
-          <div class="row p-2">
-            <div class="col-12 col-md-8">
-              <div class="p-field">
-                <label for="assessment_method">Assessment Method</label>
-                <select [disabled]="isSubmitted" class="form-control select-with-arrow" (change)="onChangeTrack($event)"   ngModel name="assessment_method"
-                  id="exampleFormControlSelect1">
-                  <option value="" disabled selected hidden>Select Assessment Method</option>
-                  <option>Track 1</option>
-                  <option>Track 2</option>
-                  <option>Track 3</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
 
           <div class="row p-2">
             <div class="col-12 col-md-8">
@@ -1355,382 +1355,83 @@
 
 
 
+
         </div>
       </div>
 
       <div class="d-flex flex-row-reverse mt-2 mb-2">
         <button pButton pRipple class="btn btn-primary btn-block text-uppercase" type='submit'>Submit</button>
       </div>
+
+
     </form>
 
 
-<div *ngIf="track3Direct">
-
-  <div *ngFor="let cha of characteristicsList">
-      <div  *ngIf="hasBarriers(cha)">
-  <h6>{{cha.name}}</h6>
-      </div>
-    <div *ngFor="let item of dataArray">
-      <ng-container *ngIf="cha.id == item.chaId">
-
-        <h6 style="font-size: 15px;">Barrier :{{item.barrierName}}</h6>
-        <p>Barrier Score: {{item.barrierScore}}</p>
-        <p>Barrier Comment : {{item.barrierComment}}</p>
-
-        <label for="{{item.barrier}}_weight">Barrier Weight: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</label>
-
-        <p-inputNumber [(ngModel)]="item.barrierWeight" mode="decimal" [showButtons]="true" inputId="minmax-buttons"
-          [min]="0" [max]="1" [step]="0.05"></p-inputNumber>
-        <br> <br>
-
-        <label for="{{item.barrier}}_Weightcomment">Comment for Barrier Weight: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</label>
-        <input pInputText type="text" name="{{item.barrier}}_Weightcomment" [(ngModel)]="item.bWeightComment" placeholder="Comment">
-
-        <br> <br>
-
-        <div *ngIf="!isBarrierWeightValid(cha.id)" style="color: red;">
-          Barrier weights for {{cha.name}} should sum up to 1.
-        </div>
-
-      </ng-container>
-    </div>
-  </div>
-
-
-
- <!--  <div *ngFor="let cha of characteristicsList">
-    <div *ngFor="let item of dataArray">
-      <div *ngIf="cha.id == item.chaId">
-        <h6>{{cha.name}}</h6>
-        <h6 style="font-size: 15px;">Barrier :{{item.barrierName}}</h6>
-        <p>Barrier Score: {{item.barrierScore}}</p>
-        <p>Barrier Comment : {{item.barrierComment}}</p>
-
-        <label for="{{item.barrier}}_weight">Barrier Weight: &nbsp; &nbsp; &nbsp; &nbsp;
-          &nbsp; &nbsp;</label>
-
-        <p-inputNumber [(ngModel)]="item.barrierWeight" mode="decimal" [showButtons]="true" inputId="minmax-buttons"
-          [min]="0" [max]="1" [step]="0.05"></p-inputNumber>
-        <br> <br>
-
-        <label for="{{item.barrier}}_Weightcomment">Comment for Barrier Weight: &nbsp; &nbsp; &nbsp; &nbsp;
-          &nbsp; &nbsp;</label>
-        <input type="text" name="{{item.barrier}}_Weightcomment" [(ngModel)]="item.bWeightComment"
-          placeholder="Comment">
-
-        <br> <br>
-
-      </div>
-    </div>
-  </div> -->
-
-  <button type="submit" [disabled]="!isAllBarrierWeightValid()" (click)="submitBarrierData(dataArray)">Submit</button>
-
- <!--  <button type="submit" (click)="submitBarrierData(dataArray)">Submit</button> -->
-
-  <div *ngIf="submitData">
-    <form #categorydata="ngForm" (ngSubmit)="onSubmitCatData(categorydata.value)">
-      <br><br>
-      <h5>Processess of change</h5>
-      <div class="row p-2">
-        <div class="col-12 col-md-8">
-          <div class="p-field">
-            <label for="nprocescat">Categories:</label>
-
-            <p-multiSelect name="nprocescat" [options]="meth1Process" [(ngModel)]="selectedItems3"
-              (onChange)="onItemSelect3($event)" defaultLabel="Select Categories" optionLabel="name"></p-multiSelect>
-          </div>
-        </div>
-      </div>
-
-
-      <div class="row p-2">
-        <div class="col-12 col-md-12">
-          <div class="p-field">
-            <div *ngFor="let category of selectedItems3"><br><br>
-              <h6>{{category.name}}</h6>
-
-              <label for="{{category.name}}_catweight">Category Weight: &nbsp;</label> <br>
-              <input type="radio" name="{{category.name}}_catweight" value="0.25" [(ngModel)]="categoryWeightOption"
-                checked>Default
-              <input type="radio" name="{{category.name}}_catweight_option" value="custom"
-                [(ngModel)]="categoryWeightOption">Custom<br>
-
-                <div *ngIf="categoryWeightOption === 'custom'">
-                <p-inputNumber  name="{{category.name}}_catweight" ngModel  mode="decimal" [showButtons]="true" inputId="minmax-buttons"
-                [min]="0" [max]="1" [step]="0.05"  (ngModelChange)="onCatWeightChange(category.name, $event)"></p-inputNumber>
-                <br>
-              </div>
-
-              <div *ngIf="!catWeightEqualTo1 && categoryWeightOption === 'custom'" style="color: red;">
-                Barrier weights for process categories should sum up to 1.
-                <br>
-              </div>
-
-              <br>
-
-
-              <label for="{{category.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
-                &nbsp; &nbsp;</label>
-              <input pInputText type="text" name="{{category.name}}_comment" ngModel placeholder="Comment"> <br> <br>
-
-              <label class="mr-4">Upload Document : </label>
-             <!--  <p-fileUpload name="file" [customUpload]="true" (uploadHandler)="myUploader($event,category.name)"
-                url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)" [multiple]="true"
-                [disabled]="categoryFileUploaded[category.name]"
-                [maxFileSize]="5000000" styleClass="custom-file-upload"></p-fileUpload> -->
-
-                <p-fileUpload name="file" [customUpload]="true" (uploadHandler)="myUploader($event,category.name)"
-                url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)" [multiple]="true"
-                [disabled]="categoryFileUploaded[category.name]"
-                [maxFileSize]="5000000" styleClass="custom-file-upload" class="narrow-file-upload"
-                 [showUploadButton]="!categoryFileUploaded[category.name]"></p-fileUpload>
-
-              <br> <br>
-
-
-              <label for="characteristics">
-                <p style="font-size: medium; font-weight: bold;">Characteristics:</p>
-              </label>
-              <div *ngFor="let characteristic of getCategory(characteristics, category.name)">
-                <input type="checkbox" name="{{category.name}}_{{characteristic.name}}" ngModel
-                 (change)="onCharacteristicChange(characteristic.name, $event)">&nbsp;
-                &nbsp;{{characteristic.name}}<br>
-
-                <label for="{{category.name}}_{{characteristic.name}}_weight">Weight: &nbsp; &nbsp; &nbsp; &nbsp;
-                  &nbsp; &nbsp;</label>
-
-                <input type="radio" name="{{category.name}}_{{characteristic.name}}_weight" value="0.25"
-                  [(ngModel)]="characteristicWeightOption" checked>Default
-                <input type="radio" name="{{category.name}}_{{characteristic.name}}_weight_option" value="custom"
-                  [(ngModel)]="characteristicWeightOption">Custom<br>
-
-                  <div *ngIf="characteristicWeightOption === 'custom'">
-                    <p-inputNumber name="{{category.name}}_{{characteristic.name}}_weight" ngModel mode="decimal" [showButtons]="true" inputId="minmax-buttons"
-                    [min]="0" [max]="1" [step]="0.05"  (ngModelChange)="onChaWeightChange(category.name,characteristic.name, $event)"></p-inputNumber>
-                    <br>
-                  </div>
-
-                  <div *ngIf="!chaCategoryTotalEqualsTo1[category.name] && characteristicWeightOption === 'custom'" style="color: red;">
-                    Barrier weights for characteristics of {{category.name}} category should sum up to 1.
-                    <br>
-                  </div>
-
-                <br>
-
-
-                <label for="{{category.name}}_{{characteristic.name}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp;
-                  &nbsp; &nbsp;</label>
-
-                <p-inputNumber name="{{category.name}}_{{characteristic.name}}_score" ngModel mode="decimal"
-                  [showButtons]="true" inputId="minmax-buttons" [min]="0" [max]="3" [step]="1"></p-inputNumber>
-                <br> <br>
-
-                <label for="{{category.name}}_{{characteristic.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
-                  &nbsp; &nbsp;</label>
-                <input pInputText type="text" name="{{category.name}}_{{characteristic.name}}_comment" ngModel
-                  placeholder="Comment"> <br> <br>
-
-                <label class="mr-4">Upload Document : </label>
-               <!--  <p-fileUpload name="file" [customUpload]="true" (uploadHandler)="myUploader($event,characteristic.name)"
-                  url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)" [multiple]="true"
-                  [disabled]="categoryFileUploaded[characteristic.name]"
-                  [maxFileSize]="5000000" styleClass="custom-file-upload"></p-fileUpload> -->
-
-                  <p-fileUpload name="file" [customUpload]="true" (uploadHandler)="myUploader($event,characteristic.name)"
-                  url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)" [multiple]="true"
-                  [disabled]="categoryFileUploaded[characteristic.name]"
-                  [maxFileSize]="5000000" styleClass="custom-file-upload" class="narrow-file-upload"
-                   [showUploadButton]="!categoryFileUploaded[characteristic.name]"></p-fileUpload>
-
-                   <!-- <app-document-upload [doucmentList]="documents"
-                   [documentOwnerId]="-4" [showUpload]="true" [showDeleteButton]="true" name="nc"
-                    [documentOwner]="documentsDocumentOwnerProject">
-                  </app-document-upload> -->
-                <br> <br>
-
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-
-      <br><br>
-      <h5>Outcomes of change</h5>
-      <div class="row p-2">
-        <div class="col-12 col-md-8">
-          <div class="p-field">
-            <label for="noutcat">Categories:</label>
-            <p-multiSelect name="noutcat" [options]="meth1Outcomes" [(ngModel)]="selectedItems4"
-              (onChange)="onItemSelect4($event)" defaultLabel="Select Categories" optionLabel="name"></p-multiSelect>
-
-          </div>
-        </div>
-      </div>
-
-
-
-      <div class="row p-2">
-        <div class="col-12 col-md-12">
-          <div class="p-field">
-            <div *ngFor="let category of selectedItems4"><br><br>
-              <h6>{{category.name}}</h6>
-
-              <label for="{{category.name}}_catweight">Category Weight: &nbsp;</label> <br>
-              <input type="radio" name="{{category.name}}_catweight" value="0.25"
-                [(ngModel)]="categoryWeightOptionOutcome" checked>Default
-              <input type="radio" name="{{category.name}}_catweight_option" value="custom"
-                [(ngModel)]="categoryWeightOptionOutcome">Custom<br>
-             <!--  <input *ngIf="categoryWeightOptionOutcome === 'custom'" type="number" name="{{category.name}}_catweight"
-                ngModel placeholder="Weight"> -->
-
-                <div *ngIf="categoryWeightOptionOutcome === 'custom'">
-                  <p-inputNumber  name="{{category.name}}_catweight" ngModel  mode="decimal" [showButtons]="true" inputId="minmax-buttons"
-                  [min]="0" [max]="1" [step]="0.05" (ngModelChange)="onCatWeightChangeOutcome(category.name, $event)"></p-inputNumber>
-                  <br>
-                </div>
-
-                <div *ngIf="!catWeightEqualTo1Outcome && categoryWeightOptionOutcome === 'custom'" style="color: red;">
-                  Barrier weights for outcome categories should sum up to 1.
-                  <br>
-                </div>
-                <br>
-
-              <label for="{{category.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
-                &nbsp; &nbsp;</label>
-              <input pInputText type="text" name="{{category.name}}_comment" ngModel placeholder="Comment"> <br> <br>
-
-              <label class="mr-4">Upload Document : </label>
-              <p-fileUpload name="file" [customUpload]="true" (uploadHandler)="myUploader($event,category.name)"
-              url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)" [multiple]="true"
-              [disabled]="categoryFileUploaded[category.name]"
-              [maxFileSize]="5000000" styleClass="custom-file-upload" class="narrow-file-upload"
-               [showUploadButton]="!categoryFileUploaded[category.name]"></p-fileUpload>
-              <br> <br>
-
-              <label for="characteristics">
-                <p style="font-size: medium; font-weight: bold;">Characteristics:</p>
-              </label>
-              <div *ngFor="let characteristic of getCategory(characteristics, category.name)">
-                <input type="checkbox" name="{{category.name}}_{{characteristic.name}}" ngModel
-                (change)="onCharacteristicChange(characteristic.name, $event)">&nbsp;
-                &nbsp;{{characteristic.name}}<br>
-
-                <label for="{{category.name}}_{{characteristic.name}}_weight">Weight: &nbsp; &nbsp; &nbsp; &nbsp;
-                  &nbsp; &nbsp;</label>
-                <input type="radio" name="{{category.name}}_{{characteristic.name}}_weight" value="0.25"
-                  [(ngModel)]="characteristicWeightOptionOutcome" checked>Default
-                <input type="radio" name="{{category.name}}_{{characteristic.name}}_weight_option" value="custom"
-                  [(ngModel)]="characteristicWeightOptionOutcome">Custom<br>
-               <!--  <input *ngIf="characteristicWeightOptionOutcome === 'custom'" type="number"
-                  name="{{category.name}}_{{characteristic.name}}_weight" ngModel placeholder="Weight"> -->
-                  <div *ngIf="characteristicWeightOptionOutcome === 'custom'">
-                    <p-inputNumber name="{{category.name}}_{{characteristic.name}}_weight" ngModel mode="decimal" [showButtons]="true" inputId="minmax-buttons"
-                    [min]="0" [max]="1" [step]="0.05" (ngModelChange)="onChaWeightChange(category.name,characteristic.name, $event)"></p-inputNumber>
-                    <br>
-                  </div>
-
-                  <div *ngIf="!chaCategoryTotalEqualsTo1[category.name] && characteristicWeightOptionOutcome === 'custom'" style="color: red;">
-                    Barrier weights for characteristics of {{category.name}} category should sum up to 1.
-                    <br>
-                  </div>
-
-                <br>
-
-                <label for="{{category.name}}_{{characteristic.name}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp;
-                  &nbsp; &nbsp;</label>
-                <!--     <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel
-                      placeholder="Score"> <br> <br> -->
-
-                      <div *ngIf="category.id== 5 || category.id ==6">
-                        <p-inputNumber name="{{category.name}}_{{characteristic.name}}_score" ngModel mode="decimal"
-                        [showButtons]="true" inputId="minmax-buttons" [min]="-1" [max]="3" [step]="1"></p-inputNumber>
-                      </div>
-
-                      <div *ngIf="category.id== 7 || category.id ==8">
-                        <p-inputNumber name="{{category.name}}_{{characteristic.name}}_score" ngModel mode="decimal"
-                        [showButtons]="true" inputId="minmax-buttons" [min]="0" [max]="3" [step]="1"></p-inputNumber>
-                      </div>
-
-                <br> <br>
-
-                <!--    <label for="{{category.name}}_{{characteristic.name}}_institution" >Institution for Characteristic Score &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</label>
-                      <select [disabled]="isSubmitted"  (change)="onChangeInstitution($event)" ngModel
-                      name="{{category.name}}_{{characteristic.name}}_institution"
-                        id="{{category.name}}_{{characteristic.name}}_institution">
-                        <option value="" disabled selected hidden>Select Institution</option>
-                        <option *ngFor="let institu of instiTutionList" [value]="institu.id">{{institu.name}}</option>
-                      </select> <br><br>
- -->
-
-                <label for="{{category.name}}_{{characteristic.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
-                  &nbsp; &nbsp;</label>
-                <input pInputText type="text" name="{{category.name}}_{{characteristic.name}}_comment" ngModel
-                  placeholder="Comment"> <br> <br>
-
-                <label class="mr-4">Upload Document : </label>
-                <p-fileUpload name="file" [customUpload]="true" (uploadHandler)="myUploader($event,characteristic.name)"
-                  url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)" [multiple]="true"
-                  [disabled]="categoryFileUploaded[characteristic.name]"
-                  [maxFileSize]="5000000" styleClass="custom-file-upload" class="narrow-file-upload"
-                   [showUploadButton]="!categoryFileUploaded[characteristic.name]"></p-fileUpload>
-                  <br> <br>
-
-
-
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="d-flex flex-row-reverse mt-2 mb-2">
-        <button pButton pRipple class="btn btn-primary btn-block text-uppercase" type='submit'>Submit</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-
-      <div *ngIf="track3Indirect">
+      <div *ngIf="track3Direct">
 
         <div *ngFor="let cha of characteristicsList">
-          <div  *ngIf="hasBarriers(cha)">
-      <h6>{{cha.name}}</h6>
+          <div *ngIf="hasBarriers(cha)">
+            <h6>{{cha.name}}</h6>
           </div>
-        <div *ngFor="let item of dataArray">
-          <ng-container *ngIf="cha.id == item.chaId">
+          <div *ngFor="let item of dataArray">
+            <ng-container *ngIf="cha.id == item.chaId">
 
+              <h6 style="font-size: 15px;">Barrier :{{item.barrierName}}</h6>
+              <p>Barrier Score: {{item.barrierScore}}</p>
+              <p>Barrier Comment : {{item.barrierComment}}</p>
+
+              <label for="{{item.barrier}}_weight">Barrier Weight: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</label>
+
+              <p-inputNumber [(ngModel)]="item.barrierWeight" mode="decimal" [showButtons]="true" inputId="minmax-buttons"
+                [min]="0" [max]="1" [step]="0.05"></p-inputNumber>
+              <br> <br>
+
+              <label for="{{item.barrier}}_Weightcomment">Comment for Barrier Weight: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                &nbsp;</label>
+              <input pInputText type="text" name="{{item.barrier}}_Weightcomment" [(ngModel)]="item.bWeightComment"
+                placeholder="Comment">
+
+              <br> <br>
+
+              <div *ngIf="!isBarrierWeightValid(cha.id)" style="color: red;">
+                Barrier weights for {{cha.name}} should sum up to 1.
+              </div>
+
+            </ng-container>
+          </div>
+        </div>
+
+
+
+        <!--  <div *ngFor="let cha of characteristicsList">
+        <div *ngFor="let item of dataArray">
+          <div *ngIf="cha.id == item.chaId">
+            <h6>{{cha.name}}</h6>
             <h6 style="font-size: 15px;">Barrier :{{item.barrierName}}</h6>
             <p>Barrier Score: {{item.barrierScore}}</p>
             <p>Barrier Comment : {{item.barrierComment}}</p>
 
-            <label for="{{item.barrier}}_weight">Barrier Weight: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</label>
+            <label for="{{item.barrier}}_weight">Barrier Weight: &nbsp; &nbsp; &nbsp; &nbsp;
+              &nbsp; &nbsp;</label>
 
             <p-inputNumber [(ngModel)]="item.barrierWeight" mode="decimal" [showButtons]="true" inputId="minmax-buttons"
               [min]="0" [max]="1" [step]="0.05"></p-inputNumber>
             <br> <br>
 
-            <label for="{{item.barrier}}_Weightcomment">Comment for Barrier Weight: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</label>
-            <input pInputText type="text" name="{{item.barrier}}_Weightcomment" [(ngModel)]="item.bWeightComment" placeholder="Comment">
+            <label for="{{item.barrier}}_Weightcomment">Comment for Barrier Weight: &nbsp; &nbsp; &nbsp; &nbsp;
+              &nbsp; &nbsp;</label>
+            <input type="text" name="{{item.barrier}}_Weightcomment" [(ngModel)]="item.bWeightComment"
+              placeholder="Comment">
 
             <br> <br>
 
-            <div *ngIf="!isBarrierWeightValid(cha.id)" style="color: red;">
-              Barrier weights for {{cha.name}} should sum up to 1.
-            </div>
-
-          </ng-container>
+          </div>
         </div>
-      </div>
+      </div> -->
 
+        <button type="submit" [disabled]="!isAllBarrierWeightValid()" (click)="submitBarrierData(dataArray)">Submit</button>
 
-
-        <button type="submit" (click)="submitBarrierData(dataArray)">Submit</button>
+        <!--  <button type="submit" (click)="submitBarrierData(dataArray)">Submit</button> -->
 
         <div *ngIf="submitData">
           <form #categorydata="ngForm" (ngSubmit)="onSubmitCatData(categorydata.value)">
@@ -1760,9 +1461,10 @@
                     <input type="radio" name="{{category.name}}_catweight_option" value="custom"
                       [(ngModel)]="categoryWeightOption">Custom<br>
 
-                      <div *ngIf="categoryWeightOption === 'custom'">
-                      <p-inputNumber  name="{{category.name}}_catweight" ngModel  mode="decimal" [showButtons]="true" inputId="minmax-buttons"
-                      [min]="0" [max]="1" [step]="0.05"  (ngModelChange)="onCatWeightChange(category.name, $event)"></p-inputNumber>
+                    <div *ngIf="categoryWeightOption === 'custom'">
+                      <p-inputNumber name="{{category.name}}_catweight" ngModel mode="decimal" [showButtons]="true"
+                        inputId="minmax-buttons" [min]="0" [max]="1" [step]="0.05"
+                        (ngModelChange)="onCatWeightChange(category.name, $event)"></p-inputNumber>
                       <br>
                     </div>
 
@@ -1779,16 +1481,16 @@
                     <input pInputText type="text" name="{{category.name}}_comment" ngModel placeholder="Comment"> <br> <br>
 
                     <label class="mr-4">Upload Document : </label>
-                   <!--  <p-fileUpload name="file" [customUpload]="true" (uploadHandler)="myUploader($event,category.name)"
-                      url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)" [multiple]="true"
-                      [disabled]="categoryFileUploaded[category.name]"
-                      [maxFileSize]="5000000" styleClass="custom-file-upload"></p-fileUpload> -->
+                    <!--  <p-fileUpload name="file" [customUpload]="true" (uploadHandler)="myUploader($event,category.name)"
+                    url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)" [multiple]="true"
+                    [disabled]="categoryFileUploaded[category.name]"
+                    [maxFileSize]="5000000" styleClass="custom-file-upload"></p-fileUpload> -->
 
-                      <p-fileUpload name="file" [customUpload]="true" (uploadHandler)="myUploader($event,category.name)"
+                    <p-fileUpload name="file" [customUpload]="true" (uploadHandler)="myUploader($event,category.name)"
                       url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)" [multiple]="true"
-                      [disabled]="categoryFileUploaded[category.name]"
-                      [maxFileSize]="5000000" styleClass="custom-file-upload" class="narrow-file-upload"
-                       [showUploadButton]="!categoryFileUploaded[category.name]"></p-fileUpload>
+                      [disabled]="categoryFileUploaded[category.name]" [maxFileSize]="5000000"
+                      styleClass="custom-file-upload" class="narrow-file-upload"
+                      [showUploadButton]="!categoryFileUploaded[category.name]"></p-fileUpload>
 
                     <br> <br>
 
@@ -1798,7 +1500,7 @@
                     </label>
                     <div *ngFor="let characteristic of getCategory(characteristics, category.name)">
                       <input type="checkbox" name="{{category.name}}_{{characteristic.name}}" ngModel
-                       (change)="onCharacteristicChange(characteristic.name, $event)">&nbsp;
+                        (change)="onCharacteristicChange(characteristic.name, $event)">&nbsp;
                       &nbsp;{{characteristic.name}}<br>
 
                       <label for="{{category.name}}_{{characteristic.name}}_weight">Weight: &nbsp; &nbsp; &nbsp; &nbsp;
@@ -1809,26 +1511,28 @@
                       <input type="radio" name="{{category.name}}_{{characteristic.name}}_weight_option" value="custom"
                         [(ngModel)]="characteristicWeightOption">Custom<br>
 
-                        <div *ngIf="characteristicWeightOption === 'custom'">
-                          <p-inputNumber name="{{category.name}}_{{characteristic.name}}_weight" ngModel mode="decimal" [showButtons]="true" inputId="minmax-buttons"
-                          [min]="0" [max]="1" [step]="0.05"  (ngModelChange)="onChaWeightChange(category.name,characteristic.name, $event)"></p-inputNumber>
-                          <br>
-                        </div>
+                      <div *ngIf="characteristicWeightOption === 'custom'">
+                        <p-inputNumber name="{{category.name}}_{{characteristic.name}}_weight" ngModel mode="decimal"
+                          [showButtons]="true" inputId="minmax-buttons" [min]="0" [max]="1" [step]="0.05"
+                          (ngModelChange)="onChaWeightChange(category.name,characteristic.name, $event)"></p-inputNumber>
+                        <br>
+                      </div>
 
-                        <div *ngIf="!chaCategoryTotalEqualsTo1[category.name] && characteristicWeightOption === 'custom'" style="color: red;">
-                          Barrier weights for characteristics of {{category.name}} category should sum up to 1.
-                          <br>
-                        </div>
+                      <div *ngIf="!chaCategoryTotalEqualsTo1[category.name] && characteristicWeightOption === 'custom'"
+                        style="color: red;">
+                        Barrier weights for characteristics of {{category.name}} category should sum up to 1.
+                        <br>
+                      </div>
 
                       <br>
 
-                      <label for="{{category.name}}_{{characteristic.name}}_institution" >Institution for Characteristic Score &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</label>
-                  <select [disabled]="isSubmitted"  (change)="onChangeInstitution($event)" ngModel
-                  name="{{category.name}}_{{characteristic.name}}_institution"
-                    id="{{category.name}}_{{characteristic.name}}_institution">
-                    <option value="" disabled selected hidden>Select Institution</option>
-                    <option *ngFor="let institu of instiTutionList" [value]="institu.id">{{institu.name}}</option>
-                  </select> <br><br>
+
+                      <label for="{{category.name}}_{{characteristic.name}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp;
+                        &nbsp; &nbsp;</label>
+
+                      <p-inputNumber name="{{category.name}}_{{characteristic.name}}_score" ngModel mode="decimal"
+                        [showButtons]="true" inputId="minmax-buttons" [min]="0" [max]="3" [step]="1"></p-inputNumber>
+                      <br> <br>
 
                       <label for="{{category.name}}_{{characteristic.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
                         &nbsp; &nbsp;</label>
@@ -1836,16 +1540,22 @@
                         placeholder="Comment"> <br> <br>
 
                       <label class="mr-4">Upload Document : </label>
-                     <!--  <p-fileUpload name="file" [customUpload]="true" (uploadHandler)="myUploader($event,characteristic.name)"
-                        url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)" [multiple]="true"
-                        [disabled]="categoryFileUploaded[characteristic.name]"
-                        [maxFileSize]="5000000" styleClass="custom-file-upload"></p-fileUpload> -->
+                      <!--  <p-fileUpload name="file" [customUpload]="true" (uploadHandler)="myUploader($event,characteristic.name)"
+                      url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)" [multiple]="true"
+                      [disabled]="categoryFileUploaded[characteristic.name]"
+                      [maxFileSize]="5000000" styleClass="custom-file-upload"></p-fileUpload> -->
 
-                        <p-fileUpload name="file" [customUpload]="true" (uploadHandler)="myUploader($event,characteristic.name)"
-                        url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)" [multiple]="true"
-                        [disabled]="categoryFileUploaded[characteristic.name]"
-                        [maxFileSize]="5000000" styleClass="custom-file-upload" class="narrow-file-upload"
-                         [showUploadButton]="!categoryFileUploaded[characteristic.name]"></p-fileUpload>
+                      <p-fileUpload name="file" [customUpload]="true"
+                        (uploadHandler)="myUploader($event,characteristic.name)"
+                        url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)"
+                        [multiple]="true" [disabled]="categoryFileUploaded[characteristic.name]" [maxFileSize]="5000000"
+                        styleClass="custom-file-upload" class="narrow-file-upload"
+                        [showUploadButton]="!categoryFileUploaded[characteristic.name]"></p-fileUpload>
+
+                      <!-- <app-document-upload [doucmentList]="documents"
+                       [documentOwnerId]="-4" [showUpload]="true" [showDeleteButton]="true" name="nc"
+                        [documentOwner]="documentsDocumentOwnerProject">
+                      </app-document-upload> -->
                       <br> <br>
 
                     </div>
@@ -1883,20 +1593,21 @@
                       [(ngModel)]="categoryWeightOptionOutcome" checked>Default
                     <input type="radio" name="{{category.name}}_catweight_option" value="custom"
                       [(ngModel)]="categoryWeightOptionOutcome">Custom<br>
-                   <!--  <input *ngIf="categoryWeightOptionOutcome === 'custom'" type="number" name="{{category.name}}_catweight"
-                      ngModel placeholder="Weight"> -->
+                    <!--  <input *ngIf="categoryWeightOptionOutcome === 'custom'" type="number" name="{{category.name}}_catweight"
+                    ngModel placeholder="Weight"> -->
 
-                      <div *ngIf="categoryWeightOptionOutcome === 'custom'">
-                        <p-inputNumber  name="{{category.name}}_catweight" ngModel  mode="decimal" [showButtons]="true" inputId="minmax-buttons"
-                        [min]="0" [max]="1" [step]="0.05" (ngModelChange)="onCatWeightChangeOutcome(category.name, $event)"></p-inputNumber>
-                        <br>
-                      </div>
-
-                      <div *ngIf="!catWeightEqualTo1Outcome && categoryWeightOptionOutcome === 'custom'" style="color: red;">
-                        Barrier weights for outcome categories should sum up to 1.
-                        <br>
-                      </div>
+                    <div *ngIf="categoryWeightOptionOutcome === 'custom'">
+                      <p-inputNumber name="{{category.name}}_catweight" ngModel mode="decimal" [showButtons]="true"
+                        inputId="minmax-buttons" [min]="0" [max]="1" [step]="0.05"
+                        (ngModelChange)="onCatWeightChangeOutcome(category.name, $event)"></p-inputNumber>
                       <br>
+                    </div>
+
+                    <div *ngIf="!catWeightEqualTo1Outcome && categoryWeightOptionOutcome === 'custom'" style="color: red;">
+                      Barrier weights for outcome categories should sum up to 1.
+                      <br>
+                    </div>
+                    <br>
 
                     <label for="{{category.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
                       &nbsp; &nbsp;</label>
@@ -1904,10 +1615,10 @@
 
                     <label class="mr-4">Upload Document : </label>
                     <p-fileUpload name="file" [customUpload]="true" (uploadHandler)="myUploader($event,category.name)"
-                    url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)" [multiple]="true"
-                    [disabled]="categoryFileUploaded[category.name]"
-                    [maxFileSize]="5000000" styleClass="custom-file-upload" class="narrow-file-upload"
-                     [showUploadButton]="!categoryFileUploaded[category.name]"></p-fileUpload>
+                      url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)" [multiple]="true"
+                      [disabled]="categoryFileUploaded[category.name]" [maxFileSize]="5000000"
+                      styleClass="custom-file-upload" class="narrow-file-upload"
+                      [showUploadButton]="!categoryFileUploaded[category.name]"></p-fileUpload>
                     <br> <br>
 
                     <label for="characteristics">
@@ -1915,7 +1626,7 @@
                     </label>
                     <div *ngFor="let characteristic of getCategory(characteristics, category.name)">
                       <input type="checkbox" name="{{category.name}}_{{characteristic.name}}" ngModel
-                      (change)="onCharacteristicChange(characteristic.name, $event)">&nbsp;
+                        (change)="onCharacteristicChange(characteristic.name, $event)">&nbsp;
                       &nbsp;{{characteristic.name}}<br>
 
                       <label for="{{category.name}}_{{characteristic.name}}_weight">Weight: &nbsp; &nbsp; &nbsp; &nbsp;
@@ -1924,37 +1635,49 @@
                         [(ngModel)]="characteristicWeightOptionOutcome" checked>Default
                       <input type="radio" name="{{category.name}}_{{characteristic.name}}_weight_option" value="custom"
                         [(ngModel)]="characteristicWeightOptionOutcome">Custom<br>
-                     <!--  <input *ngIf="characteristicWeightOptionOutcome === 'custom'" type="number"
-                        name="{{category.name}}_{{characteristic.name}}_weight" ngModel placeholder="Weight"> -->
-                        <div *ngIf="characteristicWeightOptionOutcome === 'custom'">
-                          <p-inputNumber name="{{category.name}}_{{characteristic.name}}_weight" ngModel mode="decimal" [showButtons]="true" inputId="minmax-buttons"
-                          [min]="0" [max]="1" [step]="0.05" (ngModelChange)="onChaWeightChange(category.name,characteristic.name, $event)"></p-inputNumber>
-                          <br>
-                        </div>
+                      <!--  <input *ngIf="characteristicWeightOptionOutcome === 'custom'" type="number"
+                      name="{{category.name}}_{{characteristic.name}}_weight" ngModel placeholder="Weight"> -->
+                      <div *ngIf="characteristicWeightOptionOutcome === 'custom'">
+                        <p-inputNumber name="{{category.name}}_{{characteristic.name}}_weight" ngModel mode="decimal"
+                          [showButtons]="true" inputId="minmax-buttons" [min]="0" [max]="1" [step]="0.05"
+                          (ngModelChange)="onChaWeightChange(category.name,characteristic.name, $event)"></p-inputNumber>
+                        <br>
+                      </div>
 
-                        <div *ngIf="!chaCategoryTotalEqualsTo1[category.name] && characteristicWeightOptionOutcome === 'custom'" style="color: red;">
-                          Barrier weights for characteristics of {{category.name}} category should sum up to 1.
-                          <br>
-                        </div>
+                      <div
+                        *ngIf="!chaCategoryTotalEqualsTo1[category.name] && characteristicWeightOptionOutcome === 'custom'"
+                        style="color: red;">
+                        Barrier weights for characteristics of {{category.name}} category should sum up to 1.
+                        <br>
+                      </div>
 
                       <br>
 
-                      <label for="{{category.name}}_{{characteristic.name}}_institution" >Institution for Characteristic Score &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</label>
-                      <select [disabled]="isSubmitted"  (change)="onChangeInstitution($event)" ngModel
-                      name="{{category.name}}_{{characteristic.name}}_institution"
-                        id="{{category.name}}_{{characteristic.name}}_institution">
-                        <option value="" disabled selected hidden>Select Institution</option>
-                        <option *ngFor="let institu of instiTutionList" [value]="institu.id">{{institu.name}}</option>
-                      </select> <br><br>
+                      <label for="{{category.name}}_{{characteristic.name}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp;
+                        &nbsp; &nbsp;</label>
+                      <!--     <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel
+                          placeholder="Score"> <br> <br> -->
+
+                      <div *ngIf="category.id== 5 || category.id ==6">
+                        <p-inputNumber name="{{category.name}}_{{characteristic.name}}_score" ngModel mode="decimal"
+                          [showButtons]="true" inputId="minmax-buttons" [min]="-1" [max]="3" [step]="1"></p-inputNumber>
+                      </div>
+
+                      <div *ngIf="category.id== 7 || category.id ==8">
+                        <p-inputNumber name="{{category.name}}_{{characteristic.name}}_score" ngModel mode="decimal"
+                          [showButtons]="true" inputId="minmax-buttons" [min]="0" [max]="3" [step]="1"></p-inputNumber>
+                      </div>
+
+                      <br> <br>
 
                       <!--    <label for="{{category.name}}_{{characteristic.name}}_institution" >Institution for Characteristic Score &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</label>
-                            <select [disabled]="isSubmitted"  (change)="onChangeInstitution($event)" ngModel
-                            name="{{category.name}}_{{characteristic.name}}_institution"
-                              id="{{category.name}}_{{characteristic.name}}_institution">
-                              <option value="" disabled selected hidden>Select Institution</option>
-                              <option *ngFor="let institu of instiTutionList" [value]="institu.id">{{institu.name}}</option>
-                            </select> <br><br>
-       -->
+                          <select [disabled]="isSubmitted"  (change)="onChangeInstitution($event)" ngModel
+                          name="{{category.name}}_{{characteristic.name}}_institution"
+                            id="{{category.name}}_{{characteristic.name}}_institution">
+                            <option value="" disabled selected hidden>Select Institution</option>
+                            <option *ngFor="let institu of instiTutionList" [value]="institu.id">{{institu.name}}</option>
+                          </select> <br><br>
+     -->
 
                       <label for="{{category.name}}_{{characteristic.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
                         &nbsp; &nbsp;</label>
@@ -1962,12 +1685,316 @@
                         placeholder="Comment"> <br> <br>
 
                       <label class="mr-4">Upload Document : </label>
-                      <p-fileUpload name="file" [customUpload]="true" (uploadHandler)="myUploader($event,characteristic.name)"
-                        url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)" [multiple]="true"
-                        [disabled]="categoryFileUploaded[characteristic.name]"
-                        [maxFileSize]="5000000" styleClass="custom-file-upload" class="narrow-file-upload"
-                         [showUploadButton]="!categoryFileUploaded[characteristic.name]"></p-fileUpload>
-                        <br> <br>
+                      <p-fileUpload name="file" [customUpload]="true"
+                        (uploadHandler)="myUploader($event,characteristic.name)"
+                        url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)"
+                        [multiple]="true" [disabled]="categoryFileUploaded[characteristic.name]" [maxFileSize]="5000000"
+                        styleClass="custom-file-upload" class="narrow-file-upload"
+                        [showUploadButton]="!categoryFileUploaded[characteristic.name]"></p-fileUpload>
+                      <br> <br>
+
+
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex flex-row-reverse mt-2 mb-2">
+              <button pButton pRipple class="btn btn-primary btn-block text-uppercase" type='submit'>Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+
+      <div *ngIf="track3Indirect">
+
+        <div *ngFor="let cha of characteristicsList">
+          <div *ngIf="hasBarriers(cha)">
+            <h6>{{cha.name}}</h6>
+          </div>
+          <div *ngFor="let item of dataArray">
+            <ng-container *ngIf="cha.id == item.chaId">
+
+              <h6 style="font-size: 15px;">Barrier :{{item.barrierName}}</h6>
+              <p>Barrier Score: {{item.barrierScore}}</p>
+              <p>Barrier Comment : {{item.barrierComment}}</p>
+
+              <label for="{{item.barrier}}_weight">Barrier Weight: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</label>
+
+              <p-inputNumber [(ngModel)]="item.barrierWeight" mode="decimal" [showButtons]="true" inputId="minmax-buttons"
+                [min]="0" [max]="1" [step]="0.05"></p-inputNumber>
+              <br> <br>
+
+              <label for="{{item.barrier}}_Weightcomment">Comment for Barrier Weight: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                &nbsp;</label>
+              <input pInputText type="text" name="{{item.barrier}}_Weightcomment" [(ngModel)]="item.bWeightComment"
+                placeholder="Comment">
+
+              <br> <br>
+
+              <div *ngIf="!isBarrierWeightValid(cha.id)" style="color: red;">
+                Barrier weights for {{cha.name}} should sum up to 1.
+              </div>
+
+            </ng-container>
+          </div>
+        </div>
+
+
+
+        <button type="submit" (click)="submitBarrierData(dataArray)">Submit</button>
+
+        <div *ngIf="submitData">
+          <form #categorydata="ngForm" (ngSubmit)="onSubmitCatData(categorydata.value)">
+            <br><br>
+            <h5>Processess of change</h5>
+            <div class="row p-2">
+              <div class="col-12 col-md-8">
+                <div class="p-field">
+                  <label for="nprocescat">Categories:</label>
+
+                  <p-multiSelect name="nprocescat" [options]="meth1Process" [(ngModel)]="selectedItems3"
+                    (onChange)="onItemSelect3($event)" defaultLabel="Select Categories" optionLabel="name"></p-multiSelect>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="row p-2">
+              <div class="col-12 col-md-12">
+                <div class="p-field">
+                  <div *ngFor="let category of selectedItems3"><br><br>
+                    <h6>{{category.name}}</h6>
+
+                    <label for="{{category.name}}_catweight">Category Weight: &nbsp;</label> <br>
+                    <input type="radio" name="{{category.name}}_catweight" value="0.25" [(ngModel)]="categoryWeightOption"
+                      checked>Default
+                    <input type="radio" name="{{category.name}}_catweight_option" value="custom"
+                      [(ngModel)]="categoryWeightOption">Custom<br>
+
+                    <div *ngIf="categoryWeightOption === 'custom'">
+                      <p-inputNumber name="{{category.name}}_catweight" ngModel mode="decimal" [showButtons]="true"
+                        inputId="minmax-buttons" [min]="0" [max]="1" [step]="0.05"
+                        (ngModelChange)="onCatWeightChange(category.name, $event)"></p-inputNumber>
+                      <br>
+                    </div>
+
+                    <div *ngIf="!catWeightEqualTo1 && categoryWeightOption === 'custom'" style="color: red;">
+                      Barrier weights for process categories should sum up to 1.
+                      <br>
+                    </div>
+
+                    <br>
+
+
+                    <label for="{{category.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
+                      &nbsp; &nbsp;</label>
+                    <input pInputText type="text" name="{{category.name}}_comment" ngModel placeholder="Comment"> <br> <br>
+
+                    <label class="mr-4">Upload Document : </label>
+                    <!--  <p-fileUpload name="file" [customUpload]="true" (uploadHandler)="myUploader($event,category.name)"
+                          url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)" [multiple]="true"
+                          [disabled]="categoryFileUploaded[category.name]"
+                          [maxFileSize]="5000000" styleClass="custom-file-upload"></p-fileUpload> -->
+
+                    <p-fileUpload name="file" [customUpload]="true" (uploadHandler)="myUploader($event,category.name)"
+                      url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)" [multiple]="true"
+                      [disabled]="categoryFileUploaded[category.name]" [maxFileSize]="5000000"
+                      styleClass="custom-file-upload" class="narrow-file-upload"
+                      [showUploadButton]="!categoryFileUploaded[category.name]"></p-fileUpload>
+
+                    <br> <br>
+
+
+                    <label for="characteristics">
+                      <p style="font-size: medium; font-weight: bold;">Characteristics:</p>
+                    </label>
+                    <div *ngFor="let characteristic of getCategory(characteristics, category.name)">
+                      <input type="checkbox" name="{{category.name}}_{{characteristic.name}}" ngModel
+                        (change)="onCharacteristicChange(characteristic.name, $event)">&nbsp;
+                      &nbsp;{{characteristic.name}}<br>
+
+                      <label for="{{category.name}}_{{characteristic.name}}_weight">Weight: &nbsp; &nbsp; &nbsp; &nbsp;
+                        &nbsp; &nbsp;</label>
+
+                      <input type="radio" name="{{category.name}}_{{characteristic.name}}_weight" value="0.25"
+                        [(ngModel)]="characteristicWeightOption" checked>Default
+                      <input type="radio" name="{{category.name}}_{{characteristic.name}}_weight_option" value="custom"
+                        [(ngModel)]="characteristicWeightOption">Custom<br>
+
+                      <div *ngIf="characteristicWeightOption === 'custom'">
+                        <p-inputNumber name="{{category.name}}_{{characteristic.name}}_weight" ngModel mode="decimal"
+                          [showButtons]="true" inputId="minmax-buttons" [min]="0" [max]="1" [step]="0.05"
+                          (ngModelChange)="onChaWeightChange(category.name,characteristic.name, $event)"></p-inputNumber>
+                        <br>
+                      </div>
+
+                      <div *ngIf="!chaCategoryTotalEqualsTo1[category.name] && characteristicWeightOption === 'custom'"
+                        style="color: red;">
+                        Barrier weights for characteristics of {{category.name}} category should sum up to 1.
+                        <br>
+                      </div>
+
+                      <br>
+
+                      <label for="{{category.name}}_{{characteristic.name}}_institution">Institution for Characteristic
+                        Score &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</label>
+                      <select [disabled]="isSubmitted" (change)="onChangeInstitution($event)" ngModel
+                        name="{{category.name}}_{{characteristic.name}}_institution"
+                        id="{{category.name}}_{{characteristic.name}}_institution">
+                        <option value="" disabled selected hidden>Select Institution</option>
+                        <option *ngFor="let institu of instiTutionList" [value]="institu.id">{{institu.name}}</option>
+                      </select> <br><br>
+
+                      <label for="{{category.name}}_{{characteristic.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
+                        &nbsp; &nbsp;</label>
+                      <input pInputText type="text" name="{{category.name}}_{{characteristic.name}}_comment" ngModel
+                        placeholder="Comment"> <br> <br>
+
+                      <label class="mr-4">Upload Document : </label>
+                      <!--  <p-fileUpload name="file" [customUpload]="true" (uploadHandler)="myUploader($event,characteristic.name)"
+                            url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)" [multiple]="true"
+                            [disabled]="categoryFileUploaded[characteristic.name]"
+                            [maxFileSize]="5000000" styleClass="custom-file-upload"></p-fileUpload> -->
+
+                      <p-fileUpload name="file" [customUpload]="true"
+                        (uploadHandler)="myUploader($event,characteristic.name)"
+                        url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)"
+                        [multiple]="true" [disabled]="categoryFileUploaded[characteristic.name]" [maxFileSize]="5000000"
+                        styleClass="custom-file-upload" class="narrow-file-upload"
+                        [showUploadButton]="!categoryFileUploaded[characteristic.name]"></p-fileUpload>
+                      <br> <br>
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+            <br><br>
+            <h5>Outcomes of change</h5>
+            <div class="row p-2">
+              <div class="col-12 col-md-8">
+                <div class="p-field">
+                  <label for="noutcat">Categories:</label>
+                  <p-multiSelect name="noutcat" [options]="meth1Outcomes" [(ngModel)]="selectedItems4"
+                    (onChange)="onItemSelect4($event)" defaultLabel="Select Categories" optionLabel="name"></p-multiSelect>
+
+                </div>
+              </div>
+            </div>
+
+
+
+            <div class="row p-2">
+              <div class="col-12 col-md-12">
+                <div class="p-field">
+                  <div *ngFor="let category of selectedItems4"><br><br>
+                    <h6>{{category.name}}</h6>
+
+                    <label for="{{category.name}}_catweight">Category Weight: &nbsp;</label> <br>
+                    <input type="radio" name="{{category.name}}_catweight" value="0.25"
+                      [(ngModel)]="categoryWeightOptionOutcome" checked>Default
+                    <input type="radio" name="{{category.name}}_catweight_option" value="custom"
+                      [(ngModel)]="categoryWeightOptionOutcome">Custom<br>
+                    <!--  <input *ngIf="categoryWeightOptionOutcome === 'custom'" type="number" name="{{category.name}}_catweight"
+                          ngModel placeholder="Weight"> -->
+
+                    <div *ngIf="categoryWeightOptionOutcome === 'custom'">
+                      <p-inputNumber name="{{category.name}}_catweight" ngModel mode="decimal" [showButtons]="true"
+                        inputId="minmax-buttons" [min]="0" [max]="1" [step]="0.05"
+                        (ngModelChange)="onCatWeightChangeOutcome(category.name, $event)"></p-inputNumber>
+                      <br>
+                    </div>
+
+                    <div *ngIf="!catWeightEqualTo1Outcome && categoryWeightOptionOutcome === 'custom'" style="color: red;">
+                      Barrier weights for outcome categories should sum up to 1.
+                      <br>
+                    </div>
+                    <br>
+
+                    <label for="{{category.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
+                      &nbsp; &nbsp;</label>
+                    <input pInputText type="text" name="{{category.name}}_comment" ngModel placeholder="Comment"> <br> <br>
+
+                    <label class="mr-4">Upload Document : </label>
+                    <p-fileUpload name="file" [customUpload]="true" (uploadHandler)="myUploader($event,category.name)"
+                      url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)" [multiple]="true"
+                      [disabled]="categoryFileUploaded[category.name]" [maxFileSize]="5000000"
+                      styleClass="custom-file-upload" class="narrow-file-upload"
+                      [showUploadButton]="!categoryFileUploaded[category.name]"></p-fileUpload>
+                    <br> <br>
+
+                    <label for="characteristics">
+                      <p style="font-size: medium; font-weight: bold;">Characteristics:</p>
+                    </label>
+                    <div *ngFor="let characteristic of getCategory(characteristics, category.name)">
+                      <input type="checkbox" name="{{category.name}}_{{characteristic.name}}" ngModel
+                        (change)="onCharacteristicChange(characteristic.name, $event)">&nbsp;
+                      &nbsp;{{characteristic.name}}<br>
+
+                      <label for="{{category.name}}_{{characteristic.name}}_weight">Weight: &nbsp; &nbsp; &nbsp; &nbsp;
+                        &nbsp; &nbsp;</label>
+                      <input type="radio" name="{{category.name}}_{{characteristic.name}}_weight" value="0.25"
+                        [(ngModel)]="characteristicWeightOptionOutcome" checked>Default
+                      <input type="radio" name="{{category.name}}_{{characteristic.name}}_weight_option" value="custom"
+                        [(ngModel)]="characteristicWeightOptionOutcome">Custom<br>
+                      <!--  <input *ngIf="characteristicWeightOptionOutcome === 'custom'" type="number"
+                            name="{{category.name}}_{{characteristic.name}}_weight" ngModel placeholder="Weight"> -->
+                      <div *ngIf="characteristicWeightOptionOutcome === 'custom'">
+                        <p-inputNumber name="{{category.name}}_{{characteristic.name}}_weight" ngModel mode="decimal"
+                          [showButtons]="true" inputId="minmax-buttons" [min]="0" [max]="1" [step]="0.05"
+                          (ngModelChange)="onChaWeightChange(category.name,characteristic.name, $event)"></p-inputNumber>
+                        <br>
+                      </div>
+
+                      <div
+                        *ngIf="!chaCategoryTotalEqualsTo1[category.name] && characteristicWeightOptionOutcome === 'custom'"
+                        style="color: red;">
+                        Barrier weights for characteristics of {{category.name}} category should sum up to 1.
+                        <br>
+                      </div>
+
+                      <br>
+
+                      <label for="{{category.name}}_{{characteristic.name}}_institution">Institution for Characteristic
+                        Score &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</label>
+                      <select [disabled]="isSubmitted" (change)="onChangeInstitution($event)" ngModel
+                        name="{{category.name}}_{{characteristic.name}}_institution"
+                        id="{{category.name}}_{{characteristic.name}}_institution">
+                        <option value="" disabled selected hidden>Select Institution</option>
+                        <option *ngFor="let institu of instiTutionList" [value]="institu.id">{{institu.name}}</option>
+                      </select> <br><br>
+
+                      <!--    <label for="{{category.name}}_{{characteristic.name}}_institution" >Institution for Characteristic Score &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</label>
+                                <select [disabled]="isSubmitted"  (change)="onChangeInstitution($event)" ngModel
+                                name="{{category.name}}_{{characteristic.name}}_institution"
+                                  id="{{category.name}}_{{characteristic.name}}_institution">
+                                  <option value="" disabled selected hidden>Select Institution</option>
+                                  <option *ngFor="let institu of instiTutionList" [value]="institu.id">{{institu.name}}</option>
+                                </select> <br><br>
+           -->
+
+                      <label for="{{category.name}}_{{characteristic.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
+                        &nbsp; &nbsp;</label>
+                      <input pInputText type="text" name="{{category.name}}_{{characteristic.name}}_comment" ngModel
+                        placeholder="Comment"> <br> <br>
+
+                      <label class="mr-4">Upload Document : </label>
+                      <p-fileUpload name="file" [customUpload]="true"
+                        (uploadHandler)="myUploader($event,characteristic.name)"
+                        url="{{ baseURL }}/methodology-assessment/uploadtest" (onUpload)="onUpload($event)"
+                        [multiple]="true" [disabled]="categoryFileUploaded[characteristic.name]" [maxFileSize]="5000000"
+                        styleClass="custom-file-upload" class="narrow-file-upload"
+                        [showUploadButton]="!categoryFileUploaded[characteristic.name]"></p-fileUpload>
+                      <br> <br>
 
 
 
@@ -1986,80 +2013,79 @@
 
       </div>
 
-<!-- Result loaded -->
-<!--     <div *ngIf="averageOutcome">
-      <h4>Results</h4> <br>
-      <h6>Average Process : {{ averageProcess }}</h6> <br>
-      <h6>Average Outcome : {{ averageOutcome }}</h6> <br>
-
-      <app-chart [averageOutcome]="averageOutcome" [averageProcess]="averageProcess"></app-chart>
-    </div>
- -->
 
       <div class="row">
-      <div class="p-grid p-fluid col-md-6 col-sm-12">
+        <div class="p-grid p-fluid col-md-6 col-sm-12">
 
-        <div *ngIf="!isSubmitted">
-          <div *ngIf="assessmentId">
-            <div *ngIf="!track3Direct">
-              <div class="row p-2">
-                <div class="col-12 col-md-8">
-                  <div class="p-field">
-                    <label for="category-select">Select Characteristics Affected By Barriers:</label>
-                    <p-multiSelect [options]="relevantChaList" [(ngModel)]="selectChaAffectByBarriers"
-                      (onChange)="onItemSelectcha($event)" defaultLabel="Select Characteristics"
-                      optionLabel="name"></p-multiSelect>
-                    <button type="submit" (click)="submitForm()">Submit</button>
-                  </div>
-                </div>
-              </div>
-
-              <div *ngIf="trigger">
-
+          <div *ngIf="!isSubmitted">
+            <div *ngIf="assessmentId">
+              <div *ngIf="!track3Direct">
                 <div class="row p-2">
                   <div class="col-12 col-md-8">
                     <div class="p-field">
-
-
-                      <!--      <p-multiSelect [options]="characAffectedByBarriers" [(ngModel)]="selectChaAffectByBarriers" (onChange)="onItemSelectcha($event)"
-                      defaultLabel= "Select Characteristics" optionLabel="name"></p-multiSelect> -->
-
-                      <div *ngFor="let characteristic of selectChaAffectByBarriers"><br><br>
-                        <input type="checkbox" name="{{characteristic.name}}_barrier" ngModel>&nbsp;
-                        &nbsp;{{characteristic.name}}<br>
-
-                        <label for="methodolog">Indicator</label>
-                        <select class="form-control select-with-arrow" [(ngModel)]="characteristic.indicator">
-                          <option value="" disabled selected hidden>Select Indicator</option>
-                          <option *ngFor="let indicator of handleSelectedCharacteristic(characteristic.name)"
-                            [value]="indicator.name">{{indicator.name}}</option>
-                        </select><br>
-
-
-                        <label for="methodolog">Methodology</label>
-                        <select class="form-control select-with-arrow" name="{{characteristic.name}}_methodology" ngModel
-                          id="exampleFormControlSelect1">
-                          <option value="" disabled selected hidden>Select Methodology</option>
-                          <option *ngFor="let meth of onIndicatorSelected(characteristic.indicator)" [value]="meth.name">
-                            {{meth.name}}</option>
-                        </select>
-
-                      </div>
-
-
-
-
+                      <label for="category-select">Select Characteristics Affected By Barriers:</label>
+                      <p-multiSelect [options]="relevantChaList" [(ngModel)]="selectChaAffectByBarriers"
+                        (onChange)="onItemSelectcha($event)" defaultLabel="Select Characteristics"
+                        optionLabel="name"></p-multiSelect>
+                      <button type="submit" (click)="submitForm()">Submit</button>
                     </div>
                   </div>
                 </div>
 
+                <div *ngIf="trigger">
+
+                  <div class="row p-2">
+                    <div class="col-12 col-md-8">
+                      <div class="p-field">
+
+
+                        <!--      <p-multiSelect [options]="characAffectedByBarriers" [(ngModel)]="selectChaAffectByBarriers" (onChange)="onItemSelectcha($event)"
+                          defaultLabel= "Select Characteristics" optionLabel="name"></p-multiSelect> -->
+
+                        <div *ngFor="let characteristic of selectChaAffectByBarriers"><br><br>
+                          <input type="checkbox" name="{{characteristic.name}}_barrier" ngModel>&nbsp;
+                          &nbsp;{{characteristic.name}}<br>
+
+                          <label for="methodolog">Indicator</label>
+                          <select class="form-control select-with-arrow" [(ngModel)]="characteristic.indicator">
+                            <option value="" disabled selected hidden>Select Indicator</option>
+                            <option *ngFor="let indicator of handleSelectedCharacteristic(characteristic.name)"
+                              [value]="indicator.name">{{indicator.name}}</option>
+                          </select><br>
+
+
+                          <label for="methodolog">Methodology</label>
+                          <select class="form-control select-with-arrow" name="{{characteristic.name}}_methodology" ngModel
+                            id="exampleFormControlSelect1">
+                            <option value="" disabled selected hidden>Select Methodology</option>
+                            <option *ngFor="let meth of onIndicatorSelected(characteristic.indicator)" [value]="meth.name">
+                              {{meth.name}}</option>
+                          </select>
+
+                        </div>
+
+
+
+
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
               </div>
             </div>
           </div>
+
         </div>
+      </div>
+
 
 </div>
 </div>
-
 </div>
+
+
+
+<div *ngIf="track4Select">
+<app-portfolio-track4></app-portfolio-track4>
 </div>
