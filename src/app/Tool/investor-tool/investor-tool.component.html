@@ -149,12 +149,12 @@
                     
                     <p-tabPanel [header]="category.CategoryName" *ngFor="let category of processData" >
 
-                       
+
 
                         <div class="characteristic-Topic" *ngFor="let data of category.data; index as i">
                             <h6>{{i+1}}.{{data.characteristics.name}}</h6>
                             <div>
-                             
+
                                     <div class="container pl-20 pr-20">
                                         <div id="content" #content>
                                             <div class=" mt-2">
@@ -164,7 +164,7 @@
                                                         <div class="col-12 col-lg-6">
                                                             <div class="p-field">
                                                                 <label for="Description">Description</label>
-                                                                <textarea 
+                                                                <textarea
                                                                   name="{{data.characteristics.name}}_description"
                                                                     placeholder="Description" rows="5" cols="60"
                                                                     pInputTextarea
@@ -480,6 +480,7 @@
                                                                     [(ngModel)]="data.likelihood"
                                                                     [options]="likelihood" optionLabel="id"
                                                                     optionValue="value" [required]="true"></p-dropdown>
+                                                                    
                                                             </div>
                                                         </div>
 
@@ -521,21 +522,21 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                           
+
                                         </div>
                                     </div>
 
-                              
+
 
                             </div>
                         </div>
-                      
 
-              
+
+
 
                     </p-tabPanel>
 
-                     
+
 
 
 
@@ -817,6 +818,8 @@
                 </div>
             </div>
         </div>
+
+
     </form>
     </div>
 

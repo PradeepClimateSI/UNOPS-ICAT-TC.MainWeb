@@ -133,23 +133,23 @@ export class InvestorToolComponent implements OnInit {
       for (let x of res2) {
         let categoryArray: InvestorAssessment[] =[];
         for (let z of this.characteristicsList) {
-          
+
           if (z.category.name === x.name) {
             let newCharData = new InvestorAssessment();
             newCharData.characteristics = z;
-            
+
             categoryArray.push(newCharData);
-            
+
           }
         }
-        
+
         //this.categotyList.push(x);
         if (x.type === 'process') {
           this.processData.push({
             type: 'process', CategoryName: x.name, categoryID: x.id,
             data:categoryArray
           })
-         
+
 
 
 
@@ -169,7 +169,7 @@ export class InvestorToolComponent implements OnInit {
       console.log("processdata", this.processData)
     });
 
-    
+
   }
 
   save(form: NgForm) {
@@ -284,7 +284,7 @@ export class InvestorToolComponent implements OnInit {
           detail: 'Assessment created successfully',
           closable: true,
         })
-        this.isSavedAssessment = true
+        // this.isSavedAssessment = true
         this.onCategoryTabChange('', this.tabView);
 
       
@@ -298,7 +298,7 @@ export class InvestorToolComponent implements OnInit {
         closable: true,
       })
     })
-    
+
 
     console.log("+++++++++++",this.processData)
     console.log("-----------",this.outcomeData)
