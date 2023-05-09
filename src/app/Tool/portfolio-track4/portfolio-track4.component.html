@@ -1,5 +1,5 @@
 <div class="container pl-20 pr-20">
-<!--   <div class="mb-12">
+  <!-- <div class="mb-12">
       <h4 class="mt-4"> Assess Investment & Private Sector Transformational Change</h4>
   </div> -->
   <form #fData="ngForm" (ngSubmit)="save(fData)">
@@ -10,30 +10,28 @@
 
                     <div class="p-field p-2">
                       <label for="assessment_method">Assessment Method</label>
-                      <select class="form-control select-with-arrow"  disabled [(ngModel)]="assessment.assessment_method" name="assessment_method"
-                        id="exampleFormControlSelect1">
+                      <select class="form-control select-with-arrow" disabled [(ngModel)]="assessment.assessment_method"
+                        name="assessment_method" id="exampleFormControlSelect1">
                         <option value="" disabled selected hidden>Select Assessment Method</option>
                         <option>Track 1</option>
                         <option>Track 2</option>
                         <option>Track 3</option>
                         <option>Track 4</option>
                       </select>
-                  </div>
+                    </div>
 
 
-
-                      <div class="p-field p-2">
-                          <label for="policy">Select Intervetion *</label>
-                          <p-dropdown name="policy" #policy="ngModel" placeholder="Select Policy"
-                              [(ngModel)]="assessment.climateAction" appendTo="body" [options]="policies"
-                              optionLabel="policyName" [required]="true"></p-dropdown>
-                          <p class="info-message text-danger" *ngIf="
-                              !assessment.climateAction &&
-                              (fData.submitted || policy.touched)
-                            ">
-                              This is a mandatory field
-                          </p>
-                      </div>
+                    <div class="p-field p-2">
+                      <label for="policy">Select Intervetion *</label>
+                      <p-dropdown name="policy" #policy="ngModel" placeholder="Select Policy" [(ngModel)]="assessment.climateAction"
+                        appendTo="body" [options]="policies" optionLabel="policyName" [required]="true"></p-dropdown>
+                      <p class="info-message text-danger" *ngIf="
+                                                  !assessment.climateAction &&
+                                                  (fData.submitted || policy.touched)
+                                                ">
+                        This is a mandatory field
+                      </p>
+                    </div>
                       <div class="p-field p-2">
                           <label for="policy">Assessment Type *</label>
                           <p-dropdown name="type" #type="ngModel" placeholder="Select Assessment Type"
@@ -142,6 +140,7 @@
       <app-cm-section [assessment]="assessmentres"></app-cm-section>
   </div> -->
   <div class="card">
+      <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)">
       <p-tabView (onChange)="onMainTabChange($event)  ">
 
           <p-tabPanel header="Process of Change">
@@ -156,7 +155,7 @@
                       <div class="characteristic-Topic" *ngFor="let data of category.data; index as i">
                           <h6>{{i+1}}.{{data.characteristics.name}}</h6>
                           <div>
-                              <form>
+
                                   <div class="container pl-20 pr-20">
                                       <div id="content" #content>
                                           <div class=" mt-2">
@@ -166,7 +165,8 @@
                                                       <div class="col-12 col-lg-6">
                                                           <div class="p-field">
                                                               <label for="Description">Description</label>
-                                                              <textarea name="defenitionofAssessment"
+                                                              <textarea
+                                                                name="{{data.characteristics.name}}_description"
                                                                   placeholder="Description" rows="5" cols="60"
                                                                   pInputTextarea
                                                                   [(ngModel)]="data.description"
@@ -196,10 +196,10 @@
                                                               <label for="Description">Relevance</label>
                                                               <p-dropdown name="data.charData.relavance"
                                                                   #type="ngModel"
-                                                                  placeholder="Select Geographical Areas Covered"
+                                                                  placeholder="Select Relevance"
                                                                   [(ngModel)]="data.relavance"
                                                                   [options]="relevance" optionLabel="name"
-                                                                  optionValue="name" [required]="true"></p-dropdown>
+                                                                  optionValue="value" [required]="true"></p-dropdown>
                                                           </div>
                                                       </div>
 
@@ -214,7 +214,6 @@
                                                           </div>
                                                       </div>
                                                   </div>
-
                                                   <div class="row p-2">
                                                     <div class="col-12 col-lg-12">
                                                       <div class="p-field">
@@ -225,9 +224,9 @@
                                                               name="indicator" />
                                                       </div>
                                                     </div>
-                                                  </div>
+                                                    </div>
 
-                                                  <div class="row p-2">
+                                                    <div class="row p-2">
                                                     <div class="col-12 col-lg-6">
                                                         <div class="p-field">
                                                             <label for="Relevance">Indicator Starting Situation Value</label>
@@ -244,13 +243,13 @@
                                                             <label for="Relevance">Indicator Expected Value</label>
                                                             <p-inputNumber
                                                                 [(ngModel)]="data.indicatorExpectedVal"
-                                                                placeholder="Expected Value"  inputId="locale-us" mode="decimal" locale="en-US" [minFractionDigits]="2"
+                                                                placeholder="Expected Value" inputId="locale-us" mode="decimal" locale="en-US" [minFractionDigits]="2"
                                                                >
                                                             </p-inputNumber>
 
                                                         </div>
                                                     </div>
-                                                </div>
+                                                    </div>
 
                                                   <div class="row p-2">
                                                       <div class="col-12 col-lg-6">
@@ -259,8 +258,8 @@
                                                               <p-dropdown name="data.charData.likelihood"
                                                                   #type="ngModel" placeholder="Select Likelihood"
                                                                   [(ngModel)]="data.likelihood"
-                                                                  [options]="relevance" optionLabel="name"
-                                                                  optionValue="name" [required]="true"></p-dropdown>
+                                                                  [options]="relevance" optionLabel="id"
+                                                                  optionValue="value" [required]="true"></p-dropdown>
                                                           </div>
                                                       </div>
 
@@ -302,15 +301,21 @@
                                                   </div>
                                               </div>
                                           </div>
+
                                       </div>
                                   </div>
 
-                              </form>
+
 
                           </div>
                       </div>
 
+
+
+
                   </p-tabPanel>
+
+
 
 
 
@@ -331,7 +336,6 @@
                                       <div id="content" #content>
                                           <div class=" mt-2">
                                               <div class="p-grid p-fluid col-12">
-
                                                 <div class="row p-2">
                                                   <div class="col-12 col-lg-12">
                                                     <div class="p-field">
@@ -342,9 +346,9 @@
                                                             name="indicator" />
                                                     </div>
                                                   </div>
-                                                </div>
+                                                  </div>
 
-                                                <div class="row p-2">
+                                                  <div class="row p-2">
                                                   <div class="col-12 col-lg-6">
                                                       <div class="p-field">
                                                           <label for="Relevance">Indicator Starting Situation Value</label>
@@ -367,7 +371,7 @@
 
                                                       </div>
                                                   </div>
-                                              </div>
+                                                  </div>
 
 
 
@@ -414,6 +418,18 @@
           </p-tabPanel>
 
       </p-tabView>
+
+      <div class="row justify-content-end">
+          <div>
+
+              <div class="d-flex flex-row-reverse mt-20 ">
+                  <button class="btn btn-primary text-uppercase" type="submit">
+                      Calculate & Check reults
+                  </button>
+              </div>
+          </div>
+      </div>
+  </form>
   </div>
 
 
