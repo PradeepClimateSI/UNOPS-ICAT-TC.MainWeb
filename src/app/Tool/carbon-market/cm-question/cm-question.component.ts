@@ -15,12 +15,25 @@ export class CmQuestionComponent implements OnInit {
   selectedAnswers: any
   comment: string
 
+  tooltip: string = ''
+  weight = 0
+
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy
   ) { }
 
   async ngOnInit(): Promise<void> {
     await this.getAnswers()
+    this.answers.forEach(ans => {
+      if(ans.weight !== 0){
+        this.weight = ans.weight
+      }
+      if (this.weight !== 0) {
+        this.tooltip = "Weight transformational change criteria is " + this.weight + '%'
+      } else {
+        this.tooltip = "No weight for this question"
+      }
+    })
   }
 
   async getAnswers(){

@@ -84,6 +84,7 @@ export class CmSectionComponent implements OnInit {
       })
     )
     this.criterias.push(_criterias)
+    console.log(this.criterias)
 
   }
 
@@ -93,7 +94,6 @@ export class CmSectionComponent implements OnInit {
   }
 
   onAnswer(e: any, criteria: any, sectionIdx: number, criteriaIdx: number, idx: number ) {
-    console.log(this.result)
     this.prev_answer = e.answer
     let question = criteria.questions[idx]
     if (e.type === 'COMMENT'){
@@ -106,21 +106,26 @@ export class CmSectionComponent implements OnInit {
         if (e.type === 'MULTI') {
           if (this.criterias[sectionIdx]?.length === this.shownCriterias[sectionIdx].length){
             // this.openAccordion = this.openAccordion + 1
-            this.shownSections.push(true)
-            this.shownCriterias[sectionIdx+1] = [true]
-            this.shownQuestions[sectionIdx+1][0] = [true]
-            if (!this.result.sections[sectionIdx+1] && this.result.sections.length !== this.sections.length){
-              this.result.sections.push({id: sectionIdx+1})
-              this.result.sections[sectionIdx+1]['criteria'] = [{id: 0}]
-              this.result.sections[sectionIdx+1].criteria[0]['questions'] = [{id: 0}]
+            if (this.prev_answer.isPassing){
+              this.shownSections.push(true)
+              this.shownCriterias[sectionIdx+1] = [true]
+              this.shownQuestions[sectionIdx+1][0] = [true]
+              if (!this.result.sections[sectionIdx+1] && this.result.sections.length !== this.sections.length){
+                this.result.sections.push({id: sectionIdx+1})
+                this.result.sections[sectionIdx+1]['criteria'] = [{id: 0}]
+                this.result.sections[sectionIdx+1].criteria[0]['questions'] = [{id: 0}]
+              }
+            } else {
+              this.shownCriterias[sectionIdx].splice(criteriaIdx + 1, this.shownCriterias[sectionIdx].length - (criteriaIdx + 1))
+              this.shownSections.splice(sectionIdx + 1, this.shownSections.length - (sectionIdx + 1))
             }
           } else {
             this.shownCriterias[sectionIdx].push(true)
-            this.shownQuestions[sectionIdx][criteriaIdx+1] = [true]
-            if (!this.result.sections[sectionIdx].criteria[criteriaIdx+1]){
-              this.result.sections[sectionIdx].criteria.push({id: criteriaIdx+1})
-              this.result.sections[sectionIdx].criteria[criteriaIdx+1]['questions'] = [{id: 0}]
-            } 
+            this.shownQuestions[sectionIdx][criteriaIdx + 1] = [true]
+            if (!this.result.sections[sectionIdx].criteria[criteriaIdx + 1]) {
+              this.result.sections[sectionIdx].criteria.push({ id: criteriaIdx + 1 })
+              this.result.sections[sectionIdx].criteria[criteriaIdx + 1]['questions'] = [{ id: 0 }]
+            }
           }
   
           this.recievedQuestions = []
@@ -139,7 +144,7 @@ export class CmSectionComponent implements OnInit {
             } else {
               this.shownCriterias[sectionIdx].push(true)
               this.shownQuestions[sectionIdx][criteriaIdx+1] = [true]
-              this.shownQuestions.push(true)
+              // this.shownQuestions.push(true)
               if (!this.result.sections[sectionIdx].criteria[criteriaIdx+1]){
                 this.result.sections[sectionIdx].criteria.push({id: criteriaIdx+1})
                 this.result.sections[sectionIdx].criteria[criteriaIdx+1]['questions'] = [{id: 0}]
@@ -150,6 +155,8 @@ export class CmSectionComponent implements OnInit {
           } else {
             // alert("TC score is 0")
             this.visible = true
+            this.shownCriterias[sectionIdx].splice(criteriaIdx + 1, this.shownCriterias[sectionIdx].length - (criteriaIdx + 1))
+            this.shownSections.splice(sectionIdx + 1, this.shownSections.length - (sectionIdx + 1))
           }
         }
       } else {
@@ -165,9 +172,10 @@ export class CmSectionComponent implements OnInit {
                 this.result.sections[sectionIdx].criteria[criteriaIdx].questions.push({id: idx+1})
               }
             } else {
-              // alert("TC score is 0")
               this.visible = true
-              this.shownQuestions[sectionIdx][criteriaIdx].splice(idx + 1, this.shownQuestions[sectionIdx][criteriaIdx].length - (idx + 1) )
+              this.shownQuestions[sectionIdx][criteriaIdx].splice(idx + 1, this.shownQuestions[sectionIdx][criteriaIdx].length - (idx + 1))
+              this.shownCriterias[sectionIdx].splice(criteriaIdx + 1, this.shownCriterias[sectionIdx].length - (criteriaIdx + 1))
+              this.shownSections.splice(sectionIdx + 1, this.shownSections.length - (sectionIdx + 1))
             }
         }
         this.recievedQuestions.push(idx)

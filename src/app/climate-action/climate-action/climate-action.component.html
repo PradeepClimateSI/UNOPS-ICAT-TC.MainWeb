@@ -9,7 +9,7 @@
         <div class="p-grid p-fluid col-sm-12">
           <div class="mb-12">
             <h4 class="mt-4">{{ project?.projectApprovalStatus?.id! == 1 ?'Accepted':project?.projectApprovalStatus?.id!
-              == 5 ?'Accepted':'Propose'}} a Policy</h4>
+              == 5 ?'Accepted':'Propose an'}} Intervention</h4>
           </div>
           <div class="p-2">
             <h6>Contact Details</h6>
@@ -108,12 +108,12 @@
         <div class=" mt-2">
           <div class="p-grid p-fluid col-sm-12">
             <div class="p-2">
-              <h6>Propose a policy</h6>
+              <h6>Propose an intervention</h6>
             </div>
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="nameClimate">Name of the Policy*</label>
+                  <label for="nameClimate">Name of the intervention*</label>
                   <input [disabled]="editEntytyId > 0" [(ngModel)]="project.policyName"
                     [ngModelOptions]="{ standalone: false }" placeholder="Name" #nameClimate="ngModel" type="text"
                     name="nameClimate" class="p-inputtext" pInputText (ngModelChange)="onnameKeyDown($event)"
@@ -159,7 +159,7 @@
 
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="nameClimate">Country of the Policy</label>
+                  <label for="nameClimate">Country of implementation</label>
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocknameClimate">
                     <div>
                       <p-dropdown [disabled]="editEntytyId > 0 || isSector" appendTo="body" name="countryDD"
@@ -187,7 +187,7 @@
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="projStatus">Current Status of the Policy</label>
+                  <label for="projStatus">Current Status of the intervention</label>
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlockprojStatus">
                     <p-dropdown [disabled]="editEntytyId > 0" placeholder="Please Select Status" name="projStatus"
                       #projStatus="ngModel" [(ngModel)]="project.projectStatus" [ngModelOptions]="{ standalone: false }"
@@ -209,9 +209,9 @@
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="projStatus">Type of Action</label>
+                  <label for="projStatus">Type of intervention</label>
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlockprojStatus">
-                    <p-dropdown [disabled]="editEntytyId > 0" placeholder="Please Select the type of action"
+                    <p-dropdown [disabled]="editEntytyId > 0" placeholder="Please Select the type of intervention"
                       name="projStatus" #projStatus="ngModel" [(ngModel)]="project.typeofAction"
                       [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false" optionLabel="name"
                       [required]="true"></p-dropdown>
@@ -371,7 +371,7 @@
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="projScope">Scope of the Policy*</label>
+                  <label for="projScope">Scope of the intervention*</label>
 
                   <textarea [disabled]="editEntytyId > 0" type="text" placeholder="Description" name="projScope"
                     #projScope="ngModel" [(ngModel)]="project.policyScope" [ngModelOptions]="{ standalone: false }"
@@ -389,9 +389,9 @@
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="projectContext">Context of the Policy</label>
+                  <label for="projectContext">Context of the intervention</label>
                   <textarea [disabled]="editEntytyId > 0" name="projectContext"
-                    placeholder="Please enter context of the policy" #projectContext="ngModel"
+                    placeholder="Please enter context of the intervention" #projectContext="ngModel"
                     [(ngModel)]="project.contextOfPolicy" rows="5" cols="62" pInputTextarea length="500"
                     autoResize="autoResize" class="p-inputtext"></textarea>
                 </div>
@@ -428,7 +428,7 @@
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="description">Description of the Policy</label>
+                  <label for="description">Description of the intervention</label>
                   <textarea [disabled]="editEntytyId > 0" name="description" placeholder="description"
                     #description="ngModel" [(ngModel)]="project.description" rows="5" cols="130" pInputTextarea
                     autoResize="autoResize" class="p-inputtext"></textarea>
@@ -552,7 +552,7 @@
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="objective">Objectives of the Policy</label>
+                  <label for="objective">Objectives of the intervention</label>
                   <textarea [disabled]="editEntytyId > 0" name="objective" placeholder="objective" #objective="ngModel"
                     [(ngModel)]="project.objective" rows="5" cols="130" pInputTextarea autoResize="autoResize"
                     class="p-inputtext"></textarea>
