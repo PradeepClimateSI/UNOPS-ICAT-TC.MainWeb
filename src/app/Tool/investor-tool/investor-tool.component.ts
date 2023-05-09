@@ -61,6 +61,8 @@ export class InvestorToolComponent implements OnInit {
 
   tabName: string = '';
   mainAssessment: Assessment;
+  mainTabIndex: any;
+  categoryTabIndex: any;
 
 
   constructor(
@@ -198,7 +200,6 @@ export class InvestorToolComponent implements OnInit {
                     closable: true,
                   })
                   this.isSavedAssessment = true
-                  this.onCategoryTabChange('', this.tabView);
 
                 }
                 // form.reset();
@@ -249,9 +250,12 @@ export class InvestorToolComponent implements OnInit {
   }
 
   onMainTabChange(event: any) {
-    console.log("maintab", event.index)
+    this.mainTabIndex =event.index;
+    console.log("main index", event.index)
   }
   onCategoryTabChange(event: any, tabview: TabView) {
+    this.categoryTabIndex =event.index;
+
     // console.log("tabview",tabview)
     // this.tabName = (event!==undefined && tabview !==undefined)? tabview.tabs[event.index].header:'Research and Development'
     // // this.processData.map(x=>x.data.length=0)
@@ -309,6 +313,10 @@ export class InvestorToolComponent implements OnInit {
 
     console.log("+++++++++++",this.processData)
     console.log("-----------",this.outcomeData)
+  }
+
+  showResults(){
+    
   }
 
 }
