@@ -51,8 +51,11 @@ import { AssignVerifierComponent } from 'app/data-request-flow/assign-verifier/a
 import { AcceptedPoliciesComponent } from 'app/climate-action/accepted-policies/accepted-policies.component';
 import { CarbonMarketAssessmentComponent } from 'app/Tool/carbon-market/carbon-market-assessment/carbon-market-assessment.component';
 import { CmResultComponent } from 'app/Tool/carbon-market/cm-result/cm-result.component';
+import { AuditComponent } from 'app/audit/audit.component';
+import { AuditControllerServiceProxy } from 'shared/service-proxies-auditlog/service-proxies';
 import { ReportComponent } from 'app/report/report.component';
 import { InvestorToolComponent } from 'app/Tool/investor-tool/investor-tool.component';
+import { AssessmentResultInvestorComponent } from 'app/assessment-result-investor/assessment-result-investor.component';
 
 
 
@@ -155,13 +158,13 @@ const routes: Routes = [
     canActivate: [],
     data: {}
   },
-  // {
-  //   path: 'carbon-market-tool',
-  //   component: CarbonComponent,
-  //   loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
-  //   canActivate: [],
-  //   data: {}
-  // },
+   {
+     path: 'carbon-market-tool-test',
+     component: CarbonComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+     canActivate: [],
+     data: {}
+   },
   {
     path: 'carbon-market-tool-test',
     component: CarbonComponent,
@@ -194,6 +197,13 @@ const routes: Routes = [
     path: 'investor-tool',
     component: InvestorComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+   {
+    path: 'audit-log',
+    component: AuditComponent,
+   loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}
   },
@@ -242,6 +252,13 @@ const routes: Routes = [
   {
     path: 'assessment-result-track2/:id',
     component: AssessmentResultTrack2Component,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'assessment-result-investor/:id',
+    component: AssessmentResultInvestorComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}

@@ -1,6 +1,6 @@
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 //import { MethodologyControllerServiceProxy } from 'shared/service-proxies/meth-service-proxies';
-import { Institution, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, ServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Documents, DocumentsDocumentOwner, Institution, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, ServiceProxy } from 'shared/service-proxies/service-proxies';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {  Component, ElementRef, OnInit, ViewChild } from '@angular/core';
@@ -57,6 +57,7 @@ interface ChaCategoryTotalEqualsTo1 {
 })
 export class CarbonComponent implements OnInit {
 
+
   private apiUrl = 'http://localhost:7100/methodology/assessmentData';
 
   @ViewChild('myCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
@@ -78,6 +79,8 @@ selectedIndicator: string;
   ) {
 
   }
+  documentsDocumentOwnerProject: DocumentsDocumentOwner = DocumentsDocumentOwner.Project;
+  documents: Documents[] = [];
 
   selectedType = 'opentype';
   meth1:boolean;
@@ -1345,9 +1348,15 @@ onUpload(event :any) {
 
 }
 
+track4Select : boolean = false
 onChangeTrack(event : any){
+  this.track4Select = false
   this.selectedTrack = event.target.value;
   console.log("selectedTrack : ", this.selectedTrack)
+
+  if(this.selectedTrack === 'Track 4'){
+    this.track4Select = true
+  }
 }
 
 onChangeApproach(event : any){

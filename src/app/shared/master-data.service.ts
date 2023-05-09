@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class MasterDataService {
-  
+
   private _months: {name: string, value: number}[] = []
   private _gWP_RGs: {name: string, id: number}[] = []
   private _fuel: {name: string, id: number}[] = []
@@ -80,11 +80,11 @@ export class MasterDataService {
     this.purposes =  [
     { id: 1, name: "purpose 1" },
     { id: 2, name: "purpose 2" }]
-    
-    
-    
+
+
+
     this.units = [
-    { id: 1, name: "l" }, 
+    { id: 1, name: "l" },
     { id: 2, name: "m3" },
     { id: 2, name: "LKR" }]
 
@@ -92,29 +92,29 @@ export class MasterDataService {
       { id: 1, name: "kWh" }
     ]
 
-     
+
     this.sources = [
-      { id: 1, name: "Stationary" }, 
+      { id: 1, name: "Stationary" },
       { id: 2, name: "Mobile" },
-      
+
     ]
 
     this.industries = [
-      { id: 1, name: "Energy" }, 
+      { id: 1, name: "Energy" },
       { id: 2, name: "Manufacturing and Construction" },
       { id: 2, name: "Commercial/Institutional" },
       { id: 2, name: "Residential and Agriculture/Foresty/Fishing" },
     ]
 
     this.tieres = [
-      { id: 1, name: "Tier1" }, 
+      { id: 1, name: "Tier1" },
       { id: 2, name: "Tier2" },
       { id: 2, name: "Tier3" },
     ]
     this.countries = [
-      { id: 1, name: "SriLanka" ,code:"LK"}, 
-      { id: 2, name: "India" ,code:"IND"}, 
-  
+      { id: 1, name: "SriLanka" ,code:"LK"},
+      { id: 2, name: "India" ,code:"IND"},
+
     ]
 
     this.currencies = [
@@ -165,7 +165,7 @@ export class MasterDataService {
       { id: 1, name: "International" },
       { id: 2, name: "National" },
       { id: 3, name: "Sub-national" },
-      
+
     ]
 
     this.impact_covered = [
@@ -176,13 +176,14 @@ export class MasterDataService {
       { id: 5, name: "Standard of living" },
       { id: 6, name: "Jobs" },
       { id: 7, name: "Racial equality" },
-     
+
     ]
     this.assessment_method = [
       { id: 1, name: "Track 1" },
       { id: 2, name: "Track 2" },
       { id: 3, name: "Track 3" },
-      
+      { id: 4, name: "Track 4" },
+
     ]
 
     this.relevance = [
@@ -197,10 +198,10 @@ export class MasterDataService {
       {  id: 3,value:2 },
       {  id: 4,value:3 },
       {  id: 5,value:4 },
-    
+
     ]
-    
-    
+
+
   }
 
 

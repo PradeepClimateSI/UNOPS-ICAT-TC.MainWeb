@@ -100,7 +100,11 @@ import { CarbonMarketAssessmentComponent } from './Tool/carbon-market/carbon-mar
 import { CmSectionComponent } from './Tool/carbon-market/cm-section/cm-section.component';
 import { CmQuestionComponent } from './Tool/carbon-market/cm-question/cm-question.component';
 import { CmResultComponent } from './Tool/carbon-market/cm-result/cm-result.component';
+import { AuditComponent } from "./audit/audit.component";
+import { AuditControllerServiceProxy } from "shared/service-proxies-auditlog/service-proxies";
 import { ReportComponent } from './report/report.component';
+import { AssessmentResultInvestorComponent } from './assessment-result-investor/assessment-result-investor.component';
+import { PortfolioTrack4Component } from './Tool/portfolio-track4/portfolio-track4.component';
 
 
 
@@ -159,8 +163,11 @@ export function getAuthRemoteServiceBaseUrl(): string {
         CmSectionComponent,
         CmQuestionComponent,
         CmResultComponent,
+        AuditComponent,
         ReportComponent,
         InvestorToolComponent,
+        AssessmentResultInvestorComponent,
+        PortfolioTrack4Component,
     ],
 
 
@@ -253,7 +260,8 @@ export function getAuthRemoteServiceBaseUrl(): string {
         CMQuestionControllerServiceProxy,
         CMAssessmentQuestionControllerServiceProxy,
         AssessmentCMDetailControllerServiceProxy,
-        ReportControllerServiceProxy
+        AuditControllerServiceProxy,
+        ReportControllerServiceProxy,
     ],
     bootstrap: [AppComponent],
     exports: [
