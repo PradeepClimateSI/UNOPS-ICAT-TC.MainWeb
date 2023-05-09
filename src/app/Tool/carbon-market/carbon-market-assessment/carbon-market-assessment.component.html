@@ -33,35 +33,44 @@
                             </p>
                         </div>
                         <div class="p-field p-2">
-                            <label for="policy">Assessment Boundaries *</label>
-                            <input type="text" name="boundrary" #boundrary="ngModel" [(ngModel)]="cm_detail.boundraries"
-                                class="form-control" placeholder="Enter Assessment Boundraries" required />
-                            <p class="info-message text-danger" *ngIf="
-                                                                !cm_detail.boundraries &&
-                                                                (fData.submitted || boundrary.touched)
-                                                              ">
-                                This is a mandatory field
-                            </p>
+                            <label for="policy">Assessment Boundaries</label>
+                            <div class="p-field p-2"> 
+                                <div class="row p-2">
+                                    <label class="col-5" for="policy">Sectorial Boundary</label>
+                                    <input type="text" name="boundrary" #boundrary="ngModel" [(ngModel)]="cm_detail.sectoral_boundary"
+                                        class="col-7 boundrary" placeholder="Enter Boundary" required />
+                                </div>
+                                <div class="row p-2">
+                                    <label class="col-5" for="policy">Temporal Boundary</label>
+                                    <input type="text" name="boundrary" #boundrary="ngModel" [(ngModel)]="cm_detail.temporal_boundary"
+                                        class=" col-7 boundrary" placeholder="Enter Boundary" required />
+                                </div>
+                                <div class="row p-2">
+                                    <label class="col-5" for="policy">Geographical Boundary</label>
+                                    <input type="text" name="boundrary" #boundrary="ngModel" [(ngModel)]="cm_detail.geographical_boundary"
+                                        class=" col-7 boundrary" placeholder="Enter Boundary" required />
+                                </div>
+                            </div>
                         </div>
                         <div class="p-field p-2">
                             <label for="policy">Impact Types</label>
                             <p-multiSelect name="impact_types" placeholder="Select .." appendTo="body"
                                 [options]="impact_types" [(ngModel)]="selected_impact_types" optionLabel="name"
-                                optionValue="name">
+                                optionValue="code" (onChange)="onSelectType($event)">
                             </p-multiSelect>
                         </div>
                         <div class="p-field p-2">
                             <label for="policy">Impact Categories</label>
                             <p-multiSelect name="impact_categories" placeholder="Select .." appendTo="body"
                                 [options]="impact_categories" [(ngModel)]="selected_impact_categories"
-                                optionLabel="name" optionValue="name">
+                                optionLabel="name" optionValue="code"  (onChange)="onSelectCategory($event)">
                             </p-multiSelect>
                         </div>
                         <div class="p-field p-2">
                             <label for="policy">Impact Characteristics</label>
                             <p-multiSelect name="impact_characteristics" placeholder="Select .." appendTo="body"
                                 [options]="impact_characteristics" [(ngModel)]="selected_impact_characteristics"
-                                optionLabel="name" optionValue="name">
+                                optionLabel="name" optionValue="code">
                             </p-multiSelect>
                         </div>
                         <div class="p-field p-2">

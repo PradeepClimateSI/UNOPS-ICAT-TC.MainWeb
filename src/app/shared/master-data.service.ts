@@ -20,9 +20,9 @@ export class MasterDataService {
   private _tieres: {name: string, id: number}[] = []
   private _currencies: {name: string, id: number}[] = []
   private _assessment_type: {name: string, id: number}[] = []
-  private _impact_types: {name: string, id: number}[] = []
-  private _impact_categories: {name: string, id: number}[] = []
-  private _impact_characteristics: {name: string, id: number}[] = []
+  private _impact_types: {name: string, id: number, code: string}[] = []
+  private _impact_categories: {name: string, id: number, code: string, type: string}[] = []
+  private _impact_characteristics: {name: string, id: number, code: string, type: string[]}[] = []
 
 
 
@@ -123,37 +123,37 @@ export class MasterDataService {
       { id: 2, name: "Ex-post" }
     ]
     this.impact_types = [
-      { id: 1, name: "Process" },
-      { id: 2, name: "outcomes" }
+      { id: 1, name: "Process", code: "PROCESS" },
+      { id: 2, name: "outcomes", code: "OUTCOMES" }
     ]
     this.impact_categories = [
-      { id: 1, name: "Technology" },
-      { id: 2, name: "Agents" },
-      { id: 3, name: "Incentives" },
-      { id: 4, name: "Norms" },
-      { id: 5, name: "Scale of outcome" },
-      { id: 6, name: "Sustained nature of outcome" }
+      { id: 1, name: "Technology", code: "TECHNOLOGY", type: "PROCESS" },
+      { id: 2, name: "Agents", code: "AGENTS", type: "PROCESS" },
+      { id: 3, name: "Incentives", code: "INCENTIVES", type: "PROCESS"},
+      { id: 4, name: "Norms", code: "NORMS", type: "PROCESS" },
+      { id: 5, name: "Scale of outcome", code: "SCALE_OF_OUTCOME", type: "OUTCOMES" },
+      { id: 6, name: "Sustained nature of outcome", code: "SUSTAINED_NATURE_OF_OUTCOME", type: "OUTCOMES" }
     ]
     this.impact_characteristics = [
-      { id: 1, name: "Research and development" },
-      { id: 2, name: "Adoption" },
-      { id: 3, name: "Scale-up" },
-      { id: 4, name: "Entrepreneurs" },
-      { id: 5, name: "Coalitions of advocates" },
-      { id: 6, name: "Beneficiaries" },
-      { id: 7, name: "Economic and non-economic" },
-      { id: 8, name: "Disincentives" },
-      { id: 9, name: "Institutional and regulatory" },
-      { id: 10, name: "Awareness" },
-      { id: 11, name: "Behaviour" },
-      { id: 12, name: "Social norms" },
-      { id: 13, name: "Macro level" },
-      { id: 14, name: "Medium level" },
-      { id: 15, name: "Micro level" },
-      { id: 16, name: "Long term" },
-      { id: 17, name: "Medium term" },
-      { id: 18, name: "Short term" },
-      { id: 19, name: "Other" }
+      { id: 1, name: "Research and development", code: "REESEARCH_AND_DEVELOPMEMNT", type: ["TECHNOLOGY"] },
+      { id: 2, name: "Adoption", code: "ADOPTION", type: ["TECHNOLOGY"] },
+      { id: 3, name: "Scale-up", code: "SCALE_UP", type: ["TECHNOLOGY"] },
+      { id: 4, name: "Entrepreneurs", code: "ENTREPRENEURS", type: ["AGENTS"] },
+      { id: 5, name: "Coalitions of advocates", code: "COALITIONS_OF_ADVOCATES", type: ["AGENTS"] },
+      { id: 6, name: "Beneficiaries", code: "BENEFICIARIES", type:[ "AGENTS"] },
+      { id: 7, name: "Economic and non-economic", code: "ECONOMIC_AND_NON_ECONOMIC" , type: ["INCENTIVES"]},
+      { id: 8, name: "Disincentives", code: "DISINCENTIVES", type:[ "INCENTIVES"] },
+      { id: 9, name: "Institutional and regulatory", code: "INSTITUTIONAL_AND_REGULATORY", type: ["INCENTIVES"] },
+      { id: 10, name: "Awareness", code: "AWARENESS", type: ["NORMS"] },
+      { id: 11, name: "Behaviour", code: "BEHAVIOUR", type: ["NORMS"] },
+      { id: 12, name: "Social norms", code: "SOCIAL_NORMS", type: ["NORMS"] },
+      { id: 13, name: "Macro level", code: "MACRO_LEVEL", type: ["SCALE_OF_OUTCOME"] },
+      { id: 14, name: "Medium level", code: "MEDIUM_LEVEL", type: ["SCALE_OF_OUTCOME"] },
+      { id: 15, name: "Micro level", code: "MICRO_LEVEL", type: ["SCALE_OF_OUTCOME"] },
+      { id: 16, name: "Long term", code: "LONG_TERM" , type: ["SUSTAINED_NATURE_OF_OUTCOME"]},
+      { id: 17, name: "Medium term", code: "MEDIUM_TERM", type: ["SUSTAINED_NATURE_OF_OUTCOME"] },
+      { id: 18, name: "Short term", code: "SHORT_TERM", type: ["SUSTAINED_NATURE_OF_OUTCOME"] },
+      { id: 19, name: "Other", code: "OTHER" , type: ["TECHNOLOGY", "AGENTS", "INCENTIVES","NORMS"]},
     ]
   }
 
@@ -281,27 +281,27 @@ export class MasterDataService {
     return this._assessment_type;
   }
 
-  set impact_types(value: { name: string; id: number }[]) {
+  set impact_types(value: { name: string; id: number, code: string }[]) {
     this._impact_types = value;
   }
 
-  get impact_types(): { name: string; id: number }[] {
+  get impact_types(): { name: string; id: number, code: string }[] {
     return this._impact_types;
   }
 
-  set impact_categories(value: { name: string; id: number }[]) {
+  set impact_categories(value: { name: string; id: number, code: string, type: string }[]) {
     this._impact_categories = value;
   }
 
-  get impact_categories(): { name: string; id: number }[] {
+  get impact_categories(): { name: string; id: number, code: string, type: string }[] {
     return this._impact_categories;
   }
 
-  set impact_characteristics(value: { name: string; id: number }[]) {
+  set impact_characteristics(value: { name: string; id: number, code: string, type: string[] }[]) {
     this._impact_characteristics = value;
   }
 
-  get impact_characteristics(): { name: string; id: number }[] {
+  get impact_characteristics(): { name: string; id: number, code: string, type: string[] }[] {
     return this._impact_characteristics;
   }
 }

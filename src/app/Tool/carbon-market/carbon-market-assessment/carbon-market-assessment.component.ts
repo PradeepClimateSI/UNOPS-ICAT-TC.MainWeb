@@ -16,9 +16,9 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   assessment: Assessment = new Assessment()
   cm_detail: AssessmentCMDetail = new AssessmentCMDetail()
   assessment_types: any[]
-  impact_types: any[]
-  impact_categories: any[]
-  impact_characteristics: any[]
+  impact_types: any[] = []
+  impact_categories: any[] = []
+  impact_characteristics: any[] = []
 
   selected_impact_types: string[] = []
   selected_impact_categories: string[] = []
@@ -40,8 +40,6 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.assessment_types = this.masterDataService.assessment_type
     this.impact_types = this.masterDataService.impact_types
-    this.impact_categories = this.masterDataService.impact_categories
-    this.impact_characteristics = this.masterDataService.impact_characteristics
 
     await this.getPolicies()
     console.log(this.policies)
@@ -119,6 +117,22 @@ export class CarbonMarketAssessmentComponent implements OnInit {
 
   selectAssessmentType(e: any){
    
+  }
+
+  onSelectType(e: any){
+    this.impact_categories = []
+    e.value.forEach((val: string) => {
+      this.impact_categories.push(...this.masterDataService.impact_categories.filter(cat => cat.type === val))
+    })
+  }
+
+  onSelectCategory(e: any){
+    this.impact_characteristics = []
+    e.value.forEach((val: string) => {
+      this.impact_characteristics.push(...this.masterDataService.impact_characteristics.filter(cat => cat.type.includes(val)))
+    })
+
+    this.impact_characteristics = this.impact_characteristics.filter((v,i,a)=>a.findIndex(v2=>(v2.code===v.code))===i)
   }
 
 }
