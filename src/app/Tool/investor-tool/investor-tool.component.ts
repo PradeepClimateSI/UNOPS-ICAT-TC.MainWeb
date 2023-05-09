@@ -31,33 +31,36 @@ export class InvestorToolComponent implements OnInit {
   createInvestorToolDto: CreateInvestorToolDto = new CreateInvestorToolDto();
   meth1Process: Characteristics[] = [];
   meth1Outcomes: Characteristics[] = [];
-  characteristicsList: Characteristics[]=[];
-  characteristicsArray : Characteristics[] = [];
+  characteristicsList: Characteristics[] = [];
+  characteristicsArray: Characteristics[] = [];
   selectedIndex = 0;
   activeIndex = 0;
-  likelihood:any[]=[];
-  relevance:any[]=[];
+  likelihood: any[] = [];
+  relevance: any[] = [];
 
-  yesNoAnswer:any[] =[{id:1,name:"Yes"},{id:2,name:"No"}];
+  description = ''
+
+  yesNoAnswer: any[] = [{ id: 1, name: "Yes" }, { id: 2, name: "No" }];
 
 
   processData: {
     type: string,
     CategoryName: string,
     categoryID: number,
-    data: any[]
+    data: InvestorAssessment[]
   }[] = [];
 
   outcomeData: {
     type: string,
     CategoryName: string,
     categoryID: number,
-    data: any[]
+    data: InvestorAssessment[]
   }[] = [];
   //class variable
   @ViewChild(TabView) tabView: TabView;
 
   tabName: string = '';
+  mainAssessment: Assessment;
 
 
   constructor(
@@ -78,7 +81,7 @@ export class InvestorToolComponent implements OnInit {
     this.relevance = this.masterDataService.relevance;
 
     this.assessmentMethods = this.masterDataService.assessment_method;
-    
+
 
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const countryId = token ? decode<any>(token).countryId : 0;
@@ -111,17 +114,35 @@ export class InvestorToolComponent implements OnInit {
   }
 
   async getCharacteristics() {
+
+    this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().subscribe((res3: any) => {
+      // console.log("ressss3333", res3)
+      this.characteristicsList = res3
+
+    });
+
     this.methodologyAssessmentControllerServiceProxy.findAllCategories().subscribe((res2: any) => {
       console.log("categoryList", res2)
       for (let x of res2) {
+        let categoryArray: InvestorAssessment[] =[];
+        for (let z of this.characteristicsList) {
+          
+          if (z.category.name === x.name) {
+            let newCharData = new InvestorAssessment();
+            newCharData.characteristics = z;
+            
+            categoryArray.push(newCharData);
+            
+          }
+        }
+        
         //this.categotyList.push(x);
         if (x.type === 'process') {
-          this.meth1Process.push(x)
-
           this.processData.push({
             type: 'process', CategoryName: x.name, categoryID: x.id,
-            data: []
+            data:categoryArray
           })
+         
 
 
 
@@ -131,7 +152,7 @@ export class InvestorToolComponent implements OnInit {
 
           this.outcomeData.push({
             type: 'outcome', CategoryName: x.name, categoryID: x.id,
-            data: []
+            data:categoryArray
           })
 
 
@@ -141,11 +162,7 @@ export class InvestorToolComponent implements OnInit {
       console.log("processdata", this.processData)
     });
 
-    this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().subscribe((res3: any) => {
-      // console.log("ressss3333", res3)
-      this.characteristicsList = res3
-
-    });
+    
   }
 
   save(form: NgForm) {
@@ -164,7 +181,7 @@ export class InvestorToolComponent implements OnInit {
 
 
             this.investorAssessment.assessment = res;
-
+            this.mainAssessment =res
             this.createInvestorToolDto.sectors = this.sectorArray;
             this.createInvestorToolDto.impacts = this.impactArray;
             this.createInvestorToolDto.investortool = this.investorAssessment;
@@ -181,7 +198,7 @@ export class InvestorToolComponent implements OnInit {
                     closable: true,
                   })
                   this.isSavedAssessment = true
-                  this.onCategoryTabChange('',this.tabView);
+                  this.onCategoryTabChange('', this.tabView);
 
                 }
                 // form.reset();
@@ -235,26 +252,63 @@ export class InvestorToolComponent implements OnInit {
     console.log("maintab", event.index)
   }
   onCategoryTabChange(event: any, tabview: TabView) {
-    console.log("tabview",tabview)
-    this.tabName = (event!==undefined && tabview !==undefined)? tabview.tabs[event.index].header:'Research and Development'
-    this.processData.map(x=>x.data.length=0)
-    this.outcomeData.map(x=>x.data.length=0)
-    
-    for (let x of this.characteristicsList) {
-      if (x.category.name === this.tabName) {
-        let newCharData = new InvestorAssessment();
-        newCharData.characteristics =x;
-        // this.characteristicsArray.push(x)
-        this.processData.map(y=>y.data.push(newCharData))
-        this.outcomeData.map(y=>y.data.push(newCharData))
-      }
-    }
-   
-    console.log("processdata", this.processData,this.outcomeData)
+    // console.log("tabview",tabview)
+    // this.tabName = (event!==undefined && tabview !==undefined)? tabview.tabs[event.index].header:'Research and Development'
+    // // this.processData.map(x=>x.data.length=0)
+    // // this.outcomeData.map(x=>x.data.length=0)
+
+    // for (let x of this.characteristicsList) {
+    //   if (x.category.name === this.tabName) {
+    //     let newCharData = new InvestorAssessment();
+    //     newCharData.characteristics =x;
+    //     // this.characteristicsArray.push(x)
+    //     // this.processData.map(y=>y.data.push(newCharData))
+    //     // this.outcomeData.map(y=>y.data.push(newCharData))
+    //   }
+    // }
+
+    // console.log("processdata", this.processData,this.outcomeData)
 
   }
   getSelectedHeader() {
     console.log("tabnaaame", this.tabView.tabs[this.selectedIndex].header);
+  }
+
+  onsubmit(form: NgForm){
+
+  let finalArray= this.processData.concat(this.outcomeData)
+  finalArray.map(x=>x.data.map(y=>y.assessment=this.mainAssessment))
+  // finalArray.map(x=>x.data.map(y=>y.investorTool=this.mainAssessment))
+  console.log("finalArray",finalArray)
+    this.investorToolControllerproxy.createFinalAssessment(finalArray)
+    .subscribe(_res => {
+      console.log("res final", _res)
+      if (_res) {
+        console.log(_res)
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Assessment created successfully',
+          closable: true,
+        })
+        this.isSavedAssessment = true
+        this.onCategoryTabChange('', this.tabView);
+
+      }
+      // form.reset();
+    }, error => {
+      console.log(error)
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Assessment detail saving failed',
+        closable: true,
+      })
+    })
+    
+
+    console.log("+++++++++++",this.processData)
+    console.log("-----------",this.outcomeData)
   }
 
 }

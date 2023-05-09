@@ -245,6 +245,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         VerificationControllerServiceProxy,
         QualityCheckControllerServiceProxy,
         InvestorToolControllerServiceProxy,
+        
 
         DatePipe,
         {provide: API_BASE_URL, useFactory: getRemoteServiceBaseUrl},
