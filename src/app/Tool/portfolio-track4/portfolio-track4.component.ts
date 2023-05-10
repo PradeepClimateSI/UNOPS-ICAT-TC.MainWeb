@@ -42,7 +42,7 @@ export class PortfolioTrack4Component implements OnInit {
 
   description = ''
   load : boolean = false
-  yesNoAnswer: any[] = [{ id: 1, name: "Yes" }, { id: 2, name: "No" }];
+  yesNoAnswer: any[] = [{ id: 1, name: "Yes" }, { id: 2, name: "No" },{ id: 3, name: "Maybe" }];
 
 
   processData: {
@@ -80,6 +80,7 @@ export class PortfolioTrack4Component implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+    this.categoryTabIndex =0;
 
     this.track4Selectt = true
     this.assessment.assessment_method = 'Track 4'

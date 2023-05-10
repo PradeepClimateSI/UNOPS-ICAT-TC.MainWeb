@@ -255,24 +255,30 @@
 
                           <div class="row p-2">
                             <div class="col-12 col-lg-6">
-                              <div class="p-field">
-                                <label for="Relevance">Relevance Weight</label>
-                                <p-inputNumber inputId="integeronly" [(ngModel)]="data.relevance_weight"
-                                  placeholder="Enter Relevance Weight" name="data.charData.relevance_weight">
-                                </p-inputNumber>
-                              </div>
+                                <div class="p-field">
+                                    <label for="Relevance">Relevance Weight</label>
+                                    <p-inputNumber inputId="locale-us" mode="decimal"
+                                         locale="en-US" [minFractionDigits]="2"
+                                        [(ngModel)]="data.relevance_weight"
+                                        placeholder="Enter Relevance Weight"
+                                        name="data.charData.relevance_weight">
+                                    </p-inputNumber>
+                                </div>
                             </div>
 
                             <div class="col-12 col-lg-6">
-                              <div class="p-field">
-                                <label for="Relevance">Likelihood Weight</label>
-                                <p-inputNumber inputId="integeronly" [(ngModel)]="data.likelihood_weight"
-                                  placeholder="Enter Likelihood Weight" name="data.charData.likelihood_weight">
-                                </p-inputNumber>
+                                <div class="p-field">
+                                    <label for="Relevance">Likelihood Weight</label>
+                                    <p-inputNumber inputId="locale-us" mode="decimal"
+                                         locale="en-US" [minFractionDigits]="2"
+                                        [(ngModel)]="data.likelihood_weight"
+                                        placeholder="Enter Likelihood Weight"
+                                        name="data.charData.likelihood_weight">
+                                    </p-inputNumber>
 
-                              </div>
+                                </div>
                             </div>
-                          </div>
+                        </div>
                         </div>
                       </div>
 
@@ -350,7 +356,7 @@
                                 <div class="p-field">
                                   <label for="Relevance">Score</label>
                                   <p-inputNumber inputId="integeronly" [(ngModel)]="data.score"
-                                    placeholder="Enter Relevance Weight" name="data.charData.score"> </p-inputNumber>
+                                    placeholder="Enter Score" name="data.charData.score"> </p-inputNumber>
                                 </div>
                               </div>
 
@@ -363,6 +369,20 @@
                                 </div>
                               </div>
                             </div>
+
+                            <div class="row p-2" *ngIf="categoryTabIndex===0 && mainTabIndex===1 && category.CategoryName ==='Scale GHGs' && data.characteristics.name === 'Micro Level'">
+                              <div class="col-12 col-lg-6">
+                                <div class="p-field">
+                                  <label for="expected_ghg_mitigation">Expected GHG mitgation (Mt CO2-eq)</label>
+                                  <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation" name="expected_ghg_mitigation"
+                                      placeholder="Expected GHG mitgation Value" inputId="locale-us" mode="decimal"
+                                    locale="en-US" [minFractionDigits]="2">
+                                  </p-inputNumber>
+                                  </div>
+                                </div>
+                  
+                              
+                        </div>
                           </div>
                         </div>
                       </div>
@@ -389,7 +409,7 @@
         <div>
           <div class="d-flex flex-row-reverse mt-20 ">
             <button class="btn btn-primary text-uppercase" type="submit" (click)="showResults()">
-              Calculate & Check Reults
+              Calculate & Check Results
             </button>
           </div>
         </div>

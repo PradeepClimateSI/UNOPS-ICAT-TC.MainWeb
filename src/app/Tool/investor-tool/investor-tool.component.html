@@ -519,7 +519,8 @@
                                                         <div class="col-12 col-lg-6">
                                                             <div class="p-field">
                                                                 <label for="Relevance">Relevance Weight</label>
-                                                                <p-inputNumber inputId="integeronly"
+                                                                <p-inputNumber inputId="locale-us" mode="decimal"
+                                                                     locale="en-US" [minFractionDigits]="2"
                                                                     [(ngModel)]="data.relevance_weight"
                                                                     placeholder="Enter Relevance Weight"
                                                                     name="data.charData.relevance_weight">
@@ -530,7 +531,8 @@
                                                         <div class="col-12 col-lg-6">
                                                             <div class="p-field">
                                                                 <label for="Relevance">Likelihood Weight</label>
-                                                                <p-inputNumber inputId="integeronly"
+                                                                <p-inputNumber inputId="locale-us" mode="decimal"
+                                                                     locale="en-US" [minFractionDigits]="2"
                                                                     [(ngModel)]="data.likelihood_weight"
                                                                     placeholder="Enter Likelihood Weight"
                                                                     name="data.charData.likelihood_weight">
