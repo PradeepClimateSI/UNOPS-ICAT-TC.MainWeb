@@ -63,7 +63,7 @@ export class PortfolioTrack4Component implements OnInit {
 
   tabName: string = '';
   mainAssessment: Assessment;
-
+  track4Selectt : boolean = false
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -73,10 +73,15 @@ export class PortfolioTrack4Component implements OnInit {
     private sectorProxy: SectorControllerServiceProxy,
     private investorToolControllerproxy: InvestorToolControllerServiceProxy,
     private router: Router,
-  ) { }
+
+
+  ) {
+
+  }
 
   async ngOnInit(): Promise<void> {
 
+    this.track4Selectt = true
     this.assessment.assessment_method = 'Track 4'
 
     this.assessment_types = this.masterDataService.assessment_type;
@@ -239,6 +244,18 @@ export class PortfolioTrack4Component implements OnInit {
 
   }
 
+
+  selectedTrack : any
+
+onChangeTrack(event : any){
+  this.track4Selectt = true
+  this.selectedTrack = event.target.value;
+  console.log("selectedTrack : ", this.selectedTrack)
+
+  if(this.selectedTrack === 'Track 1' || this.selectedTrack === 'Track 2' || this.selectedTrack === 'Track 3'){
+    this.track4Selectt = false
+  }
+}
 
 
   selectAssessmentType(e: any) {

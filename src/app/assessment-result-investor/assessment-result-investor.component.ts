@@ -5,6 +5,8 @@ import { DatePipe } from '@angular/common';
 import { DomSanitizer } from '@angular/platform-browser';
 import  {jsPDF} from "jspdf"
 import html2canvas from 'html2canvas';
+import * as XLSX from 'xlsx';
+
 
 @Component({
   selector: 'app-assessment-result-investor',
@@ -14,6 +16,8 @@ import html2canvas from 'html2canvas';
 export class AssessmentResultInvestorComponent implements OnInit {
 
   @ViewChild('content', {static:false}) el! : ElementRef;
+  @ViewChild('content') content: ElementRef;
+
   title = "Angular CLI and isPDF"
   assessmentId: number
   averageProcess : number
@@ -55,6 +59,15 @@ load: boolean
     private sanitizer: DomSanitizer,
     private investorToolControllerproxy: InvestorToolControllerServiceProxy,
     ) { }
+
+
+    exportToExcel() {
+      const table = this.content.nativeElement;
+      const wb = XLSX.utils.table_to_book(table, { sheet: 'Sheet1' });
+      XLSX.writeFile(wb, 'data.xlsx');
+    }
+
+
 
   ngOnInit(): void {
 
@@ -165,35 +178,56 @@ load: boolean
           categoryName: category.name ,
           characteristics: [],
           categotyRelevance : 0,
-          categoryLikelihood : 0
+          categoryLikelihood : 0,
+          categoryScaleScore : 0,
+          categorySustainedScore : 0
         };
 
-        let totalRel2 = 0
-        let countRel2 = 0
-        let totalLikelihood2 = 0
-        let countLikelihood2 = 0
+        let totalScale = 0
+        let countScale = 0
+        let totalSustained = 0
+        let countSustained = 0
         for(let x of res ){
-          if(category.name === x.category.name){
+          if(category.name === x.category.name && (x.category.name === 'Scale GHGs' || x.category.name === 'Scale SD' )){
             categoryData.categoryName = category.name;
             categoryData.characteristics.push(
               {
-                relevance : x.relavance,
-                likelihood : x.likelihood,
+                scaleScore : x.score,
+                sustainedScore : '',
                 name : x.characteristics.name
               }
             )
 
-             totalRel2 = totalRel2 +  x.relavance
-             countRel2 ++
+            totalScale = totalScale +  x.score
+            countScale ++
 
-             totalLikelihood2 = totalLikelihood2 + x.likelihood
-             countLikelihood2 ++
+          }
+          if(category.name === x.category.name && (x.category.name === 'Sustained nature-GHGs' || x.category.name === 'Sustained nature-SD' )){
+            categoryData.categoryName = category.name;
+            categoryData.characteristics.push(
+              {
+                scaleScore : '',
+                sustainedScore : x.score,
+                name : x.characteristics.name
+              }
+            )
+
+            totalSustained = totalSustained +  x.score
+            countSustained ++
 
           }
         }
 
-        categoryData.categotyRelevance = totalRel2/countRel2
-        categoryData.categoryLikelihood = totalLikelihood2/countLikelihood2
+        if(category.name === 'Scale GHGs' || category.name === 'Scale SD' ){
+          categoryData.categoryScaleScore = totalScale/countScale
+          categoryData.categorySustainedScore = ''
+        }
+
+        if(category.name === 'Sustained nature-GHGs' || category.name === 'Sustained nature-SD'  ){
+          categoryData.categorySustainedScore = totalSustained/countSustained
+          categoryData.categoryScaleScore  = ''
+        }
+
         this.categoryDataArrayOutcome.push(categoryData)
       }
 
@@ -208,30 +242,55 @@ load: boolean
   }
 
 
+
+
   makePDF() {
     const element = document.getElementById('content');
     if (element) {
-      html2canvas(element, {scale: 2}).then(canvas => {
+      html2canvas(element, { scale: 2 }).then(canvas => {
         const imgWidth = 208;
-        const imgHeight = canvas.height * imgWidth / canvas.width;
+        const imgHeight = (canvas.height * imgWidth / canvas.width)-75;
         const contentDataURL = canvas.toDataURL('image/jpeg', 1.0);
         const pdf = new jsPDF('p', 'mm', 'a4', true); // set the last parameter to true to enable adding more pages
-        const position = 0;
+        const marginTop = 6;
+        const marginBottom = 10;
+        const position = marginTop;
         let currentPage = 1;
-        const totalPages = Math.ceil(canvas.height / pdf.internal.pageSize.getHeight());
+        const totalPages = Math.ceil((canvas.height - marginTop - marginBottom) / pdf.internal.pageSize.getHeight());
 
         pdf.addImage(contentDataURL, 'JPEG', 0, position, imgWidth, imgHeight);
-        while (currentPage < totalPages) {
-          currentPage++;
+        if (totalPages > 1) {
           pdf.addPage();
-          const newHeight = (currentPage - 1) * pdf.internal.pageSize.getHeight();
-          pdf.addImage(contentDataURL, 'JPEG', 0, -newHeight, imgWidth, imgHeight);
+          pdf.addImage(contentDataURL, 'JPEG', 0, -pdf.internal.pageSize.getHeight() + marginTop, imgWidth, imgHeight);
+        }
+
+        // Delete extra pages
+        const totalPdfPages = pdf.getNumberOfPages();
+        for (let i = 3; i <= totalPdfPages; i++) {
+          pdf.deletePage(i);
         }
 
         pdf.save('assessment-result.pdf');
       });
     }
   }
+
+
+
+public openPDF(): void {
+  let DATA: any = document.getElementById('content');
+  html2canvas(DATA).then((canvas) => {
+    let fileWidth = 208;
+    let fileHeight = (canvas.height * fileWidth) / canvas.width;
+    const FILEURI = canvas.toDataURL('image/png');
+    let PDF = new jsPDF('p', 'mm', 'a4');
+    let position = 0;
+    PDF.addImage(FILEURI, 'PNG', 0, position, fileWidth, fileHeight);
+    PDF.save('angular-demo.pdf');
+  });
+}
+
+
 
 
 }
