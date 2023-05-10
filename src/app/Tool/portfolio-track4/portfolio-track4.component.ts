@@ -37,6 +37,8 @@ export class PortfolioTrack4Component implements OnInit {
   characteristicsArray: Characteristics[] = [];
   selectedIndex = 0;
   activeIndex = 0;
+  activeIndexMain =0;
+  activeIndex2 :number=0;
   likelihood: any[] = [];
   relevance: any[] = [];
 
@@ -339,6 +341,31 @@ onChangeTrack(event : any){
     setTimeout(() => {
       this.router.navigate(['/assessment-result-investor', this.mainAssessment.id], { queryParams: { assessmentId: this.mainAssessment.id } });
     }, 2000);
+  }
+
+  next(){
+
+    if(this.activeIndexMain ===1 ){
+     
+      this.activeIndex2 =this.activeIndex2+1;
+      console.log( "activeIndex2",this.activeIndex2)
+
+    }
+    if (this.activeIndex===3) {
+      this.activeIndexMain =1;
+      
+    }
+    if (this.activeIndex<=2 && this.activeIndex>=0 && this.activeIndexMain===0){
+      this.activeIndex =this.activeIndex +1;
+      console.log( this.activeIndex)
+      
+    }
+
+    
+
+   
+
+    
   }
 
 }

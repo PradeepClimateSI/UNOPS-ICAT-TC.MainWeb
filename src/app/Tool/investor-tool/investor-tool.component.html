@@ -141,8 +141,8 @@
     </div> -->
     <div class="card" *ngIf="isSavedAssessment">
         <!-- <div class="card" > -->
-        <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)">
-        <p-tabView  (onChange)="onMainTabChange($event) ">
+        <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)" >
+        <p-tabView  (onChange)="onMainTabChange($event) " [(activeIndex)]="activeIndexMain ">
 
             <p-tabPanel  header="Process of Change">
                 <!-- <div *ngFor="let characteristic of meth1Process"> -->
@@ -566,7 +566,7 @@
                 <!-- </div> -->
             </p-tabPanel>
             <p-tabPanel header="Outcome of Change">
-                <p-tabView #tabView2 (onChange)="onCategoryTabChange($event, tabView2) " [(activeIndex)]="activeIndex">
+                <p-tabView #tabView2 (onChange)="onCategoryTabChange($event, tabView2) " [(activeIndex)]="activeIndex2">
 
                     <p-tabPanel [header]="category.CategoryName" *ngFor="let category of outcomeData">
 
@@ -907,7 +907,7 @@
 
         </p-tabView>
 
-        <div  *ngIf="categoryTabIndex===3 && mainTabIndex===1" class="row justify-content-end">
+        <div  *ngIf="activeIndex2===3 && activeIndexMain===1" class="row justify-content-end">
             <div>
 
                 <div 
@@ -919,10 +919,30 @@
             </div>
         </div>
 
+        <div    *ngIf="activeIndex2!==3 || activeIndexMain!==1" class="row justify-content-end">
+            <div>
+    
+                <div 
+                class="d-flex flex-row-reverse mt-20 ">
+                    <div class="btn btn-primary text-uppercase" (click)="next()" >
+                       Next
+                    </div>
+                </div>
+            </div>
+        </div>
+   
+           
+      
+
        
 
 
     </form>
+<!-- <ng-template #elseblock> -->
+    
+
+<!-- </ng-template> -->
+    
     </div>
 
 
