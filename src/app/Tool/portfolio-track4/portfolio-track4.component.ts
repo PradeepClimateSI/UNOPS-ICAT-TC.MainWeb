@@ -203,15 +203,15 @@ export class PortfolioTrack4Component implements OnInit {
               .subscribe(_res => {
                 console.log("res final", _res)
                 if (_res) {
-                  console.log(_res)
-                  this.messageService.add({
-                    severity: 'success',
-                    summary: 'Success',
-                    detail: 'Assessment created successfully',
-                    closable: true,
-                  })
+                  // console.log(_res)
+                  // this.messageService.add({
+                  //   severity: 'success',
+                  //   summary: 'Success',
+                  //   detail: 'Assessment created successfully',
+                  //   closable: true,
+                  // })
                   this.isSavedAssessment = true
-                  this.onCategoryTabChange('', this.tabView);
+                  // this.onCategoryTabChange('', this.tabView);
 
                 }
                 // form.reset();
@@ -304,7 +304,7 @@ onChangeTrack(event : any){
     this.investorToolControllerproxy.createFinalAssessment(finalArray)
       .subscribe(_res => {
         console.log("res final", _res)
-        if (_res) {
+      
           console.log(_res)
           this.messageService.add({
             severity: 'success',
@@ -312,10 +312,11 @@ onChangeTrack(event : any){
             detail: 'Assessment created successfully',
             closable: true,
           })
+          this.showResults();
          // this.isSavedAssessment = true
-          this.onCategoryTabChange('', this.tabView);
+          // this.onCategoryTabChange('', this.tabView);
 
-        }
+        
         // form.reset();
       }, error => {
         console.log(error)

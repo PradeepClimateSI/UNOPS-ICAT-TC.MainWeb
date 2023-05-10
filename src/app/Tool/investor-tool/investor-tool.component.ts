@@ -199,12 +199,12 @@ export class InvestorToolComponent implements OnInit {
                 console.log("res final", _res)
                 if (_res) {
                   console.log(_res)
-                  this.messageService.add({
-                    severity: 'success',
-                    summary: 'Success',
-                    detail: 'Assessment created successfully',
-                    closable: true,
-                  })
+                  // this.messageService.add({
+                  //   severity: 'success',
+                  //   summary: 'Success',
+                  //   detail: 'Assessment created successfully',
+                  //   closable: true,
+                  // })
                   this.isSavedAssessment = true
 
                 }
@@ -285,8 +285,9 @@ export class InvestorToolComponent implements OnInit {
           detail: 'Assessment created successfully',
           closable: true,
         })
+        this.showResults();
         // this.isSavedAssessment = true
-        this.onCategoryTabChange('', this.tabView);
+        // this.onCategoryTabChange('', this.tabView);
 
       
       // form.reset();
