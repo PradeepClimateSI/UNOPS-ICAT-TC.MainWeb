@@ -109,6 +109,7 @@ export class ClimateActionComponent implements OnInit {
   category: BarriersCategory[];
   selectCategory: any;
   approachList: string[] = ['AR1', 'AR2', 'AR3', 'AR4', 'AR5'];
+  typeofAction: string[] = ['Investment','Carbon Market','NDC Implementation','Project']
 
   institutionList: Institution[] = [];
   institutionTypeID: number = 3;
