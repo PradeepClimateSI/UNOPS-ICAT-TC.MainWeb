@@ -1,7 +1,8 @@
 <div class="container pl-20 pr-20">
-  <!-- <div class="mb-12">
-      <h4 class="mt-4"> Assess Investment & Private Sector Transformational Change</h4>
-  </div> -->
+  <div *ngIf="track4Selectt">
+  <div class="mb-12">
+      <h4 class="mt-4">Assess the Transformational Change due to a Portfolio of Interventions</h4>
+  </div>
   <form #fData="ngForm" (ngSubmit)="save(fData)">
     <div class="card" style="min-height: 600px;">
       <div class="p-grid p-fluid col-md-6 col-sm-12">
@@ -10,7 +11,7 @@
 
             <div class="p-field p-2">
               <label for="assessment_method">Assessment Method</label>
-              <select class="form-control select-with-arrow"  [(ngModel)]="assessment.assessment_method"
+              <select class="form-control select-with-arrow"  (change)="onChangeTrack($event)" [(ngModel)]="assessment.assessment_method"
                 name="assessment_method" id="exampleFormControlSelect1">
                 <option value="" disabled selected hidden>Select Assessment Method</option>
                 <option>Track 1</option>
@@ -23,7 +24,7 @@
 
             <div class="p-field p-2">
               <label for="policy">Select Intervetion *</label>
-              <p-dropdown name="policy" #policy="ngModel" placeholder="Select Policy"
+              <p-dropdown appendTo="body" name="policy" #policy="ngModel" placeholder="Select Policy"
                 [(ngModel)]="assessment.climateAction" appendTo="body" [options]="policies" optionLabel="policyName"
                 [required]="true"></p-dropdown>
               <p class="info-message text-danger" *ngIf="
@@ -35,7 +36,7 @@
             </div>
             <div class="p-field p-2">
               <label for="policy">Assessment Type *</label>
-              <p-dropdown name="type" #type="ngModel" placeholder="Select Assessment Type"
+              <p-dropdown appendTo="body" name="type" #type="ngModel" placeholder="Select Assessment Type"
                 [(ngModel)]="assessment.assessmentType" [options]="assessment_types" optionLabel="name"
                 optionValue="name" [required]="true" (onChange)="selectAssessmentType($event)"></p-dropdown>
               <p class="info-message text-danger" *ngIf="
@@ -47,7 +48,7 @@
             </div>
             <div class="p-field p-2">
               <label for="Level of implementation">Level of implementation*</label>
-              <p-dropdown name="investorAssessment.level_of_implemetation" #type="ngModel"
+              <p-dropdown appendTo="body" name="investorAssessment.level_of_implemetation" #type="ngModel"
                 placeholder="Select Level of implementation" [(ngModel)]="investorAssessment.level_of_implemetation"
                 [options]="levelOfImplementation" optionLabel="name" optionValue="name" [required]="true"></p-dropdown>
               <p class="info-message text-danger" *ngIf="
@@ -59,7 +60,7 @@
             </div>
             <div class="p-field p-2">
               <label for="Level of implementation">Geographical Areas Covered*</label>
-              <p-dropdown name="investorAssessment.geographical_areas_covered" #type="ngModel"
+              <p-dropdown appendTo="body" name="investorAssessment.geographical_areas_covered" #type="ngModel"
                 placeholder="Select Geographical Areas Covered"
                 [(ngModel)]="investorAssessment.geographical_areas_covered" [options]="levelOfImplementation"
                 optionLabel="name" optionValue="name" [required]="true"></p-dropdown>
@@ -138,7 +139,7 @@
 
   <div class="card">
     <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)">
-      <p-tabView (onChange)="onMainTabChange($event)  ">
+      <p-tabView (onChange)="onMainTabChange($event)"  [(activeIndex)]="activeIndexMain ">
 
         <p-tabPanel header="Process of Change">
           <!-- <div *ngFor="let characteristic of meth1Process"> -->
@@ -184,7 +185,7 @@
                             <div class="col-12 col-lg-6">
                               <div class="p-field">
                                 <label for="Description">Relevance</label>
-                                <p-dropdown name="data.charData.relavance" #type="ngModel"
+                                <p-dropdown appendTo="body" name="data.charData.relavance" #type="ngModel"
                                   placeholder="Select Relevance" [(ngModel)]="data.relavance" [options]="relevance"
                                   optionLabel="name" optionValue="value" [required]="true"></p-dropdown>
                               </div>
@@ -236,7 +237,7 @@
                             <div class="col-12 col-lg-6">
                               <div class="p-field">
                                 <label for="Relevance">Likelihood</label>
-                                <p-dropdown name="data.charData.likelihood" #type="ngModel"
+                                <p-dropdown appendTo="body" name="data.charData.likelihood" #type="ngModel"
                                   placeholder="Select Likelihood" [(ngModel)]="data.likelihood" [options]="likelihood"
                                   optionLabel="id" optionValue="value" [required]="true"></p-dropdown>
                               </div>
@@ -254,24 +255,30 @@
 
                           <div class="row p-2">
                             <div class="col-12 col-lg-6">
-                              <div class="p-field">
-                                <label for="Relevance">Relevance Weight</label>
-                                <p-inputNumber inputId="integeronly" [(ngModel)]="data.relevance_weight"
-                                  placeholder="Enter Relevance Weight" name="data.charData.relevance_weight">
-                                </p-inputNumber>
-                              </div>
+                                <div class="p-field">
+                                    <label for="Relevance">Relevance Weight</label>
+                                    <p-inputNumber inputId="locale-us" mode="decimal"
+                                         locale="en-US" [minFractionDigits]="2"
+                                        [(ngModel)]="data.relevance_weight"
+                                        placeholder="Enter Relevance Weight"
+                                        name="data.charData.relevance_weight">
+                                    </p-inputNumber>
+                                </div>
                             </div>
 
                             <div class="col-12 col-lg-6">
-                              <div class="p-field">
-                                <label for="Relevance">Likelihood Weight</label>
-                                <p-inputNumber inputId="integeronly" [(ngModel)]="data.likelihood_weight"
-                                  placeholder="Enter Likelihood Weight" name="data.charData.likelihood_weight">
-                                </p-inputNumber>
+                                <div class="p-field">
+                                    <label for="Relevance">Likelihood Weight</label>
+                                    <p-inputNumber inputId="locale-us" mode="decimal"
+                                         locale="en-US" [minFractionDigits]="2"
+                                        [(ngModel)]="data.likelihood_weight"
+                                        placeholder="Enter Likelihood Weight"
+                                        name="data.charData.likelihood_weight">
+                                    </p-inputNumber>
 
-                              </div>
+                                </div>
                             </div>
-                          </div>
+                        </div>
                         </div>
                       </div>
 
@@ -297,7 +304,7 @@
           <!-- </div> -->
         </p-tabPanel>
         <p-tabPanel header="Outcome of Change">
-          <p-tabView #tabView2 (onChange)="onCategoryTabChange($event, tabView2) " [(activeIndex)]="activeIndex">
+          <p-tabView #tabView2 (onChange)="onCategoryTabChange($event, tabView2) " [(activeIndex)]="activeIndex2">
 
             <p-tabPanel [header]="category.CategoryName" *ngFor="let category of outcomeData">
 
@@ -349,7 +356,7 @@
                                 <div class="p-field">
                                   <label for="Relevance">Score</label>
                                   <p-inputNumber inputId="integeronly" [(ngModel)]="data.score"
-                                    placeholder="Enter Relevance Weight" name="data.charData.score"> </p-inputNumber>
+                                    placeholder="Enter Score" name="data.charData.score"> </p-inputNumber>
                                 </div>
                               </div>
 
@@ -362,6 +369,20 @@
                                 </div>
                               </div>
                             </div>
+
+                            <div class="row p-2" *ngIf="categoryTabIndex===0 && mainTabIndex===1 && category.CategoryName ==='Scale GHGs' && data.characteristics.name === 'Micro Level'">
+                              <div class="col-12 col-lg-6">
+                                <div class="p-field">
+                                  <label for="expected_ghg_mitigation">Expected GHG mitgation (Mt CO2-eq)</label>
+                                  <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation" name="expected_ghg_mitigation"
+                                      placeholder="Expected GHG mitgation Value" inputId="locale-us" mode="decimal"
+                                    locale="en-US" [minFractionDigits]="2">
+                                  </p-inputNumber>
+                                  </div>
+                                </div>
+                  
+                              
+                        </div>
                           </div>
                         </div>
                       </div>
@@ -387,16 +408,32 @@
       <div *ngIf="categoryTabIndex===3 && mainTabIndex===1" class="row justify-content-end">
         <div>
           <div class="d-flex flex-row-reverse mt-20 ">
-            <button class="btn btn-primary text-uppercase" type="submit" (click)="showResults()">
-              Calculate & Check Reults
+            <button class="btn btn-primary text-uppercase" type="submit" >
+              Calculate & Check Results
             </button>
           </div>
         </div>
 
       </div>
+      <div    *ngIf="activeIndex2!==3 || activeIndexMain!==1" class="row justify-content-end">
+        <div>
+
+            <div 
+            class="d-flex flex-row-reverse mt-20 ">
+                <div class="btn btn-primary text-uppercase" (click)="next()" >
+                   Next
+                </div>
+            </div>
+        </div>
+    </div>
     </form>
   </div>
 </div>
 
-
 </div>
+</div>
+
+
+<div *ngIf="!track4Selectt">
+  <app-carbon></app-carbon>
+  </div>
