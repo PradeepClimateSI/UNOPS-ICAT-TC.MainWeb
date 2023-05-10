@@ -41,7 +41,7 @@ export class InvestorToolComponent implements OnInit {
 
   description = ''
 
-  yesNoAnswer: any[] = [{ id: 1, name: "Yes" }, { id: 2, name: "No" }];
+  yesNoAnswer: any[] = [{ id: 1, name: "Yes" }, { id: 2, name: "No" },  { id: 3, name: "Maybe" }];
 
 
   processData: {
@@ -80,6 +80,7 @@ export class InvestorToolComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
+    this.categoryTabIndex =0;
 
     this.assessment_types = this.masterDataService.assessment_type;
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;

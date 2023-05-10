@@ -24,6 +24,7 @@
                             <p-dropdown name="type" #type="ngModel" placeholder="Select Assessment Type"
                                 [(ngModel)]="assessment.assessmentType" [options]="assessment_types" optionLabel="name"
                                 optionValue="name" [required]="true"
+                                appendTo="body"
                                 (onChange)="selectAssessmentType($event)"></p-dropdown>
                             <p class="info-message text-danger" *ngIf="
                                 !assessment.assessmentType &&
@@ -37,6 +38,7 @@
                             <p-dropdown name="investorAssessment.level_of_implemetation" #type="ngModel"
                                 placeholder="Select Level of implementation"
                                 [(ngModel)]="investorAssessment.level_of_implemetation"
+                                appendTo="body"
                                 [options]="levelOfImplementation" optionLabel="name" optionValue="name"
                                 [required]="true"></p-dropdown>
                             <p class="info-message text-danger" *ngIf="
@@ -107,7 +109,7 @@
                         <div class="p-field p-2">
                             <label for="Sectors Covered">Assessment Method*</label>
                             <p-dropdown name="type" #type="ngModel" placeholder="Select Assessment Method"
-                                [(ngModel)]="assessment.assessment_method" [options]="assessmentMethods"
+                                [(ngModel)]="assessment.assessment_method" [options]="assessmentMethods"  appendTo="body"
                                 optionLabel="name" optionValue="name"></p-dropdown>
                             <!-- <p class="info-message text-danger" *ngIf="
                                 !assessment.assessment_method &&
@@ -198,6 +200,7 @@
                                                                     placeholder="Select Relevance"
                                                                     [(ngModel)]="data.relavance"
                                                                     [options]="relevance" optionLabel="name"
+                                                                    appendTo="body"
                                                                     optionValue="value" [required]="true"></p-dropdown>
                                                             </div>
                                                         </div>
@@ -230,6 +233,7 @@
                                                                 placeholder="Select Answer"
                                                                 [(ngModel)]="data.question01"
                                                                 [options]="yesNoAnswer" optionLabel="name"
+                                                                appendTo="body"
                                                                 optionValue="name" [required]="true"></p-dropdown>
 
                                                         </div>
@@ -244,6 +248,7 @@
                                                             class="col-4">
                                                             <p-dropdown name="data.charData.question02" #type="ngModel"
                                                                 placeholder="Select Answer"
+                                                                appendTo="body"
                                                                 [(ngModel)]="data.question02"
                                                                 [options]="yesNoAnswer" optionLabel="name"
                                                                 optionValue="name" [required]="true"></p-dropdown>
@@ -261,6 +266,7 @@
                                                             <p-dropdown name="data.charData.question01" #type="ngModel"
                                                                 placeholder="Select Answer"
                                                                 [(ngModel)]="data.question01"
+                                                                appendTo="body"
                                                                 [options]="yesNoAnswer" optionLabel="name"
                                                                 optionValue="name" [required]="true"></p-dropdown>
 
@@ -279,6 +285,7 @@
                                                             <p-dropdown name="data.charData.question01" #type="ngModel"
                                                                 placeholder="Select Answer"
                                                                 [(ngModel)]="data.question01"
+                                                                appendTo="body"
                                                                 [options]="yesNoAnswer" optionLabel="name"
                                                                 optionValue="name" [required]="true"></p-dropdown>
 
@@ -296,6 +303,7 @@
                                                             <p-dropdown name="data.charData.question02" #type="ngModel"
                                                                 placeholder="Select Answer"
                                                                 [(ngModel)]="data.question02"
+                                                                appendTo="body"
                                                                 [options]="yesNoAnswer" optionLabel="name"
                                                                 optionValue="name" [required]="true"></p-dropdown>
 
@@ -312,6 +320,7 @@
                                                             <p-dropdown name="data.charData.question03" #type="ngModel"
                                                                 placeholder="Select Answer"
                                                                 [(ngModel)]="data.question03"
+                                                                appendTo="body"
                                                                 [options]="yesNoAnswer" optionLabel="name"
                                                                 optionValue="name" [required]="true"></p-dropdown>
 
@@ -328,6 +337,7 @@
                                                             <p-dropdown name="data.charData.question04" #type="ngModel"
                                                                 placeholder="Select Answer"
                                                                 [(ngModel)]="data.question04"
+                                                                appendTo="body"
                                                                 [options]="yesNoAnswer" optionLabel="name"
                                                                 optionValue="name" [required]="true"></p-dropdown>
 
@@ -345,6 +355,7 @@
                                                             <p-dropdown name="data.charData.question01" #type="ngModel"
                                                                 placeholder="Select Answer"
                                                                 [(ngModel)]="data.question01"
+                                                                appendTo="body"
                                                                 [options]="yesNoAnswer" optionLabel="name"
                                                                 optionValue="name" [required]="true"></p-dropdown>
 
@@ -362,6 +373,7 @@
                                                             <p-dropdown name="data.charData.question01" #type="ngModel"
                                                                 placeholder="Select Answer"
                                                                 [(ngModel)]="data.question01"
+                                                                appendTo="body"
                                                                 [options]="yesNoAnswer" optionLabel="name"
                                                                 optionValue="name" [required]="true"></p-dropdown>
 
@@ -382,6 +394,7 @@
                                                             <p-dropdown name="data.charData.question01" #type="ngModel"
                                                                 placeholder="Select Answer"
                                                                 [(ngModel)]="data.question01"
+                                                                appendTo="body"
                                                                 [options]="yesNoAnswer" optionLabel="name"
                                                                 optionValue="name" [required]="true"></p-dropdown>
 
@@ -399,6 +412,7 @@
                                                             <p-dropdown name="data.charData.question01" #type="ngModel"
                                                                 placeholder="Select Answer"
                                                                 [(ngModel)]="data.question01"
+                                                                appendTo="body"
                                                                 [options]="yesNoAnswer" optionLabel="name"
                                                                 optionValue="name" [required]="true"></p-dropdown>
 
@@ -417,6 +431,7 @@
                                                             <p-dropdown name="data.charData.question02" #type="ngModel"
                                                                 placeholder="Select Answer"
                                                                 [(ngModel)]="data.question02"
+                                                                appendTo="body"
                                                                 [options]="yesNoAnswer" optionLabel="name"
                                                                 optionValue="name" [required]="true"></p-dropdown>
 
@@ -433,6 +448,7 @@
                                                             <p-dropdown name="data.charData.question03" #type="ngModel"
                                                                 placeholder="Select Answer"
                                                                 [(ngModel)]="data.question03"
+                                                                appendTo="body"
                                                                 [options]="yesNoAnswer" optionLabel="name"
                                                                 optionValue="name" [required]="true"></p-dropdown>
 
@@ -441,7 +457,7 @@
                                                         <div *ngIf="data.characteristics.name === 'Behaviour'"
                                                             class=" ml-25 col-5">
                                                             <p class="question">
-                                                                Does the project include awareness campaigns ?</p>
+                                                                Does the project include training of Young leaders ?</p>
                                                         </div>
 
                                                         <div *ngIf="data.characteristics.name === 'Behaviour'"
@@ -449,6 +465,7 @@
                                                             <p-dropdown name="data.charData.question01" #type="ngModel"
                                                                 placeholder="Select Answer"
                                                                 [(ngModel)]="data.question01"
+                                                                appendTo="body"
                                                                 [options]="yesNoAnswer" optionLabel="name"
                                                                 optionValue="name" [required]="true"></p-dropdown>
 
@@ -465,6 +482,7 @@
                                                             <p-dropdown name="data.charData.question01" #type="ngModel"
                                                                 placeholder="Select Answer"
                                                                 [(ngModel)]="data.question01"
+                                                                appendTo="body"
                                                                 [options]="yesNoAnswer" optionLabel="name"
                                                                 optionValue="name" [required]="true"></p-dropdown>
 
@@ -479,7 +497,8 @@
                                                                     #type="ngModel" placeholder="Select Likelihood"
                                                                     [(ngModel)]="data.likelihood"
                                                                     [options]="likelihood" optionLabel="id"
-                                                                    optionValue="value" [required]="true"></p-dropdown>
+                                                                    optionValue="value" [required]="true"
+                                                                    appendTo="body"></p-dropdown>
                                                                     
                                                             </div>
                                                         </div>
@@ -559,9 +578,21 @@
                                                 <div class="p-grid p-fluid col-12">
                                                     <div class="row p-2">
                                                         <label for="Indicator"><u>Indicator</u></label>
-                                                        <div>
+                                                        <div *ngIf="( data.characteristics.name ==='Medium Level') && category.CategoryName ==='Scale GHGs'"
+                                                        class=" ml-25 col-5">
+                                                        <p class="question">If zero C project (RE?) project, does it increase intalled RE capacity by > 1% ? </p>
+                                                    </div>
 
-                                                        </div>
+                                                    <div *ngIf="( data.characteristics.name ==='Medium Level') && category.CategoryName ==='Scale GHGs'"
+                                                        class="col-4 mb-20">
+                                                        <p-dropdown name="data.charData.question01" #type="ngModel"
+                                                            placeholder="Select Answer"
+                                                            [(ngModel)]="data.question06"
+                                                            appendTo="body"
+                                                            [options]="yesNoAnswer" optionLabel="name"
+                                                            optionValue="name" [required]="true"></p-dropdown>
+
+                                                    </div>
                                                         <div *ngIf="(data.characteristics.name === 'Macro Level' || data.characteristics.name ==='Medium Level') && category.CategoryName ==='Scale GHGs'"
                                                             class=" ml-25 col-5">
                                                             <p class="question">Does the project result in a GHG
@@ -573,6 +604,7 @@
                                                             <p-dropdown name="data.charData.question01" #type="ngModel"
                                                                 placeholder="Select Answer"
                                                                 [(ngModel)]="data.question01"
+                                                                appendTo="body"
                                                                 [options]="yesNoAnswer" optionLabel="name"
                                                                 optionValue="name" [required]="true"></p-dropdown>
 
@@ -590,11 +622,31 @@
                                                                 placeholder="Select Answer"
                                                                 [(ngModel)]="data.question02"
                                                                 [options]="yesNoAnswer" optionLabel="name"
+                                                                appendTo="body"
                                                                 optionValue="name" [required]="true"></p-dropdown>
 
                                                         </div>
 
+                                                       
+
                                                         <div *ngIf="(data.characteristics.name === 'Macro Level' || data.characteristics.name ==='Medium Level') && category.CategoryName ==='Scale GHGs'"
+                                                            class=" ml-25 col-5">
+                                                            <p class="question">
+                                                                If RE project, does it increase intalled RE capacity by > 1% ? </p>
+                                                        </div>
+
+                                                        <div *ngIf="(data.characteristics.name === 'Macro Level' || data.characteristics.name ==='Medium Level') && category.CategoryName ==='Scale GHGs'"
+                                                            class="col-4 mb-20">
+                                                            <p-dropdown name="data.charData.question03" #type="ngModel"
+                                                                placeholder="Select Answer"
+                                                                [(ngModel)]="data.question04"
+                                                                [options]="yesNoAnswer" optionLabel="name"
+                                                                appendTo="body"
+                                                                optionValue="name" [required]="true"></p-dropdown>
+
+                                                        </div>
+
+                                                         <div *ngIf="(data.characteristics.name === 'Macro Level' || data.characteristics.name ==='Medium Level') && category.CategoryName ==='Scale GHGs'"
                                                             class=" ml-25 col-5">
                                                             <p class="question">If RE project, is the associated cost
                                                                 ($/MW) > 10% lower than national average? </p>
@@ -606,6 +658,7 @@
                                                                 placeholder="Select Answer"
                                                                 [(ngModel)]="data.question03"
                                                                 [options]="yesNoAnswer" optionLabel="name"
+                                                                appendTo="body"
                                                                 optionValue="name" [required]="true"></p-dropdown>
 
                                                         </div>
@@ -622,7 +675,8 @@
                                                             class="col-4 mb-20">
                                                             <p-dropdown name="data.charData.question04" #type="ngModel"
                                                                 placeholder="Select Answer"
-                                                                [(ngModel)]="data.question04"
+                                                                [(ngModel)]="data.question05"
+                                                                appendTo="body"
                                                                 [options]="yesNoAnswer" optionLabel="name"
                                                                 optionValue="name" [required]="true"></p-dropdown>
 
@@ -642,6 +696,7 @@
                                                                 placeholder="Select Answer"
                                                                 [(ngModel)]="data.question01"
                                                                 [options]="yesNoAnswer" optionLabel="name"
+                                                                appendTo="body"
                                                                 optionValue="name" [required]="true"></p-dropdown>
 
                                                         </div>
@@ -660,6 +715,7 @@
                                                                 placeholder="Select Answer"
                                                                 [(ngModel)]="data.question02"
                                                                 [options]="yesNoAnswer" optionLabel="name"
+                                                                appendTo="body"
                                                                 optionValue="name" [required]="true"></p-dropdown>
 
                                                         </div>
@@ -679,6 +735,7 @@
                                                                 placeholder="Select Answer"
                                                                 [(ngModel)]="data.question03"
                                                                 [options]="yesNoAnswer" optionLabel="name"
+                                                                appendTo="body"
                                                                 optionValue="name" [required]="true"></p-dropdown>
 
                                                         </div>
@@ -696,6 +753,7 @@
                                                                 placeholder="Select Answer"
                                                                 [(ngModel)]="data.question01"
                                                                 [options]="yesNoAnswer" optionLabel="name"
+                                                                appendTo="body"
                                                                 optionValue="name" [required]="true"></p-dropdown>
 
                                                         </div>
@@ -714,6 +772,7 @@
                                                                 placeholder="Select Answer"
                                                                 [(ngModel)]="data.question02"
                                                                 [options]="yesNoAnswer" optionLabel="name"
+                                                                appendTo="body"
                                                                 optionValue="name" [required]="true"></p-dropdown>
 
                                                         </div>
@@ -732,6 +791,7 @@
                                                                 placeholder="Select Answer"
                                                                 [(ngModel)]="data.question02"
                                                                 [options]="yesNoAnswer" optionLabel="name"
+                                                                appendTo="body"
                                                                 optionValue="name" [required]="true"></p-dropdown>
 
                                                         </div>
@@ -744,7 +804,7 @@
                                                             <div class="p-field">
                                                                 <input type="text" pInputText
                                                                     [(ngModel)]="data.indicator"
-                                                                    placeholder="Enter Justifiaction"
+                                                                    placeholder="Enter an Indicator"
                                                                     name="justification" />
                                                             </div>
                                                             <!-- need to add on requirement -->
@@ -761,6 +821,30 @@
                                                         </div>
                                                     </div>
 
+                                                    <div class="row p-2" *ngIf=" category.CategoryName ==='Scale SD'|| category.CategoryName ==='Sustained nature-SD'">
+                                                        <div class="col-12 col-lg-6">
+                                                          <div class="p-field">
+                                                            <label for="indicatorStartingVal">Indicator Starting Situation Value</label>
+                                                            <p-inputNumber [(ngModel)]="data.indicatorStartingVal" name="indicatorStartingVal"
+                                                              placeholder="Value at the Starting Situation" inputId="locale-us" mode="decimal"
+                                                              locale="en-US" [minFractionDigits]="2">
+                                                            </p-inputNumber>
+                                                          </div>
+                                                        </div>
+                            
+                                                        <div class="col-12 col-lg-6">
+                                                          <div class="p-field">
+                                                            <label for="indicatorExpectedVal">Indicator Expected Value</label>
+                                                            <p-inputNumber [(ngModel)]="data.indicatorExpectedVal" name="indicatorExpectedVal"
+                                                              placeholder="Expected Value" inputId="locale-us" mode="decimal" locale="en-US"
+                                                              [minFractionDigits]="2">
+                                                            </p-inputNumber>
+                            
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                      
+
 
 
                                                     <div class="row p-2">
@@ -769,7 +853,7 @@
                                                                 <label for="Relevance">Score</label>
                                                                 <p-inputNumber inputId="integeronly"
                                                                     [(ngModel)]="data.score"
-                                                                    placeholder="Enter Relevance Weight"
+                                                                    placeholder="Enter Score"
                                                                     name="data.charData.score"> </p-inputNumber>
                                                             </div>
                                                         </div>
@@ -785,6 +869,20 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                    <div class="row p-2" *ngIf="categoryTabIndex===0 && mainTabIndex===1 && category.CategoryName ==='Scale GHGs' && data.characteristics.name === 'Micro Level'">
+                                                        <div class="col-12 col-lg-6">
+                                                          <div class="p-field">
+                                                            <label for="expected_ghg_mitigation">Expected GHG mitgation (Mt CO2-eq)</label>
+                                                            <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation" name="expected_ghg_mitigation"
+                                                              placeholder="Expected GHG mitgation Value" inputId="locale-us" mode="decimal"
+                                                              locale="en-US" [minFractionDigits]="2">
+                                                            </p-inputNumber>
+                                                          </div>
+                                                        </div>
+                                            
+                                                        
+                                                      </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -813,11 +911,13 @@
                 <div 
                 class="d-flex flex-row-reverse mt-20 ">
                     <button class="btn btn-primary text-uppercase" type="submit" (click)="showResults()">
-                        Calculate & Check reults
+                        Calculate & Check results
                     </button>
                 </div>
             </div>
         </div>
+
+       
 
 
     </form>
