@@ -36,12 +36,14 @@ export class InvestorToolComponent implements OnInit {
   characteristicsArray: Characteristics[] = [];
   selectedIndex = 0;
   activeIndex = 0;
+  activeIndexMain =0;
+  activeIndex2 :number=0;
   likelihood: any[] = [];
   relevance: any[] = [];
 
   description = ''
 
-  yesNoAnswer: any[] = [{ id: 1, name: "Yes" }, { id: 2, name: "No" }];
+  yesNoAnswer: any[] = [{ id: 1, name: "Yes" }, { id: 2, name: "No" },  { id: 3, name: "Maybe" }];
 
 
   processData: {
@@ -80,6 +82,7 @@ export class InvestorToolComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
+    this.categoryTabIndex =0;
 
     this.assessment_types = this.masterDataService.assessment_type;
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;
@@ -198,12 +201,12 @@ export class InvestorToolComponent implements OnInit {
                 console.log("res final", _res)
                 if (_res) {
                   console.log(_res)
-                  this.messageService.add({
-                    severity: 'success',
-                    summary: 'Success',
-                    detail: 'Assessment created successfully',
-                    closable: true,
-                  })
+                  // this.messageService.add({
+                  //   severity: 'success',
+                  //   summary: 'Success',
+                  //   detail: 'Assessment created successfully',
+                  //   closable: true,
+                  // })
                   this.isSavedAssessment = true
 
                 }
@@ -284,8 +287,9 @@ export class InvestorToolComponent implements OnInit {
           detail: 'Assessment created successfully',
           closable: true,
         })
+        this.showResults();
         // this.isSavedAssessment = true
-        this.onCategoryTabChange('', this.tabView);
+        // this.onCategoryTabChange('', this.tabView);
 
       
       // form.reset();
@@ -311,6 +315,30 @@ export class InvestorToolComponent implements OnInit {
       
        }, 2000);
 
+  }
+  next(){
+
+    if(this.activeIndexMain ===1 ){
+     
+      this.activeIndex2 =this.activeIndex2+1;
+      console.log( "activeIndex2",this.activeIndex2)
+
+    }
+    if (this.activeIndex===3) {
+      this.activeIndexMain =1;
+      
+    }
+    if (this.activeIndex<=2 && this.activeIndex>=0 && this.activeIndexMain===0){
+      this.activeIndex =this.activeIndex +1;
+      console.log( this.activeIndex)
+      
+    }
+
+    
+
+   
+
+    
   }
 
 }

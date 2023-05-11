@@ -159,13 +159,13 @@
 
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="nameClimate">Country of implementation</label>
+                  <label for="nameClimate">Country of implementation  </label>
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocknameClimate">
                     <div>
-                      <p-dropdown [disabled]="editEntytyId > 0 || isSector" appendTo="body" name="countryDD"
-                        placeholder="Country" #countryDD="ngModel" [(ngModel)]="project.country"
-                        [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false" [options]="countryList"
-                        optionLabel="name" (ngModelChange)="onCountryChnage()" [required]="true"></p-dropdown>
+                      <p-dropdown [disabled]="editEntytyId > 0 || isSector" placeholder="Country" name="countryDD"
+                         #countryDD="ngModel" [(ngModel)]="project.country" appendTo="body" [autoDisplayFirst]="false"
+                         [options]="countryList" optionLabel="name" [ngModelOptions]="{ standalone: false }"  
+                         (ngModelChange)="onCountryChnage()" [required]="true"></p-dropdown>
                     </div>
                     <p class="info-message text-danger" *ngIf="
                     getUserEnterdCountry == '' &&
@@ -212,9 +212,9 @@
                   <label for="projStatus">Type of intervention</label>
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlockprojStatus">
                     <p-dropdown [disabled]="editEntytyId > 0" placeholder="Please Select the type of intervention"
-                      name="projStatus" #projStatus="ngModel" [(ngModel)]="project.typeofAction"
-                      [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false" optionLabel="name"
-                      [required]="true"></p-dropdown>
+                      name="projStatus" #projStatus="ngModel" [(ngModel)]="project.typeofAction" [options]="typeofAction"
+                      [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false" 
+                      [required]="false"></p-dropdown>
                     <p class="info-message text-danger" *ngIf="
                     !project.projectStatus &&
                     (fData.submitted || projStatus.touched || projStatus.dirty)
@@ -254,16 +254,16 @@
                 </div>
               </div>
             </div>
-            <div class="row p-2" *ngIf="isMapped != 0">
+            <!-- <div class="row p-2" *ngIf="isMapped != 0">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="ndc">Aggregated Action*</label>
+                  <label for="ndc">Aggregated Action*</label> -->
                   <!-- <div type="button"  class="pi pi-info-circle" pTooltip="The combination of action areas" ></div> -->
-                  <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlockndc">
-                    <p-dropdown placeholder="Select Aggregated Action" name="ndc" #ndc="ngModel"
+                  <!-- <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlockndc"> -->
+                    <!-- <p-dropdown placeholder="Select Aggregated Action" name="ndc" #ndc="ngModel"
                       [autoDisplayFirst]="false" [options]="ndcList" [(ngModel)]="project.aggregatedAction"
                       [ngModelOptions]="{ standalone: true }" optionLabel="name">
-                    </p-dropdown>
+                    </p-dropdown> -->
                     <!-- <p
                   class="info-message text-danger"
                   *ngIf="
@@ -272,34 +272,34 @@
                 >
                   This is a mandatory field
                 </p> -->
-                  </ng-container>
-                  <ng-template #elseBlockndc>
+                  <!-- </ng-container> -->
+                  <!-- <ng-template #elseBlockndc>
                     <input [disabled]="editEntytyId > 0" type="text" maxlength="50" name="projndc" #projndc="ngModel"
                       class="p-inputtext" [(ngModel)]="project.aggregatedAction?.name!"
                       [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
-                  </ng-template>
-                </div>
-              </div>
+                  </ng-template> -->
+                <!-- </div>
+              </div> -->
 
-              <div class="col-12 col-md-6">
+              <!-- <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="subNDC">Action Area*</label>
+                  <label for="subNDC">Action Area*</label> -->
                   <!-- <div type="button"  class="pi pi-info-circle" pTooltip="Any efforts that are taken to avoid or reduce or prevent the emission of greenhouse gases" ></div> -->
-                  <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocksubndc">
+                  <!-- <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocksubndc">
                     <p-dropdown placeholder="Select Action Areas" name="subndc" #subndc="ngModel"
                       [autoDisplayFirst]="false"
                       [options]="project.aggregatedAction === undefined || project.aggregatedAction === null  ? [] : project.aggregatedAction.actionArea"
                       [(ngModel)]="project.actionArea" [ngModelOptions]="{ standalone: true }"
                       optionLabel="name"></p-dropdown>
-                  </ng-container>
-                  <ng-template #elseBlocksubndc>
+                  </ng-container> -->
+                  <!-- <ng-template #elseBlocksubndc>
                     <input [disabled]="editEntytyId! > 0" type="text" maxlength="50" name="projsubndc"
                       #projsubndc="ngModel" class="p-inputtext" [(ngModel)]="project.actionArea?.name!"
                       [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
-                  </ng-template>
-                </div>
+                  </ng-template> -->
+                <!-- </div>
               </div>
-            </div>
+            </div> -->
 
 
             <div class="row p-2" *ngIf="flag == 1 ">
