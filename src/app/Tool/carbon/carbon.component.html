@@ -1,10 +1,11 @@
 <div class="container pl-20 pr-20">
 
+  <div *ngIf="!track4Select">
   <div class="mb-12">
     <h4 class="mt-4"> Assess the Transformational Change due to a Portfolio of Interventions</h4>
   </div>
 
-  <div *ngIf="!track4Select">
+
   <div class="card" style="min-height: 600px;">
 
     <form #userPost="ngForm" (ngSubmit)="onSubmit(userPost.value)">
@@ -2015,13 +2016,13 @@
 
 
       <div class="row">
-        <div class="p-grid p-fluid col-md-6 col-sm-12">
+        <div class="p-grid p-fluid col-md-12 col-sm-12">
 
           <div *ngIf="!isSubmitted">
             <div *ngIf="assessmentId">
               <div *ngIf="!track3Direct">
                 <div class="row p-2">
-                  <div class="col-12 col-md-8">
+                  <div class="col-12 col-md-6">
                     <div class="p-field">
                       <label for="category-select">Select Characteristics Affected By Barriers:</label>
                       <p-multiSelect [options]="relevantChaList" [(ngModel)]="selectChaAffectByBarriers"
@@ -2034,42 +2035,67 @@
 
                 <div *ngIf="trigger">
 
-                  <div class="row p-2">
-                    <div class="col-12 col-md-8">
+                  <div class="row p-2" *ngFor="let characteristic of selectChaAffectByBarriers">
+                    <div class="col-12 ">
+                      {{characteristic.name}}
+                    </div>
+                   
+                    <div class="col-10 col-md-6">
                       <div class="p-field">
-
 
                         <!--      <p-multiSelect [options]="characAffectedByBarriers" [(ngModel)]="selectChaAffectByBarriers" (onChange)="onItemSelectcha($event)"
                           defaultLabel= "Select Characteristics" optionLabel="name"></p-multiSelect> -->
 
-                        <div *ngFor="let characteristic of selectChaAffectByBarriers"><br><br>
-                          <input type="checkbox" name="{{characteristic.name}}_barrier" ngModel>&nbsp;
-                          &nbsp;{{characteristic.name}}<br>
+                        <!-- <div ><br><br> -->
+                          <!-- <input  name="{{characteristic.name}}_barrier" ngModel>&nbsp;
+                          &nbsp;<br> -->
 
                           <label for="methodolog">Indicator</label>
                           <select class="form-control select-with-arrow" [(ngModel)]="characteristic.indicator">
                             <option value="" disabled selected hidden>Select Indicator</option>
                             <option *ngFor="let indicator of handleSelectedCharacteristic(characteristic.name)"
-                              [value]="indicator.name">{{indicator.name}}</option>
+                              [value]="indicator.id">{{indicator.name}}</option>
                           </select><br>
-
-
-                          <label for="methodolog">Methodology</label>
-                          <select class="form-control select-with-arrow" name="{{characteristic.name}}_methodology" ngModel
-                            id="exampleFormControlSelect1">
-                            <option value="" disabled selected hidden>Select Methodology</option>
-                            <option *ngFor="let meth of onIndicatorSelected(characteristic.indicator)" [value]="meth.name">
-                              {{meth.name}}</option>
-                          </select>
-
-                        </div>
-
-
-
-
+                        <!-- </div> -->
                       </div>
                     </div>
+                    <div class="col-2 col-md-1">
+                        <div class="p-field">
+
+                            <label for="methodolog"></label>
+                            <p-checkbox [(ngModel)]="characteristic.isIndicator" [binary]="true" pTooltip="Select if there is methodology for indicator" inputId="binary"></p-checkbox>
+                        </div>
+                      </div>
+
+                    <div *ngIf="!characteristic.isIndicator" class="col-12 col-md-4">
+                      <div class="p-field">
+
+                      <label for="methodolog"> Indicator Value</label>
+                      
+                      <p-inputNumber [(ngModel)]="characteristic.indicatorValue" mode="decimal" placeholder="Enter indicator value" inputId="withoutgrouping" tooltipPosition="bottom"  [useGrouping]="false" [minFractionDigits]="2" [maxFractionDigits]="3"></p-inputNumber>
+                        </div>
+                    </div>
+                    <div *ngIf="characteristic.isIndicator"class="col-10 col-md-4">
+                      <div class="p-field">
+
+                      <label for="methodolog">Methodology</label>
+                      <select class="form-control select-with-arrow" name="{{characteristic.name}}_methodology" ngModel
+                        id="exampleFormControlSelect1">
+                        <option value="" disabled selected hidden>Select Methodology</option>
+                        <option *ngFor="let meth of onIndicatorSelected(characteristic.indicator)" [value]="meth.name">
+                          {{meth.name}}</option>
+                      </select>
+                        </div>
+                    </div>
                   </div>
+                  <div>
+
+                    <div  class="d-flex flex-row-reverse mt-20 ">
+                        <button class="btn btn-primary text-uppercase" type="submit"(click)="calculateResults()">
+                          Calculate
+                    </button>
+                    </div>
+                </div>
 
                 </div>
               </div>
