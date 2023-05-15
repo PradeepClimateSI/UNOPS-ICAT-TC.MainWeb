@@ -165,7 +165,7 @@
                       <p-dropdown [disabled]="editEntytyId > 0 || isSector" placeholder="Country" name="countryDD"
                          #countryDD="ngModel" [(ngModel)]="project.country" appendTo="body" [autoDisplayFirst]="false"
                          [options]="countryList" optionLabel="name" [ngModelOptions]="{ standalone: false }"  
-                         (ngModelChange)="onCountryChnage()" [required]="true"></p-dropdown>
+                         (ngModelChange)="onCountryChnage()" ></p-dropdown>
                     </div>
                     <p class="info-message text-danger" *ngIf="
                     getUserEnterdCountry == '' &&
