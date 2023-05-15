@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
-import { AppService, RecordStatus } from 'shared/AppService';
+import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
 import { UserType, ServiceProxy } from 'shared/service-proxies/auth-service-proxies';
-
+import decode from 'jwt-decode';
 @Component({
   selector: 'app-dashboard-base',
   templateUrl: './dashboard-base.component.html',
@@ -18,6 +18,7 @@ export class DashboardBaseComponent implements OnInit {
   userName: string = "";
   userRole: string = "";
   roles: UserType[] = [];
+  loginRole = LoginRole;
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -26,7 +27,11 @@ export class DashboardBaseComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-    this.userName = `${this.appService.getUserName()}`;
+    const token = localStorage.getItem('ACCESS_TOKEN')!;
+    const tokenPayload = decode<any>(token);
+    this.userRole = tokenPayload.role[0];
+    console.log('aaaa',    this.userRole)
+    // this.sectorId = tokenPayload.sectorId;
     // this.getRoles();''
   }
 
