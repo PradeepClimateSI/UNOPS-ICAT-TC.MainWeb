@@ -1273,12 +1273,16 @@ onIndicatorSelected( indicator: any) {
   this.filterMethList = []
 
   for(let item of this.methIndicatorsList){
-    if(item.indicator.name === indicator){
+    // console.log("sl indii2222: ", "ind",indicator,"item",item.indicator.id)
+    if(item.indicator.id == indicator){
+      
       this.filterMethList.push(item)
     }
   }
+  // console.log("selectChaAffectByBarriers22: ",this.selectChaAffectByBarriers)
+  
 
-  // console.log("sl indii2222: ", this.filterMethList)
+ 
 
   return this.filterMethList
 }
@@ -1474,18 +1478,26 @@ onChaWeightChange(categoryName: string, characteristicName : string, chaWeight: 
 }
 
 onMethSelected(value:any,characteristic:any){
-  console.log("value",value)
+  console.log("value",value, characteristic)
 
  
   // this.filterParamList = []
  characteristic.parameters =[];
   for(let item of this.methParametersList){
-    if(item.methodology.name === value){
+    if(item.methodology.id === characteristic.selectedMethodology.id){
       // this.filterParamList.push(item)
-      characteristic.parameters.push({name:item.name,value:''})
+      
+      characteristic.parameters.push({name:item.name,value:'', unit:item.unit,id:item.id})
+      console.log("item para ",item, characteristic.parameters)
     }
   }
   console.log("selectChaAffectByBarriers: ",this.selectChaAffectByBarriers)
+}
+
+onIndicatorChange(characteristic:any){
+  characteristic.parameters =[];
+  characteristic.selectedMethodology =''
+  console.log("selectChaAffectByBarriers22: ",this.selectChaAffectByBarriers)
 }
 
 
