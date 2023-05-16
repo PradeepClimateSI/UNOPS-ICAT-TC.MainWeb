@@ -1356,7 +1356,7 @@ chaCategoryTotalEqualsTo1 : ChaCategoryTotalEqualsTo1 = {};
 
 async myUploader(event: any, chaName : any) {
 
-  console.log("chaaNamee", chaName)
+  console.log("chaaNamee", event, chaName)
 
   for (let file of event.files) {
 
@@ -1393,12 +1393,15 @@ async myUploader(event: any, chaName : any) {
 
 }
 
-onUpload(event :any) {
+onUpload(event :any) { 
   for(let file of event.files) {
       this.uploadedFiles.push(file);
   }
       console.log("hello")
 
+}
+onRemove(event :any,x:number) { 
+  console.log("hello",event)
 }
 
 track4Select : boolean = false

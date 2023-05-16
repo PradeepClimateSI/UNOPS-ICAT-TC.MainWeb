@@ -98,31 +98,35 @@ export class AppService {
   public startIdleTimer() {
     this.userIdle.resetTimer();
     this.userIdle.stopWatching();
-    this.userIdle.setConfigValues({idle: 900, timeout: 1, ping: 600, idleSensitivity: 10});
+    this.userIdle.setConfigValues({idle: 9000, timeout: 1, ping: 6000, idleSensitivity: 100});
 
     /*Session logout */
     this.userIdle.startWatching(); //Start watching for user inactivity.
     this.userIdle.onTimerStart().subscribe((count) => {});
     // Start watch when time is up.
     this.userIdle.onTimeout().subscribe(() => {
+      console.log("ontimeout")
+      this.userIdle.resetTimer();
+      this.userIdle.stopWatching();
+      this.logout();
       // show dialog
-      this.confirmationService.confirm({
-        message: 'Please login again ',
-        header: 'Session expired',
-        acceptIcon: 'icon-not-visible',
-        acceptLabel: 'Ok',
-        rejectVisible: false,
-        accept: () => {
-          this.userIdle.resetTimer();
-          this.userIdle.stopWatching();
-          this.logout();
-        },
-        reject: () => {
-          this.userIdle.resetTimer();
-          this.userIdle.stopWatching();
-          this.logout()
-        }
-      });
+      // this.confirmationService.confirm({
+      //   message: 'Please login again ',
+      //   header: 'Session expired',
+      //   acceptIcon: 'icon-not-visible',
+      //   acceptLabel: 'Ok',
+      //   rejectVisible: false,
+      //   accept: () => {
+      //     this.userIdle.resetTimer();
+      //     this.userIdle.stopWatching();
+      //     this.logout();
+      //   },
+      //   reject: () => {
+      //     this.userIdle.resetTimer();
+      //     this.userIdle.stopWatching();
+      //     this.logout()
+      //   }
+      // });
     });
   }
 

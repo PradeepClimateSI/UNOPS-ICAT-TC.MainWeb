@@ -22,10 +22,7 @@
                                 #instype="ngModel" (ngModelChange)="onInstitutionChange($event)">
 
                             </p-dropdown>
-                            <p class="info-message text-danger" *ngIf="
-                  !intype &&
-                  (fData.submitted || instype.touched || instype.dirty)
-                ">
+                            <p class="info-message text-danger" *ngIf=" !intype && (fData.submitted || instype.touched || instype.dirty)">
                                 This is a mandatory field
                             </p>
 
@@ -71,7 +68,7 @@
                     <div class="col-12 col-md-6">
                         <div class="p-field">
                             <label for="name">Name*</label>
-                            <input [disabled]="institutionId > 0" type="text" placeholder="" name="name"
+                            <input [disabled]="institutionId > 0" type="text" placeholder="Enter Institution Name" name="insname"
                                 [(ngModel)]="inname" class="p-inputtext" #insname="ngModel" pInputText required
                                 (ngModelChange)="onInstitutionNameChange($event)" />
 

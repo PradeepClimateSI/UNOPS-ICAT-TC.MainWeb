@@ -136,6 +136,7 @@ export class ClimateActionComponent implements OnInit {
 
   constructor(
     private serviceProxy: ServiceProxy,
+    private countryProxy: CountryControllerServiceProxy,
     private confirmationService: ConfirmationService,
     private router: Router,
     private route: ActivatedRoute,
@@ -145,7 +146,6 @@ export class ClimateActionComponent implements OnInit {
     private sectorProxy: SectorControllerServiceProxy,
     private ndcProxy: NdcControllerServiceProxy,
     private asses: MethodologyAssessmentControllerServiceProxy,
-    private countryProxy: CountryControllerServiceProxy,
   ) // private usersControllerServiceProxy: UsersControllerServiceProxy,
   // private ndcProxy:NdcControllerServiceProxy
   { }
@@ -268,6 +268,9 @@ export class ClimateActionComponent implements OnInit {
     //     console.log('***************************');
     //     console.log(res.data);
     //   });
+    this.countryProxy.findall().subscribe((res:any)=>{
+      this.countryList=res;
+    })
 
     // this.serviceProxy
     //   .getManyBaseCountryControllerCountry(
@@ -325,19 +328,7 @@ export class ClimateActionComponent implements OnInit {
         // console.log("projectStatusList all", this.projectOwnerList) //  working
       });
 
-    this.serviceProxy
-      .getManyBaseSectorControllerSector(
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        ['name,ASC'],
-        undefined,
-        1000,
-        0,
-        0,
-        0
-      )
+    this.sectorProxy.findAllSector()
       .subscribe((res: any) => {
 
         // this.sectorList = res.data;

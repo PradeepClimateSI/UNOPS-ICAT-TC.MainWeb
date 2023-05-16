@@ -4,6 +4,7 @@ import { Assessment, AssessmentCMDetail, AssessmentCMDetailControllerServiceProx
 import * as XLSX from 'xlsx'; 
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { MasterDataService } from 'app/shared/master-data.service';
 
 @Component({
   selector: 'app-cm-result',
@@ -27,7 +28,8 @@ export class CmResultComponent implements OnInit {
     private route: ActivatedRoute,
     private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
     private assessmentCMDetailControllerServiceProxy: AssessmentCMDetailControllerServiceProxy,
-    private cMAssessmentQuestionControllerServiceProxy: CMAssessmentQuestionControllerServiceProxy
+    private cMAssessmentQuestionControllerServiceProxy: CMAssessmentQuestionControllerServiceProxy,
+    public masterDataService: MasterDataService
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -36,11 +38,14 @@ export class CmResultComponent implements OnInit {
       this.assessment = await this.assessmentControllerServiceProxy.findOne(assessmentId).toPromise()
       this.intervention = this.assessment.climateAction
 
-      let filter = ['assessment.id||$eq||' + assessmentId]
-
-      console.log(this.assessment)
-
       this.assessmentCMDetail = await this.assessmentCMDetailControllerServiceProxy.getAssessmentCMDetailByAssessmentId(assessmentId).toPromise()
+      let types: any = this.assessmentCMDetail.impact_types.split(',')
+      types = [...types.map((type: string) => this.masterDataService.impact_types.find(o => o.code === type)?.name)]
+      let cats: any = this.assessmentCMDetail.impact_categories.split(',')
+      cats = [...cats.map((cat: string) => this.masterDataService.impact_categories.find(o => o.code === cat)?.name)]
+      let chara: any = this.assessmentCMDetail.impact_characteristics.split(',')
+      chara = [...chara.map((char: string) => this.masterDataService.impact_characteristics.find(o => o.code === char)?.name)]
+      console.log(chara)
       this.card.push(
         ...[
           { title: 'Intervention', data: this.intervention.policyName },
@@ -49,9 +54,9 @@ export class CmResultComponent implements OnInit {
           { title: 'Sectoral Boundary', data: this.assessmentCMDetail.sectoral_boundary },
           { title: 'Temporal Boundary', data: this.assessmentCMDetail.temporal_boundary },
           { title: 'Geographical Boundary', data: this.assessmentCMDetail.geographical_boundary },
-          { title: 'Impact Types', data: this.assessmentCMDetail.impact_types },
-          { title: 'Impact Categories', data: this.assessmentCMDetail.impact_categories },
-          { title: 'Impact Characteristics', data: this.assessmentCMDetail.impact_characteristics },
+          { title: 'Impact Types', data: types.toString() },
+          { title: 'Impact Categories', data: cats.toString() },
+          { title: 'Impact Characteristics', data: chara.toString() },
           { title: 'Impact Indicators', data: this.assessmentCMDetail.impact_indicators }
         ])
       await this.getResult()

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Table } from 'primeng/table';
 import { MethodologyAssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
@@ -23,27 +23,30 @@ dt2 : Table
   constructor(
     private methassess : MethodologyAssessmentControllerServiceProxy,
     private router: Router,
+    private activatedRoute: ActivatedRoute
   ) { }
 
 
 
 
-  ngOnInit() {
+  async ngOnInit() {
 
-    this.methassess.results().subscribe((res: any) => {
-      console.log("resultsss : ", res)
-      this.resultsList = res
+    // this.methassess.results().subscribe((res: any) => {
+    //   this.resultsList = res
 
-    });
+    // });
+
+    this.resultsList = await this.methassess.results().toPromise()
+    console.log("resultsss : ", this.resultsList)
 
 
-    this.methassess.assessmentDetails().subscribe((res: any) => {
+    this.methassess.assessmentDetails().subscribe(async (res: any) => {
       console.log("assessmentData : ", res)
       this.assessmentData = res
 
 
-      for(let x of this.assessmentData){
-        for(let result of this.resultsList){
+      for await (let x of this.assessmentData){
+        for await (let result of this.resultsList){
 
           if(result.assessment.id == x.id){
             console.log("aaaaaaaaaaaaaaaa")
@@ -64,10 +67,10 @@ dt2 : Table
         }
       }
 
+      console.log("resultdataa",this.results)
     });
 
 
-      console.log("resultdataa",this.results)
 
       setTimeout(() => {
         this.load = true;
@@ -111,6 +114,14 @@ myFunction(assessId : any, averageProcess: any, averageOutcome: any){
       }
     });
   }
+  if (this.tool === 'Carbon Market Tool') {
+    this.router.navigate(['../carbon-market-tool-result'], {
+      queryParams: {
+        id: assessId
+      },
+      relativeTo: this.activatedRoute
+    });
+  }
   else {
    // console.log("dddd", assessId, averageOutcome, averageProcess)
     this.router.navigate(['/assessment-result', assessId], {
@@ -127,3 +138,5 @@ myFunction(assessId : any, averageProcess: any, averageOutcome: any){
 }
 
 }
+
+
