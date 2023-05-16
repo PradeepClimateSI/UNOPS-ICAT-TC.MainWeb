@@ -59,7 +59,7 @@
     <h6 style="font-size: 18px;">{{cha.name}}</h6>
 
     <div> <p style="font-size: 18px;">Aggregated Barrier Score for the Characteristic: {{ getCharacteristicScore(cha.id)  | number:'1.4-4'}}</p></div>
-    <p-table [value]="getMatchingBarriers(cha)" [tableStyle]="{ 'min-width': '60rem' }">
+    <p-table [value]="getMatchingBarriers(cha)" [tableStyle]="{ 'min-width': '30rem' }">
       <ng-template pTemplate="header">
         <tr>
           <th>Barrier</th>
@@ -110,7 +110,7 @@
  <h5>Aggregated Characteristic</h5><br>
  <h5>Process of Change : {{ averageProcess }}</h5><br>
 
- <p-table [value]="processCategory" rowGroupMode="rowspan" groupRowsBy="category" sortField="category" sortMode="single"  [tableStyle]="{'min-width': '75rem'}">
+ <p-table [value]="processCategory" rowGroupMode="rowspan" groupRowsBy="category" sortField="category" sortMode="single"  [tableStyle]="{'min-width': '30rem'}">
    <ng-template pTemplate="header">
        <tr style="height:4rem;">
 
@@ -148,7 +148,7 @@
 
  <h5>Outcome of Change : {{ averageOutcome }}</h5><br>
 
- <p-table [value]="outcomeCategory" rowGroupMode="rowspan" groupRowsBy="category" sortField="category" sortMode="single"  [tableStyle]="{'min-width': '75rem'}">
+ <p-table [value]="outcomeCategory" rowGroupMode="rowspan" groupRowsBy="category" sortField="category" sortMode="single"  [tableStyle]="{'min-width': '60rem'}">
    <ng-template pTemplate="header">
      <tr style="height:4rem;">
 

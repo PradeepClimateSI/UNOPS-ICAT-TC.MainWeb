@@ -74,7 +74,7 @@
             <div class="p-field p-2">
               <label for="Sectors Covered">Sectors Covered*</label>
 
-              <p-multiSelect name="sectors" #type="ngModel" placeholder="Select Sectors Covered"
+              <p-multiSelect appendTo="body" name="sectors" #type="ngModel" placeholder="Select Sectors Covered"
                 [(ngModel)]="sectorArray" [options]="sectorList" (ngModelChange)="onItemSelectSectors($event)"
                 optionLabel="name" [required]="true"></p-multiSelect>
               <p class="info-message text-danger" *ngIf="
@@ -87,7 +87,7 @@
 
             <div class="p-field p-2">
               <label for="Sectors Covered">Impact Covered*</label>
-              <p-multiSelect name="impact" #type="ngModel" placeholder="Select Impact Covered" [(ngModel)]="impactArray"
+              <p-multiSelect appendTo="body" name="impact" #type="ngModel" placeholder="Select Impact Covered" [(ngModel)]="impactArray"
                 [options]="impactCovered" (ngModelChange)="onItemSelectImpacts($event)" optionLabel="name"
                 [required]="true"></p-multiSelect>
               <p class="info-message text-danger" *ngIf="
@@ -380,8 +380,8 @@
                                   </p-inputNumber>
                                   </div>
                                 </div>
-                  
-                              
+
+
                         </div>
                           </div>
                         </div>
@@ -418,7 +418,7 @@
       <div    *ngIf="activeIndex2!==3 || activeIndexMain!==1" class="row justify-content-end">
         <div>
 
-            <div 
+            <div
             class="d-flex flex-row-reverse mt-20 ">
                 <div class="btn btn-primary text-uppercase" (click)="next()" >
                    Next

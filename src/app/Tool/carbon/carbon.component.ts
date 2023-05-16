@@ -1070,21 +1070,39 @@ allData: any
         console.log("assessId : ", this.assessmentId)
         this.chart();
 
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Assessment created successfully',
+          closable: true,
+        })
+
 
        this.methassess.findByAssessIdAndRelevanceNotRelevant(this.assessmentId).subscribe(res => {
           console.log("chaaaaaa2",res )
           this.relevantChaList = res
           } )
 
-       //   this.fileDataArray = ''
-      } )
 
-      if(data.assessment_approach === 'Direct' && data.assessment_method === 'Track 1'){
-        setTimeout(() => {
-          this.router.navigate(['/assessment-result',this.assessmentId], { queryParams: { assessmentId: this.assessmentId,
-            averageProcess : this.averageProcess , averageOutcome: this.averageOutcome} });
-        }, 2000);
-      }
+          if(data.assessment_approach === 'Direct' && data.assessment_method === 'Track 1'){
+            setTimeout(() => {
+              this.router.navigate(['/assessment-result',this.assessmentId], { queryParams: { assessmentId: this.assessmentId,
+                averageProcess : this.averageProcess , averageOutcome: this.averageOutcome} });
+            }, 2000);
+          }
+       //   this.fileDataArray = ''
+      } ,
+     error => {
+      console.log(error)
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Assessment detail saving failed',
+        closable: true,
+      })
+    })
+
+
   }
 
 
@@ -1235,14 +1253,34 @@ let assessData : any = {
     this.methassess.barrierCharacteristics(assessData).subscribe(res => {
       console.log("newww data",res)
 
-     if(this.allData.assessment_approach === 'Direct'){
-      setTimeout(() => {
-        this.router.navigate(['/assessment-result-track2',res.assesId], { queryParams: { assessmentId: res.assesId,
-          averageProcess : res.result.averageProcess , averageOutcome: res.result.averageOutcome} });
-      }, 2000);
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Assessment created successfully',
+        closable: true,
+      })
+
+      if(res.assesId){
+        if(this.allData.assessment_approach === 'Direct'){
+          setTimeout(() => {
+            this.router.navigate(['/assessment-result-track2',res.assesId], { queryParams: { assessmentId: res.assesId,
+              averageProcess : res.result.averageProcess , averageOutcome: res.result.averageOutcome} });
+          }, 2000);
+          }
       }
 
-    } )
+
+    },
+     error => {
+      console.log(error)
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Assessment detail saving failed',
+        closable: true,
+      })
+    }
+     )
 
 console.log("assessData",assessData)
 
@@ -1273,12 +1311,16 @@ onIndicatorSelected( indicator: any) {
   this.filterMethList = []
 
   for(let item of this.methIndicatorsList){
-    if(item.indicator.name === indicator){
+    // console.log("sl indii2222: ", "ind",indicator,"item",item.indicator.id)
+    if(item.indicator.id == indicator){
+
       this.filterMethList.push(item)
     }
   }
+  // console.log("selectChaAffectByBarriers22: ",this.selectChaAffectByBarriers)
 
-  // console.log("sl indii2222: ", this.filterMethList)
+
+
 
   return this.filterMethList
 }
@@ -1314,7 +1356,7 @@ chaCategoryTotalEqualsTo1 : ChaCategoryTotalEqualsTo1 = {};
 
 async myUploader(event: any, chaName : any) {
 
-  console.log("chaaNamee", chaName)
+  console.log("chaaNamee", event, chaName)
 
   for (let file of event.files) {
 
@@ -1351,12 +1393,15 @@ async myUploader(event: any, chaName : any) {
 
 }
 
-onUpload(event :any) {
+onUpload(event :any) { 
   for(let file of event.files) {
       this.uploadedFiles.push(file);
   }
       console.log("hello")
 
+}
+onRemove(event :any,x:number) { 
+  console.log("hello",event)
 }
 
 track4Select : boolean = false
@@ -1474,32 +1519,40 @@ onChaWeightChange(categoryName: string, characteristicName : string, chaWeight: 
 }
 
 onMethSelected(value:any,characteristic:any){
-  console.log("value",value)
+  console.log("value",value, characteristic)
 
- 
+
   // this.filterParamList = []
  characteristic.parameters =[];
   for(let item of this.methParametersList){
-    if(item.methodology.name === value){
+    if(item.methodology.id === characteristic.selectedMethodology.id){
       // this.filterParamList.push(item)
-      characteristic.parameters.push({name:item.name,value:''})
+
+      characteristic.parameters.push({name:item.name,value:'', unit:item.unit,id:item.id})
+      console.log("item para ",item, characteristic.parameters)
     }
   }
   console.log("selectChaAffectByBarriers: ",this.selectChaAffectByBarriers)
 }
 
+onIndicatorChange(characteristic:any){
+  characteristic.parameters =[];
+  characteristic.selectedMethodology =''
+  console.log("selectChaAffectByBarriers22: ",this.selectChaAffectByBarriers)
+}
+
 
 calculateResults(){
- 
+
   let calData =new UpdateIndicatorDto()
   calData.assessmentId=this.assessID;
   calData.data=this.selectChaAffectByBarriers
-  
+
   console.log("results",calData)
 
   this.methassess.updateIndicatorValue(calData).subscribe(res => {
     console.log("res final", res)
-   
+
       this.messageService.add({
         severity: 'success',
         summary: 'Success',
@@ -1510,7 +1563,7 @@ calculateResults(){
       // this.isSavedAssessment = true
       // this.onCategoryTabChange('', this.tabView);
 
-    
+
     // form.reset();
   }, error => {
     console.log(error)

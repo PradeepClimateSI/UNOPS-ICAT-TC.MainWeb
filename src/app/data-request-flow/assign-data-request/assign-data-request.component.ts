@@ -1,4 +1,5 @@
 import {
+  Notification,
   ParameterHistoryControllerServiceProxy,
   UpdateDeadlineDto,
   User,
@@ -56,6 +57,7 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
   rows: number = 10;
   last: number;
   event: any;
+  currantUser:any;
 
   searchBy: any = {
     text: null,
@@ -93,6 +95,7 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
     this.userSectorId = tokenPayload.sectorId;
 
     this.climateActionListFromBackend = await this.parameterProxy.getClimateActionByDataRequestStatus().toPromise();
+    this.currantUser=this.usersControllerServiceProxy.findUserByEmail(this.userName).toPromise();
 
     let filter2: string[] = new Array();
 
@@ -279,6 +282,9 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
     return str.replace(regex, '');
   }
   onClickSave(status: number) {
+    let notification =new Notification();
+    notification.fromUser= this.currantUser;
+    
     let userId: number = this.selectedUser ? this.selectedUser.id : 0;
     let idList = new Array<number>();
     if (userId > 0 && this.selectedParameters.length > 0) {
