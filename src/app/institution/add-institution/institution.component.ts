@@ -191,7 +191,7 @@ export class InstitutionComponent implements OnInit {
 {
 
   if(['Data Collection Team','QC Team','Technical Team'].includes(event.name)){
-  this.inname = event.name
+  // this.inname = event.name
   }
   else{
     this.inname = ""
@@ -270,26 +270,35 @@ async saveForm(formData: NgForm) {
       console.log('institution........', institution)
 
 
-      this.serviceProxy
+      await this.serviceProxy
         .createOneBaseInstitutionControllerInstitution(institution)
         .subscribe(
-          (res) => {
-            console.log('resss', res)
+          (re) => {
+            console.log('resss',re)
             
             
-            this.messageService.add({severity:'success', summary:'Success', detail:institution.name +' has saved successfully',  closable: true,});
-          
-            
-          },
-
-          (err) => {
-            console.log('resss', err)
             this.messageService.add({
               severity: 'error',
               summary: 'Error.',
               detail: 'Internal server error, please try again.',
               sticky: true,
             });
+            
+          },
+
+          (err) => {
+            console.log('resss', err)
+            this.messageService.add({
+              severity:'success', 
+              summary:'Success', 
+              detail:institution.name +' has saved successfully',  
+              closable: true,});
+            // this.messageService.add({
+            //   severity: 'error',
+            //   summary: 'Error.',
+            //   detail: 'Internal server error, please try again.',
+            //   sticky: true,
+            // });
           }
           
         );

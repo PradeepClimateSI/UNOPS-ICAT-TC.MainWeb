@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import { AvatarModule } from 'primeng/avatar';
-import { AppService, RecordStatus } from 'shared/AppService';
+import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
 import { UserType, ServiceProxy } from 'shared/service-proxies/auth-service-proxies';
 import { NotificationControllerServiceProxy, User, UsersControllerServiceProxy,Notification } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';

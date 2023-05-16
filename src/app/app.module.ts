@@ -248,7 +248,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         VerificationControllerServiceProxy,
         QualityCheckControllerServiceProxy,
         NotificationControllerServiceProxy,
-        InvestorToolControllerServiceProxy,
+        // InvestorToolControllerServiceProxy,
         
 
         DatePipe,
