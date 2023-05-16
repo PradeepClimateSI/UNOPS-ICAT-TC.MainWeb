@@ -51,7 +51,7 @@ export class CmResultComponent implements OnInit {
           { title: 'Intervention', data: this.intervention.policyName },
           { title: 'Assessment Type', data: this.assessment.assessmentType },
           // { title: 'Assessment Boundaries', data: this.assessmentCMDetail.boundraries },
-          { title: 'Sectoral Boundary', data: this.assessmentCMDetail.sectoral_boundary },
+          { title: 'Sectoral Boundary', data: (this.masterDataService.sectorial_boundries.find(o => o.code === this.assessmentCMDetail.sectoral_boundary)?.name) },
           { title: 'Temporal Boundary', data: this.assessmentCMDetail.temporal_boundary },
           { title: 'Geographical Boundary', data: this.assessmentCMDetail.geographical_boundary },
           { title: 'Impact Types', data: types.toString() },

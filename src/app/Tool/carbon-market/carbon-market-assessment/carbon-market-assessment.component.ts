@@ -19,6 +19,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   impact_types: any[] = []
   impact_categories: any[] = []
   impact_characteristics: any[] = []
+  sectorial_boundires: any[] = []
 
   selected_impact_types: string[] = []
   selected_impact_categories: string[] = []
@@ -40,6 +41,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.assessment_types = this.masterDataService.assessment_type
     this.impact_types = this.masterDataService.impact_types
+    this.sectorial_boundires = this.masterDataService.sectorial_boundries
 
     await this.getPolicies()
     console.log(this.policies)
