@@ -1,6 +1,6 @@
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 //import { MethodologyControllerServiceProxy } from 'shared/service-proxies/meth-service-proxies';
-import { Documents, DocumentsDocumentOwner, Institution, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, ServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Documents, DocumentsDocumentOwner, Institution, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, ServiceProxy, UpdateIndicatorDto } from 'shared/service-proxies/service-proxies';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {  Component, ElementRef, OnInit, ViewChild } from '@angular/core';
@@ -57,6 +57,7 @@ interface ChaCategoryTotalEqualsTo1 {
 })
 export class CarbonComponent implements OnInit {
 
+
   private apiUrl = 'http://localhost:7100/methodology/assessmentData';
 
   @ViewChild('myCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
@@ -78,9 +79,12 @@ selectedIndicator: string;
   ) {
 
   }
+  documentsDocumentOwnerProject: DocumentsDocumentOwner = DocumentsDocumentOwner.Project;
+  documents: Documents[] = [];
 
   selectedType = 'opentype';
   meth1:boolean;
+
 
   methList: any= [];
   methListAll :any = [];
@@ -90,6 +94,7 @@ selectedIndicator: string;
   characteristicsList : any = []
   characteristicsArray : any= []
   methIndicatorsList :any = [];
+  methParametersList :any = [];
 
   policyList : any = []
   policyId : number;
@@ -139,6 +144,7 @@ trigger : boolean = false;
   selectedPolicy: any
 
   assessmentId :number;
+  assessID:number
   selectChaAffectByBarriers : any = []
 
   policyBarriersList : any = []
@@ -158,9 +164,9 @@ trigger : boolean = false;
   characteristicWeightOptionOutcome : string
   categoryWeightOptionOutcome: string
   objectivesList : any = []
-  documents: Documents[] = [];
-  documentsDocumentOwnerProject: DocumentsDocumentOwner =
-  DocumentsDocumentOwner.Project;
+
+  checkedMethodology:boolean=false;
+
 /*   showSelectedItems() {
     console.log("aaa",this.categories);
   }
@@ -347,6 +353,11 @@ trigger : boolean = false;
     console.log("ressssponseee", res)
     this.methIndicatorsList = res
    // this.characteristicsList = res
+
+  });
+  this.methassess.findAllMethParameters().subscribe((res: any) => {
+    console.log("methParametersList", res)
+    this.methParametersList = res
 
   });
 
@@ -582,7 +593,7 @@ onItemSelectcha(item :any){
     this.selectChaAffectByBarriers.push(x)
   }
 
-  console.log("select", this.selectChaAffectByBarriers);
+  console.log("select123", this.selectChaAffectByBarriers);
 
 }
 
@@ -1052,6 +1063,7 @@ allData: any
         this.averageProcess = res.result.averageProcess
         this.averageOutcome = res.result.averageOutcome
         this.assessmentId = res.assesId
+        this.assessID =res.assesId
 
         console.log("averageProcess1 : ", this.averageProcess)
         console.log("averageOutcome1 : ", this.averageOutcome)
@@ -1257,7 +1269,7 @@ submitForm(){
 filterMethList :any  = []
 
 onIndicatorSelected( indicator: any) {
-  console.log('Selected indicator for22233:', indicator);
+  // console.log('Selected indicator for22233:', indicator);
   this.filterMethList = []
 
   for(let item of this.methIndicatorsList){
@@ -1266,7 +1278,7 @@ onIndicatorSelected( indicator: any) {
     }
   }
 
-  console.log("sl indii2222: ", this.filterMethList)
+  // console.log("sl indii2222: ", this.filterMethList)
 
   return this.filterMethList
 }
@@ -1275,7 +1287,7 @@ handleSelectedCharacteristic(event: any) {
   this.filteredIndicatorList = []
   const selectedCharacteristic = event;
   // Do something with the selected characteristic
-  console.log(selectedCharacteristic);
+  // console.log(selectedCharacteristic);
 
   for(let indicator of this.indicatorList){
     if(indicator.characteristics.name === selectedCharacteristic){
@@ -1350,9 +1362,15 @@ onRemove(event :any,x:number) {
   console.log("hello",event)
 }
 
+track4Select : boolean = false
 onChangeTrack(event : any){
+  this.track4Select = false
   this.selectedTrack = event.target.value;
   console.log("selectedTrack : ", this.selectedTrack)
+
+  if(this.selectedTrack === 'Track 4'){
+    this.track4Select = true
+  }
 }
 
 onChangeApproach(event : any){
@@ -1458,4 +1476,53 @@ onChaWeightChange(categoryName: string, characteristicName : string, chaWeight: 
 
 }
 
+onMethSelected(value:any,characteristic:any){
+  console.log("value",value)
+
+ 
+  // this.filterParamList = []
+ characteristic.parameters =[];
+  for(let item of this.methParametersList){
+    if(item.methodology.name === value){
+      // this.filterParamList.push(item)
+      characteristic.parameters.push({name:item.name,value:''})
+    }
+  }
+  console.log("selectChaAffectByBarriers: ",this.selectChaAffectByBarriers)
+}
+
+
+calculateResults(){
+ 
+  let calData =new UpdateIndicatorDto()
+  calData.assessmentId=this.assessID;
+  calData.data=this.selectChaAffectByBarriers
+  
+  console.log("results",calData)
+
+  this.methassess.updateIndicatorValue(calData).subscribe(res => {
+    console.log("res final", res)
+   
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Assessment created successfully',
+        closable: true,
+      })
+      // this.showResults();
+      // this.isSavedAssessment = true
+      // this.onCategoryTabChange('', this.tabView);
+
+    
+    // form.reset();
+  }, error => {
+    console.log(error)
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Assessment detail saving failed',
+      closable: true,
+    })
+  } )
+}
 }

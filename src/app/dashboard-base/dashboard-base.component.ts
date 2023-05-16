@@ -24,6 +24,7 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
   userRole: string = "";
   roles: UserType[] = [];
   confirm: boolean = false;
+  loginRole = LoginRole;
 
   constructor(
     private confirmationService: ConfirmationService,

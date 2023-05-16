@@ -8,7 +8,7 @@
           <i class="pi pi-arrow-left" *ngIf="togglemenu"></i>
         </div>
         <div class="sidebar--header">
-          <img style="height: 47px;padding-left: 20px" src="../country/assets/images/logo-new.png" />
+          <img style="height: 47px;padding-left: 20px" src="../assets/images/logo-new.png" />
         </div>
         <div class="sidebar-items flex-grow-1">
           <div data-ccs-admin-menu>
@@ -24,7 +24,7 @@
               Registration
             </div>
 
-            <div class="sidebar-items--link align-items-start" [routerLink]="['/app/quality-controller']"
+            <div *ngIf="userRole==loginRole.QC_Team || userRole==loginRole.MASTER_ADMIN" class="sidebar-items--link align-items-start" [routerLink]="['/app/quality-controller']"
               routerLinkActive="selected">
 
               <div class=""></div>
@@ -48,26 +48,31 @@
                 Landing Page
               </div> -->
             <p-accordion>
-              <p-accordionTab data-assess>
-                <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
-                  <div>
-                    <p class="mb-2">Policies</p>
+              <div  *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin">
+                <p-accordionTab data-assess>
+                  <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
+                    <div>
+                      <p class="mb-2">Interventions</p>
+                    </div>
+                  </p-header>
+                  <div class="sidebar-items--link d-flex flex-column align-items-start"
+                    [routerLink]="['/app/view-polocies']" routerLinkActive="selected">
+                    <p class="mb-0 ml-20">Manage interventions</p>
                   </div>
-                </p-header>
-                <div class="sidebar-items--link d-flex flex-column align-items-start"
-                  [routerLink]="['/app/view-polocies']" routerLinkActive="selected">
-                  <p class="mb-0 ml-20">Manage policies</p>
-                </div>
-
-                <div class="sidebar-items--link d-flex flex-column align-items-start"
-                  [routerLink]="['/app/accepted-policies']" routerLinkActive="selected">
-                  <p class="mb-0 ml-20">Accepted policies</p>
-                </div>
-                <div class="sidebar-items--link d-flex flex-column align-items-start"
-                  [routerLink]="['/app/add-polocies']" routerLinkActive="selected">
-                  <p class="mb-0 ml-20">Create policies</p>
-                </div>
-              </p-accordionTab>
+  
+                  <div class="sidebar-items--link d-flex flex-column align-items-start" 
+                    [routerLink]="['/app/accepted-policies']"
+                    routerLinkActive="selected">
+                    <p class="mb-0 ml-20">Accepted interventions</p>
+                  </div>
+                  <div class="sidebar-items--link d-flex flex-column align-items-start"
+                    [routerLink]="['/app/add-polocies']" routerLinkActive="selected">
+                    <p class="mb-0 ml-20">Create intervention</p>
+                  </div>
+                </p-accordionTab>
+              </div>
+             
+              
             </p-accordion>
             <!-- <p-accordion>
               <p-accordionTab data-assess>
@@ -86,24 +91,24 @@
                     <p class="mb-2">Data request</p>
                   </div>
                 </p-header>
-                <div class="sidebar-items--link d-flex flex-column align-items-start"
+                <div *ngIf="userRole==loginRole.MASTER_ADMIN  || userRole==loginRole.Data_Collection_Team" class="sidebar-items--link d-flex flex-column align-items-start"
                   [routerLink]="['/app/data-request']" routerLinkActive="selected">
                   <p class="mb-0 ml-20">Manage</p>
                 </div>
 
-                <div class="sidebar-items--link d-flex flex-column align-items-start"
+                <div *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Institution_Admin  || userRole==loginRole.Data_Collection_Team" class="sidebar-items--link d-flex flex-column align-items-start"
                   [routerLink]="['/app/assign-data-request']" routerLinkActive="selected">
                   <p class="mb-0 ml-20">assign-data-request</p>
                 </div>
-                <div class="sidebar-items--link d-flex flex-column align-items-start" [routerLink]="['/app/enter-data']"
+                <div *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Institution_Admin || userRole==loginRole.Data_Entry_Operator" class="sidebar-items--link d-flex flex-column align-items-start" [routerLink]="['/app/enter-data']"
                   routerLinkActive="selected">
                   <p class="mb-0 ml-20">Enter Data</p>
                 </div>
-                <div class="sidebar-items--link d-flex flex-column align-items-start" [routerLink]="['/app/view-data']"
+                <div *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Institution_Admin" class="sidebar-items--link d-flex flex-column align-items-start" [routerLink]="['/app/view-data']"
                   routerLinkActive="selected">
                   <p class="mb-0 ml-20">Review Data</p>
                 </div>
-                <div class="sidebar-items--link d-flex flex-column align-items-start"
+                <div   *ngIf="userRole==loginRole.MASTER_ADMIN  || userRole==loginRole.Data_Collection_Team"  class="sidebar-items--link d-flex flex-column align-items-start"
                   [routerLink]="['/app/manage-data']" routerLinkActive="selected">
                   <p class="mb-0 ml-20">Manage Data</p>
                 </div>
@@ -175,42 +180,58 @@
                 </p-accordionTab>
               </p-accordion> -->
 
-            <p-accordion>
-              <p-accordionTab data-assess>
-                <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
-                  <div [routerLink]="['/app/Tool']" routerLinkActive="selected">
-                    <p class="mb-2">Tools</p>
+            <div *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin">
+              <p-accordion>
+                <p-accordionTab data-assess>
+                  <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
+                    <div [routerLink]="['/app/Tool']" routerLinkActive="selected">
+                      <p class="mb-2">Tools</p>
+                    </div>
+                  </p-header>
+  
+                  <!-- <div class="sidebar-items--link d-flex flex-column align-items-start"
+                    [routerLink]="['/app/portfolio-tool']" routerLinkActive="selected">
+                    <p class="mb-0 ml-20">Portfolio Tool</p>
+                  </div> -->
+                  <div class="sidebar-items--link d-flex flex-column align-items-start"
+                    [routerLink]="['/app/carbon-market-tool-test']" routerLinkActive="selected">
+                    <p class="mb-0 ml-20">Portfolio Tool </p>
                   </div>
-                </p-header>
+                  <div class="sidebar-items--link d-flex flex-column align-items-start"
+                    [routerLink]="['/app/carbon-market-tool']" routerLinkActive="selected">
+                    <p class="mb-0 ml-20">Carbon Market Tool</p>
+                  </div>
+                 <!--  <div class="sidebar-items--link d-flex flex-column align-items-start"
+                    [routerLink]="['/app/carbon-market-tool-test']" routerLinkActive="selected">
+                    <p class="mb-0 ml-20">Portfolio Tool - New </p>
+                  </div> -->
+  
+                  <!-- <div class="sidebar-items--link d-flex flex-column align-items-start"
+                    [routerLink]="['/app/investor-tool']" routerLinkActive="selected">
+                    <p class="mb-0 ml-20">Investor & Private Sector Tool</p>
+                  </div> -->
+  
+                  <div class="sidebar-items--link d-flex flex-column align-items-start"
+                    [routerLink]="['/app/investor-tool-new']" routerLinkActive="selected">
+                    <p class="mb-0 ml-20">Investor & Private Sector Tool</p>
+                  </div>
+  
+  
+                </p-accordionTab>
+              </p-accordion>
+            </div>
 
-                <!-- <div class="sidebar-items--link d-flex flex-column align-items-start"
-                  [routerLink]="['/app/portfolio-tool']" routerLinkActive="selected">
-                  <p class="mb-0 ml-20">Portfolio Tool</p>
-                </div> -->
-                <div class="sidebar-items--link d-flex flex-column align-items-start" 
-                  [routerLink]="['/app/carbon-market-tool-test']" routerLinkActive="selected">
-                  <p class="mb-0 ml-20">Portfolio Tool - New </p>
-                </div>
-                <div class="sidebar-items--link d-flex flex-column align-items-start"
-                  [routerLink]="['/app/carbon-market-tool']" routerLinkActive="selected">
-                  <p class="mb-0 ml-20">Carbon Market Tool</p>
-                </div>
-                <div class="sidebar-items--link d-flex flex-column align-items-start"
-                  [routerLink]="['/app/investor-tool']" routerLinkActive="selected">
-                  <p class="mb-0 ml-20">Investor & Private Sector Tool</p>
-                </div>
 
-              </p-accordionTab>
-            </p-accordion>
-
-
-            <div class="sidebar-items--link align-items-start" [routerLink]="['/app/assessment-results']"
+            <div *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin" class="sidebar-items--link align-items-start" [routerLink]="['/app/assessment-results']"
               routerLinkActive="selected">
               Assessment
             </div>
 
-
-
+           <!--  <div class="sidebar-items--link align-items-start" [routerLink]="['/app/audit-log']"
+            routerLinkActive="selected">
+            Audit Log
+          </div> -->
+          <div  *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin || userRole==loginRole.Data_Collection_Team || userRole==loginRole.Institution_Admin">
             <p-accordion>
               <p-accordionTab data-assess>
                 <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
@@ -229,7 +250,11 @@
                 </div>
               </p-accordionTab>
             </p-accordion>
+          </div>
 
+            
+
+          <div *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin || userRole==loginRole.Data_Collection_Team || userRole==loginRole.Institution_Admin">
             <p-accordion>
               <p-accordionTab data-assess>
                 <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
@@ -250,25 +275,33 @@
 
               </p-accordionTab>
             </p-accordion>
+          </div>
+            
 
-            <div class="sidebar-items--link align-items-start" [routerLink]="['/app/report']"
+            <div *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin" class="sidebar-items--link align-items-start" [routerLink]="['/app/report']"
               routerLinkActive="selected">
 
               <div class=""></div>
               Report
             </div>
-            <div class="sidebar-items--link align-items-start" [routerLink]="['/app/verification/list']"
+            <div *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Verifier"class="sidebar-items--link align-items-start" [routerLink]="['/app/verification/list']"
               routerLinkActive="selected">
 
               <div class=""></div>
               Verification
             </div>
+
+
             <div class="sidebar-items--link align-items-start" [routerLink]="['/app/assign-verifier']"
               routerLinkActive="selected">
 
               <div class=""></div>
               Assign Verifier
             </div>
+
+           <!--  <div class="sidebar-items--link align-items-start" [routerLink]="['/app/audit-log']" routerLinkActive="selected">
+              Audit Log
+            </div> -->
 
             <!-- <div
                 class="sidebar-items--link align-items-start"

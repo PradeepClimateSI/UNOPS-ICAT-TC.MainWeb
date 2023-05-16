@@ -1,0 +1,122 @@
+<div id="content" #content>
+  <div class="container pl-20 pr-20">
+
+   <div class="mb-12">
+     <h4 class="mt-4"> Result - Invesment & Private Sector Tool - Nitric Acid Climate Action Group Initiative</h4>
+   </div>
+
+   <div class="card" style="min-height: 600px;">
+     <div style="display: flex; flex-direction: row;">
+       <div style="flex-basis: 30%;">
+       <!--   <p><strong>Intervention</strong></p> -->
+         <p><strong>Assessment Type</strong></p>
+      <!--    <p><strong>Assessment Approach</strong></p>
+         <p><strong>Assessment Method</strong></p> -->
+        <!--  <p><strong>Tool</strong></p> -->
+         <p><strong>Level of Implementation</strong></p>
+         <p><strong>Geographical Area Covered</strong></p>
+
+         <p><strong>Sectors Covered</strong></p>
+         <p><strong>Impact Covered</strong></p>
+         <p><strong>Assessment Period</strong></p>
+       </div>
+       <div style="flex-basis: 50%;">
+      <!--    <p>{{policyName}}</p> -->
+         <p>{{assessmentType}}</p>
+       <!--   <p>{{assessment_approach}}</p>
+         <p>{{assessment_method}}</p> -->
+       <!--   <p>{{tool}}</p> -->
+
+         <p>{{levelofImplemetation}}</p>
+         <p>{{geographicalAreasCovered}}</p>
+
+         <p>{{sectorList.join(', ')}}</p>
+         <p>{{impactCoverList.join(', ')}}</p>
+         <p>{{date1 | date:'yyyy-MM-dd'}} to {{date2 | date:'yyyy-MM-dd'}}</p>
+       </div>
+     </div>
+     <br><br>
+
+
+
+
+     <div *ngIf="load">
+
+      <h6>Process of Change</h6><br>
+      <p-table [value]="categoryDataArray" [tableStyle]="{ 'width': '50rem' }">
+           <ng-template pTemplate="header">
+               <tr>
+
+                   <th> <strong style="color: black; font-size: large;">Characteristic</strong></th>
+                   <th> <strong style="color: black;  font-size: large; ">Relevance</strong></th>
+                   <th> <strong style="color: black;  font-size: large; ">Likelihood</strong></th>
+               </tr>
+           </ng-template>
+         </p-table>
+
+<br><br>
+         <p-table [value]="categoryDataArray" [tableStyle]="{ 'width': '50rem' }">
+          <ng-template pTemplate="body" let-data>
+            <tr>
+              <td><strong>{{ data.categoryName }}</strong></td>
+              <td><strong>{{ data.categotyRelevance }}</strong></td>
+              <td><strong>{{ data.categoryLikelihood }}</strong></td>
+            </tr>
+            <ng-container *ngFor="let characteristic of data.characteristics">
+              <tr>
+                <td>{{ characteristic.name }}</td>
+                <td>{{ characteristic.relevance }}</td>
+                <td>{{ characteristic.likelihood }}</td>
+              </tr>
+            </ng-container>
+            <br><br>
+          </ng-template>
+        </p-table>
+
+
+        <br>
+        <h6>Outcome of Change</h6><br>
+      <p-table [value]="categoryDataArrayOutcome" [tableStyle]="{ 'width': '50rem' }">
+           <ng-template pTemplate="header">
+               <tr>
+
+                   <th> <strong style="color: black; font-size: large;">Characteristic</strong></th>
+                   <th> <strong style="color: black;  font-size: large; ">Scale Score</strong></th>
+                   <th> <strong style="color: black;  font-size: large; ">Sustained Score</strong></th>
+               </tr>
+           </ng-template>
+         </p-table>
+
+<br><br>
+         <p-table [value]="categoryDataArrayOutcome" [tableStyle]="{ 'width': '50rem' }">
+          <ng-template pTemplate="body" let-data>
+            <tr>
+              <td><strong>{{ data.categoryName }}</strong></td>
+              <td><strong>{{ data.categoryScaleScore }}</strong></td>
+              <td><strong>{{ data.categorySustainedScore }}</strong></td>
+            </tr>
+            <ng-container *ngFor="let characteristic of data.characteristics">
+              <tr>
+                <td>{{ characteristic.name }}</td>
+                <td>{{ characteristic.scaleScore }}</td>
+                <td>{{ characteristic.sustainedScore }}</td>
+              </tr>
+            </ng-container>
+            <br><br>
+          </ng-template>
+        </p-table>
+  </div>
+    <br><br>
+
+ </div>
+ </div>
+</div>
+
+<div class="container pl-20 pr-20">
+  <div class="d-flex flex-row-reverse mt-2 mb-2">
+    <button (click)="makePDF()" class="btn btn-primary btn-block text-uppercase">Download as PDF</button> &nbsp;&nbsp;
+     <button (click)="exportToExcel()" class="btn btn-primary btn-block text-uppercase">Download as Excel</button>
+  </div>
+</div>
+
+

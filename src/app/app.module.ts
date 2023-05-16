@@ -60,6 +60,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { ConfirmationService } from "primeng/api";
 // import { API_BASE_URL, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, AuthControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CMQuestionControllerServiceProxy, CountryControllerServiceProxy, DocumentControllerServiceProxy, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, NdcControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequestControllerServiceProxy, ProjectControllerServiceProxy, QualityCheckControllerServiceProxy, SectorControllerServiceProxy, ServiceProxy, UserTypeControllerServiceProxy, VerificationControllerServiceProxy } from "shared/service-proxies/service-proxies";
 import { API_BASE_URL, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, AuthControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CMQuestionControllerServiceProxy, CountryControllerServiceProxy, DocumentControllerServiceProxy, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, NdcControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequestControllerServiceProxy, ProjectControllerServiceProxy, QualityCheckControllerServiceProxy, SectorControllerServiceProxy, ServiceProxy, UserTypeControllerServiceProxy, VerificationControllerServiceProxy ,ReportControllerServiceProxy,NotificationControllerServiceProxy} from "shared/service-proxies/service-proxies";
+// import { API_BASE_URL, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, AuthControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CMQuestionControllerServiceProxy, CountryControllerServiceProxy, DocumentControllerServiceProxy, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, NdcControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequestControllerServiceProxy, ProjectControllerServiceProxy, QualityCheckControllerServiceProxy, ReportControllerServiceProxy, SectorControllerServiceProxy, ServiceProxy, UserTypeControllerServiceProxy, VerificationControllerServiceProxy } from "shared/service-proxies/service-proxies";
 import { AUTH_API_BASE_URL, ServiceProxy as AuthServiceProxy, } from 'shared/service-proxies/auth-service-proxies';
 import { BadgeModule } from 'primeng/badge';
 import { RoleGuardService } from "./auth/role-guard.service";
@@ -95,12 +96,18 @@ import { AcceptedPoliciesComponent } from './climate-action/accepted-policies/ac
 import { RaiseConcernComponent } from './component/raise-concern/raise-concern.component';
 import { RaiseConcernSectionComponent } from './component/raise-concern-section/raise-concern-section.component';
 import { NonconformanceReportComponent } from './nonconformance-report/nonconformance-report.component';
+import { InvestorToolComponent } from './Tool/investor-tool/investor-tool.component';
 import { AssignVerifierComponent } from './data-request-flow/assign-verifier/assign-verifier.component';
 import { CarbonMarketAssessmentComponent } from './Tool/carbon-market/carbon-market-assessment/carbon-market-assessment.component';
 import { CmSectionComponent } from './Tool/carbon-market/cm-section/cm-section.component';
 import { CmQuestionComponent } from './Tool/carbon-market/cm-question/cm-question.component';
 import { CmResultComponent } from './Tool/carbon-market/cm-result/cm-result.component';
+import { AuditComponent } from "./audit/audit.component";
+import { AuditControllerServiceProxy } from "shared/service-proxies-auditlog/service-proxies";
 import { ReportComponent } from './report/report.component';
+import { AssessmentResultInvestorComponent } from './assessment-result-investor/assessment-result-investor.component';
+import { PortfolioTrack4Component } from './Tool/portfolio-track4/portfolio-track4.component';
+
 
 
 
@@ -158,7 +165,11 @@ export function getAuthRemoteServiceBaseUrl(): string {
         CmSectionComponent,
         CmQuestionComponent,
         CmResultComponent,
-        ReportComponent
+        AuditComponent,
+        ReportComponent,
+        InvestorToolComponent,
+        AssessmentResultInvestorComponent,
+        PortfolioTrack4Component,
     ],
 
 
@@ -237,6 +248,9 @@ export function getAuthRemoteServiceBaseUrl(): string {
         VerificationControllerServiceProxy,
         QualityCheckControllerServiceProxy,
         NotificationControllerServiceProxy,
+        InvestorToolControllerServiceProxy,
+        
+
         DatePipe,
         {provide: API_BASE_URL, useFactory: getRemoteServiceBaseUrl},
         {provide: AUTH_API_BASE_URL, useFactory: getAuthRemoteServiceBaseUrl},
@@ -250,7 +264,8 @@ export function getAuthRemoteServiceBaseUrl(): string {
         CMQuestionControllerServiceProxy,
         CMAssessmentQuestionControllerServiceProxy,
         AssessmentCMDetailControllerServiceProxy,
-        ReportControllerServiceProxy
+        AuditControllerServiceProxy,
+        ReportControllerServiceProxy,
     ],
     bootstrap: [AppComponent],
     exports: [

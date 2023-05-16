@@ -37,6 +37,7 @@ import * as moment from 'moment';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import decode from 'jwt-decode';
+import { Token } from '@angular/compiler';
 
 /// <reference types="googlemaps" />
 
@@ -108,6 +109,7 @@ export class ClimateActionComponent implements OnInit {
   category: BarriersCategory[];
   selectCategory: any;
   approachList: string[] = ['AR1', 'AR2', 'AR3', 'AR4', 'AR5'];
+  typeofAction: string[] = ['Investment','Carbon Market','NDC Implementation','Project']
 
   institutionList: Institution[] = [];
   institutionTypeID: number = 3;
@@ -149,8 +151,9 @@ export class ClimateActionComponent implements OnInit {
   { }
 
   ngOnInit(): void {
-    const token = localStorage.getItem('access_token')!;
+    const token = localStorage.getItem('ACCESS_TOKEN')!;
     const countryId = token ? decode<any>(token).countryId : 0;
+    console.log("country", countryId)
     this.counID = countryId;
     this.userName = localStorage.getItem('user_name')!;
     let filterUser: string[] = [];
@@ -169,6 +172,13 @@ export class ClimateActionComponent implements OnInit {
 
     this.asses.findByAllCategories().subscribe((res: any) => {
       this.category = res;
+    })
+
+
+    this.countryProxy.getCountry(this.counID).subscribe((res:any)=>{
+      console.log('++++++++++++++++',res)
+      this.countryList.push(res);
+      this.project.country =this.countryList[0];
     })
 
     this.serviceProxy
@@ -220,7 +230,7 @@ export class ClimateActionComponent implements OnInit {
           undefined
         )
         .subscribe((res) => {
-          this.project.country = res;
+          this.project.country = this.countryList[0];
           this.isSector = true;
           // console.log('tokenPayloadmasssge',res);
         });
@@ -280,6 +290,7 @@ export class ClimateActionComponent implements OnInit {
     //     this.countryList = res.data;
     //     // console.log("countrylist all",this.countryList) //  working
     //   });
+
 
     this.serviceProxy
       .getManyBaseProjectOwnerControllerProjectOwner(
