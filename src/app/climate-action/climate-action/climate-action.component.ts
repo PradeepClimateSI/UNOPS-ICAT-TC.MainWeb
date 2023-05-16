@@ -238,8 +238,9 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
         )
         .subscribe((res) => {
           console.log("sss",res)
-          this.countryList.push(res)
-          this.project.country = res;
+          // this.countryList.push(res)
+          console.log("this.countryList",this.countryList)
+          this.project.country =res;
           this.isSector = true;
           // console.log('tokenPayloadmasssge',res);
         });
@@ -757,6 +758,9 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
         this.project.actionArea.id =1;
         this.project.sector = new Sector()
         this.project.sector.id =1;
+        let country = new Country();
+        country.id =this.counID
+        this.project.country =country
           this.serviceProxy.createOneBaseProjectControllerClimateAction(this.project)
           .subscribe(
             (res) => {
