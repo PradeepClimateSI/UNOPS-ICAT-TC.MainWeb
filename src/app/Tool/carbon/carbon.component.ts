@@ -1070,21 +1070,39 @@ allData: any
         console.log("assessId : ", this.assessmentId)
         this.chart();
 
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Assessment created successfully',
+          closable: true,
+        })
+
 
        this.methassess.findByAssessIdAndRelevanceNotRelevant(this.assessmentId).subscribe(res => {
           console.log("chaaaaaa2",res )
           this.relevantChaList = res
           } )
 
-       //   this.fileDataArray = ''
-      } )
 
-      if(data.assessment_approach === 'Direct' && data.assessment_method === 'Track 1'){
-        setTimeout(() => {
-          this.router.navigate(['/assessment-result',this.assessmentId], { queryParams: { assessmentId: this.assessmentId,
-            averageProcess : this.averageProcess , averageOutcome: this.averageOutcome} });
-        }, 2000);
-      }
+          if(data.assessment_approach === 'Direct' && data.assessment_method === 'Track 1'){
+            setTimeout(() => {
+              this.router.navigate(['/assessment-result',this.assessmentId], { queryParams: { assessmentId: this.assessmentId,
+                averageProcess : this.averageProcess , averageOutcome: this.averageOutcome} });
+            }, 2000);
+          }
+       //   this.fileDataArray = ''
+      } ,
+     error => {
+      console.log(error)
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Assessment detail saving failed',
+        closable: true,
+      })
+    })
+
+
   }
 
 
@@ -1235,6 +1253,13 @@ let assessData : any = {
     this.methassess.barrierCharacteristics(assessData).subscribe(res => {
       console.log("newww data",res)
 
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Assessment created successfully',
+        closable: true,
+      })
+
       if(res.assesId){
         if(this.allData.assessment_approach === 'Direct'){
           setTimeout(() => {
@@ -1245,7 +1270,17 @@ let assessData : any = {
       }
 
 
-    } )
+    },
+     error => {
+      console.log(error)
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Assessment detail saving failed',
+        closable: true,
+      })
+    }
+     )
 
 console.log("assessData",assessData)
 
@@ -1278,14 +1313,14 @@ onIndicatorSelected( indicator: any) {
   for(let item of this.methIndicatorsList){
     // console.log("sl indii2222: ", "ind",indicator,"item",item.indicator.id)
     if(item.indicator.id == indicator){
-      
+
       this.filterMethList.push(item)
     }
   }
   // console.log("selectChaAffectByBarriers22: ",this.selectChaAffectByBarriers)
-  
 
- 
+
+
 
   return this.filterMethList
 }
@@ -1483,13 +1518,13 @@ onChaWeightChange(categoryName: string, characteristicName : string, chaWeight: 
 onMethSelected(value:any,characteristic:any){
   console.log("value",value, characteristic)
 
- 
+
   // this.filterParamList = []
  characteristic.parameters =[];
   for(let item of this.methParametersList){
     if(item.methodology.id === characteristic.selectedMethodology.id){
       // this.filterParamList.push(item)
-      
+
       characteristic.parameters.push({name:item.name,value:'', unit:item.unit,id:item.id})
       console.log("item para ",item, characteristic.parameters)
     }
@@ -1505,16 +1540,16 @@ onIndicatorChange(characteristic:any){
 
 
 calculateResults(){
- 
+
   let calData =new UpdateIndicatorDto()
   calData.assessmentId=this.assessID;
   calData.data=this.selectChaAffectByBarriers
-  
+
   console.log("results",calData)
 
   this.methassess.updateIndicatorValue(calData).subscribe(res => {
     console.log("res final", res)
-   
+
       this.messageService.add({
         severity: 'success',
         summary: 'Success',
@@ -1525,7 +1560,7 @@ calculateResults(){
       // this.isSavedAssessment = true
       // this.onCategoryTabChange('', this.tabView);
 
-    
+
     // form.reset();
   }, error => {
     console.log(error)

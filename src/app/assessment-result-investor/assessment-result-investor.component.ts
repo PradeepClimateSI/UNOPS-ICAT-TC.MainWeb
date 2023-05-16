@@ -167,8 +167,8 @@ card : any = []
           }
         }
 
-        categoryData.categotyRelevance = totalRel/countRel
-        categoryData.categoryLikelihood = totalLikelihood/countLikelihood
+        categoryData.categotyRelevance = (totalRel/countRel).toFixed(3)
+        categoryData.categoryLikelihood = (totalLikelihood/countLikelihood).toFixed(3)
         this.categoryDataArray.push(categoryData)
       }
 
@@ -218,12 +218,12 @@ card : any = []
         }
 
         if(category.name === 'Scale GHGs' || category.name === 'Scale SD' ){
-          categoryData.categoryScaleScore = totalScale/countScale
+          categoryData.categoryScaleScore = (totalScale/countScale).toFixed(3)
           categoryData.categorySustainedScore = ''
         }
 
         if(category.name === 'Sustained nature-GHGs' || category.name === 'Sustained nature-SD'  ){
-          categoryData.categorySustainedScore = totalSustained/countSustained
+          categoryData.categorySustainedScore = (totalSustained/countSustained).toFixed(3)
           categoryData.categoryScaleScore  = ''
         }
 
