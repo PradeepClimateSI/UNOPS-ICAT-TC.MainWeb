@@ -138,6 +138,7 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
 
   constructor(
     private serviceProxy: ServiceProxy,
+    private countryProxy: CountryControllerServiceProxy,
     private confirmationService: ConfirmationService,
     private router: Router,
     private route: ActivatedRoute,
@@ -147,7 +148,6 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
     private sectorProxy: SectorControllerServiceProxy,
     private ndcProxy: NdcControllerServiceProxy,
     private asses: MethodologyAssessmentControllerServiceProxy,
-    private countryProxy: CountryControllerServiceProxy,
     private cdref: ChangeDetectorRef 
   ) // private usersControllerServiceProxy: UsersControllerServiceProxy,
   // private ndcProxy:NdcControllerServiceProxy
@@ -277,6 +277,9 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
     //     console.log('***************************');
     //     console.log(res.data);
     //   });
+    this.countryProxy.findall().subscribe((res:any)=>{
+      this.countryList=res;
+    })
 
     // this.serviceProxy
     //   .getManyBaseCountryControllerCountry(

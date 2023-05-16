@@ -1027,7 +1027,7 @@ allData: any
           this.relevantChaList=[];
           for(let x of res){
             this.relevantChaList.push({name:x.name,categoryID:x.id,selectedMethodology:'',parameters:[]})
-            
+
           }
           } )
 
@@ -1237,7 +1237,7 @@ onIndicatorSelected( indicator: any) {
 onMethSelected(value:any,characteristic:any){
   console.log("value",value)
 
- 
+
   // this.filterParamList = []
  characteristic.parameters =[];
   for(let item of this.methParametersList){
@@ -1254,12 +1254,12 @@ submitParams(value:any){
 console.log("value",value)
 this.result= value.parameters[0].value/value.parameters[1].value*100;
 console.log("result",this.result)
-// this.methassess.assessParameterSave(value).subscribe((res: any) => {
-//   console.log("policybarrierssList : ", res)
-//   this.policyBarriersList = res
+/* this.methassess.assessParameterSave(value).subscribe((res: any) => {
+  console.log("policybarrierssList : ", res)
+  this.policyBarriersList = res
 
 
-// });
+}); */
 
 }
 

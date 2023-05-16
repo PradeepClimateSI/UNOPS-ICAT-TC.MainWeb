@@ -59,8 +59,8 @@
                     [routerLink]="['/app/view-polocies']" routerLinkActive="selected">
                     <p class="mb-0 ml-20">Manage interventions</p>
                   </div>
-  
-                  <div class="sidebar-items--link d-flex flex-column align-items-start" 
+
+                  <div class="sidebar-items--link d-flex flex-column align-items-start"
                     [routerLink]="['/app/accepted-policies']"
                     routerLinkActive="selected">
                     <p class="mb-0 ml-20">Accepted interventions</p>
@@ -71,8 +71,8 @@
                   </div>
                 </p-accordionTab>
               </div>
-             
-              
+
+
             </p-accordion>
             <!-- <p-accordion>
               <p-accordionTab data-assess>
@@ -188,7 +188,7 @@
                       <p class="mb-2">Tools</p>
                     </div>
                   </p-header>
-  
+
                   <!-- <div class="sidebar-items--link d-flex flex-column align-items-start"
                     [routerLink]="['/app/portfolio-tool']" routerLinkActive="selected">
                     <p class="mb-0 ml-20">Portfolio Tool</p>
@@ -205,18 +205,18 @@
                     [routerLink]="['/app/carbon-market-tool-test']" routerLinkActive="selected">
                     <p class="mb-0 ml-20">Portfolio Tool - New </p>
                   </div> -->
-  
+
                   <!-- <div class="sidebar-items--link d-flex flex-column align-items-start"
                     [routerLink]="['/app/investor-tool']" routerLinkActive="selected">
                     <p class="mb-0 ml-20">Investor & Private Sector Tool</p>
                   </div> -->
-  
+
                   <div class="sidebar-items--link d-flex flex-column align-items-start"
                     [routerLink]="['/app/investor-tool-new']" routerLinkActive="selected">
                     <p class="mb-0 ml-20">Investor & Private Sector Tool</p>
                   </div>
-  
-  
+
+
                 </p-accordionTab>
               </p-accordion>
             </div>
@@ -227,10 +227,10 @@
               Assessment
             </div>
 
-           <!--  <div class="sidebar-items--link align-items-start" [routerLink]="['/app/audit-log']"
+            <div class="sidebar-items--link align-items-start" [routerLink]="['/app/audit-log']"
             routerLinkActive="selected">
             Audit Log
-          </div> -->
+          </div>
           <div  *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin || userRole==loginRole.Data_Collection_Team || userRole==loginRole.Institution_Admin">
             <p-accordion>
               <p-accordionTab data-assess>
@@ -252,7 +252,7 @@
             </p-accordion>
           </div>
 
-            
+
 
           <div *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin || userRole==loginRole.Data_Collection_Team || userRole==loginRole.Institution_Admin">
             <p-accordion>
@@ -276,7 +276,7 @@
               </p-accordionTab>
             </p-accordion>
           </div>
-            
+
 
             <div *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin" class="sidebar-items--link align-items-start" [routerLink]="['/app/report']"
               routerLinkActive="selected">
@@ -363,7 +363,13 @@
                   <div class="username">{{userName}}</div>
                   <div class="userrole">{{userRole}}</div>
                 </span>
+                <span>
+                  <div (click)="viewPop()" class="viewPop">
+                    <i class="pi pi-bell mr-4 p-text-secondary" value={{notificationViewCount}} pBadge
+                      style="font-size: 2rem"></i>
+                  </div>
 
+                </span>
                 <span>
                   <div (click)="logout()" class="logout">
                     <i class="pi pi-sign-out"></i>
@@ -376,9 +382,54 @@
             <!-- <small><b>Test</b></small> -->
           </div>
         </div>
-        <router-outlet></router-outlet>
+
+        <p-dialog [(visible)]="confirm" header="Notification" position="top-right">
+
+          <div class="container" style="width: 500px; height: 225px; margin-left: 50px; margin-top: 0px ;">
+            <p-table #table [value]="notification" [lazy]="true" [showCurrentPageReport]="true"
+              paginatorDropdownAppendTo="body"
+              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [responsive]="true">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th >               
+                  </th>
+                  <th></th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-notification>
+                <tr>
+                  <td  style="color:blue">
+                    <i [hidden]="notification.is_viewed"  class="pi pi-eye"   style="font-size: 1.5rem; border-color: transparent ; color-scheme: blue; "
+                    (click)="detail(notification)" ></i>
+                    <i [hidden]="!notification.is_viewed" class="pi pi-eye-slash" style="font-size: 1.5rem; border-color:transparent" ></i>
+                    <!-- <p-tableCheckbox [value]="notification"> </p-tableCheckbox> -->
+                  </td>
+
+                  <td>{{ notification.massege! }}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+
+
+            <!-- <table>
+              <tr>
+                <td class="col-12 col-md-4">
+                  <div class="p-field mb-2">
+                <td>
+                </td>
+          </div>
+          </td>
+          <td class="col-12 col-md-6">
+            <div class="p-field mb-2">ggg</div>
+          </td>
+          </tr>
+          </table> -->
       </div>
+      </p-dialog>
+      <router-outlet></router-outlet>
     </div>
+    </div>
+
   </nb-layout-column>
 
   <nb-layout-footer fixed>
