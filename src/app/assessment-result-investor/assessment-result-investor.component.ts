@@ -53,6 +53,8 @@ export class AssessmentResultInvestorComponent implements OnInit {
   characteristicsList  : any = []
   assessategory : any = []
 load: boolean
+
+card : any = []
   constructor( private route: ActivatedRoute,
     private methassess : MethodologyAssessmentControllerServiceProxy,
     private datePipe: DatePipe,
@@ -61,11 +63,8 @@ load: boolean
     ) { }
 
 
-    exportToExcel() {
-      const table = this.content.nativeElement;
-      const wb = XLSX.utils.table_to_book(table, { sheet: 'Sheet1' });
-      XLSX.writeFile(wb, 'data.xlsx');
-    }
+
+
 
 
 
@@ -235,62 +234,69 @@ load: boolean
 
     });
 
+
     setTimeout(() => {
+      this.card.push(
+        ...[
+          { title: 'Assessment Type', data: this.assessmentType },
+          { title: 'Level of Implementation', data: this.levelofImplemetation },
+          { title: 'Geographical Area Covered', data: this.geographicalAreasCovered },
+          { title: 'Sectors Covered', data: this.sectorList.join(', ') },
+          { title: 'Impact Covered', data: this.impactCoverList.join(', ') },
+          { title: 'Date From', data: this.datePipe.transform(this.date1, 'yyyy-MM-dd') },
+          { title: 'To', data: this.datePipe.transform(this.date2, 'yyyy-MM-dd') },
+
+        ])
+
+        console.log("cardddd", this.card)
       this.load = true;
     }, 1000);
 
   }
 
 
+  public exportToExcel(): void {
+    import("xlsx").then(xlsx => {
+      const ws = xlsx.utils.json_to_sheet(this.card, { skipHeader: true });
+      const worksheet = xlsx.utils.table_to_sheet(document.querySelector("#content"));
 
+      // add existing data to worksheet
+      const existingData = xlsx.utils.sheet_to_json(worksheet, {header: 1});
+      xlsx.utils.sheet_add_json(ws, existingData, {skipHeader: true, origin: -1});
 
-  makePDF() {
-    const element = document.getElementById('content');
-    if (element) {
-      html2canvas(element, { scale: 2 }).then(canvas => {
-        const imgWidth = 208;
-        const imgHeight = (canvas.height * imgWidth / canvas.width)-75;
-        const contentDataURL = canvas.toDataURL('image/jpeg', 1.0);
-        const pdf = new jsPDF('p', 'mm', 'a4', true); // set the last parameter to true to enable adding more pages
-        const marginTop = 6;
-        const marginBottom = 10;
-        const position = marginTop;
-        let currentPage = 1;
-        const totalPages = Math.ceil((canvas.height - marginTop - marginBottom) / pdf.internal.pageSize.getHeight());
-
-        pdf.addImage(contentDataURL, 'JPEG', 0, position, imgWidth, imgHeight);
-        if (totalPages > 1) {
-          pdf.addPage();
-          pdf.addImage(contentDataURL, 'JPEG', 0, -pdf.internal.pageSize.getHeight() + marginTop, imgWidth, imgHeight);
-        }
-
-        // Delete extra pages
-        const totalPdfPages = pdf.getNumberOfPages();
-        for (let i = 3; i <= totalPdfPages; i++) {
-          pdf.deletePage(i);
-        }
-
-        pdf.save('assessment-result.pdf');
-      });
-    }
+      const workbook = xlsx.utils.book_new();
+      xlsx.utils.book_append_sheet(workbook, ws, "Sheet1");
+      xlsx.writeFile(workbook, "data.xlsx", { cellStyles: true });
+    });
   }
 
 
 
-public openPDF(): void {
-  let DATA: any = document.getElementById('content');
-  html2canvas(DATA).then((canvas) => {
-    let fileWidth = 208;
-    let fileHeight = (canvas.height * fileWidth) / canvas.width;
-    const FILEURI = canvas.toDataURL('image/png');
-    let PDF = new jsPDF('p', 'mm', 'a4');
-    let position = 0;
-    PDF.addImage(FILEURI, 'PNG', 0, position, fileWidth, fileHeight);
-    PDF.save('angular-demo.pdf');
-  });
-}
 
+  makePDF() {
 
+    var data = document.getElementById('content')!;
+
+    html2canvas(data).then((canvas) => {
+      const componentWidth = data.offsetWidth
+      const componentHeight = data.offsetHeight
+
+      const orientation = componentWidth >= componentHeight ? 'l' : 'p'
+
+      const imgData = canvas.toDataURL('image/png')
+      const pdf = new jsPDF({
+        orientation,
+        unit: 'px'
+      })
+
+      pdf.internal.pageSize.width = componentWidth
+      pdf.internal.pageSize.height = componentHeight
+
+      pdf.addImage(imgData, 'PNG', 0, 0, componentWidth, componentHeight)
+      pdf.save('assessment-result.pdf')
+    })
+
+  }
 
 
 }

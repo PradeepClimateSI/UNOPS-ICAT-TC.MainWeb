@@ -160,12 +160,12 @@ load: boolean
 
   }
 
-  makePDF() {
+ /*  makePDF() {
     const element = document.getElementById('content');
     if (element) {
       html2canvas(element, { scale: 2 }).then(canvas => {
         const imgWidth = 208;
-        const imgHeight = (canvas.height * imgWidth / canvas.width)-75;
+        const imgHeight = (canvas.height * imgWidth / canvas.width);
         const contentDataURL = canvas.toDataURL('image/jpeg', 1.0);
         const pdf = new jsPDF('p', 'mm', 'a4', true); // set the last parameter to true to enable adding more pages
         const marginTop = 6;
@@ -189,8 +189,32 @@ load: boolean
         pdf.save('assessment-result.pdf');
       });
     }
-  }
+  } */
 
+  makePDF() {
+
+    var data = document.getElementById('content')!;
+
+    html2canvas(data).then((canvas) => {
+      const componentWidth = data.offsetWidth
+      const componentHeight = data.offsetHeight
+
+      const orientation = componentWidth >= componentHeight ? 'l' : 'p'
+
+      const imgData = canvas.toDataURL('image/png')
+      const pdf = new jsPDF({
+        orientation,
+        unit: 'px'
+      })
+
+      pdf.internal.pageSize.width = componentWidth
+      pdf.internal.pageSize.height = componentHeight
+
+      pdf.addImage(imgData, 'PNG', 0, 0, componentWidth, componentHeight)
+      pdf.save('assessment-result.pdf')
+    })
+
+  }
 
 
 }

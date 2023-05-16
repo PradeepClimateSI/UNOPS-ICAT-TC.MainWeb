@@ -1224,12 +1224,15 @@ let assessData : any = {
     this.methassess.barrierCharacteristics(assessData).subscribe(res => {
       console.log("newww data",res)
 
-     if(this.allData.assessment_approach === 'Direct'){
-      setTimeout(() => {
-        this.router.navigate(['/assessment-result-track2',res.assesId], { queryParams: { assessmentId: res.assesId,
-          averageProcess : res.result.averageProcess , averageOutcome: res.result.averageOutcome} });
-      }, 2000);
+      if(res.assesId){
+        if(this.allData.assessment_approach === 'Direct'){
+          setTimeout(() => {
+            this.router.navigate(['/assessment-result-track2',res.assesId], { queryParams: { assessmentId: res.assesId,
+              averageProcess : res.result.averageProcess , averageOutcome: res.result.averageOutcome} });
+          }, 2000);
+          }
       }
+
 
     } )
 
