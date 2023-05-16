@@ -7,7 +7,7 @@
       <h4 class="mt-4">Assessments</h4>
     </div>
 
-<p-table #dt2 [value]="results" [tableStyle]="{'min-width': '50rem'}"
+<p-table #dt2 [value]="results" [tableStyle]="{'min-width': '82rem'}"
           [paginator]="true"
           [rows]="5" [totalRecords]="results.length"
 
@@ -40,8 +40,7 @@
         <td>{{results.assessmentType}}</td>
         <td>{{results.tool}}</td>
         <td>
-          <button pButton pRipple class="btn btn-primary btn-block text-uppercase" type='submit' (click)="myFunction(results.assessId, results.averageProcess, results.averageOutcome)"> View</button>
-
+          <button pButton pRipple class="btn btn-primary btn-block text-uppercase" type='submit' (click)="toResultPage(results.assessId, results.averageProcess, results.averageOutcome, results.tool)"> View</button>
         </td>
 
       </tr>
