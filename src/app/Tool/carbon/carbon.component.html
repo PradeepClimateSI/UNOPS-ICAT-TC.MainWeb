@@ -1242,7 +1242,8 @@
         <div class="col-12 col-md-8">
           <div class="p-field">
             <label for="{{barrier}}_score">Barrier Score: &nbsp;</label>
-            <p-inputNumber  name="{{barrier}}_score" ngModel  mode="decimal" [showButtons]="true" inputId="minmax-buttons"
+            <p-inputNumber  name="{{barrier}}_score" ngModel inputId="locale-us" mode="decimal"
+            locale="en-US" [minFractionDigits]="3" [showButtons]="true" inputId="minmax-buttons"
                   [min]="0" [max]="1" [step]="0.05" ></p-inputNumber>
 
           </div>
@@ -2039,7 +2040,7 @@
                     <div class="col-12 ">
                       {{characteristic.name}}
                     </div>
-                   
+
                     <div class="col-10 col-md-6">
                       <div class="p-field">
 
@@ -2051,7 +2052,7 @@
                           &nbsp;<br> -->
 
                           <label for="methodolog">Indicator</label>
-                          <select class="form-control select-with-arrow" [(ngModel)]="characteristic.indicator">
+                          <select class="form-control select-with-arrow" [(ngModel)]="characteristic.indicator" (change)="onIndicatorChange(characteristic)">
                             <option value="" disabled selected hidden>Select Indicator</option>
                             <option *ngFor="let indicator of handleSelectedCharacteristic(characteristic.name)"
                               [value]="indicator.id">{{indicator.name}}</option>
@@ -2071,22 +2072,62 @@
                       <div class="p-field">
 
                       <label for="methodolog"> Indicator Value</label>
-                      
+
                       <p-inputNumber [(ngModel)]="characteristic.indicatorValue" mode="decimal" placeholder="Enter indicator value" inputId="withoutgrouping" tooltipPosition="bottom"  [useGrouping]="false" [minFractionDigits]="2" [maxFractionDigits]="3"></p-inputNumber>
                         </div>
                     </div>
-                    <div *ngIf="characteristic.isIndicator"class="col-10 col-md-4">
+                    <div *ngIf="characteristic.isIndicator" class="col-10 col-md-4">
                       <div class="p-field">
 
                       <label for="methodolog">Methodology</label>
-                      <select class="form-control select-with-arrow" name="{{characteristic.name}}_methodology" ngModel
+                      <select class="form-control select-with-arrow" #methodology name="{{characteristic.name}}_methodology" [(ngModel)]="characteristic.selectedMethodology" (change)="onMethSelected(methodology.value,characteristic)"
                         id="exampleFormControlSelect1">
                         <option value="" disabled selected hidden>Select Methodology</option>
-                        <option *ngFor="let meth of onIndicatorSelected(characteristic.indicator)" [value]="meth.name">
+                        <option *ngFor="let meth of onIndicatorSelected(characteristic.indicator)" [ngValue]="meth">
                           {{meth.name}}</option>
+                          <div >
+                          <label for="parameters">Parameters</label>
+
+                        <!-- <button pButton pRipple class="btn btn-primary btn-block text-uppercase" (click)="submitParams(characteristic)" type='submit'>Calculate</button>
+                        <div class="mt-3" *ngIf="result">
+                          Result:{{result}}
+                        </div>  -->
+                      </div>
                       </select>
+
                         </div>
                     </div>
+                    <div class="row p-2">
+                      <div *ngIf="characteristic.parameters && characteristic.parameters.length!==0 && characteristic.isIndicator">
+                        <div class="col-12 col-md-4 offset-md-8">
+                          <!-- <div class="p-field"> -->
+                          <label for="parameters">Parameters</label>
+                        <!-- </div> -->
+                        </div>
+
+                        <!-- <div *ngFor="let param of characteristic.parameters ">
+
+                        <div>
+                          <label for="{{param.name}}">{{param.name}} ({{param.unit}}): &nbsp; &nbsp; &nbsp; &nbsp;
+                            &nbsp; &nbsp;</label>
+                          <input type="number" name="{{param.name}}" [(ngModel)] ="param.value"
+                            placeholder="Enter value"> <br> <br>
+
+                        </div>
+                        </div> -->
+                        <div *ngFor="let param of characteristic.parameters " class="col-12 col-md-4 offset-md-8 mb-10">
+                          <div class="p-field">
+
+                          <label for="{{param.name}}">{{param.name}} ({{param.unit}}):</label>
+
+                          <p-inputNumber [(ngModel)] ="param.value" name="{{param.name}}" mode="decimal" placeholder="Enter indicator value" inputId="withoutgrouping" tooltipPosition="bottom"  [useGrouping]="false" [minFractionDigits]="2" [maxFractionDigits]="3"></p-inputNumber>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    </div>
+
                   </div>
                   <div>
 

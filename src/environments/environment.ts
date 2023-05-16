@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   baseUrlAPI: 'http://localhost:7080',
+
   esbaseUrlAPI: 'http://localhost:7070',
   authBaseUrlAPI: 'http://localhost:7090',
   baseUrlAPIDocUploadAPI: 'http://localhost:7080/document/upload2',
@@ -12,7 +13,7 @@ export const environment = {
   baseUrlAPIDocUploadAnonymousAPI: 'http://localhost:7080/document/upload2',
   baseUrlAuditlog :  'http://localhost:7000',
 };
-// baseUrlAPI: 'http://3.110.188.89:7080',
+  // baseUrlAPI: 'http://3.108.9.184:7080',
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

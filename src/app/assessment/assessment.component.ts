@@ -17,6 +17,7 @@ export class AssessmentComponent implements OnInit {
 data2 : any
 loading: boolean ;
 totalRecords : number
+load : boolean = false
 
 dt2 : Table
   constructor(
@@ -32,9 +33,9 @@ dt2 : Table
 
     // this.methassess.results().subscribe((res: any) => {
     //   this.resultsList = res
-      
+
     // });
-    
+
     this.resultsList = await this.methassess.results().toPromise()
     console.log("resultsss : ", this.resultsList)
 
@@ -71,6 +72,10 @@ dt2 : Table
 
 
 
+      setTimeout(() => {
+        this.load = true;
+      }, 1000);
+
   }
 
   clear(table: Table) {
@@ -82,16 +87,43 @@ onInput(event: any, dt: any) {
   dt.filterGlobal(value, 'contains');
 }
 
-toResultPage(assessId : any, averageProcess: any, averageOutcome: any, tool: any){
+tool :string
+assessment_method : string
 
-  if (tool === 'Carbon Market Tool') {
+myFunction(assessId : any, averageProcess: any, averageOutcome: any){
+
+  this.methassess.assessmentData(assessId).subscribe((res: any) => {
+    console.log("assessmentDataaaaa: ", res)
+    for (let x of res) {
+      this.tool = x.tool
+      this.assessment_method = x.assessment_method
+    }
+
+  });
+
+  setTimeout(() => {
+
+
+  console.log("dddd", assessId, this.tool, this.assessment_method)
+
+  if (this.tool === 'Investment & Private Sector Tool' || (this.tool === 'Portfolio Tool' && this.assessment_method === 'Track 4')) {
+
+    this.router.navigate(['/assessment-result-investor', assessId], {
+      queryParams: {
+        assessmentId: assessId
+      }
+    });
+  }
+  if (this.tool === 'Carbon Market Tool') {
     this.router.navigate(['../carbon-market-tool-result'], {
       queryParams: {
         id: assessId
       },
       relativeTo: this.activatedRoute
     });
-  } else {
+  }
+  else {
+   // console.log("dddd", assessId, averageOutcome, averageProcess)
     this.router.navigate(['/assessment-result', assessId], {
       queryParams: {
         assessmentId: assessId,
@@ -100,8 +132,11 @@ toResultPage(assessId : any, averageProcess: any, averageOutcome: any, tool: any
     });
   }
 
-  console.log("dddd", assessId, averageOutcome, averageProcess)
+}, 1000);
+
 
 }
 
 }
+
+

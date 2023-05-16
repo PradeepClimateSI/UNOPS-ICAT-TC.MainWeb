@@ -160,22 +160,61 @@ load: boolean
 
   }
 
-  makePDF() {
+ /*  makePDF() {
     const element = document.getElementById('content');
     if (element) {
       html2canvas(element, { scale: 2 }).then(canvas => {
         const imgWidth = 208;
-        const imgHeight = canvas.height * imgWidth / canvas.width;
+        const imgHeight = (canvas.height * imgWidth / canvas.width);
         const contentDataURL = canvas.toDataURL('image/jpeg', 1.0);
-        const pdf = new jsPDF('p', 'mm', 'a4', false);
-        const position = 0;
+        const pdf = new jsPDF('p', 'mm', 'a4', true); // set the last parameter to true to enable adding more pages
+        const marginTop = 6;
+        const marginBottom = 10;
+        const position = marginTop;
+        let currentPage = 1;
+        const totalPages = Math.ceil((canvas.height - marginTop - marginBottom) / pdf.internal.pageSize.getHeight());
+
         pdf.addImage(contentDataURL, 'JPEG', 0, position, imgWidth, imgHeight);
+        if (totalPages > 1) {
+          pdf.addPage();
+          pdf.addImage(contentDataURL, 'JPEG', 0, -pdf.internal.pageSize.getHeight() + marginTop, imgWidth, imgHeight);
+        }
+
+        // Delete extra pages
+        const totalPdfPages = pdf.getNumberOfPages();
+        for (let i = 5; i <= totalPdfPages; i++) {
+          pdf.deletePage(i);
+        }
+
         pdf.save('assessment-result.pdf');
       });
     }
+  } */
+
+  makePDF() {
+
+    var data = document.getElementById('content')!;
+
+    html2canvas(data).then((canvas) => {
+      const componentWidth = data.offsetWidth
+      const componentHeight = data.offsetHeight
+
+      const orientation = componentWidth >= componentHeight ? 'l' : 'p'
+
+      const imgData = canvas.toDataURL('image/png')
+      const pdf = new jsPDF({
+        orientation,
+        unit: 'px'
+      })
+
+      pdf.internal.pageSize.width = componentWidth
+      pdf.internal.pageSize.height = componentHeight
+
+      pdf.addImage(imgData, 'PNG', 0, 0, componentWidth, componentHeight)
+      pdf.save('assessment-result.pdf')
+    })
+
   }
-
-
 
 
 }
