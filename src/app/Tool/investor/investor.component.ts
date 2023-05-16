@@ -1254,12 +1254,12 @@ submitParams(value:any){
 console.log("value",value)
 this.result= value.parameters[0].value/value.parameters[1].value*100;
 console.log("result",this.result)
-this.methassess.assessParameterSave(value).subscribe((res: any) => {
-  console.log("policybarrierssList : ", res)
-  this.policyBarriersList = res
+// this.methassess.assessParameterSave(value).subscribe((res: any) => {
+//   console.log("policybarrierssList : ", res)
+//   this.policyBarriersList = res
 
 
-});
+// });
 
 }
 

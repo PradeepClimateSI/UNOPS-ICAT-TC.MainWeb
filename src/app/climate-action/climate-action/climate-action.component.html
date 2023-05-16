@@ -116,7 +116,7 @@
                   <label for="nameClimate">Name of the intervention*</label>
                   <input [disabled]="editEntytyId > 0" [(ngModel)]="project.policyName"
                     [ngModelOptions]="{ standalone: false }" placeholder="Name" #nameClimate="ngModel" type="text"
-                    name="nameClimate" class="p-inputtext" pInputText (ngModelChange)="onnameKeyDown($event)"
+                    name="nameClimate" class="p-inputtext" pInputText
                     required />
                   <p class="info-message text-danger" *ngIf="
                     !project.policyName &&
@@ -159,30 +159,21 @@
 
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="nameClimate">Country of implementation  </label>
-                  <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocknameClimate">
-                    <div>
-                      <p-dropdown [disabled]="editEntytyId > 0 || isSector" placeholder="Country" name="countryDD"
-                         #countryDD="ngModel" [(ngModel)]="project.country" appendTo="body" [autoDisplayFirst]="false"
-                         [options]="countryList" optionLabel="name" [ngModelOptions]="{ standalone: false }"  
-                         (ngModelChange)="onCountryChnage()" ></p-dropdown>
-                    </div>
-                    <p class="info-message text-danger" *ngIf="
-                    getUserEnterdCountry == '' &&
-                    (fData.submitted || countryDD.touched || countryDD.dirty)
+                  <label for="designation">Intervention ID*</label>
+                  <input [disabled]="editEntytyId > 0" type="text" maxlength="30" placeholder="ID of the intervention"
+                    #interventionID="ngModel" name="designation" class="p-inputtext"
+                    [(ngModel)]="project.contactPersonDesignation" [ngModelOptions]="{ standalone: false }"
+                    pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText required />
+                  <p class="info-message text-danger" *ngIf="
+                    !project.contactPersonDesignation &&
+                    (fData.submitted || interventionID.touched || interventionID.dirty)
                   ">
-                      This is a mandatory field
-                    </p>
-                  </ng-container>
-                  <ng-template #elseBlocknameClimate>
-
-                    <input [disabled]="editEntytyId > 0" type="text" maxlength="50" name="nameCountry"
-                      #nameCountry="ngModel" class="p-inputtext" [(ngModel)]="project.country?.name!"
-                      [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText required />
-
-                  </ng-template>
+                    This is a mandatory field
+                  </p>
                 </div>
               </div>
+
+             
             </div>
             <div class="row p-2">
               <div class="col-12 col-md-6">
@@ -202,16 +193,78 @@
                   </ng-container>
                   <ng-template #elseBlockprojStatus>
                     <input [disabled]="editEntytyId > 0" type="text" maxlength="50" name="projStatus"
-                      #projStatus1="ngModel" class="p-inputtext" [(ngModel)]="project.projectStatus?.name!"
+                      #projStatus1="ngModel" class="p-inputtext" [(ngModel)]="project.projectStatus.name!"
                       [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
                   </ng-template>
                 </div>
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
+                  <label for="nameClimate">Country of implementation  </label>
+                  <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocknameClimate">
+                    <div>
+                      <p-dropdown
+                      [disabled]="editEntytyId > 0 || isSector"
+                      appendTo="body"
+                      name="countryDD"
+                      placeholder="Country"
+                      #countryDD="ngModel"
+                      [(ngModel)]="project.country"
+                      [ngModelOptions]="{ standalone: false }"
+                      [autoDisplayFirst]="false"
+                      [options]="countryList"
+                      optionLabel="name"
+                      (ngModelChange)="onCountryChnage()"
+                      [required]="true"
+                    ></p-dropdown>
+                    </div>
+                    <p class="info-message text-danger" *ngIf="
+                    getUserEnterdCountry == '' &&
+                    (fData.submitted || countryDD.touched || countryDD.dirty)
+                  ">
+                      This is a mandatory field
+                    </p>
+                  </ng-container>
+                  <ng-template #elseBlocknameClimate>
+
+                    <input [disabled]="editEntytyId > 0" type="text" maxlength="50" name="nameCountry"
+                      #nameCountry="ngModel" class="p-inputtext" [(ngModel)]="project.country?.name!"
+                      [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText required />
+
+                  </ng-template>
+                </div>
+              </div>
+
+            </div>
+            <div class="row p-2">
+              <div class="col-12 col-md-6">
+                <div class="p-field">
+                  <label for="sector">Sectors Targeted</label>
+                  <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocksector">
+                    <p-multiSelect [disabled]="editEntytyId > 0" placeholder="Select Sector" name="sector"
+                      #sector="ngModel" [(ngModel)]="project.sector" [options]="sectorList"
+                      optionLabel="name" (ngModelChange)="onSectorChange($event)" [required]="true"></p-multiSelect>
+                    <p class="info-message text-danger" *ngIf="
+                    !project.sector &&
+                    (fData.submitted || sector.touched || sector.dirty)
+                  ">
+                      This is a mandatory field
+                    </p>
+                  </ng-container>
+                  <ng-template #elseBlocksector>
+                    <input [disabled]="editEntytyId > 0" type="text" maxlength="50" name="projsector"
+                      #projsector="ngModel" class="p-inputtext" [(ngModel)]="project.sector.name!"
+                      [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
+                  </ng-template>
+                </div>
+              </div>
+
+              <div class="col-12 col-md-6">
+                <div class="p-field">
                   <label for="projStatus">Type of intervention</label>
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlockprojStatus">
                     <p-dropdown [disabled]="editEntytyId > 0" placeholder="Please Select the type of intervention"
+                      #typeOfIntervention="ngModel"
                       name="projStatus" #projStatus="ngModel" [(ngModel)]="project.typeofAction" [options]="typeofAction"
                       [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false" 
                       [required]="false"></p-dropdown>
@@ -225,30 +278,6 @@
                   <ng-template #elseBlockprojStatus>
                     <input [disabled]="editEntytyId > 0" type="text" maxlength="50" name="typeofAction"
                       #typeofAction="ngModel" class="p-inputtext" [(ngModel)]="project.typeofAction"
-                      [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
-                  </ng-template>
-                </div>
-              </div>
-
-            </div>
-            <div class="row p-2">
-              <div class="col-12 col-md-6">
-                <div class="p-field">
-                  <label for="sector">Sectors Targeted</label>
-                  <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocksector">
-                    <p-dropdown [disabled]="editEntytyId > 0" placeholder="Select Sector" name="sector"
-                      #sector="ngModel" [(ngModel)]="project.sector" [autoDisplayFirst]="false" [options]="sectorList"
-                      optionLabel="name" (ngModelChange)="onSectorChange($event)" [required]="true"></p-dropdown>
-                    <p class="info-message text-danger" *ngIf="
-                    !project.sector &&
-                    (fData.submitted || sector.touched || sector.dirty)
-                  ">
-                      This is a mandatory field
-                    </p>
-                  </ng-container>
-                  <ng-template #elseBlocksector>
-                    <input [disabled]="editEntytyId > 0" type="text" maxlength="50" name="projsector"
-                      #projsector="ngModel" class="p-inputtext" [(ngModel)]="project.sector?.name!"
                       [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
                   </ng-template>
                 </div>
