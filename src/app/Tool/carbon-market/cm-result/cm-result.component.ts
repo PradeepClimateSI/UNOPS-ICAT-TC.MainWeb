@@ -39,12 +39,12 @@ export class CmResultComponent implements OnInit {
       this.intervention = this.assessment.climateAction
 
       this.assessmentCMDetail = await this.assessmentCMDetailControllerServiceProxy.getAssessmentCMDetailByAssessmentId(assessmentId).toPromise()
-      let types: any = this.assessmentCMDetail.impact_types.split(',')
-      types = [...types.map((type: string) => this.masterDataService.impact_types.find(o => o.code === type)?.name)]
-      let cats: any = this.assessmentCMDetail.impact_categories.split(',')
-      cats = [...cats.map((cat: string) => this.masterDataService.impact_categories.find(o => o.code === cat)?.name)]
-      let chara: any = this.assessmentCMDetail.impact_characteristics.split(',')
-      chara = [...chara.map((char: string) => this.masterDataService.impact_characteristics.find(o => o.code === char)?.name)]
+      let types: any = this.assessmentCMDetail.impact_types?.split(',')
+      if(types?.length > 0) types = [...types.map((type: string) => this.masterDataService.impact_types.find(o => o.code === type)?.name)]
+      let cats: any = this.assessmentCMDetail.impact_categories?.split(',')
+      if (cats?.length > 0) cats = [...cats.map((cat: string) => this.masterDataService.impact_categories.find(o => o.code === cat)?.name)]
+      let chara: any = this.assessmentCMDetail.impact_characteristics?.split(',')
+      if (chara?.length > 0) chara = [...chara.map((char: string) => this.masterDataService.impact_characteristics.find(o => o.code === char)?.name)]
       console.log(chara)
       this.card.push(
         ...[
@@ -54,9 +54,9 @@ export class CmResultComponent implements OnInit {
           { title: 'Sectoral Boundary', data: (this.masterDataService.sectorial_boundries.find(o => o.code === this.assessmentCMDetail.sectoral_boundary)?.name) },
           { title: 'Temporal Boundary', data: this.assessmentCMDetail.temporal_boundary },
           { title: 'Geographical Boundary', data: this.assessmentCMDetail.geographical_boundary },
-          { title: 'Impact Types', data: types.toString() },
-          { title: 'Impact Categories', data: cats.toString() },
-          { title: 'Impact Characteristics', data: chara.toString() },
+          { title: 'Impact Types', data: types?.toString() },
+          { title: 'Impact Categories', data: cats?.toString() },
+          { title: 'Impact Characteristics', data: chara?.toString() },
           { title: 'Impact Indicators', data: this.assessmentCMDetail.impact_indicators }
         ])
       await this.getResult()
@@ -66,20 +66,22 @@ export class CmResultComponent implements OnInit {
 
   async getResult() {
     let res = await this.cMAssessmentQuestionControllerServiceProxy.getResults(this.assessment.id).toPromise()
-    this.results = res.result
-    this.criterias = res.criteria
-    this.keys = Object.keys(this.results)
-
-
-    this.criterias.forEach((c: any) => {
-      this.expandedRows[c] = false
-    })
-
-    let req = new CalculateDto()
-    req.assessmentId = this.assessment.id
-
-    let response = await this.cMAssessmentQuestionControllerServiceProxy.calculateResult(req).toPromise()
-    this.score = response.score
+    if (res){
+      this.results = res.result
+      this.criterias = res.criteria
+      this.keys = Object.keys(this.results)
+  
+  
+      this.criterias.forEach((c: any) => {
+        this.expandedRows[c] = false
+      })
+  
+      let req = new CalculateDto()
+      req.assessmentId = this.assessment.id
+  
+      let response = await this.cMAssessmentQuestionControllerServiceProxy.calculateResult(req).toPromise()
+      this.score = response.score
+    }
   }
 
   toDownloadExcel(){
