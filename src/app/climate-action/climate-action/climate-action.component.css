@@ -1,0 +1,39 @@
+.p-button .icon {
+    font-size: 30px !important;
+    color: red !important;
+}
+
+::ng-deep .p-dialog .row {
+    display: flex !important;
+    flex-wrap: wrap !important; 
+    margin-right: -15px !important;
+    margin-left: -15px !important;
+  }
+  
+  
+::ng-deep .p-dialog .col-12 {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+  
+ 
+/* ::ng-deep .p-dialog  .col-6 {
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+  } */
+
+
+  ::ng-deep .p-dialog  .p-field {
+    margin-bottom: 1rem;
+  }
+  
+  ::ng-deep .p-dialog .label {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+  }
+
+  .barrier-top{
+    font-size: 14px;
+    font-weight: 600;
+  }

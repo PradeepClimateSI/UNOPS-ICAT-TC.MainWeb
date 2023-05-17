@@ -40,6 +40,8 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import decode from 'jwt-decode';
 import { Token } from '@angular/compiler';
+import { MasterDataService } from 'app/shared/master-data.service';
+import { BarrierSelected } from './barrier-selected';
 
 /// <reference types="googlemaps" />
 
@@ -58,7 +60,7 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
   options: any;
   relatedItem: Project[] = [];
   exsistingPrpject: boolean = false;
-  countryList: Country[] = [];
+  countryList:Country[]= [];
   projectOwnerList: ProjectOwner[] = [];
   projectStatusList: ProjectStatus[] = [];
   sectorList: Sector[] = [];
@@ -112,6 +114,14 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
   selectCategory: any;
   approachList: string[] = ['AR1', 'AR2', 'AR3', 'AR4', 'AR5'];
   typeofAction: string[] = ['Investment','Carbon Market','NDC Implementation','Project']
+  levelOfImplementation: any[] = [];
+  
+  barrierBox:boolean=false;
+
+  barrierSelected:BarrierSelected= new BarrierSelected()
+
+
+
 
   // institutionList: Institution[] = [];
   // institutionTypeID: number = 3;
@@ -148,7 +158,8 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
     private sectorProxy: SectorControllerServiceProxy,
     private ndcProxy: NdcControllerServiceProxy,
     private asses: MethodologyAssessmentControllerServiceProxy,
-    private cdref: ChangeDetectorRef 
+    private cdref: ChangeDetectorRef ,
+    private masterDataService: MasterDataService,
   ) // private usersControllerServiceProxy: UsersControllerServiceProxy,
   // private ndcProxy:NdcControllerServiceProxy
   { }
@@ -158,6 +169,9 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
  }
 
   ngOnInit(): void {
+
+    
+    this.levelOfImplementation = this.masterDataService.level_of_implemetation;
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const countryId = token ? decode<any>(token).countryId : 0;
     console.log("country", countryId)
@@ -182,11 +196,15 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
     })
 
 
-    // this.countryProxy.getCountry(this.counID).subscribe((res:any)=>{
-    //   console.log('++++++++++++++++',res)
-    //   this.countryList.push(res);
-    //   this.project.country =this.countryList[0];
-    // })
+    this.countryProxy.getCountry(this.counID).subscribe((res:any)=>{
+      console.log('++++++++++++++++',res)
+      this.countryList.push(res);
+      this.project.country =res
+
+      console.log('++++++++++++++++',this.countryList)
+      this.isSector = true;
+      
+    })
 
     // this.serviceProxy
     //   .getManyBaseUsersControllerUser(
@@ -229,21 +247,21 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
     });
 
     if (countryId) {
-      this.serviceProxy
-        .getOneBaseCountryControllerCountry(
-          countryId,
-          undefined,
-          undefined,
-          undefined
-        )
-        .subscribe((res) => {
-          console.log("sss",res)
-          // this.countryList.push(res)
-          console.log("this.countryList",this.countryList)
-          this.project.country =res;
-          this.isSector = true;
-          // console.log('tokenPayloadmasssge',res);
-        });
+      // this.serviceProxy
+      //   .getOneBaseCountryControllerCountry(
+      //     countryId,
+      //     undefined,
+      //     undefined,
+      //     undefined
+      //   )
+      //   .subscribe((res) => {
+      //     console.log("sss",res)
+      //     // this.countryList.push(res)
+      //     console.log("this.countryList",this.countryList)
+      //     this.project.country =res;
+      //     this.isSector = true;
+      //     // console.log('tokenPayloadmasssge',res);
+      //   });
     } else {
       this.project.country = new Country();
       console.log("pr", this.project)   // working
@@ -764,6 +782,7 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
           this.serviceProxy.createOneBaseProjectControllerClimateAction(this.project)
           .subscribe(
             (res) => {
+              console.log(res)
               this.isSaving = true;
               this.messageService.add({
                 severity: 'success',
@@ -788,7 +807,7 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
               this.messageService.add({
                 severity: 'error',
                 summary: 'Error.',
-                detail: 'Please Fill All Mandatory Fileds',
+                detail: 'Internal server error',
                 sticky: true,
               });
             }
@@ -1096,13 +1115,15 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
   }
 
   onCategoryChange(event: any) {
+    console.log("event",event)
     this.setbarriers = []
-    for (let o of event) {
-      let br = this.barriers.filter((a: any) => o.id == a.barriersCategory.id)
+    
+      let br = this.barriers.filter((a: any) => event.id == a.barriersCategory.id)
+      console.log("selected barrier",br)
       for (let b of br) {
         this.setbarriers.push(b);
       }
-  }
+  
 }
 
 enableActionButtonsarea() {
@@ -1464,6 +1485,18 @@ toUpdateNdcs() {
   }
 }
 
+showDialog(){
+  this.barrierBox =true;
+  console.log(this.barrierBox)
+
+}
+finalBarrierList =new Array ()
+pushBarriers(barrier:any){
+  console.log("barrier",barrier)
+  this.finalBarrierList.push(barrier)
+ this.barrierSelected = new BarrierSelected()
+
+}
 toDownload() {
   this.isDownloadMode = 1;
   this.isDownloading = true;
