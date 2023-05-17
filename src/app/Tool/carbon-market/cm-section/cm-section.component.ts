@@ -28,6 +28,8 @@ export class CmSectionComponent implements OnInit {
 
   result: any 
 
+  message = 'The preconditions for transformational change have not been met. <br> Transformational change = 0'
+
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
     private cMAssessmentQuestionControllerServiceProxy: CMAssessmentQuestionControllerServiceProxy,
@@ -93,7 +95,7 @@ export class CmSectionComponent implements OnInit {
     await this.getCriteriaBySection(section.id)
   }
 
-  onAnswer(e: any, criteria: any, sectionIdx: number, criteriaIdx: number, idx: number ) {
+  onAnswer(e: any, message: string, criteria: any, sectionIdx: number, criteriaIdx: number, idx: number ) {
     this.prev_answer = e.answer
     let question = criteria.questions[idx]
     if (e.type === 'COMMENT'){
@@ -154,6 +156,7 @@ export class CmSectionComponent implements OnInit {
             this.recievedQuestions = []
           } else {
             // alert("TC score is 0")
+            this.message = message
             this.visible = true
             this.shownCriterias[sectionIdx].splice(criteriaIdx + 1, this.shownCriterias[sectionIdx].length - (criteriaIdx + 1))
             this.shownSections.splice(sectionIdx + 1, this.shownSections.length - (sectionIdx + 1))
@@ -173,6 +176,7 @@ export class CmSectionComponent implements OnInit {
               }
             } else {
               this.visible = true
+              this.message = message
               this.shownQuestions[sectionIdx][criteriaIdx].splice(idx + 1, this.shownQuestions[sectionIdx][criteriaIdx].length - (idx + 1))
               this.shownCriterias[sectionIdx].splice(criteriaIdx + 1, this.shownCriterias[sectionIdx].length - (criteriaIdx + 1))
               this.shownSections.splice(sectionIdx + 1, this.shownSections.length - (sectionIdx + 1))
