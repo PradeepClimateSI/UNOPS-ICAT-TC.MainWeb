@@ -28,6 +28,9 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   showSections: boolean = false
   isSavedAssessment: boolean = false
 
+  date1: any
+  date2: any
+
   assessmentres: Assessment
 
   constructor(
@@ -63,6 +66,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
         .subscribe(res => {
           console.log(res)
           if (res) {
+            this.cm_detail.temporal_boundary = moment(this.date1).format("YYYY-MM-DD")  + ' - ' + moment(this.date2).format("YYYY-MM-DD")
             this.cm_detail.cmassessment = res
             this.cm_detail.impact_categories = this.selected_impact_categories.join(',')
             this.cm_detail.impact_characteristics = this.selected_impact_characteristics.join(',')

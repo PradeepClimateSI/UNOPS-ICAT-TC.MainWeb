@@ -3,7 +3,8 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ProfileStatus, RecordStatus } from 'shared/AppService';
-import { AuthControllerServiceProxy, ServiceProxy } from 'shared/service-proxies/auth-service-proxies';
+import { AuthControllerServiceProxy } from 'shared/service-proxies/auth-service-proxies';
+import { ServiceProxy, UsersControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-forgot-password',
@@ -18,15 +19,17 @@ export class ForgotPasswordComponent implements OnInit {
     private activatedRoute:ActivatedRoute,
     private router: Router,
     private authControllerServiceProxy: AuthControllerServiceProxy,
+    private usersControllerServiceProxy: UsersControllerServiceProxy,
     private messageService: MessageService,
   ) { }
 
   ngOnInit(): void {
   }
 
-  requestOTP(form: NgForm){
+  async requestOTP(form: NgForm){
     localStorage.setItem('reset-key', this.userName)
-    this.authControllerServiceProxy.forgotPassword(this.userName).subscribe(res => {
+    let user = await this.usersControllerServiceProxy.findUserByUserNameEx(this.userName).toPromise()
+    this.authControllerServiceProxy.forgotPassword(this.userName, user.firstName).subscribe(res => {
       //@ts-ignore
       if(res.status){
         this.messageService.add({

@@ -4,7 +4,7 @@
     </div>
     <form #fData="ngForm" (ngSubmit)="save(fData)">
         <div class="card" style="min-height: 600px;">
-            <div class="p-grid p-fluid col-md-6 col-sm-12">
+            <div class="p-grid p-fluid col-md-8 col-sm-12">
                 <div class="row p-2">
                     <div class="col-12 col-md-8">
                         <div class="p-field p-2">
@@ -36,12 +36,12 @@
                             <label for="policy">Assessment Boundaries *</label>
                             <div class="p-field p-2"> 
                                 <div class="row p-2">
-                                    <label class="col-6" for="policy">Sectoral Boundary *</label>
+                                    <label class="col-5" for="policy">Sectoral Boundary *</label>
                                     <!-- <input type="text" name="boundrary" #boundrary="ngModel" [(ngModel)]="cm_detail.sectoral_boundary"
                                         class="col-7 boundrary" placeholder="Enter Boundary" required /> -->
                                     <p-dropdown name="sectorial_boundary" #sectorial_boundary="ngModel" placeholder="Select"
                                         [(ngModel)]="cm_detail.sectoral_boundary" [options]="sectorial_boundires" optionLabel="name"
-                                        optionValue="code" [required]="true" class="col-6 boundrary-dropdown"></p-dropdown>
+                                        optionValue="code" [required]="true" class="col-7 boundrary-dropdown"></p-dropdown>
                                         <p class="info-message text-danger" *ngIf="
                                             !cm_detail.sectoral_boundary &&
                                             (fData.submitted || sectorial_boundary.touched)
@@ -50,20 +50,34 @@
                                         </p>
                                 </div>
                                 <div class="row p-2">
-                                    <label class="col-6" for="policy">Temporal Boundary *</label>
-                                    <input type="text" name="tboundrary" #tboundrary="ngModel" [(ngModel)]="cm_detail.temporal_boundary"
+                                    <label class="col-5" for="policy">Temporal Boundary *</label>
+                                    <!-- <input type="text" name="tboundrary" #tboundrary="ngModel" [(ngModel)]="cm_detail.temporal_boundary"
                                         class=" col-6 boundrary" placeholder="Enter Boundary" required />
                                         <p class="info-message text-danger" *ngIf="
                                         !cm_detail.temporal_boundary &&
                                         (fData.submitted || tboundrary.touched)
                                         ">
                                             This is a mandatory field
-                                        </p>
+                                        </p> -->
+                                    <div class="p-inputgroup col-7">
+                                        <span class="p-inputgroup-addon">
+                                        <i class="pi pi-calendar"></i>
+                                        </span>
+                                        <p-calendar  dateFormat="mm-dd-yy" inputId="date1" placeholder="From"[(ngModel)]="date1" name="date1"></p-calendar>
+                                        <span class="p-inputgroup-addon">to</span>
+                                        <p-calendar  dateFormat="mm-dd-yy" inputId="date2" placeholder="To" [(ngModel)]="date2" name="date2"></p-calendar>
+                                    </div>
+                                    <p class="info-message text-danger" *ngIf="
+                                    (!date1 || !date2) &&
+                                    (fData.submitted)
+                                    ">
+                                        This is a mandatory field
+                                    </p> 
                                 </div>
                                 <div class="row p-2">
-                                    <label class="col-6" for="policy">Geographical Boundary *</label>
+                                    <label class="col-5" for="policy">Geographical Boundary *</label>
                                     <input type="text" name="gboundrary" #gboundrary="ngModel" [(ngModel)]="cm_detail.geographical_boundary"
-                                        class=" col-6 boundrary" placeholder="Enter Boundary" required />
+                                        class=" col-7 boundrary" placeholder="Enter Boundary" required />
                                         <p class="info-message text-danger" *ngIf="
                                         !cm_detail.geographical_boundary &&
                                         (fData.submitted || gboundrary.touched)
@@ -81,7 +95,7 @@
                             </p-multiSelect>
                             <p class="info-message text-danger" *ngIf="
                             selected_impact_types.length === 0 &&
-                            (fData.submitted || tboundrary.touched)
+                            (fData.submitted)
                             ">
                                 This is a mandatory field
                             </p>
@@ -94,7 +108,7 @@
                             </p-multiSelect>
                             <p class="info-message text-danger" *ngIf="
                             selected_impact_categories.length === 0 &&
-                            (fData.submitted || tboundrary.touched)
+                            (fData.submitted )
                             ">
                                 This is a mandatory field
                             </p>
@@ -107,7 +121,7 @@
                             </p-multiSelect>
                             <p class="info-message text-danger" *ngIf="
                             selected_impact_characteristics.length === 0 &&
-                            (fData.submitted || tboundrary.touched)
+                            (fData.submitted )
                             ">
                                 This is a mandatory field
                             </p>
@@ -119,7 +133,7 @@
                                 placeholder="Enter Impact Indicators" required />
                             <p class="info-message text-danger" *ngIf="
                             !cm_detail.impact_indicators &&
-                            (fData.submitted || tboundrary.touched)
+                            (fData.submitted )
                             ">
                                 This is a mandatory field
                             </p>
