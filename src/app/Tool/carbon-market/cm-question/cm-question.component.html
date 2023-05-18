@@ -14,6 +14,6 @@
 <div class="row p-2">
     <div class="col-4">Rationale</div>
     <div class="col-8">
-        <textarea pInputTextarea [rows]="5" [cols]="91" required maxlength="500" [(ngModel)]="comment" (change)="onSelectAnswer($event, 'COMMENT')"></textarea>
+        <textarea style="width: 100%;" pInputTextarea [rows]="5" wrap="hard" required maxlength="500" [(ngModel)]="comment" (change)="onSelectAnswer($event, 'COMMENT')"></textarea>
     </div>
 </div>

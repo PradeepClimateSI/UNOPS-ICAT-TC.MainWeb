@@ -776,9 +776,9 @@ button.p-element.fas.fa-plus.p-button.p-component {
   height: 21px;
 }
 
-i.pi.pi-plus {
-  color: #fff !important;
-}
+// i.pi.pi-plus {
+//   color: #fff !important;
+// }
 
 .p-button,
 .btn-primary {
@@ -855,4 +855,11 @@ i.pi.pi-eye {
 
 .sidebar-items--link.d-flex.flex-column.selected p {
   color: #ffffff;
+}
+
+
+
+.p-field-radiobutton label {
+  margin-bottom: 0;
+  margin-left: 5px;
 }

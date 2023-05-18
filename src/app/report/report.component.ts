@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { environment } from 'environments/environment';
+import { MessageService } from 'primeng/api';
 import { Assessment, ClimateAction, CreateReportDto, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, ReportControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
@@ -16,8 +17,8 @@ export class ReportComponent implements OnInit {
   };
 
   climateActions: any[]
-  display: true
-  allSelect: true
+  display:boolean 
+  allSelect: boolean
   reportName: string;
   assessmentTypes: any[]
 
@@ -32,7 +33,8 @@ export class ReportComponent implements OnInit {
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
     private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
     private reportControllerServiceProxy: ReportControllerServiceProxy,
-    private masterDataService: MasterDataService
+    private masterDataService: MasterDataService,
+    private messageService: MessageService
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -49,7 +51,11 @@ export class ReportComponent implements OnInit {
     this.assessments = await this.methodologyAssessmentControllerServiceProxy.getAssessmentByClimateAction(this.selectedClimateAction.id).toPromise()
   } 
 
-  onCAChange(e: any){}
+  onCAChange(e: any){
+    console.log(e)
+    this.searchBy.climateAction = e.value
+    this.filterReportData()
+  }
 
   generate(){
     this.display = true;
@@ -66,14 +72,32 @@ export class ReportComponent implements OnInit {
     body.climateAction = this.selectedClimateAction
     body.reportName = this.reportName
     this.reportControllerServiceProxy.generateReport(body).subscribe(res => {
-      console.log(res)
+      console.log("generated repotr", res)
+      if (res) {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Report generated successfully',
+          closable: true,
+        })
+        this.display = false
+        this.filterReportData()
+      }
+    }, error => {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to generate report',
+        closable: true,
+      })
     })
   }
 
   filterReportData() {
     console.log("this.searchBy", this.searchBy);
-    let climateAction = this.searchBy.ca ? this.searchBy.ca.policyName.toString() : "";
+    let climateAction = this.searchBy.climateAction ? this.searchBy.climateAction.policyName.toString() : "";
     let reportName = this.searchBy.text ? this.searchBy.text : "";
+    console.log(climateAction)
 
     this.reportControllerServiceProxy.getReportData(climateAction, reportName).subscribe(res => {
       this.pdfFiles = res

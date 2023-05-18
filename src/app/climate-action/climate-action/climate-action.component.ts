@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Location } from '@angular/common';
 import { } from 'googlemaps';
@@ -29,6 +29,8 @@ import {
   BarriersCategory,
   PolicyBarriers,
   CountryControllerServiceProxy,
+  AggregatedAction,
+  ActionArea,
 
 } from 'shared/service-proxies/service-proxies';
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
@@ -38,6 +40,8 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import decode from 'jwt-decode';
 import { Token } from '@angular/compiler';
+import { MasterDataService } from 'app/shared/master-data.service';
+import { BarrierSelected } from './barrier-selected';
 
 /// <reference types="googlemaps" />
 
@@ -46,7 +50,7 @@ import { Token } from '@angular/compiler';
   templateUrl: './climate-action.component.html',
   styleUrls: ['./climate-action.component.css']
 })
-export class ClimateActionComponent implements OnInit {
+export class ClimateActionComponent implements OnInit, AfterContentChecked {
   isSaving: boolean = false;
   project: Project = new Project();
   policyBar: PolicyBarriers[] = [];
@@ -56,7 +60,7 @@ export class ClimateActionComponent implements OnInit {
   options: any;
   relatedItem: Project[] = [];
   exsistingPrpject: boolean = false;
-  countryList: Country[] = [];
+  countryList:Country[]= [];
   projectOwnerList: ProjectOwner[] = [];
   projectStatusList: ProjectStatus[] = [];
   sectorList: Sector[] = [];
@@ -110,10 +114,18 @@ export class ClimateActionComponent implements OnInit {
   selectCategory: any;
   approachList: string[] = ['AR1', 'AR2', 'AR3', 'AR4', 'AR5'];
   typeofAction: string[] = ['Investment','Carbon Market','NDC Implementation','Project']
+  levelOfImplementation: any[] = [];
+  
+  barrierBox:boolean=false;
 
-  institutionList: Institution[] = [];
-  institutionTypeID: number = 3;
-  selectedInstitution: Institution;
+  barrierSelected:BarrierSelected= new BarrierSelected()
+
+
+
+
+  // institutionList: Institution[] = [];
+  // institutionTypeID: number = 3;
+  // selectedInstitution: Institution;
   selectedDocuments: Documents[] = [];
   counID: number;
   a = this.project.otherRelatedActivities
@@ -146,16 +158,25 @@ export class ClimateActionComponent implements OnInit {
     private sectorProxy: SectorControllerServiceProxy,
     private ndcProxy: NdcControllerServiceProxy,
     private asses: MethodologyAssessmentControllerServiceProxy,
+    private cdref: ChangeDetectorRef ,
+    private masterDataService: MasterDataService,
   ) // private usersControllerServiceProxy: UsersControllerServiceProxy,
   // private ndcProxy:NdcControllerServiceProxy
   { }
+  ngAfterContentChecked() {
+    
+    this.cdref.detectChanges();
+ }
 
   ngOnInit(): void {
+
+    
+    this.levelOfImplementation = this.masterDataService.level_of_implemetation;
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const countryId = token ? decode<any>(token).countryId : 0;
     console.log("country", countryId)
     this.counID = countryId;
-    this.userName = localStorage.getItem('user_name')!;
+    // this.userName = localStorage.getItem('user_name')!;
     let filterUser: string[] = [];
     filterUser.push('username||$eq||' + this.userName);
 
@@ -178,28 +199,32 @@ export class ClimateActionComponent implements OnInit {
     this.countryProxy.getCountry(this.counID).subscribe((res:any)=>{
       console.log('++++++++++++++++',res)
       this.countryList.push(res);
-      this.project.country =this.countryList[0];
+      this.project.country =res
+
+      console.log('++++++++++++++++',this.countryList)
+      this.isSector = true;
+      
     })
 
-    this.serviceProxy
-      .getManyBaseUsersControllerUser(
-        undefined,
-        undefined,
-        filterUser,
-        undefined,
-        ['editedOn,DESC'],
-        undefined,
-        1000,
-        0,
-        0,
-        0
-      )
-      .subscribe((res: any) => {
-        this.loggedUser = res.data[0];
-        this.fullname =
-          this.loggedUser.firstName + ' ' + this.loggedUser.lastName;
-        // console.log("this.loggedUser...",this.fullname)
-      });
+    // this.serviceProxy
+    //   .getManyBaseUsersControllerUser(
+    //     undefined,
+    //     undefined,
+    //     filterUser,
+    //     undefined,
+    //     ['editedOn,DESC'],
+    //     undefined,
+    //     1000,
+    //     0,
+    //     0,
+    //     0
+    //   )
+    //   .subscribe((res: any) => {
+    //     this.loggedUser = res.data[0];
+    //     this.fullname =
+    //       this.loggedUser.firstName + ' ' + this.loggedUser.lastName;
+    //     // console.log("this.loggedUser...",this.fullname)
+    //   });
 
     this.route.queryParams.subscribe((params) => {
       this.editEntytyId = 0;
@@ -222,18 +247,21 @@ export class ClimateActionComponent implements OnInit {
     });
 
     if (countryId) {
-      this.serviceProxy
-        .getOneBaseCountryControllerCountry(
-          countryId,
-          undefined,
-          undefined,
-          undefined
-        )
-        .subscribe((res) => {
-          this.project.country = this.countryList[0];
-          this.isSector = true;
-          // console.log('tokenPayloadmasssge',res);
-        });
+      // this.serviceProxy
+      //   .getOneBaseCountryControllerCountry(
+      //     countryId,
+      //     undefined,
+      //     undefined,
+      //     undefined
+      //   )
+      //   .subscribe((res) => {
+      //     console.log("sss",res)
+      //     // this.countryList.push(res)
+      //     console.log("this.countryList",this.countryList)
+      //     this.project.country =res;
+      //     this.isSector = true;
+      //     // console.log('tokenPayloadmasssge',res);
+      //   });
     } else {
       this.project.country = new Country();
       console.log("pr", this.project)   // working
@@ -328,10 +356,24 @@ export class ClimateActionComponent implements OnInit {
         // console.log("projectStatusList all", this.projectOwnerList) //  working
       });
 
-    this.sectorProxy.findAllSector()
-      .subscribe((res: any) => {
+    // this.serviceProxy
+    //   .getManyBaseSectorControllerSector(
+    //     undefined,
+    //     undefined,
+    //     undefined,
+    //     undefined,
+    //     ['name,ASC'],
+    //     undefined,
+    //     1000,
+    //     0,
+    //     0,
+    //     0
+    //   )
+    //   .subscribe((res: any) => {
+    //     console.log("ressssssssss",res)
 
         // this.sectorList = res.data;
+        console.log("editEntytyId",this.editEntytyId)
 
         // if (token && this.editEntytyId && this.editEntytyId > 0) {
         if (this.editEntytyId && this.editEntytyId > 0) {
@@ -539,7 +581,7 @@ export class ClimateActionComponent implements OnInit {
           //       });
           //   });
         }
-      });
+      // });
 
     this.serviceProxy
       .getManyBaseProjectApprovalStatusControllerProjectApprovalStatus(
@@ -560,45 +602,45 @@ export class ClimateActionComponent implements OnInit {
 
       });
 
-    this.serviceProxy
-      .getManyBaseFinancingSchemeControllerFinancingScheme(
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        ['name,ASC'],
-        undefined,
-        1000,
-        0,
-        0,
-        0
-      )
-      .subscribe((res: any) => {
-        this.financingSchemeList = res.data;
-      });
+    // this.serviceProxy
+    //   .getManyBaseFinancingSchemeControllerFinancingScheme(
+    //     undefined,
+    //     undefined,
+    //     undefined,
+    //     undefined,
+    //     ['name,ASC'],
+    //     undefined,
+    //     1000,
+    //     0,
+    //     0,
+    //     0
+    //   )
+    //   .subscribe((res: any) => {
+    //     this.financingSchemeList = res.data;
+    //   });
 
-    let institutionListFilter: string[] = new Array();
+    // let institutionListFilter: string[] = new Array();
 
-    institutionListFilter.push('type.Id||$eq||' + this.institutionTypeID);
-    console.log(institutionListFilter);
-    this.serviceProxy
-      .getManyBaseInstitutionControllerInstitution(
-        undefined,
-        undefined,
-        institutionListFilter,
-        undefined,
-        ['name,ASC'],
-        undefined,
-        1000,
-        0,
-        0,
-        0
-      )
-      .subscribe((res: any) => {
-        this.institutionList = res.data;
-        console.log('list of institutions', this.institutionList);
-        // this.project.mappedInstitution
-      });
+    // institutionListFilter.push('type.Id||$eq||' + this.institutionTypeID);
+    // console.log(institutionListFilter);
+    // this.serviceProxy
+    //   .getManyBaseInstitutionControllerInstitution(
+    //     undefined,
+    //     undefined,
+    //     institutionListFilter,
+    //     undefined,
+    //     ['name,ASC'],
+    //     undefined,
+    //     1000,
+    //     0,
+    //     0,
+    //     0
+    //   )
+    //   .subscribe((res: any) => {
+    //     this.institutionList = res.data;
+    //     console.log('list of institutions', this.institutionList);
+    //     // this.project.mappedInstitution
+    //   });
 
     if (this.editEntytyId && this.editEntytyId !== 0) {
       let docFilter: string[] = new Array();
@@ -722,21 +764,25 @@ export class ClimateActionComponent implements OnInit {
       }
     } else {
       if (formData.form.valid) {
-        this.project.projectApprovalStatus.id=4; // proposed
+        console.log( "project",this.project)
+        let projaprovalstatus = new  ProjectApprovalStatus()
+        projaprovalstatus.id =4
+        this.project.projectApprovalStatus= projaprovalstatus; // proposed
         this.messageService.clear();
-        this.serviceProxy
-          .createOneBaseProjectControllerClimateAction(this.project)
+        // this.projectProxy.createNewCA(this.project)
+        this.project.aggregatedAction =new AggregatedAction()
+        this.project.aggregatedAction.id =1;
+        this.project.actionArea =new ActionArea()
+        this.project.actionArea.id =1;
+        this.project.sector = new Sector()
+        this.project.sector.id =1;
+        let country = new Country();
+        country.id =this.counID
+        this.project.country =country
+          this.serviceProxy.createOneBaseProjectControllerClimateAction(this.project)
           .subscribe(
             (res) => {
-              for (let b of this.selectbarriers) {
-                let pb = new PolicyBarriers();
-                pb.climateAction = res
-                pb.barriers = b;
-                this.policyBar.push(pb);
-              }
-              //@ts-ignore
-              this.projectProxy.policyBar(this.policyBar).subscribe();
-              console.log('save', res);
+              console.log(res)
               this.isSaving = true;
               this.messageService.add({
                 severity: 'success',
@@ -744,13 +790,24 @@ export class ClimateActionComponent implements OnInit {
                 detail: 'project  has save successfully',
                 closable: true,
               });
+              // console.log("ssss",res)
+              // for (let b of this.selectbarriers) {
+              //   let pb = new PolicyBarriers();
+              //   pb.climateAction = res
+              //   pb.barriers = b;
+              //   this.policyBar.push(pb);
+              // }
+              // //@ts-ignore
+              // this.projectProxy.policyBar(this.policyBar).subscribe();
+              // console.log('save', res);
+             
             },
 
             (err) => {
               this.messageService.add({
                 severity: 'error',
                 summary: 'Error.',
-                detail: 'Please Fill All Mandatory Fileds',
+                detail: 'Internal server error',
                 sticky: true,
               });
             }
@@ -845,53 +902,54 @@ export class ClimateActionComponent implements OnInit {
   }
 
   onSectorChange(event: any) {
-    if (this.project.sector && this.project.country) {
-      this.serviceProxy
-        .getManyBaseNdcControllerAggregatedAction(
-          undefined,
-          undefined,
-          [
-            'sector.id||$eq||' + this.project.sector.id,
-            'country.id||$eq||' + this.project.country.id,
-          ],
-          undefined,
-          ['name,ASC'],
-          ['subNdc'],
-          1000,
-          0,
-          0,
-          0
-        )
-        .subscribe((res: any) => {
-          this.ndcList = res.data;
-          // this.onNdcChnage(event);
-          console.log("this.ndcList", this.ndcList)
-          // console.log("event11",  event)
-          if (event === true) {
-            var ndc = this.ndcList?.find((a) => a.id === this.project?.aggregatedAction?.id);
-            this.project.aggregatedAction = ndc !== undefined ? ndc : new Ndc();
-            console.log("this.ndcList", this.project.aggregatedAction)
-            if (this.project.actionArea) {
-              console.log(" this.ndcList", this.ndcList)
-              var subNdc: SubNdc = this.project.aggregatedAction.actionArea?.find(
-                (a) => a.id === this.project.aggregatedAction.id
-              )!;
-              this.project.actionArea = subNdc;
-            }
-          }
-        });
-    } else {
-      this.ndcList = [];
-    }
+    console.log("event", event, "sector",this.project.sector, "country",this.project.country)
+    // if (this.project.sector && this.project.country) {
+    //   this.serviceProxy
+    //     .getManyBaseNdcControllerAggregatedAction(
+    //       undefined,
+    //       undefined,
+    //       [
+    //         'sector.id||$eq||' + this.project.sector.id,
+    //         'country.id||$eq||' + this.project.country.id,
+    //       ],
+    //       undefined,
+    //       ['name,ASC'],
+    //       ['subNdc'],
+    //       1000,
+    //       0,
+    //       0,
+    //       0
+    //     )
+    //     .subscribe((res: any) => {
+    //       this.ndcList = res.data;
+    //       // this.onNdcChnage(event);
+    //       console.log("this.ndcList", this.ndcList)
+    //       // console.log("event11",  event)
+    //       if (event === true) {
+    //         var ndc = this.ndcList?.find((a) => a.id === this.project?.aggregatedAction?.id);
+    //         this.project.aggregatedAction = ndc !== undefined ? ndc : new Ndc();
+    //         console.log("this.ndcList", this.project.aggregatedAction)
+    //         if (this.project.actionArea) {
+    //           console.log(" this.ndcList", this.ndcList)
+    //           var subNdc: SubNdc = this.project.aggregatedAction.actionArea?.find(
+    //             (a) => a.id === this.project.aggregatedAction.id
+    //           )!;
+    //           this.project.actionArea = subNdc;
+    //         }
+    //       }
+    //     });
+    // } else {
+    //   this.ndcList = [];
+    // }
   }
   onNdcChnage(event: any): void {
     console.log("this.project", this.project)
 
-    this.ndcProxy.getSubNdc(this.project.aggregatedAction?.id).subscribe((res: any) => {
-      this.SubndcList = res;
-      console.log("SubndcList", this.SubndcList)
-      console.log("this.project", this.project)
-    });
+    // this.ndcProxy.getSubNdc(this.project.aggregatedAction?.id).subscribe((res: any) => {
+    //   this.SubndcList = res;
+    //   console.log("SubndcList", this.SubndcList)
+    //   console.log("this.project", this.project)
+    // });
   }
 
   escape(s: string) {
@@ -1057,13 +1115,15 @@ export class ClimateActionComponent implements OnInit {
   }
 
   onCategoryChange(event: any) {
+    console.log("event",event)
     this.setbarriers = []
-    for (let o of event) {
-      let br = this.barriers.filter((a: any) => o.id == a.barriersCategory.id)
+    
+      let br = this.barriers.filter((a: any) => event.id == a.barriersCategory.id)
+      console.log("selected barrier",br)
       for (let b of br) {
         this.setbarriers.push(b);
       }
-  }
+  
 }
 
 enableActionButtonsarea() {
@@ -1425,6 +1485,18 @@ toUpdateNdcs() {
   }
 }
 
+showDialog(){
+  this.barrierBox =true;
+  console.log(this.barrierBox)
+
+}
+finalBarrierList =new Array ()
+pushBarriers(barrier:any){
+  console.log("barrier",barrier)
+  this.finalBarrierList.push(barrier)
+ this.barrierSelected = new BarrierSelected()
+
+}
 toDownload() {
   this.isDownloadMode = 1;
   this.isDownloading = true;
