@@ -72,7 +72,7 @@ export class ViewInstitutionComponent implements OnInit {
 
    // this.route.queryParams.subscribe((params) => {
       this.userId = 4;
-      
+
     this.serviceProxy
     .getOneBaseUsersControllerUser(
       this.userId,
@@ -105,10 +105,10 @@ export class ViewInstitutionComponent implements OnInit {
       }
       if(this.userTypeId == 2){
         this.typeList.push(this.selectedTypeList[1]);
-        this.typeList.push(this.selectedTypeList[2]);        
+        this.typeList.push(this.selectedTypeList[2]);
       }
     });
-  
+
 
     })
 
@@ -159,18 +159,18 @@ export class ViewInstitutionComponent implements OnInit {
         console.log('rrrr',res);
       })
     });
-    
+
 
 
     if(this.institutionId == 0){
-      this.title = "Add Institution" 
+      this.title = "Add Institution"
     }else{
-      this.title = "View Institution"
+      this.title = "Manage Institution"
     }
 
 
     }
-  
+
     deleteInstitution(institution: Institution){
           this.confirmationService.confirm({
             message: 'Confirm you want to deactivate institution, this action will also deactivate users associated with the institution?',
@@ -180,23 +180,23 @@ export class ViewInstitutionComponent implements OnInit {
               this.institutionProxy
               .deactivateInstitution(institution.id)
               .subscribe((res) => {
-                
+
                 this.confirmationService.confirm({
-                  
+
                   accept: () => {
                     console.log('Deactivated sucessfully')
-                    
+
                   }
                 })
-               
+
               })
-              
+
             },
           });
     }
 
     updateStatus(institution: Institution){
-        
+
       console.log('stasus===',institution.status)
 
         let statusUpdate = 1;
@@ -206,30 +206,30 @@ export class ViewInstitutionComponent implements OnInit {
         let sector = new Sector();
         sector.id = this.institution.sector?.id;
         this.institution.sector = sector;
-    
-    
+
+
         if (this.institution.type) {
           let type = new InstitutionType();
           type.id = this.institution.type?.id;
-          this.institution.type = type; 
+          this.institution.type = type;
         }
-    
+
         if (this.institution.category) {
           let category = new InstitutionCategory();
           category.id = this.institution.category?.id;
           this.institution.category = category;
         }
 
-        
+
           this.serviceProxy
-          
+
           .updateOneBaseInstitutionControllerInstitution(institution.id, institution)
           .subscribe((res) => {
             console.log('done............'),
             this.messageService.add({
               severity: 'success',
               summary: 'Deactivated successfully',
-              detail: 
+              detail:
               institution.status === 1
                ? this.institution.name + ' is deactivated' : '',
               closable: true,
@@ -245,7 +245,7 @@ export class ViewInstitutionComponent implements OnInit {
            });
          }
           );
-         
+
       }
 
       activateInstitution(institution: Institution){
@@ -267,7 +267,7 @@ export class ViewInstitutionComponent implements OnInit {
           this.statusUpdate = 1;
 
         }
-      
+
       }
       else{
         alert("Can not deactivate your own institution")
@@ -283,14 +283,14 @@ export class ViewInstitutionComponent implements OnInit {
         let sector = new Sector();
         sector.id = this.institution.sector?.id;
         this.institution.sector = sector;
-    
-    
+
+
         if (this.institution.type) {
           let type = new InstitutionType();
           type.id = this.institution.type?.id;
-          this.institution.type = type; 
+          this.institution.type = type;
         }
-    
+
         if (this.institution.category) {
           let category = new InstitutionCategory();
           category.id = this.institution.category?.id;
@@ -298,14 +298,14 @@ export class ViewInstitutionComponent implements OnInit {
         }
 
           this.serviceProxy
-          
+
           .updateOneBaseInstitutionControllerInstitution(institution.id, institution)
           .subscribe((res) => {
             console.log('done............'),
             this.messageService.add({
               severity: 'success',
               summary: institution.status === 0 ? 'Activated successfully' : 'Decativated successfully',
-              detail: 
+              detail:
               institution.status === 0
                ? this.institution.name + ' is activated': this.institution.name + 'is decativated',
               closable: true,
@@ -327,7 +327,7 @@ export class ViewInstitutionComponent implements OnInit {
       onConfirm() {
         this.messageService.clear('c');
       }
-    
+
       onReject() {
         this.messageService.clear('c');
       }
@@ -347,7 +347,7 @@ export class ViewInstitutionComponent implements OnInit {
       onBackClick() {
         this.router.navigate(['/app/institutionlist']);
       }
-    
+
       edit(institution: Institution){
         this.router.navigate(['edit-institution'],{
           queryParams: { id: institution.id}

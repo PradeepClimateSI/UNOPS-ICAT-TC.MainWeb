@@ -15,7 +15,7 @@
         <div class="p-grid p-fluid col-md-6 col-sm-12">
 
 
-          <div class="row p-2">
+      <!--     <div class="row p-2">
             <div class="col-12 col-md-8">
               <div class="p-field">
                 <label for="assessment_method">Assessment Method</label>
@@ -30,44 +30,78 @@
               </div>
             </div>
           </div>
+ -->
+          <div class="row p-2">
+            <div class="col-12 col-md-8">
+              <div class="p-field">
+                <label for="assessment_method">Assessment Method</label>
+                <select [disabled]="isSubmitted" class="form-control select-with-arrow" (change)="onChangeTrack($event)"   #assessmentMethod="ngModel"
+                        [(ngModel)]="assessment_method" name="assessment_method" id="exampleFormControlSelect1" required>
+                  <option value="" disabled selected hidden>Select Assessment Method</option>
+                  <option>Track 1</option>
+                  <option>Track 2</option>
+                  <option>Track 3</option>
+                  <option>Track 4</option>
+                </select>
+                <p class="info-message text-danger" *ngIf="!assessment_method && (userPost.submitted || assessmentMethod.touched)">This is a mandatory field</p>
+              </div>
+            </div>
+          </div>
+
+
 
 
 
           <div class="row p-2">
             <div class="col-12 col-md-8">
               <div class="p-field">
-                <label for="policy">Interventions</label>
+                <label for="policy">Interventions *</label>
                 <select [disabled]="isSubmitted" class="form-control select-with-arrow" (change)="onChange($event)" ngModel name="policy"
-                  id="exampleFormControlSelect1">
+                  id="exampleFormControlSelect1" required #selectedPolicy="ngModel">
                   <option value="" disabled selected hidden>Select Intervention</option>
                   <option *ngFor="let policy of policyList" [value]="policy.policyName">{{policy.policyName}}</option>
                 </select>
+                <p class="info-message text-danger" *ngIf="!selectedPolicy.value && (userPost.submitted || selectedPolicy.touched)">This is a mandatory field</p>
               </div>
             </div>
           </div>
+
+
 
           <div *ngIf="flag">
             <div class="row p-2">
               <div class="col-12 col-md-8">
                 <div class="p-field">
-                  <label for="selectedBarriers">Barriers</label>
-                  <p-multiSelect [disabled]="isSubmitted" name="selectedBarriers" [options]="barriersList"
+                  <label for="selectedBarriers">Barriers *</label>
+                  <p-multiSelect [disabled]="isSubmitted" name="selectedBarriers" [options]="barriersList" #selectedBarriers="ngModel"
                     [(ngModel)]="selectedPolicyBarriersList" (onChange)="onItemSelectBarriers($event)"
-                    defaultLabel="Select Barriers">
-                  </p-multiSelect>
+                    defaultLabel="Select Barriers"  [required]="true"></p-multiSelect>
+                  <p class="info-message text-danger" *ngIf="
+                  selectedPolicyBarriersList.length===0 &&
+                                  (userPost.submitted || selectedBarriers.touched)
+                                ">
+                                  This is a mandatory field
+                              </p>
                 </div>
               </div>
             </div>
           </div>
+
 
           <div class="row p-2">
             <div class="col-12 col-md-8">
               <div class="p-field">
                 <label for="selectedBarriers">Objectives</label>
-                <p-multiSelect [disabled]="isSubmitted" name="selectedObjectives" [options]="objectivesList"
-                  [(ngModel)]="selectedObjectivesList" (onChange)="onItemSelectObjectives($event)" optionLabel="name"
+                <p-multiSelect [disabled]="isSubmitted" name="selectedObjectives" [options]="objectivesList" #type="ngModel"
+                  [(ngModel)]="selectedObjectivesList" (onChange)="onItemSelectObjectives($event)" optionLabel="name"  [required]="true"
                   defaultLabel="Select Objectives">
                 </p-multiSelect>
+                <p class="info-message text-danger" *ngIf="
+                selectedObjectivesList.length===0 &&
+                                (userPost.submitted || type.touched)
+                              ">
+                                This is a mandatory field
+                            </p>
               </div>
             </div>
           </div>
@@ -76,17 +110,20 @@
             <div class="row p-2">
               <div class="col-12 col-md-8">
                 <div class="p-field">
-                  <label for="opportunities">Opportunities   &nbsp; </label>
-                  <input pInputText type="text"  name="opportunities" ngModel placeholder="opportunities" />
+                  <label for="opportunities">Opportunities *</label>
+                  <input pInputText type="text" #opportunities="ngModel" name="opportunities" ngModel placeholder="opportunities" required />
+                  <p class="info-message text-danger" *ngIf="!opportunities.value && (userPost.submitted || opportunities.touched)">This is a mandatory field</p>
                 </div>
               </div>
             </div>
+
 
             <div class="row p-2">
               <div class="col-12 col-md-8">
                 <div class="p-field">
                   <label for="person">Person or Organization Doing the Assessment   &nbsp; </label>
-                  <input pInputText type="text" name="person" ngModel placeholder="Enter the person or organization doing the assessment" />
+                  <input pInputText type="text" #person="ngModel"  name="person" ngModel placeholder="Enter the person or organization doing the assessment" />
+                  <p class="info-message text-danger" *ngIf="!person.value && (userPost.submitted || person.touched)">This is a mandatory field</p>
                 </div>
               </div>
             </div>
@@ -95,7 +132,8 @@
               <div class="col-12 col-md-8">
                 <div class="p-field">
                   <label for="audience">Intended Audience(s)   &nbsp; </label>
-                  <input pInputText type="text" name="audience" ngModel placeholder="Intended Audience(s)" />
+                  <input pInputText type="text" #audience="ngModel" name="audience" ngModel placeholder="Intended Audience(s)" />
+                  <p class="info-message text-danger" *ngIf="!audience.value && (userPost.submitted || audience.touched)">This is a mandatory field</p>
                 </div>
               </div>
             </div>
@@ -104,7 +142,8 @@
               <div class="col-12 col-md-8">
                 <div class="p-field">
                   <label for="assessBoundry">Assessment Boundary   &nbsp; </label>
-                  <input pInputText type="text" name="assessBoundry" ngModel placeholder="Assessment Boundary" />
+                  <input pInputText type="text" #assessBoundry="ngModel" name="assessBoundry" ngModel placeholder="Assessment Boundary" />
+                  <p class="info-message text-danger" *ngIf="!assessBoundry.value && (userPost.submitted || assessBoundry.touched)">This is a mandatory field</p>
                 </div>
               </div>
             </div>
@@ -113,7 +152,8 @@
               <div class="col-12 col-md-8">
                 <div class="p-field">
                   <label for="impactsCovered">Impacts Covered    &nbsp; </label>
-                  <input pInputText type="text" name="impactsCovered" ngModel placeholder="Impacts Covered" />
+                  <input pInputText type="text" #impactsCovered="ngModel" name="impactsCovered" ngModel placeholder="Impacts Covered" />
+                  <p class="info-message text-danger" *ngIf="!impactsCovered.value && (userPost.submitted || impactsCovered.touched)">This is a mandatory field</p>
                 </div>
               </div>
             </div>
@@ -123,12 +163,13 @@
             <div class="col-12 col-md-8">
               <div class="p-field">
                 <label for="assessment_type">Assessment Type</label>
-                <select [disabled]="isSubmitted" class="form-control select-with-arrow"  ngModel name="assessment_type"
+                <select [disabled]="isSubmitted" class="form-control select-with-arrow" #assessment_type="ngModel" ngModel name="assessment_type"
                   id="exampleFormControlSelect1">
                   <option value="" disabled selected hidden>Select Assessment Type</option>
                   <option>Ex-ante</option>
                   <option>Ex-post</option>
                 </select>
+                <p class="info-message text-danger" *ngIf="!assessment_type.value && (userPost.submitted || assessment_type.touched)">This is a mandatory field</p>
               </div>
             </div>
           </div>
@@ -139,30 +180,37 @@
             <div class="col-12 col-md-8">
               <div class="p-field">
                 <div class="field col-12 md:col-4">
-                  <label for="date1">Assessment Period</label>
+                  <label for="date1">Assessment Period *</label>
                   <div class="p-inputgroup">
                     <span class="p-inputgroup-addon">
                       <i class="pi pi-calendar"></i>
                     </span>
-                    <p-calendar [disabled]="isSubmitted" dateFormat="mm-dd-yy" inputId="date1" placeholder="From" ngModel name="date1"></p-calendar>
+                    <p-calendar [disabled]="isSubmitted" dateFormat="mm-dd-yy" inputId="date1" placeholder="From"
+                      ngModel name="date1" #date1="ngModel" [required]="true"></p-calendar>
                     <span class="p-inputgroup-addon">to</span>
-                    <p-calendar [disabled]="isSubmitted" dateFormat="mm-dd-yy" inputId="date2" placeholder="To" ngModel name="date2"></p-calendar>
+                    <p-calendar [disabled]="isSubmitted" dateFormat="mm-dd-yy" inputId="date2" placeholder="To"
+                      ngModel name="date2" #date2="ngModel" [required]="true"></p-calendar>
                   </div>
+                  <p class="info-message text-danger" *ngIf="(date1.invalid || date2.invalid) && (userPost.submitted || date1.touched || date2.touched)">
+                    Assessment Period is required
+                  </p>
                 </div>
               </div>
             </div>
           </div>
 
+
           <div class="row p-2">
             <div class="col-12 col-md-8">
               <div class="p-field">
                 <label for="assessment_approach">Assessment Approach</label>
-                <select [disabled]="isSubmitted" class="form-control select-with-arrow" (change)="onChangeApproach($event)" ngModel name="assessment_approach"
+                <select [disabled]="isSubmitted"  #assessment_approach="ngModel"  class="form-control select-with-arrow" (change)="onChangeApproach($event)" ngModel name="assessment_approach"
                   id="exampleFormControlSelect1">
                   <option value="" disabled selected hidden>Select Assessment Approach</option>
                   <option>Direct</option>
                   <option>Indirect</option>
                 </select>
+                <p class="info-message text-danger" *ngIf="!assessment_approach.value && (userPost.submitted || assessment_approach.touched)">This is a mandatory field</p>
               </div>
             </div>
           </div>
@@ -173,10 +221,11 @@
             <div class="col-12 col-md-8">
               <div class="p-field">
                 <label for="methodology">Methodology</label>
-                <select [disabled]="isSubmitted" class="form-control select-with-arrow" ngModel name="methodology" id="exampleFormControlSelect1">
+                <select [disabled]="isSubmitted"  #methodology="ngModel" class="form-control select-with-arrow" ngModel name="methodology" id="exampleFormControlSelect1">
                   <option value="" disabled selected hidden>Select Methodology</option>
                   <option *ngFor="let methodology of methList" [value]="methodology">{{methodology}}</option>
                 </select>
+                <p class="info-message text-danger" *ngIf="!methodology.value && (userPost.submitted || methodology.touched)">This is a mandatory field</p>
               </div>
             </div>
           </div>
@@ -1369,7 +1418,7 @@
     </form>
 
 
-      <div *ngIf="track3Direct">
+      <div *ngIf="track2Direct">
 
         <div *ngFor="let cha of characteristicsList">
           <div *ngIf="hasBarriers(cha)">
@@ -1509,18 +1558,18 @@
                         &nbsp; &nbsp;</label>
 
                       <input type="radio" name="{{category.name}}_{{characteristic.name}}_weight" value="0.25"
-                        [(ngModel)]="characteristicWeightOption" checked>Default
+                        [(ngModel)]="characteristicWeightOption[category.name]" checked>Default
                       <input type="radio" name="{{category.name}}_{{characteristic.name}}_weight_option" value="custom"
-                        [(ngModel)]="characteristicWeightOption">Custom<br>
+                        [(ngModel)]="characteristicWeightOption[category.name]">Custom<br>
 
-                      <div *ngIf="characteristicWeightOption === 'custom'">
+                      <div *ngIf="characteristicWeightOption[category.name] === 'custom'">
                         <p-inputNumber name="{{category.name}}_{{characteristic.name}}_weight" ngModel mode="decimal"
                           [showButtons]="true" inputId="minmax-buttons" [min]="0" [max]="1" [step]="0.05"
                           (ngModelChange)="onChaWeightChange(category.name,characteristic.name, $event)"></p-inputNumber>
                         <br>
                       </div>
 
-                      <div *ngIf="!chaCategoryTotalEqualsTo1[category.name] && characteristicWeightOption === 'custom'"
+                      <div *ngIf="!chaCategoryTotalEqualsTo1[category.name] && characteristicWeightOption[category.name] === 'custom'"
                         style="color: red;">
                         Barrier weights for characteristics of {{category.name}} category should sum up to 1.
                         <br>
@@ -1634,12 +1683,12 @@
                       <label for="{{category.name}}_{{characteristic.name}}_weight">Weight: &nbsp; &nbsp; &nbsp; &nbsp;
                         &nbsp; &nbsp;</label>
                       <input type="radio" name="{{category.name}}_{{characteristic.name}}_weight" value="0.25"
-                        [(ngModel)]="characteristicWeightOptionOutcome" checked>Default
+                        [(ngModel)]="characteristicWeightOptionOutcome[category.name]" checked>Default
                       <input type="radio" name="{{category.name}}_{{characteristic.name}}_weight_option" value="custom"
-                        [(ngModel)]="characteristicWeightOptionOutcome">Custom<br>
+                        [(ngModel)]="characteristicWeightOptionOutcome[category.name]">Custom<br>
                       <!--  <input *ngIf="characteristicWeightOptionOutcome === 'custom'" type="number"
                       name="{{category.name}}_{{characteristic.name}}_weight" ngModel placeholder="Weight"> -->
-                      <div *ngIf="characteristicWeightOptionOutcome === 'custom'">
+                      <div *ngIf="characteristicWeightOptionOutcome[category.name] === 'custom'">
                         <p-inputNumber name="{{category.name}}_{{characteristic.name}}_weight" ngModel mode="decimal"
                           [showButtons]="true" inputId="minmax-buttons" [min]="0" [max]="1" [step]="0.05"
                           (ngModelChange)="onChaWeightChange(category.name,characteristic.name, $event)"></p-inputNumber>
@@ -1647,7 +1696,7 @@
                       </div>
 
                       <div
-                        *ngIf="!chaCategoryTotalEqualsTo1[category.name] && characteristicWeightOptionOutcome === 'custom'"
+                        *ngIf="!chaCategoryTotalEqualsTo1[category.name] && characteristicWeightOptionOutcome[category.name] === 'custom'"
                         style="color: red;">
                         Barrier weights for characteristics of {{category.name}} category should sum up to 1.
                         <br>
@@ -1712,7 +1761,7 @@
       </div>
 
 
-      <div *ngIf="track3Indirect">
+      <div *ngIf="track2Indirect">
 
         <div *ngFor="let cha of characteristicsList">
           <div *ngIf="hasBarriers(cha)">
@@ -1824,18 +1873,18 @@
                         &nbsp; &nbsp;</label>
 
                       <input type="radio" name="{{category.name}}_{{characteristic.name}}_weight" value="0.25"
-                        [(ngModel)]="characteristicWeightOption" checked>Default
+                        [(ngModel)]="characteristicWeightOption[category.name]" checked>Default
                       <input type="radio" name="{{category.name}}_{{characteristic.name}}_weight_option" value="custom"
-                        [(ngModel)]="characteristicWeightOption">Custom<br>
+                        [(ngModel)]="characteristicWeightOption[category.name]">Custom<br>
 
-                      <div *ngIf="characteristicWeightOption === 'custom'">
+                      <div *ngIf="characteristicWeightOption[category.name] === 'custom'">
                         <p-inputNumber name="{{category.name}}_{{characteristic.name}}_weight" ngModel mode="decimal"
                           [showButtons]="true" inputId="minmax-buttons" [min]="0" [max]="1" [step]="0.05"
                           (ngModelChange)="onChaWeightChange(category.name,characteristic.name, $event)"></p-inputNumber>
                         <br>
                       </div>
 
-                      <div *ngIf="!chaCategoryTotalEqualsTo1[category.name] && characteristicWeightOption === 'custom'"
+                      <div *ngIf="!chaCategoryTotalEqualsTo1[category.name] && characteristicWeightOption[category.name] === 'custom'"
                         style="color: red;">
                         Barrier weights for characteristics of {{category.name}} category should sum up to 1.
                         <br>
@@ -1945,12 +1994,13 @@
                       <label for="{{category.name}}_{{characteristic.name}}_weight">Weight: &nbsp; &nbsp; &nbsp; &nbsp;
                         &nbsp; &nbsp;</label>
                       <input type="radio" name="{{category.name}}_{{characteristic.name}}_weight" value="0.25"
-                        [(ngModel)]="characteristicWeightOptionOutcome" checked>Default
+                        [(ngModel)]="characteristicWeightOptionOutcome[category.name]" checked>Default
+
                       <input type="radio" name="{{category.name}}_{{characteristic.name}}_weight_option" value="custom"
-                        [(ngModel)]="characteristicWeightOptionOutcome">Custom<br>
+                        [(ngModel)]="characteristicWeightOptionOutcome[category.name]">Custom<br>
                       <!--  <input *ngIf="characteristicWeightOptionOutcome === 'custom'" type="number"
                             name="{{category.name}}_{{characteristic.name}}_weight" ngModel placeholder="Weight"> -->
-                      <div *ngIf="characteristicWeightOptionOutcome === 'custom'">
+                      <div *ngIf="characteristicWeightOptionOutcome[category.name] === 'custom'">
                         <p-inputNumber name="{{category.name}}_{{characteristic.name}}_weight" ngModel mode="decimal"
                           [showButtons]="true" inputId="minmax-buttons" [min]="0" [max]="1" [step]="0.05"
                           (ngModelChange)="onChaWeightChange(category.name,characteristic.name, $event)"></p-inputNumber>
@@ -1958,7 +2008,7 @@
                       </div>
 
                       <div
-                        *ngIf="!chaCategoryTotalEqualsTo1[category.name] && characteristicWeightOptionOutcome === 'custom'"
+                        *ngIf="!chaCategoryTotalEqualsTo1[category.name] && characteristicWeightOptionOutcome[category.name] === 'custom'"
                         style="color: red;">
                         Barrier weights for characteristics of {{category.name}} category should sum up to 1.
                         <br>
@@ -2021,7 +2071,7 @@
 
           <div *ngIf="!isSubmitted">
             <div *ngIf="assessmentId">
-              <div *ngIf="!track3Direct">
+              <div *ngIf="!track2Direct">
                 <div class="row p-2">
                   <div class="col-12 col-md-6">
                     <div class="p-field">
