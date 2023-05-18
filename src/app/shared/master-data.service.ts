@@ -21,6 +21,7 @@ export class MasterDataService {
   private _currencies: {name: string, id: number}[] = []
   private _assessment_type: {name: string, id: number}[] = []
   private _impact_types: {name: string, id: number, code: string}[] = []
+  private _sectorial_boundries: {name: string, id: number, code: string}[] = []
   private _impact_categories: {name: string, id: number, code: string, type: string}[] = []
   private _impact_characteristics: {name: string, id: number, code: string, type: string[]}[] = []
   private _level_of_implemetation: {name: string, id: number}[] = []
@@ -127,9 +128,16 @@ export class MasterDataService {
       { id: 1, name: "Ex-ante" },
       { id: 2, name: "Ex-post" }
     ]
+    this.sectorial_boundries = [
+      { id: 1, name: "Energy", code: "ENERGY" },
+      { id: 2, name: "Transport", code: "TRANSPORT" },
+      { id: 3, name: "Agriculture", code: "AGRICULTURE" },
+      { id: 4, name: "LULUCF", code: "LULUCF" },
+      { id: 5, name: "Industry", code: "INDUSTRY" }
+    ]
     this.impact_types = [
       { id: 1, name: "Process", code: "PROCESS" },
-      { id: 2, name: "outcomes", code: "OUTCOMES" }
+      { id: 2, name: "Outcomes", code: "OUTCOMES" }
     ]
     this.impact_categories = [
       { id: 1, name: "Technology", code: "TECHNOLOGY", type: "PROCESS" },
@@ -326,6 +334,14 @@ export class MasterDataService {
 
   get assessment_type(): { name: string; id: number }[] {
     return this._assessment_type;
+  }
+
+  set sectorial_boundries(value: { name: string; id: number, code: string }[]) {
+    this._sectorial_boundries = value;
+  }
+
+  get sectorial_boundries(): { name: string; id: number, code: string }[] {
+    return this._sectorial_boundries;
   }
 
   set impact_types(value: { name: string; id: number, code: string }[]) {

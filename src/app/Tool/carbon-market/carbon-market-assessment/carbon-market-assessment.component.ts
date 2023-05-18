@@ -19,6 +19,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   impact_types: any[] = []
   impact_categories: any[] = []
   impact_characteristics: any[] = []
+  sectorial_boundires: any[] = []
 
   selected_impact_types: string[] = []
   selected_impact_categories: string[] = []
@@ -26,6 +27,9 @@ export class CarbonMarketAssessmentComponent implements OnInit {
 
   showSections: boolean = false
   isSavedAssessment: boolean = false
+
+  date1: any
+  date2: any
 
   assessmentres: Assessment
 
@@ -40,6 +44,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.assessment_types = this.masterDataService.assessment_type
     this.impact_types = this.masterDataService.impact_types
+    this.sectorial_boundires = this.masterDataService.sectorial_boundries
 
     await this.getPolicies()
     console.log(this.policies)
@@ -61,6 +66,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
         .subscribe(res => {
           console.log(res)
           if (res) {
+            this.cm_detail.temporal_boundary = moment(this.date1).format("YYYY-MM-DD")  + ' - ' + moment(this.date2).format("YYYY-MM-DD")
             this.cm_detail.cmassessment = res
             this.cm_detail.impact_categories = this.selected_impact_categories.join(',')
             this.cm_detail.impact_characteristics = this.selected_impact_characteristics.join(',')
