@@ -95,6 +95,7 @@ selectedIndicator: string;
   characteristicsArray : any= []
   methIndicatorsList :any = [];
   methParametersList :any = [];
+  assessment_method: string;
 
   policyList : any = []
   policyId : number;
@@ -139,6 +140,10 @@ trigger : boolean = false;
 
   selectedBarriers: { id: number, name: string }[] = [];
 
+  characteristicWeightOption: { [key: string]: string } = {};
+  characteristicWeightOptionOutcome : { [key: string]: string } = {};
+
+
   characAffectedByBarriers: { id: number, name: string }[] = [];
 
   selectedPolicy: any
@@ -160,8 +165,8 @@ trigger : boolean = false;
   selectedCategories: string[] = ['Category 1', 'Category 2'];
   categoryWeightOption : string
   categoryWeight : any
-  characteristicWeightOption : string
-  characteristicWeightOptionOutcome : string
+  //characteristicWeightOption : string
+  //characteristicWeightOptionOutcome : string
   categoryWeightOptionOutcome: string
   objectivesList : any = []
 
@@ -682,8 +687,8 @@ onDeSelectAll7(item: any){
   console.log("select7", this.characAffectedByBarriers);
 } */
 dataArray : any= []
-track3Direct : boolean = false
-track3Indirect : boolean = false
+track2Direct : boolean = false
+track2Indirect : boolean = false
 allData: any
 
  onSubmit(data: any) {
@@ -692,16 +697,16 @@ allData: any
   this.assessmentId = 0;
   this.dataArray = []
   this.sendBarriers = []
-  this.track3Direct = false
-  this.track3Indirect = false
+  this.track2Direct = false
+  this.track2Indirect = false
 
   if((data.assessment_approach === 'Direct' || data.assessment_approach === 'Indirect' ) && data.assessment_method === 'Track 2'){
    // this.fileDataArray = ''
     if((data.assessment_approach === 'Direct' ) ){
-      this.track3Direct = true
+      this.track2Direct = true
     }
     if((data.assessment_approach === 'Indirect' ) ){
-      this.track3Indirect = true
+      this.track2Indirect = true
     }
 
     for (let barriers of this.selectedPolicyBarriersList) {
@@ -1393,14 +1398,14 @@ async myUploader(event: any, chaName : any) {
 
 }
 
-onUpload(event :any) { 
+onUpload(event :any) {
   for(let file of event.files) {
       this.uploadedFiles.push(file);
   }
       console.log("hello")
 
 }
-onRemove(event :any,x:number) { 
+onRemove(event :any,x:number) {
   console.log("hello",event)
 }
 
