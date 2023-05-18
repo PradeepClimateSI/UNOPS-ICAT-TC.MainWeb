@@ -87,55 +87,36 @@ onInput(event: any, dt: any) {
   dt.filterGlobal(value, 'contains');
 }
 
-tool :string
-assessment_method : string
-
-myFunction(assessId : any, averageProcess: any, averageOutcome: any){
-
-  this.methassess.assessmentData(assessId).subscribe((res: any) => {
-    console.log("assessmentDataaaaa: ", res)
-    for (let x of res) {
-      this.tool = x.tool
-      this.assessment_method = x.assessment_method
-    }
-
-  });
-
-  setTimeout(() => {
 
 
-  console.log("dddd", assessId, this.tool, this.assessment_method)
+myFunction(assessId: any, averageProcess: any, averageOutcome: any, tool: string, assessment_method: string) {
+  console.log("dddd", assessId, tool, assessment_method, averageProcess, averageOutcome);
 
-  if (this.tool === 'Investment & Private Sector Tool' || (this.tool === 'Portfolio Tool' && this.assessment_method === 'Track 4')) {
-
+  if (tool === 'Investment & Private Sector Tool' || (tool === 'Portfolio Tool' && assessment_method === 'Track 4')) {
     this.router.navigate(['/assessment-result-investor', assessId], {
       queryParams: {
         assessmentId: assessId
-      }
+      },
+      relativeTo: this.activatedRoute
     });
-  }
-  if (this.tool === 'Carbon Market Tool') {
+  } else if (tool === 'Carbon Market Tool') {
     this.router.navigate(['../carbon-market-tool-result'], {
       queryParams: {
         id: assessId
       },
       relativeTo: this.activatedRoute
     });
-  }
-  else {
-   // console.log("dddd", assessId, averageOutcome, averageProcess)
+  } else {
     this.router.navigate(['/assessment-result', assessId], {
       queryParams: {
         assessmentId: assessId,
-        averageProcess: averageProcess, averageOutcome: averageOutcome
+        averageProcess: averageProcess,
+        averageOutcome: averageOutcome
       }
     });
   }
-
-}, 1000);
-
-
 }
+
 
 }
 

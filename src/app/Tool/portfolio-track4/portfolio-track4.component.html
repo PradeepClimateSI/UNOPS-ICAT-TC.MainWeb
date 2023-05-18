@@ -12,15 +12,15 @@
             <div class="p-field p-2">
               <label for="assessment_method">Assessment Method</label>
               <select class="form-control select-with-arrow"  (change)="onChangeTrack($event)" [(ngModel)]="assessment.assessment_method"
-                name="assessment_method" id="exampleFormControlSelect1">
+                name="assessment_method" id="exampleFormControlSelect1"  #assessmentMethod="ngModel">
                 <option value="" disabled selected hidden>Select Assessment Method</option>
                 <option>Track 1</option>
                 <option>Track 2</option>
                 <option>Track 3</option>
                 <option>Track 4</option>
               </select>
+              <p class="info-message text-danger" *ngIf="!assessment.assessment_method && (fData.submitted || assessmentMethod.touched)">This is a mandatory field</p>
             </div>
-
 
             <div class="p-field p-2">
               <label for="policy">Select Intervetion *</label>
