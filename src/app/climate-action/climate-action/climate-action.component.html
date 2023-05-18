@@ -182,7 +182,7 @@
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlockprojStatus">
                     <p-dropdown [disabled]="editEntytyId > 0" placeholder="Please Select Status" name="projStatus"
                       #projStatus="ngModel" [(ngModel)]="project.projectStatus" [ngModelOptions]="{ standalone: false }"
-                      [autoDisplayFirst]="false" [options]="projectStatusList" optionLabel="name"
+                      [autoDisplayFirst]="false" [options]="projectStatusList" optionLabel="name" appendTo="body"
                       [required]="true"></p-dropdown>
                     <p class="info-message text-danger" *ngIf="
                     !project.projectStatus &&
@@ -244,11 +244,11 @@
                   <label for="sector">Sectors Targeted</label>
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocksector">
                     <p-multiSelect [disabled]="editEntytyId > 0" placeholder="Select Sector" name="sector"
-                      #sector="ngModel" [(ngModel)]="project.sector" [options]="sectorList"
+                      #sector="ngModel" [(ngModel)]="project.sector" [options]="sectorList" appendTo="body"
                       optionLabel="name" (ngModelChange)="onSectorChange($event)" [required]="true"></p-multiSelect>
                     <p class="info-message text-danger" *ngIf="
                     !project.sector &&
-                    (fData.submitted || sector.touched || sector.dirty)
+                    (fData.submitted || sector.touched || sector.dirty) 
                   ">
                       This is a mandatory field
                     </p>
@@ -268,7 +268,7 @@
                     <p-dropdown [disabled]="editEntytyId > 0" placeholder="Please Select the type of intervention"
                       #typeOfIntervention="ngModel"
                       name="typeOfIntervention" #projStatus="ngModel" [(ngModel)]="project.typeofAction" [options]="typeofAction"
-                      [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false" 
+                      [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false" appendTo="body"
                       [required]="false"></p-dropdown>
                     <p class="info-message text-danger" *ngIf="
                     !project.typeofAction &&
@@ -366,7 +366,7 @@
                 <div class="p-field">
                   <label for="ndc">Edit Aggregated Actions</label>
                   <ng-container *ngIf="flag ==1">
-                    <p-dropdown placeholder="Select Aggregated Action" name="ndcEdit" #ndc="ngModel"
+                    <p-dropdown placeholder="Select Aggregated Action" name="ndcEdit" #ndc="ngModel" appendTo="body"
                       [autoDisplayFirst]="false" [options]="ndcList" [(ngModel)]="project.aggregatedAction"
                       [ngModelOptions]="{ standalone: true }" optionLabel="name"></p-dropdown>
 
@@ -379,7 +379,7 @@
                 <div class="p-field">
                   <label for="subNDC">Edit Action Areas</label>
                   <ng-container *ngIf="flag ==1">
-                    <p-dropdown placeholder="Select Action Areas" name="subndcEdit" #subndcEdit="ngModel"
+                    <p-dropdown placeholder="Select Action Areas" name="subndcEdit" #subndcEdit="ngModel" appendTo="body"
                       [autoDisplayFirst]="false"
                       [options]="project.aggregatedAction === undefined ? [] : project.aggregatedAction.actionArea"
                       [(ngModel)]="project.actionArea" [ngModelOptions]="{ standalone: true }"
@@ -424,7 +424,7 @@
                     <p-dropdown [disabled]="editEntytyId > 0" placeholder="Please Select the Level of Implementation"
                       name="level_of_implemetation" #level_of_implemetation="ngModel" [(ngModel)]="project.levelofImplemenation" 
                       [options]="levelOfImplementation" optionLabel="name" optionValue="name"
-                      [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false" 
+                      [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false"  appendTo="body"
                       [required]="false"></p-dropdown>
                     <p class="info-message text-danger" *ngIf="
                     !project.levelofImplemenation &&
@@ -541,7 +541,7 @@
                   <div>
 
                     <p-calendar [disabled]="editEntytyId > 0" placeholder="DD/MM/YYYY" dateFormat="dd/mm/yy"
-                      name="impleDate" #impleDate="ngModel" [(ngModel)]="project.dateOfImplementation"
+                      name="impleDate" #impleDate="ngModel" [(ngModel)]="project.dateOfImplementation"  appendTo="body"
                       [required]="true"></p-calendar>
                   </div>
                   <p class="info-message text-danger" *ngIf="
@@ -558,7 +558,7 @@
                   <div>
 
                     <p-calendar [disabled]="editEntytyId > 0" placeholder="DD/MM/YYYY" dateFormat="dd/mm/yy"
-                      name="complDate" #complDate="ngModel" [(ngModel)]="project.dateOfCompletion"
+                      name="complDate" #complDate="ngModel" [(ngModel)]="project.dateOfCompletion" appendTo="body"
                       [required]="true"></p-calendar>
                   </div>
                   <p class="info-message text-danger" *ngIf="
