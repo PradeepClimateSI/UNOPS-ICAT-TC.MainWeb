@@ -200,40 +200,51 @@
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="nameClimate">Country of implementation  </label>
+                  <label for="nameClimate">Country of the Specific Climate Action*</label>
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocknameClimate">
                     <div>
-                      <p-dropdown
-                      appendTo="body"
-                      name="countryDD"
-                      placeholder="Country"
-                      #countryDD="ngModel"
-                      [(ngModel)]="project.country"
-                      [ngModelOptions]="{ standalone: false }"
-                      [autoDisplayFirst]="false"
-                      [options]="countryList"
-                      optionLabel="name"
-                      (ngModelChange)="onCountryChnage()"
-                      [required]="true"
-                    ></p-dropdown>
-                    <!-- <input type="text"  name="countryDD"
+                  <p-dropdown
+                    [disabled]="editEntytyId > 0 || isSector"
+                    appendTo="body"
+                    name="countryDD"
                     placeholder="Country"
-                    #countryDD="ngModel" [required]="true" [disabled]="isSector || editEntytyId > 0" [(ngModel)]="project.country.name"> -->
-                    </div>
-                    <p class="info-message text-danger" *ngIf="
-                    getUserEnterdCountry == '' &&
-                    (fData.submitted || countryDD.touched || countryDD.dirty)
-                  ">
-                      This is a mandatory field
-                    </p>
-                  </ng-container>
-                  <ng-template #elseBlocknameClimate>
-
-                    <input [disabled]="editEntytyId > 0" type="text" maxlength="50" name="nameCountry"
-                      #nameCountry="ngModel" class="p-inputtext" [(ngModel)]="project.country?.name!"
-                      [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText required />
-
-                  </ng-template>
+                    #countryDD="ngModel"
+                    [(ngModel)]="project.country"
+                    [ngModelOptions]="{ standalone: false }"
+                    [autoDisplayFirst]="false"
+                    [options]="countryList"
+                    optionLabel="name"
+                    (ngModelChange)="onCountryChnage()"
+                    [required]="true"
+                  ></p-dropdown>
+                </div>
+                  <p
+                    class="info-message text-danger"
+                    *ngIf="
+                    !project.country &&
+                      (fData.submitted || countryDD.touched || countryDD.dirty)
+                    "
+                  >
+                    This is a mandatory field
+                  </p>
+                </ng-container>
+                <ng-template #elseBlocknameClimate>
+    
+                  <input
+                  [disabled]="editEntytyId > 0"
+                  type="text"
+                  maxlength="50"
+                  name="nameCountry"
+                  #nameCountry="ngModel"
+                  class="p-inputtext"
+                  [(ngModel)]="project.country?.name!"
+                  [ngModelOptions]="{ standalone: true }"
+                  pattern="^[a-zA-Z0-9 ]{1,64}$"
+                  pInputText
+                  required
+                />
+    
+                </ng-template>
                 </div>
               </div>
 
@@ -934,7 +945,7 @@
         <div class=" mt-2">
           <div class="p-grid p-fluid col-sm-12">
             <div class="p-2">
-              <h6>Barriers &nbsp; <p-button icon="pi pi-plus " style=" height: 2px;" styleClass="p-button-sm p-button-rounded"  (click)="showDialog()"></p-button></h6>
+              <h6>Barriers &nbsp; <p-button icon="pi pi-plus "  styleClass="p-button-sm p-button-rounded"  (click)="showDialog()"></p-button></h6>
             </div>
             <p-dialog header="Add Barrier" [(visible)]="barrierBox"  [modal]="true" appendTo="body"  [style]="{width: '50vw'}"  >
               <ng-template pTemplate="p-dialog-content">

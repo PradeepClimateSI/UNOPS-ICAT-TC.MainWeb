@@ -196,15 +196,15 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
     })
 
 
-    this.countryProxy.getCountry(this.counID).subscribe((res:any)=>{
-      console.log('++++++++++++++++',res)
-      this.countryList.push(res);
-      this.project.country =res
+    // this.countryProxy.getCountry(this.counID).subscribe((res:any)=>{
+    //   console.log('++++++++++++++++',res)
+    //   this.countryList.push(res);
+    //   this.project.country =res
 
-      console.log('++++++++++++++++',this.countryList)
-      this.isSector = true;
+    //   console.log('++++++++++++++++',this.countryList)
+    //   this.isSector = true;
       
-    })
+    // })
 
     // this.serviceProxy
     //   .getManyBaseUsersControllerUser(
@@ -247,21 +247,21 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
     });
 
     if (countryId) {
-      // this.serviceProxy
-      //   .getOneBaseCountryControllerCountry(
-      //     countryId,
-      //     undefined,
-      //     undefined,
-      //     undefined
-      //   )
-      //   .subscribe((res) => {
-      //     console.log("sss",res)
-      //     // this.countryList.push(res)
-      //     console.log("this.countryList",this.countryList)
-      //     this.project.country =res;
-      //     this.isSector = true;
-      //     // console.log('tokenPayloadmasssge',res);
-      //   });
+      this.serviceProxy
+        .getOneBaseCountryControllerCountry(
+          countryId,
+          undefined,
+          undefined,
+          undefined
+        )
+        .subscribe((res) => {
+          console.log("sss",res)
+          this.countryList.push(res)
+          console.log("this.countryList",this.countryList)
+          this.project.country =res;
+          this.isSector = true;
+          // console.log('tokenPayloadmasssge',res);
+        });
     } else {
       this.project.country = new Country();
       console.log("pr", this.project)   // working
@@ -296,9 +296,9 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
     //     console.log('***************************');
     //     console.log(res.data);
     //   });
-    this.countryProxy.findall().subscribe((res:any)=>{
-      this.countryList=res;
-    })
+    // this.countryProxy.findall().subscribe((res:any)=>{
+    //   this.countryList=res;
+    // })
 
     // this.serviceProxy
     //   .getManyBaseCountryControllerCountry(
@@ -316,7 +316,7 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
     //   .subscribe((res: any) => {
 
     //     this.countryList = res.data;
-    //     // console.log("countrylist all",this.countryList) //  working
+    //     console.log("countrylist all",this.countryList) //  working
     //   });
 
 
@@ -776,9 +776,9 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
         this.project.actionArea.id =1;
         this.project.sector = new Sector()
         this.project.sector.id =1;
-        let country = new Country();
-        country.id =this.counID
-        this.project.country =country
+        // let country = new Country();
+        // country.id =this.counID
+        // this.project.country =country
           this.serviceProxy.createOneBaseProjectControllerClimateAction(this.project)
           .subscribe(
             (res) => {
