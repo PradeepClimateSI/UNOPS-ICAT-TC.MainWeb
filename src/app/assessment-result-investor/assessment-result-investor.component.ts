@@ -152,8 +152,8 @@ card : any = []
             categoryData.categoryName = category.name;
             categoryData.characteristics.push(
               {
-                relevance : x.relavance,
-                likelihood : x.likelihood,
+                relevance: !x.relavance ? '-' : x.relavance,
+                likelihood: !x.likelihood ? '-' : x.likelihood,
                 name : x.characteristics.name
               }
             )
@@ -170,6 +170,8 @@ card : any = []
         categoryData.categotyRelevance = (totalRel/countRel).toFixed(3)
         categoryData.categoryLikelihood = (totalLikelihood/countLikelihood).toFixed(3)
         this.categoryDataArray.push(categoryData)
+
+        console.log("categoryDataArray: ", this.categoryDataArray)
       }
 
       for(let category of this.meth1Outcomes){
@@ -192,7 +194,7 @@ card : any = []
             categoryData.characteristics.push(
               {
                 scaleScore : x.score,
-                sustainedScore : '',
+                sustainedScore : '-',
                 name : x.characteristics.name
               }
             )
@@ -205,7 +207,7 @@ card : any = []
             categoryData.categoryName = category.name;
             categoryData.characteristics.push(
               {
-                scaleScore : '',
+                scaleScore : '-',
                 sustainedScore : x.score,
                 name : x.characteristics.name
               }
@@ -219,12 +221,12 @@ card : any = []
 
         if(category.name === 'Scale GHGs' || category.name === 'Scale SD' ){
           categoryData.categoryScaleScore = (totalScale/countScale).toFixed(3)
-          categoryData.categorySustainedScore = ''
+          categoryData.categorySustainedScore = '-'
         }
 
         if(category.name === 'Sustained nature-GHGs' || category.name === 'Sustained nature-SD'  ){
           categoryData.categorySustainedScore = (totalSustained/countSustained).toFixed(3)
-          categoryData.categoryScaleScore  = ''
+          categoryData.categoryScaleScore  = '-'
         }
 
         this.categoryDataArrayOutcome.push(categoryData)
