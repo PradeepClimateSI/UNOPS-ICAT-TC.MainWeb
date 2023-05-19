@@ -182,7 +182,7 @@
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlockprojStatus">
                     <p-dropdown [disabled]="editEntytyId > 0" placeholder="Please Select Status" name="projStatus"
                       #projStatus="ngModel" [(ngModel)]="project.projectStatus" [ngModelOptions]="{ standalone: false }"
-                      [autoDisplayFirst]="false" [options]="projectStatusList" optionLabel="name"
+                      [autoDisplayFirst]="false" [options]="projectStatusList" optionLabel="name" appendTo="body"
                       [required]="true"></p-dropdown>
                     <p class="info-message text-danger" *ngIf="
                     !project.projectStatus &&
@@ -200,40 +200,51 @@
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="nameClimate">Country of implementation  </label>
+                  <label for="nameClimate">Country of the Specific Climate Action*</label>
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocknameClimate">
                     <div>
-                      <p-dropdown
-                      appendTo="body"
-                      name="countryDD"
-                      placeholder="Country"
-                      #countryDD="ngModel"
-                      [(ngModel)]="project.country"
-                      [ngModelOptions]="{ standalone: false }"
-                      [autoDisplayFirst]="false"
-                      [options]="countryList"
-                      optionLabel="name"
-                      (ngModelChange)="onCountryChnage()"
-                      [required]="true"
-                    ></p-dropdown>
-                    <!-- <input type="text"  name="countryDD"
+                  <p-dropdown
+                    [disabled]="editEntytyId > 0 || isSector"
+                    appendTo="body"
+                    name="countryDD"
                     placeholder="Country"
-                    #countryDD="ngModel" [required]="true" [disabled]="isSector || editEntytyId > 0" [(ngModel)]="project.country.name"> -->
-                    </div>
-                    <p class="info-message text-danger" *ngIf="
-                    getUserEnterdCountry == '' &&
-                    (fData.submitted || countryDD.touched || countryDD.dirty)
-                  ">
-                      This is a mandatory field
-                    </p>
-                  </ng-container>
-                  <ng-template #elseBlocknameClimate>
-
-                    <input [disabled]="editEntytyId > 0" type="text" maxlength="50" name="nameCountry"
-                      #nameCountry="ngModel" class="p-inputtext" [(ngModel)]="project.country?.name!"
-                      [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText required />
-
-                  </ng-template>
+                    #countryDD="ngModel"
+                    [(ngModel)]="project.country"
+                    [ngModelOptions]="{ standalone: false }"
+                    [autoDisplayFirst]="false"
+                    [options]="countryList"
+                    optionLabel="name"
+                    (ngModelChange)="onCountryChnage()"
+                    [required]="true"
+                  ></p-dropdown>
+                </div>
+                  <p
+                    class="info-message text-danger"
+                    *ngIf="
+                    !project.country &&
+                      (fData.submitted || countryDD.touched || countryDD.dirty)
+                    "
+                  >
+                    This is a mandatory field
+                  </p>
+                </ng-container>
+                <ng-template #elseBlocknameClimate>
+    
+                  <input
+                  [disabled]="editEntytyId > 0"
+                  type="text"
+                  maxlength="50"
+                  name="nameCountry"
+                  #nameCountry="ngModel"
+                  class="p-inputtext"
+                  [(ngModel)]="project.country?.name!"
+                  [ngModelOptions]="{ standalone: true }"
+                  pattern="^[a-zA-Z0-9 ]{1,64}$"
+                  pInputText
+                  required
+                />
+    
+                </ng-template>
                 </div>
               </div>
 
@@ -244,11 +255,11 @@
                   <label for="sector">Sectors Targeted</label>
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocksector">
                     <p-multiSelect [disabled]="editEntytyId > 0" placeholder="Select Sector" name="sector"
-                      #sector="ngModel" [(ngModel)]="project.sector" [options]="sectorList"
+                      #sector="ngModel" [(ngModel)]="project.sector" [options]="sectorList" appendTo="body"
                       optionLabel="name" (ngModelChange)="onSectorChange($event)" [required]="true"></p-multiSelect>
                     <p class="info-message text-danger" *ngIf="
                     !project.sector &&
-                    (fData.submitted || sector.touched || sector.dirty)
+                    (fData.submitted || sector.touched || sector.dirty) 
                   ">
                       This is a mandatory field
                     </p>
@@ -268,7 +279,7 @@
                     <p-dropdown [disabled]="editEntytyId > 0" placeholder="Please Select the type of intervention"
                       #typeOfIntervention="ngModel"
                       name="typeOfIntervention" #projStatus="ngModel" [(ngModel)]="project.typeofAction" [options]="typeofAction"
-                      [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false" 
+                      [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false" appendTo="body"
                       [required]="false"></p-dropdown>
                     <p class="info-message text-danger" *ngIf="
                     !project.typeofAction &&
@@ -366,7 +377,7 @@
                 <div class="p-field">
                   <label for="ndc">Edit Aggregated Actions</label>
                   <ng-container *ngIf="flag ==1">
-                    <p-dropdown placeholder="Select Aggregated Action" name="ndcEdit" #ndc="ngModel"
+                    <p-dropdown placeholder="Select Aggregated Action" name="ndcEdit" #ndc="ngModel" appendTo="body"
                       [autoDisplayFirst]="false" [options]="ndcList" [(ngModel)]="project.aggregatedAction"
                       [ngModelOptions]="{ standalone: true }" optionLabel="name"></p-dropdown>
 
@@ -379,7 +390,7 @@
                 <div class="p-field">
                   <label for="subNDC">Edit Action Areas</label>
                   <ng-container *ngIf="flag ==1">
-                    <p-dropdown placeholder="Select Action Areas" name="subndcEdit" #subndcEdit="ngModel"
+                    <p-dropdown placeholder="Select Action Areas" name="subndcEdit" #subndcEdit="ngModel" appendTo="body"
                       [autoDisplayFirst]="false"
                       [options]="project.aggregatedAction === undefined ? [] : project.aggregatedAction.actionArea"
                       [(ngModel)]="project.actionArea" [ngModelOptions]="{ standalone: true }"
@@ -424,7 +435,7 @@
                     <p-dropdown [disabled]="editEntytyId > 0" placeholder="Please Select the Level of Implementation"
                       name="level_of_implemetation" #level_of_implemetation="ngModel" [(ngModel)]="project.levelofImplemenation" 
                       [options]="levelOfImplementation" optionLabel="name" optionValue="name"
-                      [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false" 
+                      [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false"  appendTo="body"
                       [required]="false"></p-dropdown>
                     <p class="info-message text-danger" *ngIf="
                     !project.levelofImplemenation &&
@@ -541,7 +552,7 @@
                   <div>
 
                     <p-calendar [disabled]="editEntytyId > 0" placeholder="DD/MM/YYYY" dateFormat="dd/mm/yy"
-                      name="impleDate" #impleDate="ngModel" [(ngModel)]="project.dateOfImplementation"
+                      name="impleDate" #impleDate="ngModel" [(ngModel)]="project.dateOfImplementation"  appendTo="body"
                       [required]="true"></p-calendar>
                   </div>
                   <p class="info-message text-danger" *ngIf="
@@ -558,7 +569,7 @@
                   <div>
 
                     <p-calendar [disabled]="editEntytyId > 0" placeholder="DD/MM/YYYY" dateFormat="dd/mm/yy"
-                      name="complDate" #complDate="ngModel" [(ngModel)]="project.dateOfCompletion"
+                      name="complDate" #complDate="ngModel" [(ngModel)]="project.dateOfCompletion" appendTo="body"
                       [required]="true"></p-calendar>
                   </div>
                   <p class="info-message text-danger" *ngIf="
@@ -934,7 +945,7 @@
         <div class=" mt-2">
           <div class="p-grid p-fluid col-sm-12">
             <div class="p-2">
-              <h6>Barriers &nbsp; <p-button icon="pi pi-plus " style=" height: 2px;" styleClass="p-button-sm p-button-rounded"  (click)="showDialog()"></p-button></h6>
+              <h6>Barriers &nbsp; <p-button icon="pi pi-plus "  styleClass="p-button-sm p-button-rounded"  (click)="showDialog()"></p-button></h6>
             </div>
             <p-dialog header="Add Barrier" [(visible)]="barrierBox"  [modal]="true" appendTo="body"  [style]="{width: '50vw'}"  >
               <ng-template pTemplate="p-dialog-content">
@@ -966,6 +977,20 @@
               <div class="row p-2">
                 <div class="col-12 col-md-6">
                   <div class="p-field">
+                    <label for="impEntity">Characteristic Affected</label>
+                    <p-dropdown placeholder="Select Barrier &nbsp; &nbsp;" appendTo="body" name="name" [options]="characteristicsList"
+                      [(ngModel)]="barrierSelected.characteristics" optionLabel="barrier" #assyesrw="ngModel">
+                    </p-dropdown>
+                  </div>
+                </div>
+  
+              </div>
+
+              
+
+              <div class="row p-2">
+                <div class="col-12 col-md-6">
+                  <div class="p-field">
                     <p-checkbox  [binary]="true" [(ngModel)]="barrierSelected.affectedbyIntervention"  name="affectedbyIntervention" inputId="binary"></p-checkbox> &nbsp; &nbsp;
                     <label for="ny">Is the barrier directly affected by the intervention?</label>
 
@@ -973,6 +998,7 @@
                 </div>
   
               </div>
+              
             </ng-template>
 
               <ng-template pTemplate="footer">
@@ -989,14 +1015,19 @@
   
           </p-dialog>
           <div class="row p-2" >
-            <div class="col-12 col-md-3">
+            <div class="col-12 col-md-2">
               <div class="p-field">
                 <label class ="barrier-top" for="relatedPolicies">Barrier category</label>
               </div>
             </div>
-            <div class="col-12 col-md-5">
+            <div class="col-12 col-md-3">
               <div class="p-field">
                 <label class ="barrier-top" for="relatedPolicies">Barrier </label>
+              </div>
+            </div>
+            <div class="col-12 col-md-3">
+              <div class="p-field">
+                <label class ="barrier-top" for="relatedPolicies">Characteristic Affected </label>
               </div>
             </div>
             <div class="col-12 col-md-4">
@@ -1006,30 +1037,36 @@
             </div>
 
           </div>
-          <div class="row p-2" *ngFor="let barriers of finalBarrierList">
+          <div *ngIf="finalBarrierList.length !==0" >
+            <div class="row p-2" *ngFor="let barriers of finalBarrierList">
             
-            <div class="col-12 col-md-3">
-              <div class="p-field">
-               <div></div>
-               <div>{{barriers.category.category}}</div>
-               
+              <div class="col-12 col-md-2">
+                <div class="p-field">
+                 <div></div>
+                 <div>{{barriers.category.category}}</div>
+                </div>
               </div>
-            </div>
-            <div class="col-12 col-md-5">
-              <div class="p-field">
-                <div>{{barriers.barrier.barrier}}</div>
-
-               
+              <div class="col-12 col-md-3">
+                <div class="p-field">
+                  <div>{{barriers.barrier.barrier}}</div>
+                </div>
               </div>
-            </div>
-            <div class="col-12 col-md-4">
-              <div class="p-field">
-                <div>{{barriers.affectedbyIntervention}} </div>
-               
+              <div class="col-12 col-md-3">
+                <div class="p-field">
+                  <div>{{barriers.barrier.characteristics?.name}}</div>
+                </div>
               </div>
+              <div class="col-12 col-md-4">
+                <div class="p-field">
+                  <div>{{barriers.affectedbyIntervention}} </div>
+                 
+                </div>
+              </div>
+  
             </div>
 
           </div>
+         
           </div>
         </div>
         <div class=" mt-2">
