@@ -193,7 +193,7 @@
                   </ng-container>
                   <ng-template #elseBlockprojStatus>
                     <input [disabled]="editEntytyId > 0" type="text" maxlength="50" name="projStatus"
-                      #projStatus1="ngModel" class="p-inputtext" [(ngModel)]="project.projectStatus.name!"
+                      #projStatus1="ngModel" class="p-inputtext" [(ngModel)]="project.projectStatus?.name!"
                       [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
                   </ng-template>
                 </div>
@@ -266,7 +266,7 @@
                   </ng-container>
                   <ng-template #elseBlocksector>
                     <input [disabled]="editEntytyId > 0" type="text" maxlength="50" name="projsector"
-                      #projsector="ngModel" class="p-inputtext" [(ngModel)]="project.sector.name!"
+                      #projsector="ngModel" class="p-inputtext" [(ngModel)]="project.sector?.name!"
                       [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
                   </ng-template>
                 </div>
@@ -344,7 +344,7 @@
             </div> -->
 
 
-            <div class="row p-2" *ngIf="flag == 1 ">
+            <!-- <div class="row p-2" *ngIf="flag == 1 ">
               <div class="col-12 col-md-6">
                 <div type="button" class="pi pi-info-circle"
                   pTooltip="This is a mandatory field. Please check whether it has correctly mapped or not."></div>
@@ -369,10 +369,10 @@
                     [(ngModel)]="isMapped"></p-radioButton><label>No</label>
                 </div>
               </div>
-            </div>
+            </div> -->
 
 
-            <div class="row p-2" *ngIf="isMapped == 0">
+            <!-- <div class="row p-2" *ngIf="isMapped == 0">
               <div class="col-12 col-md-6">
                 <div class="p-field">
                   <label for="ndc">Edit Aggregated Actions</label>
@@ -398,9 +398,9 @@
                   </ng-container>
                 </div>
               </div>
-            </div>
+            </div> -->
 
-            <div class="row p-2" *ngIf="isMapped == 0">
+            <!-- <div class="row p-2" *ngIf="isMapped == 0">
               <div class="col-12 col-md-3">
                 <div class="p-field">
 
@@ -408,7 +408,7 @@
                     style="margin-right: 10px" class="p-button-raised" (click)="toUpdateNdcs()"></button>
                 </div>
               </div>
-            </div>
+            </div> -->
 
             <div class="row p-2">
               <div class="col-12 col-md-6">
@@ -952,8 +952,8 @@
               <div class="row p-2">
                 <div class="col-12 col-md-6">
                   <div class="p-field">
-                    <label for="impEntity">Barriers Category</label> &nbsp;
-                    <p-dropdown placeholder="Select Barriers Category" appendTo="body" name="category"
+                    <label style="width:200px" for="impEntity">Barriers Category</label> 
+                    <p-dropdown [style]="{'width':'50%'}" placeholder="Please select barriers category  " appendTo="body" name="category"
                       [options]="category" [(ngModel)]="barrierSelected.category" optionLabel="category" #cat="ngModel"
                       (ngModelChange)="onCategoryChange($event)">
                     </p-dropdown>
@@ -965,8 +965,8 @@
               <div class="row p-2">
                 <div class="col-12 col-md-6">
                   <div class="p-field">
-                    <label for="impEntity">Barriers</label> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                    <p-dropdown placeholder="Select Barrier &nbsp; &nbsp;" appendTo="body" name="barrier" [options]="setbarriers"
+                    <label style="width:200px" for="impEntity">Barriers</label>  
+                    <p-dropdown  [style]="{'width':'50%'}" placeholder="Please select barrier" appendTo="body" name="barrier" [options]="setbarriers"
                       [(ngModel)]="barrierSelected.barrier" optionLabel="barrier" #assyesrw="ngModel">
                     </p-dropdown>
                   </div>
@@ -977,9 +977,9 @@
               <div class="row p-2">
                 <div class="col-12 col-md-6">
                   <div class="p-field">
-                    <label for="impEntity">Characteristic Affected</label>
-                    <p-dropdown placeholder="Select Barrier &nbsp; &nbsp;" appendTo="body" name="name" [options]="characteristicsList"
-                      [(ngModel)]="barrierSelected.characteristics" optionLabel="barrier" #assyesrw="ngModel">
+                    <label style="width:200px"  for="impEntity">Characteristic Affected</label>
+                    <p-dropdown  [style]="{'width':'50%'}" placeholder="Please select characteristic " appendTo="body" name="name" [options]="characteristicsList"
+                      [(ngModel)]="barrierSelected.characteristics" optionLabel="name" #assyesrw="ngModel">
                     </p-dropdown>
                   </div>
                 </div>
@@ -1053,7 +1053,7 @@
               </div>
               <div class="col-12 col-md-3">
                 <div class="p-field">
-                  <div>{{barriers.barrier.characteristics?.name}}</div>
+                  <div>{{barriers.characteristics?.name}}</div>
                 </div>
               </div>
               <div class="col-12 col-md-4">

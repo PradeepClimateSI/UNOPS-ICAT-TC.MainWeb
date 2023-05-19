@@ -73,7 +73,9 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
   anonymousEditEntytyId: number = 0;
   documentOwnerId: number = 0;
   proposeDateofCommence: Date;
-  endDateofCommence: Date;
+  dateOfCompletion: Date;
+  dateOfImplementation:Date;
+
   isLoading: boolean = false;
   isDownloading: boolean = true;
   isDownloadMode: number = 0;
@@ -120,7 +122,8 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
   
   barrierBox:boolean=false;
 
-  barrierSelected:BarrierSelected= new BarrierSelected()
+  barrierSelected:BarrierSelected= new BarrierSelected();
+  finalBarrierList :BarrierSelected[]=[];
 
 
 
@@ -389,6 +392,7 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
 
         // if (token && this.editEntytyId && this.editEntytyId > 0) {
         if (this.editEntytyId && this.editEntytyId > 0) {
+          console.log("woorking")
           this.serviceProxy
             .getOneBaseProjectControllerClimateAction(
               this.editEntytyId,
@@ -397,9 +401,10 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
               0
             )
             .subscribe(async (res1) => {
+              console.log("project",res1)
               this.project = res1;
-              this.project.aggregatedAction = res1.aggregatedAction;
-              this.project.sector = res1.sector;
+              // this.project.aggregatedAction = res1.aggregatedAction;
+              // this.project.sector = res1.sector;
               const latitude = parseFloat(this.project.latitude + '');
               const longitude = parseFloat(this.project.longitude + '');
               await this.addMarker(longitude, latitude);
@@ -428,11 +433,14 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
               //   this.project?.financialFecialbility;
               // this.isAvailabiltyOfTEchFromDb =
               //   this.project.availabilityOfTechnology;
+
+
+
               var sector = this.sectorList.find(
                 (a) => a.id === this.project?.sector?.id
               );
               // this.project.sector = sector != undefined ? sector : new Sector();
-              console.log('this.project.sector...', this.project.sector);
+              // console.log('this.project.sector...', this.project.sector);
               this.onSectorChange(true);
               this.proposeDateofCommence = new Date(
                 this.project.proposeDateofCommence.year(),
@@ -444,6 +452,20 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
               //   this.project.endDateofCommence.month(),
               //   this.project.endDateofCommence.date()
               // );
+              this.dateOfImplementation = new Date(
+                this.project.dateOfImplementation.year(),
+                this.project.dateOfImplementation.month(),
+                this.project.dateOfImplementation.date()
+              );
+
+              this.dateOfImplementation = new Date(
+                this.project.dateOfCompletion.year(),
+                this.project.dateOfCompletion.month(),
+                this.project.dateOfCompletion.date()
+              );
+
+   
+    //this.project.endDateofCommence = moment(this.endDateofCommence);
 
               this.isLoading = false;
               if (this.flag == 1) {
@@ -721,6 +743,8 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
 
 
     this.project.proposeDateofCommence = moment(this.proposeDateofCommence);
+    this.project.dateOfImplementation = moment(this.dateOfImplementation);
+    this.project.dateOfCompletion = moment(this.dateOfCompletion);
     //this.project.endDateofCommence = moment(this.endDateofCommence);
     // this.project.mappedInstitution=this.selectedInstitution;/
 
@@ -796,22 +820,37 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
             (res) => {
               console.log(res)
               this.isSaving = true;
-              this.messageService.add({
-                severity: 'success',
-                summary: 'Success',
-                detail: 'project  has save successfully',
-                closable: true,
-              });
+              
               console.log("ssss",res)
-              for (let b of this.selectbarriers) {
+              for (let b of this.finalBarrierList) {
                 let pb = new PolicyBarriers();
                 pb.climateAction = res
-                pb.barriers = b;
+                pb.barriers = b.barrier;
+                pb.characteristics=b.characteristics;
+                pb.is_affected =b.affectedbyIntervention;
                 this.policyBar.push(pb);
               }
               //@ts-ignore
-              this.projectProxy.policyBar(this.policyBar).subscribe();
-              console.log('save', res);
+              this.projectProxy.policyBar(this.policyBar).subscribe((res) => {
+                console.log('save', res);
+                this.messageService.add({
+                  severity: 'success',
+                  summary: 'Success',
+                  detail: 'project  has save successfully',
+                  closable: true,
+                },
+                
+                );
+              },
+              (err) => {
+                this.messageService.add({
+                  severity: 'error',
+                  summary: 'Error.',
+                  detail: 'Internal server error in policy barriers',
+                  sticky: true,
+                });
+              });
+             
              
             },
 
@@ -1502,7 +1541,7 @@ showDialog(){
   console.log(this.barrierBox)
 
 }
-finalBarrierList =new Array ()
+
 pushBarriers(barrier:any){
   console.log("barrier",barrier)
   this.finalBarrierList.push(barrier)
