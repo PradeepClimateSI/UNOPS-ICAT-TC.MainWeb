@@ -457,7 +457,7 @@ onChangeTrack(event : any){
       console.log('Characteristicrrrrrrr:',  this.characteristicLikelihoodWeightScore[cha.name]);
    }
 
-   if( this.chaCategoryLikelihoodWeightTotal[categoryName] == 1){
+   if( this.chaCategoryLikelihoodWeightTotal[categoryName] == 100){
     this.chaCategoryLikelihoodTotalEqualsTo1[categoryName] = true
    }
    console.log('LL Characteristic Name:',categoryName ,  characteristicName, 'chaWeight:', chaWeight);
@@ -477,7 +477,7 @@ onChangeTrack(event : any){
      console.log('Characteristicrrrrrrr:',  this.characteristicWeightScore[cha.name]);
   }
 
-  if( this.chaCategoryWeightTotal[categoryName] == 1){
+  if( this.chaCategoryWeightTotal[categoryName] == 100){
    this.chaCategoryTotalEqualsTo1[categoryName] = true
   }
   console.log('Characteristic Name:',categoryName ,  characteristicName, 'chaWeight:', chaWeight);
