@@ -10,7 +10,7 @@
   <div *ngIf="load">
 <p-table #dt2 [value]="results" [tableStyle]="{'min-width': '50rem'}"
           [paginator]="true"
-          [rows]="5" [totalRecords]="results.length"
+          [rows]="13" [totalRecords]="results.length" [sortField]="'id'" [sortOrder]="-1"
 
 [globalFilterFields]="['meth', 'method', 'approach', 'assessmentType', 'tool']">
   <ng-template pTemplate="caption">

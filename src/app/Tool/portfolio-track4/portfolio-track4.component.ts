@@ -9,6 +9,19 @@ import { TabView } from 'primeng/tabview';
 import { Dropdown } from 'primeng/dropdown';
 import { Router } from '@angular/router';
 
+
+interface CharacteristicWeight {
+  [key: string]: number;
+}
+
+interface ChaCategoryWeightTotal {
+  [key: string]: number;
+}
+
+interface ChaCategoryTotalEqualsTo1 {
+  [key: string]: boolean;
+}
+
 @Component({
   selector: 'app-portfolio-track4',
   templateUrl: './portfolio-track4.component.html',
@@ -306,7 +319,7 @@ onChangeTrack(event : any){
     this.investorToolControllerproxy.createFinalAssessment(finalArray)
       .subscribe(_res => {
         console.log("res final", _res)
-      
+
           console.log(_res)
           this.messageService.add({
             severity: 'success',
@@ -318,7 +331,7 @@ onChangeTrack(event : any){
          // this.isSavedAssessment = true
           // this.onCategoryTabChange('', this.tabView);
 
-        
+
         // form.reset();
       }, error => {
         console.log(error)
@@ -346,26 +359,130 @@ onChangeTrack(event : any){
   next(){
 
     if(this.activeIndexMain ===1 ){
-     
+
       this.activeIndex2 =this.activeIndex2+1;
       console.log( "activeIndex2",this.activeIndex2)
 
     }
     if (this.activeIndex===3) {
       this.activeIndexMain =1;
-      
+
     }
     if (this.activeIndex<=2 && this.activeIndex>=0 && this.activeIndexMain===0){
       this.activeIndex =this.activeIndex +1;
       console.log( this.activeIndex)
-      
+
     }
 
-    
-
-   
-
-    
   }
+
+  getCategory(characteristics: any, category: any) {
+    this.characteristicsArray = [];
+    for (let x of this.characteristicsList) {
+      if (x.category.name === category) {
+        this.characteristicsArray.push(x)
+      }
+    }
+    return this.characteristicsArray
+  }
+
+
+  characteristicWeightScore :CharacteristicWeight = {};
+  chaCategoryWeightTotal : ChaCategoryWeightTotal = {};
+  chaCategoryTotalEqualsTo1 : ChaCategoryTotalEqualsTo1 = {};
+
+  characteristicLikelihoodWeightScore :CharacteristicWeight = {};
+  chaCategoryLikelihoodWeightTotal : ChaCategoryWeightTotal = {};
+  chaCategoryLikelihoodTotalEqualsTo1 : ChaCategoryTotalEqualsTo1 = {};
+
+  /* characteristicWeightScoreOutcome :CharacteristicWeight = {};
+  chaCategoryWeightTotalOutcome : ChaCategoryWeightTotal = {};
+  chaCategoryTotalEqualsTo1Outcome : ChaCategoryTotalEqualsTo1 = {};
+
+  characteristicLikelihoodWeightScoreOutcome :CharacteristicWeight = {};
+  chaCategoryLikelihoodWeightTotalOutcome : ChaCategoryWeightTotal = {};
+  chaCategoryLikelihoodTotalEqualsTo1Outcome : ChaCategoryTotalEqualsTo1 = {};
+ */
+
+ /*  onRelevanceWeightChangeOutcome(categoryName: string, characteristicName : string, chaWeight: number) {
+    this.characteristicWeightScoreOutcome[characteristicName] = chaWeight
+   this.chaCategoryWeightTotalOutcome[categoryName] = 0
+   this.chaCategoryTotalEqualsTo1Outcome[categoryName] = false
+
+  for(let cha of  this.getCategory(characteristicName, categoryName)) {
+     this.chaCategoryWeightTotalOutcome[categoryName] =  this.chaCategoryWeightTotalOutcome[categoryName] +  this.characteristicWeightScoreOutcome[cha.name]
+
+     console.log('Characteristicrrrrrrr:',  this.characteristicWeightScoreOutcome[cha.name]);
+  }
+
+  if( this.chaCategoryWeightTotalOutcome[categoryName] == 1){
+   this.chaCategoryTotalEqualsTo1Outcome[categoryName] = true
+  }
+  console.log('Characteristic Name:',categoryName ,  characteristicName, 'chaWeight:', chaWeight);
+   console.log( 'category :',categoryName,' Total: ',  this.chaCategoryWeightTotalOutcome[categoryName]);
+
+ } */
+
+
+
+ /*  onLikelihoodWeightChangeOutcome(categoryName: string, characteristicName : string, chaWeight: number) {
+    this.characteristicLikelihoodWeightScoreOutcome[characteristicName] = chaWeight
+   this.chaCategoryLikelihoodWeightTotalOutcome[categoryName] = 0
+   this.chaCategoryLikelihoodTotalEqualsTo1Outcome[categoryName] = false
+
+  for(let cha of  this.getCategory(characteristicName, categoryName)) {
+     this.chaCategoryLikelihoodWeightTotalOutcome[categoryName] =  this.chaCategoryLikelihoodWeightTotalOutcome[categoryName] +  this.characteristicLikelihoodWeightScoreOutcome[cha.name]
+
+     console.log('Characteristicrrrrrrr:',  this.characteristicLikelihoodWeightScoreOutcome[cha.name]);
+  }
+
+  if( this.chaCategoryLikelihoodWeightTotalOutcome[categoryName] == 1){
+   this.chaCategoryLikelihoodTotalEqualsTo1Outcome[categoryName] = true
+  }
+  console.log('LL Characteristic Name:',categoryName ,  characteristicName, 'chaWeight:', chaWeight);
+ console.log( 'LL category :',categoryName,' Total: ',  this.chaCategoryLikelihoodWeightTotalOutcome[categoryName]);
+
+ } */
+
+
+
+  onLikelihoodWeightChange(categoryName: string, characteristicName : string, chaWeight: number) {
+     this.characteristicLikelihoodWeightScore[characteristicName] = chaWeight
+    this.chaCategoryLikelihoodWeightTotal[categoryName] = 0
+    this.chaCategoryLikelihoodTotalEqualsTo1[categoryName] = false
+
+   for(let cha of  this.getCategory(characteristicName, categoryName)) {
+      this.chaCategoryLikelihoodWeightTotal[categoryName] =  this.chaCategoryLikelihoodWeightTotal[categoryName] +  this.characteristicLikelihoodWeightScore[cha.name]
+
+      console.log('Characteristicrrrrrrr:',  this.characteristicLikelihoodWeightScore[cha.name]);
+   }
+
+   if( this.chaCategoryLikelihoodWeightTotal[categoryName] == 1){
+    this.chaCategoryLikelihoodTotalEqualsTo1[categoryName] = true
+   }
+   console.log('LL Characteristic Name:',categoryName ,  characteristicName, 'chaWeight:', chaWeight);
+  console.log( 'LL category :',categoryName,' Total: ',  this.chaCategoryLikelihoodWeightTotal[categoryName]);
+
+  }
+
+
+  onRelevanceWeightChange(categoryName: string, characteristicName : string, chaWeight: number) {
+    this.characteristicWeightScore[characteristicName] = chaWeight
+   this.chaCategoryWeightTotal[categoryName] = 0
+   this.chaCategoryTotalEqualsTo1[categoryName] = false
+
+  for(let cha of  this.getCategory(characteristicName, categoryName)) {
+     this.chaCategoryWeightTotal[categoryName] =  this.chaCategoryWeightTotal[categoryName] +  this.characteristicWeightScore[cha.name]
+
+     console.log('Characteristicrrrrrrr:',  this.characteristicWeightScore[cha.name]);
+  }
+
+  if( this.chaCategoryWeightTotal[categoryName] == 1){
+   this.chaCategoryTotalEqualsTo1[categoryName] = true
+  }
+  console.log('Characteristic Name:',categoryName ,  characteristicName, 'chaWeight:', chaWeight);
+   console.log( 'category :',categoryName,' Total: ',  this.chaCategoryWeightTotal[categoryName]);
+
+ }
 
 }
