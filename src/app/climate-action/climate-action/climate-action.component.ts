@@ -31,6 +31,7 @@ import {
   CountryControllerServiceProxy,
   AggregatedAction,
   ActionArea,
+  Characteristics,
 
 } from 'shared/service-proxies/service-proxies';
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
@@ -115,6 +116,7 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
   approachList: string[] = ['AR1', 'AR2', 'AR3', 'AR4', 'AR5'];
   typeofAction: string[] = ['Investment','Carbon Market','NDC Implementation','Project']
   levelOfImplementation: any[] = [];
+  characteristicsList: Characteristics[] = [];
   
   barrierBox:boolean=false;
 
@@ -160,6 +162,7 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
     private asses: MethodologyAssessmentControllerServiceProxy,
     private cdref: ChangeDetectorRef ,
     private masterDataService: MasterDataService,
+    
   ) // private usersControllerServiceProxy: UsersControllerServiceProxy,
   // private ndcProxy:NdcControllerServiceProxy
   { }
@@ -194,6 +197,15 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
     this.asses.findByAllCategories().subscribe((res: any) => {
       this.category = res;
     })
+
+    
+ 
+    this.asses.findAllCharacteristics().subscribe((res3: any) => {
+      // console.log("ressss3333", res3)
+      this.characteristicsList = res3
+      // console.log("ressss3333", this.characteristicsList)
+
+    });
 
 
     // this.countryProxy.getCountry(this.counID).subscribe((res:any)=>{
@@ -790,16 +802,16 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
                 detail: 'project  has save successfully',
                 closable: true,
               });
-              // console.log("ssss",res)
-              // for (let b of this.selectbarriers) {
-              //   let pb = new PolicyBarriers();
-              //   pb.climateAction = res
-              //   pb.barriers = b;
-              //   this.policyBar.push(pb);
-              // }
-              // //@ts-ignore
-              // this.projectProxy.policyBar(this.policyBar).subscribe();
-              // console.log('save', res);
+              console.log("ssss",res)
+              for (let b of this.selectbarriers) {
+                let pb = new PolicyBarriers();
+                pb.climateAction = res
+                pb.barriers = b;
+                this.policyBar.push(pb);
+              }
+              //@ts-ignore
+              this.projectProxy.policyBar(this.policyBar).subscribe();
+              console.log('save', res);
              
             },
 

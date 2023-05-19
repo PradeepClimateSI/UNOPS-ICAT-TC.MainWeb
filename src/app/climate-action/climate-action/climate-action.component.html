@@ -977,6 +977,20 @@
               <div class="row p-2">
                 <div class="col-12 col-md-6">
                   <div class="p-field">
+                    <label for="impEntity">Characteristic Affected</label>
+                    <p-dropdown placeholder="Select Barrier &nbsp; &nbsp;" appendTo="body" name="name" [options]="characteristicsList"
+                      [(ngModel)]="barrierSelected.characteristics" optionLabel="barrier" #assyesrw="ngModel">
+                    </p-dropdown>
+                  </div>
+                </div>
+  
+              </div>
+
+              
+
+              <div class="row p-2">
+                <div class="col-12 col-md-6">
+                  <div class="p-field">
                     <p-checkbox  [binary]="true" [(ngModel)]="barrierSelected.affectedbyIntervention"  name="affectedbyIntervention" inputId="binary"></p-checkbox> &nbsp; &nbsp;
                     <label for="ny">Is the barrier directly affected by the intervention?</label>
 
@@ -984,6 +998,7 @@
                 </div>
   
               </div>
+              
             </ng-template>
 
               <ng-template pTemplate="footer">
@@ -1000,14 +1015,19 @@
   
           </p-dialog>
           <div class="row p-2" >
-            <div class="col-12 col-md-3">
+            <div class="col-12 col-md-2">
               <div class="p-field">
                 <label class ="barrier-top" for="relatedPolicies">Barrier category</label>
               </div>
             </div>
-            <div class="col-12 col-md-5">
+            <div class="col-12 col-md-3">
               <div class="p-field">
                 <label class ="barrier-top" for="relatedPolicies">Barrier </label>
+              </div>
+            </div>
+            <div class="col-12 col-md-3">
+              <div class="p-field">
+                <label class ="barrier-top" for="relatedPolicies">Characteristic Affected </label>
               </div>
             </div>
             <div class="col-12 col-md-4">
@@ -1017,30 +1037,36 @@
             </div>
 
           </div>
-          <div class="row p-2" *ngFor="let barriers of finalBarrierList">
+          <div *ngIf="finalBarrierList.length !==0" >
+            <div class="row p-2" *ngFor="let barriers of finalBarrierList">
             
-            <div class="col-12 col-md-3">
-              <div class="p-field">
-               <div></div>
-               <div>{{barriers.category.category}}</div>
-               
+              <div class="col-12 col-md-2">
+                <div class="p-field">
+                 <div></div>
+                 <div>{{barriers.category.category}}</div>
+                </div>
               </div>
-            </div>
-            <div class="col-12 col-md-5">
-              <div class="p-field">
-                <div>{{barriers.barrier.barrier}}</div>
-
-               
+              <div class="col-12 col-md-3">
+                <div class="p-field">
+                  <div>{{barriers.barrier.barrier}}</div>
+                </div>
               </div>
-            </div>
-            <div class="col-12 col-md-4">
-              <div class="p-field">
-                <div>{{barriers.affectedbyIntervention}} </div>
-               
+              <div class="col-12 col-md-3">
+                <div class="p-field">
+                  <div>{{barriers.barrier.characteristics?.name}}</div>
+                </div>
               </div>
+              <div class="col-12 col-md-4">
+                <div class="p-field">
+                  <div>{{barriers.affectedbyIntervention}} </div>
+                 
+                </div>
+              </div>
+  
             </div>
 
           </div>
+         
           </div>
         </div>
         <div class=" mt-2">
