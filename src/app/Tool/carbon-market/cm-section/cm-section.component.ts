@@ -27,8 +27,9 @@ export class CmSectionComponent implements OnInit {
   visible: boolean = false
 
   result: any 
-
-  message = 'The preconditions for transformational change have not been met. <br> Transformational change = 0'
+  
+  message: string
+  defaultMessage = 'The preconditions for transformational change have not been met. <br> Transformational change = 0'
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -156,7 +157,11 @@ export class CmSectionComponent implements OnInit {
             this.recievedQuestions = []
           } else {
             // alert("TC score is 0")
-            this.message = message
+            if (message){
+              this.message = message
+            } else {
+              this.message = this.defaultMessage
+            }
             this.visible = true
             this.shownCriterias[sectionIdx].splice(criteriaIdx + 1, this.shownCriterias[sectionIdx].length - (criteriaIdx + 1))
             this.shownSections.splice(sectionIdx + 1, this.shownSections.length - (sectionIdx + 1))
@@ -176,7 +181,11 @@ export class CmSectionComponent implements OnInit {
               }
             } else {
               this.visible = true
-              this.message = message
+              if (message){
+                this.message = message
+              } else {
+                this.message = this.defaultMessage
+              }
               this.shownQuestions[sectionIdx][criteriaIdx].splice(idx + 1, this.shownQuestions[sectionIdx][criteriaIdx].length - (idx + 1))
               this.shownCriterias[sectionIdx].splice(criteriaIdx + 1, this.shownCriterias[sectionIdx].length - (criteriaIdx + 1))
               this.shownSections.splice(sectionIdx + 1, this.shownSections.length - (sectionIdx + 1))
