@@ -31,6 +31,7 @@ import {
   CountryControllerServiceProxy,
   AggregatedAction,
   ActionArea,
+  Characteristics,
 
 } from 'shared/service-proxies/service-proxies';
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
@@ -115,6 +116,7 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
   approachList: string[] = ['AR1', 'AR2', 'AR3', 'AR4', 'AR5'];
   typeofAction: string[] = ['Investment','Carbon Market','NDC Implementation','Project']
   levelOfImplementation: any[] = [];
+  characteristicsList: Characteristics[] = [];
   
   barrierBox:boolean=false;
 
@@ -160,6 +162,7 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
     private asses: MethodologyAssessmentControllerServiceProxy,
     private cdref: ChangeDetectorRef ,
     private masterDataService: MasterDataService,
+    
   ) // private usersControllerServiceProxy: UsersControllerServiceProxy,
   // private ndcProxy:NdcControllerServiceProxy
   { }
@@ -195,16 +198,25 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
       this.category = res;
     })
 
+    
+ 
+    this.asses.findAllCharacteristics().subscribe((res3: any) => {
+      // console.log("ressss3333", res3)
+      this.characteristicsList = res3
+      // console.log("ressss3333", this.characteristicsList)
 
-    this.countryProxy.getCountry(this.counID).subscribe((res:any)=>{
-      console.log('++++++++++++++++',res)
-      this.countryList.push(res);
-      this.project.country =res
+    });
 
-      console.log('++++++++++++++++',this.countryList)
-      this.isSector = true;
+
+    // this.countryProxy.getCountry(this.counID).subscribe((res:any)=>{
+    //   console.log('++++++++++++++++',res)
+    //   this.countryList.push(res);
+    //   this.project.country =res
+
+    //   console.log('++++++++++++++++',this.countryList)
+    //   this.isSector = true;
       
-    })
+    // })
 
     // this.serviceProxy
     //   .getManyBaseUsersControllerUser(
@@ -247,21 +259,21 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
     });
 
     if (countryId) {
-      // this.serviceProxy
-      //   .getOneBaseCountryControllerCountry(
-      //     countryId,
-      //     undefined,
-      //     undefined,
-      //     undefined
-      //   )
-      //   .subscribe((res) => {
-      //     console.log("sss",res)
-      //     // this.countryList.push(res)
-      //     console.log("this.countryList",this.countryList)
-      //     this.project.country =res;
-      //     this.isSector = true;
-      //     // console.log('tokenPayloadmasssge',res);
-      //   });
+      this.serviceProxy
+        .getOneBaseCountryControllerCountry(
+          countryId,
+          undefined,
+          undefined,
+          undefined
+        )
+        .subscribe((res) => {
+          console.log("sss",res)
+          this.countryList.push(res)
+          console.log("this.countryList",this.countryList)
+          this.project.country =res;
+          this.isSector = true;
+          // console.log('tokenPayloadmasssge',res);
+        });
     } else {
       this.project.country = new Country();
       console.log("pr", this.project)   // working
@@ -296,9 +308,9 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
     //     console.log('***************************');
     //     console.log(res.data);
     //   });
-    this.countryProxy.findall().subscribe((res:any)=>{
-      this.countryList=res;
-    })
+    // this.countryProxy.findall().subscribe((res:any)=>{
+    //   this.countryList=res;
+    // })
 
     // this.serviceProxy
     //   .getManyBaseCountryControllerCountry(
@@ -316,7 +328,7 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
     //   .subscribe((res: any) => {
 
     //     this.countryList = res.data;
-    //     // console.log("countrylist all",this.countryList) //  working
+    //     console.log("countrylist all",this.countryList) //  working
     //   });
 
 
@@ -776,9 +788,9 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
         this.project.actionArea.id =1;
         this.project.sector = new Sector()
         this.project.sector.id =1;
-        let country = new Country();
-        country.id =this.counID
-        this.project.country =country
+        // let country = new Country();
+        // country.id =this.counID
+        // this.project.country =country
           this.serviceProxy.createOneBaseProjectControllerClimateAction(this.project)
           .subscribe(
             (res) => {
@@ -790,16 +802,16 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
                 detail: 'project  has save successfully',
                 closable: true,
               });
-              // console.log("ssss",res)
-              // for (let b of this.selectbarriers) {
-              //   let pb = new PolicyBarriers();
-              //   pb.climateAction = res
-              //   pb.barriers = b;
-              //   this.policyBar.push(pb);
-              // }
-              // //@ts-ignore
-              // this.projectProxy.policyBar(this.policyBar).subscribe();
-              // console.log('save', res);
+              console.log("ssss",res)
+              for (let b of this.selectbarriers) {
+                let pb = new PolicyBarriers();
+                pb.climateAction = res
+                pb.barriers = b;
+                this.policyBar.push(pb);
+              }
+              //@ts-ignore
+              this.projectProxy.policyBar(this.policyBar).subscribe();
+              console.log('save', res);
              
             },
 

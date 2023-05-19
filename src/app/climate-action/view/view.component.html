@@ -55,7 +55,7 @@
            
   
             <tr>
-              <th>ID</th>
+              <!-- <th>ID</th> -->
               
           
                 
@@ -79,11 +79,13 @@
                 INTERVENTION </th>
               
              
-              <th>PROJECT PROPENENT</th>
+              <!-- <th>PROJECT PROPENENT</th> -->
               <!-- <th>Type of Mitigation Action</th> -->
               <!-- <ng-container *ngIf="this.loggedUser?.userType!?.id! == 1">
                 <th>STATUS OF APPPROVAL</th>
               </ng-container> -->
+              <th>Type of intervention</th>
+              <th>Current status</th>
               <th>STATUS OF APPPROVAL</th>
               <th>ACTIONS</th>
               
@@ -95,10 +97,10 @@
               
                 
               
-              <td>{{climateactions.id}}</td>
-              <td>
-              {{ climateactions.policyName }}</td>
-              <td>{{ climateactions.contactPersoFullName }}</td>
+              <!-- <td>{{climateactions.id}}</td> -->
+              <!-- <td>
+              {{ climateactions.policyName }}</td> -->
+              <td>{{ climateactions.policyName }}</td>
               <!-- <td>{{ climateactions.mitigationAction?.name }}</td> -->
               <!-- <ng-container *ngIf="this.loggedUser?.userType!?.id! == 1">
                 <td
@@ -109,6 +111,12 @@
                 {{(climateactions.projectApprovalStatus?.id == undefined || climateactions.projectApprovalStatus?.id == 4)?'Proposed':(climateactions.projectApprovalStatus.id == 3?'Data Requested':(climateactions.projectApprovalStatus.id == 1?'Accept':(climateactions.projectApprovalStatus.id == 5?'Active':'Reject')))}}
                 </td>
               </ng-container> -->
+              <td>
+                {{climateactions.typeofAction}}
+              </td>
+              <td>
+                {{climateactions.projectStatus?.name}}
+              </td>
               <td>
                 {{(climateactions.projectApprovalStatus?.id == undefined || climateactions.projectApprovalStatus?.id == 4)?'Proposed':(climateactions.projectApprovalStatus.id == 3?'Data Requested':(climateactions.projectApprovalStatus.id == 1?'Accept':(climateactions.projectApprovalStatus.id == 5?'Active':'Reject')))}}
               </td>

@@ -41,7 +41,8 @@ export class InvestorToolComponent implements OnInit {
   likelihood: any[] = [];
   relevance: any[] = [];
 
-  description = ''
+  description = '';
+  levelofImplementation:number=0;
 
   yesNoAnswer: any[] = [{ id: 1, name: "Yes" }, { id: 2, name: "No" },  { id: 3, name: "Maybe" }];
 
@@ -195,7 +196,8 @@ export class InvestorToolComponent implements OnInit {
             this.createInvestorToolDto.sectors = this.sectorArray;
             this.createInvestorToolDto.impacts = this.impactArray;
             this.createInvestorToolDto.investortool = this.investorAssessment;
-
+             this.createInvestorToolDto.investortool = this.investorAssessment;
+            console.log("investorassessmet",this.createInvestorToolDto)
             this.investorToolControllerproxy.createinvestorToolAssessment(this.createInvestorToolDto)
               .subscribe(_res => {
                 console.log("res final", _res)
@@ -340,5 +342,24 @@ export class InvestorToolComponent implements OnInit {
 
     
   }
+
+  onLevelofImplementationChange(event:any){
+    console.log(event)
+    if(event==='National')
+    {
+      this.levelofImplementation =1
+      console.log("111")
+    }
+    else if(event==='Sub-national')
+    {
+      this.levelofImplementation =2
+      console.log("222")
+    }
+    else{
+      this.levelofImplementation =0
+    }
+      
+  }
+ 
 
 }

@@ -4,9 +4,9 @@
     </div>
     <form #fData="ngForm" (ngSubmit)="save(fData)">
         <div class="card" style="min-height: 600px;">
-            <div class="p-grid p-fluid col-md-6 col-sm-12">
+            <div class="p-grid p-fluid col-md-12 col-sm-12">
                 <div class="row p-2">
-                    <div class="col-12 col-md-8">
+                    <div class="col-12 col-md-6">
                         <div class="p-field p-2">
                             <label for="policy">Select Intervetion *</label>
                             <p-dropdown name="policy" #policy="ngModel" placeholder="Select Policy"
@@ -33,94 +33,149 @@
                                 This is a mandatory field
                             </p>
                         </div>
+                       
+
+                    </div>
+                </div>
+                <div class="row p-2">
+                    <div class="col-12 col-md-6">
                         <div class="p-field p-2">
                             <label for="Level of implementation">Level of implementation*</label>
-                            <p-dropdown name="investorAssessment.level_of_implemetation" #type="ngModel"
+                            <p-dropdown name="investorAssessment.level_of_implemetation" #levelofimpl="ngModel"
                                 placeholder="Select Level of implementation"
                                 [(ngModel)]="investorAssessment.level_of_implemetation"
                                 appendTo="body"
                                 [options]="levelOfImplementation" optionLabel="name" optionValue="name"
+                                (ngModelChange)="onLevelofImplementationChange($event)"
                                 [required]="true"></p-dropdown>
                             <p class="info-message text-danger" *ngIf="
                                 !investorAssessment.level_of_implemetation &&
-                                (fData.submitted || type.touched)
+                                (fData.submitted || levelofimpl.touched)
                               ">
                                 This is a mandatory field
                             </p>
                         </div>
-                        <div class="p-field p-2">
-                            <label for="Level of implementation">Geographical Areas Covered*</label>
-                            <p-dropdown name="investorAssessment.geographical_areas_covered" #type="ngModel"
-                                placeholder="Select Geographical Areas Covered"
-                                [(ngModel)]="investorAssessment.geographical_areas_covered"
-                                [options]="levelOfImplementation" optionLabel="name" optionValue="name"
-                                [required]="true"></p-dropdown>
-                            <p class="info-message text-danger" *ngIf="
-                                !investorAssessment.geographical_areas_covered &&
-                                (fData.submitted || type.touched)
-                              ">
-                                This is a mandatory field
-                            </p>
-                        </div>
-                        <div class="p-field p-2">
-                            <label for="Sectors Covered">Sectors Covered*</label>
-
-                            <p-multiSelect name="sectors" #type="ngModel" placeholder="Select Sectors Covered"
-                                [(ngModel)]="sectorArray" [options]="sectorList"
-                                (ngModelChange)="onItemSelectSectors($event)" optionLabel="name"
-                                [required]="true"></p-multiSelect>
-                            <p class="info-message text-danger" *ngIf="
-                                sectorArray.length===0 &&
-                                (fData.submitted || type.touched)
-                              ">
-                                This is a mandatory field
-                            </p>
-                        </div>
-
-                        <div class="p-field p-2">
-                            <label for="Sectors Covered">Impact Covered*</label>
-                            <p-multiSelect name="impact" #type="ngModel" placeholder="Select Impact Covered"
-                                [(ngModel)]="impactArray" [options]="impactCovered"
-                                (ngModelChange)="onItemSelectImpacts($event)" optionLabel="name"
-                                [required]="true"></p-multiSelect>
-                            <p class="info-message text-danger" *ngIf="
-                                impactArray.length===0 &&
-                                (fData.submitted || type.touched)
-                              ">
-                                This is a mandatory field
-                            </p>
-                        </div>
-
-                        <div class="p-field p-2">
-
-                            <label for="date1">Assessment Period</label>
-                            <div class="p-inputgroup">
-                                <span class="p-inputgroup-addon">
-                                    <i class="pi pi-calendar"></i>
-                                </span>
-                                <p-calendar dateFormat="mm-dd-yy" inputId="date1" placeholder="From"
-                                    [(ngModel)]="assessment.from" name="date1"></p-calendar>
-                                <span class="p-inputgroup-addon">to</span>
-                                <p-calendar dateFormat="mm-dd-yy" inputId="date2" placeholder="To"
-                                    [(ngModel)]="assessment.to" name="date2"></p-calendar>
-                            </div>
-                        </div>
-
-                        <div class="p-field p-2">
-                            <label for="Sectors Covered">Assessment Method*</label>
-                            <p-dropdown name="type" #type="ngModel" placeholder="Select Assessment Method"
-                                [(ngModel)]="assessment.assessment_method" [options]="assessmentMethods"  appendTo="body"
-                                optionLabel="name" optionValue="name"></p-dropdown>
-                            <!-- <p class="info-message text-danger" *ngIf="
-                                !assessment.assessment_method &&
-                                (fData.submitted || type.touched)
-                              ">
-                                This is a mandatory field
-                            </p> -->
-                        </div>
-
+                            
                     </div>
+                    <div *ngIf="levelofImplementation ===1" class="col-12 col-md-6">
+                        <div class="p-field p-2">
+                            <label for="Level of implementation">Enter country*</label>
+                            <input type="text" pInputText
+                              #country="ngModel"
+                              [required]="true"
+                              placeholder="Enter country"
+                              [(ngModel)]="investorAssessment.national_country"
+                              name="country" />
+                            <p class="info-message text-danger" *ngIf="
+                                !investorAssessment.national_country &&
+                                (fData.submitted || country.touched)
+                              ">
+                                This is a mandatory field
+                            </p>
+                        </div>
+                           
+                    </div>
+
+                    <div *ngIf="levelofImplementation ===2" class="col-12 col-md-6">
+                        <div class="p-field p-2">
+                            <label for="Level of implementation">Enter region*</label>
+                            <input type="text" pInputText
+                              #country="ngModel"
+                              [required]="true"
+                              placeholder="Enter region"
+                              [(ngModel)]="investorAssessment.subnational_region"
+                              name="country" />
+                            <p class="info-message text-danger" *ngIf="
+                                !investorAssessment.subnational_region &&
+                                (fData.submitted || country.touched)
+                              ">
+                                This is a mandatory field
+                            </p>
+                        </div>
+                           
+                    </div>
+                       
+
+                    
                 </div>
+                <div class="row p-2">
+                    <div class="col-12 col-md-6">
+                    <div class="p-field p-2">
+                        <label for="Level of implementation">Geographical Areas Covered*</label>
+                        <p-dropdown name="investorAssessment.geographical_areas_covered" #type="ngModel"
+                            placeholder="Select Geographical Areas Covered"
+                            [(ngModel)]="investorAssessment.geographical_areas_covered"
+                            [options]="levelOfImplementation" optionLabel="name" optionValue="name"
+                            [required]="true"></p-dropdown>
+                        <p class="info-message text-danger" *ngIf="
+                            !investorAssessment.geographical_areas_covered &&
+                            (fData.submitted || type.touched)
+                          ">
+                            This is a mandatory field
+                        </p>
+                        </div>
+                        <div class="p-field p-2">
+                        <label for="Sectors Covered">Sectors Covered*</label>
+                        
+                        <p-multiSelect name="sectors" #type="ngModel" placeholder="Select Sectors Covered"
+                            [(ngModel)]="sectorArray" [options]="sectorList"
+                            (ngModelChange)="onItemSelectSectors($event)" optionLabel="name"
+                            [required]="true"></p-multiSelect>
+                        <p class="info-message text-danger" *ngIf="
+                            sectorArray.length===0 &&
+                            (fData.submitted || type.touched)
+                          ">
+                            This is a mandatory field
+                        </p>
+                        </div>
+                        
+                        <div class="p-field p-2">
+                        <label for="Sectors Covered">Impact Covered*</label>
+                        <p-multiSelect name="impact" #type="ngModel" placeholder="Select Impact Covered"
+                            [(ngModel)]="impactArray" [options]="impactCovered"
+                            (ngModelChange)="onItemSelectImpacts($event)" optionLabel="name"
+                            [required]="true"></p-multiSelect>
+                        <p class="info-message text-danger" *ngIf="
+                            impactArray.length===0 &&
+                            (fData.submitted || type.touched)
+                          ">
+                            This is a mandatory field
+                        </p>
+                        </div>
+                        
+                        <div class="p-field p-2">
+                        
+                        <label for="date1">Assessment Period</label>
+                        <div class="p-inputgroup">
+                            <span class="p-inputgroup-addon">
+                                <i class="pi pi-calendar"></i>
+                            </span>
+                            <p-calendar dateFormat="mm-dd-yy" inputId="date1" placeholder="From"
+                                [(ngModel)]="assessment.from" name="date1"></p-calendar>
+                            <span class="p-inputgroup-addon">to</span>
+                            <p-calendar dateFormat="mm-dd-yy" inputId="date2" placeholder="To"
+                                [(ngModel)]="assessment.to" name="date2"></p-calendar>
+                        </div>
+                        </div>
+                        
+                        <div class="p-field p-2">
+                        <label for="Sectors Covered">Assessment Method*</label>
+                        <p-dropdown name="type" #type="ngModel" placeholder="Select Assessment Method"
+                            [(ngModel)]="assessment.assessment_method" [options]="assessmentMethods"  appendTo="body"
+                            optionLabel="name" optionValue="name"></p-dropdown>
+                        <!-- <p class="info-message text-danger" *ngIf="
+                            !assessment.assessment_method &&
+                            (fData.submitted || type.touched)
+                          ">
+                            This is a mandatory field
+                        </p> -->
+                        </div>
+                    </div>
+                       
+
+                    
+                </div>
+                
             </div>
             <div class="row justify-content-end" *ngIf="!isSavedAssessment">
                 <div>
@@ -791,7 +846,7 @@
                                                             class="col-4 mb-20">
                                                             <p-dropdown name="data.charData.question02" #type="ngModel"
                                                                 placeholder="Select Answer"
-                                                                [(ngModel)]="data.question02"
+                                                                [(ngModel)]="data.question03"
                                                                 [options]="yesNoAnswer" optionLabel="name"
                                                                 appendTo="body"
                                                                 optionValue="name" [required]="true"></p-dropdown>
@@ -853,9 +908,12 @@
                                                         <div class="col-12 col-lg-6">
                                                             <div class="p-field">
                                                                 <label for="Relevance">Score</label>
-                                                                <p-inputNumber inputId="integeronly"
+                                                                <p-inputNumber 
+                                                                    [min]="-1" [max]="3"  [step]="1"
+                                                                    [showButtons]="true"
+                                                                    inputId="horizontal" 
                                                                     [(ngModel)]="data.score"
-                                                                    placeholder="Enter Score"
+                                                                    placeholder="Enter an integer between -1 and 3"
                                                                     name="data.charData.score"> </p-inputNumber>
                                                             </div>
                                                         </div>
