@@ -18,7 +18,7 @@ import decode from 'jwt-decode';
 //   @Input() isSetting: boolean = false;
 
 //   isView: boolean = false;
-//   isNewEntry: boolean = true;  
+//   isNewEntry: boolean = true;
 //   editEntryId: number; // user id. not login profile id
 //   creating: boolean = false;
 
@@ -29,7 +29,7 @@ import decode from 'jwt-decode';
 
 
 //   @ViewChild(UserDetailsFormComponent) userDetailsFormComponent:UserDetailsFormComponent;
-  
+
 //   constructor(
 //     private usersControllerServiceProxy: UsersControllerServiceProxy,
 //     private serviceProxy: ServiceProxy,
@@ -62,15 +62,15 @@ import decode from 'jwt-decode';
 //       const userName = this.appService.getUserName();
 //       const role = this.appService.getRole();
 //       // if(loginProfileId && userName && role){
-//       //   this.loginProfile.userName = userName; 
+//       //   this.loginProfile.userName = userName;
 //       //   this.loginProfile.id = loginProfileId;
 //       //   const r = this.roles.find(r => r.code === role);
 //       //   if(r){
 //       //     this.loginProfile.role = r;
-//       //   }     
+//       //   }
 
 //       //   console.log(this.loginProfile.id);
-        
+
 //       //   this.serviceProxy.getManyBaseUsersControllerUser(
 //       //     undefined,
 //       //     undefined,
@@ -122,24 +122,24 @@ import decode from 'jwt-decode';
 //   //     const r = this.roles.find(r => r.code === res.role);
 //   //     if(r){
 //   //       this.loginProfile.userType = r;
-//   //     }    
-//   //     this.userDetailsFormComponent.initUser(res.user);  
+//   //     }
+//   //     this.userDetailsFormComponent.initUser(res.user);
 //   //   })
 //   // }
 
 //   // private isSupperRole(){
-//   //   return this.loginProfile.userType.code === LoginRole.MASTER_ADMIN || this.loginProfile.userType.code === LoginRole.CSI_ADMIN; 
+//   //   return this.loginProfile.userType.code === LoginRole.MASTER_ADMIN || this.loginProfile.userType.code === LoginRole.CSI_ADMIN;
 //   // }
 
 //   private abaleToSave(form: NgForm){
-//     return (form.valid || (!this.isNewEntry && this.loginProfile.userType && this.loginProfile.userName) ) 
+//     return (form.valid || (!this.isNewEntry && this.loginProfile.userType && this.loginProfile.userName) )
 //     // &&      this.loginProfile.userType && this.userDetailsFormComponent.isValid() ;
 //   }
 
 //   async save(form: NgForm) {
-//     this.creating=true;    
+//     this.creating=true;
 //     if(this.abaleToSave(form)){
-//       if(this.isNewEntry){        
+//       if(this.isNewEntry){
 //         this.authServiceProxy.createOneBaseLoginProfileControllerLoginProfile(this.loginProfile)
 //           .subscribe(async (res: LoginProfile) => {
 //             // this.editEntryId = res.id;
@@ -246,7 +246,7 @@ import decode from 'jwt-decode';
 //           detail: 'has deleted successfully',
 //           closable: true,
 //         });
-//       },error => {        
+//       },error => {
 //         this.messageService.add({
 //           severity: 'error',
 //           summary: 'Error',
@@ -321,17 +321,23 @@ export class UserFormComponent implements OnInit {
   ngOnInit(): void {
 
     console.log("ngonitit")
-    const token = localStorage.getItem('access_token')!;
-    console.log("token",token)
-    
-      const tokenPayload = token ? decode<any>(token):'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3IiOiJzZWN0b3JhZG1pbjJAY2xpbWF0ZXNpLmNvbSIsImZuYW1lIjoiTWFkaHV3YW50aGEiLCJsbmFtZSI6IkhpbmRhZ29kYSIsImNvdW50cnlJZCI6MSwiaW5zdE5hbWUiOiJUcmFuc3BvcnQgTWluaXN0cnkiLCJtb2R1bGVMZXZlbHMiOlsxLDEsMSwxLDFdLCJzZWN0b3JJZCI6MSwicm9sZXMiOlsiU2VjdG9yIEFkbWluIl0sImlhdCI6MTY3ODE3MzM4MiwiZXhwIjoxNjc5MDM3MzgyfQ.0bpc5Jm3TxUhoOU8sNwnLGRtsonGAY4et1O2PlmicGA';
+   // const token = localStorage.getItem('access_token')!;
+   // console.log("token",token)
+
+    const token = localStorage.getItem('ACCESS_TOKEN')!;
+    const tokenPayload = decode<any>(token);
+    const username = tokenPayload.usr;
+    console.log('username=========', tokenPayload);
+
+
+    //  const tokenPayload = token ? decode<any>(token):'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3IiOiJzZWN0b3JhZG1pbjJAY2xpbWF0ZXNpLmNvbSIsImZuYW1lIjoiTWFkaHV3YW50aGEiLCJsbmFtZSI6IkhpbmRhZ29kYSIsImNvdW50cnlJZCI6MSwiaW5zdE5hbWUiOiJUcmFuc3BvcnQgTWluaXN0cnkiLCJtb2R1bGVMZXZlbHMiOlsxLDEsMSwxLDFdLCJzZWN0b3JJZCI6MSwicm9sZXMiOlsiU2VjdG9yIEFkbWluIl0sImlhdCI6MTY3ODE3MzM4MiwiZXhwIjoxNjc5MDM3MzgyfQ.0bpc5Jm3TxUhoOU8sNwnLGRtsonGAY4et1O2PlmicGA';
       this.countryId=tokenPayload.countryId;
 
       let country=new Country()
        country.id=this.countryId;
       // country.id=2;
       this.sectorId = tokenPayload.sectorId;
-      //this.userRole = tokenPayload.roles[0]
+      this.userRole = tokenPayload.role[0]
       console.log("user role..",this.userRole)
 
     this.user.userType = undefined!;
@@ -342,7 +348,7 @@ export class UserFormComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.editUserId = params['id'];
       if (this.editUserId && this.editUserId > 0) {
-        
+
         this.isNewUser = false;
         this.serviceProxy
           .getOneBaseUsersControllerUser(
@@ -354,13 +360,13 @@ export class UserFormComponent implements OnInit {
           .subscribe((res: any) => {
             console.log('getUser====', res);
           //  this.onInstitutionChange2(res);
-            //this.selecteduserType = 
+            //this.selecteduserType =
             this.onInstitutionChange2(res);
             this.user = res;
             this.selecteduserType={"ae_name":this.user.userType.description,
                                      "ae_id" : this.user.userType.id      }
             this.selectedUserTypesFordrop.push(this.selecteduserType)
-            
+
           });
       }
     });
@@ -368,42 +374,42 @@ export class UserFormComponent implements OnInit {
     this.UserTypeServiceProxy.getUserTypes().subscribe((res: any) => {
       this.userTypes = res;
     });
-    
-    // this.instProxy.getAllInstitutions().subscribe((res: any) => {
-    //   console.log('institutions res ============', res);
-    //   this.institutions = res;
-    // });
+
+    this.instProxy.getAllInstitutions().subscribe((res: any) => {
+      console.log('institutions res ============', res);
+      this.institutions = res;
+    });
 
 
-    
-      // this.instProxy.getInstitutionForManageUsers(0,0)
-      // .subscribe((res) => {
-      //   console.log('institutions res ============', res);
-      //   this.institutions = res.items;
 
-      //   if (this.user?.institution) {
-      //     this.institutions.forEach((ins: Institution) => {
-      //       if (ins.id == this.user.institution.id) {
-      //         let cat = ins.category;
-      //         let type = ins.type;
-      //         ins.category = new InstitutionCategory(cat)
-      //         ins.type = new InstitutionType(type)
-      //         let _ins = new Institution(ins)
-      //         console.log(_ins)
-      //         this.user.institution = _ins;
-      //         console.log('ins set =======================');
-      //       }
-      //     });
-      //   }
-      //   console.log('institutions============', this.institutions);
-        
-      //  if(this.userRole == 'Data Collection Team')
-      //  {
-      //   this.institutions = this.institutions.filter((o)=>o.country.id == this.countryId && o.sectorId == this.sectorId && o.type.id == 3);
-      //  }
+   /*    this.instProxy.getInstitutionForManageUsers(0,0)
+      .subscribe((res) => {
+        console.log('institutions res ============', res);
+        this.institutions = res.items;
+
+        if (this.user?.institution) {
+          this.institutions.forEach((ins: Institution) => {
+            if (ins.id == this.user.institution.id) {
+              let cat = ins.category;
+              let type = ins.type;
+              ins.category = new InstitutionCategory(cat)
+              ins.type = new InstitutionType(type)
+              let _ins = new Institution(ins)
+              console.log(_ins)
+              this.user.institution = _ins;
+              console.log('ins set =======================');
+            }
+          });
+        }
+        console.log('institutions============', this.institutions);
+
+       if(this.userRole == 'Data Collection Team')
+       {
+        this.institutions = this.institutions.filter((o)=>o.country.id == this.countryId && o.sectorId == this.sectorId && o.type.id == 3);
+       }
 
 
-      // });
+      }); */
   }
 
   onChangeUser(event: any) {
@@ -413,7 +419,7 @@ export class UserFormComponent implements OnInit {
 
   async saveUser(userForm: NgForm) {
     console.log('userForm================', userForm);
-   
+
 
     if (userForm.valid) {
       if (this.isNewUser) {
@@ -421,8 +427,8 @@ export class UserFormComponent implements OnInit {
         this.usedEmail = '';
         console.log('working' );
         let tempUsers = await this.serviceProxy
-          
-           
+
+
               // create user
               console.log('create user' );
               this.user.username = this.user.email;
@@ -444,7 +450,7 @@ export class UserFormComponent implements OnInit {
                 .createOneBaseUsersControllerUser(this.user)
                 .subscribe(
                   (res) => {
-                  
+
                     this.messageService.add({
                       severity: 'success',
                       summary: 'Success',
@@ -462,11 +468,11 @@ export class UserFormComponent implements OnInit {
                   }
                 );
                 setTimeout(() => {
-                  this.onBackClick();    
+                  this.onBackClick();
                 },1000);
-       
+
       } else {
-       
+
         this.serviceProxy
           .updateOneBaseUsersControllerUser(this.user.id, this.user)
           .subscribe(
@@ -504,7 +510,7 @@ export class UserFormComponent implements OnInit {
             }
           );
           setTimeout(() => {
-            this.onBackClick();    
+            this.onBackClick();
           },1000);
       }
     }
@@ -557,11 +563,11 @@ export class UserFormComponent implements OnInit {
         });
       });
   }
-  
+
 
  async onInstitutionChange(event: any) {
     console.log('event====1',event);
-  
+
     let tempList= this.userTypes
 
 //in here check if there are any users  for inst type 1,2,3 for that certent country
@@ -569,20 +575,20 @@ export class UserFormComponent implements OnInit {
     // if(event.type.id==1){
     //   let res= await this.instProxy.getInstitutionForUsers(event.id,3).toPromise()
     // }
- 
-    
+
+
      if(event.type.id==2){
       let res= await this.instProxy.getInstitutionForUsers(event.id,3).toPromise()
-    
+
       if(res==1){
-   
+
        tempList= tempList.filter((a)=> a.ae_name!="Sector Admin")
       }
     }
     else if(event.type.id==3){
-      
+
       let res= await this.instProxy.getInstitutionForUsers(event.id,8).toPromise();
-     
+
       if(res==1){
         tempList= tempList.filter((a)=> a.ae_name!="Institution Admin")
        }
@@ -590,10 +596,10 @@ export class UserFormComponent implements OnInit {
 
     if(this.userRole ==="Institution Admin"){
       this.selectedUserTypesFordrop = tempList.filter((a)=> a.ae_name==="Data Entry Operator")
-      // console.log(this.userTypes) 
+      // console.log(this.userTypes)
        }
   else{
- 
+
     this.selectedUserTypesFordrop = tempList.filter(
       (a) => a.int_institutionTypeId === event.type.id
     );
@@ -610,7 +616,7 @@ export class UserFormComponent implements OnInit {
   onInstitutionChange2(aaa: any) {
     console.log('event====',aaa.institution);
 
-  
+
     this.selectedUserTypesFordrop = this.userTypes.filter(
       (a) => a.int_institutionTypeId ===  1//aaa.institution.type.id
     );
@@ -618,6 +624,6 @@ export class UserFormComponent implements OnInit {
     console.log('selectedUserTypesFordrop=====',this.selectedUserTypesFordrop);
 
   }
-  
+
 }
 

@@ -149,7 +149,6 @@
             <p-tabPanel [header]="category.CategoryName" *ngFor="let category of processData">
 
 
-
               <div class="characteristic-Topic" *ngFor="let data of category.data; index as i">
                 <h6>{{i+1}}.{{data.characteristics.name}}</h6>
                 <div>
@@ -251,31 +250,42 @@
 
                               </div>
                             </div>
-                          </div>
-
-                          <div class="row p-2">
-                            <div class="col-12 col-lg-6">
-                                <div class="p-field">
-                                    <label for="Relevance">Relevance Weight</label>
-                                    <p-inputNumber inputId="locale-us" mode="decimal"
-                                         locale="en-US" [minFractionDigits]="2"
-                                        [(ngModel)]="data.relevance_weight"
-                                        placeholder="Enter Relevance Weight"
-                                        name="data.charData.relevance_weight">
-                                    </p-inputNumber>
-                                </div>
                             </div>
 
-                            <div class="col-12 col-lg-6">
+                            <div class="row p-2">
+                              <div class="col-12 col-lg-6">
                                 <div class="p-field">
-                                    <label for="Relevance">Likelihood Weight</label>
+                                  <label for="Relevance">Relevance Weight (%)</label>
+                                  <p-inputNumber inputId="locale-us" mode="decimal" locale="en-US" [minFractionDigits]="2"
+                                    [(ngModel)]="data.relevance_weight" placeholder="Enter Relevance Weight" name="data.charData.relevance_weight"
+                                    (ngModelChange)="onRelevanceWeightChange(category.CategoryName,data.characteristics.name, $event)">
+                                  </p-inputNumber>
+
+                                 <!--   <div *ngIf="!chaCategoryTotalEqualsTo1[category.CategoryName]" style="color: red;">
+                                    Relevance weights for characteristics of {{category.CategoryName}} category should sum up to 100%.
+                                    <br>
+                                  </div> -->
+                                </div>
+                              </div>
+
+
+
+                            <div class="col-12 col-lg-4">
+                                <div class="p-field">
+                                    <label for="Relevance">Likelihood Weight (%)</label>
                                     <p-inputNumber inputId="locale-us" mode="decimal"
                                          locale="en-US" [minFractionDigits]="2"
                                         [(ngModel)]="data.likelihood_weight"
                                         placeholder="Enter Likelihood Weight"
-                                        name="data.charData.likelihood_weight">
+                                        name="data.charData.likelihood_weight"
+                                        (ngModelChange)="onLikelihoodWeightChange(category.CategoryName,data.characteristics.name, $event)"
+                                        >
                                     </p-inputNumber>
 
+                                 <!--  <div *ngIf="!chaCategoryLikelihoodTotalEqualsTo1[category.CategoryName]" style="color: red;">
+                                      Likelihood weights for characteristics of {{category.CategoryName}} category should sum up to 100%.
+                                      <br>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
