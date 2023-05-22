@@ -32,6 +32,7 @@ import {
   AggregatedAction,
   ActionArea,
   Characteristics,
+  PolicySector,
 
 } from 'shared/service-proxies/service-proxies';
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
@@ -124,6 +125,13 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
 
   barrierSelected:BarrierSelected= new BarrierSelected();
   finalBarrierList :BarrierSelected[]=[];
+
+  policySectorArray:PolicySector[]=[]
+  sectornames:any[]=[];
+  barrierArray:PolicyBarriers[]
+  sectorsJoined :string='';
+
+  finalSectors:Sector[]=[]
 
 
 
@@ -458,7 +466,7 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
                 this.project.dateOfImplementation.date()
               );
 
-              this.dateOfImplementation = new Date(
+              this.dateOfCompletion = new Date(
                 this.project.dateOfCompletion.year(),
                 this.project.dateOfCompletion.month(),
                 this.project.dateOfCompletion.date()
@@ -476,6 +484,21 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
 
               let histryFilter: string[] = new Array();
               histryFilter.push('project.id||$eq||' + this.project.id);
+
+              this.projectProxy.findPolicyBarrierData(this.editEntytyId ).subscribe( (res) => {
+                  this.barrierArray =res;
+                   console.log("barriers",this.barrierArray)
+
+              })
+              this.projectProxy.findPolicySectorData(this.editEntytyId ).subscribe( (res) => {
+                this.policySectorArray =res;
+                for(let x of res){
+                  this.sectornames.push(x.sector.name)
+                }
+                 this.sectorsJoined=this.sectornames.join(', ')
+                //  console.log("sectors",this.policySectorArray, this.sectorsJoined)
+
+            })
               //console.log("id......",this.project.id)
               // this.serviceProxy
               //   .getManyBaseCaActionHistoryControllerCaActionHistory(
@@ -818,10 +841,21 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
           this.serviceProxy.createOneBaseProjectControllerClimateAction(this.project)
           .subscribe(
             (res) => {
+
+              for (let sec of this.finalSectors) {
+                let ps = new PolicySector();
+                ps.intervention = res
+                ps.sector =sec
+                
+                this.policySectorArray.push(ps);
+              }
+              //@ts-ignore
+              this.projectProxy.policySectors(this.policySectorArray).subscribe((res) => {
+                console.log('save', res);
+               
+              })
               console.log(res)
               this.isSaving = true;
-              
-              console.log("ssss",res)
               for (let b of this.finalBarrierList) {
                 let pb = new PolicyBarriers();
                 pb.climateAction = res
@@ -830,6 +864,11 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
                 pb.is_affected =b.affectedbyIntervention;
                 this.policyBar.push(pb);
               }
+              
+              
+              console.log("ssss",res)
+              
+
               //@ts-ignore
               this.projectProxy.policyBar(this.policyBar).subscribe((res) => {
                 console.log('save', res);
@@ -840,6 +879,7 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
                   closable: true,
                 },
                 
+                
                 );
               },
               (err) => {
@@ -849,7 +889,8 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
                   detail: 'Internal server error in policy barriers',
                   sticky: true,
                 });
-              });
+              })
+              
              
              
             },
