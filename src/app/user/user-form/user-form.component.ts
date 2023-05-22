@@ -375,14 +375,14 @@ export class UserFormComponent implements OnInit {
       this.userTypes = res;
     });
 
-    this.instProxy.getAllInstitutions().subscribe((res: any) => {
-      console.log('institutions res ============', res);
-      this.institutions = res;
-    });
+    // this.instProxy.getAllInstitutions().subscribe((res: any) => {
+    //   console.log('institutions res ============', res);
+    //   this.institutions = res;
+    // });
 
 
 
-   /*    this.instProxy.getInstitutionForManageUsers(0,0)
+      this.instProxy.getInstitutionForManageUsers(0,0)
       .subscribe((res) => {
         console.log('institutions res ============', res);
         this.institutions = res.items;
@@ -409,7 +409,7 @@ export class UserFormComponent implements OnInit {
        }
 
 
-      }); */
+      });
   }
 
   onChangeUser(event: any) {
@@ -460,16 +460,21 @@ export class UserFormComponent implements OnInit {
                   },
                   (error) => {
                     this.coreatingUser = false;
-                    alert('An error occurred, please try again.');
+                    this.messageService.add({
+                      severity: 'error',
+                      summary: 'Error',
+                      detail: 'An error occurred, please try again.',
+                      closable: true,
+                    });
                     console.log('Error', error);
                   },
                   () => {
                     this.coreatingUser = false;
                   }
                 );
-                setTimeout(() => {
-                  this.onBackClick();
-                },1000);
+                // setTimeout(() => {
+                //   this.onBackClick();
+                // },1000);
 
       } else {
 
@@ -509,13 +514,18 @@ export class UserFormComponent implements OnInit {
               console.log('Error', error);
             }
           );
-          setTimeout(() => {
-            this.onBackClick();
-          },1000);
+          // setTimeout(() => {
+          //   this.onBackClick();
+          // },1000);
       }
     }
     else{
-      alert("Fill all the mandetory fields")
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Fill all the mandetory fields',
+        closable: true,
+      });
     }
   }
 
