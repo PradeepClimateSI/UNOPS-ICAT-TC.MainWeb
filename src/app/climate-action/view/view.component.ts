@@ -95,8 +95,16 @@ export class ViewComponent implements OnInit, AfterViewInit {
     this.cdr.detectChanges();
   }
 
+
   ngOnInit(): void {
     // this.totalRecords = 0;
+
+    this.projectProxy.findAllPolicies().subscribe((res: any) => {
+        this.climateactions = res
+
+      console.log("policyList : ", this.climateactions)
+
+    });
 
     this.userName = localStorage.getItem('user_name')!;
     const token = localStorage.getItem('access_token')!;
@@ -125,7 +133,7 @@ export class ViewComponent implements OnInit, AfterViewInit {
       .subscribe((res: any) => {
         this.loggedUser = res.data[0];
         console.log("this.loggedUser...",this.loggedUser);
-        
+
       });
 
 
@@ -280,17 +288,17 @@ export class ViewComponent implements OnInit, AfterViewInit {
           0,
           0,
           sectorId,
-          
+
         )
-        
+
         .subscribe((a) => {
           console.log( a," this.climateactions")
-          this.climateactions = a.items
+       //   this.climateactions = a.items
            this.totalRecords=a.meta.totalItems
           this.loading = false;
         }, err => {this.loading = false;});
     }, 1000);
-   
+
   };
   addproject() {
     this.router.navigate(['/add-polocies']);
@@ -300,12 +308,12 @@ export class ViewComponent implements OnInit, AfterViewInit {
   detail(climateactions: Project) {
     console.log("climateactions",climateactions )
     this.router.navigate(['/add-polocies'], {
-      
+
     queryParams: { id: climateactions.id ,flag:this.flag},
-    
-   
+
+
     });
-    
+
   }
 
   next() {
@@ -358,6 +366,13 @@ export class ViewComponent implements OnInit, AfterViewInit {
   {
     this.display = false;
   }
+
+  onInput(event: any, dt: any) {
+    const value = event.target.value;
+    console.log("aaa",value)
+    dt.filterGlobal(value, 'contains');
+  }
+
 
 }
 

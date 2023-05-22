@@ -1523,8 +1523,8 @@ onChaWeightChange(categoryName: string, characteristicName : string, chaWeight: 
 
 }
 
-onMethSelected(value:any,characteristic:any){
-  console.log("value",value, characteristic)
+onMethSelected(characteristic:any){
+  console.log("value", characteristic)
 
 
   // this.filterParamList = []

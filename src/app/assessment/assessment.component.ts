@@ -51,6 +51,7 @@ dt2 : Table
           if(result.assessment.id == x.id){
             console.log("aaaaaaaaaaaaaaaa")
             let data : any = {
+              id : result.id,
               assessId : x.id,
               meth : x.climateAction.policyName,
               method : result.assessment.assessment_method,
@@ -68,6 +69,11 @@ dt2 : Table
       }
 
       console.log("resultdataa",this.results)
+
+
+      console.log("resultdataareverse",  this.results.reverse())
+
+
     });
 
 
