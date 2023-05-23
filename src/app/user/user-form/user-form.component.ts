@@ -137,7 +137,7 @@ export class UserFormComponent implements OnInit {
 
 
 
-      this.instProxy.getInstitutionForManageUsers(0,0)
+   /*    this.instProxy.getInstitutionForManageUsers(0,0)
       .subscribe((res) => {
         console.log('institutions res ============', res);
         this.institutions = res.items;
@@ -164,7 +164,7 @@ export class UserFormComponent implements OnInit {
        }
 
 
-      });
+      }); */
   }
 
   onChangeUser(event: any) {
@@ -181,45 +181,31 @@ export class UserFormComponent implements OnInit {
         this.isEmailUsed = false;
         this.usedEmail = '';
 
-        let tempUsers = await this.serviceProxy
-          .getManyBaseUsersControllerUser(
-            undefined,
-            undefined,
-            ['email||$eq||' + this.user.email],
-            undefined,
-            ['firstName,ASC'],
-            ['institution'],
-            1,
-            0,
-            0,
-            0
-          )
-          .subscribe((res) => {
-            if (res.data.length > 0) {
-              this.isEmailUsed = true;
-              this.usedEmail = res.data[0].email;
-              // alert("Email address is already in use, please select a diffrent email address to create a new user.")
-              // this.confirmationService.confirm({
-              //   message:
-              //     'Email address is already in use, please select a diffrent email address to create a new user.!',
-              //   header: 'Error!',
-              //   //acceptIcon: 'icon-not-visible',
-              //   rejectIcon: 'icon-not-visible',
-              //   rejectVisible: false,
-              //   acceptLabel: 'Ok',
-              //   accept: () => {
-              //     // this.onBackClick();
-              //   },
-
-              //   reject: () => {},
-              // });
-              this.messageService.add({
-                severity: 'error',
-                summary: 'Error.',
-                detail: 'Email address is already in use, please select a diffrent email address to create a new user.!',
-                sticky: true,
-              });
-            } else {
+        // let tempUsers = await this.serviceProxy
+        //   .getManyBaseUsersControllerUser(
+        //     undefined,
+        //     undefined,
+        //     ['email||$eq||' + this.user.email],
+        //     undefined,
+        //     ['firstName,ASC'],
+        //     ['institution'],
+        //     1,
+        //     0,
+        //     0,
+        //     0
+        //   )
+        //   .subscribe((res) => {
+        //     if (res.data.length > 0) {
+        //       this.isEmailUsed = true;
+        //       this.usedEmail = res.data[0].email;
+              
+        //       this.messageService.add({
+        //         severity: 'error',
+        //         summary: 'Error.',
+        //         detail: 'Email address is already in use, please select a diffrent email address to create a new user.!',
+        //         sticky: true,
+        //       });
+        //     } else {
               // create user
               this.user.username = this.user.email;
               this.user.status = 0;
@@ -262,18 +248,22 @@ export class UserFormComponent implements OnInit {
                   },
                   (error) => {
                     this.coreatingUser = false;
-                    alert('An error occurred, please try again.');
-                    console.log('Error', error);
+                    this.messageService.add({
+                      severity: 'error',
+                      summary: 'Error',
+                      detail: 'An error occurred, please try again.',
+                      closable: true,
+                    });
                   },
                   () => {
                     this.coreatingUser = false;
                   }
                 );
-                setTimeout(() => {
-                  this.onBackClick();    
-                },1000);
-            }
-          });
+                // setTimeout(() => {
+                //   this.onBackClick();    
+                // },1000);
+          //   }
+          // });
 
         // this.serviceProxy.createOneBaseUserv2ControllerUser(this.user).subscribe(res => {
         //   alert("User created !");
