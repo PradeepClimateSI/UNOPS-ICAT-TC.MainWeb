@@ -33,7 +33,7 @@
                                 This is a mandatory field
                             </p>
                         </div>
-                       
+
 
                     </div>
                 </div>
@@ -55,7 +55,7 @@
                                 This is a mandatory field
                             </p>
                         </div>
-                            
+
                     </div>
                     <div *ngIf="levelofImplementation ===1" class="col-12 col-md-6">
                         <div class="p-field p-2">
@@ -73,7 +73,7 @@
                                 This is a mandatory field
                             </p>
                         </div>
-                           
+
                     </div>
 
                     <div *ngIf="levelofImplementation ===2" class="col-12 col-md-6">
@@ -92,11 +92,11 @@
                                 This is a mandatory field
                             </p>
                         </div>
-                           
-                    </div>
-                       
 
-                    
+                    </div>
+
+
+
                 </div>
                 <div class="row p-2">
                     <div class="col-12 col-md-6">
@@ -116,7 +116,7 @@
                         </div>
                         <div class="p-field p-2">
                         <label for="Sectors Covered">Sectors Covered*</label>
-                        
+
                         <p-multiSelect name="sectors" #type="ngModel" placeholder="Select Sectors Covered"
                             [(ngModel)]="sectorArray" [options]="sectorList"
                             (ngModelChange)="onItemSelectSectors($event)" optionLabel="name"
@@ -128,7 +128,7 @@
                             This is a mandatory field
                         </p>
                         </div>
-                        
+
                         <div class="p-field p-2">
                         <label for="Sectors Covered">Impact Covered*</label>
                         <p-multiSelect name="impact" #type="ngModel" placeholder="Select Impact Covered"
@@ -142,9 +142,9 @@
                             This is a mandatory field
                         </p>
                         </div>
-                        
+
                         <div class="p-field p-2">
-                        
+
                         <label for="date1">Assessment Period</label>
                         <div class="p-inputgroup">
                             <span class="p-inputgroup-addon">
@@ -157,7 +157,7 @@
                                 [(ngModel)]="assessment.to" name="date2"></p-calendar>
                         </div>
                         </div>
-                        
+
                         <div class="p-field p-2">
                         <label for="Sectors Covered">Assessment Method*</label>
                         <p-dropdown name="type" #type="ngModel" placeholder="Select Assessment Method"
@@ -171,11 +171,11 @@
                         </p> -->
                         </div>
                     </div>
-                       
 
-                    
+
+
                 </div>
-                
+
             </div>
             <div class="row justify-content-end" *ngIf="!isSavedAssessment">
                 <div>
@@ -203,7 +203,7 @@
                 <!-- <div *ngFor="let characteristic of meth1Process"> -->
 
                 <p-tabView #tabView (onChange)="onCategoryTabChange($event, tabView)" [(activeIndex)]="activeIndex "    >
-                    
+
                     <p-tabPanel [header]="category.CategoryName" *ngFor="let category of processData" >
 
 
@@ -554,7 +554,7 @@
                                                                     [options]="likelihood" optionLabel="id"
                                                                     optionValue="value" [required]="true"
                                                                     appendTo="body"></p-dropdown>
-                                                                    
+
                                                             </div>
                                                         </div>
 
@@ -573,26 +573,36 @@
                                                     <div class="row p-2">
                                                         <div class="col-12 col-lg-6">
                                                             <div class="p-field">
-                                                                <label for="Relevance">Relevance Weight</label>
+                                                                <label for="Relevance">Relevance Weight (%)</label>
                                                                 <p-inputNumber inputId="locale-us" mode="decimal"
                                                                      locale="en-US" [minFractionDigits]="2"
                                                                     [(ngModel)]="data.relevance_weight"
                                                                     placeholder="Enter Relevance Weight"
-                                                                    name="data.charData.relevance_weight">
+                                                                    name="data.charData.relevance_weight"
+                                                                    (ngModelChange)="onRelevanceWeightChange(category.CategoryName,data.characteristics.name, $event)">
                                                                 </p-inputNumber>
+                                                              <!--   <div *ngIf="!chaCategoryTotalEqualsTo1[category.CategoryName]" style="color: red;">
+                                                                  Relevance weights for characteristics of {{category.CategoryName}} category should sum up to 100%.
+                                                                  <br>
+                                                                </div> -->
                                                             </div>
                                                         </div>
 
                                                         <div class="col-12 col-lg-6">
                                                             <div class="p-field">
-                                                                <label for="Relevance">Likelihood Weight</label>
+                                                                <label for="Relevance">Likelihood Weight (%)</label>
                                                                 <p-inputNumber inputId="locale-us" mode="decimal"
                                                                      locale="en-US" [minFractionDigits]="2"
                                                                     [(ngModel)]="data.likelihood_weight"
                                                                     placeholder="Enter Likelihood Weight"
-                                                                    name="data.charData.likelihood_weight">
+                                                                    name="data.charData.likelihood_weight"
+                                                                    (ngModelChange)="onLikelihoodWeightChange(category.CategoryName,data.characteristics.name, $event)">
                                                                 </p-inputNumber>
 
+                                                              <!--   <div *ngIf="!chaCategoryLikelihoodTotalEqualsTo1[category.CategoryName]" style="color: red;">
+                                                                  Likelihood weights for characteristics of {{category.CategoryName}} category should sum up to 100%.
+                                                                  <br>
+                                                                </div> -->
                                                             </div>
                                                         </div>
                                                     </div>
@@ -684,7 +694,7 @@
 
                                                         </div>
 
-                                                       
+
 
                                                         <div *ngIf="(data.characteristics.name === 'Macro Level' || data.characteristics.name ==='Medium Level') && category.CategoryName ==='Scale GHGs'"
                                                             class=" ml-25 col-5">
@@ -888,7 +898,7 @@
                                                             </p-inputNumber>
                                                           </div>
                                                         </div>
-                            
+
                                                         <div class="col-12 col-lg-6">
                                                           <div class="p-field">
                                                             <label for="indicatorExpectedVal">Indicator Expected Value</label>
@@ -896,11 +906,11 @@
                                                               placeholder="Expected Value" inputId="locale-us" mode="decimal" locale="en-US"
                                                               [minFractionDigits]="2">
                                                             </p-inputNumber>
-                            
+
                                                           </div>
                                                         </div>
                                                       </div>
-                                                      
+
 
 
 
@@ -908,11 +918,10 @@
                                                         <div class="col-12 col-lg-6">
                                                             <div class="p-field">
                                                                 <label for="Relevance">Score</label>
-                                                                <p-inputNumber 
-                                                                    [min]="-1" [max]="3"  [step]="1"
-                                                                    [showButtons]="true"
-                                                                    inputId="horizontal" 
-                                                                    [(ngModel)]="data.score"
+                                                                <p-inputNumber
+                                                                    inputId="horizontal"
+                                                                    [(ngModel)]="data.score"  [showButtons]="true" [min]="-1" [max]="3" [step]="1"
+                                                                    inputId="minmax-buttons"
                                                                     placeholder="Enter an integer between -1 and 3"
                                                                     name="data.charData.score"> </p-inputNumber>
                                                             </div>
@@ -940,8 +949,8 @@
                                                             </p-inputNumber>
                                                           </div>
                                                         </div>
-                                            
-                                                        
+
+
                                                       </div>
                                                 </div>
                                             </div>
@@ -968,7 +977,7 @@
         <div  *ngIf="activeIndex2===3 && activeIndexMain===1" class="row justify-content-end">
             <div>
 
-                <div 
+                <div
                 class="d-flex flex-row-reverse mt-20 ">
                     <button class="btn btn-primary text-uppercase" type="submit" >
                         Calculate & Check results
@@ -979,8 +988,8 @@
 
         <div    *ngIf="activeIndex2!==3 || activeIndexMain!==1" class="row justify-content-end">
             <div>
-    
-                <div 
+
+                <div
                 class="d-flex flex-row-reverse mt-20 ">
                     <div class="btn btn-primary text-uppercase" (click)="next()" >
                        Next
@@ -988,19 +997,19 @@
                 </div>
             </div>
         </div>
-   
-           
-      
 
-       
+
+
+
+
 
 
     </form>
 <!-- <ng-template #elseblock> -->
-    
+
 
 <!-- </ng-template> -->
-    
+
     </div>
 
 
