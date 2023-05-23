@@ -1,3 +1,4 @@
+
 <p-toast position="top-right"></p-toast>
 <div class="container pl-20 pr-20">
   <div class="mb-12">
@@ -8,7 +9,7 @@
       <div class="row p-2">
         <div class="col-12 col-md-6">
           <div class="p-field">
-            <label for="institution">Assign Institution </label>
+            <label for="institution">Assigned Institution </label>
             <!-- <p-dropdown
               [disabled]="editUserId > 0"
               name="namehhhh"
@@ -49,7 +50,7 @@
               #fut="ngModel"
             ></p-dropdown> -->
 
-            <!-- <input
+            <input *ngIf="user.userType"
               [disabled]="editUserId > 0"
               type="text"
               name="usertype"
@@ -58,7 +59,7 @@
               #fdesignation="ngModel"
               placeholder="Enter the user type"
               required
-            /> -->
+            />
           </div>
         </div>
       </div>
@@ -121,7 +122,6 @@
               [(ngModel)]="user.email"
               #femail="ngModel"
               placeholder="Enter the email"
-              pattern="[\w-\.]+@([\w-]+\.)+[\w-]{1,20}$"
               required
             />
           </div>
@@ -134,17 +134,17 @@
         <div class="col-12 col-md-8">
           <div class="p-field">
             <label for="institution">Landline </label>
-            <p-inputMask
+            <input
               [disabled]="editUserId > 0"
               type="text"
               name="telephone"
               mask="+99 99-999-9999"
-              [autoClear]="false"
+              class="form-control"
               placeholder="+99 999 999-9999"
               [(ngModel)]="user.landline"
               #ftelephone="ngModel"
-              [styleClass]="'form-control'"
-            ></p-inputMask>
+              
+            >
           </div>
         </div>
       </div>
@@ -156,17 +156,17 @@
           <div class="p-field">
             <label for="mobile">Mobile </label>
 
-            <p-inputMask
-              [disabled]="editUserId > 0"
-              type="text"
-              name="mobile"
-              mask="+99 99-999-9999"
-              [autoClear]="false"
-              placeholder="+99 999 999-999"
-              [(ngModel)]="user.mobile"
-              [styleClass]="'form-control'"
-              #fmobile="ngModel"
-            ></p-inputMask>
+            <input
+            [disabled]="editUserId > 0"
+            type="text"
+            name="telephone"
+            mask="+99 99-999-9999"
+            class="form-control"
+            placeholder="+99 999 999-9999"
+            [(ngModel)]="user.mobile"
+            #ftelephone="ngModel"
+            
+          >
           </div>
         </div>
       </div>

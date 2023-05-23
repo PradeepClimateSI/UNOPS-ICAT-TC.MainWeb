@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService, ConfirmationService } from 'primeng/api';
@@ -14,7 +14,7 @@ import decode from 'jwt-decode';
   styleUrls: ['./user-form.component.css']
 })
 
-export class UserFormComponent implements OnInit {
+export class UserFormComponent implements OnInit,AfterViewInit {
   temp1: string;
   temp2: string;
   temp3: string;
@@ -70,8 +70,12 @@ export class UserFormComponent implements OnInit {
     private router: Router,
     private confirmationService: ConfirmationService,
     private UserTypeServiceProxy: UserTypeControllerServiceProxy,
-    private instProxy:InstitutionControllerServiceProxy
+    private instProxy:InstitutionControllerServiceProxy,
+    private ref: ChangeDetectorRef
   ) {}
+  ngAfterViewInit(): void {
+    this.ref.detectChanges();
+  }
 
   ngOnInit(): void {
 
@@ -120,7 +124,10 @@ export class UserFormComponent implements OnInit {
             this.user = res;
             this.selecteduserType={"ae_name":this.user.userType.description,
                                      "ae_id" : this.user.userType.id      }
+
+                                     
             this.selectedUserTypesFordrop.push(this.selecteduserType)
+            console.log( "selectedUserTypesFordrop",this.selectedUserTypesFordrop )
 
           });
       }
@@ -371,7 +378,7 @@ export class UserFormComponent implements OnInit {
         this.messageService.add({
           severity: 'success',
           summary: 'Success',
-          detail: 'Delete Confirmation',
+          detail: 'Delete deactivated user',
           closable: true,
         });
       });
