@@ -287,7 +287,8 @@ export class UserFormComponent implements OnInit,AfterViewInit {
         //   console.log("Error", error);
         // });
       } else {
-
+        console.log("update",this.user.id, this.user)
+        this.user.institution =new Institution()
         this.serviceProxy
           .updateOneBaseUsersControllerUser(this.user.id, this.user)
           .subscribe(
