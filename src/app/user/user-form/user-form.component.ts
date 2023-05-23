@@ -20,7 +20,7 @@ export class UserFormComponent implements OnInit,AfterViewInit {
   temp3: string;
 
   user: User = new User();
-
+  userInstitution:Institution;
   userTypes: any[] = [];
   selectedUserTypesFordrop: UserType[] = [];
   selecteduserType: any = {};
@@ -74,7 +74,7 @@ export class UserFormComponent implements OnInit,AfterViewInit {
     private instProxy: InstitutionControllerServiceProxy,
     private userController: UsersControllerServiceProxy,
     private authUser: LoginProfileControllerServiceProxy,
-    private authServiceProxy: authServiceProxy,,
+    private authServiceProxy: authServiceProxy,
     private ref: ChangeDetectorRef
   ) { }
   ngAfterViewInit(): void {
@@ -307,7 +307,15 @@ export class UserFormComponent implements OnInit,AfterViewInit {
         // });
       } else {
         console.log("update",this.user.id, this.user)
-        this.user.institution =new Institution()
+        // this.user.institution =new Institution()
+
+        let userType = new UserType;
+        userType.init(this.selecteduserType)
+        this.user.userType = userType;
+
+        let institute = new Institution;
+        institute.init(this.userInstitution)
+        this.user.institution = institute;
         this.serviceProxy
           .updateOneBaseUsersControllerUser(this.user.id, this.user)
           .subscribe(
@@ -328,9 +336,14 @@ export class UserFormComponent implements OnInit,AfterViewInit {
               this.messageService.add({
                 severity: 'success',
                 summary: 'Success',
-                detail: 'Successfully Saved',
+                detail: 'Successfully Updated User',
                 closable: true,
               });
+              setTimeout(() => {
+                this.router.navigate(['/app/user/list']);
+              },1000);
+      
+              
             },
             (error) => {
               this.messageService.add({
