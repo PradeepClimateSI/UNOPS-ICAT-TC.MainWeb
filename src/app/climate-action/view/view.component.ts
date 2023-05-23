@@ -100,7 +100,7 @@ export class ViewComponent implements OnInit, AfterViewInit {
     // this.totalRecords = 0;
 
     this.projectProxy.findAllPolicies().subscribe((res: any) => {
-        this.climateactions = res
+        // this.climateactions = res
 
       console.log("policyList : ", this.climateactions)
 
@@ -293,7 +293,7 @@ export class ViewComponent implements OnInit, AfterViewInit {
 
         .subscribe((a) => {
           console.log( a," this.climateactions")
-       //   this.climateactions = a.items
+         this.climateactions = a.items
            this.totalRecords=a.meta.totalItems
           this.loading = false;
         }, err => {this.loading = false;});
