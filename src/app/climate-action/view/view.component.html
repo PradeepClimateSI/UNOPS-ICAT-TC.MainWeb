@@ -8,9 +8,18 @@
         <h4 class="mt-4">Manage Interventions</h4>
       </div>
 
-  <p-table #dt2 [value]="climateactions" [tableStyle]="{'min-width': '61rem'}"
+  <p-table #dt2 
+            [value]="climateactions"
             [paginator]="true"
-            [rows]="13" [totalRecords]="climateactions.length" [sortField]="'id'" [sortOrder]="-1"
+            [rows]="rows" 
+            [totalRecords]="totalRecords" [sortField]="'id'" [sortOrder]="-1"
+            [lazy]="true" 
+            (onLazyLoad)="loadgridData($event)" 
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Entries"
+            [rowsPerPageOptions]="[1, 10, 25, 50]" 
+            [loading]="loading" 
+            [responsive]="true"
 
   [globalFilterFields]="['id', 'policyName', 'contactPersoFullName']">
     <ng-template pTemplate="caption">
@@ -23,24 +32,33 @@
   </ng-template>
 
     <ng-template pTemplate="header">
-        <tr  style="height:4rem;">
-            <th pSortableColumn="id" >ID <p-sortIcon field="id"></p-sortIcon></th>
-            <th pSortableColumn="policyName" >INTERVENTION <p-sortIcon field="policyName"></p-sortIcon></th>
-            <th pSortableColumn="contactPersoFullName">PROJECT PROPENENT<p-sortIcon field="contactPersoFullName"></p-sortIcon></th>
-            <th >STATUS OF APPPROVAL</th>
-            <th>ACTIONS</th>
+        <tr  >
+            <!-- <th pSortableColumn="id" >ID <p-sortIcon field="id"></p-sortIcon></th> -->
+            <!-- <th pSortableColumn="policyName" >INTERVENTION <p-sortIcon field="policyName"></p-sortIcon></th> -->
+            <!-- <th pSortableColumn="contactPersoFullName">PROJECT PROPENENT<p-sortIcon field="contactPersoFullName"></p-sortIcon></th> -->
+            <th>Intervention</th>
+            <th>Type of intervention</th>
+            <th>Current status</th>
+            <th>Status of approval</th>
+            <th>Actions</th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-climateactions>
         <tr>
-          <td>{{climateactions.id}}</td>
+          <!-- <td>{{climateactions.id}}</td> -->
           <td>
             {{ climateactions.policyName }}</td>
-          <td>{{ climateactions.contactPersoFullName }}</td>
+          <!-- <td>{{ climateactions.contactPersoFullName }}</td> -->
+          <td>
+             {{climateactions.typeofAction}}
+         </td>
+           <td>
+             {{climateactions.projectStatus?.name}}
+          </td>
           <td>
             {{(climateactions.projectApprovalStatus?.id == undefined || climateactions.projectApprovalStatus?.id ==
             4)?'Proposed':(climateactions.projectApprovalStatus.id == 3?'Data
-            Requested':(climateactions.projectApprovalStatus.id == 1?'Accept':(climateactions.projectApprovalStatus.id
+            Requested':(climateactions.projectApprovalStatus.id == 1?'Accepted':(climateactions.projectApprovalStatus.id
             == 5?'Active':'Reject')))}}
           </td>
           <td>

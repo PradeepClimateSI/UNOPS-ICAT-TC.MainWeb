@@ -19,7 +19,7 @@
               <div class="p-field">
                 <label for="contatname">Contact Person's Full Name*</label>
                 <input [disabled]="editEntytyId > 0" type="text" maxlength="50" placeholder="Full Name"
-                  name="contatname" #contatname="ngModel" field="contatname" class="p-inputtext"
+                  name="contatname" #contatname="ngModel" field="contatname" pInputText
                   [(ngModel)]="project.contactPersoFullName" [ngModelOptions]="{ standalone: false }" required />
 
                 <p class="info-message text-danger" *ngIf="
@@ -79,7 +79,9 @@
                 <label for="telephoneNumber">Telephone No</label>
                 <p-inputMask type="text" name="telephoneNumber" mask="+99 99-999-9999" [autoClear]="true"
                   placeholder="+99 999 999-9999" [(ngModel)]="project.telephoneNumber"
-                  [ngModelOptions]="{ standalone: false }" #telephoneNumber="ngModel" [styleClass]="'form-control'"
+                  [ngModelOptions]="{ standalone: false }" #telephoneNumber="ngModel" 
+                  [disabled]="editEntytyId > 0"
+                  
                   [required]="true"></p-inputMask>
                 <p class="info-message text-danger" *ngIf="
                   !project.telephoneNumber &&
@@ -96,10 +98,11 @@
               <div class="p-field">
                 <label for="mobileNumber">Mobile No</label>
 
-                <p-inputMask type="text" name="mobileNumber" mask="+99 99-999-9999" [autoClear]="false"
+                <p-inputMask type="text" name="mobileNumber" mask="+99 99-999-9999" [autoClear]="false" 
                   placeholder="+99 999 999-9999" [(ngModel)]="project.mobileNumber"
-                  [ngModelOptions]="{ standalone: true }" #telephoneNumber="ngModel"
-                  [styleClass]="'form-control'"></p-inputMask>
+                  [ngModelOptions]="{ standalone: true }" #telephoneNumber="ngModel" 
+                  [disabled]="editEntytyId > 0"
+                 ></p-inputMask>
               </div>
             </div>
           </div>
@@ -160,10 +163,13 @@
               <div class="col-12 col-md-6">
                 <div class="p-field">
                   <label for="interventionID">Intervention ID*</label>
-                  <input [disabled]="editEntytyId > 0" type="text" maxlength="30" placeholder="ID of the intervention"
-                    #interventionID="ngModel" name="designation" class="p-inputtext"
+                  <input [disabled]="editEntytyId > 0" type="text" maxlength="50" placeholder="ID of the intervention"
+                    #interventionID="ngModel" name="interventionID" pInputText
                     [(ngModel)]="project.intervention_id" [ngModelOptions]="{ standalone: false }"
                     pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText required />
+
+
+                 
                   <p class="info-message text-danger" *ngIf="
                     !project.intervention_id &&
                     (fData.submitted || interventionID.touched || interventionID.dirty)
@@ -193,14 +199,14 @@
                   </ng-container>
                   <ng-template #elseBlockprojStatus>
                     <input [disabled]="editEntytyId > 0" type="text" maxlength="50" name="projStatus"
-                      #projStatus1="ngModel" class="p-inputtext" [(ngModel)]="project.projectStatus.name!"
+                      #projStatus1="ngModel" class="p-inputtext" [(ngModel)]="project.projectStatus?.name!"
                       [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
                   </ng-template>
                 </div>
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="nameClimate">Country of the Specific Climate Action*</label>
+                  <label for="nameClimate">Country of the Specific Intervention*</label>
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocknameClimate">
                     <div>
                   <p-dropdown
@@ -255,10 +261,10 @@
                   <label for="sector">Sectors Targeted</label>
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocksector">
                     <p-multiSelect [disabled]="editEntytyId > 0" placeholder="Select Sector" name="sector"
-                      #sector="ngModel" [(ngModel)]="project.sector" [options]="sectorList" appendTo="body"
+                      #sector="ngModel" [(ngModel)]="finalSectors" [options]="sectorList" appendTo="body"
                       optionLabel="name" (ngModelChange)="onSectorChange($event)" [required]="true"></p-multiSelect>
                     <p class="info-message text-danger" *ngIf="
-                    !project.sector &&
+                    !finalSectors &&
                     (fData.submitted || sector.touched || sector.dirty) 
                   ">
                       This is a mandatory field
@@ -266,7 +272,7 @@
                   </ng-container>
                   <ng-template #elseBlocksector>
                     <input [disabled]="editEntytyId > 0" type="text" maxlength="50" name="projsector"
-                      #projsector="ngModel" class="p-inputtext" [(ngModel)]="project.sector.name!"
+                      #projsector="ngModel" class="p-inputtext" [(ngModel)]="sectorsJoined"
                       [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
                   </ng-template>
                 </div>
@@ -344,7 +350,7 @@
             </div> -->
 
 
-            <div class="row p-2" *ngIf="flag == 1 ">
+            <!-- <div class="row p-2" *ngIf="flag == 1 ">
               <div class="col-12 col-md-6">
                 <div type="button" class="pi pi-info-circle"
                   pTooltip="This is a mandatory field. Please check whether it has correctly mapped or not."></div>
@@ -369,10 +375,10 @@
                     [(ngModel)]="isMapped"></p-radioButton><label>No</label>
                 </div>
               </div>
-            </div>
+            </div> -->
 
 
-            <div class="row p-2" *ngIf="isMapped == 0">
+            <!-- <div class="row p-2" *ngIf="isMapped == 0">
               <div class="col-12 col-md-6">
                 <div class="p-field">
                   <label for="ndc">Edit Aggregated Actions</label>
@@ -398,9 +404,9 @@
                   </ng-container>
                 </div>
               </div>
-            </div>
+            </div> -->
 
-            <div class="row p-2" *ngIf="isMapped == 0">
+            <!-- <div class="row p-2" *ngIf="isMapped == 0">
               <div class="col-12 col-md-3">
                 <div class="p-field">
 
@@ -408,7 +414,7 @@
                     style="margin-right: 10px" class="p-button-raised" (click)="toUpdateNdcs()"></button>
                 </div>
               </div>
-            </div>
+            </div> -->
 
             <div class="row p-2">
               <div class="col-12 col-md-6">
@@ -417,7 +423,7 @@
 
                   <textarea [disabled]="editEntytyId > 0" type="text" placeholder="Scope of the Intervention" name="projScope"
                     #projScope="ngModel" [(ngModel)]="project.policyScope" [ngModelOptions]="{ standalone: false }"
-                    class="p-inputtext" rows="1" cols="130" pInputTextarea autoResize="autoResize" class="p-inputtext"
+                    class="p-inputtext" rows="1" cols="130" pInputText autoResize="autoResize"
                     required></textarea>
                   <p class="info-message text-danger" *ngIf="
                     !project.policyScope &&
@@ -431,7 +437,7 @@
               <div class="col-12 col-md-6">
                 <div class="p-field">
                   <label for="projStatus">Level of Implementation</label>
-                  <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlockprojStatus">
+                  <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocklevelofIpml">
                     <p-dropdown [disabled]="editEntytyId > 0" placeholder="Please Select the Level of Implementation"
                       name="level_of_implemetation" #level_of_implemetation="ngModel" [(ngModel)]="project.levelofImplemenation" 
                       [options]="levelOfImplementation" optionLabel="name" optionValue="name"
@@ -444,11 +450,12 @@
                       This is a mandatory field
                     </p>
                   </ng-container>
-                  <ng-template #elseBlockprojStatus>
+                  <ng-template #elseBlocklevelofIpml>
                     <input [disabled]="editEntytyId > 0" type="text" maxlength="50" name="level_of_implemetation"
                       #level_of_implemetation="ngModel" class="p-inputtext" [(ngModel)]="project.levelofImplemenation"
                       [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
                   </ng-template>
+                 
                 </div>
               </div>
 
@@ -460,8 +467,9 @@
                   <label for="projectContext">Context of the intervention</label>
                   <textarea [disabled]="editEntytyId > 0" name="projectContext"
                     placeholder="Please enter context of the intervention" #projectContext="ngModel"
-                    [(ngModel)]="project.contextOfPolicy" rows="5" cols="62" pInputTextarea length="500"
-                    autoResize="autoResize" class="p-inputtext"></textarea>
+                    pInputText
+                    [(ngModel)]="project.contextOfPolicy" rows="5" cols="62"  length="500"
+                    autoResize="autoResize"></textarea>
                 </div>
               </div>
             </div>
@@ -498,16 +506,17 @@
                 <div class="p-field">
                   <label for="description">Description of the intervention</label>
                   <textarea [disabled]="editEntytyId > 0" name="description" placeholder="description"
-                    #description="ngModel" [(ngModel)]="project.description" rows="5" cols="130" pInputTextarea
-                    autoResize="autoResize" class="p-inputtext"></textarea>
+                    #description="ngModel" [(ngModel)]="project.description" rows="5" cols="130" pInputText
+                    autoResize="autoResize" ></textarea>
                 </div>
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
                   <label for="objective">Objective of the intervention</label>
                   <textarea [disabled]="editEntytyId > 0" name="objective" placeholder="objective" #objective="ngModel"
-                    [(ngModel)]="project.objective" rows="5" cols="130" pInputTextarea autoResize="autoResize"
-                    class="p-inputtext"></textarea>
+                    [(ngModel)]="project.objective" rows="5" cols="130" pInputText autoResize="autoResize"
+                    
+                    ></textarea>
                 </div>
               </div>
             </div>
@@ -551,12 +560,16 @@
                   <label for="impleDate"> Date of Implementation*</label>
                   <div>
 
-                    <p-calendar [disabled]="editEntytyId > 0" placeholder="DD/MM/YYYY" dateFormat="dd/mm/yy"
-                      name="impleDate" #impleDate="ngModel" [(ngModel)]="project.dateOfImplementation"  appendTo="body"
+                    <p-calendar [disabled]="editEntytyId > 0" 
+                      placeholder="DD/MM/YYYY" 
+                      dateFormat="dd/mm/yy"
+                      name="impleDate" 
+                      #impleDate="ngModel" 
+                      [(ngModel)]="dateOfImplementation"  appendTo="body"
                       [required]="true"></p-calendar>
                   </div>
                   <p class="info-message text-danger" *ngIf="
-                    !project.dateOfImplementation &&
+                    !dateOfImplementation &&
                     (fData.submitted || impleDate.touched || impleDate.dirty)
                   ">
                     This is a mandatory field
@@ -569,11 +582,11 @@
                   <div>
 
                     <p-calendar [disabled]="editEntytyId > 0" placeholder="DD/MM/YYYY" dateFormat="dd/mm/yy"
-                      name="complDate" #complDate="ngModel" [(ngModel)]="project.dateOfCompletion" appendTo="body"
+                      name="complDate" #complDate="ngModel" [(ngModel)]="dateOfCompletion" appendTo="body"
                       [required]="true"></p-calendar>
                   </div>
                   <p class="info-message text-danger" *ngIf="
-                    !project.dateOfCompletion &&
+                    !dateOfCompletion &&
                     (fData.submitted || complDate.touched || complDate.dirty)
                   ">
                     This is a mandatory field
@@ -661,16 +674,16 @@
                 <div class="p-field">
                   <label for="vision_long">Long Term ({{"\u003C"}}15 years)</label>
                   <textarea [disabled]="editEntytyId > 0" name="vision_long" placeholder="Long Term Vision"
-                    #vision_long="ngModel" [(ngModel)]="project.vision_long" rows="1" cols="130" pInputTextarea
-                    autoResize="autoResize" class="p-inputtext"></textarea>
+                    #vision_long="ngModel" [(ngModel)]="project.vision_long" rows="1" cols="130" pInputText
+                    autoResize="autoResize"></textarea>
                 </div>
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
                   <label for="vision_medium">Medium Term ({{"\u003E"}}5 years and   {{"\u003C"}}15 years)</label>
                   <textarea [disabled]="editEntytyId > 0" name="vision_medium" placeholder="Medium Term Vision" #vision_medium="ngModel"
-                    [(ngModel)]="project.vision_medium" rows="1" cols="130" pInputTextarea autoResize="autoResize"
-                    class="p-inputtext"></textarea>
+                    [(ngModel)]="project.vision_medium" rows="1" cols="130" pInputText autoResize="autoResize"
+                    ></textarea>
                 </div>
               </div>
             </div>
@@ -680,8 +693,8 @@
                 <div class="p-field">
                   <label for="vision_short">Short Term ({{"\u003C"}}5 years)</label>
                   <textarea [disabled]="editEntytyId > 0" name="vision_short" placeholder="Short Term Vision" #vision_short="ngModel"
-                    [(ngModel)]="project.vision_short" rows="1" cols="130" pInputTextarea autoResize="autoResize"
-                    class="p-inputtext"></textarea>
+                    [(ngModel)]="project.vision_short" rows="1" cols="130" pInputText autoResize="autoResize"
+                    ></textarea>
                 </div>
               </div>
             </div>
@@ -785,8 +798,8 @@
                       <label for="geographicCoverage">Geographic Coverage</label>
                       <textarea [disabled]="editEntytyId > 0" name="geographicCoverage"
                         placeholder="Geographic Coverage" #geographicCoverage="ngModel"
-                        [(ngModel)]="project.geographicCoverage" rows="5" cols="130" pInputTextarea
-                        autoResize="autoResize" class="p-inputtext"></textarea>
+                        [(ngModel)]="project.geographicCoverage" rows="5" cols="130" pInputText
+                        autoResize="autoResize" ></textarea>
                     </div>
                   </div>
 
@@ -828,9 +841,9 @@
                 <div class="p-field">
                   <label for="projectOutcome">Intended Outcomes and Benefits</label>
                   <textarea [disabled]="editEntytyId > 0" name="projectOutcome"
-                    placeholder="Please enter outcomes of the specific climate action" #projectOutcome="ngModel"
-                    [(ngModel)]="project.outcome" rows="5" cols="62" pInputTextarea length="500" autoResize="autoResize"
-                    class="p-inputtext"></textarea>
+                    placeholder="Please enter outcomes " #projectOutcome="ngModel"
+                    [(ngModel)]="project.outcome" rows="5" cols="62" pInputText length="500" autoResize="autoResize"
+                   ></textarea>
                 </div>
               </div>
 
@@ -846,7 +859,7 @@
 
                   <textarea [disabled]="editEntytyId > 0" type="text" placeholder="Please enter intended impacts"
                     name="intendedImpacts" #intendedImpacts="ngModel" [(ngModel)]="project.intendedImpacts"
-                    class="p-inputtext" rows="1" cols="62" pInputTextarea autoResize="autoResize" class="p-inputtext"
+                    class="p-inputtext" rows="1" cols="62" pInputText autoResize="autoResize" class="p-inputtext"
                     length="500"></textarea>
                 </div>
               </div>
@@ -858,7 +871,7 @@
 
                   <textarea [disabled]="editEntytyId > 0" type="text" placeholder="Please enter adaptation Benefits"
                     name="adaptionBenfits" #adaptionBenfits="ngModel" [(ngModel)]="project.adaptationBenefits"
-                    class="p-inputtext" rows="1" cols="62" pInputTextarea autoResize="autoResize" class="p-inputtext"
+                    class="p-inputtext" rows="1" cols="62" pInputText autoResize="autoResize" class="p-inputtext"
                     length="500"></textarea>
                 </div>
               </div>
@@ -875,7 +888,7 @@
                   <label for="directSD">Relevant Direct SD Benefits</label>
                   <textarea [disabled]="editEntytyId > 0" name="directSD"
                     placeholder="Please indicate the linkage of Objectives with SDGs" #directSD="ngModel"
-                    [(ngModel)]="project.directSDBenefit" rows="5" cols="62" pInputTextarea autoResize="autoResize"
+                    [(ngModel)]="project.directSDBenefit" rows="5" cols="62" pInputText autoResize="autoResize"
                     class="p-inputtext" length="500"></textarea>
                 </div>
               </div>
@@ -885,7 +898,7 @@
                   <label for="RelevantindirectSD">Relevant Indirect SD Benefits</label>
                   <textarea [disabled]="editEntytyId > 0" name="RelevantindirectSD"
                     placeholder="Please indicate the linkage of Objectives with SDGs " #RelevantindirectSD="ngModel"
-                    [(ngModel)]="project.indirectSDBenefit" rows="5" cols="62" pInputTextarea autoResize="autoResize"
+                    [(ngModel)]="project.indirectSDBenefit" rows="5" cols="62" pInputText autoResize="autoResize"
                     class="p-inputtext"></textarea>
                 </div>
               </div>
@@ -904,7 +917,7 @@
                 <div class="p-field">
                   <label for="impEntity">Implementing Entity</label>
                   <input [disabled]="editEntytyId > 0" type="text" placeholder="Name of the Implementing Entity"
-                    name="impEntity" #impEntity="ngModel" field="contatname" class="p-inputtext"
+                    name="impEntity" #impEntity="ngModel" field="contatname" pInputText
                     [(ngModel)]="project.implementingEntity" />
                 </div>
               </div>
@@ -913,7 +926,7 @@
                 <div class="p-field">
                   <label for="excutingEntity">Executing Entity</label>
                   <input [disabled]="editEntytyId > 0" type="text" placeholder="Name of the Executing Entity"
-                    #excutingEntity="ngModel" name="excutingEntity" class="p-inputtext"
+                    #excutingEntity="ngModel" name="excutingEntity" pInputText
                     [(ngModel)]="project.executingEntity" pInputText />
                 </div>
               </div>
@@ -945,15 +958,15 @@
         <div class=" mt-2">
           <div class="p-grid p-fluid col-sm-12">
             <div class="p-2">
-              <h6>Barriers &nbsp; <p-button icon="pi pi-plus "  styleClass="p-button-sm p-button-rounded"  (click)="showDialog()"></p-button></h6>
+              <h6>Barriers &nbsp; <p-button *ngIf="!(editEntytyId > 0)" icon="pi pi-plus "  styleClass="p-button-sm p-button-rounded"  (click)="showDialog()"></p-button></h6>
             </div>
             <p-dialog header="Add Barrier" [(visible)]="barrierBox"  [modal]="true" appendTo="body"  [style]="{width: '50vw'}"  >
               <ng-template pTemplate="p-dialog-content">
               <div class="row p-2">
                 <div class="col-12 col-md-6">
                   <div class="p-field">
-                    <label for="impEntity">Barriers Category</label> &nbsp;
-                    <p-dropdown placeholder="Select Barriers Category" appendTo="body" name="category"
+                    <label style="width:200px" for="impEntity">Barriers Category</label> 
+                    <p-dropdown [style]="{'width':'50%'}" placeholder="Please select barriers category  " appendTo="body" name="category"
                       [options]="category" [(ngModel)]="barrierSelected.category" optionLabel="category" #cat="ngModel"
                       (ngModelChange)="onCategoryChange($event)">
                     </p-dropdown>
@@ -965,8 +978,8 @@
               <div class="row p-2">
                 <div class="col-12 col-md-6">
                   <div class="p-field">
-                    <label for="impEntity">Barriers</label> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                    <p-dropdown placeholder="Select Barrier &nbsp; &nbsp;" appendTo="body" name="barrier" [options]="setbarriers"
+                    <label style="width:200px" for="impEntity">Barriers</label>  
+                    <p-dropdown  [style]="{'width':'50%'}" placeholder="Please select barrier" appendTo="body" name="barrier" [options]="setbarriers"
                       [(ngModel)]="barrierSelected.barrier" optionLabel="barrier" #assyesrw="ngModel">
                     </p-dropdown>
                   </div>
@@ -977,9 +990,9 @@
               <div class="row p-2">
                 <div class="col-12 col-md-6">
                   <div class="p-field">
-                    <label for="impEntity">Characteristic Affected</label>
-                    <p-dropdown placeholder="Select Barrier &nbsp; &nbsp;" appendTo="body" name="name" [options]="characteristicsList"
-                      [(ngModel)]="barrierSelected.characteristics" optionLabel="barrier" #assyesrw="ngModel">
+                    <label style="width:200px"  for="impEntity">Characteristic Affected</label>
+                    <p-dropdown  [style]="{'width':'50%'}" placeholder="Please select characteristic " appendTo="body" name="name" [options]="characteristicsList"
+                      [(ngModel)]="barrierSelected.characteristics" optionLabel="name" #assyesrw="ngModel">
                     </p-dropdown>
                   </div>
                 </div>
@@ -1053,7 +1066,7 @@
               </div>
               <div class="col-12 col-md-3">
                 <div class="p-field">
-                  <div>{{barriers.barrier.characteristics?.name}}</div>
+                  <div>{{barriers.characteristics?.name}}</div>
                 </div>
               </div>
               <div class="col-12 col-md-4">
@@ -1066,6 +1079,37 @@
             </div>
 
           </div>
+
+          <div *ngIf="(editEntytyId > 0)" >
+            <div class="row p-2" *ngFor="let barriers of barrierArray">
+            
+              <div class="col-12 col-md-2">
+                <div class="p-field">
+                 <div></div>
+                 <div>{{barriers.barriers.barriersCategory.category}}</div>
+                </div>
+              </div>
+              <div class="col-12 col-md-3">
+                <div class="p-field">
+                  <div>{{barriers.barriers.barrier}}</div>
+                </div>
+              </div>
+              <div class="col-12 col-md-3">
+                <div class="p-field">
+                  <div>{{barriers.characteristics?.name}}</div>
+                </div>
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="p-field">
+                  <div>{{barriers.is_affected}} </div>
+                 
+                </div>
+              </div>
+  
+            </div>
+
+          </div>
+          
          
           </div>
         </div>
@@ -1080,7 +1124,7 @@
 
                   <textarea [disabled]="editEntytyId > 0" name="otherRelatedActivities"
                     placeholder="Other Related activities" #otherRelatedActivities="ngModel"
-                    [(ngModel)]="project.otherRelatedActivities" rows="5" cols="130" pInputTextarea
+                    [(ngModel)]="project.otherRelatedActivities" rows="5" cols="130" pInputText
                     autoResize="autoResize" class="p-inputtext"></textarea>
                 </div>
               </div>
@@ -1096,9 +1140,9 @@
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="relatedPolicies">Related Polocies </label>
-                  <textarea [disabled]="editEntytyId > 0" name="relatedPolicies" placeholder="Related Polocies"
-                    #relatedPolicies="ngModel" [(ngModel)]="project.related_policies" rows="1" cols="130" pInputTextarea
+                  <label for="relatedPolicies">Related Interventions </label>
+                  <textarea [disabled]="editEntytyId > 0" name="relatedPolicies" placeholder="Related interventions"
+                    #relatedPolicies="ngModel" [(ngModel)]="project.related_policies" rows="1" cols="130" pInputText
                     autoResize="autoResize" class="p-inputtext"></textarea>
                 </div>
               </div>
@@ -1106,7 +1150,7 @@
                 <div class="p-field">
                   <label for="reference">Reference</label>
                   <textarea [disabled]="editEntytyId > 0" name="reference" placeholder="Reference" #reference="ngModel"
-                    [(ngModel)]="project.reference" rows="1" cols="130" pInputTextarea autoResize="autoResize"
+                    [(ngModel)]="project.reference" rows="1" cols="130" pInputText autoResize="autoResize"
                     class="p-inputtext"></textarea>
                 </div>
               </div>
