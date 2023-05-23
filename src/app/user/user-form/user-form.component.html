@@ -134,16 +134,16 @@
                 [(ngModel)]="user.institution"
                 #finstitution="ngModel"
                 [filter]="true"
-                placeholder={{user.institution.name}}
+                placeholder="Please select an institution"
                 optionLabel="name"
                 (ngModelChange)="onInstitutionChange($event)"
-                
+                [required]="true"
               ></p-dropdown>
               <p
                 class="info-message text-danger"
                 *ngIf="
-                  !user.institution.id &&
-                  (fLogin.submitted ||
+                  !user.institution &&
+                  (
                     finstitution.touched ||
                     finstitution.dirty)
                 ">
