@@ -581,10 +581,10 @@
                                                                     name="data.charData.relevance_weight"
                                                                     (ngModelChange)="onRelevanceWeightChange(category.CategoryName,data.characteristics.name, $event)">
                                                                 </p-inputNumber>
-                                                              <!--   <div *ngIf="!chaCategoryTotalEqualsTo1[category.CategoryName]" style="color: red;">
+                                                             <div *ngIf="!chaCategoryTotalEqualsTo1[category.CategoryName]" style="color: red;">
                                                                   Relevance weights for characteristics of {{category.CategoryName}} category should sum up to 100%.
                                                                   <br>
-                                                                </div> -->
+                                                                </div>
                                                             </div>
                                                         </div>
 
@@ -599,10 +599,10 @@
                                                                     (ngModelChange)="onLikelihoodWeightChange(category.CategoryName,data.characteristics.name, $event)">
                                                                 </p-inputNumber>
 
-                                                              <!--   <div *ngIf="!chaCategoryLikelihoodTotalEqualsTo1[category.CategoryName]" style="color: red;">
+                                                              <div *ngIf="!chaCategoryLikelihoodTotalEqualsTo1[category.CategoryName]" style="color: red;">
                                                                   Likelihood weights for characteristics of {{category.CategoryName}} category should sum up to 100%.
                                                                   <br>
-                                                                </div> -->
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
