@@ -181,39 +181,31 @@ export class UserFormComponent implements OnInit {
         this.isEmailUsed = false;
         this.usedEmail = '';
 
-              //   reject: () => {},
-              // });
+       /*  let tempUsers = await this.serviceProxy
+          .getManyBaseUsersControllerUser(
+            undefined,
+            undefined,
+            ['email||$eq||' + this.user.email],
+            undefined,
+            ['firstName,ASC'],
+            ['institution'],
+            1,
+            0,
+            0,
+            0
+          )
+          .subscribe((res) => {
+            if (res.data.length > 0) {
+              this.isEmailUsed = true;
+              this.usedEmail = res.data[0].email;
+             
               this.messageService.add({
                 severity: 'error',
                 summary: 'Error.',
                 detail: 'Email address is already in use, please select a diffrent email address to create a new user.!',
                 sticky: true,
               });
-            } else {        // let tempUsers = await this.serviceProxy
-        //   .getManyBaseUsersControllerUser(
-        //     undefined,
-        //     undefined,
-        //     ['email||$eq||' + this.user.email],
-        //     undefined,
-        //     ['firstName,ASC'],
-        //     ['institution'],
-        //     1,
-        //     0,
-        //     0,
-        //     0
-        //   )
-        //   .subscribe((res) => {
-        //     if (res.data.length > 0) {
-        //       this.isEmailUsed = true;
-        //       this.usedEmail = res.data[0].email;
-              
-        //       this.messageService.add({
-        //         severity: 'error',
-        //         summary: 'Error.',
-        //         detail: 'Email address is already in use, please select a diffrent email address to create a new user.!',
-        //         sticky: true,
-        //       });
-        //     } else {
+            } else { */
               // create user
               this.user.username = this.user.email;
               this.user.status = 0;
@@ -270,8 +262,8 @@ export class UserFormComponent implements OnInit {
                 // setTimeout(() => {
                 //   this.onBackClick();    
                 // },1000);
-          //   }
-          // });
+           /*  }
+          }); */
 
         // this.serviceProxy.createOneBaseUserv2ControllerUser(this.user).subscribe(res => {
         //   alert("User created !");
