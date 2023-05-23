@@ -12,20 +12,20 @@
           <div class="col-12 col-md-8">
             <div class="p-field" *ngIf="isNewUser">
               <label for="contatname">User Type*</label>
-              <p-dropdown [options]="userTypes" name="usertype" [(ngModel)]="selecteduserType"
+              <p-dropdown [options]="userTypes" name="usertype" [(ngModel)]="selecteduserType" 
                 placeholder="select user type" optionLabel="name" #fut="ngModel"></p-dropdown>
 
-              <p class="info-message text-danger" *ngIf="
+              <!-- <p class="info-message text-danger" *ngIf="
                   !selecteduserType?.id &&
                   (fLogin.submitted || fut.touched || fut.dirty)
                 ">
                 This is a mandatory field
-              </p>
+              </p> -->
             </div>
             <div class="p-field" *ngIf="!isNewUser">
               <label for="contatname">User Type*</label>
-              <p-dropdown [options]="userTypes" name="usertype" [(ngModel)]="selecteduserType"
-                placeholder={{user.userType?.name}} optionLabel="name" #fut="ngModel"></p-dropdown>
+              <p-dropdown [options]="selectedUserTypesFordrop" name="usertype" [(ngModel)]="user.userType"
+                placeholder={{user.userType?.name}} optionLabel="ae_name" #fut="ngModel"></p-dropdown>
 
               <p class="info-message text-danger" *ngIf="
                   !selecteduserType?.id &&

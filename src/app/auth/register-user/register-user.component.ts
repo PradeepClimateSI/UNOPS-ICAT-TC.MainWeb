@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AppService } from 'shared/AppService';
-import { AuthControllerServiceProxy, AuthCredentialDto, LoginProfile, LoginProfileControllerServiceProxy } from 'shared/service-proxies/auth-service-proxies';
+import { AuthControllerServiceProxy, AuthCredentialDto, LoginProfile, LoginProfileControllerServiceProxy,ServiceProxy } from 'shared/service-proxies/auth-service-proxies';
 import { User, UsersControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
@@ -30,6 +30,7 @@ export class RegisterUserComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private userControllerService: UsersControllerServiceProxy,
     private loginprofileControllerServiceProxy: LoginProfileControllerServiceProxy,
+    private service:ServiceProxy,
   ) { }
 
   ngOnInit(): void {
@@ -68,7 +69,7 @@ export class RegisterUserComponent implements OnInit {
     newProfile.userName = form.value.email;
     
  
-      const b = await this.loginprofileControllerServiceProxy.create(newProfile).subscribe((res) => {
+      const b = await this.service.createOneBaseLoginProfileControllerLoginProfile(newProfile).subscribe((res) => {
         this.messageService.add({
           severity: 'success',
           summary: '',
