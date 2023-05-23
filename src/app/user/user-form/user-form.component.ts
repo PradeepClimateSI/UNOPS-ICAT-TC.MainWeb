@@ -137,7 +137,7 @@ export class UserFormComponent implements OnInit {
 
 
 
-   /*    this.instProxy.getInstitutionForManageUsers(0,0)
+      this.instProxy.getInstitutionForManageUsers(0,0)
       .subscribe((res) => {
         console.log('institutions res ============', res);
         this.institutions = res.items;
@@ -164,7 +164,7 @@ export class UserFormComponent implements OnInit {
        }
 
 
-      }); */
+      });
   }
 
   onChangeUser(event: any) {
@@ -181,7 +181,15 @@ export class UserFormComponent implements OnInit {
         this.isEmailUsed = false;
         this.usedEmail = '';
 
-        // let tempUsers = await this.serviceProxy
+              //   reject: () => {},
+              // });
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error.',
+                detail: 'Email address is already in use, please select a diffrent email address to create a new user.!',
+                sticky: true,
+              });
+            } else {        // let tempUsers = await this.serviceProxy
         //   .getManyBaseUsersControllerUser(
         //     undefined,
         //     undefined,
