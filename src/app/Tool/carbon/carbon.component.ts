@@ -427,6 +427,7 @@ trigger : boolean = false;
  */
 
   flag : boolean = false
+  selectedMethodology : any
 
    onChange(event:any) {
 
@@ -452,6 +453,9 @@ trigger : boolean = false;
     }, 500);
   }
 
+  onChangeMeth(event:any) {
+    this.selectedMethodology = event.target.value;
+  }
 
   getCategory(characteristics: any, category: any) {
 
@@ -700,6 +704,7 @@ allData: any
   this.track2Direct = false
   this.track2Indirect = false
 
+  console.log("pppppp :",data)
   if((data.assessment_approach === 'Direct' || data.assessment_approach === 'Indirect' ) && data.assessment_method === 'Track 2'){
    // this.fileDataArray = ''
     if((data.assessment_approach === 'Direct' ) ){
@@ -798,7 +803,7 @@ allData: any
 
       console.log("ddd: ", data)
       let categoryDataArray: any[] = [];
-    if( data.policy === 'TC Uganda Geothermal'){
+    if( data.methodology === 'Methodology 1'){
       for (let category of this.selectedItems) {
         let categoryData: any = {
           categoryScore: data[`${category.name}_catscore`],
@@ -894,7 +899,7 @@ allData: any
     }
 
 
-    if( data.policy === 'TC NACAG Initiative'){
+    if( data.methodology === 'Methodology 2'){
       for (let category of this.selectedItems3) {
 
         this.categoryFilename = ''
@@ -1043,7 +1048,7 @@ allData: any
         methodology : this.methId,
         categoryData :categoryDataArray,
         policyId : this.policyId,
-        tool : 'Carbon Market Tool',
+        tool : 'Portfolio Tool',
         assessment_type : data.assessment_type,
         date1 : data.date1,
         date2 : data.date2,

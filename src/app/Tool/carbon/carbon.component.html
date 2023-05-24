@@ -34,7 +34,7 @@
           <div class="row p-2">
             <div class="col-12 col-md-8">
               <div class="p-field">
-                <label for="assessment_method">Assessment Method</label>
+                <label for="assessment_method">Assessment Method *</label>
                 <select [disabled]="isSubmitted" class="form-control select-with-arrow" (change)="onChangeTrack($event)"   #assessmentMethod="ngModel"
                         [(ngModel)]="assessment_method" name="assessment_method" id="exampleFormControlSelect1" required>
                   <option value="" disabled selected hidden>Select Assessment Method</option>
@@ -91,7 +91,7 @@
           <div class="row p-2">
             <div class="col-12 col-md-8">
               <div class="p-field">
-                <label for="selectedBarriers">Objectives</label>
+                <label for="selectedBarriers">Objectives *</label>
                 <p-multiSelect [disabled]="isSubmitted" name="selectedObjectives" [options]="objectivesList" #type="ngModel"
                   [(ngModel)]="selectedObjectivesList" (onChange)="onItemSelectObjectives($event)" optionLabel="name"  [required]="true"
                   defaultLabel="Select Objectives">
@@ -121,7 +121,7 @@
             <div class="row p-2">
               <div class="col-12 col-md-8">
                 <div class="p-field">
-                  <label for="person">Person or Organization Doing the Assessment   &nbsp; </label>
+                  <label for="person">Person or Organization Doing the Assessment *  &nbsp; </label>
                   <input pInputText type="text" #person="ngModel"  name="person" ngModel placeholder="Enter the person or organization doing the assessment" />
                   <p class="info-message text-danger" *ngIf="!person.value && (userPost.submitted || person.touched)">This is a mandatory field</p>
                 </div>
@@ -131,7 +131,7 @@
             <div class="row p-2">
               <div class="col-12 col-md-8">
                 <div class="p-field">
-                  <label for="audience">Intended Audience(s)   &nbsp; </label>
+                  <label for="audience">Intended Audience(s) *  &nbsp; </label>
                   <input pInputText type="text" #audience="ngModel" name="audience" ngModel placeholder="Intended Audience(s)" />
                   <p class="info-message text-danger" *ngIf="!audience.value && (userPost.submitted || audience.touched)">This is a mandatory field</p>
                 </div>
@@ -141,7 +141,7 @@
             <div class="row p-2">
               <div class="col-12 col-md-8">
                 <div class="p-field">
-                  <label for="assessBoundry">Assessment Boundary   &nbsp; </label>
+                  <label for="assessBoundry">Assessment Boundary *  &nbsp; </label>
                   <input pInputText type="text" #assessBoundry="ngModel" name="assessBoundry" ngModel placeholder="Assessment Boundary" />
                   <p class="info-message text-danger" *ngIf="!assessBoundry.value && (userPost.submitted || assessBoundry.touched)">This is a mandatory field</p>
                 </div>
@@ -151,7 +151,7 @@
             <div class="row p-2">
               <div class="col-12 col-md-8">
                 <div class="p-field">
-                  <label for="impactsCovered">Impacts Covered    &nbsp; </label>
+                  <label for="impactsCovered">Impacts Covered *   &nbsp; </label>
                   <input pInputText type="text" #impactsCovered="ngModel" name="impactsCovered" ngModel placeholder="Impacts Covered" />
                   <p class="info-message text-danger" *ngIf="!impactsCovered.value && (userPost.submitted || impactsCovered.touched)">This is a mandatory field</p>
                 </div>
@@ -162,7 +162,7 @@
           <div class="row p-2">
             <div class="col-12 col-md-8">
               <div class="p-field">
-                <label for="assessment_type">Assessment Type</label>
+                <label for="assessment_type">Assessment Type *</label>
                 <select [disabled]="isSubmitted" class="form-control select-with-arrow" #assessment_type="ngModel" ngModel name="assessment_type"
                   id="exampleFormControlSelect1">
                   <option value="" disabled selected hidden>Select Assessment Type</option>
@@ -203,7 +203,7 @@
           <div class="row p-2">
             <div class="col-12 col-md-8">
               <div class="p-field">
-                <label for="assessment_approach">Assessment Approach</label>
+                <label for="assessment_approach">Assessment Approach *</label>
                 <select [disabled]="isSubmitted"  #assessment_approach="ngModel"  class="form-control select-with-arrow" (change)="onChangeApproach($event)" ngModel name="assessment_approach"
                   id="exampleFormControlSelect1">
                   <option value="" disabled selected hidden>Select Assessment Approach</option>
@@ -220,8 +220,8 @@
           <div class="row p-2">
             <div class="col-12 col-md-8">
               <div class="p-field">
-                <label for="methodology">Methodology</label>
-                <select [disabled]="isSubmitted"  #methodology="ngModel" class="form-control select-with-arrow" ngModel name="methodology" id="exampleFormControlSelect1">
+                <label for="methodology">Methodology *</label>
+                <select [disabled]="isSubmitted"  #methodology="ngModel" class="form-control select-with-arrow" (change)="onChangeMeth($event)" ngModel name="methodology" id="exampleFormControlSelect1">
                   <option value="" disabled selected hidden>Select Methodology</option>
                   <option *ngFor="let methodology of methList" [value]="methodology">{{methodology}}</option>
                 </select>
@@ -235,7 +235,7 @@
 
 <div *ngIf="selectedTrack === 'Track 1'">
   <div *ngIf="selectedApproach === 'Direct'">
-    <div *ngIf="selectedType === 'TC Uganda Geothermal'" class="form-group">
+    <div *ngIf="selectedMethodology === 'Methodology 1'" class="form-group">
 
       <br><br>
       <h5>Processess of change</h5>
@@ -380,7 +380,7 @@
     </div> <!--  end of meth1 form -->
 
     <!--   start of meth 2 form data -->
-    <div *ngIf="selectedType === 'TC NACAG Initiative'" class="form-group">
+    <div *ngIf="selectedMethodology === 'Methodology 2'" class="form-group">
 
       <br><br>
       <h5>Processess of change</h5>
@@ -564,7 +564,7 @@
 
 <div *ngIf="selectedTrack === 'Track 1'">
   <div *ngIf="selectedApproach === 'Indirect'">
-    <div *ngIf="selectedType === 'TC Uganda Geothermal'" class="form-group">
+    <div *ngIf="selectedMethodology === 'Methodology 1'" class="form-group">
 
       <br><br>
       <h5>Processess of change</h5>
@@ -719,7 +719,7 @@
     </div> <!--  end of meth1 form -->
 
     <!--   start of meth 2 form data -->
-    <div *ngIf="selectedType === 'TC NACAG Initiative'" class="form-group">
+    <div *ngIf="selectedMethodology === 'Methodology 2'" class="form-group">
 
       <br><br>
       <h5>Processess of change</h5>
@@ -935,7 +935,7 @@
 
 <div *ngIf="selectedTrack === 'Track 3'">
   <div *ngIf="selectedApproach === 'Direct'">
-    <div *ngIf="selectedType === 'TC Uganda Geothermal'" class="form-group">
+    <div *ngIf="selectedMethodology === 'Methodology 1'" class="form-group">
 
       <br><br>
       <h5>Processess of change</h5>
@@ -1098,7 +1098,7 @@
     </div> <!--  end of meth1 form -->
 
     <!--   start of meth 2 form data -->
-    <div *ngIf="selectedType === 'TC NACAG Initiative'" class="form-group">
+    <div *ngIf="selectedMethodology === 'Methodology 2'" class="form-group">
 
       <br><br>
       <h5>Processess of change</h5>
