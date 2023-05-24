@@ -1048,7 +1048,7 @@ allData: any
         methodology : this.methId,
         categoryData :categoryDataArray,
         policyId : this.policyId,
-        tool : 'Carbon Market Tool',
+        tool : 'Portfolio Tool',
         assessment_type : data.assessment_type,
         date1 : data.date1,
         date2 : data.date2,
