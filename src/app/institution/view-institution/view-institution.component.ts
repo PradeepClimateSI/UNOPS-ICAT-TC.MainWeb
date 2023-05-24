@@ -276,8 +276,7 @@ export class ViewInstitutionComponent implements OnInit {
           detail: 'Can not deactivate your own institution',
           sticky: true,
         });
-       
-              return 
+       return 
           
         
       }
@@ -319,9 +318,9 @@ export class ViewInstitutionComponent implements OnInit {
               closable: true,
               
             });
-            // setTimeout(() => {
-            //   this.onBackClick();    
-            // },2000)
+            setTimeout(() => {
+              this.onBackClick();    
+            },2000)
           },
           (err) => {
             console.log('error............'),
