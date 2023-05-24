@@ -55,13 +55,13 @@ export class ViewInstitutionComponent implements OnInit {
 
   ngOnInit(): void {
 
-    const token = localStorage.getItem('access_token')!;
+    const token = localStorage.getItem('ACCESS_TOKEN')!;
     const currenyUser=decode<any>(token);
-    this.userName = currenyUser.usr;
+    this.userName = currenyUser.username;
     console.log("currenyUser",currenyUser);
 
 
-    this.userProxy.findUserByUserName(
+    this.userProxy.findUserByUserNameEx(
       this.userName
     ).subscribe((res: any) => {
 
@@ -82,7 +82,7 @@ export class ViewInstitutionComponent implements OnInit {
     ).subscribe((res: any) => {
       //this.user = res;
       console.log('ressss..',res);
-      this.userTypeId = this.user.userType.id;
+      this.userTypeId = this.user.userType?.id;
       console.log('userType',this.userTypeId);
 
       this.serviceProxy
@@ -142,7 +142,7 @@ export class ViewInstitutionComponent implements OnInit {
       0,
       0
     ).subscribe((res: any) => {
-      this.sectorList = res.data;
+      this.sectorList = res?.data;
       console.log('sector........',this.sectorList)
     });
 
@@ -251,13 +251,13 @@ export class ViewInstitutionComponent implements OnInit {
       activateInstitution(institution: Institution){
 
        console.log("loguser===",this.user)
-       console.log("loguserinsId===",this.user.institution.id)
+       console.log("institute",institution)
        console.log("activationinsId===",institution.id)
 
 
         console.log('stasus===',institution.status)
-
-        if(this.user.institution.id != institution.id ){
+        console.log("user.institution.id",this.user.institution.id,"institution.id",institution.id)
+        if(this.user.institution.id !== institution.id ){
 
         if(institution.status == 1){
           this.statusUpdate = 0;
@@ -270,8 +270,16 @@ export class ViewInstitutionComponent implements OnInit {
 
       }
       else{
-        alert("Can not deactivate your own institution")
-        return
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error.',
+          detail: 'Can not deactivate your own institution',
+          sticky: true,
+        });
+       
+              return 
+          
+        
       }
 
         this.institution.status = this.statusUpdate;
@@ -309,7 +317,11 @@ export class ViewInstitutionComponent implements OnInit {
               institution.status === 0
                ? this.institution.name + ' is activated': this.institution.name + 'is decativated',
               closable: true,
+              
             });
+            // setTimeout(() => {
+            //   this.onBackClick();    
+            // },2000)
           },
           (err) => {
             console.log('error............'),
@@ -349,7 +361,8 @@ export class ViewInstitutionComponent implements OnInit {
       }
 
       edit(institution: Institution){
-        this.router.navigate(['edit-institution'],{
+        console.log("institution",institution)
+        this.router.navigate(['app/edit-institution'],{
           queryParams: { id: institution.id}
         });
       }

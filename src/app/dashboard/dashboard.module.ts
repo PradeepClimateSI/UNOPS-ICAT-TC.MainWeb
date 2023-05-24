@@ -56,6 +56,7 @@ import { AuditControllerServiceProxy } from 'shared/service-proxies-auditlog/ser
 import { ReportComponent } from 'app/report/report.component';
 import { InvestorToolComponent } from 'app/Tool/investor-tool/investor-tool.component';
 import { AssessmentResultInvestorComponent } from 'app/assessment-result-investor/assessment-result-investor.component';
+import { EditInstitutionComponent } from 'app/institution/edit-institution/edit-institution.component';
 
 
 
@@ -91,6 +92,14 @@ const routes: Routes = [
   {
     path: 'view-institution',
     component: ViewInstitutionComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+
+  {
+    path: 'edit-institution',
+    component: EditInstitutionComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}

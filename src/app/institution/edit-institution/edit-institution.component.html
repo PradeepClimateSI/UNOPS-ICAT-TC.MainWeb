@@ -33,7 +33,7 @@
                     <div class="col-12 col-md-6">
                         <div class="p-field">
                             <label for="category">Category*</label>
-                            <p-dropdown placeholder="Select" [(ngModel)]="institution.category" name="category"
+                            <p-dropdown placeholder={{institution.category?.name}} [(ngModel)]="institution.category" name="category"
                                 [options]="categoryList" [autoDisplayFirst]="false" optionLabel="name"
                                 #inscat="ngModel">
                             </p-dropdown>
