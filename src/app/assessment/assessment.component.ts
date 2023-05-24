@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LazyLoadEvent } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { MethodologyAssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
@@ -30,18 +31,18 @@ dt2 : Table
 
 
   async ngOnInit() {
-
+    this.loading = true;
     // this.methassess.results().subscribe((res: any) => {
     //   this.resultsList = res
 
     // });
 
     this.resultsList = await this.methassess.results().toPromise()
-    console.log("resultsss : ", this.resultsList)
+    //console.log("resultsss : ", this.resultsList)
 
 
     this.methassess.assessmentDetails().subscribe(async (res: any) => {
-      console.log("assessmentData : ", res)
+    //  console.log("assessmentData : ", res)
       this.assessmentData = res
 
 
@@ -49,7 +50,7 @@ dt2 : Table
         for await (let result of this.resultsList){
 
           if(result.assessment.id == x.id){
-            console.log("aaaaaaaaaaaaaaaa")
+          //  console.log("aaaaaaaaaaaaaaaa")
             let data : any = {
               id : result.id,
               assessId : x.id,
@@ -71,7 +72,7 @@ dt2 : Table
       console.log("resultdataa",this.results)
 
 
-      console.log("resultdataareverse",  this.results.reverse())
+    //  console.log("resultdataareverse",  this.results.reverse())
 
 
     });
@@ -80,9 +81,11 @@ dt2 : Table
 
       setTimeout(() => {
         this.load = true;
+        this.loading = false;
       }, 1000);
 
   }
+
 
   clear(table: Table) {
     table.clear();
