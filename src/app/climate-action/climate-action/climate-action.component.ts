@@ -423,10 +423,10 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
               this.updateMapBoundaries(map, longitude, latitude);
 
               console.log('ths.project,,,..', this.project);
-              // this.likelyHood = this.project.likelyhood;
-              // this.isPoliticalPreference = this.project.politicalPreference;
-              // this.isFinancialFeciability = this.project.financialFecialbility;
-              // this.isAvailabiltyOfTEch = this.project.availabilityOfTechnology;
+              this.likelyHood = this.project.likelyhood;
+              this.isPoliticalPreference = this.project.politicalPreference;
+              this.isFinancialFeciability = this.project.financialFecialbility;
+              this.isAvailabiltyOfTEch = this.project.availabilityOfTechnology;
               this.originalApprovalStatus =
                 this.project.projectApprovalStatus == undefined
                   ? 'Propose'
@@ -434,13 +434,13 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
               this.proposedDate = this.project.proposeDateofCommence.toString();
               // this.isMapped = this.project?.isMappedCorrectly;
               // this.disbaleNdcmappedFromDB = this.project?.isMappedCorrectly;
-              // this.isLikelyhoodFromDb = this.project?.likelyhood;
-              // this.isPoliticalPreferenceFromDb =
-              //   this.project?.politicalPreference;
-              // this.isFinancialFeciabilityFromDb =
-              //   this.project?.financialFecialbility;
-              // this.isAvailabiltyOfTEchFromDb =
-              //   this.project.availabilityOfTechnology;
+              this.isLikelyhoodFromDb = this.project?.likelyhood;
+              this.isPoliticalPreferenceFromDb =
+                this.project?.politicalPreference;
+              this.isFinancialFeciabilityFromDb =
+                this.project?.financialFecialbility;
+              this.isAvailabiltyOfTEchFromDb =
+                this.project.availabilityOfTechnology;
 
 
 
@@ -1333,11 +1333,11 @@ updateStatus(project: Project, aprovalStatus: number) {
   //   project.mappedInstitution = insti;
   // }
 
-  // project.politicalPreference = this.isPoliticalPreference;
-  // project.likelyhood = this.likelyHood;
-  // project.availabilityOfTechnology = this.isAvailabiltyOfTEch;
-  // project.financialFecialbility = this.isFinancialFeciability;
-  // // project.actionJustification = this.commentForJustification;
+  project.politicalPreference = this.isPoliticalPreference;
+  project.likelyhood = this.likelyHood;
+  project.availabilityOfTechnology = this.isAvailabiltyOfTEch;
+  project.financialFecialbility = this.isFinancialFeciability;
+  // project.actionJustification = this.commentForJustification;
   // project.isMappedCorrectly = this.isMapped;
   // console.log('project.actionJustification..', project.actionJustification);
 

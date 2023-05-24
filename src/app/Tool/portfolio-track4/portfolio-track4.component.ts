@@ -316,6 +316,7 @@ onChangeTrack(event : any){
     finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
     // finalArray.map(x=>x.data.map(y=>y.investorTool=this.mainAssessment))
     console.log("finalArray", finalArray)
+    //@ts-ignore
     this.investorToolControllerproxy.createFinalAssessment(finalArray)
       .subscribe(_res => {
         console.log("res final", _res)

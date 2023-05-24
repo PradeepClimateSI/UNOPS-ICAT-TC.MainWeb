@@ -215,21 +215,21 @@ export class UserListComponent implements OnInit {
   editUser(user: User) {
     console.log('edit user', user);
 
-    this.router.navigate(['/create'], { queryParams: { id: user.id } });
+    this.router.navigate(['app/user/create'], { queryParams: { id: user.id } });
   }
 
   viewUser(user: User) {
 
-    this.router.navigate(['/view-user'], { queryParams: { id: user.id } });
+    this.router.navigate(['app/user/view-user'], { queryParams: { id: user.id } });
     console.log('hit', user.id);
   }
 
   EditUser(user: User) {
     console.log('hit');
-    this.router.navigate(['/user/create'], { queryParams: { id: user.id } });
+    this.router.navigate(['/app/user/create'], { queryParams: { id: user.id } });
   }
   new() {
-    this.router.navigate(['/create']);
+    this.router.navigate(['/app/user/create']);
   }
 
   onTypeChange(event: any) {

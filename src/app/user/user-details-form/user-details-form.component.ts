@@ -52,9 +52,10 @@ export class UserDetailsFormComponent implements OnInit {
       }
     });
     // this.getUnits();
-    const token = localStorage.getItem('access_token')!;
+    const token = localStorage.getItem('ACCESS_TOKEN')!;
 
     const tokenPayload = decode<any>(token);
+    console.log("tokenPayload", tokenPayload)
     
     this.user.userType = undefined!;
     this.user.mobile = '';
@@ -81,8 +82,8 @@ export class UserDetailsFormComponent implements OnInit {
             console.log('User====',  this.user.institution.name);
 
             this.isActive=this.user.status;
-            this.itsMe=this.user.username==tokenPayload.usr;
-            let loggedUserRole=tokenPayload.roles[0]
+            this.itsMe=this.user.username==tokenPayload.username;
+            let loggedUserRole=tokenPayload.role[0]
             console.log('this.itsMe---------', this.itsMe);
             if (this.user.userType.name == "Country Admin") {
    

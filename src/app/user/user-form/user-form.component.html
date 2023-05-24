@@ -12,23 +12,23 @@
           <div class="col-12 col-md-8">
             <div class="p-field" *ngIf="isNewUser">
               <label for="contatname">User Type*</label>
-              <p-dropdown [options]="userTypes" name="usertype" [(ngModel)]="selecteduserType"
+              <p-dropdown [options]="userTypes" name="usertype" [(ngModel)]="selecteduserType" 
                 placeholder="select user type" optionLabel="name" #fut="ngModel"></p-dropdown>
 
-              <p class="info-message text-danger" *ngIf="
+              <!-- <p class="info-message text-danger" *ngIf="
                   !selecteduserType?.id &&
                   (fLogin.submitted || fut.touched || fut.dirty)
                 ">
                 This is a mandatory field
-              </p>
+              </p> -->
             </div>
-            <div class="p-field" *ngIf="!isNewUser">
+            <div class="p-field" *ngIf="!isNewUser ">
               <label for="contatname">User Type*</label>
-              <p-dropdown [options]="selectedUserTypesFordrop" name="usertype" [(ngModel)]="selecteduserType"
-                placeholder={{user.userType?.name}} optionLabel="ae_name" #fut="ngModel"></p-dropdown>
+              <p-dropdown [options]="userTypes" name="usertype" [(ngModel)]="selecteduserType"
+                placeholder={{user.userType?.name}} optionLabel="name" #fut="ngModel"></p-dropdown>
 
               <p class="info-message text-danger" *ngIf="
-                  !selecteduserType?.ae_id &&
+                  !selecteduserType &&
                   (fLogin.submitted || fut.touched || fut.dirty)
                 ">
                 This is a mandatory field
@@ -101,24 +101,25 @@
       <div class="p-grid p-fluid col-md-9 col-sm-12">
         <div class="row p-2">
           <div class="col-12 col-md-8">
-            <div class="p-field" *ngIf="!isNewUser">
+            <div class="p-field" *ngIf="!isNewUser && user.institution">
               <label for="institution">Assign Institution *</label>
               <p-dropdown              
                 name="institution"
                 [options]="institutions"
-                [(ngModel)]="user.institution"
+                [(ngModel)]="userInstitution"
                 #finstitution="ngModel"
-                [filter]="true"
-                placeholder="institution"
+                placeholder={{user.institution?.name}}
                 optionLabel="name"
                 (ngModelChange)="onInstitutionChange($event)"
                 [required]="true"
                 
               ></p-dropdown>
+              
+              
               <p
                 class="info-message text-danger"
                 *ngIf="
-                  !user.institution.id &&
+                  !userInstitution &&
                   (fLogin.submitted ||
                     finstitution.touched ||
                     finstitution.dirty)

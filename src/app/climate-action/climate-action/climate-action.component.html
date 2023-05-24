@@ -1219,55 +1219,11 @@
 
       <div class="card mt-2" *ngIf="flag == 1">
         <div class="p-grid p-fluid col-sm-12">
-          <!-- <div class="p-2">
+         <div class="p-2">
             <h6>Approval Check List</h6>
           </div>
 
-          <div class="row p-2">
-
-            <div class="col-12 col-md-6">
-              <div class="p-field">
-                Indicate the likelihood of GHG impact of this CA
-              </div>
-            </div>
-
-            <div class="col-12 col-md-2">
-              <div class=>
-
-                <div class="p-field-radiobutton col-3 col-md-12">
-                  <p-radioButton name="likelyHood" value="1" [disabled]="isLikelyhoodFromDb != null"
-                    [(ngModel)]="likelyHood"></p-radioButton><label>Low</label>
-                </div>
-
-              </div>
-            </div>
-            <div class="col-12 col-md-2">
-              <div class="p-field">
-
-                <div class="p-field-radiobutton col-3 col-md-12">
-                  <p-radioButton name="likelyHood" [disabled]="isLikelyhoodFromDb != null" value="2"
-                    [(ngModel)]="likelyHood"></p-radioButton><label>Medium</label>
-                </div>
-
-              </div>
-            </div>
-            <div class="col-12 col-md-2">
-              <div class="p-field">
-
-                <div class="p-field-radiobutton col-3 col-md-12">
-                  <p-radioButton name="likelyHood" [disabled]="isLikelyhoodFromDb != null" value="3"
-                    [(ngModel)]="likelyHood"></p-radioButton><label>High</label>
-                </div>
-
-              </div>
-            </div>
-
-
-          </div> -->
-
-
-
-
+         
           <div class="row p-2" *ngIf="project.projectStatus?.name! == 'Planned'">
 
             <div class="col-12 col-md-6">
@@ -1306,12 +1262,7 @@
 
               </div>
             </div>
-
-
           </div>
-
-
-
 
           <div class="row p-2" *ngIf="project.projectStatus?.name! == 'Planned'">
 
@@ -1355,8 +1306,6 @@
 
           </div>
 
-
-
           <div class="row p-2" *ngIf="project.projectStatus?.name! == 'Planned'">
 
             <div class="col-12 col-md-6">
@@ -1387,17 +1336,63 @@
             </div>
             <div class="col-12 col-md-2">
               <div class="p-field">
-
-
-
               </div>
             </div>
-
-
-
-
-
           </div>
+          <div class="row p-2">
+            <div class="col-12 col-md-6">
+              <div class="p-field">
+                Indicate the likelihood of TC impact of this intervention
+              </div>
+            </div>
+  
+            <div class="col-12 col-md-2">
+              <div class=>
+  
+                <div class="p-field-radiobutton col-3 col-md-12">
+                  <p-radioButton
+                  name="likelyHood"
+                  value="1"
+                  [disabled]="isLikelyhoodFromDb != null"
+                  [(ngModel)]="likelyHood"
+                ></p-radioButton><label >Low</label>
+                </div>
+  
+              </div>
+            </div>
+            <div class="col-12 col-md-2">
+              <div class="p-field">
+                
+                <div class="p-field-radiobutton col-3 col-md-12">
+                  <p-radioButton
+                  name="likelyHood"
+                  [disabled]="isLikelyhoodFromDb != null"
+                  value="2"
+                  [(ngModel)]="likelyHood"
+                ></p-radioButton><label >Medium</label>
+                </div>
+  
+              </div>
+            </div>
+            <div class="col-12 col-md-2">
+              <div class="p-field">
+                
+                <div class="p-field-radiobutton col-3 col-md-12">
+                  <p-radioButton
+                  name="likelyHood"
+                  [disabled]="isLikelyhoodFromDb != null"
+                  value="3"
+                  [(ngModel)]="likelyHood"
+                ></p-radioButton><label >High</label>
+                </div>
+  
+              </div>
+            </div>
+              
+            
+          </div>
+
+          
 
 
           <div class="row p-2">
@@ -1421,7 +1416,7 @@
 
               name="justification"
               placeholder="Please type a justification for your action"
-              [(ngModel)]="project.justification"
+              [(ngModel)]="project.actionJustification"
               #justification="ngModel"
               rows="5"
               cols="62"
@@ -1463,7 +1458,7 @@
 
 
 
-            <div class="col-12 col-md-2" *ngIf="isActionButtonSectionEnabled == true  ">
+            <div class="col-12 col-md-2" *ngIf="isActionButtonSectionEnabled == true && project?.actionJustification! !=''  ">
               <div class="p-field">
                 <ng-container
                   *ngIf="project.projectApprovalStatus?.id == 1 || project.projectApprovalStatus?.id == 5 ; else elseBlockAccept">
@@ -1484,7 +1479,7 @@
             </div>
 
 
-            <div class="col-12 col-md-2" *ngIf="isActionButtonSectionEnabled == true ">
+            <div class="col-12 col-md-2" *ngIf="isActionButtonSectionEnabled == true && project?.actionJustification! !='' ">
               <div class="p-field">
                 <ng-container
                   *ngIf="project.projectApprovalStatus?.id == 1 || project.projectApprovalStatus?.id == 5 ; else elseBlockReject">
