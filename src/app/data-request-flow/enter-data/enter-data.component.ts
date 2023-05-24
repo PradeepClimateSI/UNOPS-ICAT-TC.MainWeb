@@ -126,7 +126,7 @@ export class EnterDataComponent implements OnInit, AfterViewInit {
     const tokenPayload = decode<any>(token);
     this.userCountryId  = tokenPayload.countryId;
     this.userSectorId = tokenPayload.sectorId;
-    this.user_role=tokenPayload.role[0]
+    this.user_role=tokenPayload.role.code;
     this.totalRecords = 0;
     this.userName = tokenPayload.username;
 

@@ -109,7 +109,7 @@ export class ViewComponent implements OnInit, AfterViewInit {
     this.userName = localStorage.getItem('user_name')!;
     const token = localStorage.getItem('access_token')!;
     const currenyUser=decode<any>(token);
-    this.userRole = currenyUser.roles[0];
+    this.userRole = currenyUser.roles.code;
     // this.userName = currenyUser.fname;
     console.log("currenyUser",this.userRole);
     console.log("this.userName...",this.userName);
@@ -307,7 +307,7 @@ export class ViewComponent implements OnInit, AfterViewInit {
 
   detail(climateactions: Project) {
     console.log("climateactions",climateactions )
-    this.router.navigate(['/add-polocies'], {
+    this.router.navigate(['app/add-polocies'], {
 
     queryParams: { id: climateactions.id ,flag:this.flag},
 
