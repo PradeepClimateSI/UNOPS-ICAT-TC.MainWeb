@@ -56,7 +56,7 @@ export class QualityCheckComponent implements OnInit {
     const tokenPayload = decode<any>(token);
     this.userCountryId = tokenPayload.countryId;
     this.userSectorId = tokenPayload.sectorId;
-    this.usrRole = tokenPayload.role[0]
+    this.usrRole = tokenPayload.role.code;
 
     console.log("usrRole", this.usrRole)
 

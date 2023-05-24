@@ -82,7 +82,7 @@ export class UserDetailsFormComponent implements OnInit {
 
             this.isActive=this.user.status;
             this.itsMe=this.user.username==tokenPayload.usr;
-            let loggedUserRole=tokenPayload.roles[0]
+            let loggedUserRole=tokenPayload.roles.code
             console.log('this.itsMe---------', this.itsMe);
             if (this.user.userType.name == "Country Admin") {
    

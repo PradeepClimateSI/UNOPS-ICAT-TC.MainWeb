@@ -81,7 +81,7 @@ export class InstitutionComponent implements OnInit {
     
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
-    this.usrrole = tokenPayload.role[0];
+    this.usrrole = tokenPayload.role.code;
     this.sectorId = tokenPayload.sectorId;
     this.countryId = tokenPayload['countryId'];
     // this.dataCollectionModuleStatus =tokenPayload.moduleLevels[3];

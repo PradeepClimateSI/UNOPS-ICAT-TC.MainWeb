@@ -42,8 +42,9 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
     const tokenPayload = decode<any>(token);
     this.userName = tokenPayload.username;
     this.userName = `${this.appService.getUserName()}`;
-    this.userRole = tokenPayload.role[0];
-
+    this.userRole = tokenPayload.role.code;
+    // this.userRole = tokenPayload.role[0];
+    console.log("++++++++++++++++++",tokenPayload);
 
     this.userProxy.findUserByUserName(
       this.userName
