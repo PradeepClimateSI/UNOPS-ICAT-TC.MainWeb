@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { Institution, InstitutionCategory, InstitutionType, Sector, ServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Institution, InstitutionCategory, InstitutionType, Sector, SectorControllerServiceProxy, ServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-edit-institution',
@@ -28,7 +28,8 @@ export class EditInstitutionComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute,
     private router: Router,
-    private messageService: MessageService) { }
+    private messageService: MessageService,
+    private sectorProxy:SectorControllerServiceProxy) { }
 
 
     OnShowOerlay() {
@@ -53,6 +54,7 @@ export class EditInstitutionComponent implements OnInit {
       0
     ).subscribe((res: any) => {
       this.typeList = res.data;
+      console.log("typeList",this.typeList)
     });
 
     this.serviceProxy
@@ -72,21 +74,12 @@ export class EditInstitutionComponent implements OnInit {
       this.categoryList = res.data;
     });
 
-    this.serviceProxy
-    .getManyBaseSectorControllerSector(
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      1000,
-      0,
-      0,
-      0
+    this.sectorProxy
+    .findAllSector(
+     
     ).subscribe((res: any) => {
-      this.sectorList = res.data;
-      console.log('sector........',this.sectorList)
+      this.sectorList = res;
+      console.log('sector........',res)
     });
 
   this.route.queryParams.subscribe((params) => {
@@ -129,6 +122,7 @@ export class EditInstitutionComponent implements OnInit {
     }
 
     if (this.institution.id > 0) {
+      console.log("********",this.institution)
       this.serviceProxy
         .updateOneBaseInstitutionControllerInstitution(this.institution.id, this.institution)
         .subscribe(
@@ -142,6 +136,10 @@ export class EditInstitutionComponent implements OnInit {
             closable: true,
             
             });
+            setTimeout(() => {
+              this.onBackClick();    
+            },2000);
+            
             
           },
           (err) => {
@@ -153,16 +151,18 @@ export class EditInstitutionComponent implements OnInit {
             });
           }
         );
-        setTimeout(() => {
-          this.onBackClick();    
-        },1000);
         
         console.log(formData);
       
     }}
 
     else{
-      alert("Fill all the mandetory fields in correct format")
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error.',
+        detail: 'Fill all the mandetory fields in correct format',
+        sticky: true,
+      });
     }
   } 
 
@@ -180,7 +180,7 @@ export class EditInstitutionComponent implements OnInit {
  
 
   onBackClick() {
-    this.router.navigate(['/institution-list']);
+    this.router.navigate(['/app/institutionlist']);
   }
 
   // view(institution: Institution){
