@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
-import { UsersControllerServiceProxy, ServiceProxy, User, Institution, InstitutionControllerServiceProxy, UserTypeControllerServiceProxy, Country, InstitutionType, InstitutionCategory, UserType } from 'shared/service-proxies/service-proxies';
+import { UsersControllerServiceProxy, ServiceProxy, User, Institution, InstitutionControllerServiceProxy, UserTypeControllerServiceProxy, Country, InstitutionType, InstitutionCategory, UserType, CountryControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import { LoginProfile, LoginProfileControllerServiceProxy, ServiceProxy as authServiceProxy } from 'shared/service-proxies/auth-service-proxies';
 import { UserDetailsFormComponent } from '../user-details-form/user-details-form.component';
 import decode from 'jwt-decode';
@@ -63,6 +63,7 @@ export class UserFormComponent implements OnInit,AfterViewInit {
   countryId: number;
   sectorId: number;
   userRole: string;
+  country:Country = new Country();
 
   constructor(
     private serviceProxy: ServiceProxy,
@@ -75,6 +76,7 @@ export class UserFormComponent implements OnInit,AfterViewInit {
     private userController: UsersControllerServiceProxy,
     private authUser: LoginProfileControllerServiceProxy,
     private authServiceProxy: authServiceProxy,
+    private countryProxy:CountryControllerServiceProxy,
     private ref: ChangeDetectorRef
   ) { }
   ngAfterViewInit(): void {
@@ -95,6 +97,9 @@ export class UserFormComponent implements OnInit,AfterViewInit {
 
     //  const tokenPayload = token ? decode<any>(token):'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3IiOiJzZWN0b3JhZG1pbjJAY2xpbWF0ZXNpLmNvbSIsImZuYW1lIjoiTWFkaHV3YW50aGEiLCJsbmFtZSI6IkhpbmRhZ29kYSIsImNvdW50cnlJZCI6MSwiaW5zdE5hbWUiOiJUcmFuc3BvcnQgTWluaXN0cnkiLCJtb2R1bGVMZXZlbHMiOlsxLDEsMSwxLDFdLCJzZWN0b3JJZCI6MSwicm9sZXMiOlsiU2VjdG9yIEFkbWluIl0sImlhdCI6MTY3ODE3MzM4MiwiZXhwIjoxNjc5MDM3MzgyfQ.0bpc5Jm3TxUhoOU8sNwnLGRtsonGAY4et1O2PlmicGA';
     this.countryId = tokenPayload.countryId;
+    this.countryProxy.getCountrySector(this.countryId).subscribe((res: any) => {
+      this.country =res;
+    });
 
     let country = new Country()
     country.id = this.countryId;
@@ -226,8 +231,11 @@ export class UserFormComponent implements OnInit,AfterViewInit {
         let userType = new UserType;
         userType.init(this.selecteduserType)
         this.user.userType = userType;
-        //  userType =this.selecteduserType;
-        // this.user.userType.id = userType.id;
+        let co = new Country;
+        co.init(this.country);
+
+      
+        this.user.country= co;
 
         let insTemp = this.user.institution;
         this.user.institution = new Institution();
@@ -240,12 +248,16 @@ export class UserFormComponent implements OnInit,AfterViewInit {
         // authUser.password = res.password;
         // authUser.salt = res.salt;
         authUser.userType = this.selecteduserType;
-        authUser.coutryId = this.countryId;
+        authUser.coutryId = this.countryId ;
         authUser.insId = this.user.institution.id;
 
 
         this.authServiceProxy.createOneBaseLoginProfileControllerLoginProfile(authUser).subscribe(
           (res) => {
+            let sa
+            this.authUser.getById(res.id).subscribe((res)=>{
+
+            })
             console.log(res)
             this.user.loginProfile =res.id;
             this.user.password = res.password;
