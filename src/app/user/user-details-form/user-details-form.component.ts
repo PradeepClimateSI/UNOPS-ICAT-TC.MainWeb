@@ -52,9 +52,10 @@ export class UserDetailsFormComponent implements OnInit {
       }
     });
     // this.getUnits();
-    const token = localStorage.getItem('access_token')!;
+    const token = localStorage.getItem('ACCESS_TOKEN')!;
 
     const tokenPayload = decode<any>(token);
+    console.log("tokenPayload", tokenPayload)
     
     this.user.userType = undefined!;
     this.user.mobile = '';

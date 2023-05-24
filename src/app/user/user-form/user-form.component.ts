@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService, ConfirmationService } from 'primeng/api';
@@ -14,13 +14,13 @@ import decode from 'jwt-decode';
   styleUrls: ['./user-form.component.css']
 })
 
-export class UserFormComponent implements OnInit {
+export class UserFormComponent implements OnInit,AfterViewInit {
   temp1: string;
   temp2: string;
   temp3: string;
 
   user: User = new User();
-
+  userInstitution:Institution;
   userTypes: any[] = [];
   selectedUserTypesFordrop: UserType[] = [];
   selecteduserType: any = {};
@@ -77,7 +77,11 @@ export class UserFormComponent implements OnInit {
     private authUser: LoginProfileControllerServiceProxy,
     private authServiceProxy: authServiceProxy,
     private countryProxy:CountryControllerServiceProxy,
+    private ref: ChangeDetectorRef
   ) { }
+  ngAfterViewInit(): void {
+    this.ref.detectChanges();
+  }
 
   ngOnInit(): void {
 
@@ -131,7 +135,10 @@ export class UserFormComponent implements OnInit {
               "ae_name": this.user.userType.description,
               "ae_id": this.user.userType.id
             }
+
+                                     
             this.selectedUserTypesFordrop.push(this.selecteduserType)
+            console.log( "selectedUserTypesFordrop",this.selectedUserTypesFordrop )
 
           });
       }
@@ -311,7 +318,16 @@ export class UserFormComponent implements OnInit {
         //   console.log("Error", error);
         // });
       } else {
+        console.log("update",this.user.id, this.user)
+        // this.user.institution =new Institution()
 
+        let userType = new UserType;
+        userType.init(this.selecteduserType)
+        this.user.userType = userType;
+
+        let institute = new Institution;
+        institute.init(this.userInstitution)
+        this.user.institution = institute;
         this.serviceProxy
           .updateOneBaseUsersControllerUser(this.user.id, this.user)
           .subscribe(
@@ -332,9 +348,14 @@ export class UserFormComponent implements OnInit {
               this.messageService.add({
                 severity: 'success',
                 summary: 'Success',
-                detail: 'Successfully Saved',
+                detail: 'Successfully Updated User',
                 closable: true,
               });
+              setTimeout(() => {
+                this.router.navigate(['/app/user/list']);
+              },1000);
+      
+              
             },
             (error) => {
               this.messageService.add({
@@ -402,7 +423,7 @@ export class UserFormComponent implements OnInit {
         this.messageService.add({
           severity: 'success',
           summary: 'Success',
-          detail: 'Delete Confirmation',
+          detail: 'Delete deactivated user',
           closable: true,
         });
       });

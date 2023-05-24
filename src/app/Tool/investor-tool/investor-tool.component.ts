@@ -8,6 +8,18 @@ import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { Router } from '@angular/router';
 
+
+interface CharacteristicWeight {
+  [key: string]: number;
+}
+
+interface ChaCategoryWeightTotal {
+  [key: string]: number;
+}
+
+interface ChaCategoryTotalEqualsTo1 {
+  [key: string]: boolean;
+}
 @Component({
   selector: 'app-investor-tool',
   templateUrl: './investor-tool.component.html',
@@ -278,10 +290,11 @@ export class InvestorToolComponent implements OnInit {
   finalArray.map(x=>x.data.map(y=>y.assessment=this.mainAssessment))
   // finalArray.map(x=>x.data.map(y=>y.investorTool=this.mainAssessment))
   console.log("finalArray",finalArray)
+  //@ts-ignore
     this.investorToolControllerproxy.createFinalAssessment(finalArray)
     .subscribe(_res => {
       console.log("res final", _res)
-     
+
         console.log(_res)
         this.messageService.add({
           severity: 'success',
@@ -293,7 +306,7 @@ export class InvestorToolComponent implements OnInit {
         // this.isSavedAssessment = true
         // this.onCategoryTabChange('', this.tabView);
 
-      
+
       // form.reset();
     }, error => {
       console.log(error)
@@ -314,33 +327,33 @@ export class InvestorToolComponent implements OnInit {
     setTimeout(() => {
 
        this.router.navigate(['/assessment-result-investor',this.mainAssessment.id], { queryParams: { assessmentId: this.mainAssessment.id} });
-      
+
        }, 2000);
 
   }
   next(){
 
     if(this.activeIndexMain ===1 ){
-     
+
       this.activeIndex2 =this.activeIndex2+1;
       console.log( "activeIndex2",this.activeIndex2)
 
     }
     if (this.activeIndex===3) {
       this.activeIndexMain =1;
-      
+
     }
     if (this.activeIndex<=2 && this.activeIndex>=0 && this.activeIndexMain===0){
       this.activeIndex =this.activeIndex +1;
       console.log( this.activeIndex)
-      
+
     }
 
-    
 
-   
 
-    
+
+
+
   }
 
   onLevelofImplementationChange(event:any){
@@ -358,8 +371,66 @@ export class InvestorToolComponent implements OnInit {
     else{
       this.levelofImplementation =0
     }
-      
+
   }
- 
+
+  getCategory(characteristics: any, category: any) {
+    this.characteristicsArray = [];
+    for (let x of this.characteristicsList) {
+      if (x.category.name === category) {
+        this.characteristicsArray.push(x)
+      }
+    }
+    return this.characteristicsArray
+  }
+
+  characteristicWeightScore :CharacteristicWeight = {};
+  chaCategoryWeightTotal : ChaCategoryWeightTotal = {};
+  chaCategoryTotalEqualsTo1 : ChaCategoryTotalEqualsTo1 = {};
+
+  characteristicLikelihoodWeightScore :CharacteristicWeight = {};
+  chaCategoryLikelihoodWeightTotal : ChaCategoryWeightTotal = {};
+  chaCategoryLikelihoodTotalEqualsTo1 : ChaCategoryTotalEqualsTo1 = {};
+
+
+
+  onLikelihoodWeightChange(categoryName: string, characteristicName : string, chaWeight: number) {
+    this.characteristicLikelihoodWeightScore[characteristicName] = chaWeight
+   this.chaCategoryLikelihoodWeightTotal[categoryName] = 0
+   this.chaCategoryLikelihoodTotalEqualsTo1[categoryName] = false
+
+  for(let cha of  this.getCategory(characteristicName, categoryName)) {
+     this.chaCategoryLikelihoodWeightTotal[categoryName] =  this.chaCategoryLikelihoodWeightTotal[categoryName] +  this.characteristicLikelihoodWeightScore[cha.name]
+
+     console.log('Characteristicrrrrrrr:',  this.characteristicLikelihoodWeightScore[cha.name]);
+  }
+
+  if( this.chaCategoryLikelihoodWeightTotal[categoryName] == 100){
+   this.chaCategoryLikelihoodTotalEqualsTo1[categoryName] = true
+  }
+  console.log('LL Characteristic Name:',categoryName ,  characteristicName, 'chaWeight:', chaWeight);
+ console.log( 'LL category :',categoryName,' Total: ',  this.chaCategoryLikelihoodWeightTotal[categoryName]);
+
+ }
+
+
+ onRelevanceWeightChange(categoryName: string, characteristicName : string, chaWeight: number) {
+   this.characteristicWeightScore[characteristicName] = chaWeight
+  this.chaCategoryWeightTotal[categoryName] = 0
+  this.chaCategoryTotalEqualsTo1[categoryName] = false
+
+ for(let cha of  this.getCategory(characteristicName, categoryName)) {
+    this.chaCategoryWeightTotal[categoryName] =  this.chaCategoryWeightTotal[categoryName] +  this.characteristicWeightScore[cha.name]
+
+    console.log('Characteristicrrrrrrr:',  this.characteristicWeightScore[cha.name]);
+ }
+
+ if( this.chaCategoryWeightTotal[categoryName] == 100){
+  this.chaCategoryTotalEqualsTo1[categoryName] = true
+ }
+ console.log('Characteristic Name:',categoryName ,  characteristicName, 'chaWeight:', chaWeight);
+  console.log( 'category :',categoryName,' Total: ',  this.chaCategoryWeightTotal[categoryName]);
+
+}
 
 }

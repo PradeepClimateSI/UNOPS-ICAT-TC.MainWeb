@@ -10,7 +10,7 @@
           <div class="col-12 col-md-8">
 
             <div class="p-field p-2">
-              <label for="assessment_method">Assessment Method</label>
+              <label for="assessment_method">Assessment Method *</label>
               <select class="form-control select-with-arrow"  (change)="onChangeTrack($event)" [(ngModel)]="assessment.assessment_method"
                 name="assessment_method" id="exampleFormControlSelect1"  #assessmentMethod="ngModel">
                 <option value="" disabled selected hidden>Select Assessment Method</option>
@@ -261,10 +261,10 @@
                                     (ngModelChange)="onRelevanceWeightChange(category.CategoryName,data.characteristics.name, $event)">
                                   </p-inputNumber>
 
-                                 <!--   <div *ngIf="!chaCategoryTotalEqualsTo1[category.CategoryName]" style="color: red;">
+                                   <div *ngIf="!chaCategoryTotalEqualsTo1[category.CategoryName]" style="color: red;">
                                     Relevance weights for characteristics of {{category.CategoryName}} category should sum up to 100%.
                                     <br>
-                                  </div> -->
+                                  </div>
                                 </div>
                               </div>
 
@@ -282,10 +282,10 @@
                                         >
                                     </p-inputNumber>
 
-                                 <!--  <div *ngIf="!chaCategoryLikelihoodTotalEqualsTo1[category.CategoryName]" style="color: red;">
+                                  <div *ngIf="!chaCategoryLikelihoodTotalEqualsTo1[category.CategoryName]" style="color: red;">
                                       Likelihood weights for characteristics of {{category.CategoryName}} category should sum up to 100%.
                                       <br>
-                                    </div> -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -365,8 +365,8 @@
                               <div class="col-12 col-lg-6">
                                 <div class="p-field">
                                   <label for="Relevance">Score</label>
-                                  <p-inputNumber inputId="integeronly" [(ngModel)]="data.score"
-                                    placeholder="Enter Score" name="data.charData.score"> </p-inputNumber>
+                                  <p-inputNumber inputId="integeronly" [(ngModel)]="data.score" [showButtons]="true" [min]="-1" [max]="3" [step]="1"
+                                  inputId="minmax-buttons" placeholder="Enter Score" name="data.charData.score"> </p-inputNumber>
                                 </div>
                               </div>
 
