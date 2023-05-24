@@ -7,7 +7,15 @@
       <h4 class="mt-4">Assessments</h4>
     </div>
 
-  <div *ngIf="load">
+    <ng-container *ngIf="!load">
+      <!-- Loading action -->
+      <div class="text-center">
+        <h4>Loading...</h4>
+        <!-- You can add a loading spinner or any other loading animation here -->
+      </div>
+    </ng-container>
+
+ <div *ngIf="load">
 <p-table #dt2 [value]="results" [tableStyle]="{'min-width': '50rem'}"
           [paginator]="true"
           [rows]="13" [totalRecords]="results.length" [sortField]="'id'" [sortOrder]="-1"
@@ -25,8 +33,9 @@
 
   <ng-template pTemplate="header">
       <tr  style="height:4rem;">
+<!--         <th pSortableColumn="id" >Id <p-sortIcon field="meth"></p-sortIcon></th> -->
           <th pSortableColumn="meth" >Intervention <p-sortIcon field="meth"></p-sortIcon></th>
-          <th pSortableColumn="method" >Assessment Method <p-sortIcon field="method"></p-sortIcon></th>
+       <!--    <th pSortableColumn="method" >Assessment Method <p-sortIcon field="method"></p-sortIcon></th> -->
           <th pSortableColumn="approach">Assessment Approach <p-sortIcon field="approach"></p-sortIcon></th>
           <th pSortableColumn="assessmentType" >Assessment Type <p-sortIcon field="assessmentType"></p-sortIcon></th>
           <th pSortableColumn="tool" >Tool <p-sortIcon field="tool"></p-sortIcon></th>
@@ -35,8 +44,9 @@
   </ng-template>
   <ng-template pTemplate="body" let-results>
       <tr>
+       <!--  <td>{{results.id}}</td> -->
         <td>{{results.meth}}</td>
-        <td>{{results.method}}</td>
+       <!--  <td>{{results.method}}</td> -->
         <td>{{results.approach}}</td>
         <td>{{results.assessmentType}}</td>
         <td>{{results.tool}}</td>
