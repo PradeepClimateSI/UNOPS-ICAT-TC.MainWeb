@@ -24,10 +24,13 @@
   [globalFilterFields]="['id', 'policyName', 'contactPersoFullName']">
     <ng-template pTemplate="caption">
       <div class="d-flex justify-content-end">
-          <span class="p-input-icon-left ml-auto">
-              <i class="pi pi-search"></i>
-              <input pInputText type="text" (input)="onInput($event, dt2)" placeholder="Search keyword" />
-          </span>
+        <div class="col-md-4">
+          <div class="p-inputgroup pt-4">
+            <input placeholder="Type Your Keyword" [(ngModel)]="searchBy.text" #nameClimate="ngModel" type="text"
+              name="nameClimate" class="p-inputtext" pInputText />
+            <button type="button" pButton pRipple label="Search" (click)="onSearch()"></button>
+          </div>
+        </div>
       </div>
   </ng-template>
 
