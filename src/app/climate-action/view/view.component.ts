@@ -248,6 +248,7 @@ export class ViewComponent implements OnInit, AfterViewInit {
     this.onSearch();
   }
   onSearch() {
+    
     let event: any = {};
     event.rows = this.rows;
     event.first = 0;
@@ -278,6 +279,7 @@ export class ViewComponent implements OnInit, AfterViewInit {
         ? 1
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
+    console.log("api call",pageNumber,this.rows,filtertext,statusId,sectorId)
     setTimeout(() => {
       this.projectProxy
         .getAllClimateActionList(
