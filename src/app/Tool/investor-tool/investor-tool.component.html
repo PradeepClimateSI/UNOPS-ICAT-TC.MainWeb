@@ -170,6 +170,19 @@
                             This is a mandatory field
                         </p> -->
                         </div>
+                        <div class="p-field p-2">
+                            <label for="Sectors Covered">Assessment Approach*</label>
+                            <p-dropdown name="approach" #assessApproach="ngModel" placeholder="Select Assessment Method"
+                                [(ngModel)]="assessment.assessment_approach" [options]="assessmentApproach"  appendTo="body"
+                                (ngModelChange)="onAssessmentApproachchange(assessment.assessment_approach)" [required]="true"
+                                optionLabel="name" optionValue="name"></p-dropdown>
+                            <p class="info-message text-danger" *ngIf="
+                                !assessment.assessment_approach &&
+                                (fData.submitted || assessApproach.touched)
+                              ">
+                                This is a mandatory field
+                            </p>
+                            </div>
                     </div>
 
 
@@ -194,8 +207,8 @@
     <!-- <div class="p-grid p-fluid col-sm-12" *ngIf="showSections">
         <app-cm-section [assessment]="assessmentres"></app-cm-section>
     </div> -->
-    <div class="card" *ngIf="isSavedAssessment">
-        <!-- <div class="card" > -->
+    <!-- <div class="card" *ngIf="isSavedAssessment"> -->
+        <div class="card" >
         <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)" >
         <p-tabView  (onChange)="onMainTabChange($event) " [(activeIndex)]="activeIndexMain ">
 
@@ -260,7 +273,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-12 col-lg-6">
+                                                        <div class="col-12 col-lg-6"   *ngIf="approach===1">
                                                             <div class="p-field">
                                                                 <label for="justification">Justification</label>
                                                                 <input type="text" pInputText
@@ -548,7 +561,8 @@
                                                         <div class="col-12 col-lg-6">
                                                             <div class="p-field">
                                                                 <label for="Relevance">Likelihood</label>
-                                                                <p-dropdown name="data.charData.likelihood"
+                                                                <p-dropdown *ngIf="approach===1" 
+                                                                    name="data.charData.likelihood"
                                                                     #type="ngModel" placeholder="Select Likelihood"
                                                                     [(ngModel)]="data.likelihood"
                                                                     [options]="likelihood" optionLabel="id"
@@ -558,7 +572,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-12 col-lg-6">
+                                                        <div class="col-12 col-lg-6" *ngIf="approach===1">
                                                             <div class="p-field">
                                                                 <label for="justification">Justification</label>
                                                                 <input type="text" pInputText
@@ -927,7 +941,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-12 col-lg-6">
+                                                        <div   *ngIf="approach===1" class="col-12 col-lg-6">
                                                             <div class="p-field">
                                                                 <label for="justification">Justification</label>
                                                                 <input type="text" pInputText

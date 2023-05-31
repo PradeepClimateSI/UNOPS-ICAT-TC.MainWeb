@@ -39,6 +39,7 @@ export class InvestorToolComponent implements OnInit {
   sectorsCovered: any[] = [];
   impactCovered: any[] = [];
   assessmentMethods: any[] = [];
+  assessmentApproach:any[] =[];
   countryID: number;
   sectorList: any[] = [];
   createInvestorToolDto: CreateInvestorToolDto = new CreateInvestorToolDto();
@@ -52,6 +53,7 @@ export class InvestorToolComponent implements OnInit {
   activeIndex2 :number=0;
   likelihood: any[] = [];
   relevance: any[] = [];
+  approach:number=0;
 
   description = '';
   levelofImplementation:number=0;
@@ -63,14 +65,14 @@ export class InvestorToolComponent implements OnInit {
     type: string,
     CategoryName: string,
     categoryID: number,
-    data: InvestorAssessment[]
+    data: any[]
   }[] = [];
 
   outcomeData: {
     type: string,
     CategoryName: string,
     categoryID: number,
-    data: InvestorAssessment[]
+    data: any[]
   }[] = [];
   //class variable
   @ViewChild(TabView) tabView: TabView;
@@ -104,7 +106,7 @@ export class InvestorToolComponent implements OnInit {
     this.relevance = this.masterDataService.relevance;
 
     this.assessmentMethods = this.masterDataService.assessment_method;
-
+    this.assessmentApproach =this.masterDataService.assessment_approach;
 
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const countryId = token ? decode<any>(token).countryId : 0;
@@ -431,6 +433,16 @@ export class InvestorToolComponent implements OnInit {
  console.log('Characteristic Name:',categoryName ,  characteristicName, 'chaWeight:', chaWeight);
   console.log( 'category :',categoryName,' Total: ',  this.chaCategoryWeightTotal[categoryName]);
 
+}
+
+onAssessmentApproachchange(approach:any){
+  console.log("approach",approach)
+  if (approach==='Direct'){
+    this.approach=1;
+  }
+  if (approach==='Indirect'){
+    this.approach=2;
+  }
 }
 
 }

@@ -27,6 +27,7 @@ export class MasterDataService {
   private _level_of_implemetation: {name: string, id: number}[] = []
   private _impact_covered: {name: string, id: number}[] = []
   private _assessment_method: {name: string, id: number}[] = []
+  private _assessment_approach: {name: string, id: number}[] = []
   private _relevance: {name: string, value: number}[] = []
   private _likelihood: {id: string, value: number}[] = []
 
@@ -206,6 +207,12 @@ export class MasterDataService {
       {  id: "2",value:2 },
       {  id: "3",value:3 },
       {  id: "4",value:4 },
+
+    ]
+
+    this.assessment_approach = [
+      { id: 1, name: "Direct" },
+      { id: 2, name: "Indirect" },
 
     ]
 
@@ -406,6 +413,15 @@ export class MasterDataService {
   get likelihood (): { id: string; value: number }[] {
     return this._likelihood;
   }
+
+  set assessment_approach(value: { name: string; id: number }[]) {
+    this._assessment_approach = value;
+  }
+
+  get assessment_approach (): { name: string; id: number }[] {
+    return this._assessment_approach;
+  }
+
 
 
 
