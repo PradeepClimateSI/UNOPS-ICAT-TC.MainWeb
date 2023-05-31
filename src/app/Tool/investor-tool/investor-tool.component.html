@@ -263,13 +263,23 @@
                                                         <div class="col-12 col-lg-6">
                                                             <div class="p-field">
                                                                 <label for="Description">Relevance</label>
-                                                                <p-dropdown name="data.charData.relavance"
+                                                                <p-dropdown  *ngIf="approach===1"
+                                                                    name="data.charData.relavance"
                                                                     #type="ngModel"
                                                                     placeholder="Select Relevance"
                                                                     [(ngModel)]="data.relavance"
                                                                     [options]="relevance" optionLabel="name"
                                                                     appendTo="body"
                                                                     optionValue="value" [required]="true"></p-dropdown>
+
+                                                                    <p-dropdown  *ngIf="approach===2"
+                                                                    name="data.charData.relavance"
+                                                                    #type="ngModel"
+                                                                    placeholder="Select Relevance"
+                                                                    [(ngModel)]="data.relavance"
+                                                                    [options]="relevance" optionLabel="name"
+                                                                    appendTo="body"
+                                                                    optionValue="value" [required]="true"></p-dropdown>   
                                                             </div>
                                                         </div>
 
@@ -560,7 +570,7 @@
                                                     <div class="row p-2">
                                                         <div class="col-12 col-lg-6">
                                                             <div class="p-field">
-                                                                <label for="Relevance">Likelihood</label>
+                                                                <label for="likelihood">Likelihood</label>
                                                                 <p-dropdown *ngIf="approach===1" 
                                                                     name="data.charData.likelihood"
                                                                     #type="ngModel" placeholder="Select Likelihood"

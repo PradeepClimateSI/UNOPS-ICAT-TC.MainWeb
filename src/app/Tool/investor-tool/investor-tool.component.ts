@@ -7,6 +7,7 @@ import { Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, Impa
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { Router } from '@angular/router';
+import { IndicatorDetails } from './IndicatorDetails';
 
 
 interface CharacteristicWeight {
@@ -65,14 +66,15 @@ export class InvestorToolComponent implements OnInit {
     type: string,
     CategoryName: string,
     categoryID: number,
-    data: any[]
+    data: InvestorAssessment[],
+     
   }[] = [];
 
   outcomeData: {
     type: string,
     CategoryName: string,
     categoryID: number,
-    data: any[]
+    data: InvestorAssessment[]
   }[] = [];
   //class variable
   @ViewChild(TabView) tabView: TabView;
