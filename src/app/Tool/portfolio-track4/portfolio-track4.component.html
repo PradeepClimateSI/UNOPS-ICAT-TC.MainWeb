@@ -98,6 +98,20 @@
               </p>
             </div>
 
+
+            <div class="p-field p-2">
+              <label for="assessment_approach">Assessment Approach *</label>
+            <p-dropdown appendTo="body" name="assessment_approach" #assessment_approach="ngModel"
+              placeholder="Select Assessment Approach"  [(ngModel)]="assessment.assessment_approach"
+              ngModel [options]="assessmentApproach" (onChange)="onChangeApproach($event)"
+              optionLabel="name" optionValue="name" [required]="true"></p-dropdown>
+              <p class="info-message text-danger" *ngIf="!assessment_approach.value && (fData.submitted || assessment_approach.touched)">This is a mandatory field</p>
+            </div>
+
+
+
+
+
             <div class="p-field p-2">
 
               <label for="date1">Assessment Period</label>
@@ -135,7 +149,7 @@
   <!-- <div class="p-grid p-fluid col-sm-12" *ngIf="showSections">
       <app-cm-section [assessment]="assessmentres"></app-cm-section>
   </div> -->
-<div *ngIf="load">
+<div *ngIf="load && selectedApproach === 'Direct'">
 
   <div class="card">
     <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)">
@@ -367,6 +381,307 @@
                                   <label for="Relevance">Score</label>
                                   <p-inputNumber inputId="integeronly" [(ngModel)]="data.score" [showButtons]="true" [min]="-1" [max]="3" [step]="1"
                                   inputId="minmax-buttons" placeholder="Enter Score" name="data.charData.score"> </p-inputNumber>
+                                </div>
+                              </div>
+
+                              <div class="col-12 col-lg-6">
+                                <div class="p-field">
+                                  <label for="justification">Justification</label>
+                                  <input type="text" pInputText [(ngModel)]="data.justification"
+                                    placeholder="Enter Justifiaction" name="justification" />
+
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="row p-2" *ngIf="categoryTabIndex===0 && mainTabIndex===1 && category.CategoryName ==='Scale GHGs' && data.characteristics.name === 'Micro Level'">
+                              <div class="col-12 col-lg-6">
+                                <div class="p-field">
+                                  <label for="expected_ghg_mitigation">Expected GHG mitgation (Mt CO2-eq)</label>
+                                  <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation" name="expected_ghg_mitigation"
+                                      placeholder="Expected GHG mitgation Value" inputId="locale-us" mode="decimal"
+                                    locale="en-US" [minFractionDigits]="2">
+                                  </p-inputNumber>
+                                  </div>
+                                </div>
+
+
+                        </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </form>
+
+                </div>
+              </div>
+
+
+
+            </p-tabPanel>
+
+
+
+
+          </p-tabView>
+        </p-tabPanel>
+
+      </p-tabView>
+
+      <div *ngIf="activeIndex2===3 && activeIndexMain===1" class="row justify-content-end">
+        <div>
+          <div class="d-flex flex-row-reverse mt-20 ">
+            <button class="btn btn-primary text-uppercase" type="submit" >
+              Calculate & Check Results
+            </button>
+          </div>
+        </div>
+
+      </div>
+      <div    *ngIf="activeIndex2!==3 || activeIndexMain!==1" class="row justify-content-end">
+        <div>
+
+            <div
+            class="d-flex flex-row-reverse mt-20 ">
+                <div class="btn btn-primary text-uppercase" (click)="next()" >
+                   Next
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+  </div>
+</div>
+
+<div *ngIf="load && selectedApproach === 'Indirect'">
+<p>ppppppppppppppppppp</p>
+  <div class="card">
+    <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)">
+      <p-tabView (onChange)="onMainTabChange($event)"  [(activeIndex)]="activeIndexMain ">
+
+        <p-tabPanel header="Process of Change">
+          <!-- <div *ngFor="let characteristic of meth1Process"> -->
+
+          <p-tabView #tabView (onChange)="onCategoryTabChange($event, tabView)" [(activeIndex)]="activeIndex ">
+
+            <p-tabPanel [header]="category.CategoryName" *ngFor="let category of processData">
+
+
+              <div class="characteristic-Topic" *ngFor="let data of category.data; index as i">
+                <h6>{{i+1}}.{{data.characteristics.name}}</h6>
+                <div>
+
+                  <div class="container pl-20 pr-20">
+                    <div id="content" #content>
+                      <div class=" mt-2">
+                        <div class="p-grid p-fluid col-12">
+
+                          <div class="row p-2">
+                            <div class="col-12 col-lg-6">
+                              <div class="p-field">
+                                <label for="Description">Description</label>
+                                <textarea name="{{data.characteristics.name}}_description" placeholder="Description"
+                                  rows="5" cols="60" pInputTextarea [(ngModel)]="data.description"
+                                  autoResize="autoResize" class="p-inputtext"></textarea>
+                              </div>
+                            </div>
+
+                            <div class="col-12 col-lg-6">
+                              <div class="p-field">
+                                <label for="StartingSituation">Starting
+                                  Situation</label>
+                                <textarea name="Starting Situation" placeholder="Starting Situation" rows="5" cols="60"
+                                  pInputTextarea [(ngModel)]="data.starting_situation" autoResize="autoResize"
+                                  class="p-inputtext"></textarea>
+
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="row p-2">
+                            <div class="col-12 col-lg-6">
+                              <div class="p-field">
+                                <label for="relavance">Relevance</label>
+                                <p-dropdown appendTo="body" name="relavance"
+                                  placeholder="Select Institution" [(ngModel)]="data.relavance" [options]="instiTutionList"
+                                  optionLabel="name" optionValue="id" [required]="true"></p-dropdown>
+                              </div>
+                            </div>
+
+                            <div class="col-12 col-lg-6">
+                              <div class="p-field">
+                                <label for="justification">Justification</label>
+                                <input type="text" pInputText [(ngModel)]="data.justification"
+                                  placeholder="Enter Justifiaction" name="justification" />
+
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row p-2">
+                            <div class="col-12 col-lg-12">
+                              <div class="p-field">
+                                <label for="indicator">Indicator</label>
+                                <input type="text" pInputText [(ngModel)]="data.indicator" placeholder="Indicator Name"
+                                  name="indicator" />
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="row p-2">
+                            <div class="col-12 col-lg-6">
+                              <div class="p-field">
+                                <label for="indicatorStartingVal">Indicator Starting Situation Value</label>
+                                <p-dropdown appendTo="body" name="indicatorStartingVal"
+                                  placeholder="Select Institution" [(ngModel)]="data.indicatorStartingVal" [options]="instiTutionList"
+                                  optionLabel="name" optionValue="id" [required]="true"></p-dropdown>
+                              </div>
+                            </div>
+
+                            <div class="col-12 col-lg-6">
+                              <div class="p-field">
+                                <label for="indicatorExpectedVal">Indicator Expected Value</label>
+                                <p-dropdown appendTo="body" name="indicatorExpectedVal"
+                                placeholder="Select Institution" [(ngModel)]="data.indicatorExpectedVal" [options]="instiTutionList"
+                                optionLabel="name" optionValue="id" [required]="true"></p-dropdown>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="row p-2">
+                            <div class="col-12 col-lg-6">
+                              <div class="p-field">
+                                <label for="likelihood">Likelihood</label>
+                                  <p-dropdown appendTo="body" name="likelihood"
+                                  placeholder="Select Institution" [(ngModel)]="data.likelihood" [options]="instiTutionList"
+                                  optionLabel="name" optionValue="id" [required]="true"></p-dropdown>
+                              </div>
+                            </div>
+
+                            <div class="col-12 col-lg-6">
+                              <div class="p-field">
+                                <label for="justification">Justification</label>
+                                <input type="text" pInputText [(ngModel)]="data.likelihood_justification"
+                                  placeholder="Enter Justifiaction" name="data.charData.likelihood_justification" />
+
+                              </div>
+                            </div>
+                            </div>
+
+                            <div class="row p-2">
+                              <div class="col-12 col-lg-6">
+                                <div class="p-field">
+                                  <label for="Relevance">Relevance Weight (%)</label>
+                                  <p-inputNumber inputId="locale-us" mode="decimal" locale="en-US" [minFractionDigits]="2"
+                                    [(ngModel)]="data.relevance_weight" placeholder="Enter Relevance Weight" name="data.charData.relevance_weight"
+                                    (ngModelChange)="onRelevanceWeightChange(category.CategoryName,data.characteristics.name, $event)">
+                                  </p-inputNumber>
+
+                                   <div *ngIf="!chaCategoryTotalEqualsTo1[category.CategoryName]" style="color: red;">
+                                    Relevance weights for characteristics of {{category.CategoryName}} category should sum up to 100%.
+                                    <br>
+                                  </div>
+                                </div>
+                              </div>
+
+
+
+                            <div class="col-12 col-lg-4">
+                                <div class="p-field">
+                                    <label for="Relevance">Likelihood Weight (%)</label>
+                                    <p-inputNumber inputId="locale-us" mode="decimal"
+                                         locale="en-US" [minFractionDigits]="2"
+                                        [(ngModel)]="data.likelihood_weight"
+                                        placeholder="Enter Likelihood Weight"
+                                        name="data.charData.likelihood_weight"
+                                        (ngModelChange)="onLikelihoodWeightChange(category.CategoryName,data.characteristics.name, $event)"
+                                        >
+                                    </p-inputNumber>
+
+                                  <div *ngIf="!chaCategoryLikelihoodTotalEqualsTo1[category.CategoryName]" style="color: red;">
+                                      Likelihood weights for characteristics of {{category.CategoryName}} category should sum up to 100%.
+                                      <br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+
+
+                </div>
+              </div>
+
+
+
+
+            </p-tabPanel>
+
+
+
+
+
+
+          </p-tabView>
+          <!-- </div> -->
+        </p-tabPanel>
+        <p-tabPanel header="Outcome of Change">
+          <p-tabView #tabView2 (onChange)="onCategoryTabChange($event, tabView2) " [(activeIndex)]="activeIndex2">
+
+            <p-tabPanel [header]="category.CategoryName" *ngFor="let category of outcomeData">
+
+              <div class="characteristic-Topic" *ngFor="let data of category.data; index as i">
+                <h6>{{i+1}}.{{data.characteristics.name}}</h6>
+                <div>
+                  <form>
+                    <div class="container pl-20 pr-20">
+                      <div id="content" #content>
+                        <div class=" mt-2">
+                          <div class="p-grid p-fluid col-12">
+                            <div class="row p-2">
+                              <div class="col-12 col-lg-12">
+                                <div class="p-field">
+                                  <label for="indicator">Indicator</label>
+                                  <input type="text" pInputText [(ngModel)]="data.indicator"
+                                    placeholder="Indicator Name" name="indicator" />
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="row p-2">
+                              <div class="col-12 col-lg-6">
+                                <div class="p-field">
+                                  <label for="indicatorStartingVal">Indicator Starting Situation Value</label>
+                                  <p-dropdown appendTo="body" name="indicatorStartingVal"
+                                  placeholder="Select Institution" [(ngModel)]="data.indicatorStartingVal" [options]="instiTutionList"
+                                  optionLabel="name" optionValue="id" [required]="true"></p-dropdown>
+                                </div>
+                              </div>
+
+                              <div class="col-12 col-lg-6">
+                                <div class="p-field">
+                                  <label for="indicatorExpectedVal">Indicator Expected Value</label>
+                                  <p-dropdown appendTo="body" name="indicatorExpectedVal"
+                                placeholder="Select Institution" [(ngModel)]="data.indicatorExpectedVal" [options]="instiTutionList"
+                                optionLabel="name" optionValue="id" [required]="true"></p-dropdown>
+
+                                </div>
+                              </div>
+                            </div>
+
+
+
+                            <div class="row p-2">
+                              <div class="col-12 col-lg-6">
+                                <div class="p-field">
+                                  <label for="score">Score</label>
+                               <p-dropdown appendTo="body" name="score"
+                                placeholder="Select Institution" [(ngModel)]="data.score" [options]="instiTutionList"
+                                optionLabel="name" optionValue="id" [required]="true"></p-dropdown>
                                 </div>
                               </div>
 

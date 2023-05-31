@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import { Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, ImpactCovered, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, ImpactCovered, InstitutionControllerServiceProxy, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { Dropdown } from 'primeng/dropdown';
@@ -50,14 +50,20 @@ export class PortfolioTrack4Component implements OnInit {
   characteristicsArray: Characteristics[] = [];
   selectedIndex = 0;
   activeIndex = 0;
-  activeIndexMain =0;
-  activeIndex2 :number=0;
+  activeIndexMain = 0;
+  activeIndex2: number = 0;
   likelihood: any[] = [];
   relevance: any[] = [];
+  selectedApproach: any
 
   description = ''
-  load : boolean = false
-  yesNoAnswer: any[] = [{ id: 1, name: "Yes" }, { id: 2, name: "No" },{ id: 3, name: "Maybe" }];
+  load: boolean = false
+  yesNoAnswer: any[] = [{ id: 1, name: "Yes" }, { id: 2, name: "No" }, { id: 3, name: "Maybe" }];
+  assessmentApproach = [
+    { name: 'Direct' },
+    { name: 'Indirect' },
+    // Add other options if needed
+  ];
 
 
   processData: {
@@ -78,7 +84,7 @@ export class PortfolioTrack4Component implements OnInit {
 
   tabName: string = '';
   mainAssessment: Assessment;
-  track4Selectt : boolean = false
+  track4Selectt: boolean = false
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -88,14 +94,32 @@ export class PortfolioTrack4Component implements OnInit {
     private sectorProxy: SectorControllerServiceProxy,
     private investorToolControllerproxy: InvestorToolControllerServiceProxy,
     private router: Router,
-
+    private instituionProxy: InstitutionControllerServiceProxy,
 
   ) {
 
   }
 
+  instiTutionList : any = []
+  userCountryId:number = 0;
+
   async ngOnInit(): Promise<void> {
-    this.categoryTabIndex =0;
+
+    const token = localStorage.getItem('ACCESS_TOKEN')!;
+    const tokenPayload = decode<any>(token);
+    this.userCountryId  = tokenPayload.countryId;
+
+    let intTypeFilter: string[] = new Array();
+
+    intTypeFilter.push('type.id||$eq||' + 3);
+
+    this.instituionProxy.getInstituion(3,this.userCountryId,1000,0).subscribe((res: any) => {
+      this.instiTutionList = res;
+      console.log( "listtt",this.instiTutionList)
+    });
+
+
+    this.categoryTabIndex = 0;
 
     this.track4Selectt = true
     this.assessment.assessment_method = 'Track 4'
@@ -109,7 +133,7 @@ export class PortfolioTrack4Component implements OnInit {
     this.assessmentMethods = this.masterDataService.assessment_method;
 
 
-    const token = localStorage.getItem('ACCESS_TOKEN')!;
+  //  const token = localStorage.getItem('ACCESS_TOKEN')!;
     const countryId = token ? decode<any>(token).countryId : 0;
     console.log("country", countryId)
     this.countryID = countryId;
@@ -261,17 +285,17 @@ export class PortfolioTrack4Component implements OnInit {
   }
 
 
-  selectedTrack : any
+  selectedTrack: any
 
-onChangeTrack(event : any){
-  this.track4Selectt = true
-  this.selectedTrack = event.target.value;
-  console.log("selectedTrack : ", this.selectedTrack)
+  onChangeTrack(event: any) {
+    this.track4Selectt = true
+    this.selectedTrack = event.target.value;
+    console.log("selectedTrack : ", this.selectedTrack)
 
-  if(this.selectedTrack === 'Track 1' || this.selectedTrack === 'Track 2' || this.selectedTrack === 'Track 3'){
-    this.track4Selectt = false
+    if (this.selectedTrack === 'Track 1' || this.selectedTrack === 'Track 2' || this.selectedTrack === 'Track 3') {
+      this.track4Selectt = false
+    }
   }
-}
 
 
   selectAssessmentType(e: any) {
@@ -321,16 +345,16 @@ onChangeTrack(event : any){
       .subscribe(_res => {
         console.log("res final", _res)
 
-          console.log(_res)
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Assessment created successfully',
-            closable: true,
-          })
-          this.showResults();
-         // this.isSavedAssessment = true
-          // this.onCategoryTabChange('', this.tabView);
+        console.log(_res)
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Assessment created successfully',
+          closable: true,
+        })
+        this.showResults();
+        // this.isSavedAssessment = true
+        // this.onCategoryTabChange('', this.tabView);
 
 
         // form.reset();
@@ -357,21 +381,21 @@ onChangeTrack(event : any){
     }, 2000);
   }
 
-  next(){
+  next() {
 
-    if(this.activeIndexMain ===1 ){
+    if (this.activeIndexMain === 1) {
 
-      this.activeIndex2 =this.activeIndex2+1;
-      console.log( "activeIndex2",this.activeIndex2)
-
-    }
-    if (this.activeIndex===3) {
-      this.activeIndexMain =1;
+      this.activeIndex2 = this.activeIndex2 + 1;
+      console.log("activeIndex2", this.activeIndex2)
 
     }
-    if (this.activeIndex<=2 && this.activeIndex>=0 && this.activeIndexMain===0){
-      this.activeIndex =this.activeIndex +1;
-      console.log( this.activeIndex)
+    if (this.activeIndex === 3) {
+      this.activeIndexMain = 1;
+
+    }
+    if (this.activeIndex <= 2 && this.activeIndex >= 0 && this.activeIndexMain === 0) {
+      this.activeIndex = this.activeIndex + 1;
+      console.log(this.activeIndex)
 
     }
 
@@ -388,13 +412,13 @@ onChangeTrack(event : any){
   }
 
 
-  characteristicWeightScore :CharacteristicWeight = {};
-  chaCategoryWeightTotal : ChaCategoryWeightTotal = {};
-  chaCategoryTotalEqualsTo1 : ChaCategoryTotalEqualsTo1 = {};
+  characteristicWeightScore: CharacteristicWeight = {};
+  chaCategoryWeightTotal: ChaCategoryWeightTotal = {};
+  chaCategoryTotalEqualsTo1: ChaCategoryTotalEqualsTo1 = {};
 
-  characteristicLikelihoodWeightScore :CharacteristicWeight = {};
-  chaCategoryLikelihoodWeightTotal : ChaCategoryWeightTotal = {};
-  chaCategoryLikelihoodTotalEqualsTo1 : ChaCategoryTotalEqualsTo1 = {};
+  characteristicLikelihoodWeightScore: CharacteristicWeight = {};
+  chaCategoryLikelihoodWeightTotal: ChaCategoryWeightTotal = {};
+  chaCategoryLikelihoodTotalEqualsTo1: ChaCategoryTotalEqualsTo1 = {};
 
   /* characteristicWeightScoreOutcome :CharacteristicWeight = {};
   chaCategoryWeightTotalOutcome : ChaCategoryWeightTotal = {};
@@ -405,85 +429,90 @@ onChangeTrack(event : any){
   chaCategoryLikelihoodTotalEqualsTo1Outcome : ChaCategoryTotalEqualsTo1 = {};
  */
 
- /*  onRelevanceWeightChangeOutcome(categoryName: string, characteristicName : string, chaWeight: number) {
-    this.characteristicWeightScoreOutcome[characteristicName] = chaWeight
-   this.chaCategoryWeightTotalOutcome[categoryName] = 0
-   this.chaCategoryTotalEqualsTo1Outcome[categoryName] = false
+  /*  onRelevanceWeightChangeOutcome(categoryName: string, characteristicName : string, chaWeight: number) {
+     this.characteristicWeightScoreOutcome[characteristicName] = chaWeight
+    this.chaCategoryWeightTotalOutcome[categoryName] = 0
+    this.chaCategoryTotalEqualsTo1Outcome[categoryName] = false
 
-  for(let cha of  this.getCategory(characteristicName, categoryName)) {
-     this.chaCategoryWeightTotalOutcome[categoryName] =  this.chaCategoryWeightTotalOutcome[categoryName] +  this.characteristicWeightScoreOutcome[cha.name]
+   for(let cha of  this.getCategory(characteristicName, categoryName)) {
+      this.chaCategoryWeightTotalOutcome[categoryName] =  this.chaCategoryWeightTotalOutcome[categoryName] +  this.characteristicWeightScoreOutcome[cha.name]
 
-     console.log('Characteristicrrrrrrr:',  this.characteristicWeightScoreOutcome[cha.name]);
-  }
+      console.log('Characteristicrrrrrrr:',  this.characteristicWeightScoreOutcome[cha.name]);
+   }
 
-  if( this.chaCategoryWeightTotalOutcome[categoryName] == 1){
-   this.chaCategoryTotalEqualsTo1Outcome[categoryName] = true
-  }
-  console.log('Characteristic Name:',categoryName ,  characteristicName, 'chaWeight:', chaWeight);
-   console.log( 'category :',categoryName,' Total: ',  this.chaCategoryWeightTotalOutcome[categoryName]);
+   if( this.chaCategoryWeightTotalOutcome[categoryName] == 1){
+    this.chaCategoryTotalEqualsTo1Outcome[categoryName] = true
+   }
+   console.log('Characteristic Name:',categoryName ,  characteristicName, 'chaWeight:', chaWeight);
+    console.log( 'category :',categoryName,' Total: ',  this.chaCategoryWeightTotalOutcome[categoryName]);
 
- } */
-
-
-
- /*  onLikelihoodWeightChangeOutcome(categoryName: string, characteristicName : string, chaWeight: number) {
-    this.characteristicLikelihoodWeightScoreOutcome[characteristicName] = chaWeight
-   this.chaCategoryLikelihoodWeightTotalOutcome[categoryName] = 0
-   this.chaCategoryLikelihoodTotalEqualsTo1Outcome[categoryName] = false
-
-  for(let cha of  this.getCategory(characteristicName, categoryName)) {
-     this.chaCategoryLikelihoodWeightTotalOutcome[categoryName] =  this.chaCategoryLikelihoodWeightTotalOutcome[categoryName] +  this.characteristicLikelihoodWeightScoreOutcome[cha.name]
-
-     console.log('Characteristicrrrrrrr:',  this.characteristicLikelihoodWeightScoreOutcome[cha.name]);
-  }
-
-  if( this.chaCategoryLikelihoodWeightTotalOutcome[categoryName] == 1){
-   this.chaCategoryLikelihoodTotalEqualsTo1Outcome[categoryName] = true
-  }
-  console.log('LL Characteristic Name:',categoryName ,  characteristicName, 'chaWeight:', chaWeight);
- console.log( 'LL category :',categoryName,' Total: ',  this.chaCategoryLikelihoodWeightTotalOutcome[categoryName]);
-
- } */
+  } */
 
 
 
-  onLikelihoodWeightChange(categoryName: string, characteristicName : string, chaWeight: number) {
-     this.characteristicLikelihoodWeightScore[characteristicName] = chaWeight
+  /*  onLikelihoodWeightChangeOutcome(categoryName: string, characteristicName : string, chaWeight: number) {
+     this.characteristicLikelihoodWeightScoreOutcome[characteristicName] = chaWeight
+    this.chaCategoryLikelihoodWeightTotalOutcome[categoryName] = 0
+    this.chaCategoryLikelihoodTotalEqualsTo1Outcome[categoryName] = false
+
+   for(let cha of  this.getCategory(characteristicName, categoryName)) {
+      this.chaCategoryLikelihoodWeightTotalOutcome[categoryName] =  this.chaCategoryLikelihoodWeightTotalOutcome[categoryName] +  this.characteristicLikelihoodWeightScoreOutcome[cha.name]
+
+      console.log('Characteristicrrrrrrr:',  this.characteristicLikelihoodWeightScoreOutcome[cha.name]);
+   }
+
+   if( this.chaCategoryLikelihoodWeightTotalOutcome[categoryName] == 1){
+    this.chaCategoryLikelihoodTotalEqualsTo1Outcome[categoryName] = true
+   }
+   console.log('LL Characteristic Name:',categoryName ,  characteristicName, 'chaWeight:', chaWeight);
+  console.log( 'LL category :',categoryName,' Total: ',  this.chaCategoryLikelihoodWeightTotalOutcome[categoryName]);
+
+  } */
+
+
+
+  onLikelihoodWeightChange(categoryName: string, characteristicName: string, chaWeight: number) {
+    this.characteristicLikelihoodWeightScore[characteristicName] = chaWeight
     this.chaCategoryLikelihoodWeightTotal[categoryName] = 0
     this.chaCategoryLikelihoodTotalEqualsTo1[categoryName] = false
 
-   for(let cha of  this.getCategory(characteristicName, categoryName)) {
-      this.chaCategoryLikelihoodWeightTotal[categoryName] =  this.chaCategoryLikelihoodWeightTotal[categoryName] +  this.characteristicLikelihoodWeightScore[cha.name]
+    for (let cha of this.getCategory(characteristicName, categoryName)) {
+      this.chaCategoryLikelihoodWeightTotal[categoryName] = this.chaCategoryLikelihoodWeightTotal[categoryName] + this.characteristicLikelihoodWeightScore[cha.name]
 
-      console.log('Characteristicrrrrrrr:',  this.characteristicLikelihoodWeightScore[cha.name]);
-   }
+      console.log('Characteristicrrrrrrr:', this.characteristicLikelihoodWeightScore[cha.name]);
+    }
 
-   if( this.chaCategoryLikelihoodWeightTotal[categoryName] == 100){
-    this.chaCategoryLikelihoodTotalEqualsTo1[categoryName] = true
-   }
-   console.log('LL Characteristic Name:',categoryName ,  characteristicName, 'chaWeight:', chaWeight);
-  console.log( 'LL category :',categoryName,' Total: ',  this.chaCategoryLikelihoodWeightTotal[categoryName]);
+    if (this.chaCategoryLikelihoodWeightTotal[categoryName] == 100) {
+      this.chaCategoryLikelihoodTotalEqualsTo1[categoryName] = true
+    }
+    console.log('LL Characteristic Name:', categoryName, characteristicName, 'chaWeight:', chaWeight);
+    console.log('LL category :', categoryName, ' Total: ', this.chaCategoryLikelihoodWeightTotal[categoryName]);
 
   }
 
 
-  onRelevanceWeightChange(categoryName: string, characteristicName : string, chaWeight: number) {
+  onRelevanceWeightChange(categoryName: string, characteristicName: string, chaWeight: number) {
     this.characteristicWeightScore[characteristicName] = chaWeight
-   this.chaCategoryWeightTotal[categoryName] = 0
-   this.chaCategoryTotalEqualsTo1[categoryName] = false
+    this.chaCategoryWeightTotal[categoryName] = 0
+    this.chaCategoryTotalEqualsTo1[categoryName] = false
 
-  for(let cha of  this.getCategory(characteristicName, categoryName)) {
-     this.chaCategoryWeightTotal[categoryName] =  this.chaCategoryWeightTotal[categoryName] +  this.characteristicWeightScore[cha.name]
+    for (let cha of this.getCategory(characteristicName, categoryName)) {
+      this.chaCategoryWeightTotal[categoryName] = this.chaCategoryWeightTotal[categoryName] + this.characteristicWeightScore[cha.name]
 
-     console.log('Characteristicrrrrrrr:',  this.characteristicWeightScore[cha.name]);
+      console.log('Characteristicrrrrrrr:', this.characteristicWeightScore[cha.name]);
+    }
+
+    if (this.chaCategoryWeightTotal[categoryName] == 100) {
+      this.chaCategoryTotalEqualsTo1[categoryName] = true
+    }
+    console.log('Characteristic Name:', categoryName, characteristicName, 'chaWeight:', chaWeight);
+    console.log('category :', categoryName, ' Total: ', this.chaCategoryWeightTotal[categoryName]);
+
   }
 
-  if( this.chaCategoryWeightTotal[categoryName] == 100){
-   this.chaCategoryTotalEqualsTo1[categoryName] = true
+  onChangeApproach(event: any) {
+    this.selectedApproach = event.value;
+    console.log("selectedApproach : ", this.selectedApproach)
   }
-  console.log('Characteristic Name:',categoryName ,  characteristicName, 'chaWeight:', chaWeight);
-   console.log( 'category :',categoryName,' Total: ',  this.chaCategoryWeightTotal[categoryName]);
-
- }
 
 }
