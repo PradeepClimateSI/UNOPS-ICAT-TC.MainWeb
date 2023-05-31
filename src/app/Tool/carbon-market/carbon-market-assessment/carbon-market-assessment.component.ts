@@ -16,6 +16,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   assessment: Assessment = new Assessment()
   cm_detail: AssessmentCMDetail = new AssessmentCMDetail()
   assessment_types: any[]
+  assessment_approaches: any[]
   impact_types: any[] = []
   impact_categories: any[] = []
   impact_characteristics: any[] = []
@@ -45,6 +46,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     this.assessment_types = this.masterDataService.assessment_type
     this.impact_types = this.masterDataService.impact_types
     this.sectorial_boundires = this.masterDataService.sectorial_boundries
+    this.assessment_approaches = this.masterDataService.assessment_approach
 
     await this.getPolicies()
     console.log(this.policies)
@@ -56,7 +58,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   }
 
   save(form: NgForm) {
-    // this.showSections = true
+    this.showSections = true //TODO comment this line in commit
     //save assessment
     this.assessment.tool = 'Carbon Market Tool'
     this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
@@ -123,6 +125,10 @@ export class CarbonMarketAssessmentComponent implements OnInit {
 
   selectAssessmentType(e: any){
    
+  }
+
+  selectAssessmentApproach(e: any){
+
   }
 
   onSelectType(e: any){

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { CMAnswer, CMQuestion, CMQuestionControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { CMAnswer, CMQuestion, CMQuestionControllerServiceProxy, Institution, InstitutionControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-cm-question',
@@ -9,17 +9,22 @@ import { CMAnswer, CMQuestion, CMQuestionControllerServiceProxy } from 'shared/s
 export class CmQuestionComponent implements OnInit {
 
   @Input() question: CMQuestion
+  @Input() approach: string
   @Output() prev_answer = new EventEmitter()
 
   answers: CMAnswer[] = []
   selectedAnswers: any
   comment: string
 
+  institutions: Institution[] = [];
+  selectedInstitution: Institution
+
   tooltip: string = ''
   weight = 0
 
   constructor(
-    private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy
+    private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
+    private institutionControllerServiceProxy: InstitutionControllerServiceProxy
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -34,6 +39,9 @@ export class CmQuestionComponent implements OnInit {
         this.tooltip = "No weight for this question"
       }
     })
+    this.institutionControllerServiceProxy.getAllInstitutions().subscribe((res: any) => {
+      this.institutions = res;
+    });
   }
 
   async getAnswers(){
@@ -50,6 +58,18 @@ export class CmQuestionComponent implements OnInit {
 
   keyup(e: any){
     alert(e)
+  }
+
+  showAnswer(){
+    if (this.approach === 'INDIRECT'){
+      if (this.question.criteria.section.code === 'SECTION_3'){
+        return false
+      } else {
+        return true
+      }
+    } else {
+      return true
+    }
   }
 
 }
