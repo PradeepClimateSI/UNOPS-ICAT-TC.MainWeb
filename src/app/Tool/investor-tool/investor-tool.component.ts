@@ -3,11 +3,11 @@ import { NgForm } from '@angular/forms';
 import { MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import { Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, ImpactCovered, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { Router } from '@angular/router';
-import { IndicatorDetails } from './IndicatorDetails';
+// import { IndicatorDetails } from './IndicatorDetails';
 
 
 interface CharacteristicWeight {
@@ -55,6 +55,8 @@ export class InvestorToolComponent implements OnInit {
   likelihood: any[] = [];
   relevance: any[] = [];
   approach:number=0;
+  instiTutionList : any = []
+  investorQuestions:InvestorQuestions[]=[];
 
   description = '';
   levelofImplementation:number=0;
@@ -93,6 +95,7 @@ export class InvestorToolComponent implements OnInit {
     private sectorProxy: SectorControllerServiceProxy,
     private investorToolControllerproxy: InvestorToolControllerServiceProxy,
     private router: Router,
+    private instituionProxy: InstitutionControllerServiceProxy,
 
 
 
@@ -115,6 +118,15 @@ export class InvestorToolComponent implements OnInit {
     console.log("country", countryId)
     this.countryID = countryId;
     console.log("tabName", this.tabName)
+
+    let intTypeFilter: string[] = new Array();
+
+    intTypeFilter.push('type.id||$eq||' + 3);
+
+    this.instituionProxy.getInstituion(3,countryId,1000,0).subscribe((res: any) => {
+      this.instiTutionList = res;
+      console.log( "listtt",this.instiTutionList)
+    });
     // this.getSelectedHeader();
 
 
@@ -128,6 +140,7 @@ export class InvestorToolComponent implements OnInit {
     await this.getPolicies();
     await this.getAllImpactsCovered();
     await this.getCharacteristics();
+    // await this.getInvestorQuestions();
     console.log(this.policies)
     console.log(this.assessment)
 
@@ -140,8 +153,14 @@ export class InvestorToolComponent implements OnInit {
     this.impactCovered = await this.investorToolControllerproxy.findAllImpactCovered().toPromise()
   }
 
+
   async getCharacteristics() {
 
+    this.investorToolControllerproxy.findAllIndicatorquestions().subscribe((res3: any) => {
+      this.investorQuestions  = res3
+      console.log("ressss3333",  this.investorQuestions)
+
+    });
     this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().subscribe((res3: any) => {
       // console.log("ressss3333", res3)
       this.characteristicsList = res3
@@ -157,10 +176,21 @@ export class InvestorToolComponent implements OnInit {
           if (z.category.name === x.name) {
             let newCharData = new InvestorAssessment();
             newCharData.characteristics = z;
+           
+            for(let q of this.investorQuestions){
+              if(newCharData.characteristics.id ===q.characteristics.id){
+                let indicatorDetails =new IndicatorDetails()
+                indicatorDetails.type='question';
+                indicatorDetails.question = q
+                newCharData.indicator_details.push(indicatorDetails)
+                
+              }
+            }
 
             categoryArray.push(newCharData);
 
           }
+          
         }
 
         //this.categotyList.push(x);
@@ -169,8 +199,6 @@ export class InvestorToolComponent implements OnInit {
             type: 'process', CategoryName: x.name, categoryID: x.id,
             data:categoryArray
           })
-
-
 
 
         }
@@ -445,6 +473,14 @@ onAssessmentApproachchange(approach:any){
   if (approach==='Indirect'){
     this.approach=2;
   }
+}
+
+onRelavanceChange(data:any,ins:any){
+  console.log("========",this.processData,data,ins)
+  // for (let i of object) {
+    
+  // }
+
 }
 
 }
