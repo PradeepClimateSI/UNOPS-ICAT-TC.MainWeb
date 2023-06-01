@@ -207,8 +207,8 @@
     <!-- <div class="p-grid p-fluid col-sm-12" *ngIf="showSections">
         <app-cm-section [assessment]="assessmentres"></app-cm-section>
     </div> -->
-    <!-- <div class="card" *ngIf="isSavedAssessment"> -->
-        <div class="card" >
+    <div class="card" *ngIf="isSavedAssessment">
+        <!-- <div class="card" > -->
         <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)" >
         <p-tabView  (onChange)="onMainTabChange($event) " [(activeIndex)]="activeIndexMain ">
 
@@ -604,7 +604,7 @@
                 <div
                 class="d-flex flex-row-reverse mt-20 ">
                     <button class="btn btn-primary text-uppercase" type="submit" >
-                        Calculate & Check results
+                        {{approach==1 ?'Calculate & Check results': (approach==2 ?'Send to Data Collection Team':'')}} 
                     </button>
                 </div>
             </div>

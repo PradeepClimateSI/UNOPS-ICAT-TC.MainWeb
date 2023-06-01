@@ -316,43 +316,79 @@ export class InvestorToolComponent implements OnInit {
     console.log("tabnaaame", this.tabView.tabs[this.selectedIndex].header);
   }
 
-  onsubmit(form: NgForm){
+  onsubmit(form: NgForm) {
 
-  let finalArray= this.processData.concat(this.outcomeData)
-  finalArray.map(x=>x.data.map(y=>y.assessment=this.mainAssessment))
-  // finalArray.map(x=>x.data.map(y=>y.investorTool=this.mainAssessment))
-  console.log("finalArray",finalArray)
-  //@ts-ignore
-    this.investorToolControllerproxy.createFinalAssessment(finalArray)
-    .subscribe(_res => {
-      console.log("res final", _res)
+    console.log("assesssssssss", this.assessment)
+    if(this.assessment.assessment_approach === 'Direct'){
+      console.log("Directttt")
+      let finalArray = this.processData.concat(this.outcomeData)
+      finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
+      // finalArray.map(x=>x.data.map(y=>y.investorTool=this.mainAssessment))
+      console.log("finalArray", finalArray)
+      //@ts-ignore
+      this.investorToolControllerproxy.createFinalAssessment(finalArray)
+        .subscribe(_res => {
+          console.log("res final", _res)
 
-        console.log(_res)
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Assessment created successfully',
-          closable: true,
+          console.log(_res)
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Assessment created successfully',
+            closable: true,
+          })
+          this.showResults();
+          // this.isSavedAssessment = true
+          // this.onCategoryTabChange('', this.tabView);
+
+
+          // form.reset();
+        }, error => {
+          console.log(error)
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Assessment detail saving failed',
+            closable: true,
+          })
         })
-        this.showResults();
-        // this.isSavedAssessment = true
-        // this.onCategoryTabChange('', this.tabView);
 
 
-      // form.reset();
-    }, error => {
-      console.log(error)
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Assessment detail saving failed',
-        closable: true,
-      })
-    })
+     // console.log("+++++++++++", this.processData)
+     // console.log("-----------", this.outcomeData)
+    }
+    else{
+      console.log("Indirectttt")
+      let finalArray = this.processData.concat(this.outcomeData)
+      finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
+      // finalArray.map(x=>x.data.map(y=>y.investorTool=this.mainAssessment))
+      console.log("finalArray", finalArray)
+      //@ts-ignore
+      this.investorToolControllerproxy.createFinalAssessmentIndirect(finalArray)
+        .subscribe(_res => {
+          console.log("res final", _res)
+
+          console.log(_res)
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Assessment created successfully',
+            closable: true,
+          })
+        //  this.showResults();
+
+        }, error => {
+          console.log(error)
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Assessment detail saving failed',
+            closable: true,
+          })
+        })
+    }
 
 
-    console.log("+++++++++++",this.processData)
-    console.log("-----------",this.outcomeData)
   }
 
   showResults(){
