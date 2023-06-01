@@ -393,7 +393,7 @@ export class PortfolioTrack4Component implements OnInit {
             detail: 'Assessment created successfully',
             closable: true,
           })
-          this.showResults();
+        //  this.showResults();
 
         }, error => {
           console.log(error)
