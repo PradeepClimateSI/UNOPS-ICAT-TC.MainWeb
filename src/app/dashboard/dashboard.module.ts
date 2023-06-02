@@ -57,7 +57,8 @@ import { ReportComponent } from 'app/report/report.component';
 import { InvestorToolComponent } from 'app/Tool/investor-tool/investor-tool.component';
 import { AssessmentResultInvestorComponent } from 'app/assessment-result-investor/assessment-result-investor.component';
 import { EditInstitutionComponent } from 'app/institution/edit-institution/edit-institution.component';
-
+import { InvestmentDashboardComponent } from 'app/investment-dashboard/investment-dashboard.component';
+import { ButtonModule } from 'primeng/button';
 
 
 const routes: Routes = [
@@ -300,6 +301,14 @@ const routes: Routes = [
     canActivate: [],
     data: {}
   },
+
+  {
+    path: 'investment-dashboard',
+    component: InvestmentDashboardComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
 ]
 
 @NgModule({
@@ -314,8 +323,8 @@ const routes: Routes = [
     FormsModule,
     NgxOrgChartModule,
     NbLayoutModule,
-    AccordionModule
-
+    AccordionModule,
+    ButtonModule
   ]
 })
 export class DashboardModule { }

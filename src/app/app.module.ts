@@ -107,6 +107,7 @@ import { AuditControllerServiceProxy } from "shared/service-proxies-auditlog/ser
 import { ReportComponent } from './report/report.component';
 import { AssessmentResultInvestorComponent } from './assessment-result-investor/assessment-result-investor.component';
 import { PortfolioTrack4Component } from './Tool/portfolio-track4/portfolio-track4.component';
+import { InvestmentDashboardComponent } from './investment-dashboard/investment-dashboard.component';
 
 
 
@@ -170,6 +171,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         InvestorToolComponent,
         AssessmentResultInvestorComponent,
         PortfolioTrack4Component,
+        InvestmentDashboardComponent,
     ],
 
 

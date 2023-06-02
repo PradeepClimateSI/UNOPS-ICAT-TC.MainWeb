@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
 
@@ -39,11 +40,16 @@ export class DashboardComponent implements OnInit {
   public title: string;
   public items:any =[];
   data1: { labels: string[]; datasets: { label: string; data: number[]; fill: boolean; borderColor: string; }[]; };
-  constructor() { }
+  constructor(
+    private router: Router,
+  ) { }
 
   ngOnInit(): void {
 
     console.log('+++++++++++++')
+  }
+  goToInvestment(){
+    this.router.navigate(['/app/investment-dashboard'],);
   }
 
 }
