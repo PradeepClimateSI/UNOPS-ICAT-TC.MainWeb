@@ -170,6 +170,19 @@
                             This is a mandatory field
                         </p> -->
                         </div>
+                        <div class="p-field p-2">
+                            <label for="Sectors Covered">Assessment Approach*</label>
+                            <p-dropdown name="approach" #assessApproach="ngModel" placeholder="Select Assessment Method"
+                                [(ngModel)]="assessment.assessment_approach" [options]="assessmentApproach"  appendTo="body"
+                                (ngModelChange)="onAssessmentApproachchange(assessment.assessment_approach)" [required]="true"
+                                optionLabel="name" optionValue="name"></p-dropdown>
+                            <p class="info-message text-danger" *ngIf="
+                                !assessment.assessment_approach &&
+                                (fData.submitted || assessApproach.touched)
+                              ">
+                                This is a mandatory field
+                            </p>
+                            </div>
                     </div>
 
 
@@ -250,17 +263,28 @@
                                                         <div class="col-12 col-lg-6">
                                                             <div class="p-field">
                                                                 <label for="Description">Relevance</label>
-                                                                <p-dropdown name="data.charData.relavance"
+                                                                <p-dropdown  *ngIf="approach===1"
+                                                                    name="data.charData.relavance"
                                                                     #type="ngModel"
                                                                     placeholder="Select Relevance"
                                                                     [(ngModel)]="data.relavance"
                                                                     [options]="relevance" optionLabel="name"
                                                                     appendTo="body"
                                                                     optionValue="value" [required]="true"></p-dropdown>
+
+                                                                    <p-dropdown  *ngIf="approach===2"
+                                                                    name="data.charData.relavance"
+                                                                    placeholder="Select Institution"
+                                                                    [(ngModel)]="data.relavance"
+                                                                    [options]="instiTutionList" 
+                                                                    optionLabel="name"
+                                                                    appendTo="body"
+                                                                    optionValue="id"
+                                                                   [required]="true"></p-dropdown>   
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-12 col-lg-6">
+                                                        <div class="col-12 col-lg-6"   *ngIf="approach===1">
                                                             <div class="p-field">
                                                                 <label for="justification">Justification</label>
                                                                 <input type="text" pInputText
@@ -273,292 +297,60 @@
                                                     </div>
                                                     <div class="row p-2">
                                                         <label for="Indicator"><u>Indicator</u></label>
-                                                        <div>
-
-                                                        </div>
-                                                        <div *ngIf="data.characteristics.name === 'Research and Development'"
-                                                            class=" ml-25 col-5">
-                                                            <p class="question">Does the project have a local R&D
-                                                                component? </p>
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Research and Development'"
+                                                        <div class="row" *ngFor="let question of data.indicator_details">
+                                                            <div class=" ml-25 col-5 mb-20">
+                                                        
+                                                            <p class="question">{{question.question.name}}</p>
+                                                          </div>
+                                                          <div 
                                                             class="col-4 mb-20">
-                                                            <p-dropdown name="data.charData.question01" #type="ngModel"
+                                                            <p-dropdown *ngIf="approach===1"
+                                                                name="data.charData.question01" #type="ngModel"
                                                                 placeholder="Select Answer"
-                                                                [(ngModel)]="data.question01"
+                                                                [(ngModel)]="question.value"
                                                                 [options]="yesNoAnswer" optionLabel="name"
                                                                 appendTo="body"
-                                                                optionValue="name" [required]="true"></p-dropdown>
-
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Research and Development'"
-                                                            class=" ml-25 col-5">
-                                                            <p class="question"> Does the project have a significant
-                                                                training component?</p>
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Research and Development'"
-                                                            class="col-4">
-                                                            <p-dropdown name="data.charData.question02" #type="ngModel"
-                                                                placeholder="Select Answer"
+                                                                optionValue="name" [required]="true">
+                                                            </p-dropdown>
+                                                            <p-dropdown  *ngIf="approach===2"
+                                                                name={{data}}_charData.relavance
+                                                                placeholder="Select Institution"
+                                                                [(ngModel)]="question.value"
+                                                                [options]="instiTutionList" optionLabel="name"
                                                                 appendTo="body"
-                                                                [(ngModel)]="data.question02"
-                                                                [options]="yesNoAnswer" optionLabel="name"
-                                                                optionValue="name" [required]="true"></p-dropdown>
+                                                                optionValue="id" [required]="true">
+                                                            </p-dropdown> 
 
                                                         </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Adoption'"
-                                                            class=" ml-25 col-5">
-                                                            <p class="question"> Does the project lead to new business
-                                                                start-ups?</p>
                                                         </div>
 
-                                                        <div *ngIf="data.characteristics.name === 'Adoption'"
-                                                            class="col-4">
-                                                            <p-dropdown name="data.charData.question01" #type="ngModel"
-                                                                placeholder="Select Answer"
-                                                                [(ngModel)]="data.question01"
-                                                                appendTo="body"
-                                                                [options]="yesNoAnswer" optionLabel="name"
-                                                                optionValue="name" [required]="true"></p-dropdown>
-
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Scale up'"
-                                                            class=" ml-25 col-5">
-                                                            <p class="question">
-                                                                Does the project include workshops for knowledge
-                                                                sharing?
-                                                            </p>
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Scale up'"
-                                                            class="col-4 mb-20">
-                                                            <p-dropdown name="data.charData.question01" #type="ngModel"
-                                                                placeholder="Select Answer"
-                                                                [(ngModel)]="data.question01"
-                                                                appendTo="body"
-                                                                [options]="yesNoAnswer" optionLabel="name"
-                                                                optionValue="name" [required]="true"></p-dropdown>
-
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Scale up'"
-                                                            class=" ml-25 col-5">
-                                                            <p class="question">
-                                                                Will the project be replicable in the country?
-                                                            </p>
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Scale up'"
-                                                            class="col-4 mb-20">
-                                                            <p-dropdown name="data.charData.question02" #type="ngModel"
-                                                                placeholder="Select Answer"
-                                                                [(ngModel)]="data.question02"
-                                                                appendTo="body"
-                                                                [options]="yesNoAnswer" optionLabel="name"
-                                                                optionValue="name" [required]="true"></p-dropdown>
-
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Scale up'"
-                                                            class=" ml-25 col-5">
-                                                            <p class="question">
-                                                                Will the project lead to economies of scale? </p>
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Scale up'"
-                                                            class="col-4 mb-20">
-                                                            <p-dropdown name="data.charData.question03" #type="ngModel"
-                                                                placeholder="Select Answer"
-                                                                [(ngModel)]="data.question03"
-                                                                appendTo="body"
-                                                                [options]="yesNoAnswer" optionLabel="name"
-                                                                optionValue="name" [required]="true"></p-dropdown>
-
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Scale up'"
-                                                            class=" ml-25 col-5">
-                                                            <p class="question">
-                                                                Does the project get government support?</p>
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Scale up'"
-                                                            class="col-4 mb-20">
-                                                            <p-dropdown name="data.charData.question04" #type="ngModel"
-                                                                placeholder="Select Answer"
-                                                                [(ngModel)]="data.question04"
-                                                                appendTo="body"
-                                                                [options]="yesNoAnswer" optionLabel="name"
-                                                                optionValue="name" [required]="true"></p-dropdown>
-
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Entrepreneurs'"
-                                                            class=" ml-25 col-5">
-                                                            <p class="question">
-                                                                Is the project first of its kind for the local project
-                                                                developer?</p>
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Entrepreneurs'"
-                                                            class="col-4 mb-20">
-                                                            <p-dropdown name="data.charData.question01" #type="ngModel"
-                                                                placeholder="Select Answer"
-                                                                [(ngModel)]="data.question01"
-                                                                appendTo="body"
-                                                                [options]="yesNoAnswer" optionLabel="name"
-                                                                optionValue="name" [required]="true"></p-dropdown>
-
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Coalition of advocates'"
-                                                            class=" ml-25 col-5">
-                                                            <p class="question">
-                                                                Is the project first of its kind for the local project
-                                                                developer?</p>
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Coalition of advocates'"
-                                                            class="col-4 mb-20">
-                                                            <p-dropdown name="data.charData.question01" #type="ngModel"
-                                                                placeholder="Select Answer"
-                                                                [(ngModel)]="data.question01"
-                                                                appendTo="body"
-                                                                [options]="yesNoAnswer" optionLabel="name"
-                                                                optionValue="name" [required]="true"></p-dropdown>
-
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Economic and non-economic'"
-                                                            class=" ml-25 col-5">
-                                                            <p class="question">
-                                                                New subsidies and tariff structures, such as renewable
-                                                                energy
-                                                                obligations, feed-in tariffs, renewable energy auctions
-                                                                and
-                                                                value-added tax (VAT) exemption?</p>
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Economic and non-economic'"
-                                                            class="col-4 mb-20">
-                                                            <p-dropdown name="data.charData.question01" #type="ngModel"
-                                                                placeholder="Select Answer"
-                                                                [(ngModel)]="data.question01"
-                                                                appendTo="body"
-                                                                [options]="yesNoAnswer" optionLabel="name"
-                                                                optionValue="name" [required]="true"></p-dropdown>
-
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Awareness'"
-                                                            class=" ml-25 col-5">
-                                                            <p class="question">
-                                                                Does the project include information workshops and
-                                                                similar platforms?</p>
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Awareness'"
-                                                            class="col-4 mb-20">
-                                                            <p-dropdown name="data.charData.question01" #type="ngModel"
-                                                                placeholder="Select Answer"
-                                                                [(ngModel)]="data.question01"
-                                                                appendTo="body"
-                                                                [options]="yesNoAnswer" optionLabel="name"
-                                                                optionValue="name" [required]="true"></p-dropdown>
-
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Awareness'"
-                                                            class=" ml-25 col-5">
-                                                            <p class="question">
-                                                                Does the project include awareness generation programmes
-                                                                through private sector or business associations, etc.?
-                                                            </p>
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Awareness'"
-                                                            class="col-4 mb-20">
-                                                            <p-dropdown name="data.charData.question02" #type="ngModel"
-                                                                placeholder="Select Answer"
-                                                                [(ngModel)]="data.question02"
-                                                                appendTo="body"
-                                                                [options]="yesNoAnswer" optionLabel="name"
-                                                                optionValue="name" [required]="true"></p-dropdown>
-
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Awareness'"
-                                                            class=" ml-25 col-5">
-                                                            <p class="question">
-                                                                Does the project include awareness campaigns ?</p>
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Awareness'"
-                                                            class="col-4 mb-20">
-                                                            <p-dropdown name="data.charData.question03" #type="ngModel"
-                                                                placeholder="Select Answer"
-                                                                [(ngModel)]="data.question03"
-                                                                appendTo="body"
-                                                                [options]="yesNoAnswer" optionLabel="name"
-                                                                optionValue="name" [required]="true"></p-dropdown>
-
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Behaviour'"
-                                                            class=" ml-25 col-5">
-                                                            <p class="question">
-                                                                Does the project include training of Young leaders ?</p>
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Behaviour'"
-                                                            class="col-4 mb-20">
-                                                            <p-dropdown name="data.charData.question01" #type="ngModel"
-                                                                placeholder="Select Answer"
-                                                                [(ngModel)]="data.question01"
-                                                                appendTo="body"
-                                                                [options]="yesNoAnswer" optionLabel="name"
-                                                                optionValue="name" [required]="true"></p-dropdown>
-
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Social Norms'"
-                                                            class=" ml-25 col-5">
-                                                            <p class="question">
-                                                                Is the project accompanied by awarenes campaigns?</p>
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Social Norms'"
-                                                            class="col-4 mb-20">
-                                                            <p-dropdown name="data.charData.question01" #type="ngModel"
-                                                                placeholder="Select Answer"
-                                                                [(ngModel)]="data.question01"
-                                                                appendTo="body"
-                                                                [options]="yesNoAnswer" optionLabel="name"
-                                                                optionValue="name" [required]="true"></p-dropdown>
-
-                                                        </div>
                                                     </div>
 
                                                     <div class="row p-2">
                                                         <div class="col-12 col-lg-6">
                                                             <div class="p-field">
-                                                                <label for="Relevance">Likelihood</label>
-                                                                <p-dropdown name="data.charData.likelihood"
+                                                                <label for="likelihood">Likelihood</label>
+                                                                <p-dropdown *ngIf="approach===1" 
+                                                                    name="data.charData.likelihood"
                                                                     #type="ngModel" placeholder="Select Likelihood"
                                                                     [(ngModel)]="data.likelihood"
                                                                     [options]="likelihood" optionLabel="id"
                                                                     optionValue="value" [required]="true"
                                                                     appendTo="body"></p-dropdown>
 
+                                                                    <p-dropdown  *ngIf="approach===2"
+                                                                    name={{data}}_charData.relavance
+                                                                    placeholder="Select Institution"
+                                                                    [(ngModel)]="data.likelihood"
+                                                                    [options]="instiTutionList" optionLabel="name"
+                                                                    appendTo="body"
+                                                                    optionValue="id" [required]="true">
+                                                                </p-dropdown> 
+
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-12 col-lg-6">
+                                                        <div class="col-12 col-lg-6" *ngIf="approach===1">
                                                             <div class="p-field">
                                                                 <label for="justification">Justification</label>
                                                                 <input type="text" pInputText
@@ -645,222 +437,32 @@
                                                 <div class="p-grid p-fluid col-12">
                                                     <div class="row p-2">
                                                         <label for="Indicator"><u>Indicator</u></label>
-                                                        <div *ngIf="( data.characteristics.name ==='Medium Level') && category.CategoryName ==='Scale GHGs'"
-                                                        class=" ml-25 col-5">
-                                                        <p class="question">If zero C project (RE?) project, does it increase intalled RE capacity by > 1% ? </p>
-                                                    </div>
-
-                                                    <div *ngIf="( data.characteristics.name ==='Medium Level') && category.CategoryName ==='Scale GHGs'"
-                                                        class="col-4 mb-20">
-                                                        <p-dropdown name="data.charData.question01" #type="ngModel"
-                                                            placeholder="Select Answer"
-                                                            [(ngModel)]="data.question06"
-                                                            appendTo="body"
-                                                            [options]="yesNoAnswer" optionLabel="name"
-                                                            optionValue="name" [required]="true"></p-dropdown>
-
-                                                    </div>
-                                                        <div *ngIf="(data.characteristics.name === 'Macro Level' || data.characteristics.name ==='Medium Level') && category.CategoryName ==='Scale GHGs'"
-                                                            class=" ml-25 col-5">
-                                                            <p class="question">Does the project result in a GHG
-                                                                reduction of > 1% of sector total GHG emissions? </p>
-                                                        </div>
-
-                                                        <div *ngIf="(data.characteristics.name === 'Macro Level' || data.characteristics.name ==='Medium Level') && category.CategoryName ==='Scale GHGs'"
+                                                        <div class="row" *ngFor="let question of data.indicator_details">
+                                                            <div class=" ml-25 col-5 mb-20">
+                                                        
+                                                            <p class="question">{{question.question.name}}</p>
+                                                          </div>
+                                                          <div 
                                                             class="col-4 mb-20">
-                                                            <p-dropdown name="data.charData.question01" #type="ngModel"
+                                                            <p-dropdown  *ngIf="approach===1"
+                                                                name="data.charData.question01" #type="ngModel"
                                                                 placeholder="Select Answer"
-                                                                [(ngModel)]="data.question01"
-                                                                appendTo="body"
-                                                                [options]="yesNoAnswer" optionLabel="name"
-                                                                optionValue="name" [required]="true"></p-dropdown>
-
-                                                        </div>
-
-                                                        <div *ngIf="(data.characteristics.name === 'Macro Level' || data.characteristics.name ==='Medium Level') && category.CategoryName ==='Scale GHGs'"
-                                                            class=" ml-25 col-5">
-                                                            <p class="question">Are the project emissions/kWh 50% or
-                                                                lower that the GEF? </p>
-                                                        </div>
-
-                                                        <div *ngIf="(data.characteristics.name === 'Macro Level' || data.characteristics.name ==='Medium Level') && category.CategoryName ==='Scale GHGs'"
-                                                            class="col-4 mb-20">
-                                                            <p-dropdown name="data.charData.question02" #type="ngModel"
-                                                                placeholder="Select Answer"
-                                                                [(ngModel)]="data.question02"
+                                                                [(ngModel)]="question.value"
                                                                 [options]="yesNoAnswer" optionLabel="name"
                                                                 appendTo="body"
-                                                                optionValue="name" [required]="true"></p-dropdown>
+                                                                optionValue="name" [required]="true">
+                                                            </p-dropdown>
 
-                                                        </div>
-
-
-
-                                                        <div *ngIf="(data.characteristics.name === 'Macro Level' || data.characteristics.name ==='Medium Level') && category.CategoryName ==='Scale GHGs'"
-                                                            class=" ml-25 col-5">
-                                                            <p class="question">
-                                                                If RE project, does it increase intalled RE capacity by > 1% ? </p>
-                                                        </div>
-
-                                                        <div *ngIf="(data.characteristics.name === 'Macro Level' || data.characteristics.name ==='Medium Level') && category.CategoryName ==='Scale GHGs'"
-                                                            class="col-4 mb-20">
-                                                            <p-dropdown name="data.charData.question03" #type="ngModel"
-                                                                placeholder="Select Answer"
-                                                                [(ngModel)]="data.question04"
-                                                                [options]="yesNoAnswer" optionLabel="name"
+                                                            <p-dropdown  *ngIf="approach===2"
+                                                                name={{data}}_charData.relavance
+                                                                placeholder="Select Institution"
+                                                                [(ngModel)]="question.value"
+                                                                [options]="instiTutionList" optionLabel="name"
                                                                 appendTo="body"
-                                                                optionValue="name" [required]="true"></p-dropdown>
+                                                                optionValue="id" [required]="true">
+                                                            </p-dropdown> 
 
-                                                        </div>
-
-                                                         <div *ngIf="(data.characteristics.name === 'Macro Level' || data.characteristics.name ==='Medium Level') && category.CategoryName ==='Scale GHGs'"
-                                                            class=" ml-25 col-5">
-                                                            <p class="question">If RE project, is the associated cost
-                                                                ($/MW) > 10% lower than national average? </p>
-                                                        </div>
-
-                                                        <div *ngIf="(data.characteristics.name === 'Macro Level' || data.characteristics.name ==='Medium Level') && category.CategoryName ==='Scale GHGs'"
-                                                            class="col-4 mb-20">
-                                                            <p-dropdown name="data.charData.question03" #type="ngModel"
-                                                                placeholder="Select Answer"
-                                                                [(ngModel)]="data.question03"
-                                                                [options]="yesNoAnswer" optionLabel="name"
-                                                                appendTo="body"
-                                                                optionValue="name" [required]="true"></p-dropdown>
-
-                                                        </div>
-
-                                                        <div *ngIf="(data.characteristics.name === 'Macro Level' || data.characteristics.name ==='Medium Level') && category.CategoryName ==='Scale GHGs'"
-                                                            class=" ml-25 col-5">
-                                                            <p class="question">
-                                                                If RE project, is the cost of electricity ($/kWh) > 10%
-                                                                lower than the
-                                                                LCOE? </p>
-                                                        </div>
-
-                                                        <div *ngIf="(data.characteristics.name === 'Macro Level' || data.characteristics.name ==='Medium Level') && category.CategoryName ==='Scale GHGs'"
-                                                            class="col-4 mb-20">
-                                                            <p-dropdown name="data.charData.question04" #type="ngModel"
-                                                                placeholder="Select Answer"
-                                                                [(ngModel)]="data.question05"
-                                                                appendTo="body"
-                                                                [options]="yesNoAnswer" optionLabel="name"
-                                                                optionValue="name" [required]="true"></p-dropdown>
-
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Micro Level' && category.CategoryName ==='Scale GHGs'"
-                                                            class=" ml-25 col-5">
-                                                            <p class="question">
-                                                                Is the emission intensity of electricity of the newly
-                                                                built generation capacity (gCO2e/kWh) 50% or lower that
-                                                                the local GEF? </p>
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Micro Level' && category.CategoryName ==='Scale GHGs'"
-                                                            class="col-4 mb-20">
-                                                            <p-dropdown name="data.charData.question01" #type="ngModel"
-                                                                placeholder="Select Answer"
-                                                                [(ngModel)]="data.question01"
-                                                                [options]="yesNoAnswer" optionLabel="name"
-                                                                appendTo="body"
-                                                                optionValue="name" [required]="true"></p-dropdown>
-
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Micro Level' && category.CategoryName ==='Scale GHGs'"
-                                                            class=" ml-25 col-5">
-                                                            <p class="question">
-                                                                Does the project represent a 5% or more of weighted
-                                                                annual investment in specific RE technology on a local
-                                                                level? </p>
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Micro Level' && category.CategoryName ==='Scale GHGs'"
-                                                            class="col-4 mb-20">
-                                                            <p-dropdown name="data.charData.question02" #type="ngModel"
-                                                                placeholder="Select Answer"
-                                                                [(ngModel)]="data.question02"
-                                                                [options]="yesNoAnswer" optionLabel="name"
-                                                                appendTo="body"
-                                                                optionValue="name" [required]="true"></p-dropdown>
-
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Micro Level' && category.CategoryName ==='Scale GHGs'"
-                                                            class=" ml-25 col-5">
-                                                            <p class="question">
-                                                                Does the project increase the number of households or
-                                                                people with
-                                                                access to electricity?
-                                                            </p>
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Micro Level' && category.CategoryName ==='Scale GHGs'"
-                                                            class="col-4 mb-20">
-                                                            <p-dropdown name="data.charData.question03" #type="ngModel"
-                                                                placeholder="Select Answer"
-                                                                [(ngModel)]="data.question03"
-                                                                [options]="yesNoAnswer" optionLabel="name"
-                                                                appendTo="body"
-                                                                optionValue="name" [required]="true"></p-dropdown>
-
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Long term (>15 years)' && category.CategoryName ==='Sustained nature-GHGs'"
-                                                            class=" ml-25 col-5">
-                                                            <p class="question">
-                                                                Does the project contribute to > 5% of the coutry's long
-                                                                term RE goals, if applicable? </p>
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Long term (>15 years)' && category.CategoryName ==='Sustained nature-GHGs'"
-                                                            class="col-4 mb-20">
-                                                            <p-dropdown name="data.charData.question01" #type="ngModel"
-                                                                placeholder="Select Answer"
-                                                                [(ngModel)]="data.question01"
-                                                                [options]="yesNoAnswer" optionLabel="name"
-                                                                appendTo="body"
-                                                                optionValue="name" [required]="true"></p-dropdown>
-
-                                                        </div>
-
-                                                        <div *ngIf=" category.CategoryName ==='Sustained nature-GHGs'"
-                                                            class=" ml-25 col-5">
-                                                            <p class="question">
-                                                                Does the project result in a GHG reduction of > 1% of
-                                                                sector total GHG emissions in the period 2029-2040 ?
-                                                            </p>
-                                                        </div>
-
-                                                        <div *ngIf=" category.CategoryName ==='Sustained nature-GHGs'"
-                                                            class="col-4 mb-20">
-                                                            <p-dropdown name="data.charData.question02" #type="ngModel"
-                                                                placeholder="Select Answer"
-                                                                [(ngModel)]="data.question02"
-                                                                [options]="yesNoAnswer" optionLabel="name"
-                                                                appendTo="body"
-                                                                optionValue="name" [required]="true"></p-dropdown>
-
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Long term (>15 years)' && category.CategoryName ==='Sustained nature-GHGs'"
-                                                            class=" ml-25 col-5">
-                                                            <p class="question">
-                                                                Does the project result in a GHG reduction of > 1% of
-                                                                sector total
-                                                                GHG emissions in the period 2099-2028 ? </p>
-                                                        </div>
-
-                                                        <div *ngIf="data.characteristics.name === 'Long term (>15 years)' && category.CategoryName ==='Sustained nature-GHGs'"
-                                                            class="col-4 mb-20">
-                                                            <p-dropdown name="data.charData.question02" #type="ngModel"
-                                                                placeholder="Select Answer"
-                                                                [(ngModel)]="data.question03"
-                                                                [options]="yesNoAnswer" optionLabel="name"
-                                                                appendTo="body"
-                                                                optionValue="name" [required]="true"></p-dropdown>
-
+                                                            </div>
                                                         </div>
 
                                                     </div>
@@ -888,7 +490,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="row p-2" *ngIf=" category.CategoryName ==='Scale SD'|| category.CategoryName ==='Sustained nature-SD'">
+                                                    <div class="row p-2" *ngIf=" approach===1 && (category.CategoryName ==='Scale SD'|| category.CategoryName ==='Sustained nature-SD')">
                                                         <div class="col-12 col-lg-6">
                                                           <div class="p-field">
                                                             <label for="indicatorStartingVal">Indicator Starting Situation Value</label>
@@ -918,16 +520,28 @@
                                                         <div class="col-12 col-lg-6">
                                                             <div class="p-field">
                                                                 <label for="Relevance">Score</label>
-                                                                <p-inputNumber
+                                                                <p-inputNumber *ngIf="approach===1"
                                                                     inputId="horizontal"
-                                                                    [(ngModel)]="data.score"  [showButtons]="true" [min]="-1" [max]="3" [step]="1"
+                                                                    [(ngModel)]="data.score"  
+                                                                    [showButtons]="true" [min]="-1" [max]="3" [step]="1"
                                                                     inputId="minmax-buttons"
                                                                     placeholder="Enter an integer between -1 and 3"
-                                                                    name="data.charData.score"> </p-inputNumber>
+                                                                    name="data.charData.score"> 
+                                                                </p-inputNumber>
+
+                                                                
+                                                                <p-dropdown  *ngIf="approach===2"
+                                                                    name={{data}}_charData.relavance
+                                                                    placeholder="Select Institution"
+                                                                    [(ngModel)]="data.score"  
+                                                                    [options]="instiTutionList" optionLabel="name"
+                                                                    appendTo="body"
+                                                                    optionValue="id" [required]="true">
+                                                                </p-dropdown> 
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-12 col-lg-6">
+                                                        <div   *ngIf="approach===1" class="col-12 col-lg-6">
                                                             <div class="p-field">
                                                                 <label for="justification">Justification</label>
                                                                 <input type="text" pInputText
@@ -943,10 +557,20 @@
                                                         <div class="col-12 col-lg-6">
                                                           <div class="p-field">
                                                             <label for="expected_ghg_mitigation">Expected GHG mitgation (Mt CO2-eq)</label>
-                                                            <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation" name="expected_ghg_mitigation"
+                                                            <p-inputNumber *ngIf="approach===1"
+                                                              [(ngModel)]="data.expected_ghg_mitigation" name="expected_ghg_mitigation"
                                                               placeholder="Expected GHG mitgation Value" inputId="locale-us" mode="decimal"
                                                               locale="en-US" [minFractionDigits]="2">
                                                             </p-inputNumber>
+
+                                                            <p-dropdown  *ngIf="approach===2"
+                                                                name={{data}}_charData.relavance
+                                                                placeholder="Select Institution"
+                                                                [(ngModel)]="data.expected_ghg_mitigation"
+                                                                [options]="instiTutionList" optionLabel="name"
+                                                                appendTo="body"
+                                                                optionValue="id" [required]="true">
+                                                            </p-dropdown> 
                                                           </div>
                                                         </div>
 
@@ -980,7 +604,7 @@
                 <div
                 class="d-flex flex-row-reverse mt-20 ">
                     <button class="btn btn-primary text-uppercase" type="submit" >
-                        Calculate & Check results
+                        {{approach==1 ?'Calculate & Check results': (approach==2 ?'Send to Data Collection Team':'')}} 
                     </button>
                 </div>
             </div>

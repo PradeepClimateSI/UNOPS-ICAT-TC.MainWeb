@@ -17,17 +17,38 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-6">
-            <div class="card">
-                <h6>Sample Widget</h6>
-            </div>
-            </div>
-            <div class="col-md-6">
-            <div class="card">
-                <h6>Sample Widget</h6>
-            </div>
-            </div>
+        <div class="p-grid p-fluid card">
+            <div class="row">
+                <div class="col-md-3 ">
+                    <button
+                        class="p-button-lg"
+                        type="button"
+                        pButton
+                        pRipple
+                        label="Carbon Market">
+                    </button>
+                </div>
+                <div class="col-md-3">
+                    <button
+                        class="p-button-lg"
+                        type="button"
+                        pButton
+                        pRipple
+                        label="Investment"
+                        (click)="goToInvestment()">
+                    </button>
+            
+                </div>
+                <div class="col-md-3">
+                    <button
+                        class="p-button-lg"
+                        type="button"
+                        pButton
+                        pRipple
+                        label="Portfolio">
+                    </button>
+                </div>
+             </div>
         </div>
     </div>
 </div>
