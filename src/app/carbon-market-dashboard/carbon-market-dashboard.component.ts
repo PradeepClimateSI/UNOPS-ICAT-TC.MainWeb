@@ -45,12 +45,12 @@ CMPrerequiste: {
 
   CMBarChart:any =[];
   pieChartCM:any=[];
-  value:any
+  averageTCValue:any;
 
   tool : string;
 
   ngOnInit(): void {
-    this.value =58.05;
+    this.averageTCValue =58.05;
 
     this.tool = 'Carbon Market Tool';
 
@@ -59,6 +59,7 @@ CMPrerequiste: {
 
       this.interventions = res;
     //  console.log("policyList:", this.interventions);
+      this.averageTCValue= Number(res.reduce((total:number, next:any) => total + next.y, 0) / res.length).toFixed(2);
 
       // Sort interventions based on id in descending order
       this.interventions.sort((a: { id: number; }, b: { id: number; }) => b.id - a.id);
@@ -276,7 +277,7 @@ CMPrerequiste: {
               display: true,
               text: 'Average Transformational Change (%)',
               font: {
-                size: 14,
+                size: 12,
                 weight: 'bold',
 
               }
