@@ -20,6 +20,7 @@ export class MasterDataService {
   private _tieres: {name: string, id: number}[] = []
   private _currencies: {name: string, id: number}[] = []
   private _assessment_type: {name: string, id: number}[] = []
+  private _assessment_approach: {name: string, id: number, code: string}[] = []
   private _impact_types: {name: string, id: number, code: string}[] = []
   private _sectorial_boundries: {name: string, id: number, code: string}[] = []
   private _impact_categories: {name: string, id: number, code: string, type: string}[] = []
@@ -27,6 +28,7 @@ export class MasterDataService {
   private _level_of_implemetation: {name: string, id: number}[] = []
   private _impact_covered: {name: string, id: number}[] = []
   private _assessment_method: {name: string, id: number}[] = []
+  private _assessment_approach2: {name: string, id: number}[] = []
   private _relevance: {name: string, value: number}[] = []
   private _likelihood: {id: string, value: number}[] = []
 
@@ -128,6 +130,12 @@ export class MasterDataService {
       { id: 1, name: "Ex-ante" },
       { id: 2, name: "Ex-post" }
     ]
+
+    this.assessment_approach = [
+      { id: 1, name: "Direct", code: "DIRECT" },
+      { id: 2, name: "Indirect", code: "INDIRECT" }
+    ]
+
     this.sectorial_boundries = [
       { id: 1, name: "Energy", code: "ENERGY" },
       { id: 2, name: "Transport", code: "TRANSPORT" },
@@ -208,6 +216,12 @@ export class MasterDataService {
       {  id: "4",value:4 },
 
     ]
+
+    this.assessment_approach2 = [
+      { id: 1, name: "Direct" },
+      { id: 2, name: "Indirect" },
+
+    ] 
 
 
   }
@@ -336,6 +350,14 @@ export class MasterDataService {
     return this._assessment_type;
   }
 
+  set assessment_approach(value: { name: string; id: number; code: string }[]) {
+    this._assessment_approach = value;
+  }
+
+  get assessment_approach(): { name: string; id: number; code: string }[] {
+    return this._assessment_approach;
+  }
+
   set sectorial_boundries(value: { name: string; id: number, code: string }[]) {
     this._sectorial_boundries = value;
   }
@@ -406,6 +428,15 @@ export class MasterDataService {
   get likelihood (): { id: string; value: number }[] {
     return this._likelihood;
   }
+
+  set assessment_approach2(value: { name: string; id: number }[]) {
+    this._assessment_approach2 = value;
+  }
+
+  get assessment_approach2 (): { name: string; id: number }[] {
+    return this._assessment_approach;
+  } 
+
 
 
 

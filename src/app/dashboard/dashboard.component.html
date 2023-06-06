@@ -17,17 +17,60 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-6">
-            <div class="card">
-                <h6>Sample Widget</h6>
+         <!-- <div class="p-grid p-fluid card">
+          <div class="row">
+            <div class="col-md-7 ">
+              <h3>Type of Interventions</h3>
+<p-chart type="bar" [data]="data" [options]="options"></p-chart>
+            </div>
+
+            <div class="col-md-5 ">
+              <div class="row text-center ">
+
+                <div class="col-12  mt-20 ml-10"  >
+                    <canvas   id="pieChart">{{chart}}</canvas>
+                 </div>
             </div>
             </div>
-            <div class="col-md-6">
-            <div class="card">
-                <h6>Sample Widget</h6>
-            </div>
-            </div>
+          </div>
+        </div> -->
+
+
+
+        <div class="p-grid p-fluid ">
+            <div class="row">
+                <div class="col-md-3 ">
+                    <button
+                        class="p-button-lg"
+                        type="button"
+                        pButton
+                        pRipple
+                        (click)="goToCarbonMarket()"
+                        label="Carbon Market">
+                    </button>
+                </div>
+                <div class="col-md-3">
+                    <button
+                        class="p-button-lg"
+                        type="button"
+                        pButton
+                        pRipple
+                        label="Investment"
+                        (click)="goToInvestment()">
+                    </button>
+
+                </div>
+                <div class="col-md-3">
+                    <button
+                        class="p-button-lg"
+                        type="button"
+                        pButton
+                        pRipple
+                        (click)="goToPortfolio()"
+                        label="Portfolio">
+                    </button>
+                </div>
+             </div>
         </div>
     </div>
 </div>
@@ -35,6 +78,14 @@
 <div>
 </div>
 
-
+<div *ngIf="SelectedTool === 1">
+  <app-investment-dashboard></app-investment-dashboard>
+</div>
+<div *ngIf="SelectedTool === 2">
+  <app-portfolio-dashboard></app-portfolio-dashboard>
+</div>
+<div *ngIf="SelectedTool === 3">
+  <app-carbon-market-dashboard></app-carbon-market-dashboard>
+</div>
 <!--<ngx-org-chart direction="horizontal" [nodes]="nodes" (itemClick)="test($event)"></ngx-org-chart>-->
 

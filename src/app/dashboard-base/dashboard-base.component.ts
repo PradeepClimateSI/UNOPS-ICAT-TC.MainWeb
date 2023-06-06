@@ -61,7 +61,7 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
         }
         console.log("++++++++++++++++++", this.notification );
       })
-   
+
     });
 
 
@@ -70,7 +70,7 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
   onHideDialog(){}
 
   viewPop(){
-    this.confirm = !this.confirm 
+    this.confirm = !this.confirm
   }
   detail(note:Notification){
     note.is_viewed=true;

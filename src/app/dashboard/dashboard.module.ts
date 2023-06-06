@@ -57,7 +57,10 @@ import { ReportComponent } from 'app/report/report.component';
 import { InvestorToolComponent } from 'app/Tool/investor-tool/investor-tool.component';
 import { AssessmentResultInvestorComponent } from 'app/assessment-result-investor/assessment-result-investor.component';
 import { EditInstitutionComponent } from 'app/institution/edit-institution/edit-institution.component';
-
+import { InvestmentDashboardComponent } from 'app/investment-dashboard/investment-dashboard.component';
+import { ButtonModule } from 'primeng/button';
+import { PortfolioDashboardComponent } from 'app/portfolio-dashboard/portfolio-dashboard.component';
+import { CarbonMarketDashboardComponent } from 'app/carbon-market-dashboard/carbon-market-dashboard.component';
 
 
 const routes: Routes = [
@@ -300,10 +303,32 @@ const routes: Routes = [
     canActivate: [],
     data: {}
   },
+
+  {
+    path: 'investment-dashboard',
+    component: InvestmentDashboardComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'portfolio-dashboard',
+    component: PortfolioDashboardComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'carbon-dashboard',
+    component: CarbonMarketDashboardComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
 ]
 
 @NgModule({
-  declarations: [DashboardComponent, CASADashboardComponent,],
+  declarations: [ CASADashboardComponent],
   imports: [
     RouterModule.forChild(routes),
     CommonModule,
@@ -314,8 +339,8 @@ const routes: Routes = [
     FormsModule,
     NgxOrgChartModule,
     NbLayoutModule,
-    AccordionModule
-
+    AccordionModule,
+    ButtonModule
   ]
 })
 export class DashboardModule { }

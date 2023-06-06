@@ -49,7 +49,7 @@ dt2 : Table
       for await (let x of this.assessmentData){
         for await (let result of this.resultsList){
 
-          if(result.assessment.id == x.id){
+          if(result.assessment?.id == x.id){
           //  console.log("aaaaaaaaaaaaaaaa")
             let data : any = {
               id : result.id,
