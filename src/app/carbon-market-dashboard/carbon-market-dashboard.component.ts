@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
-import { AssessmentCMDetailControllerServiceProxy, ClimateAction, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { AssessmentCMDetailControllerServiceProxy, ClimateAction, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-carbon-market-dashboard',
@@ -12,11 +12,12 @@ export class CarbonMarketDashboardComponent implements OnInit {
   constructor(
     private projectProxy: ProjectControllerServiceProxy,
     private assessmentCMProxy:AssessmentCMDetailControllerServiceProxy,
+    private methassess : MethodologyAssessmentControllerServiceProxy,
   ) { }
 
  // @ViewChild('canvas', { static: false }) canvas: ElementRef;
 
-  interventions:ClimateAction[]=[];
+  interventions:any
   tcData: {
     x:string,
     y:number,
@@ -33,7 +34,7 @@ export class CarbonMarketDashboardComponent implements OnInit {
   CMsectorCount: {
     sectoral_boundary:number
     average_tc_value:string,
-    
+
     }[];
 
 CMPrerequiste: {
@@ -45,9 +46,47 @@ CMPrerequiste: {
   CMBarChart:any =[];
   pieChartCM:any=[];
 
+  tool : string;
+
   ngOnInit(): void {
 
-    this.projectProxy.findAllPolicies().subscribe((res: any) => {
+    this.tool = 'Carbon Market Tool';
+
+    this.methassess.getTCForTool(this.tool).subscribe((res: any) => {
+      console.log("kkkkk : ", res)
+
+      this.interventions = res;
+    //  console.log("policyList:", this.interventions);
+
+      // Sort interventions based on id in descending order
+      this.interventions.sort((a: { id: number; }, b: { id: number; }) => b.id - a.id);
+
+      // Get the last 5 interventions
+      const lastFiveInterventions = this.interventions.slice(0,5);
+
+      this.tcData = lastFiveInterventions
+     /*  this.tcData = lastFiveInterventions.map(intervention => ({
+        y: intervention?.tc_value,
+        x: intervention?.intervention_id,
+        data: intervention?.data
+      }));
+
+      this.tcTableData = this.interventions.map(intervention => ({
+        y: intervention?.tc_value,
+        x: intervention?.intervention_id,
+        data: intervention?.policyName
+      })); */
+
+      this.tcTableData = this.interventions
+
+      this.viewMainChart();
+      console.log("aaa", this.tcData);
+      console.log("bbb", this.tcTableData);
+
+    });
+
+
+/*     this.projectProxy.findAllPolicies().subscribe((res: any) => {
       this.interventions = res;
       console.log("policyList:", this.interventions);
 
@@ -72,7 +111,7 @@ CMPrerequiste: {
       this.viewMainChart();
       console.log("aaa", this.tcData);
       console.log("bbb", this.tcTableData);
-    });
+    }); */
 
     this.assessmentCMProxy.getSectorCount().subscribe((res: any) => {
       console.log("CMsectorCount",res)
@@ -81,7 +120,7 @@ CMPrerequiste: {
     })
 
     this.assessmentCMProxy.getPrerequisite().subscribe((res:any)=>{
-      
+
       this.CMPrerequiste=res
       console.log("CMPrerequiste",res)
       this.viewPieChartCM();
@@ -187,12 +226,12 @@ CMPrerequiste: {
     console.log("label",label,"data",data)
     this.CMBarChart =new Chart('CMBarCahart', {
       type: 'bar',
-     
+
       data: {
-        labels: label, 
+        labels: label,
         datasets: [{
           label: 'Bar Chart',
-          data: data, 
+          data: data,
           backgroundColor: [
             'rgba(153, 102, 255, 1)',
             'rgba(75, 192, 192,1)',
@@ -201,7 +240,7 @@ CMPrerequiste: {
             'rgba(255, 99, 132, 1)',
             'rgba(255, 205, 86, 1)',
             'rgba(255, 99, 132, 1)',
-            
+
           ],
           borderColor:[
             'rgba(153, 102, 255, 1)',
@@ -211,7 +250,7 @@ CMPrerequiste: {
             'rgba(255, 99, 132, 1)',
             'rgba(255, 205, 86, 1)',
             'rgba(255, 99, 132, 1)',],
-         
+
           borderWidth: 1
         }]
       },
@@ -225,7 +264,7 @@ CMPrerequiste: {
               font: {
                 size: 16,
                 weight: 'bold',
-                
+
               }
             }
           },
@@ -237,7 +276,7 @@ CMPrerequiste: {
               font: {
                 size: 14,
                 weight: 'bold',
-                
+
               }
             }
           }
@@ -250,11 +289,11 @@ CMPrerequiste: {
             position:'average',
             boxWidth:10,
             callbacks:{
-              
-              label:(context)=>{ 
-               
+
+              label:(context)=>{
+
                 return[
-                  
+
                   `Average TC value: ${data[context.dataIndex]}`,
                 ];
                }
@@ -271,13 +310,13 @@ CMPrerequiste: {
               bodyAlign: 'left'
           }
         }
-        
+
       }
   });
-  
+
   }
-  
-  
+
+
   viewPieChartCM(){
     const labels = this.CMPrerequiste.map((item) => item.sector);
     let counts:number[] = this.CMPrerequiste.map((item) => item.count);
@@ -285,7 +324,7 @@ CMPrerequiste: {
     const percentages = counts.map(count => ((count / total) * 100).toFixed(2));
     this.pieChartCM =new Chart('pieChartCM', {
       type: 'pie',
-     
+
       data: {
         labels: labels,
         datasets: [{
@@ -313,14 +352,14 @@ CMPrerequiste: {
               const percentage = percentages[ctx.dataIndex];
               return `${label}: ${value} (${percentage}%)`;
             },
-            
+
           },
           tooltip:{
             position:'average',
             boxWidth:10,
             callbacks:{
-              
-              label:(ctx)=>{ 
+
+              label:(ctx)=>{
                 let sum = 0;
                 let array =counts
                 array.forEach((number) => {
@@ -328,7 +367,7 @@ CMPrerequiste: {
                 });
                 // console.log(sum, counts[ctx.dataIndex])
                 let percentage = (counts[ctx.dataIndex]*100 / sum).toFixed(2)+"%";
-               
+
                 return[
                   ` ${labels[ctx.dataIndex]}`,
                   `Count: ${counts[ctx.dataIndex]}`,
@@ -346,14 +385,14 @@ CMPrerequiste: {
               },
               displayColors: true, // Hide the color box in the tooltip
               bodyAlign: 'left'
-              
+
           }
        }
-         
+
       },
-    
+
   });
-  
+
   }
 
 
