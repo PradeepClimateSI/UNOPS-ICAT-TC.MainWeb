@@ -33,7 +33,7 @@ export class InvestmentDashboardComponent implements OnInit {
   constructor(
     private projectProxy: ProjectControllerServiceProxy,
     private investorProxy: InvestorToolControllerServiceProxy,
-  ) { 
+  ) {
     Chart.register(...registerables);
   }
 
@@ -44,9 +44,9 @@ export class InvestmentDashboardComponent implements OnInit {
       // console.log("policyList : ", this.interventions)
       this.tcData=this.interventions.map(intervention=>({y:intervention?.tc_value,x:intervention?.initialInvestment,data:intervention?.policyName}))
       this.viewMainChart();
-      console.log(this.tcData)
+      console.log("aaa",this.tcData)
 
-      
+
     });
     let tool ='Investment & Private Sector Tool'
     this.investorProxy.findSectorCount(tool).subscribe((res: any) => {
@@ -54,17 +54,17 @@ export class InvestmentDashboardComponent implements OnInit {
       console.log("sectorcount",this.sectorCount)
       this.viewPieChart()
 
-      
+
     });
 
-   
+
   }
   viewMainChart(){
     this.chart =new Chart('canvas', {
       type: 'scatter',
-     
+
       data: {
-          
+
           datasets: [
             {
               label:'TC change with investments',
@@ -84,7 +84,7 @@ export class InvestmentDashboardComponent implements OnInit {
               font: {
                 size: 16,
                 weight: 'bold',
-                
+
               }
             }
           },
@@ -96,7 +96,7 @@ export class InvestmentDashboardComponent implements OnInit {
               font: {
                 size: 16,
                 weight: 'bold',
-                
+
               }
             }
           }
@@ -109,9 +109,9 @@ export class InvestmentDashboardComponent implements OnInit {
             position:'average',
             boxWidth:10,
             callbacks:{
-              
-              label:(context)=>{ 
-               
+
+              label:(context)=>{
+
                 return[
                   `Intervention: ${this.tcData[context.dataIndex].data}`,
                   `Investment: ${this.tcData[context.dataIndex].x}`,
@@ -131,7 +131,7 @@ export class InvestmentDashboardComponent implements OnInit {
               bodyAlign: 'left'
           }
         }
-        
+
       }
   });
 
@@ -144,7 +144,7 @@ export class InvestmentDashboardComponent implements OnInit {
     const percentages = counts.map(count => ((count / total) * 100).toFixed(2));
     this.pieChart =new Chart('pieChart', {
       type: 'pie',
-     
+
       data: {
         labels: labels,
         datasets: [{
@@ -172,14 +172,14 @@ export class InvestmentDashboardComponent implements OnInit {
               const percentage = percentages[ctx.dataIndex];
               return `${label}: ${value} (${percentage}%)`;
             },
-            
+
           },
           tooltip:{
             position:'average',
             boxWidth:10,
             callbacks:{
-              
-              label:(ctx)=>{ 
+
+              label:(ctx)=>{
                 console.log(ctx)
                 // let sum = ctx.dataset._meta[0].total;
                 // let percentage = (value * 100 / sum).toFixed(2) + "%";
@@ -191,7 +191,7 @@ export class InvestmentDashboardComponent implements OnInit {
                 });
                 console.log(sum, counts[ctx.dataIndex])
                 let percentage = (counts[ctx.dataIndex]*100 / sum).toFixed(2)+"%";
-               
+
                 return[
                   `Sector: ${labels[ctx.dataIndex]}`,
                   `Count: ${counts[ctx.dataIndex]}`,
@@ -211,9 +211,9 @@ export class InvestmentDashboardComponent implements OnInit {
               bodyAlign: 'left'
           }
        }
-         
+
       },
-    
+
   });
 
   }
@@ -226,7 +226,7 @@ export class InvestmentDashboardComponent implements OnInit {
     return colors;
   }
   ngAfterViewInit() {
-    
+
 }
 
 }
