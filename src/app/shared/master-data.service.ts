@@ -20,6 +20,7 @@ export class MasterDataService {
   private _tieres: {name: string, id: number}[] = []
   private _currencies: {name: string, id: number}[] = []
   private _assessment_type: {name: string, id: number}[] = []
+  private _assessment_approach: {name: string, id: number, code: string}[] = []
   private _impact_types: {name: string, id: number, code: string}[] = []
   private _sectorial_boundries: {name: string, id: number, code: string}[] = []
   private _impact_categories: {name: string, id: number, code: string, type: string}[] = []
@@ -129,6 +130,12 @@ export class MasterDataService {
       { id: 1, name: "Ex-ante" },
       { id: 2, name: "Ex-post" }
     ]
+
+    this.assessment_approach = [
+      { id: 1, name: "Direct", code: "DIRECT" },
+      { id: 2, name: "Indirect", code: "INDIRECT" }
+    ]
+
     this.sectorial_boundries = [
       { id: 1, name: "Energy", code: "ENERGY" },
       { id: 2, name: "Transport", code: "TRANSPORT" },
@@ -341,6 +348,14 @@ export class MasterDataService {
 
   get assessment_type(): { name: string; id: number }[] {
     return this._assessment_type;
+  }
+
+  set assessment_approach(value: { name: string; id: number; code: string }[]) {
+    this._assessment_approach = value;
+  }
+
+  get assessment_approach(): { name: string; id: number; code: string }[] {
+    return this._assessment_approach;
   }
 
   set sectorial_boundries(value: { name: string; id: number, code: string }[]) {

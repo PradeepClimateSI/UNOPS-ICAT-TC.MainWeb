@@ -138,6 +138,19 @@
                                 This is a mandatory field
                             </p>
                         </div>
+                        <div class="p-field p-2">
+                            <label for="policy">Assessment Approach *</label>
+                            <p-dropdown name="type" #type="ngModel" placeholder="Select Assessment Approach"
+                                [(ngModel)]="assessment.assessment_approach" [options]="assessment_approaches" optionLabel="name"
+                                optionValue="code" [required]="true"
+                                (onChange)="selectAssessmentApproach($event)" appendTo="body"></p-dropdown>
+                            <p class="info-message text-danger" *ngIf="
+                                !assessment.assessment_approach &&
+                                (fData.submitted || type.touched)
+                              ">
+                                This is a mandatory field
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -158,6 +171,6 @@
         </div>
     </form>
     <div class="p-grid p-fluid col-sm-12" *ngIf="showSections">
-        <app-cm-section [assessment]="assessmentres"></app-cm-section>
+        <app-cm-section [assessment]="assessmentres" [approach]="assessment.assessment_approach"></app-cm-section>
     </div>
 </div>

@@ -9,7 +9,7 @@
                                 <label >{{criteria.name}}</label>
                                 <ng-container *ngFor="let question of criteria.questions;let idx=index;">
                                     <app-cm-question [question]="question" (prev_answer)="onAnswer($event, question.message, criteria,idxs, idxc, idx )"
-                                        *ngIf="shownQuestions[idxs][idxc][idx]"></app-cm-question>
+                                        *ngIf="shownQuestions[idxs][idxc][idx]" [approach]="approach"></app-cm-question>
                                 </ng-container>
                             </div>
                         </ng-container>

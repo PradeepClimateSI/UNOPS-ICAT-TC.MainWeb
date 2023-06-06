@@ -11,6 +11,7 @@ import { Assessment, CMAnswer, CMAssessmentQuestion, CMAssessmentQuestionControl
 export class CmSectionComponent implements OnInit {
 
   @Input() assessment: Assessment
+  @Input() approach: string
 
   openAccordion = 0
 
@@ -40,6 +41,7 @@ export class CmSectionComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
+    this.approach = 'INDIRECT' //TODO REMOVE ON COMMIT
     await this.getSections()
     this.onOpenTab({index: 0})
     this.shownQuestions[0] = []
@@ -102,8 +104,13 @@ export class CmSectionComponent implements OnInit {
     if (e.type === 'COMMENT'){
       this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['comment'] = e.comment
     } else {
-      this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['answer'] = e.answer
+      if (e.type === 'INDIRECT'){
+        this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['institution'] = e.answer
+      } else {
+        this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['answer'] = e.answer
+      }
       this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['question'] = question
+      this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['type'] = e.type
 
       if (criteria.questions.length === idx + 1 && !this.recievedQuestions.includes(idx)) {
         if (e.type === 'MULTI') {
@@ -133,7 +140,7 @@ export class CmSectionComponent implements OnInit {
   
           this.recievedQuestions = []
         } else {
-          if (this.prev_answer.isPassing){
+          if (this.prev_answer.isPassing || (e.type === "INDIRECT")){
             if (this.criterias[sectionIdx]?.length === this.shownCriterias[sectionIdx].length){
               this.shownSections.push(true)
               this.shownCriterias[sectionIdx+1] = [true]
@@ -204,9 +211,11 @@ export class CmSectionComponent implements OnInit {
       section.criteria.forEach((cr: any) => {
         cr.questions.forEach((q:any) => {
           let item = new CMResultDto()
-          item.answer = q.answer
+          if (q.answer) item.answer = q.answer
+          if (q.institution) item.institution = q.institution
           item.comment = q.comment
           item.question = q.question
+          item.type = q.type
           result.result.push(item)
         })
       })
