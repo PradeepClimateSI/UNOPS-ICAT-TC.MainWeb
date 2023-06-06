@@ -1,26 +1,39 @@
-<div class="row">
-  <div class="col-6">
-      <div class="p-grid p-fluid card m-3">
+<div class="container">
+  <div class="row">
+    <div class="col-5">
+        <div class="p-grid p-fluid card m-3">
+            <div class="row text-center ">
+                <h3>Transformational Change </h3>
+                <h2 class="tc-value">{{value}}%</h2>
+                <div class="col-12  mt-20 ml-10" >
+                  <!-- <p-progressBar [value]="value" [style]="{ 'height': '20px' }" ></p-progressBar>
+  
+                  <ng-template #displayTemplate let-value>
+                    <div class="progress-value">{{ value }}%</div>
+                  </ng-template> -->
+                  <div class="first">
+                    <div class="second" [ngStyle]="{'width.%':value}">
+                      
+                    </div>
+                  </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-7">
+        <div class="p-grid p-fluid card m-3">
           <div class="row text-center ">
-              <h3>Transformational Change </h3>
-              <div class="col-12  mt-20 ml-10" >
-                 
-               </div>
-          </div>
-      </div>
+            <h3>Transformational Change by Sectors</h3>
+            <div class="col-12  mt-20 ml-10 chart-container"  >
+                <canvas  id="CMBarCahart">{{CMBarChart}}</canvas>
+            </div>
+        </div>
+        </div>
+    </div>
+  
   </div>
-  <div class="col-6">
-      <div class="p-grid p-fluid card m-3">
-        <div class="row text-center ">
-          <h3>Transformational Change by Sectors</h3>
-          <div class="col-12  mt-20 ml-10 chart-container"  >
-              <canvas  id="CMBarCahart">{{CMBarChart}}</canvas>
-          </div>
-      </div>
-      </div>
-  </div>
-
 </div>
+
 
 
 

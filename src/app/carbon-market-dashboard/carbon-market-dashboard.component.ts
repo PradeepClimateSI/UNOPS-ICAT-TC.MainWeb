@@ -44,8 +44,10 @@ CMPrerequiste: {
 
   CMBarChart:any =[];
   pieChartCM:any=[];
+  value:any
 
   ngOnInit(): void {
+    this.value =58.05;
 
     this.projectProxy.findAllPolicies().subscribe((res: any) => {
       this.interventions = res;
