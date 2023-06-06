@@ -1,6 +1,6 @@
 import { Component, OnInit ,ViewChild } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
-import { ClimateAction, InvestorToolControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { AssessmentCMDetailControllerServiceProxy, ClimateAction, InvestorToolControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 
 
@@ -20,6 +20,7 @@ export class InvestmentDashboardComponent implements OnInit {
   tcLables:string[]=[]
   chart: any = [];
   pieChart:any=[];
+  CMBarChart:any =[];
   tcData: {
     x:number,
     y:number,
@@ -30,11 +31,21 @@ export class InvestmentDashboardComponent implements OnInit {
     count:number
     }[];
 
+  CMsectorCount: {
+      sectoral_boundary:number
+      average_tc_value:string,
+      
+      }[];
+
+
+
   constructor(
     private projectProxy: ProjectControllerServiceProxy,
     private investorProxy: InvestorToolControllerServiceProxy,
+    private assessmentCMProxy:AssessmentCMDetailControllerServiceProxy,
   ) { 
     Chart.register(...registerables);
+  
   }
 
   ngOnInit(): void {
@@ -46,6 +57,7 @@ export class InvestmentDashboardComponent implements OnInit {
       this.viewMainChart();
       console.log(this.tcData)
 
+
       
     });
     let tool ='Investment & Private Sector Tool'
@@ -56,6 +68,16 @@ export class InvestmentDashboardComponent implements OnInit {
 
       
     });
+
+
+    
+      //cm tool 
+      this.assessmentCMProxy.getSectorCount().subscribe((res: any) => {
+        console.log("CMsectorCount",res)
+        this.CMsectorCount = res
+         this.viewCMBarChart();
+      })
+       
 
    
   }
@@ -227,6 +249,105 @@ export class InvestmentDashboardComponent implements OnInit {
   }
   ngAfterViewInit() {
     
+}
+
+viewCMBarChart(){
+  console.log("sssssssssss")
+
+
+  let label =this.CMsectorCount.map((item) => item.sectoral_boundary);
+  let data =this.CMsectorCount.map((item) => item.average_tc_value);
+  console.log("label",label,"data",data)
+  this.CMBarChart =new Chart('CMBarCahart', {
+    type: 'bar',
+   
+    data: {
+      labels: label, 
+      datasets: [{
+        label: 'Bar Chart',
+        data: data, 
+        backgroundColor: [
+          'rgba(153, 102, 255, 1)',
+          'rgba(75, 192, 192,1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(123, 122, 125, 1)',
+          'rgba(255, 99, 132, 1)',
+          'rgba(255, 205, 86, 1)',
+          'rgba(255, 99, 132, 1)',
+          
+        ],
+        borderColor:[
+          'rgba(153, 102, 255, 1)',
+          'rgba(75, 192, 192,1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(123, 122, 125, 1)',
+          'rgba(255, 99, 132, 1)',
+          'rgba(255, 205, 86, 1)',
+          'rgba(255, 99, 132, 1)',],
+       
+        borderWidth: 1
+      }]
+    },
+    options:{
+      scales: {
+        x: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Sectors',
+            font: {
+              size: 16,
+              weight: 'bold',
+              
+            }
+          }
+        },
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Average Transformational Change (%)',
+            font: {
+              size: 16,
+              weight: 'bold',
+              
+            }
+          }
+        }
+      },
+      plugins:{
+        legend: {
+          display: false
+        },
+        tooltip:{
+          position:'average',
+          boxWidth:10,
+          callbacks:{
+            
+            label:(context)=>{ 
+             
+              return[
+                
+                `Average TC value: ${data[context.dataIndex]}`,
+              ];
+             }
+          },
+          backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
+            titleFont: {
+              size: 14,
+              weight: 'bold'
+            },
+            bodyFont: {
+              size: 14
+            },
+            displayColors: true, // Hide the color box in the tooltip
+            bodyAlign: 'left'
+        }
+      }
+      
+    }
+});
+
 }
 
 }
