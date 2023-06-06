@@ -111,7 +111,7 @@ export class InvestorToolComponent implements OnInit {
     this.relevance = this.masterDataService.relevance;
 
     this.assessmentMethods = this.masterDataService.assessment_method;
-    this.assessmentApproach =this.masterDataService.assessment_approach;
+    this.assessmentApproach =this.masterDataService.assessment_approach2;
 
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const countryId = token ? decode<any>(token).countryId : 0;

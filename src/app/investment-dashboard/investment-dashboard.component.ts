@@ -21,6 +21,7 @@ export class InvestmentDashboardComponent implements OnInit {
   chart: any = [];
   pieChart:any=[];
   CMBarChart:any =[];
+  pieChartCM:any=[];
   tcData: {
     x:number,
     y:number,
@@ -36,6 +37,11 @@ export class InvestmentDashboardComponent implements OnInit {
       average_tc_value:string,
       
       }[];
+
+  CMPrerequiste: {
+    sector:string,
+    count:number
+    }[];
 
 
 
@@ -68,14 +74,18 @@ export class InvestmentDashboardComponent implements OnInit {
 
       
     });
-
-
-    
       //cm tool 
       this.assessmentCMProxy.getSectorCount().subscribe((res: any) => {
         console.log("CMsectorCount",res)
         this.CMsectorCount = res
          this.viewCMBarChart();
+      })
+
+      this.assessmentCMProxy.getPrerequisite().subscribe((res:any)=>{
+        
+        this.CMPrerequiste=res
+        console.log("CMPrerequiste",res)
+        this.viewPieChartCM();
       })
        
 
@@ -202,7 +212,7 @@ export class InvestmentDashboardComponent implements OnInit {
             callbacks:{
               
               label:(ctx)=>{ 
-                console.log(ctx)
+                // console.log(ctx)
                 // let sum = ctx.dataset._meta[0].total;
                 // let percentage = (value * 100 / sum).toFixed(2) + "%";
                 // return percentage;
@@ -211,7 +221,7 @@ export class InvestmentDashboardComponent implements OnInit {
                 array.forEach((number) => {
                   sum += Number(number);
                 });
-                console.log(sum, counts[ctx.dataIndex])
+                // console.log(sum, counts[ctx.dataIndex])
                 let percentage = (counts[ctx.dataIndex]*100 / sum).toFixed(2)+"%";
                
                 return[
@@ -252,9 +262,6 @@ export class InvestmentDashboardComponent implements OnInit {
 }
 
 viewCMBarChart(){
-  console.log("sssssssssss")
-
-
   let label =this.CMsectorCount.map((item) => item.sectoral_boundary);
   let data =this.CMsectorCount.map((item) => item.average_tc_value);
   console.log("label",label,"data",data)
@@ -346,6 +353,85 @@ viewCMBarChart(){
       }
       
     }
+});
+
+}
+
+
+viewPieChartCM(){
+  const labels = this.CMPrerequiste.map((item) => item.sector);
+  let counts:number[] = this.CMPrerequiste.map((item) => item.count);
+  const total = counts.reduce((acc, val) => acc + val, 0);
+  const percentages = counts.map(count => ((count / total) * 100).toFixed(2));
+  this.pieChartCM =new Chart('pieChartCM', {
+    type: 'pie',
+   
+    data: {
+      labels: labels,
+      datasets: [{
+        data: counts,
+        backgroundColor: ['rgba(153, 102, 255, 1)','black'],
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins:{
+        legend:{
+          position: 'bottom',
+          labels: {
+            padding: 20
+          }
+        },
+        datalabels: {
+          color: '#fff',
+          font: {
+            size: 12
+          },
+          formatter: (value, ctx) => {
+            const label = ctx.chart.data.labels![ctx.dataIndex];
+            const percentage = percentages[ctx.dataIndex];
+            return `${label}: ${value} (${percentage}%)`;
+          },
+          
+        },
+        tooltip:{
+          position:'average',
+          boxWidth:10,
+          callbacks:{
+            
+            label:(ctx)=>{ 
+              let sum = 0;
+              let array =counts
+              array.forEach((number) => {
+                sum += Number(number);
+              });
+              // console.log(sum, counts[ctx.dataIndex])
+              let percentage = (counts[ctx.dataIndex]*100 / sum).toFixed(2)+"%";
+             
+              return[
+                ` ${labels[ctx.dataIndex]}`,
+                `Count: ${counts[ctx.dataIndex]}`,
+                `Percentage: ${percentage}`
+              ];
+             }
+          },
+          backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
+            titleFont: {
+              size: 14,
+              weight: 'bold'
+            },
+            bodyFont: {
+              size: 14
+            },
+            displayColors: true, // Hide the color box in the tooltip
+            bodyAlign: 'left'
+            
+        }
+     }
+       
+    },
+  
 });
 
 }
