@@ -108,6 +108,9 @@ import { ReportComponent } from './report/report.component';
 import { AssessmentResultInvestorComponent } from './assessment-result-investor/assessment-result-investor.component';
 import { PortfolioTrack4Component } from './Tool/portfolio-track4/portfolio-track4.component';
 import { InvestmentDashboardComponent } from './investment-dashboard/investment-dashboard.component';
+import { PortfolioDashboardComponent } from './portfolio-dashboard/portfolio-dashboard.component';
+import { CarbonMarketDashboardComponent } from './carbon-market-dashboard/carbon-market-dashboard.component';
+import { DashboardComponent } from "./dashboard/dashboard.component";
 
 
 
@@ -172,6 +175,10 @@ export function getAuthRemoteServiceBaseUrl(): string {
         AssessmentResultInvestorComponent,
         PortfolioTrack4Component,
         InvestmentDashboardComponent,
+        PortfolioDashboardComponent,
+        CarbonMarketDashboardComponent,
+        DashboardComponent,
+
     ],
 
 

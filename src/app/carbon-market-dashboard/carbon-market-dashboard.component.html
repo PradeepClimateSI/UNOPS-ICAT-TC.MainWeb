@@ -1,0 +1,68 @@
+<div class="p-grid p-fluid card mt-20 m-3">
+  <div class="row text-center ">
+      <h3>Transformational Change by Interventions</h3>
+      <div class="col-12  mt-20 ml-10 chart-container"  style="max-height: 600px;">
+          <canvas  id="canvas">{{chart}}</canvas>
+       </div>
+   </div>
+</div>
+
+
+<div class="row">
+  <div class="col-7">
+      <div class="p-grid p-fluid card m-3">
+          <div class="row text-center ">
+              <h3>Recent Assessments Done</h3>
+              <div class="col-12  mt-20 ml-10" >
+
+                <p-table
+                [value]="tcTableData"
+                [paginator]="true"
+                [rows]="5"
+                [showCurrentPageReport]="true"
+                [tableStyle]="{ 'min-width': '5rem' }"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [rowsPerPageOptions]="[5, 10, 20]"
+            >
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width:15%">ID</th>
+                        <th style="width:70%">Intervention</th>
+                        <th style="width:15%">TC Value</th>
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-tcTableData>
+                    <tr>
+                        <td>{{ tcTableData.x }}</td>
+                        <td>{{ tcTableData.data }}</td>
+                        <td>{{ tcTableData.y }}</td>
+                    </tr>
+                </ng-template>
+            <!--     <ng-template pTemplate="paginatorleft">
+                    <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"></p-button>
+                </ng-template> -->
+<!--                 <ng-template pTemplate="paginatorright">
+                    <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
+                </ng-template> -->
+            </p-table>
+               </div>
+          </div>
+      </div>
+  </div>
+  <div class="col-5">
+
+      <div class="p-grid p-fluid card mt-3">
+        <div class="row text-center ">
+          <div class="row">
+            <div class="col-9">
+              <h3 >Pecentage of prerequisite met</h3>
+            </div>
+          </div>
+
+
+        </div>
+    </div>
+  </div>
+
+</div>

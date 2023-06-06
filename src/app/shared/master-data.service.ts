@@ -221,7 +221,7 @@ export class MasterDataService {
       { id: 1, name: "Direct" },
       { id: 2, name: "Indirect" },
 
-    ]
+    ] */
 
 
   }
@@ -435,7 +435,7 @@ export class MasterDataService {
 
   get assessment_approach2 (): { name: string; id: number }[] {
     return this._assessment_approach;
-  }
+  } */
 
 
 

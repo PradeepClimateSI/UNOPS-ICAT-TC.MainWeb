@@ -58,7 +58,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   }
 
   save(form: NgForm) {
-    this.showSections = true //TODO comment this line in commit
+   // this.showSections = true //TODO comment this line in commit
     //save assessment
     this.assessment.tool = 'Carbon Market Tool'
     this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
@@ -124,7 +124,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   }
 
   selectAssessmentType(e: any){
-   
+
   }
 
   selectAssessmentApproach(e: any){
