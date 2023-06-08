@@ -111,6 +111,9 @@ import { InvestmentDashboardComponent } from './investment-dashboard/investment-
 import { PortfolioDashboardComponent } from './portfolio-dashboard/portfolio-dashboard.component';
 import { CarbonMarketDashboardComponent } from './carbon-market-dashboard/carbon-market-dashboard.component';
 import { DashboardComponent } from "./dashboard/dashboard.component";
+import { PortfolioListComponent } from './portfolios/portfolio-list/portfolio-list.component';
+import { PortfolioAddComponent } from './portfolios/portfolio-add/portfolio-add.component';
+import { PortfolioResultComponent } from './portfolios/portfolio-result/portfolio-result.component';
 
 
 
@@ -178,6 +181,9 @@ export function getAuthRemoteServiceBaseUrl(): string {
         PortfolioDashboardComponent,
         CarbonMarketDashboardComponent,
         DashboardComponent,
+        PortfolioListComponent,
+        PortfolioAddComponent,
+        PortfolioResultComponent,
 
     ],
 
