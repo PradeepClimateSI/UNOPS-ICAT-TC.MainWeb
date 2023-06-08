@@ -244,7 +244,7 @@ export class CmSectionComponent implements OnInit {
           detail: 'Assessment created successfully',
           closable: true,
         })
-        this.cMAssessmentQuestionControllerServiceProxy.saveTcValue(this.assessment.id).subscribe();
+        // this.cMAssessmentQuestionControllerServiceProxy.saveTcValue(this.assessment.id).subscribe();
         
         if(result.assessment.assessment_approach=== 'DIRECT'){
           this.router.navigate(['../carbon-market-tool-result'], {queryParams: { id: this.assessment.id }, relativeTo:this.activatedRoute});
