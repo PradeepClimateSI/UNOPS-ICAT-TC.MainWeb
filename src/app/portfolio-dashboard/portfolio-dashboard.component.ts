@@ -1,16 +1,17 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
-import { MethodologyAssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-portfolio-dashboard',
   templateUrl: './portfolio-dashboard.component.html',
-  styleUrls: ['./portfolio-dashboard.component.css']
+  styleUrls: ['./portfolio-dashboard.component.css','../investment-dashboard/investment-dashboard.component.css']
 })
 export class PortfolioDashboardComponent implements OnInit {
 
   constructor(
     private methassess : MethodologyAssessmentControllerServiceProxy,
+    private investorProxy: InvestorToolControllerServiceProxy,
   ) {
     this.test= [{data: 'AAA', x:2,y:3}, {data: 'BBB', x:3,y:3},{data: 'CCC', x:4,y:4}]
   }
@@ -20,6 +21,7 @@ export class PortfolioDashboardComponent implements OnInit {
   chart: any = [];
   tool : string;
   resultData : any = []
+  calResults: any;
 
 
 
@@ -30,6 +32,15 @@ export class PortfolioDashboardComponent implements OnInit {
       this.resultData = res
       this.viewResults();
     });
+
+    this.investorProxy.calculateAssessmentResults(this.tool).subscribe((res: any) => {
+      this.calResults = res[0]
+      console.log("assessdetails",this.calResults)
+      
+
+
+    });
+     
 
   }
 
