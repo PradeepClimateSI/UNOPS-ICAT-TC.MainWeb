@@ -61,6 +61,8 @@ import { InvestmentDashboardComponent } from 'app/investment-dashboard/investmen
 import { ButtonModule } from 'primeng/button';
 import { PortfolioDashboardComponent } from 'app/portfolio-dashboard/portfolio-dashboard.component';
 import { CarbonMarketDashboardComponent } from 'app/carbon-market-dashboard/carbon-market-dashboard.component';
+import { PortfolioListComponent } from 'app/portfolios/portfolio-list/portfolio-list.component';
+import { PortfolioAddComponent } from 'app/portfolios/portfolio-add/portfolio-add.component';
 
 
 const routes: Routes = [
@@ -321,6 +323,20 @@ const routes: Routes = [
   {
     path: 'carbon-dashboard',
     component: CarbonMarketDashboardComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'portfolio-list',
+    component: PortfolioListComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'portfolio-add',
+    component: PortfolioAddComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}

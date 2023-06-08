@@ -9,7 +9,7 @@
           </div>
       </div>
   </div>
- <!--  <div class="col-7">
+  <div class="col-7">
       <div class="p-grid p-fluid card mt-3">
           <div class="row text-center ">
             <div class="row">
@@ -44,19 +44,26 @@
         </div>
     </div>
   </div>
- -->
+
 </div>
 
-<!-- <div class="p-grid p-fluid card m-3">
+<div class="p-grid p-fluid card m-3">
 <div class="row text-center ">
     <h3>Transformational Change of Interventions</h3>
-    <div class="col-12  mt-20 ml-10" >
+
+    <div class="row">
+    <div class="col-6 " >
       <canvas class="chart-canvas" #myCanvas></canvas>
      </div>
+
+     <div class="col-6 " >
+    <!--   <canvas class="chart-canvas" #myCanvas2></canvas> -->
+     </div>
+    </div>
 </div>
 </div>
- -->
- <div class="p-grid p-fluid card m-3">
+
+<!--  <div class="p-grid p-fluid card m-3">
   <div class="row">
       <h3>Recent Assessments Done</h3>
       <div class="col-12  mt-20 ml-10" >
@@ -66,20 +73,20 @@
           [paginator]="true"
           [rows]="5"
           [showCurrentPageReport]="true"
-          
+
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
           [rowsPerPageOptions]="[5, 10, 20]">
-        
+
         <ng-template pTemplate="header">
-         
-        <tr>  
+
+        <tr>
             <th colspan="1" class="table-header"></th>
             <th colspan="2" class="table-header">Process</th>
             <th colspan="2" class="table-header">Outcomes</th>
         </tr>
-      
-          
-       
+
+
+
             <tr>
                 <th class="table-header-3">Intervention Name</th>
                 <th class="table-header-2">Relevence</th>
@@ -98,13 +105,8 @@
                 <td style="text-align: center">{{ calResults?.sustainedScore==null?'-':calResults?.sustainedScore }}</td>
             </tr>
         </ng-template>
-    <!--     <ng-template pTemplate="paginatorleft">
-            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"></p-button>
-        </ng-template> -->
-<!--                 <ng-template pTemplate="paginatorright">
-            <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
-        </ng-template> -->
+
     </p-table>
        </div>
    </div>
-</div>
+</div> -->

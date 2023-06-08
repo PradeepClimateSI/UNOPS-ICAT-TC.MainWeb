@@ -1,5 +1,5 @@
 .chart-canvas {
-  background: linear-gradient(to bottom right, rgba(0,255,0,0.5), rgba(255,255,0,0.5), rgba(255, 0, 0,0.5), rgba(255,0,0,1));
+  background: linear-gradient(to bottom left, rgba(0,255,0,0.5), rgba(255,255,0,0.5), rgba(255, 0, 0,0.5), rgba(255,0,0,1));
   padding: 30px;
   padding-bottom: 5px;
 
