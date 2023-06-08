@@ -19,7 +19,7 @@ export class InvestmentDashboardComponent implements OnInit {
   tc:number[]=[];
   tcLables:string[]=[]
   chart: any = [];
-  pieChart:any=[];
+  pieChart2:any=[];
   CMBarChart:any =[];
   pieChartCM:any=[];
   tcData: {
@@ -179,7 +179,7 @@ export class InvestmentDashboardComponent implements OnInit {
     let counts:number[] = this.sectorCount.map((item) => item.count);
     const total = counts.reduce((acc, val) => acc + val, 0);
     const percentages = counts.map(count => ((count / total) * 100).toFixed(2));
-    this.pieChart =new Chart('pieChart', {
+    this.pieChart2 =new Chart('pieChart2', {
       type: 'pie',
 
       data: {

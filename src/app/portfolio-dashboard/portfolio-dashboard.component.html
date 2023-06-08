@@ -56,3 +56,55 @@
 </div>
 </div>
  -->
+ <div class="p-grid p-fluid card m-3">
+  <div class="row">
+      <h3>Recent Assessments Done</h3>
+      <div class="col-12  mt-20 ml-10" >
+
+        <p-table
+          [value]="calResults"
+          [paginator]="true"
+          [rows]="5"
+          [showCurrentPageReport]="true"
+          
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+          [rowsPerPageOptions]="[5, 10, 20]">
+        
+        <ng-template pTemplate="header">
+         
+        <tr>  
+            <th colspan="1" class="table-header"></th>
+            <th colspan="2" class="table-header">Process</th>
+            <th colspan="2" class="table-header">Outcomes</th>
+        </tr>
+      
+          
+       
+            <tr>
+                <th class="table-header-3">Intervention Name</th>
+                <th class="table-header-2">Relevence</th>
+                <th class="table-header-2">Likelihood</th>
+                <th class="table-header-2">Scaled</th>
+                <th class="table-header-2">Sustained</th>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-calResults>
+            <tr>
+                <td>{{ calResults?.assesment?.climateAction?.policyName?calResults?.assesment?.climateAction?.policyName:'-' }}</td>
+                <td style="text-align: center">{{ calResults?.relevance==null?'-':calResults?.relevance }}</td>
+                <td style="text-align: center">{{ calResults?.likelihood==null?'-':calResults?.likelihood  }}</td>
+                <td style="text-align: center">{{ calResults?.scaleScore==null?'-':calResults?.scaleScore  }}</td>
+                <td style="text-align: center">{{ calResults?.sustainedScore==null?'-':calResults?.sustainedScore }}</td>
+            </tr>
+        </ng-template>
+    <!--     <ng-template pTemplate="paginatorleft">
+            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"></p-button>
+        </ng-template> -->
+<!--                 <ng-template pTemplate="paginatorright">
+            <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
+        </ng-template> -->
+    </p-table>
+       </div>
+   </div>
+</div>
