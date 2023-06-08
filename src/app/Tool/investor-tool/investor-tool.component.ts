@@ -158,7 +158,7 @@ export class InvestorToolComponent implements OnInit {
 
     this.investorToolControllerproxy.findAllIndicatorquestions().subscribe((res3: any) => {
       this.investorQuestions  = res3
-      console.log("ressss3333",  this.investorQuestions)
+      // console.log("ressss3333",  this.investorQuestions)
 
     });
     this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().subscribe((res3: any) => {

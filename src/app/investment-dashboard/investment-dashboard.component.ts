@@ -14,12 +14,12 @@ export class InvestmentDashboardComponent implements OnInit {
   ctx: any;
   @ViewChild('mychart') mychart: any;
 
-  interventions:ClimateAction[]=[];
+  interventions:any[]=[];
   investment:number[]=[];
   tc:number[]=[];
   tcLables:string[]=[]
   chart: any = [];
-  pieChart:any=[];
+  pieChart2:any=[];
   CMBarChart:any =[];
   pieChartCM:any=[];
   tcData: {
@@ -42,7 +42,8 @@ export class InvestmentDashboardComponent implements OnInit {
     sector:string,
     count:number
     }[];
-
+  averageTCValue:any;
+  calResults: any;
 
 
   constructor(
@@ -55,21 +56,39 @@ export class InvestmentDashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    this.projectProxy.findAllPolicies().subscribe((res: any) => {
-      this.interventions = res
-      // console.log("policyList : ", this.interventions)
-      this.tcData=this.interventions.map(intervention=>({y:intervention?.tc_value,x:intervention?.initialInvestment,data:intervention?.policyName}))
-      this.viewMainChart();
-      console.log("aaa",this.tcData)
-
-
-    });
+    this.averageTCValue =75
     let tool ='Investment & Private Sector Tool'
+    // this.projectProxy.findAllPolicies().subscribe((res: any) => {
+    //   this.interventions = res
+    //   // console.log("policyList : ", this.interventions)
+    //   this.tcData=this.interventions.map(intervention=>({y:intervention?.tc_value,x:intervention?.initialInvestment,data:intervention?.policyName}))
+    //   this.viewMainChart();
+    //   console.log("aaa",this.tcData)
+
+
+    // });
+    this.investorProxy.getTCValueByAssessment(tool).subscribe((res: any) => {
+      console.log("policyList : ", res)
+      this.interventions = res
+      this.tcData=this.interventions.map(intervention=>({
+        y:intervention?.tc_value,
+        x:intervention?.climateAction?.initialInvestment,
+        data:intervention?.climateAction?.policyName}))
+        console.log("Tc data:",this.tcData)
+      this.viewMainChart();
+    })
+  
     this.investorProxy.findSectorCount(tool).subscribe((res: any) => {
       this.sectorCount = res
       console.log("sectorcount",this.sectorCount)
       this.viewPieChart()
+    });
+
+
+    this.investorProxy.calculateAssessmentResults(tool).subscribe((res: any) => {
+      this.calResults = res[0]
+      console.log("assessdetails",this.calResults)
+      
 
 
     });
@@ -160,7 +179,7 @@ export class InvestmentDashboardComponent implements OnInit {
     let counts:number[] = this.sectorCount.map((item) => item.count);
     const total = counts.reduce((acc, val) => acc + val, 0);
     const percentages = counts.map(count => ((count / total) * 100).toFixed(2));
-    this.pieChart =new Chart('pieChart', {
+    this.pieChart2 =new Chart('pieChart2', {
       type: 'pie',
 
       data: {
