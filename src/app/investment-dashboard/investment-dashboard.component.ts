@@ -424,7 +424,17 @@ export class InvestmentDashboardComponent implements OnInit {
         labels: labels,
         datasets: [{
           data: counts,
-          backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#66BB6A', '#FF7043', '#9575CD'],
+          backgroundColor: [
+            'rgba(153, 102, 255, 1)',
+            'rgba(75, 192, 192,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(123, 122, 125, 1)',
+            'rgba(255, 99, 132, 1)',
+            'rgba(255, 205, 86, 1)',
+            'rgba(255, 99, 132, 1)',
+
+          ],
+         
         }]
       },
       options: {
