@@ -114,6 +114,10 @@ import { DashboardComponent } from "./dashboard/dashboard.component";
 import { PortfolioListComponent } from './portfolios/portfolio-list/portfolio-list.component';
 import { PortfolioAddComponent } from './portfolios/portfolio-add/portfolio-add.component';
 import { PortfolioResultComponent } from './portfolios/portfolio-result/portfolio-result.component';
+import { EnterDataCmComponent } from './data-request-flow/enter-data-path/enter-data-cm/enter-data-cm.component';
+import { EnterDataPortfolioComponent } from './data-request-flow/enter-data-path/enter-data-portfolio/enter-data-portfolio.component';
+import { EnterDataInvestmentComponent } from "./data-request-flow/enter-data-path/enter-data-investment/enter-data-investment.component";
+import { EnterDataPathComponent } from './data-request-flow/enter-data-path/enter-data-path/enter-data-path.component';
 
 
 
@@ -147,7 +151,6 @@ export function getAuthRemoteServiceBaseUrl(): string {
         EnterDataComponent,
         AssignDataRequestComponent,
         ViewDatarequestHistoryComponent,
-        EnterDataComponent,
         ReviewDataComponent,
         PortfolioComponent,
         CarbonComponent,
@@ -184,6 +187,10 @@ export function getAuthRemoteServiceBaseUrl(): string {
         PortfolioListComponent,
         PortfolioAddComponent,
         PortfolioResultComponent,
+        EnterDataCmComponent,
+        EnterDataInvestmentComponent,
+        EnterDataPortfolioComponent,
+        EnterDataPathComponent,
 
     ],
 
