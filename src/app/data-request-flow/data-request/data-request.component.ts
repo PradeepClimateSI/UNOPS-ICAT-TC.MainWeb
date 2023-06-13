@@ -22,6 +22,7 @@ import { LazyLoadEvent, MessageService } from 'primeng/api';
 // import {MessageModule} from 'primeng/message';
 // import { strictEqual } from 'assert';
 import { ClimateAction, ServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Tool } from '../enum/tool.enum';
 
 @Component({
   selector: 'app-data-request',
@@ -83,7 +84,7 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
 
   activeIndexMain =0;
   tabIndex =0;
-
+  tool='';
   constructor(
     private router: Router,
     private serviceProxy: ServiceProxy,
@@ -100,48 +101,48 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
   }
 
   async ngOnInit(): Promise<void> {
+    this.tool=Tool.CM_tool;
 
+    // this.parameterRqstProxy
+    //   .getNewDataRequestForClimateList(0, 0, '', 0, '', 0, '1234').subscribe(res => {
+    //     console.log("data",res)
+    //     this.loading=true
+    //     for (let a of res.items) {
 
-    this.parameterRqstProxy
-      .getNewDataRequestForClimateList(0, 0, '', 0, '', 0, '1234').subscribe(res => {
-        console.log("data",res)
-        this.loading=true
-        for (let a of res.items) {
+    //       if (a.parameter.Assessment !== null) {
+    //         if (
+    //           !this.assignCAArray.includes(
+    //             a.parameter.Assessment.Prject
+    //               .climateActionName
+    //           )
+    //         ) {
 
-          if (a.parameter.Assessment !== null) {
-            if (
-              !this.assignCAArray.includes(
-                a.parameter.Assessment.Prject
-                  .climateActionName
-              )
-            ) {
+    //           this.assignCAArray.push(
+    //             a.parameter.Assessment.Prject
+    //               .climateActionName
+    //           );
+    //           this.dataReqAssignCA.push(
+    //             a.parameter.Assessment.Prject
+    //           );
+    //         }
+    //       }
+    //     }
 
-              this.assignCAArray.push(
-                a.parameter.Assessment.Prject
-                  .climateActionName
-              );
-              this.dataReqAssignCA.push(
-                a.parameter.Assessment.Prject
-              );
-            }
-          }
-        }
+    //   })
+    // setTimeout(() => {
+    //   this.parameterRqstProxy
+    //     .getNewDataRequest(1, this.rows, '', 0, '', 0, '1234')
+    //     .subscribe((a) => {
+    //       console.log('aa', a);
+    //       if (a) {
+    //         this.dataRequestList = a.items;
+    //         console.log('ttttttttt', this.dataRequestList);
+    //         console.log('dataReqAssignCA===', this.dataReqAssignCA);
 
-      })
-    setTimeout(() => {
-      this.parameterRqstProxy
-        .getNewDataRequest(1, this.rows, '', 0, '', 0, '1234')
-        .subscribe((a) => {
-          console.log('aa', a);
-          if (a) {
-            this.dataRequestList = a.items;
-            console.log('ttttttttt', this.dataRequestList);
-            console.log('dataReqAssignCA===', this.dataReqAssignCA);
-
-            console.log('assignCAArray===', this.assignCAArray);
-          }
-        });
-    }, 10);
+    //         console.log('assignCAArray===', this.assignCAArray);
+    //       }
+    //     });
+    // }, 10);
     let req = await this.institutionProxy.getInstitutionDataProvider(1, 1000, '', 1).toPromise();
 
     this.instuitutionList = req.items;
@@ -405,6 +406,7 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
 
   loadgridData = (event: LazyLoadEvent) => {
     console.log('event Date', event);
+    
     this.loading = true;
     this.totalRecords = 0;
 
@@ -427,6 +429,7 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
     // this.loading = false;
+    console.log('tool', this.tool);
     setTimeout(() => {
       this.parameterRqstProxy
         .getNewDataRequest(
@@ -436,7 +439,9 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
           climateActionId,
           year,
           institutionId,
-          '1234'
+          this.tool,
+          '1234',
+          
         )
         .subscribe((a) => {
           console.log('aa', a);
@@ -559,6 +564,22 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
 
   onMainTabChange(event:any){
     this.tabIndex= this.activeIndexMain;
+    let event2 :LazyLoadEvent ={rows: 10, first: 0}
+    if (this.activeIndexMain==0){
+     this.tool=Tool.CM_tool
+     this.loadgridData(event);
+      // this.loadgridData(event2,Tool.CM_tool )
+    }
+    else if (this.activeIndexMain==1){
+      this.tool=Tool.Investor_tool
+      this.loadgridData(event);
+      // this.loadgridData(event2,Tool.Investor_tool )
+    }
+    else if (this.activeIndexMain==2){
+      this.tool=Tool.Portfolio_tool;
+      this.loadgridData(event);
+      
+    }
     console.log("tabIndex",this.tabIndex)
   }
 }
