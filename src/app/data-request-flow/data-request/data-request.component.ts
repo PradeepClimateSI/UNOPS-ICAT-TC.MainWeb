@@ -81,6 +81,9 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
   disableButton: boolean = false;
   first = 0;
 
+  activeIndexMain =0;
+  tabIndex =0;
+
   constructor(
     private router: Router,
     private serviceProxy: ServiceProxy,
@@ -101,6 +104,7 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
 
     this.parameterRqstProxy
       .getNewDataRequestForClimateList(0, 0, '', 0, '', 0, '1234').subscribe(res => {
+        console.log("data",res)
         this.loading=true
         for (let a of res.items) {
 
@@ -551,6 +555,11 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
         });
       }
     );
+  }
+
+  onMainTabChange(event:any){
+    this.tabIndex= this.activeIndexMain;
+    console.log("tabIndex",this.tabIndex)
   }
 }
 

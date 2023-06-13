@@ -2,6 +2,20 @@
     <h4 class="mt-4"> Request Data </h4>
     <div class="p-grid p-fluid card">
       <div class="row mb-3">
+        <p-tabView  (onChange)="onMainTabChange($event) " [(activeIndex)]="activeIndexMain ">
+          <p-tabPanel  header="Carbon Market Tool">
+            
+          </p-tabPanel>
+          <p-tabPanel  header="Investment & Private Sector Tool">
+            
+          </p-tabPanel>
+          <p-tabPanel  header="Portfolio Tool">
+            
+          </p-tabPanel>
+        </p-tabView>
+
+      </div>
+      <div class="row mb-3">
         <div class="col-md-4"></div>
         <div class="col-md-4"></div>
         <div class="col-md-4">
@@ -136,15 +150,21 @@
                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
               </th>
               <th >INTERVENTION</th>
-              <th>CATEGORY</th>
-              <th>CHARACTERISTICS</th>
-              <th>RELAVANCY</th>
-              <!-- <th>Alternative/Parents Available</th> -->
-              <th>REQUESTED FROM</th>
-              <!-- <th>Year</th> -->
-              <th>DEADLINE</th>
-              <!-- <th>Status</th> -->
-              <th>Info</th>
+              <th >ASSESSMENT TYPE</th>
+              <th >ASSESSMENT PERIOD</th>
+              <ng-container *ngIf="tabIndex==1||tabIndex==2" >
+                <th>PROCESS/OUTCOME</th>
+                <th>CATEGORY</th>
+                <th>CHARACTERISTIC</th>
+                <th>INDICATOR/SCORE</th>
+              </ng-container>
+              <ng-container *ngIf="tabIndex==0" >
+                <th>QUESTION</th>
+                
+              </ng-container>
+              <th >DATA PROVIDER</th>
+              <th >INFO</th>
+            
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-dataRequestList>
@@ -156,70 +176,43 @@
                 <div
                   class="might-overflow"
                   [pTooltip]="
-                    dataRequestList?.parameter?.Assessment?.Prject
-                      ?.policyName
+                    dataRequestList?.investmentParameter?.assessment?.climateAction?.policyName
+                     
                   "
                   tooltipPosition="top"
                 >
                   {{
-                    dataRequestList?.parameter?.Assessment?.Prject
-                      ?.policyName
+                    dataRequestList?.investmentParameter?.assessment?.climateAction?.policyName
                   }}
                 </div>
               </td>
               <td>
-                {{ dataRequestList?.parameter?.category?.name }}
+                {{  dataRequestList?.investmentParameter?.assessment?.assessmentType}}
               </td>
               <td>
-                {{
-                  dataRequestList?.parameter.characteristics?.name}}
+                {{  dataRequestList?.investmentParameter?.assessment?.from | date: "dd-MM-yyyy " }} - {{ dataRequestList?.investmentParameter?.assessment?.to | date: "dd-MM-yyyy "}}
               </td>
-              <td>
-                {{
-                  dataRequestList?.parameter.relevance}}
-              </td>
-              <!-- <td>
-                <button
-                  data-toggle="tooltip"
-                  type="button"
-                  (click)="showAlternativity(dataRequestList.parameter)"
-                  style="background-color: transparent; border-color: transparent"
-                >
-                  <div
-                    class="might-overflow"
-                    [pTooltip]="dataRequestList?.parameter?.name"
-                    tooltipPosition="top"
-                  >
-                    {{ dataRequestList?.parameter?.name }}
-                  </div>
-                </button>
-              </td> -->
-              <!-- <td>
-                <button
-                  (click)="showAlternativity(dataRequestList.parameter)"
-                  pRipple
-                  [disabled]="!dataRequestList.parameter.hasChild"
-                  class="fas fa-plus"
-                  pButton
-                  type="button"
-                  style="background-color: #c6cfd7; border-color: transparent"
-                >
-                  <i
-                    class="pi pi-pencil"
-                    style="font-size: 1rem; color: rgb(255, 255, 255)"
-                  ></i>
-                </button>
-              </td> -->
+             <ng-container *ngIf="tabIndex==1||tabIndex==2" >
+              <td>{{ dataRequestList?.investmentParameter?.type}}</td>
+              <td>{{ dataRequestList?.investmentParameter?.category?.name}}</td>
+              <td>{{ dataRequestList?.investmentParameter?.characteristics?.name}}</td>
+              <td>{{ dataRequestList?.investmentParameter?.institutionDescription}}</td>
+               
+              </ng-container>
+              <ng-container *ngIf="tabIndex==0" >
+                <!-- <th>QUESTION</th> -->
+                
+              </ng-container>
+              <!-- data provider -->
               <td>
                 <div
                   class="might-overflow"
-                  [pTooltip]="dataRequestList.parameter?.institution?.name"
+                  [pTooltip]="dataRequestList.investmentParameter?.institution?.name"
                   tooltipPosition="top"
                 >
                   {{
-                    dataRequestList.parameter.institution
-                      ? dataRequestList.parameter.institution.name
-                      : ""
+                    dataRequestList.investmentParameter?.institution?.name
+                      
                   }}
                 </div>
   
@@ -237,24 +230,7 @@
                   ></i>
                 </button>
               </td>
-              <!-- <td>
-                {{
-                  dataRequestList.parameter.AssessmentYear
-                    ? dataRequestList.parameter.AssessmentYear
-                    : dataRequestList.parameter.projectionYear
-                    ? dataRequestList.parameter.projectionYear
-                    : dataRequestList.parameter.projectionBaseYear
-                }}
-              </td> -->
-              <td>{{ dataRequestList.deadline | date: "dd-MM-yyyy " }}</td>
-              <!-- <td>
-                {{
-                  dataRequestList.dataRequestStatus == -1 ? "Just Created" : ""
-                }}
-                {{ dataRequestList.dataRequestStatus == 1 ? "Saved" : "" }}
-                {{ dataRequestList.dataRequestStatus == 30 ? "Rejected(QC)" : "" }}
-                {{ dataRequestList.dataRequestStatus == -6? "Rejected(IA)" : "" }}
-              </td> -->
+            
               <td>
                 <i
                   class="pi pi-ellipsis-v"
