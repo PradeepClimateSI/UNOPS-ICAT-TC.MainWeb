@@ -151,8 +151,9 @@
               </th>
               <th >INTERVENTION</th>
               <th >ASSESSMENT TYPE</th>
-              <th >ASSESSMENT PERIOD</th>
+              
               <ng-container *ngIf="tabIndex==1||tabIndex==2" >
+                <th >ASSESSMENT PERIOD</th>
                 <th>PROCESS/OUTCOME</th>
                 <th>CATEGORY</th>
                 <th>CHARACTERISTIC</th>
@@ -172,6 +173,9 @@
               <td>
                 <p-tableCheckbox [value]="dataRequestList"> </p-tableCheckbox>
               </td>
+             
+              
+             <ng-container *ngIf="tabIndex==1||tabIndex==2" >
               <td>
                 <div
                   class="might-overflow"
@@ -192,18 +196,10 @@
               <td>
                 {{  dataRequestList?.investmentParameter?.assessment?.from | date: "dd-MM-yyyy " }} - {{ dataRequestList?.investmentParameter?.assessment?.to | date: "dd-MM-yyyy "}}
               </td>
-             <ng-container *ngIf="tabIndex==1||tabIndex==2" >
               <td>{{ dataRequestList?.investmentParameter?.type}}</td>
               <td>{{ dataRequestList?.investmentParameter?.category?.name}}</td>
               <td>{{ dataRequestList?.investmentParameter?.characteristics?.name}}</td>
               <td>{{ dataRequestList?.investmentParameter?.institutionDescription}}</td>
-               
-              </ng-container>
-              <ng-container *ngIf="tabIndex==0" >
-                <!-- <th>QUESTION</th> -->
-                
-              </ng-container>
-              <!-- data provider -->
               <td>
                 <div
                   class="might-overflow"
@@ -230,6 +226,65 @@
                   ></i>
                 </button>
               </td>
+              </ng-container>
+              <ng-container *ngIf="tabIndex==0" >
+                <td>
+                  <div
+                    class="might-overflow"
+                    [pTooltip]="
+                      dataRequestList?.cmAssessmentAnswer?.assessment_question?.assessment?.climateAction?.policyName
+                       
+                    "
+                    tooltipPosition="top"
+                  >
+                    {{
+                      dataRequestList?.cmAssessmentAnswer?.assessment_question?.assessment?.climateAction?.policyName
+                    }}
+                  </div>
+                </td>
+                <td>
+                  {{  dataRequestList?.cmAssessmentAnswer?.assessment_question?.assessment?.assessmentType}}
+                </td>
+                <td>
+                  <!-- <div
+                  class="might-overflow"
+                  [pTooltip]="dataRequestList?.cmAssessmentAnswer?.assessment_question?.question?.label"
+                  tooltipPosition="top"
+                >
+                {{  dataRequestList?.cmAssessmentAnswer?.assessment_question?.question?.label}}
+                </div> -->
+                {{  dataRequestList?.cmAssessmentAnswer?.assessment_question?.question?.label}}
+                </td>
+                <td>
+                  <div
+                    class="might-overflow"
+                    [pTooltip]="dataRequestList?.cmAssessmentAnswer?.institution?.name"
+                    tooltipPosition="top"
+                  >
+                    {{
+                      dataRequestList?.cmAssessmentAnswer?.institution?.name
+                        
+                    }}
+                  </div>
+    
+                  <button
+                    pRipple
+                    class="fas fa-plus"
+                    pButton
+                    type="button"
+                    style="background-color: #c6cfd7; border-color: transparent"
+                    (click)="showDataProviders(dataRequestList.parameter)"
+                  >
+                    <i
+                      class="pi pi-pencil"
+                      style="font-size: 1rem; color: rgb(255, 255, 255)"
+                    ></i>
+                  </button>
+                </td>
+                
+              </ng-container>
+              <!-- data provider -->
+             
             
               <td>
                 <i
