@@ -6,6 +6,9 @@ import {
   ParameterRequestControllerServiceProxy,
   ParameterHistoryControllerServiceProxy,
   UpdateDeadlineDto,
+  ParameterRequest,
+  CMAssessmentAnswer,
+  InvestorAssessment,
   // ParameterHistoryControllerServiceProxy,
   // ParameterRequestControllerServiceProxy,
   // UpdateDeadlineDto,
@@ -72,7 +75,9 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
   dataProviderList: Institution[];
   displayDataProvider: boolean = false;
   selectedDataProvider: Institution;
-  selectedParameter: MethodologyAssessmentParameters;
+  selectedParameter: ParameterRequest;
+  
+    
   selectDataProvider: boolean = false;
 
   parameterDisplay: boolean = false;
@@ -84,7 +89,7 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
 
   activeIndexMain =0;
   tabIndex =0;
-  tool='';
+  tool:any='';
   constructor(
     private router: Router,
     private serviceProxy: ServiceProxy,
@@ -203,19 +208,37 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
     this.onSearch();
   }
   onSendClick() {
+    console.log("selectedParameters",this.selectedParameters)
+   
     if (this.selectedParameters.length > 0) {
       for (let drqst of this.selectedParameters) {
-        if (!drqst.parameter.institution) {
+        if(this.tabIndex==0){
+          if (!drqst.cmAssessmentAnswer.institution) {
+          
 
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error.',
-            detail: 'Please select a data provider.',
-          });
-          return;
-
-
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error.',
+              detail: 'Please select a data provider.',
+            });
+            return;
+          }
+      
         }
+        else if(this.tabIndex==1||2){
+          if (!drqst.investmentParameter.institution) {
+          
+
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error.',
+              detail: 'Please select a data provider.',
+            });
+            return;
+          }
+      
+        }
+        
       }
 
       this.confirm1 = true;
@@ -236,12 +259,14 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
 
   // /////////////////////////////////////////////
 
-  showDataProviders(parameter: MethodologyAssessmentParameters) {
+  showDataProviders(parameter: any) {
+    
+    console.log("parameter",parameter)
     this.selectedParameter = parameter;
-    this.selectedDataProvider = this.selectedParameter.institution;
+    this.selectedDataProvider = this.tabIndex==0?(this.selectedParameter.cmAssessmentAnswer.institution):(this.selectedParameter.investmentParameter?.institution);
     if (this.selectedDataProvider) {
       this.dataProviderList = this.instuitutionList.filter(
-        (inst: Institution) => inst.id != this.selectedParameter.institution.id
+        (inst: Institution) => inst.id != this.selectedDataProvider.id
       );
     } else {
       this.dataProviderList = this.instuitutionList;
@@ -253,47 +278,60 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
   }
 
   updateDataProviders() {
-    // console.log('workdata',this.selectedDataProvider)
-    // if (
-    //   this.selectedDataProvider != undefined &&
-    //   this.selectedDataProvider.id != null &&
-    //   this.selectedDataProvider.id != this.selectedParameter.institution?.id
-    // ) {
-    //   this.selectDataProvider = false;
+    console.log('workdata',this.selectedDataProvider)
+    let param =this.tabIndex==0?(this.selectedParameter.cmAssessmentAnswer.institution):(this.selectedParameter.investmentParameter?.institution)
+    if (
+      this.selectedDataProvider != undefined &&
+      this.selectedDataProvider.id != null &&
+      this.selectedDataProvider.id != param?.id
+    ) {
+      this.selectDataProvider = false;
 
-    //   this.selectedParameter.institution = this.selectedDataProvider;
-    //   this.serviceProxy
-    //     .updateOneBaseParameterControllerParameter(
-    //       this.selectedParameter.id,
-    //       this.selectedParameter
-    //     )
-    //     .subscribe(
-    //       (res) => {
-    //         this.messageService.add({
-    //           severity: 'success',
-    //           summary: 'Success',
-    //           detail: 'Data provider were updated successfully',
-    //         });
+      // console.log('selectedParameter',this.selectedParameter)
+      // console.log('selectedDataProvider',this.selectedDataProvider)
+      this.tabIndex==0?(this.selectedParameter.cmAssessmentAnswer.institution= this.selectedDataProvider):(this.selectedParameter.investmentParameter.institution= this.selectedDataProvider)
+      // this.selectedParameter.institution = this.selectedDataProvider;
+      console.log('selectedParameter2',this.selectedParameter)
+      this.serviceProxy
+        .updateOneBaseParameterRequestControllerParameterRequest(
+          this.selectedParameter.id,
+          this.selectedParameter
+        )
+        .subscribe(
+          (res) => {
+            console.log("res",res)
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Data provider were updated successfully',
+            });
 
-    //         let event: any = {};
-    //         event.rows = this.rows;
-    //         event.first = 0;
+            // let event: any = {};
+            // event.rows = this.rows;
+            // event.first = 0;
 
-    //         this.loadgridData(event);
-    //         this.displayDataProvider = false;
-    //       },
-    //       (err) => {
-    //         this.messageService.add({
-    //           severity: 'error',
-    //           summary: 'Error.',
-    //           detail: 'Internal server error, please try again.',
-    //         });
-    //       }
-    //     );
-    // } else {
-    //   this.selectDataProvider = true;
-    // }
+            // this.loadgridData(event);
+            // this.displayDataProvider = false;
+          },
+          (err) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error.',
+              detail: 'Internal server error, please try again.',
+            });
+          }
+        );
+    } else {
+      this.selectDataProvider = true;
+      // this.messageService.add({severity:'success', summary:'Service Message', detail:'Via MessageService'});
+      // this.messageService.add({
+      //   severity: 'error',
+      //   summary: 'Error.',
+      //   detail: 'Select data provider.',
+      // });
+    }
   }
+
 
   showAlternativity(para: any) {
     // this.isAlternative = para.isAlternative ? para.isAlternative : false;
@@ -539,6 +577,7 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
     let inputParameters = new UpdateDeadlineDto();
     inputParameters.ids = idList;
     inputParameters.status = status;
+    inputParameters.tool =this.tool;
     console.log('this.selectedDeadline', this.selectedDeadline);
     inputParameters.deadline = moment(this.selectedDeadline);
     this.parameterRqstProxy.updateDeadline(inputParameters).subscribe(

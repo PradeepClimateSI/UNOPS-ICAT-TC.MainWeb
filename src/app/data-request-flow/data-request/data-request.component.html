@@ -164,7 +164,10 @@
                 
               </ng-container>
               <th >DATA PROVIDER</th>
+              <th>Deadline</th>
+              <th>Status</th>
               <th >INFO</th>
+
             
             </tr>
           </ng-template>
@@ -218,7 +221,7 @@
                   pButton
                   type="button"
                   style="background-color: #c6cfd7; border-color: transparent"
-                  (click)="showDataProviders(dataRequestList.parameter)"
+                  (click)="showDataProviders(dataRequestList)"
                 >
                   <i
                     class="pi pi-pencil"
@@ -273,7 +276,7 @@
                     pButton
                     type="button"
                     style="background-color: #c6cfd7; border-color: transparent"
-                    (click)="showDataProviders(dataRequestList.parameter)"
+                    (click)="showDataProviders(dataRequestList)"
                   >
                     <i
                       class="pi pi-pencil"
@@ -284,7 +287,15 @@
                 
               </ng-container>
               <!-- data provider -->
-             
+              <td>{{ dataRequestList.deadline | date: "dd-MM-yyyy " }}</td>
+              <td>
+                {{
+                  dataRequestList.dataRequestStatus ==null ? "Just Created" : ""
+                }}
+                {{ dataRequestList.dataRequestStatus == 1 ? "Saved" : "" }}
+                {{ dataRequestList.dataRequestStatus == 30 ? "Rejected(QC)" : "" }}
+                {{ dataRequestList.dataRequestStatus == -6? "Rejected(IA)" : "" }}
+              </td>
             
               <td>
                 <i
@@ -385,21 +396,63 @@
     </app-view-datarequest-history>
   </p-dialog>
   <p-dialog
-    header="Change Data Provider"
-    [(visible)]="displayDataProvider"
-    [dismissableMask]="true"
-    [modal]="true"
-    (onHide)="cancelDataProviders()"
-    [draggable]="false"
-    [resizable]="true"
+  header="Change Data Provider"
+  [(visible)]="displayDataProvider"
+  [dismissableMask]="true"
+  [modal]="true"
+  (onHide)="cancelDataProviders()"
+  [draggable]="false"
+  [resizable]="true"
+>
+  <!-- <div class="p-field p-col-12 p-md-4">
+  <span class="p-float-label">
+    
+    <label>{{selectedParameter?.name}}</label>
+  </span>
+</div> -->
+  <p-card
+    [style]="{ width: '360px' }"
+    styleClass="p-card-shadow"
   >
-    <!-- <div class="p-field p-col-12 p-md-4">
-    <span class="p-float-label">
-      
-      <label>{{selectedParameter?.name}}</label>
-    </span>
-  </div> -->
-  </p-dialog>
+    <ng-template pTemplate="header"> </ng-template>
+    <p-listbox
+      [options]="dataProviderList"
+      [(ngModel)]="selectedDataProvider"
+      [metaKeySelection]="false"
+      [checkbox]="true"
+      [filter]="true"
+      [listStyle]="{ 'max-height': '250px' }"
+      optionLabel="name"
+    >
+      <!-- <ng-template let-country pTemplate="item">
+        <div class="country-item">
+            <div>{{country.name}}</div>
+        </div>
+    </ng-template> -->
+    </p-listbox>
+    <small *ngIf="selectDataProvider" class="p-error"
+      >Please select Data provider.</small
+    >
+    <ng-template pTemplate="footer">
+      <div class="d-flex flex-row-reverse">
+        <p-button
+          label="Update"
+          (onClick)="updateDataProviders()"
+          icon="pi pi-check"
+        ></p-button>
+        <p-button
+          label="Cancel"
+          (onClick)="cancelDataProviders()"
+          icon="pi pi-times"
+          styleClass="p-button-secondary"
+          [style]="{ 'margin-right': '.5em' }"
+        ></p-button>
+      </div>
+      <!-- <p-button label="Save" icon="pi pi-check"></p-button>
+      <p-button label="Cancel" icon="pi pi-times" styleClass="p-button-secondary" [style]="{'margin-left': '.5em'}"></p-button> -->
+    </ng-template>
+  </p-card>
+</p-dialog>
   <p-dialog
     header="Change alternativity"
     [(visible)]="parameterDisplay"
