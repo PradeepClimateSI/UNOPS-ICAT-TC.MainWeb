@@ -53,9 +53,9 @@ export class EnterDataCmComponent implements OnInit {
   ngOnInit(): void {
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
-    this.userCountryId  = tokenPayload.countryId;
+    this.userCountryId = tokenPayload.countryId;
     this.userSectorId = tokenPayload.sectorId;
-    this.user_role=tokenPayload.role.code;
+    this.user_role = tokenPayload.role.code;
     this.totalRecords = 0;
     this.userName = tokenPayload.username;
 
@@ -105,7 +105,7 @@ export class EnterDataCmComponent implements OnInit {
     }, 1);
   };
 
-  async onClickUpdateValue( parameterList: ParameterRequest) {
+  async onClickUpdateValue(parameterList: ParameterRequest) {
     // this.selectedPara = parameterList
     // console.log('parameterId++++', parameterId);
     // this.relevance =relevance;
@@ -134,7 +134,7 @@ export class EnterDataCmComponent implements OnInit {
   onRejectConfirm() {
     let inputParameters = new UpdateDeadlineDto();
     inputParameters.ids = [this.selectedDataRequestId];
-    inputParameters.status =this.user_role=="Institution Admin"?DataRequestStatus.Rejected_EnterData_IA:DataRequestStatus.Rejected_EnterData_DEO;
+    inputParameters.status = this.user_role == "Institution Admin" ? DataRequestStatus.Rejected_EnterData_IA : DataRequestStatus.Rejected_EnterData_DEO;
     inputParameters.comment = this.reasonForReject;
     // this.parameterRequestProxy.rejectEnterData(inputParameters).subscribe(
     //   (res) => {
@@ -186,8 +186,8 @@ export class EnterDataCmComponent implements OnInit {
     this.displayHistory = true;
   }
 
-   // On file Select
-   onChange(event: any) {
+  // On file Select
+  onChange(event: any) {
     this.fileData = event.target.files[0];
   }
 
@@ -202,9 +202,9 @@ export class EnterDataCmComponent implements OnInit {
     // const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
     //   this.parameterListFilterData
     // );
-   
+
     // const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    
+
     // console.log(ws)
     // console.log(wb)
     // XLSX.utils.book_append_sheet(wb, ws, 'sheet1');
@@ -232,8 +232,8 @@ export class EnterDataCmComponent implements OnInit {
     this.uploadFile = false;
   }
 
-   // OnClick of button Upload
-   onUpload() {
+  // OnClick of button Upload
+  onUpload() {
     // const formData = new FormData();
     // formData.append('file', this.fileData);
     // let fullUrl = this.SERVER_URL;
@@ -271,9 +271,9 @@ export class EnterDataCmComponent implements OnInit {
     let assessmentAnswer = new CMAssessmentAnswer()
     assessmentAnswer.id = this.selectedParameter.id
     assessmentAnswer.answer = this.selectedValue
-    assessmentAnswer.score = this.selectedValue.score_portion/100 * this.selectedValue.weight/100
+    assessmentAnswer.score = this.selectedValue.score_portion / 100 * this.selectedValue.weight / 100
 
-    if (this.selectedAssumption){
+    if (this.selectedAssumption) {
       let assessmentQuestion = new CMAssessmentQuestion()
       assessmentQuestion.id = this.selectedParameter.assessment_question.id
       assessmentQuestion.enterDataAssumption = this.selectedAssumption
@@ -286,32 +286,32 @@ export class EnterDataCmComponent implements OnInit {
     let res1 = await this.serviceProxy.updateOneBaseCMAssessmentAnswerControllerCMAssessmentAnswer(
       assessmentAnswer.id, assessmentAnswer
     ).toPromise()
-  
-        let inputParameters = new UpdateDeadlineDto();
-        inputParameters.ids = [this.selectedId];
-        inputParameters.status = status;
-        inputParameters.tool = UpdateDeadlineDtoTool.Carbon_Market_Tool
 
-        console.log('inputParameters', inputParameters);
-        this.parameterRequestControllerServiceProxy.acceptReviewData(inputParameters).subscribe(res =>{
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: status==5?'Successfully saved the value':'Successfully sent the value',
-          });
-        }, error => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Internal server error',
-          });
-        });
-        this.selectedValue = new CMAnswer();
-        this.selectedAssumption = '';
-        this.selectedParameter = [];
-        this.onSearch();
-        this.isAddData = false;
-      
+    let inputParameters = new UpdateDeadlineDto();
+    inputParameters.ids = [this.selectedId];
+    inputParameters.status = status;
+    inputParameters.tool = UpdateDeadlineDtoTool.Carbon_Market_Tool
+
+    console.log('inputParameters', inputParameters);
+    this.parameterRequestControllerServiceProxy.acceptReviewData(inputParameters).subscribe(res => {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: status == 5 ? 'Successfully saved the value' : 'Successfully sent the value',
+      });
+    }, error => {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Internal server error',
+      });
+    });
+    this.selectedValue = new CMAnswer();
+    this.selectedAssumption = '';
+    this.selectedParameter = [];
+    this.onSearch();
+    this.isAddData = false;
+
   }
 
   onSearch() {
@@ -375,7 +375,7 @@ export class EnterDataCmComponent implements OnInit {
     this.isAddData = false;
   }
 
-  onHideDialog(){
+  onHideDialog() {
     // this.isHistorical = false
   }
 
