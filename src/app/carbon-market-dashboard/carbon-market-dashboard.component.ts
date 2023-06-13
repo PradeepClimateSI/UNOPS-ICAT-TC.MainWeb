@@ -50,7 +50,7 @@ CMPrerequiste: {
   tool : string;
 
   ngOnInit(): void {
-    this.averageTCValue =58.05;
+    // this.averageTCValue =58.05;
 
     this.tool = 'Carbon Market Tool';
 
@@ -59,7 +59,8 @@ CMPrerequiste: {
 
       this.interventions = res;
     //  console.log("policyList:", this.interventions);
-      this.averageTCValue= Number(res.reduce((total:number, next:any) => total + next.y, 0) / res.length).toFixed(2);
+      this.averageTCValue= (res.reduce((total:number, next:any) => total + Number(next.y), 0) / res.length).toFixed(2);
+      console.log( "averageTCValue :",this.averageTCValue)
 
       // Sort interventions based on id in descending order
       this.interventions.sort((a: { id: number; }, b: { id: number; }) => b.id - a.id);
