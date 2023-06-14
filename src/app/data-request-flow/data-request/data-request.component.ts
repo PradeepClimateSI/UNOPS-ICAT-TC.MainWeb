@@ -108,32 +108,32 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
   async ngOnInit(): Promise<void> {
     this.tool=Tool.CM_tool;
 
-    // this.parameterRqstProxy
-    //   .getNewDataRequestForClimateList(0, 0, '', 0, '', 0, '1234').subscribe(res => {
-    //     console.log("data",res)
-    //     this.loading=true
-    //     for (let a of res.items) {
+    this.parameterRqstProxy
+      .getNewDataRequestForClimateList(0, 0, '', 0, '', 0, '1234').subscribe(res => {
+        console.log("data",res)
+        this.loading=true
+        for (let a of res.items) {
 
-    //       if (a.parameter.Assessment !== null) {
-    //         if (
-    //           !this.assignCAArray.includes(
-    //             a.parameter.Assessment.Prject
-    //               .climateActionName
-    //           )
-    //         ) {
+          if (a.parameter.Assessment !== null) {
+            if (
+              !this.assignCAArray.includes(
+                a.parameter.Assessment.Prject
+                  .climateActionName
+              )
+            ) {
 
-    //           this.assignCAArray.push(
-    //             a.parameter.Assessment.Prject
-    //               .climateActionName
-    //           );
-    //           this.dataReqAssignCA.push(
-    //             a.parameter.Assessment.Prject
-    //           );
-    //         }
-    //       }
-    //     }
+              this.assignCAArray.push(
+                a.parameter.Assessment.Prject
+                  .climateActionName
+              );
+              this.dataReqAssignCA.push(
+                a.parameter.Assessment.Prject
+              );
+            }
+          }
+        }
 
-    //   })
+      })
     // setTimeout(() => {
     //   this.parameterRqstProxy
     //     .getNewDataRequest(1, this.rows, '', 0, '', 0, '1234')
@@ -174,18 +174,18 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
     //   });
   }
 ///////////////////////////////////////////////////////////
-  // onCAChange(event: any) {
-  //   console.log('searchby', this.searchBy);
-  //   if (this.searchBy.climateaction) {
-  //     this.assessmentYearProxy
-  //     .getAllByProjectId(this.searchBy.climateaction.id)
-  //     .subscribe((res: any) => {
-  //       this.yearList = res;
-  //       const tempYearList = getUniqueListBy(this.yearList, 'assessmentYear');
-  //       this.yearList = tempYearList;
-  //       console.log('yearlist----', this.yearList);
-  //     });
-  //   }
+  onCAChange(event: any) {
+    console.log('searchby', this.searchBy);
+    // if (this.searchBy.climateaction) {
+    //   this.assessmentYearProxy
+    //   .getAllByProjectId(this.searchBy.climateaction.id)
+    //   .subscribe((res: any) => {
+    //     this.yearList = res;
+    //     const tempYearList = getUniqueListBy(this.yearList, 'assessmentYear');
+    //     this.yearList = tempYearList;
+    //     console.log('yearlist----', this.yearList);
+    //   });
+    }
 
   //   function getUniqueListBy(arr: any, key: any) {
   //     return [
@@ -292,8 +292,8 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
       this.tabIndex==0?(this.selectedParameter.cmAssessmentAnswer.institution= this.selectedDataProvider):(this.selectedParameter.investmentParameter.institution= this.selectedDataProvider)
       // this.selectedParameter.institution = this.selectedDataProvider;
       console.log('selectedParameter2',this.selectedParameter)
-      this.serviceProxy
-        .updateOneBaseParameterRequestControllerParameterRequest(
+      this.parameterRqstProxy
+        .updateInstitution(
           this.selectedParameter.id,
           this.selectedParameter
         )
@@ -306,12 +306,12 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
               detail: 'Data provider were updated successfully',
             });
 
-            // let event: any = {};
-            // event.rows = this.rows;
-            // event.first = 0;
+            let event: any = {};
+            event.rows = this.rows;
+            event.first = 0;
 
-            // this.loadgridData(event);
-            // this.displayDataProvider = false;
+            this.loadgridData(event);
+            this.displayDataProvider = false;
           },
           (err) => {
             this.messageService.add({
@@ -516,7 +516,12 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
 
   getInfo(obj: any) {
     console.log('dataRequestList...', obj);
-    this.paraId = obj.parameter.id;
+    if(this.tool==Tool.CM_tool){
+      this.paraId = obj.cmAssessmentAnswer.id; 
+    }
+    else if(this.tool==Tool.Investor_tool||Tool.Portfolio_tool){
+      this.paraId = obj.investmentParameter.id; 
+    }
     console.log('this.paraId...', this.paraId);
 
     // let x = 602;

@@ -25,6 +25,7 @@ import {
   ServiceProxy,
   UsersControllerServiceProxy,
 } from 'shared/service-proxies/service-proxies';
+import { Tool } from '../enum/tool.enum';
 
 @Component({
   selector: 'app-assign-data-request',
@@ -72,6 +73,11 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
   userCountryId: number = 0;
   userSectorId: number = 0;
   climateactionsList: any[] = [];
+
+
+  activeIndexMain =0;
+  tabIndex =0;
+  tool:any='';
   constructor(
     private router: Router,
     private serviceProxy: ServiceProxy,
@@ -88,6 +94,7 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
   }
 
   async ngOnInit(): Promise<void> {
+    this.tool=Tool.CM_tool;
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
     this.userName =tokenPayload.username;
@@ -107,6 +114,7 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
         '',
         0,
         this.userName,
+        this.tool,
         "1234"
       )
       .subscribe((res) => {
@@ -202,6 +210,7 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
           filtertext,
           climateActionId,
           this.userName,
+          this.tool,
           "1234"
         )
         .subscribe((a) => {
@@ -237,9 +246,14 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
 
 
   getInfo(obj: any) {
-    console.log("dataRequestList...", obj)
-    this.paraId = obj.parameterId.id;
-    console.log("this.paraId...", this.paraId)
+    // console.log("dataRequestList...", obj)
+    if(this.tool==Tool.CM_tool){
+      this.paraId = obj.cmAssessmentAnswer.id; 
+    }
+    else if(this.tool==Tool.Investor_tool||Tool.Portfolio_tool){
+      this.paraId = obj.investmentParameter.id; 
+    }
+    // console.log("this.paraId...", this.paraId)
 
     // let x = 602;
     this.prHistoryProxy
@@ -321,5 +335,26 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
         }
       );
     }
+  }
+
+  onMainTabChange(event:any){
+    this.tabIndex= this.activeIndexMain;
+    let event2 :LazyLoadEvent ={rows: 10, first: 0}
+    if (this.activeIndexMain==0){
+     this.tool=Tool.CM_tool
+     this.loadgridData(event);
+      // this.loadgridData(event2,Tool.CM_tool )
+    }
+    else if (this.activeIndexMain==1){
+      this.tool=Tool.Investor_tool
+      this.loadgridData(event);
+      // this.loadgridData(event2,Tool.Investor_tool )
+    }
+    else if (this.activeIndexMain==2){
+      this.tool=Tool.Portfolio_tool;
+      this.loadgridData(event);
+      
+    }
+    console.log("tabIndex",this.tabIndex)
   }
 }
