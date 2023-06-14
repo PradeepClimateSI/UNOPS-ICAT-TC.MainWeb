@@ -324,51 +324,50 @@ export class EnterDataCmComponent implements OnInit {
 
 
   onClickSendNowAll() {
-    // let idList = new Array<number>();
-    // for (let index = 0; index < this.selectedParameters.length; index++) {
-    //   let element = this.selectedParameters[index];
-    //   console.log('++++',element)
-    //   if (
-    //     element.parameterId?.score != null 
-    //     // && element.parameterId?.uomDataEntry != null
-    //   ) {
-    //     idList.push(element.id);
-    //     console.log('element Pushed', element);
-    //   } else {
-    //     console.log('element', element);
-    //     this.messageService.add({
-    //       severity: 'error',
-    //       summary: 'Error.',
-    //       detail: 'Selected parameters must have a value for unit and value.',
-    //     });
-    //     return;
-    //   }
-    // }
-    // if (idList.length > 0) {
-    //   let inputParameters = new UpdateDeadlineDto();
-    //   inputParameters.ids = idList;
-    //   inputParameters.status = 6;
-    //   this.projectProxy.acceptReviewData(inputParameters).subscribe(
-    //     (res) => {
-    //       this.isAddData = false;
-    //       this.isHistorical = false;
-    //       this.messageService.add({
-    //         severity: 'success',
-    //         summary: 'Success',
-    //         detail: 'Successfully sent the Value',
-    //       });
-    //       this.parameterList = [];
-    //       this.onSearch();
-    //     },
-    //     (err) => {
-    //       this.messageService.add({
-    //         severity: 'error',
-    //         summary: 'Error.',
-    //         detail: 'Internal server error, please try again.',
-    //       });
-    //     }
-    //   );
-    // }
+    let idList = new Array<number>();
+    for (let index = 0; index < this.selectedParameters.length; index++) {
+      let element = this.selectedParameters[index];
+      console.log('++++',element)
+      if (
+        element.cmAssessmentAnswer?.answer != null 
+        // && element.parameterId?.uomDataEntry != null
+      ) {
+        idList.push(element.id);
+        console.log('element Pushed', element);
+      } else {
+        console.log('element', element);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error.',
+          detail: 'Selected parameters must have a answer.',
+        });
+        return;
+      }
+    }
+    if (idList.length > 0) {
+      let inputParameters = new UpdateDeadlineDto();
+      inputParameters.ids = idList;
+      inputParameters.status = 6;
+      this.parameterRequestControllerServiceProxy.acceptReviewData(inputParameters).subscribe(
+        (res) => {
+          this.isAddData = false;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Successfully sent the Value',
+          });
+          this.parameterList = [];
+          this.onSearch();
+        },
+        (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error.',
+            detail: 'Internal server error, please try again.',
+          });
+        }
+      );
+    }
   }
 
   onCancel() {

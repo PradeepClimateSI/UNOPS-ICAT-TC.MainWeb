@@ -63,6 +63,7 @@ import { CarbonMarketDashboardComponent } from 'app/carbon-market-dashboard/carb
 import { PortfolioListComponent } from 'app/portfolios/portfolio-list/portfolio-list.component';
 import { PortfolioAddComponent } from 'app/portfolios/portfolio-add/portfolio-add.component';
 import { EnterDataPathComponent } from 'app/data-request-flow/enter-data-path/enter-data-path/enter-data-path.component';
+import { ReviewDataPathComponent } from 'app/data-request-flow/review-data-path/review-data-path/review-data-path.component';
 
 
 const routes: Routes = [
@@ -146,7 +147,7 @@ const routes: Routes = [
   },
   {
     path: 'view-data',
-    component: ReviewDataComponent,
+    component: ReviewDataPathComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}
