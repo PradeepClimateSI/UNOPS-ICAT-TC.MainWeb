@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
-import { InvestorAssessment, InvestorToolControllerServiceProxy, ParameterRequest, ParameterRequestControllerServiceProxy, ParameterRequestTool, ServiceProxy, UpdateDeadlineDto, UpdateDeadlineDtoTool } from 'shared/service-proxies/service-proxies';
+import { InvestorAssessment, InvestorToolControllerServiceProxy, ParameterRequest, ParameterRequestControllerServiceProxy, ParameterRequestTool, ServiceProxy, UpdateDeadlineDto, UpdateDeadlineDtoTool, UpdateInvestorToolDto } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import * as moment from 'moment';
 import { DataRequestStatus } from 'app/Model/DataRequestStatus.enum';
@@ -10,6 +10,8 @@ import { DataRequestStatus } from 'app/Model/DataRequestStatus.enum';
   styleUrls: ['./enter-data-investment.component.css']
 })
 export class EnterDataInvestmentComponent implements OnInit {
+
+  @Input() tool: string
 
   loading: boolean;
   totalRecords: number;
@@ -41,6 +43,8 @@ export class EnterDataInvestmentComponent implements OnInit {
   selectedAssumption: string;
   selectedParameter: any;
   selectedId: number;
+  isDropdown: boolean;
+  answers: any[] = ['Yes', 'No']
 
   constructor(
     private parameterRequestControllerServiceProxy: ParameterRequestControllerServiceProxy,
@@ -90,7 +94,7 @@ export class EnterDataInvestmentComponent implements OnInit {
           climateActionId,
           year,
           this.userName,
-          ParameterRequestTool.Investor_Tool.toString(),
+          this.tool,
           '1234'
         )
         .subscribe((a) => {
@@ -105,21 +109,11 @@ export class EnterDataInvestmentComponent implements OnInit {
   };
 
   async onClickUpdateValue(parameterList: ParameterRequest) {
-    // this.selectedPara = parameterList
-    // console.log('parameterId++++', parameterId);
-    // this.relevance =relevance;
-    // this.characteristics = characteristic;
-    // this.selectedUnit.ur_fromUnit = unit;
-    // this.selectedId = dataRequestId;
-    // this.selectedValue = parameterValue;
-    // this.selectedYear = year;
-    // this.selectedParameterId = parameterId;
-    // console.log('id', dataRequestId);
-    this.selectedParameter = parameterList.cmAssessmentAnswer
+    this.selectedParameter = parameterList.investmentParameter
     this.selectedId = parameterList.id
-
-    // this.answers = await this.cMQuestionControllerServiceProxy.getAnswersByQuestion(parameterList.cmAssessmentAnswer.assessment_question.question.id).toPromise()
-
+    if (!['likelihood', 'score', 'relavance'].includes(parameterList.investmentParameter.institutionDescription)){
+      this.isDropdown = true
+    }
 
     this.isAddData = true;
   }
@@ -267,31 +261,20 @@ export class EnterDataInvestmentComponent implements OnInit {
     // inputValues.value = this.selectedValue;
     // inputValues.assumptionParameter = this.selectedAssumption;
 
-    let invest = new InvestorAssessment()
+    let invest = new UpdateInvestorToolDto()
+    invest.id = this.selectedParameter.id
+    invest.parameter_value = this.selectedValue
 
-    // let assessmentAnswer = new CMAssessmentAnswer()
-    // assessmentAnswer.id = this.selectedParameter.id
-    // assessmentAnswer.answer = this.selectedValue
-    // assessmentAnswer.score = this.selectedValue.score_portion / 100 * this.selectedValue.weight / 100
+    if (this.selectedAssumption) {
+      invest.assumption = this.selectedAssumption
+    }
 
-    // if (this.selectedAssumption) {
-    //   let assessmentQuestion = new CMAssessmentQuestion()
-    //   assessmentQuestion.id = this.selectedParameter.assessment_question.id
-    //   assessmentQuestion.enterDataAssumption = this.selectedAssumption
-
-    //   let res = await this.serviceProxy.updateOneBaseCMAssessmentQuestionControllerCMAssessmentQuestion(
-    //     assessmentQuestion.id, assessmentQuestion
-    //   ).toPromise()
-    // }
-
-    // let res1 = await this.serviceProxy.updateOneBaseCMAssessmentAnswerControllerCMAssessmentAnswer(
-    //   assessmentAnswer.id, assessmentAnswer
-    // ).toPromise()
+    let res = await this.investorToolControllerServiceProxy.updateInvestorAssessment(invest).toPromise()
 
     let inputParameters = new UpdateDeadlineDto();
     inputParameters.ids = [this.selectedId];
     inputParameters.status = status;
-    inputParameters.tool = UpdateDeadlineDtoTool.Carbon_Market_Tool
+    inputParameters.tool = this.tool as unknown as UpdateDeadlineDtoTool
 
     console.log('inputParameters', inputParameters);
     this.parameterRequestControllerServiceProxy.acceptReviewData(inputParameters).subscribe(res => {
@@ -325,51 +308,51 @@ export class EnterDataInvestmentComponent implements OnInit {
 
 
   onClickSendNowAll() {
-    // let idList = new Array<number>();
-    // for (let index = 0; index < this.selectedParameters.length; index++) {
-    //   let element = this.selectedParameters[index];
-    //   console.log('++++',element)
-    //   if (
-    //     element.parameterId?.score != null 
-    //     // && element.parameterId?.uomDataEntry != null
-    //   ) {
-    //     idList.push(element.id);
-    //     console.log('element Pushed', element);
-    //   } else {
-    //     console.log('element', element);
-    //     this.messageService.add({
-    //       severity: 'error',
-    //       summary: 'Error.',
-    //       detail: 'Selected parameters must have a value for unit and value.',
-    //     });
-    //     return;
-    //   }
-    // }
-    // if (idList.length > 0) {
-    //   let inputParameters = new UpdateDeadlineDto();
-    //   inputParameters.ids = idList;
-    //   inputParameters.status = 6;
-    //   this.projectProxy.acceptReviewData(inputParameters).subscribe(
-    //     (res) => {
-    //       this.isAddData = false;
-    //       this.isHistorical = false;
-    //       this.messageService.add({
-    //         severity: 'success',
-    //         summary: 'Success',
-    //         detail: 'Successfully sent the Value',
-    //       });
-    //       this.parameterList = [];
-    //       this.onSearch();
-    //     },
-    //     (err) => {
-    //       this.messageService.add({
-    //         severity: 'error',
-    //         summary: 'Error.',
-    //         detail: 'Internal server error, please try again.',
-    //       });
-    //     }
-    //   );
-    // }
+    let idList = new Array<number>();
+    for (let index = 0; index < this.selectedParameters.length; index++) {
+      let element = this.selectedParameters[index];
+      console.log('++++',element)
+      if (
+        element.investmentParameter?.parameter_value != null 
+        // && element.parameterId?.uomDataEntry != null
+      ) {
+        idList.push(element.id);
+        console.log('element Pushed', element);
+      } else {
+        console.log('element', element);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error.',
+          detail: 'Selected parameters must have a value.',
+        });
+        return;
+      }
+    }
+    if (idList.length > 0) {
+      let inputParameters = new UpdateDeadlineDto();
+      inputParameters.ids = idList;
+      inputParameters.status = 6;
+      inputParameters.tool = this.tool as unknown as UpdateDeadlineDtoTool
+      this.parameterRequestControllerServiceProxy.acceptReviewData(inputParameters).subscribe(
+        (res) => {
+          this.isAddData = false;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Successfully sent the Value',
+          });
+          this.parameterList = [];
+          this.onSearch();
+        },
+        (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error.',
+            detail: 'Internal server error, please try again.',
+          });
+        }
+      );
+    }
   }
 
   onCancel() {

@@ -6,10 +6,10 @@
                 <app-enter-data-cm></app-enter-data-cm>
             </p-tabPanel>
             <p-tabPanel header="Investment">
-                <app-enter-data-investment></app-enter-data-investment>
+                <app-enter-data-investment [tool]="'Investor Tool'"></app-enter-data-investment>
             </p-tabPanel>
             <p-tabPanel header="Portfolio">
-                <app-enter-data-portfolio></app-enter-data-portfolio>
+                <app-enter-data-investment [tool]="'Portfolio Tool'"></app-enter-data-investment>
             </p-tabPanel>
         </p-tabView>
     </div>
