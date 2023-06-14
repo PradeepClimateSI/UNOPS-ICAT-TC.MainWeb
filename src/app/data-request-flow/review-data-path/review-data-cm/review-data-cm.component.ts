@@ -41,7 +41,7 @@ export class ReviewDataCmComponent implements OnInit {
     private confirmationService: ConfirmationService
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
     this.userCountryId  = tokenPayload.countryId;
@@ -51,13 +51,15 @@ export class ReviewDataCmComponent implements OnInit {
 
     this.userName = tokenPayload.username;
 
-    this.usersControllerServiceProxy
-      .usersByInstitution(1, 1000, '', 9, this.userName)
-      .subscribe((res: any) => {
-        this.userList = res.items;
+    // this.usersControllerServiceProxy
+    //   .usersByInstitution(1, 1000, '', 9, this.userName)
+    //   .subscribe((res: any) => {
+    //     this.userList = res.items;
 
-        console.log('this.userList', this.userList);
-      });
+    //     console.log('this.userList', this.userList);
+    //   });
+
+    this.userList = await this.usersControllerServiceProxy.usersByInstitution(1, 1000, '', 9, this.userName).toPromise()
   
   }
 

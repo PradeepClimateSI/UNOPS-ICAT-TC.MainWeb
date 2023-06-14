@@ -1,1 +1,112 @@
-<p>review-data-investment works!</p>
+<div class="row p-2">
+    <p-table #table [value]="dataRequestList" [lazy]="true" (onLazyLoad)="loadgridData($event)" [paginator]="true"
+        [rows]="rows" [showCurrentPageReport]="true" paginatorDropdownAppendTo="body"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [rowsPerPageOptions]="[ 10, 25, 50]" [totalRecords]="totalRecords" [loading]="loading" [responsive]="true"
+        [(selection)]="selectedParameters">
+
+        <ng-template pTemplate="header">
+
+            <tr>
+                <th style="width: 3rem">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                <th>Intervention</th>
+                <th>Assessment Type</th>
+                <th>Assessment Period</th>
+                <th>Process/Outcome</th>
+                <th>Category</th>
+                <th>Characteristic</th>
+                <th>Indicator/Score</th>
+                <th>Value/Answer</th>
+                <th>Deadline</th>
+                <th>User</th>
+                <th>Created On</th>
+                <th>Info</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-request>
+            <tr>
+                <td>
+                    <p-tableCheckbox [value]="request"> </p-tableCheckbox>
+                </td>
+                <td>
+                    <div class="might-overflow"
+                        [pTooltip]="request.investmentParameter.assessment.climateAction.policyName"
+                        tooltipPosition="top">
+                        {{
+                            request.investmentParameter.assessment.climateAction.policyName!
+                        }}
+                    </div>
+                </td>
+                <td>{{ request.investmentParameter.assessment.assessmentType! }}</td>
+                <td>{{request.investmentParameter.assessment.from| date: "yyyy/MM/dd "}} -
+                    {{request.investmentParameter.assessment.to| date: "yyyy/MM/dd "}}</td>
+                <td>{{request.investmentParameter.type }}</td>
+                <td>{{request.investmentParameter.category?.name}}</td>
+                <td>{{request.investmentParameter.characteristics?.name}}</td>
+                <td>{{request.investmentParameter.indicator}}/{{request.investmentParameter.score}}</td>
+                <td>{{request.investmentParameter.parameter_value}}</td>
+
+            <td>
+                {{ request.deadlineDataEntry | date: "yyyy-MM-dd " }}
+            </td>
+            <td>{{request.user?.firstName}} {{request.user?.lastName}}</td>
+            <td>{{request.createdOn | date: "yyyy-MM-dd" }}</td>
+            <td>
+                <i class="pi pi-ellipsis-v" style="font-size: 2rem" (click)="getInfo(request)"></i>
+            </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <div class="col-md-6 offset-6 mt-3 d-flex">
+        <button class="mt-2 mr-10" type="button" pButton pRipple label="Accept"
+            (click)="onAcceptClick()"></button>
+        <button class="mt-2" type="button" pButton pRipple label="Reject" (click)="onRejectClick()"></button>
+    </div>
+</div>
+
+<p-dialog [(visible)]="confirm1" header="Reject Data">
+    <div class="container" style="width: 600px; height: 500px">
+        <div class="row mb-2">
+            <div class="col-3">Select DEO</div>
+            <div class="col-4">
+                <p-dropdown name="userType" [options]="userList" [(ngModel)]="selectedUser" #fsector="ngModel"
+                    [showClear]="true" [filter]="true" placeholder="Select .." optionLabel="firstName">
+                </p-dropdown>
+            </div>
+            <div class="col-5"></div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-3">New Deadline</div>
+            <div class="col-4">
+                <p-calendar [minDate]="minDate" [(ngModel)]="selectedDeadline" placeholder="DD/MM/YYYY"
+                    dateFormat="dd/mm/yy">
+                </p-calendar>
+            </div>
+            <div class="col-5"></div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-3">Reason</div>
+            <div class="col-4">
+                <textarea rows="4" cols="35" placeholder="Reason for Reject" type="text" class="p-inputtext"
+                    [(ngModel)]="reasonForReject" pInputTextarea></textarea>
+            </div>
+            <div class="col-5"></div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-3"></div>
+            <div class="col-4">
+
+                <button type="button" pButton pRipple label="Send" style="margin-right: 10px"
+                    (click)="onRejectConfirm(-8)"></button>
+
+
+                <button type="button" pButton pRipple label="Cancel" (click)="onReject()"></button>
+            </div>
+            <div class="col-5"></div>
+        </div>
+    </div>
+</p-dialog>
+<p-confirmDialog header="Climate Action" icon="pi pi-exclamation-triangle">
+</p-confirmDialog>
