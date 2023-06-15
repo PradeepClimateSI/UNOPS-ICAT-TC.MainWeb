@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EnterDataPortfolioComponent } from './enter-data-portfolio.component';
+import { ReviewDataCmComponent } from './review-data-cm.component';
 
-describe('EnterDataPortfolioComponent', () => {
-  let component: EnterDataPortfolioComponent;
-  let fixture: ComponentFixture<EnterDataPortfolioComponent>;
+describe('ReviewDataCmComponent', () => {
+  let component: ReviewDataCmComponent;
+  let fixture: ComponentFixture<ReviewDataCmComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EnterDataPortfolioComponent ]
+      declarations: [ ReviewDataCmComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EnterDataPortfolioComponent);
+    fixture = TestBed.createComponent(ReviewDataCmComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
