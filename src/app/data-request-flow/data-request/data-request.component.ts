@@ -26,6 +26,7 @@ import { LazyLoadEvent, MessageService } from 'primeng/api';
 // import { strictEqual } from 'assert';
 import { ClimateAction, ServiceProxy } from 'shared/service-proxies/service-proxies';
 import { Tool } from '../enum/tool.enum';
+import { MasterDataService } from 'app/shared/master-data.service';
 
 @Component({
   selector: 'app-data-request',
@@ -89,6 +90,7 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
 
   activeIndexMain =0;
   tabIndex =0;
+  assessment_types:any=[]
   tool:any='';
   constructor(
     private router: Router,
@@ -99,7 +101,8 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
     // private assessmentYearProxy: AssessmentYearControllerServiceProxy,
     private messageService: MessageService,
     private prHistoryProxy: ParameterHistoryControllerServiceProxy,
-    private institutionProxy: InstitutionControllerServiceProxy
+    private institutionProxy: InstitutionControllerServiceProxy,
+    private masterDataService: MasterDataService,
   ) { }
   ngAfterViewInit(): void {
     this.cdr.detectChanges();
@@ -107,47 +110,82 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
 
   async ngOnInit(): Promise<void> {
     this.tool=Tool.CM_tool;
+    this.assessment_types = this.masterDataService.assessment_type;
 
     this.parameterRqstProxy
       .getNewDataRequestForClimateList(0, 0, '', 0, '', 0, '1234').subscribe(res => {
         console.log("data",res)
         this.loading=true
         for (let a of res.items) {
-
-          if (a.parameter.Assessment !== null) {
-            if (
-              !this.assignCAArray.includes(
-                a.parameter.Assessment.Prject
-                  .climateActionName
-              )
-            ) {
-
-              this.assignCAArray.push(
-                a.parameter.Assessment.Prject
-                  .climateActionName
-              );
-              this.dataReqAssignCA.push(
-                a.parameter.Assessment.Prject
-              );
+          if(this.tool==Tool.CM_tool){
+           
+            if (a?.cmAssessmentAnswer?.assessment_question?.assessment?.climateAction !== null) {
+              if (
+                !this.assignCAArray.includes(
+                  a.cmAssessmentAnswer.assessment_question.assessment.climateAction.policyName
+                )
+                
+              ) {
+                // console.log("climateactionsList",this.assignCAArray)
+  
+                this.assignCAArray.push(
+                  a.cmAssessmentAnswer.assessment_question.assessment.climateAction.policyName
+                );
+                this.dataReqAssignCA.push(
+                  a.cmAssessmentAnswer.assessment_question.assessment.climateAction
+                  
+                );
+                console.log("climateactionsList",this.dataReqAssignCA)
+               
+              }
             }
+  
           }
+          else if(this.tool==Tool.Investor_tool||Tool.Portfolio_tool){
+            
+            if (a?.investmentParameter?.assessment?.climateAction?.policyName !== null) {
+              if (
+                !this.assignCAArray.includes(
+                  a.investmentParameter.assessment.climateAction.policyName
+                )
+                
+              ) {
+                // console.log("climateactionsList",this.assignCAArray)
+  
+                this.assignCAArray.push(
+                  a.investmentParameter.assessment.climateAction.policyName
+                );
+                this.dataReqAssignCA.push(
+                  a.investmentParameter.assessment.climateAction
+                  
+                );
+                console.log("climateactionsList",this.dataReqAssignCA)
+               
+              }
+            }
+  
+          }
+          
+  
+  
+  
         }
 
       })
-    // setTimeout(() => {
-    //   this.parameterRqstProxy
-    //     .getNewDataRequest(1, this.rows, '', 0, '', 0, '1234')
-    //     .subscribe((a) => {
-    //       console.log('aa', a);
-    //       if (a) {
-    //         this.dataRequestList = a.items;
-    //         console.log('ttttttttt', this.dataRequestList);
-    //         console.log('dataReqAssignCA===', this.dataReqAssignCA);
+    setTimeout(() => {
+      this.parameterRqstProxy
+        .getNewDataRequest(1, this.rows, '', 0, '', 0,this.tool, '1234')
+        .subscribe((a) => {
+          console.log('aa', a);
+          if (a) {
+            this.dataRequestList = a.items;
+            console.log('ttttttttt', this.dataRequestList);
+            console.log('dataReqAssignCA===', this.dataReqAssignCA);
 
-    //         console.log('assignCAArray===', this.assignCAArray);
-    //       }
-    //     });
-    // }, 10);
+            console.log('assignCAArray===', this.assignCAArray);
+          }
+        });
+    }, 10);
     let req = await this.institutionProxy.getInstitutionDataProvider(1, 1000, '', 1).toPromise();
 
     this.instuitutionList = req.items;
@@ -454,7 +492,7 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
     let institutionId = this.searchBy.institution
       ? this.searchBy.institution.id
       : 0;
-    let year = this.searchBy.year ? this.searchBy.year.assessmentYear : '';
+    let year = this.searchBy.year ? this.searchBy.year : '';
     let filtertext = this.searchBy.text ? this.searchBy.text : '';
 
     let editedOn = this.searchBy.editedOn
@@ -481,12 +519,68 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
           '1234',
           
         )
-        .subscribe((a) => {
-          console.log('aa', a);
-          if (a) {
-            this.dataRequestList = a.items;
+        .subscribe((res) => {
+          console.log('aa', res);
+          if (res) {
+            this.dataRequestList = res.items;
             console.log('data requests.....', this.dataRequestList);
-            this.totalRecords = a.meta.totalItems;
+            this.totalRecords = res.meta.totalItems;
+            this.assignCAArray.length=0;
+            this.dataReqAssignCA.length=0;
+            for (let a of res.items) {
+              if(this.tool==Tool.CM_tool){
+               
+                if (a?.cmAssessmentAnswer?.assessment_question?.assessment?.climateAction !== null) {
+                  if (
+                    !this.assignCAArray.includes(
+                      a.cmAssessmentAnswer.assessment_question.assessment.climateAction.policyName
+                    )
+                    
+                  ) {
+                    // console.log("climateactionsList",this.assignCAArray)
+      
+                    this.assignCAArray.push(
+                      a.cmAssessmentAnswer.assessment_question.assessment.climateAction.policyName
+                    );
+                    this.dataReqAssignCA.push(
+                      a.cmAssessmentAnswer.assessment_question.assessment.climateAction
+                      
+                    );
+                    console.log("climateactionsList",this.dataReqAssignCA)
+                   
+                  }
+                }
+      
+              }
+              else if(this.tool==Tool.Investor_tool||Tool.Portfolio_tool){
+                
+                if (a?.investmentParameter?.assessment?.climateAction?.policyName !== null) {
+                  if (
+                    !this.assignCAArray.includes(
+                      a.investmentParameter.assessment.climateAction.policyName
+                    )
+                    
+                  ) {
+                    // console.log("climateactionsList",this.assignCAArray)
+      
+                    this.assignCAArray.push(
+                      a.investmentParameter.assessment.climateAction.policyName
+                    );
+                    this.dataReqAssignCA.push(
+                      a.investmentParameter.assessment.climateAction
+                      
+                    );
+                    console.log("climateactionsList",this.dataReqAssignCA)
+                   
+                  }
+                }
+      
+              }
+              
+      
+      
+      
+            }
           }
           this.loading = false;
         });

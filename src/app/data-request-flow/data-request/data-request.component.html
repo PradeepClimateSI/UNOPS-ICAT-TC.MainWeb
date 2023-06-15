@@ -64,7 +64,7 @@
                 [showClear]="true"
                 [filter]="true"
                 placeholder="Select .."
-                optionLabel="climateActionName"
+                optionLabel="policyName"
               >
               </p-dropdown>
             </div>
@@ -72,16 +72,17 @@
         </div>
         <div class="col-md-4">
           <div class="p-field">
-            <label for="projYear">Year</label>
+            <label for="projYear">Assessment Type</label>
             <p-dropdown
               name="projYear"
-              [options]="yearList"
               [(ngModel)]="searchBy.year"
               #fsector="ngModel"
               [showClear]="true"
               [filter]="true"
               placeholder="Select .."
-              optionLabel="assessmentYear"
+              [options]="assessment_types"
+              optionLabel="name"
+              optionValue="name" 
               (ngModelChange)="onYearChange($event)"
             >
             </p-dropdown>
@@ -149,24 +150,24 @@
               <th style="width: 3rem">
                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
               </th>
-              <th >INTERVENTION</th>
-              <th >ASSESSMENT TYPE</th>
+              <th >Intervention</th>
+              <th >Assessment Type</th>
               
               <ng-container *ngIf="tabIndex==1||tabIndex==2" >
-                <th >ASSESSMENT PERIOD</th>
-                <th>PROCESS/OUTCOME</th>
-                <th>CATEGORY</th>
-                <th>CHARACTERISTIC</th>
-                <th>INDICATOR/SCORE</th>
+                <th >Assessment Period</th>
+                <th>Process/Outcome</th>
+                <th>Category</th>
+                <th>Characteristic</th>
+                <th>Indicator/Score</th>
               </ng-container>
               <ng-container *ngIf="tabIndex==0" >
-                <th>QUESTION</th>
+                <th>Question</th>
                 
               </ng-container>
-              <th >DATA PROVIDER</th>
+              <th >Data Provider</th>
               <th>Deadline</th>
               <th>Status</th>
-              <th >INFO</th>
+              <th >Info</th>
 
             
             </tr>
@@ -202,7 +203,7 @@
               <td>{{ dataRequestList?.investmentParameter?.type}}</td>
               <td>{{ dataRequestList?.investmentParameter?.category?.name}}</td>
               <td>{{ dataRequestList?.investmentParameter?.characteristics?.name}}</td>
-              <td>{{ dataRequestList?.investmentParameter?.institutionDescription}}</td>
+              <td>{{ (dataRequestList?.investmentParameter?.question) ?(dataRequestList?.investmentParameter?.question?.name): (dataRequestList?.investmentParameter?.institutionDescription)}}</td>
               <td>
                 <div
                   class="might-overflow"

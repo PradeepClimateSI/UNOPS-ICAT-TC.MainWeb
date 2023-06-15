@@ -26,7 +26,7 @@
               [showClear]="true"
               [filter]="true"
               placeholder="Select .."
-              optionLabel="climateActionName"
+              optionLabel="policyName"
               (ngModelChange)="onCAChange($event)"
             >
             </p-dropdown>
@@ -145,7 +145,8 @@
               <td>{{ assignDataRequestList?.investmentParameter?.type}}</td>
               <td>{{ assignDataRequestList?.investmentParameter?.category?.name}}</td>
               <td>{{ assignDataRequestList?.investmentParameter?.characteristics?.name}}</td>
-              <td>{{ assignDataRequestList?.investmentParameter?.institutionDescription}}</td>
+              <td>{{ (assignDataRequestList?.investmentParameter?.question) ?(assignDataRequestList?.investmentParameter?.question?.name): (assignDataRequestList?.investmentParameter?.institutionDescription)}}</td>
+
             
               </ng-container>
               <ng-container *ngIf="tabIndex==0" >
