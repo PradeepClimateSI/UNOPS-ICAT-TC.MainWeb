@@ -418,6 +418,7 @@ export class EnterDataCmComponent implements OnInit {
       let inputParameters = new UpdateDeadlineDto();
       inputParameters.ids = idList;
       inputParameters.status = 6;
+      inputParameters.tool = UpdateDeadlineDtoTool.Carbon_Market_Tool
       this.parameterRequestControllerServiceProxy.acceptReviewData(inputParameters).subscribe(
         (res) => {
           this.isAddData = false;
