@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
 import { CMAnswer, CMAssessmentAnswer, CMAssessmentQuestion, CMQuestionControllerServiceProxy, ParameterRequest, ParameterRequestControllerServiceProxy, ParameterRequestTool, ServiceProxy, UpdateDeadlineDto, UpdateDeadlineDtoTool, UpdateValueEnterData } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { DataRequestStatus } from 'app/Model/DataRequestStatus.enum';
 import * as XLSX from 'xlsx';
+import { environment } from 'environments/environment.prod';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-enter-data-cm',
@@ -44,12 +46,18 @@ export class EnterDataCmComponent implements OnInit {
   selectedParameter: any;
   selectedId: number;
   parameterListFilterData: any[];
+  // SERVER_URL = environment.baseUrlExcelUpload; //'http://localhost:7080/parameter/upload'
+  SERVER_URL = 'http://localhost:7080/cm-assessment-answer/upload'
+
+  @ViewChild('myInput')
+  myInputVariable: ElementRef;
 
   constructor(
     private parameterRequestControllerServiceProxy: ParameterRequestControllerServiceProxy,
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
     private serviceProxy: ServiceProxy,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private httpClient: HttpClient
   ) { }
 
   ngOnInit(): void {
@@ -197,15 +205,15 @@ export class EnterDataCmComponent implements OnInit {
         let id = e.cmAssessmentAnswer.id;
         let intervention = e.cmAssessmentAnswer.assessment_question.assessment.climateAction.policyName;
         let assesmentType = e.cmAssessmentAnswer.assessment_question.assessment.assessmentType;
+        let questionId = e.cmAssessmentAnswer.assessment_question.question.id
         let question = e.cmAssessmentAnswer.assessment_question.question.label
         let answer = e.cmAssessmentAnswer.answer.label
-        // let unit = e.parameterId.uomDataRequest;
-        // let deadline = e.deadline;
   
         let obj = {
           id,
           intervention,
           assesmentType,
+          questionId,
           question,
           answer
         };
@@ -232,9 +240,24 @@ export class EnterDataCmComponent implements OnInit {
 
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
 
+    // let dropdownOptions = ['Yes', 'No']
+
+    // const dataValidation = {
+    //   type: 'list',
+    //   formula1: `"${dropdownOptions.join(',')}"`,
+    //   showDropDown: true,
+    // };
+
     console.log(ws)
     console.log(wb)
+    // const cellAddress = 'F5'; // Change this to the desired cell address
+
+    // ws['!dataValidations'] = [{
+    //   sqref: cellAddress,
+    //   ...dataValidation,
+    // }];
     XLSX.utils.book_append_sheet(wb, ws, 'sheet1');
+
 
     XLSX.writeFile(wb, 'data_entry_template_' + reportTime + '.xlsx');
 
@@ -281,32 +304,32 @@ export class EnterDataCmComponent implements OnInit {
 
   // OnClick of button Upload
   onUpload() {
-    // const formData = new FormData();
-    // formData.append('file', this.fileData);
-    // let fullUrl = this.SERVER_URL;
-    // this.httpClient.post<any>(fullUrl, formData).subscribe(
-    //   (res) => {
-    //     this.messageService.add({
-    //       severity: 'success',
-    //       summary: 'Success',
-    //       detail: 'Excel Data Uploaded successfully',
-    //     });
+    const formData = new FormData();
+    formData.append('file', this.fileData);
+    let fullUrl = this.SERVER_URL;
+    this.httpClient.post<any>(fullUrl, formData).subscribe(
+      (res) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Excel Data Uploaded successfully',
+        });
 
-    //     this.myInputVariable.nativeElement.value = '';
-    //     this.uploadFile = false;
-    //   },
-    //   (err) => {
-    //     this.messageService.add({
-    //       severity: 'error',
-    //       summary: 'Error.',
-    //       detail: 'Internal server error, please try again.',
-    //     });
-    //   }
-    // );
-    // setTimeout(() => {
-    //   this.onSearch();
-    //   //location.reload();
-    // }, 1000);
+        this.myInputVariable.nativeElement.value = '';
+        this.uploadFile = false;
+      },
+      (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error.',
+          detail: 'Internal server error, please try again.',
+        });
+      }
+    );
+    setTimeout(() => {
+      this.onSearch();
+      //location.reload();
+    }, 1000);
   }
 
   async onClickSendNow(status: number) {
