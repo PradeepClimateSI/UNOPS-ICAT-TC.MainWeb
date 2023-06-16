@@ -44,7 +44,7 @@
                 <td>{{parameterList.investmentParameter.type}}</td>
                 <td>{{parameterList.investmentParameter.category?.name}}</td>
                 <td>{{parameterList.investmentParameter.characteristics?.name}}</td>
-                <td>{{parameterList.investmentParameter.indicator}}/{{parameterList.investmentParameter.score}}</td>
+                <td>{{ (parameterList?.investmentParameter?.question) ?(parameterList?.investmentParameter?.question?.name): (parameterList?.investmentParameter?.institutionDescription)}}</td>
                 <td>{{parameterList.investmentParameter.parameter_value}}</td>
                 <td>
             <tr>

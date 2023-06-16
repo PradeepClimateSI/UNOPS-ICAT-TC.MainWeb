@@ -4,6 +4,7 @@ import { LazyLoadEvent, MessageService } from 'primeng/api';
 import { CMAnswer, CMAssessmentAnswer, CMAssessmentQuestion, CMQuestionControllerServiceProxy, ParameterRequest, ParameterRequestControllerServiceProxy, ParameterRequestTool, ServiceProxy, UpdateDeadlineDto, UpdateDeadlineDtoTool, UpdateValueEnterData } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { DataRequestStatus } from 'app/Model/DataRequestStatus.enum';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-enter-data-cm',
@@ -42,6 +43,7 @@ export class EnterDataCmComponent implements OnInit {
   answers: CMAnswer[] = []
   selectedParameter: any;
   selectedId: number;
+  parameterListFilterData: any[];
 
   constructor(
     private parameterRequestControllerServiceProxy: ParameterRequestControllerServiceProxy,
@@ -106,16 +108,6 @@ export class EnterDataCmComponent implements OnInit {
   };
 
   async onClickUpdateValue(parameterList: ParameterRequest) {
-    // this.selectedPara = parameterList
-    // console.log('parameterId++++', parameterId);
-    // this.relevance =relevance;
-    // this.characteristics = characteristic;
-    // this.selectedUnit.ur_fromUnit = unit;
-    // this.selectedId = dataRequestId;
-    // this.selectedValue = parameterValue;
-    // this.selectedYear = year;
-    // this.selectedParameterId = parameterId;
-    // console.log('id', dataRequestId);
     this.selectedParameter = parameterList.cmAssessmentAnswer
     this.selectedId = parameterList.id
 
@@ -127,7 +119,7 @@ export class EnterDataCmComponent implements OnInit {
 
   onRejectClick(id: number) {
     this.isOpen = false;
-    this.isAddData = true;
+    this.confirm2 = true;
     this.selectedDataRequestId = id;
   }
 
@@ -191,37 +183,92 @@ export class EnterDataCmComponent implements OnInit {
     this.fileData = event.target.files[0];
   }
 
+  paraListFilter() {
+    console.log("paraListFilter")
+
+    if(this.selectedParameters)
+    {
+
+      this.parameterListFilterData = [];
+
+
+      this.selectedParameters.map((e) => {
+        console.log("====== selected e",e);
+        let id = e.cmAssessmentAnswer.id;
+        let intervention = e.cmAssessmentAnswer.assessment_question.assessment.climateAction.policyName;
+        let assesmentType = e.cmAssessmentAnswer.assessment_question.assessment.assessmentType;
+        let question = e.cmAssessmentAnswer.assessment_question.question.label
+        let answer = e.cmAssessmentAnswer.answer.label
+        // let unit = e.parameterId.uomDataRequest;
+        // let deadline = e.deadline;
+  
+        let obj = {
+          id,
+          intervention,
+          assesmentType,
+          question,
+          answer
+        };
+  
+        this.parameterListFilterData.push(obj);
+  
+        console.log('+++++++obj 1======', obj);
+      })
+    }
+  }
+
   download() {
-    // this.paraListFilter();
+    console.log("download")
+    this.paraListFilter();
 
-    // var d = new Date();
-    // var reportTime = this.formatDate(d);
+    var d = new Date();
+    var reportTime = this.formatDate(d);
 
 
-    // console.log(this.parameterListFilterData)
-    // const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
-    //   this.parameterListFilterData
-    // );
+    console.log(this.parameterListFilterData)
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
+      this.parameterListFilterData
+    );
 
-    // const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
 
-    // console.log(ws)
-    // console.log(wb)
-    // XLSX.utils.book_append_sheet(wb, ws, 'sheet1');
+    console.log(ws)
+    console.log(wb)
+    XLSX.utils.book_append_sheet(wb, ws, 'sheet1');
 
-    // XLSX.writeFile(wb, 'data_entry_template_' + reportTime + '.xlsx');
+    XLSX.writeFile(wb, 'data_entry_template_' + reportTime + '.xlsx');
 
-    // this.onSearch();
-    // //
-    // this.messageService.add({
-    //   severity: 'info',
-    //   summary: 'Info',
-    //   detail:
-    //     'Please do not change the number of columns , column names  & selected units of the excel sheet if you want to re upload ',
-    //   closable: true,
-    // });
+    this.onSearch();
+    //
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Info',
+      detail:
+        'Please do not change the number of columns , column names  & selected units of the excel sheet if you want to re upload ',
+      closable: true,
+    });
 
-    // this.selectedParameters = []
+    this.selectedParameters = []
+  }
+
+  formatDate(date: any) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return (
+      date.getMonth() +
+      1 +
+      '/' +
+      date.getDate() +
+      '/' +
+      date.getFullYear() +
+      '_' +
+      strTime
+    );
   }
 
   uploadDialog() {

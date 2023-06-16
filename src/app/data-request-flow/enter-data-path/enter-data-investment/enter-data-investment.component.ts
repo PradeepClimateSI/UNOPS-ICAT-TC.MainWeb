@@ -120,7 +120,7 @@ export class EnterDataInvestmentComponent implements OnInit {
 
   onRejectClick(id: number) {
     this.isOpen = false;
-    this.isAddData = true;
+    this.confirm2 = true;
     this.selectedDataRequestId = id;
   }
 
@@ -129,25 +129,26 @@ export class EnterDataInvestmentComponent implements OnInit {
     inputParameters.ids = [this.selectedDataRequestId];
     inputParameters.status = this.user_role == "Institution Admin" ? DataRequestStatus.Rejected_EnterData_IA : DataRequestStatus.Rejected_EnterData_DEO;
     inputParameters.comment = this.reasonForReject;
-    // this.parameterRequestProxy.rejectEnterData(inputParameters).subscribe(
-    //   (res) => {
-    //     this.messageService.add({
-    //       severity: 'success',
-    //       summary: 'Success',
-    //       detail: 'Data was rejected successfully',
-    //     });
-    //     this.confirm2 = false;
+    inputParameters.tool = this.tool as unknown as UpdateDeadlineDtoTool
+    this.parameterRequestControllerServiceProxy.rejectEnterData(inputParameters).subscribe(
+      (res) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Data was rejected successfully',
+        });
+        this.confirm2 = false;
 
-    //     this.onSearch();
-    //   },
-    //   (err) => {
-    //     this.messageService.add({
-    //       severity: 'error',
-    //       summary: 'Error.',
-    //       detail: 'Internal server error, please try again.',
-    //     });
-    //   }
-    // );
+        this.onSearch();
+      },
+      (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error.',
+          detail: 'Internal server error, please try again.',
+        });
+      }
+    );
   }
 
   onReject() {
