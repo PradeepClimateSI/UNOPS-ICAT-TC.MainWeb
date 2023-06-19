@@ -63,6 +63,7 @@ import { PortfolioDashboardComponent } from 'app/portfolio-dashboard/portfolio-d
 import { CarbonMarketDashboardComponent } from 'app/carbon-market-dashboard/carbon-market-dashboard.component';
 import { PortfolioListComponent } from 'app/portfolios/portfolio-list/portfolio-list.component';
 import { PortfolioAddComponent } from 'app/portfolios/portfolio-add/portfolio-add.component';
+import { PortfolioResultComponent } from 'app/portfolios/portfolio-result/portfolio-result.component';
 
 
 const routes: Routes = [
@@ -337,6 +338,13 @@ const routes: Routes = [
   {
     path: 'portfolio-add',
     component: PortfolioAddComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'portfolio-view',
+    component: PortfolioResultComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}
