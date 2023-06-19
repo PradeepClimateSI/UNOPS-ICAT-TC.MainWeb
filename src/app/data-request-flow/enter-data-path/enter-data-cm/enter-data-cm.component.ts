@@ -51,6 +51,8 @@ export class EnterDataCmComponent implements OnInit {
 
   @ViewChild('myInput')
   myInputVariable: ElementRef;
+  assignCAArray: any = []
+  climateactions: any = []
 
   constructor(
     private parameterRequestControllerServiceProxy: ParameterRequestControllerServiceProxy,
@@ -68,6 +70,38 @@ export class EnterDataCmComponent implements OnInit {
     this.user_role = tokenPayload.role.code;
     this.totalRecords = 0;
     this.userName = tokenPayload.username;
+
+    this.parameterRequestControllerServiceProxy
+      .getEnterDataParameters(
+        0,
+        0,
+        '',
+        0,
+        '',
+        this.userName,
+        ParameterRequestTool.Carbon_Market_Tool.toString(),
+        '1234'
+      )
+      .subscribe((res: any) => {
+        for (let a of res.items) {
+          if (a.cmAssessmentAnswer.CMAssessmentQuestion.assessment !== null) {
+
+            if (
+              !this.assignCAArray.includes(
+                a.cmAssessmentAnswer.CMAssessmentQuestion.assessment.climateAction.policyName
+              )
+            ) {
+
+              this.assignCAArray.push(
+                a.cmAssessmentAnswer.CMAssessmentQuestion.assessment.climateAction.policyName
+              );
+              this.climateactions.push(
+                a.cmAssessmentAnswer.CMAssessmentQuestion.assessment.climateAction
+              );
+            }
+          }
+        }
+      });
 
     this.loadgridData({})
   }
@@ -114,6 +148,15 @@ export class EnterDataCmComponent implements OnInit {
         });
     }, 1);
   };
+
+  onCAChange(event: any) {
+    console.log('searchby...', this.searchBy);
+    this.onSearch();
+  }
+
+  onSearchClick(event: any) {
+    this.onSearch();
+  }
 
   async onClickUpdateValue(parameterList: ParameterRequest) {
     this.selectedParameter = parameterList.cmAssessmentAnswer

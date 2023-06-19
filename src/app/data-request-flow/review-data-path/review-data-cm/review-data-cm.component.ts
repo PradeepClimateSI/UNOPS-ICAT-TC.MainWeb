@@ -32,6 +32,9 @@ export class ReviewDataCmComponent implements OnInit {
   selectedUser: User;
   selectedDeadline: Date;
   reasonForReject: string;
+  assignCAArray: any = []
+  climateactionsList: any = []
+  assessmentType: string[] = ['Ex-ante','Ex-post'];
 
   constructor(
     private parameterRequestControllerServiceProxy: ParameterRequestControllerServiceProxy,
@@ -60,6 +63,40 @@ export class ReviewDataCmComponent implements OnInit {
     //   });
 
     this.userList = await this.usersControllerServiceProxy.usersByInstitution(1, 1000, '', 9, this.userName).toPromise()
+
+    this.parameterRequestControllerServiceProxy
+      .getReviewDataRequests(
+        0,
+        0,
+        '',
+        0,
+        '',
+        '',
+        this.userName,
+        ParameterRequestTool.Carbon_Market_Tool.toString(),
+        "1234"
+      )
+      .subscribe((res: any) => {
+        console.log('my list....s', res.items);
+        for (let a of res.items) {
+          if (a.cmAssessmentAnswer.CMAssessmentQuestion.assessment !== null) {
+
+            if (
+              !this.assignCAArray.includes(
+                a.cmAssessmentAnswer.CMAssessmentQuestion.assessment.climateAction.policyName
+              )
+            ) {
+
+              this.assignCAArray.push(
+                a.cmAssessmentAnswer.CMAssessmentQuestion.assessment.climateAction.policyName
+              );
+              this.climateactionsList.push(
+                a.cmAssessmentAnswer.CMAssessmentQuestion.assessment.climateAction
+              );
+            }
+          }
+        }
+      });
   
   }
 
@@ -121,6 +158,19 @@ export class ReviewDataCmComponent implements OnInit {
         });
     }, 1);
   };
+
+  onSearchClick(event: any) {
+    this.onSearch();
+  }
+
+  onCAChange(event: any) {
+    this.onSearch();
+  }
+
+  onYearChange(event: any) {
+    this.onSearch();
+  }
+
 
   getInfo(obj: any)
   {

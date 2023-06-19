@@ -52,6 +52,8 @@ export class EnterDataInvestmentComponent implements OnInit {
   
   @ViewChild('myInput')
   myInputVariable: ElementRef;
+  assignCAArray: any = []
+  climateactions: any = []
 
   constructor(
     private parameterRequestControllerServiceProxy: ParameterRequestControllerServiceProxy,
@@ -69,6 +71,39 @@ export class EnterDataInvestmentComponent implements OnInit {
     this.user_role = tokenPayload.role.code;
     this.totalRecords = 0;
     this.userName = tokenPayload.username;
+
+    this.parameterRequestControllerServiceProxy
+    .getEnterDataParameters(
+      0,
+      0,
+      '',
+      0,
+      '',
+      this.userName,
+      this.tool,
+      '1234'
+    )
+    .subscribe((res: any) => {
+      console.log(res)
+      for (let a of res.items) {
+        if (a.investmentParameter.assessment !== null) {
+
+          if (
+            !this.assignCAArray.includes(
+              a.investmentParameter.assessment.climateAction.policyName
+            )
+          ) {
+
+            this.assignCAArray.push(
+              a.investmentParameter.assessment.climateAction.policyName
+            );
+            this.climateactions.push(
+              a.investmentParameter.assessment.climateAction
+            );
+          }
+        }
+      }
+    });
 
     this.loadgridData({})
   }
@@ -115,6 +150,15 @@ export class EnterDataInvestmentComponent implements OnInit {
         });
     }, 1);
   };
+
+  onCAChange(event: any) {
+    console.log('searchby...', this.searchBy);
+    this.onSearch();
+  }
+
+  onSearchClick(event: any) {
+    this.onSearch();
+  }
 
   async onClickUpdateValue(parameterList: ParameterRequest) {
     this.selectedParameter = parameterList.investmentParameter
