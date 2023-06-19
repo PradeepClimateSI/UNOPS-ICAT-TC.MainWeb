@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
@@ -26,7 +26,7 @@ interface ChaCategoryTotalEqualsTo1 {
   templateUrl: './investor-tool.component.html',
   styleUrls: ['./investor-tool.component.css']
 })
-export class InvestorToolComponent implements OnInit {
+export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   assessment: Assessment = new Assessment();
   investorAssessment: InvestorTool = new InvestorTool();
@@ -62,7 +62,7 @@ export class InvestorToolComponent implements OnInit {
   levelofImplementation:number=0;
 
   yesNoAnswer: any[] = [{ id: 1, name: "Yes" }, { id: 2, name: "No" },  { id: 3, name: "Maybe" }];
-
+ angle:string
 
   processData: {
     type: string,
@@ -96,6 +96,7 @@ export class InvestorToolComponent implements OnInit {
     private investorToolControllerproxy: InvestorToolControllerServiceProxy,
     private router: Router,
     private instituionProxy: InstitutionControllerServiceProxy,
+    private changeDetector: ChangeDetectorRef,
 
 
 
@@ -146,6 +147,10 @@ export class InvestorToolComponent implements OnInit {
 
 
   }
+  
+  ngAfterContentChecked(): void {
+    this.changeDetector.detectChanges();
+  }
   async getPolicies() {
     this.policies = await this.projectControllerServiceProxy.findAllPolicies().toPromise()
   }
@@ -162,9 +167,13 @@ export class InvestorToolComponent implements OnInit {
 
     });
     this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().subscribe((res3: any) => {
-      // console.log("ressss3333", res3)
-      this.characteristicsList = res3
-
+      let res:Characteristics[] = res3
+      for(let i of res){
+          if ( !['Beneficiaries', 'Disincentives', 'Institutional and regulatory'].includes(i.name)) {
+          this.characteristicsList.push(i)
+        }
+      }
+      // console.log("charList",this.characteristicsList)
     });
 
     this.methodologyAssessmentControllerServiceProxy.findAllCategories().subscribe((res2: any) => {
@@ -372,9 +381,10 @@ export class InvestorToolComponent implements OnInit {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Assessment created successfully',
+            detail: 'Successfully sent to Data Collection Team',
             closable: true,
           })
+          this.router.navigate(['/app/investor-tool-new'])
         //  this.showResults();
 
         }, error => {
@@ -518,5 +528,15 @@ onRelavanceChange(data:any,ins:any){
   // }
 
 }
+// validateAngle(value: string): string {
+//   console.log("score",value)
+//   const parsedValue = parseInt(value, 10);
+
+//   if (isNaN(parsedValue) || parsedValue < -1 || parsedValue > 3) {
+//     return ''; // Reset the value if it's not within the desired range
+//   }
+
+//   return value; // Return the validated value
+// }
 
 }
