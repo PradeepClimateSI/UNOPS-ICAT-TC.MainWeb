@@ -5,7 +5,7 @@ import { InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServ
 @Component({
   selector: 'app-portfolio-dashboard',
   templateUrl: './portfolio-dashboard.component.html',
-  styleUrls: ['./portfolio-dashboard.component.css','../investment-dashboard/investment-dashboard.component.css']
+  styleUrls: ['./portfolio-dashboard.component.css']
 })
 export class PortfolioDashboardComponent implements OnInit {
 
@@ -27,9 +27,10 @@ export class PortfolioDashboardComponent implements OnInit {
 
   recentResult : any ;
 
-
+  averageTCValue:any;
 
   ngOnInit(): void {
+    this.averageTCValue =63.78
     this.tool = 'Portfolio Tool'
     this.methassess.getResultForTool(this.tool).subscribe((res: any) => {
       console.log("resulttt : ", res)

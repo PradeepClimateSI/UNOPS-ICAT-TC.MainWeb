@@ -1,4 +1,4 @@
-import { Component, OnInit ,ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit ,ViewChild } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { AssessmentCMDetailControllerServiceProxy, ClimateAction, InvestorToolControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
@@ -7,13 +7,14 @@ import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 @Component({
   selector: 'app-investment-dashboard',
   templateUrl: './investment-dashboard.component.html',
-  styleUrls: ['./investment-dashboard.component.css']
+  styleUrls: ['./investment-dashboard.component.css','../portfolio-dashboard/portfolio-dashboard.component.css']
 })
 export class InvestmentDashboardComponent implements OnInit {
   canvas: any;
   ctx: any;
   @ViewChild('mychart') mychart: any;
-
+  @ViewChild('myCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('myCanvas2', { static: true }) canvasRef2!: ElementRef<HTMLCanvasElement>;
   interventions:any[]=[];
   investment:number[]=[];
   tc:number[]=[];
@@ -44,7 +45,9 @@ export class InvestmentDashboardComponent implements OnInit {
     }[];
   averageTCValue:any;
   calResults: any;
-
+  resultData : any = []
+  resultData2 : any = []
+  recentResult : any ;
 
   constructor(
     private projectProxy: ProjectControllerServiceProxy,
@@ -88,7 +91,23 @@ export class InvestmentDashboardComponent implements OnInit {
     this.investorProxy.calculateAssessmentResults(tool).subscribe((res: any) => {
       this.calResults = res[0]
       console.log("assessdetails",this.calResults)
-      
+      const RecentInterventions = this.calResults.slice(0,10);
+      this.recentResult = RecentInterventions
+
+      this.resultData= this.recentResult.map((intervention: { likelihood: any; relevance: any; assesment: { climateAction: { policyName: any; }; }; })=>({
+        y:intervention?.likelihood,
+        x:intervention?.relevance,
+        data:intervention?.assesment?.climateAction?.policyName}))
+
+        this.resultData2= this.recentResult.map((a: { scaleScore: any; sustainedScore: any; assesment: { climateAction: { policyName: any; }; }; })=>({
+          y:a?.scaleScore,
+          x:a?.sustainedScore,
+          data:a?.assesment?.climateAction?.policyName}))
+
+        console.log("kkkkkk : ",   this.resultData)
+        console.log("kkkkkk2 : ",   this.resultData2)
+        this.viewResults();
+        this.viewResults2();
 
 
     });
@@ -174,6 +193,225 @@ export class InvestmentDashboardComponent implements OnInit {
 
   }
 
+
+  viewResults(): void {
+    if (!this.canvasRef) {
+      console.error('Could not find canvas element');
+      return;
+    }
+
+    const canvas = this.canvasRef.nativeElement;
+    const ctx = canvas.getContext('2d');
+
+    if (!ctx) {
+      console.error('Could not get canvas context');
+      return;
+    }
+
+    const gradient = ctx.createLinearGradient(0, 0, 500, 500);
+    gradient.addColorStop(0, 'red');
+    gradient.addColorStop(0.5, 'yellow');
+    gradient.addColorStop(1, 'green');
+
+    this.chart = new Chart(ctx, {
+      type: 'scatter',
+      data: {
+        datasets: [
+          {
+            label: '',
+            data: this.resultData,
+            backgroundColor: gradient,
+            borderColor: 'black',
+            borderWidth: 1,
+            pointRadius: 8,
+            pointBackgroundColor: ['#0000FF','#FF6384', '#36A2EB', '#FFCE56', '#800000', '#66BB6A', '#FF7043', '#9575CD'],
+            pointBorderColor: 'black',
+            pointBorderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          x: {
+            type: 'linear',
+            min: 0,
+            max: 4,
+            ticks: {
+              stepSize: 1,
+           /*    callback: (value, index, ticks) => {
+                 if (value === 0) {
+                  return 'Major 4';
+                } else if (value === 1) {
+                  return 'Moderate 3';
+                } else if (value === 2) {
+                  return 'Minor 2';
+                } else if (value === 3) {
+                  return 'None 1';
+                }  else if (value === 4) {
+                  return 'Negative 0';
+                }
+                else {
+                  return value;
+                }
+              }, */
+            },
+            title: {
+              display: true,
+              text: 'Relevance',
+              font: {
+                weight: 'bold',
+                size: 16, // Adjust the font size as desired
+              },
+            },
+          },
+          y: {
+            type: 'linear',
+            min: 0,
+            max: 4,
+            ticks: {
+              stepSize: 1,
+            },
+            title: {
+              display: true,
+              text: 'Likelihood',
+              font: {
+                weight: 'bold',
+                size: 16, // Adjust the font size as desired
+              },
+            },
+          },
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: (context) => {
+                const data = context.dataset.data[context.dataIndex];
+                return[
+                  `Intervention: ${this.resultData[context.dataIndex].data}`,
+                  `Likelihood: ${this.resultData[context.dataIndex].y}`,
+                  `Relevance: ${this.resultData[context.dataIndex].x}`
+
+                ];
+              },
+            },
+          },
+          legend: {
+            display: false, // Hide the legend
+          },
+        },
+      },
+    });
+  }
+
+  viewResults2(): void {
+    if (!this.canvasRef2) {
+      console.error('Could not find canvas element');
+      return;
+    }
+
+    const canvas = this.canvasRef2.nativeElement;
+    const ctx = canvas.getContext('2d');
+
+    if (!ctx) {
+      console.error('Could not get canvas context');
+      return;
+    }
+
+    const gradient = ctx.createLinearGradient(0, 0, 500, 500);
+    gradient.addColorStop(0, 'red');
+    gradient.addColorStop(0.5, 'yellow');
+    gradient.addColorStop(1, 'green');
+
+    this.chart = new Chart(ctx, {
+      type: 'scatter',
+      data: {
+        datasets: [
+          {
+            label: '',
+            data: this.resultData2,
+            backgroundColor: gradient,
+            borderColor: 'black',
+            borderWidth: 1,
+            pointRadius: 8,
+            pointBackgroundColor: ['#0000FF','#FF6384', '#36A2EB', '#FFCE56', '#800000', '#66BB6A', '#FF7043', '#9575CD'],
+            pointBorderColor: 'black',
+            pointBorderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          x: {
+            type: 'linear',
+            min: -1,
+            max: 3,
+            ticks: {
+              stepSize: 1,
+           /*    callback: (value, index, ticks) => {
+                 if (value === 0) {
+                  return 'Major 4';
+                } else if (value === 1) {
+                  return 'Moderate 3';
+                } else if (value === 2) {
+                  return 'Minor 2';
+                } else if (value === 3) {
+                  return 'None 1';
+                }  else if (value === 4) {
+                  return 'Negative 0';
+                }
+                else {
+                  return value;
+                }
+              }, */
+            },
+            title: {
+              display: true,
+              text: 'Sustained',
+              font: {
+                weight: 'bold',
+                size: 16, // Adjust the font size as desired
+              },
+            },
+          },
+          y: {
+            type: 'linear',
+            min: -1,
+            max: 3,
+            ticks: {
+              stepSize: 1,
+            },
+            title: {
+              display: true,
+              text: 'Scaled',
+              font: {
+                weight: 'bold',
+                size: 16, // Adjust the font size as desired
+              },
+            },
+          },
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: (context) => {
+                const data = context.dataset.data[context.dataIndex];
+                return[
+                  `Intervention: ${this.resultData2[context.dataIndex].data}`,
+                  `Scaled: ${this.resultData2[context.dataIndex].y}`,
+                  `Sustained: ${this.resultData2[context.dataIndex].x}`
+
+                ];
+              },
+            },
+          },
+          legend: {
+            display: false, // Hide the legend
+          },
+        },
+      },
+    });
+  }
+
   viewPieChart(){
     const labels = this.sectorCount.map((item) => item.sector);
     let counts:number[] = this.sectorCount.map((item) => item.count);
@@ -186,7 +424,17 @@ export class InvestmentDashboardComponent implements OnInit {
         labels: labels,
         datasets: [{
           data: counts,
-          backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#66BB6A', '#FF7043', '#9575CD'],
+          backgroundColor: [
+            'rgba(153, 102, 255, 1)',
+            'rgba(75, 192, 192,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(123, 122, 125, 1)',
+            'rgba(255, 99, 132, 1)',
+            'rgba(255, 205, 86, 1)',
+            'rgba(255, 99, 132, 1)',
+
+          ],
+         
         }]
       },
       options: {

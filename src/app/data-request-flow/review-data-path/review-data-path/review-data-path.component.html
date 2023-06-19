@@ -1,0 +1,16 @@
+<div class="container pl-20 pr-20">
+    <h4 class="mt-4">Review Data</h4>
+    <div class="p-grid p-fluid card">
+        <p-tabView>
+            <p-tabPanel header="Carbon market">
+                <app-review-data-cm></app-review-data-cm>
+            </p-tabPanel>
+            <p-tabPanel header="Investment & Private Sector Tool">
+                <app-review-data-investment [tool]="'Investment & Private Sector Tool'"></app-review-data-investment>
+            </p-tabPanel>
+            <p-tabPanel header="Portfolio">
+                <app-review-data-investment [tool]="'Portfolio Tool'"></app-review-data-investment>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</div>

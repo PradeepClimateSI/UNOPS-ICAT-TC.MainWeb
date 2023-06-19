@@ -13,7 +13,7 @@ import { ResetComponent } from './reset/reset.component';
 import { AuthControllerServiceProxy } from 'shared/service-proxies/auth-service-proxies';
 import { RegisterUserComponent } from './register-user/register-user.component';
 import { EmailConfirmComponent } from './email-confirm/email-confirm.component';
-
+import { SetPasswordComponent } from './set-password/set-password.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -38,6 +38,10 @@ const routes: Routes = [
     component: RegisterUserComponent
   },
   {
+    path: 'reset-password',
+    component: SetPasswordComponent
+  },
+  {
     path: 'confirm-email',
     component: EmailConfirmComponent
   },
@@ -50,7 +54,8 @@ const routes: Routes = [
     OtpComponent,
     ResetComponent,
     RegisterUserComponent,
-    EmailConfirmComponent
+    EmailConfirmComponent,
+    SetPasswordComponent
   ],
     imports: [
         CommonModule,
@@ -59,7 +64,7 @@ const routes: Routes = [
         PasswordModule,
         DividerModule,
         InputTextModule,
-        ToastModule
+        ToastModule,
     ],
     providers: [AuthControllerServiceProxy]
 })

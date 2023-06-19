@@ -31,7 +31,6 @@ import { ClimateActionComponent } from 'app/climate-action/climate-action/climat
 import { ViewComponent } from 'app/climate-action/view/view.component';
 import { DataRequestComponent } from 'app/data-request-flow/data-request/data-request.component';
 import { AssignDataRequestComponent } from 'app/data-request-flow/assign-data-request/assign-data-request.component';
-import { EnterDataComponent } from 'app/data-request-flow/enter-data/enter-data.component';
 import { ReviewDataComponent } from 'app/data-request-flow/review-data/review-data.component';
 import { CarbonComponent } from 'app/Tool/carbon/carbon.component';
 import { PortfolioComponent } from 'app/Tool/portfolio/portfolio.component';
@@ -64,6 +63,8 @@ import { CarbonMarketDashboardComponent } from 'app/carbon-market-dashboard/carb
 import { PortfolioListComponent } from 'app/portfolios/portfolio-list/portfolio-list.component';
 import { PortfolioAddComponent } from 'app/portfolios/portfolio-add/portfolio-add.component';
 import { PortfolioResultComponent } from 'app/portfolios/portfolio-result/portfolio-result.component';
+import { EnterDataPathComponent } from 'app/data-request-flow/enter-data-path/enter-data-path/enter-data-path.component';
+import { ReviewDataPathComponent } from 'app/data-request-flow/review-data-path/review-data-path/review-data-path.component';
 
 
 const routes: Routes = [
@@ -140,14 +141,14 @@ const routes: Routes = [
   },
   {
     path: 'enter-data',
-    component: EnterDataComponent,
+    component: EnterDataPathComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}
   },
   {
     path: 'view-data',
-    component: ReviewDataComponent,
+    component: ReviewDataPathComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}

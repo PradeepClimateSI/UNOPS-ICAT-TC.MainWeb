@@ -25,6 +25,7 @@ import {
   ServiceProxy,
   UsersControllerServiceProxy,
 } from 'shared/service-proxies/service-proxies';
+import { Tool } from '../enum/tool.enum';
 
 @Component({
   selector: 'app-assign-data-request',
@@ -72,6 +73,11 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
   userCountryId: number = 0;
   userSectorId: number = 0;
   climateactionsList: any[] = [];
+
+
+  activeIndexMain =0;
+  tabIndex =0;
+  tool:any='';
   constructor(
     private router: Router,
     private serviceProxy: ServiceProxy,
@@ -88,6 +94,7 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
   }
 
   async ngOnInit(): Promise<void> {
+    this.tool=Tool.CM_tool;
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
     this.userName =tokenPayload.username;
@@ -100,43 +107,7 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
     let filter2: string[] = new Array();
 
     filter2.push('projectApprovalStatus.id||$eq||' + 5);
-    this.parameterProxy
-      .getAssignDateRequest(
-        0,
-        0,
-        '',
-        0,
-        this.userName,
-        "1234"
-      )
-      .subscribe((res) => {
-        for (let a of res.items) {
-          // console.log("test countrya",a)
-
-          if (a.parameterId.Assessment !== null) {
-            if (
-              !this.assignCAArray.includes(
-                a.parameterId.Assessment.Prject
-                  .climateActionName
-              )
-            ) {
-
-              this.assignCAArray.push(
-                a.parameterId.Assessment.Prject
-                  .climateActionName
-              );
-              this.climateactionsList.push(
-                a.parameterId.Assessment.Prject
-              );
-            }
-          }
-
-
-
-        }
-
-      });
-
+    this.getdata();
 
 
     this.usersControllerServiceProxy
@@ -148,10 +119,55 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
         console.log('this.userList', this.userList);
       });
   }
+  getdata(){
+    this.parameterProxy
+    .getAssignDateRequest(
+      0,
+      0,
+      '',
+      0,
+      this.userName,
+      this.tool,
+      "1234"
+    )
+    .subscribe((res) => {
+      for (let a of res.items) {
+        // console.log("test countrya",a)
+        if(this.tool==Tool.CM_tool){
+          if (a?.cmAssessmentAnswer?.assessment_question?.assessment?.climateAction !== null) {
+            if (
+              !this.assignCAArray.includes(
+                a.cmAssessmentAnswer.assessment_question.assessment.climateAction.policyName
+              )
+              
+            ) {
+              // console.log("climateactionsList",this.assignCAArray)
 
+              this.assignCAArray.push(
+                a.cmAssessmentAnswer.assessment_question.assessment.climateAction.policyName
+              );
+              this.climateactionsList.push(
+                a.cmAssessmentAnswer.assessment_question.assessment.climateAction
+                
+              );
+              console.log("climateactionsList",this.climateactionsList)
+             
+            }
+          }
+
+        }
+        
+
+
+
+      }
+
+    });
+
+  }
   onCAChange(event: any) {
     console.log('selectedUser', this.selectedUser);
-
+    
     this.onSearch();
   }
 
@@ -177,6 +193,7 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
   // /////////////////////////////////////////////
 
   loadgridData = (event: LazyLoadEvent) => {
+    
     console.log('event Date', event);
     this.loading = true;
     this.totalRecords = 0;
@@ -202,13 +219,70 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
           filtertext,
           climateActionId,
           this.userName,
+          this.tool,
           "1234"
         )
-        .subscribe((a) => {
-          console.log('aa', a);
-          if (a) {
-            this.assignDataRequestList = a.items;
-            this.totalRecords = a.meta.totalItems;
+        .subscribe((res) => {
+          console.log('aa', res);
+          if (res) {
+            this.assignDataRequestList = res.items;
+            this.totalRecords = res.meta.totalItems;
+            this.assignCAArray.length=0;
+            this.climateactionsList.length=0;
+            for (let a of res.items) {
+              if(this.tool==Tool.CM_tool){
+               
+                if (a?.cmAssessmentAnswer?.assessment_question?.assessment?.climateAction !== null) {
+                  if (
+                    !this.assignCAArray.includes(
+                      a.cmAssessmentAnswer.assessment_question.assessment.climateAction.policyName
+                    )
+                    
+                  ) {
+                    // console.log("climateactionsList",this.assignCAArray)
+      
+                    this.assignCAArray.push(
+                      a.cmAssessmentAnswer.assessment_question.assessment.climateAction.policyName
+                    );
+                    this.climateactionsList.push(
+                      a.cmAssessmentAnswer.assessment_question.assessment.climateAction
+                      
+                    );
+                    console.log("climateactionsList",this.climateactionsList)
+                   
+                  }
+                }
+      
+              }
+              else if(this.tool==Tool.Investor_tool||Tool.Portfolio_tool){
+                
+                if (a?.investmentParameter?.assessment?.climateAction?.policyName !== null) {
+                  if (
+                    !this.assignCAArray.includes(
+                      a.investmentParameter.assessment.climateAction.policyName
+                    )
+                    
+                  ) {
+                    // console.log("climateactionsList",this.assignCAArray)
+      
+                    this.assignCAArray.push(
+                      a.investmentParameter.assessment.climateAction.policyName
+                    );
+                    this.climateactionsList.push(
+                      a.investmentParameter.assessment.climateAction
+                      
+                    );
+                    console.log("climateactionsList",this.climateactionsList)
+                   
+                  }
+                }
+      
+              }
+              
+      
+      
+      
+            }
           }
           this.loading = false;
         });
@@ -237,9 +311,14 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
 
 
   getInfo(obj: any) {
-    console.log("dataRequestList...", obj)
-    this.paraId = obj.parameterId.id;
-    console.log("this.paraId...", this.paraId)
+    // console.log("dataRequestList...", obj)
+    if(this.tool==Tool.CM_tool){
+      this.paraId = obj.cmAssessmentAnswer.id; 
+    }
+    else if(this.tool==Tool.Investor_tool||Tool.Portfolio_tool){
+      this.paraId = obj.investmentParameter.id; 
+    }
+    // console.log("this.paraId...", this.paraId)
 
     // let x = 602;
     this.prHistoryProxy
@@ -321,5 +400,27 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
         }
       );
     }
+  }
+
+  onMainTabChange(event:any){
+    this.tabIndex= this.activeIndexMain;
+    
+    let event2 :LazyLoadEvent ={rows: 10, first: 0}
+    if (this.activeIndexMain==0){
+     this.tool=Tool.CM_tool
+     this.loadgridData(event);
+      // this.loadgridData(event2,Tool.CM_tool )
+    }
+    else if (this.activeIndexMain==1){
+      this.tool=Tool.Investor_tool
+      this.loadgridData(event);
+      // this.loadgridData(event2,Tool.Investor_tool )
+    }
+    else if (this.activeIndexMain==2){
+      this.tool=Tool.Portfolio_tool;
+      this.loadgridData(event);
+      
+    }
+    console.log("tabIndex",this.tabIndex)
   }
 }

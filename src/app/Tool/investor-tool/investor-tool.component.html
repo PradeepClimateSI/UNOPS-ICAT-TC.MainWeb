@@ -175,6 +175,7 @@
                             <p-dropdown name="approach" #assessApproach="ngModel" placeholder="Select Assessment Method"
                                 [(ngModel)]="assessment.assessment_approach" [options]="assessmentApproach"  appendTo="body"
                                 (ngModelChange)="onAssessmentApproachchange(assessment.assessment_approach)" [required]="true"
+                                [disabled]="isSavedAssessment"
                                 optionLabel="name" optionValue="name"></p-dropdown>
                             <p class="info-message text-danger" *ngIf="
                                 !assessment.assessment_approach &&

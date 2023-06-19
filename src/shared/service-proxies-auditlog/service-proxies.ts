@@ -19,6 +19,8 @@ import { environment } from 'environments/environment';
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 export const  baseURLEnv:string= environment.baseUrlAuditlog;
 @Injectable()
+
+
 export class AppControllerServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
