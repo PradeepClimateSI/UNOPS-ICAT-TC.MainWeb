@@ -2,7 +2,7 @@ import { Component, OnInit ,ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import decode from 'jwt-decode';
-import { AuthControllerServiceProxy, AuthCredentialDto, ResetPassword } from 'shared/service-proxies/auth-service-proxies';
+import { AuthControllerServiceProxy, AuthCredentialDto } from 'shared/service-proxies/auth-service-proxies';
 
 @Component({
   selector: 'app-set-password',
@@ -26,7 +26,7 @@ export class SetPasswordComponent implements OnInit {
   passwordConfirm: string = "";
   showEmail: boolean = false;
   public isSubmitted: boolean = false;
-  form1: any;
+  fSetPassword: any;
   
 
   constructor(
@@ -48,33 +48,28 @@ export class SetPasswordComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      const token = localStorage.getItem('access_token')!;
-
+      const token = localStorage.getItem('ACCESS_TOKEN')!;
       const tokenPayload = decode<any>(token);
-
-      console.log('testload---------', tokenPayload);
-
-      //   this.restToken = tokenPayload;
-      this.email = tokenPayload.usr;
+      this.email = tokenPayload.username;
       if (this.email) {
         this.showEmail = true
       }
-      //   console.log("restToken", this.restToken);
     });
   }
 
 
   clickResetPassword() {
-    console.log(" this.form1", this.form1.valid)
     if (this.form.valid && this.passwordConfirm == this.resetPasswordDto.password) {
-      // this.resetPasswordDto.token = "";
       this.resetPasswordDto.username = this.email;
-      this.authControllerServiceProxy.resetPassword(this.resetPasswordDto).subscribe(isSuccess => {
+      this.authControllerServiceProxy.resetOWnPassword(this.resetPasswordDto).subscribe(isSuccess => {
         if (isSuccess) {
           this.islSuccessPopup = true;
+          this.gotoLogin();
         } else {
           this.isErrorPopup = true;
         }
+
+       
       },
         err => {
           this.isErrorPopup = true;
@@ -93,7 +88,7 @@ export class SetPasswordComponent implements OnInit {
   }
 
   gotoLogin() {
-    this.router.navigate(['/login']);
+    this.router.navigate(['/auth/login']);
   }
 
   togglePasswordText() {

@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
 import { UsersControllerServiceProxy, ServiceProxy, User, Institution, InstitutionControllerServiceProxy, UserTypeControllerServiceProxy, Country, InstitutionType, InstitutionCategory, UserType, CountryControllerServiceProxy } from 'shared/service-proxies/service-proxies';
-import { LoginProfile, LoginProfileControllerServiceProxy, ServiceProxy as authServiceProxy } from 'shared/service-proxies/auth-service-proxies';
+import { CreateManyUserTypeDto, LoginProfile,UserType as AuthUserType, LoginProfileControllerServiceProxy, ServiceProxy as authServiceProxy } from 'shared/service-proxies/auth-service-proxies';
 import { UserDetailsFormComponent } from '../user-details-form/user-details-form.component';
 import decode from 'jwt-decode';
 
@@ -227,12 +227,15 @@ export class UserFormComponent implements OnInit,AfterViewInit {
         this.user.username = this.user.email;
         this.user.status = 0;
         // this.user.status = 1;
-        console.log("userd", this.selecteduserType)
+        
         let userType = new UserType;
+        // userType.id= this.selecteduserType.id
         userType.init(this.selecteduserType)
+        console.log("userd", userType)
         this.user.userType = userType;
         let co = new Country;
-        co.init(this.country);
+        co.id=this.countryId 
+        // co.init(this.country);
 
       
         this.user.country= co;
@@ -247,7 +250,9 @@ export class UserFormComponent implements OnInit,AfterViewInit {
         authUser.userName = this.user.email;
         // authUser.password = res.password;
         // authUser.salt = res.salt;
-        authUser.userType = this.selecteduserType;
+        let authUserType = new AuthUserType;
+        authUserType.id =this.selecteduserType.id;
+        authUser.userType =authUserType;
         authUser.coutryId = this.countryId ;
         authUser.insId = this.user.institution.id;
 
