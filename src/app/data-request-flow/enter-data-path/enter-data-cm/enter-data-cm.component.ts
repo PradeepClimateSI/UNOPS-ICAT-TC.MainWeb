@@ -250,7 +250,7 @@ export class EnterDataCmComponent implements OnInit {
         let assesmentType = e.cmAssessmentAnswer.assessment_question.assessment.assessmentType;
         let questionId = e.cmAssessmentAnswer.assessment_question.question.id
         let question = e.cmAssessmentAnswer.assessment_question.question.label
-        let answer = e.cmAssessmentAnswer.answer.label
+        let answer = e.cmAssessmentAnswer?.answer?.label
   
         let obj = {
           id,
