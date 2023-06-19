@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
 import { CMAnswer, CMAssessmentAnswer, CMAssessmentQuestion, CMQuestionControllerServiceProxy, ParameterRequest, ParameterRequestControllerServiceProxy, ParameterRequestTool, ServiceProxy, UpdateDeadlineDto, UpdateDeadlineDtoTool, UpdateValueEnterData } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { DataRequestStatus } from 'app/Model/DataRequestStatus.enum';
+import * as XLSX from 'xlsx';
+import { environment } from 'environments/environment.prod';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-enter-data-cm',
@@ -42,12 +45,21 @@ export class EnterDataCmComponent implements OnInit {
   answers: CMAnswer[] = []
   selectedParameter: any;
   selectedId: number;
+  parameterListFilterData: any[];
+  // SERVER_URL = environment.baseUrlExcelUpload; //'http://localhost:7080/parameter/upload'
+  SERVER_URL = 'http://localhost:7080/cm-assessment-answer/upload'
+
+  @ViewChild('myInput')
+  myInputVariable: ElementRef;
+  assignCAArray: any = []
+  climateactions: any = []
 
   constructor(
     private parameterRequestControllerServiceProxy: ParameterRequestControllerServiceProxy,
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
     private serviceProxy: ServiceProxy,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private httpClient: HttpClient
   ) { }
 
   ngOnInit(): void {
@@ -58,6 +70,38 @@ export class EnterDataCmComponent implements OnInit {
     this.user_role = tokenPayload.role.code;
     this.totalRecords = 0;
     this.userName = tokenPayload.username;
+
+    this.parameterRequestControllerServiceProxy
+      .getEnterDataParameters(
+        0,
+        0,
+        '',
+        0,
+        '',
+        this.userName,
+        ParameterRequestTool.Carbon_Market_Tool.toString(),
+        '1234'
+      )
+      .subscribe((res: any) => {
+        for (let a of res.items) {
+          if (a.cmAssessmentAnswer.CMAssessmentQuestion.assessment !== null) {
+
+            if (
+              !this.assignCAArray.includes(
+                a.cmAssessmentAnswer.CMAssessmentQuestion.assessment.climateAction.policyName
+              )
+            ) {
+
+              this.assignCAArray.push(
+                a.cmAssessmentAnswer.CMAssessmentQuestion.assessment.climateAction.policyName
+              );
+              this.climateactions.push(
+                a.cmAssessmentAnswer.CMAssessmentQuestion.assessment.climateAction
+              );
+            }
+          }
+        }
+      });
 
     this.loadgridData({})
   }
@@ -105,17 +149,16 @@ export class EnterDataCmComponent implements OnInit {
     }, 1);
   };
 
+  onCAChange(event: any) {
+    console.log('searchby...', this.searchBy);
+    this.onSearch();
+  }
+
+  onSearchClick(event: any) {
+    this.onSearch();
+  }
+
   async onClickUpdateValue(parameterList: ParameterRequest) {
-    // this.selectedPara = parameterList
-    // console.log('parameterId++++', parameterId);
-    // this.relevance =relevance;
-    // this.characteristics = characteristic;
-    // this.selectedUnit.ur_fromUnit = unit;
-    // this.selectedId = dataRequestId;
-    // this.selectedValue = parameterValue;
-    // this.selectedYear = year;
-    // this.selectedParameterId = parameterId;
-    // console.log('id', dataRequestId);
     this.selectedParameter = parameterList.cmAssessmentAnswer
     this.selectedId = parameterList.id
 
@@ -127,7 +170,7 @@ export class EnterDataCmComponent implements OnInit {
 
   onRejectClick(id: number) {
     this.isOpen = false;
-    this.isAddData = true;
+    this.confirm2 = true;
     this.selectedDataRequestId = id;
   }
 
@@ -191,37 +234,107 @@ export class EnterDataCmComponent implements OnInit {
     this.fileData = event.target.files[0];
   }
 
+  paraListFilter() {
+    console.log("paraListFilter")
+
+    if(this.selectedParameters)
+    {
+
+      this.parameterListFilterData = [];
+
+
+      this.selectedParameters.map((e) => {
+        console.log("====== selected e",e);
+        let id = e.cmAssessmentAnswer.id;
+        let intervention = e.cmAssessmentAnswer.assessment_question.assessment.climateAction.policyName;
+        let assesmentType = e.cmAssessmentAnswer.assessment_question.assessment.assessmentType;
+        let questionId = e.cmAssessmentAnswer.assessment_question.question.id
+        let question = e.cmAssessmentAnswer.assessment_question.question.label
+        let answer = e.cmAssessmentAnswer?.answer?.label
+  
+        let obj = {
+          id,
+          intervention,
+          assesmentType,
+          questionId,
+          question,
+          answer
+        };
+  
+        this.parameterListFilterData.push(obj);
+  
+        console.log('+++++++obj 1======', obj);
+      })
+    }
+  }
+
   download() {
-    // this.paraListFilter();
+    console.log("download")
+    this.paraListFilter();
 
-    // var d = new Date();
-    // var reportTime = this.formatDate(d);
+    var d = new Date();
+    var reportTime = this.formatDate(d);
 
 
-    // console.log(this.parameterListFilterData)
-    // const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
-    //   this.parameterListFilterData
-    // );
+    console.log(this.parameterListFilterData)
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
+      this.parameterListFilterData
+    );
 
-    // const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
 
-    // console.log(ws)
-    // console.log(wb)
-    // XLSX.utils.book_append_sheet(wb, ws, 'sheet1');
+    // let dropdownOptions = ['Yes', 'No']
 
-    // XLSX.writeFile(wb, 'data_entry_template_' + reportTime + '.xlsx');
+    // const dataValidation = {
+    //   type: 'list',
+    //   formula1: `"${dropdownOptions.join(',')}"`,
+    //   showDropDown: true,
+    // };
 
-    // this.onSearch();
-    // //
-    // this.messageService.add({
-    //   severity: 'info',
-    //   summary: 'Info',
-    //   detail:
-    //     'Please do not change the number of columns , column names  & selected units of the excel sheet if you want to re upload ',
-    //   closable: true,
-    // });
+    console.log(ws)
+    console.log(wb)
+    // const cellAddress = 'F5'; // Change this to the desired cell address
 
-    // this.selectedParameters = []
+    // ws['!dataValidations'] = [{
+    //   sqref: cellAddress,
+    //   ...dataValidation,
+    // }];
+    XLSX.utils.book_append_sheet(wb, ws, 'sheet1');
+
+
+    XLSX.writeFile(wb, 'data_entry_template_' + reportTime + '.xlsx');
+
+    this.onSearch();
+    //
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Info',
+      detail:
+        'Please do not change the number of columns , column names  & selected units of the excel sheet if you want to re upload ',
+      closable: true,
+    });
+
+    this.selectedParameters = []
+  }
+
+  formatDate(date: any) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return (
+      date.getMonth() +
+      1 +
+      '/' +
+      date.getDate() +
+      '/' +
+      date.getFullYear() +
+      '_' +
+      strTime
+    );
   }
 
   uploadDialog() {
@@ -234,32 +347,32 @@ export class EnterDataCmComponent implements OnInit {
 
   // OnClick of button Upload
   onUpload() {
-    // const formData = new FormData();
-    // formData.append('file', this.fileData);
-    // let fullUrl = this.SERVER_URL;
-    // this.httpClient.post<any>(fullUrl, formData).subscribe(
-    //   (res) => {
-    //     this.messageService.add({
-    //       severity: 'success',
-    //       summary: 'Success',
-    //       detail: 'Excel Data Uploaded successfully',
-    //     });
+    const formData = new FormData();
+    formData.append('file', this.fileData);
+    let fullUrl = this.SERVER_URL;
+    this.httpClient.post<any>(fullUrl, formData).subscribe(
+      (res) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Excel Data Uploaded successfully',
+        });
 
-    //     this.myInputVariable.nativeElement.value = '';
-    //     this.uploadFile = false;
-    //   },
-    //   (err) => {
-    //     this.messageService.add({
-    //       severity: 'error',
-    //       summary: 'Error.',
-    //       detail: 'Internal server error, please try again.',
-    //     });
-    //   }
-    // );
-    // setTimeout(() => {
-    //   this.onSearch();
-    //   //location.reload();
-    // }, 1000);
+        this.myInputVariable.nativeElement.value = '';
+        this.uploadFile = false;
+      },
+      (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error.',
+          detail: 'Internal server error, please try again.',
+        });
+      }
+    );
+    setTimeout(() => {
+      this.onSearch();
+      //location.reload();
+    }, 1000);
   }
 
   async onClickSendNow(status: number) {
@@ -348,6 +461,7 @@ export class EnterDataCmComponent implements OnInit {
       let inputParameters = new UpdateDeadlineDto();
       inputParameters.ids = idList;
       inputParameters.status = 6;
+      inputParameters.tool = UpdateDeadlineDtoTool.Carbon_Market_Tool
       this.parameterRequestControllerServiceProxy.acceptReviewData(inputParameters).subscribe(
         (res) => {
           this.isAddData = false;

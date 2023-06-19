@@ -1,3 +1,34 @@
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="col-12">
+            <div class="p-field">
+                <label for="projStatus">Intervention</label>
+                <p-dropdown name="climateActiontype" [options]="climateactionsList" [(ngModel)]="searchBy.climateaction"
+                    #fsector="ngModel" [showClear]="true" [filter]="true" placeholder="Select .."
+                    optionLabel="policyName" (ngModelChange)="onCAChange($event)">
+                </p-dropdown>
+
+                <p-toast position="top-right"></p-toast>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="p-field">
+            <label for="projYear">Type</label>
+            <p-dropdown name="assesmentType" [options]="assessmentType" [(ngModel)]="searchBy.type" #fsector="ngModel"
+                [showClear]="true" [filter]="true" placeholder="Select .." (ngModelChange)="onYearChange($event)">
+            </p-dropdown>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="p-inputgroup pt-4">
+            <input placeholder="Type Your Keyword" type="text" class="p-inputtext" [(ngModel)]="searchBy.text"
+                pInputText />
+            <button type="button" pButton pRipple label="Search" (click)="onSearchClick($event)"></button>
+        </div>
+    </div>
+</div>
 <div class="row p-2">
     <p-table #table [value]="dataRequestList" [lazy]="true" (onLazyLoad)="loadgridData($event)" [paginator]="true"
         [rows]="rows" [showCurrentPageReport]="true" paginatorDropdownAppendTo="body"
@@ -45,7 +76,7 @@
                 <td>{{request.investmentParameter.type }}</td>
                 <td>{{request.investmentParameter.category?.name}}</td>
                 <td>{{request.investmentParameter.characteristics?.name}}</td>
-                <td>{{request.investmentParameter.indicator}}/{{request.investmentParameter.score}}</td>
+                <td>{{ (request?.investmentParameter?.question) ?(request?.investmentParameter?.question?.name): (request?.investmentParameter?.institutionDescription)}}</td>
                 <td>{{request.investmentParameter.parameter_value}}</td>
 
             <td>

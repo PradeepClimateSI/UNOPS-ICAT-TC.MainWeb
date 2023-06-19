@@ -1,3 +1,60 @@
+<div class="row mb-4">
+    <div class="col-md-4">
+      <div class="col-12">
+        <div class="p-field">
+          <label for="projStatus">Intervention</label>
+          <p-dropdown
+            name="climateActiontype"
+            [options]="climateactions"
+            [(ngModel)]="searchBy.climateaction"
+            #fsector="ngModel"
+            [showClear]="true"
+            [filter]="true"
+            placeholder="Select .."
+            optionLabel="policyName"
+            (ngModelChange)="onCAChange($event)"
+          >
+          </p-dropdown>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="col-md-4">
+      <div class="p-field">
+        <label for="projStatus">Year</label>
+        <p-dropdown
+          name="projYear"
+          [options]="yearList"
+          [(ngModel)]="searchBy.year"
+          #fsector="ngModel"
+          [showClear]="true"
+          [filter]="true"
+          placeholder="Select .."
+          optionLabel="assessmentYear"
+          (ngModelChange)="onYearChange($event)"
+        >
+        </p-dropdown>
+      </div>
+    </div> -->
+
+    <div class="col-md-4">
+      <div class="p-inputgroup pt-4">
+        <input
+          placeholder="Type Your Keyword"
+          type="text"
+          class="p-inputtext"
+          [(ngModel)]="searchBy.text"
+          pInputText
+        />
+        <button
+          type="button"
+          pButton
+          pRipple
+          label="Search"
+          (click)="onSearchClick($event)"
+        ></button>
+      </div>
+    </div>
+</div>
 <div class="row p-2">
     <p-table #table [value]="parameterList" [lazy]="true" (onLazyLoad)="loadgridData($event)" [paginator]="true"
         [rows]="rows" [showCurrentPageReport]="true" paginatorDropdownAppendTo="body"
@@ -44,7 +101,7 @@
                 <td>{{parameterList.investmentParameter.type}}</td>
                 <td>{{parameterList.investmentParameter.category?.name}}</td>
                 <td>{{parameterList.investmentParameter.characteristics?.name}}</td>
-                <td>{{parameterList.investmentParameter.indicator}}/{{parameterList.investmentParameter.score}}</td>
+                <td>{{ (parameterList?.investmentParameter?.question) ?(parameterList?.investmentParameter?.question?.name): (parameterList?.investmentParameter?.institutionDescription)}}</td>
                 <td>{{parameterList.investmentParameter.parameter_value}}</td>
                 <td>
             <tr>
