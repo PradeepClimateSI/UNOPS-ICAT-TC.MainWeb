@@ -113,7 +113,7 @@ export class ManagedatastatusComponent implements OnInit {
     let statusId = 0;
     let mitigationActionTypeId = 0;
 
-    this.projectApprovalStatusId = 5;
+    // this.projectApprovalStatusId = 4;
     this.countryId = 0;
 
     let assessmentStatusName = '';
@@ -142,6 +142,7 @@ export class ManagedatastatusComponent implements OnInit {
         for (let assement of res.items) {
           let datarequests1: datarequest = {
             name: "",
+            tool: "",
             type: '',
             year: "",
             assenmentYearId: 0,
@@ -152,14 +153,16 @@ export class ManagedatastatusComponent implements OnInit {
             qaStatus: 0
           };
           datarequests1.name = assement.climateAction.policyName;
+          datarequests1.tool = assement.tool;
           datarequests1.year = assement.assessmentYear ? assement.year : "";
           datarequests1.type = assement.assessmentType;
           datarequests1.assenmentYearId = assement.id;
           // datarequests1.qaStatus = assement.qaStatus;
 
 
+          console.log(assement.tool)
           this.parameterProxy
-            .getDateRequestToManageDataStatus(assement.id, 1)
+            .getDateRequestToManageDataStatus(assement.id, 1, assement.tool)
             .subscribe(re => {
               console.log("dr_dataRequestStatus", re)
               datarequests1.totalreqCount = re.length;
@@ -252,6 +255,7 @@ export interface activeproject {
 
 export interface datarequest {
   name: string,
+  tool: string,
   type: string,
   year: string,
   assenmentYearId: number,

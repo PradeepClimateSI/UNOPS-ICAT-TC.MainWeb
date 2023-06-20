@@ -1,9 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
 import { InvestorAssessment, InvestorToolControllerServiceProxy, ParameterRequest, ParameterRequestControllerServiceProxy, ParameterRequestTool, ServiceProxy, UpdateDeadlineDto, UpdateDeadlineDtoTool, UpdateInvestorToolDto } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import * as moment from 'moment';
 import { DataRequestStatus } from 'app/Model/DataRequestStatus.enum';
+import * as XLSX from 'xlsx';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-enter-data-investment',
   templateUrl: './enter-data-investment.component.html',
@@ -45,12 +47,20 @@ export class EnterDataInvestmentComponent implements OnInit {
   selectedId: number;
   isDropdown: boolean;
   answers: any[] = ['Yes', 'No']
+  parameterListFilterData: any[];
+  SERVER_URL = 'http://localhost:7080/investor-tool/upload'  
+  
+  @ViewChild('myInput')
+  myInputVariable: ElementRef;
+  assignCAArray: any = []
+  climateactions: any = []
 
   constructor(
     private parameterRequestControllerServiceProxy: ParameterRequestControllerServiceProxy,
     private serviceProxy: ServiceProxy,
     private messageService: MessageService,
-    private investorToolControllerServiceProxy: InvestorToolControllerServiceProxy
+    private investorToolControllerServiceProxy: InvestorToolControllerServiceProxy,
+    private httpClient: HttpClient
   ) { }
 
   ngOnInit(): void {
@@ -61,6 +71,39 @@ export class EnterDataInvestmentComponent implements OnInit {
     this.user_role = tokenPayload.role.code;
     this.totalRecords = 0;
     this.userName = tokenPayload.username;
+
+    this.parameterRequestControllerServiceProxy
+    .getEnterDataParameters(
+      0,
+      0,
+      '',
+      0,
+      '',
+      this.userName,
+      this.tool,
+      '1234'
+    )
+    .subscribe((res: any) => {
+      console.log(res)
+      for (let a of res.items) {
+        if (a.investmentParameter.assessment !== null) {
+
+          if (
+            !this.assignCAArray.includes(
+              a.investmentParameter.assessment.climateAction.policyName
+            )
+          ) {
+
+            this.assignCAArray.push(
+              a.investmentParameter.assessment.climateAction.policyName
+            );
+            this.climateactions.push(
+              a.investmentParameter.assessment.climateAction
+            );
+          }
+        }
+      }
+    });
 
     this.loadgridData({})
   }
@@ -108,6 +151,15 @@ export class EnterDataInvestmentComponent implements OnInit {
     }, 1);
   };
 
+  onCAChange(event: any) {
+    console.log('searchby...', this.searchBy);
+    this.onSearch();
+  }
+
+  onSearchClick(event: any) {
+    this.onSearch();
+  }
+
   async onClickUpdateValue(parameterList: ParameterRequest) {
     this.selectedParameter = parameterList.investmentParameter
     this.selectedId = parameterList.id
@@ -120,7 +172,7 @@ export class EnterDataInvestmentComponent implements OnInit {
 
   onRejectClick(id: number) {
     this.isOpen = false;
-    this.isAddData = true;
+    this.confirm2 = true;
     this.selectedDataRequestId = id;
   }
 
@@ -129,25 +181,26 @@ export class EnterDataInvestmentComponent implements OnInit {
     inputParameters.ids = [this.selectedDataRequestId];
     inputParameters.status = this.user_role == "Institution Admin" ? DataRequestStatus.Rejected_EnterData_IA : DataRequestStatus.Rejected_EnterData_DEO;
     inputParameters.comment = this.reasonForReject;
-    // this.parameterRequestProxy.rejectEnterData(inputParameters).subscribe(
-    //   (res) => {
-    //     this.messageService.add({
-    //       severity: 'success',
-    //       summary: 'Success',
-    //       detail: 'Data was rejected successfully',
-    //     });
-    //     this.confirm2 = false;
+    inputParameters.tool = this.tool as unknown as UpdateDeadlineDtoTool
+    this.parameterRequestControllerServiceProxy.rejectEnterData(inputParameters).subscribe(
+      (res) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Data was rejected successfully',
+        });
+        this.confirm2 = false;
 
-    //     this.onSearch();
-    //   },
-    //   (err) => {
-    //     this.messageService.add({
-    //       severity: 'error',
-    //       summary: 'Error.',
-    //       detail: 'Internal server error, please try again.',
-    //     });
-    //   }
-    // );
+        this.onSearch();
+      },
+      (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error.',
+          detail: 'Internal server error, please try again.',
+        });
+      }
+    );
   }
 
   onReject() {
@@ -184,37 +237,91 @@ export class EnterDataInvestmentComponent implements OnInit {
     this.fileData = event.target.files[0];
   }
 
+  paraListFilter() {
+
+    if(this.selectedParameters)
+    {
+      this.parameterListFilterData = [];
+      this.selectedParameters.map((e) => {
+        let id = e.investmentParameter.id;
+        let intervention = e.investmentParameter.assessment.climateAction.policyName;
+        let assesmentType = e.investmentParameter.assessment.assessmentType;
+        let assessmentPeriod = moment(e.investmentParameter.assessment.from).format('yy-MM-DD') + " - " + moment(e.investmentParameter.assessment.to).format('yy-MM-DD')
+        let process_outcome = e.investmentParameter.type
+        let category = e.investmentParameter.category.name
+        let characteristic = e.investmentParameter.characteristics.name
+        let indicator = (e?.investmentParameter?.question) ?(e?.investmentParameter?.question?.name): (e?.investmentParameter?.institutionDescription)
+        let value = e.investmentParameter.parameter_value
+  
+        let obj = {
+          id,
+          intervention,
+          assesmentType,
+          assessmentPeriod,
+          process_outcome,
+          category,
+          characteristic,
+          indicator,
+          value
+        };
+  
+        this.parameterListFilterData.push(obj);
+      })
+    }
+  }
+
   download() {
-    // this.paraListFilter();
+    this.paraListFilter();
 
-    // var d = new Date();
-    // var reportTime = this.formatDate(d);
+    var d = new Date();
+    var reportTime = this.formatDate(d);
 
 
-    // console.log(this.parameterListFilterData)
-    // const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
-    //   this.parameterListFilterData
-    // );
+    console.log(this.parameterListFilterData)
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
+      this.parameterListFilterData
+    );
 
-    // const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
 
-    // console.log(ws)
-    // console.log(wb)
-    // XLSX.utils.book_append_sheet(wb, ws, 'sheet1');
+    console.log(ws)
+    console.log(wb)
+    XLSX.utils.book_append_sheet(wb, ws, 'sheet1');
 
-    // XLSX.writeFile(wb, 'data_entry_template_' + reportTime + '.xlsx');
+    XLSX.writeFile(wb, 'data_entry_template_' + reportTime + '.xlsx');
 
-    // this.onSearch();
-    // //
-    // this.messageService.add({
-    //   severity: 'info',
-    //   summary: 'Info',
-    //   detail:
-    //     'Please do not change the number of columns , column names  & selected units of the excel sheet if you want to re upload ',
-    //   closable: true,
-    // });
+    this.onSearch();
+    //
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Info',
+      detail:
+        'Please do not change the number of columns , column names  & selected units of the excel sheet if you want to re upload ',
+      closable: true,
+    });
 
-    // this.selectedParameters = []
+    this.selectedParameters = []
+  }
+
+
+  formatDate(date: any) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return (
+      date.getMonth() +
+      1 +
+      '/' +
+      date.getDate() +
+      '/' +
+      date.getFullYear() +
+      '_' +
+      strTime
+    );
   }
 
   uploadDialog() {
@@ -227,32 +334,32 @@ export class EnterDataInvestmentComponent implements OnInit {
 
   // OnClick of button Upload
   onUpload() {
-    // const formData = new FormData();
-    // formData.append('file', this.fileData);
-    // let fullUrl = this.SERVER_URL;
-    // this.httpClient.post<any>(fullUrl, formData).subscribe(
-    //   (res) => {
-    //     this.messageService.add({
-    //       severity: 'success',
-    //       summary: 'Success',
-    //       detail: 'Excel Data Uploaded successfully',
-    //     });
+    const formData = new FormData();
+    formData.append('file', this.fileData);
+    let fullUrl = this.SERVER_URL;
+    this.httpClient.post<any>(fullUrl, formData).subscribe(
+      (res) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Excel Data Uploaded successfully',
+        });
 
-    //     this.myInputVariable.nativeElement.value = '';
-    //     this.uploadFile = false;
-    //   },
-    //   (err) => {
-    //     this.messageService.add({
-    //       severity: 'error',
-    //       summary: 'Error.',
-    //       detail: 'Internal server error, please try again.',
-    //     });
-    //   }
-    // );
-    // setTimeout(() => {
-    //   this.onSearch();
-    //   //location.reload();
-    // }, 1000);
+        this.myInputVariable.nativeElement.value = '';
+        this.uploadFile = false;
+      },
+      (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error.',
+          detail: 'Internal server error, please try again.',
+        });
+      }
+    );
+    setTimeout(() => {
+      this.onSearch();
+      //location.reload();
+    }, 1000);
   }
 
   async onClickSendNow(status: number) {

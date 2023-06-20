@@ -49,9 +49,10 @@
       >
         <ng-template pTemplate="header">
           <tr>
-            <th>Specific Climate Action</th>
+            <th>Intervention</th>
+            <th>Tool</th>
             <th>Assessment Type</th>
-            <th>Assessment Year</th>
+            <!-- <th>Assessment Year</th> -->
             <th>Total Data Requests</th>
             <th>Pending Data Requests</th>
             <th>Pending Data Entries</th>
@@ -62,8 +63,9 @@
         <ng-template pTemplate="body" let-datarequests>
           <tr>
             <td>{{ datarequests.name }}</td>
+            <td>{{ datarequests.tool }}</td>
             <td>{{ datarequests.type }}</td>
-            <td>{{ datarequests.year }}</td>
+            <!-- <td>{{ datarequests.year }}</td> -->
             <td>{{ datarequests.totalreqCount }}</td>
             <td>{{ datarequests.pendingreqCount }}</td>
             <td>{{ datarequests.pendingdataentries }}</td>

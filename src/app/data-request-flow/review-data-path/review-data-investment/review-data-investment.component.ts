@@ -31,6 +31,9 @@ export class ReviewDataInvestmentComponent implements OnInit {
   selectedUser: User;
   selectedDeadline: Date;
   reasonForReject: string;
+  assignCAArray: any = []
+  climateactionsList: any = []
+  assessmentType: string[] = ['Ex-ante','Ex-post'];
 
   constructor(
     private parameterRequestControllerServiceProxy: ParameterRequestControllerServiceProxy,
@@ -43,7 +46,7 @@ export class ReviewDataInvestmentComponent implements OnInit {
   ngOnInit(): void {
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
-    this.userCountryId  = tokenPayload.countryId;
+    this.userCountryId = tokenPayload.countryId;
     this.userSectorId = tokenPayload.sectorId;
     // this.totalRecords = 0;
     this.minDate = new Date();
@@ -57,7 +60,41 @@ export class ReviewDataInvestmentComponent implements OnInit {
 
         console.log('this.userList', this.userList);
       });
-  
+
+    this.parameterRequestControllerServiceProxy
+      .getReviewDataRequests(
+        0,
+        0,
+        '',
+        0,
+        '',
+        '',
+        this.userName,
+        this.tool,
+        "1234"
+      )
+      .subscribe((res: any) => {
+        console.log('my list....s', res.items);
+        for (let a of res.items) {
+          if (a.investmentParameter.assessment !== null) {
+
+            if (
+              !this.assignCAArray.includes(
+                a.investmentParameter.assessment.climateAction.policyName
+              )
+            ) {
+
+              this.assignCAArray.push(
+                a.investmentParameter.assessment.climateAction.policyName
+              );
+              this.climateactionsList.push(
+                a.investmentParameter.assessment.climateAction
+              );
+            }
+          }
+        }
+      });
+
   }
 
   loadgridData = (event: LazyLoadEvent) => {
@@ -118,6 +155,18 @@ export class ReviewDataInvestmentComponent implements OnInit {
         });
     }, 1);
   };
+
+  onSearchClick(event: any) {
+    this.onSearch();
+  }
+
+  onCAChange(event: any) {
+    this.onSearch();
+  }
+
+  onYearChange(event: any) {
+    this.onSearch();
+  }
 
   getInfo(obj: any)
   {
