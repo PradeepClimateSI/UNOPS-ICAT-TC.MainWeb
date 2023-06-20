@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {  Portfolio } from 'shared/service-proxies/service-proxies';
+import { MessageService } from 'primeng/api';
+import {  MethodologyAssessmentControllerServiceProxy, Portfolio, PortfolioControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-portfolio-add',
@@ -8,9 +9,14 @@ import {  Portfolio } from 'shared/service-proxies/service-proxies';
 })
 export class PortfolioAddComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private methassess : MethodologyAssessmentControllerServiceProxy,
+    private portfolioServiceProxy : PortfolioControllerServiceProxy,
+    private messageService: MessageService,
+  ) { }
 
   portfolio : Portfolio = new Portfolio();
+  tool : string;
 
   optionList = [
     { name: 'Yes' },
@@ -18,13 +24,127 @@ export class PortfolioAddComponent implements OnInit {
     // Add other options if needed
   ];
 
-
+  assessList : any = []
+  loading: boolean = true;
+  statuses: any[];
+  apporoachList : any[];
+  interventionsList: any = [];
+  selectedValues: any = [];
+  select : any;
+  dataObj : any = []
+  lastId : any ;
 
   ngOnInit(): void {
+    this.tool = 'Portfolio Tool';
+
+   /*  this.methassess.assessmentDetails().subscribe(async (res: any) => {
+       console.log("assessmentData : ", res)
+      }); */
+
+      this.portfolioServiceProxy.getLastID().subscribe(async (res: any) => {
+        console.log("iddd : ", res)
+        this.lastId = res[0].portfolioId;
+
+        this.portfolio.portfolioId = this.getNext();
+
+        console.log("nexttt : ",  this.portfolio.portfolioId)
+       });
+
+
+      this.methassess.assessmentDetailsforTool(this.tool).subscribe(async (res: any) => {
+        console.log("assessmentData : ", res)
+        this.assessList = res;
+
+        const uniqueNamesSet = new Set<string>(this.assessList.map((item: { climateAction: { policyName: any; }; })=> item.climateAction.policyName));
+        this.interventionsList = Array.from(uniqueNamesSet, value => ({ value, label: value }));
+
+        console.log("distinctNames : ", this.interventionsList)
+
+       });
+
+       this.statuses = [
+        { label: 'Ex-post', value: 'Ex-post' },
+        { label: 'Ex-ante', value: 'Ex-ante' },
+    ];
+
+    this.apporoachList = [
+      { label: 'Direct', value: 'Direct' },
+      { label: 'Indirect', value: 'Indirect' },
+  ];
+  }
+
+
+  getNext(){
+    const lastNumber = parseInt(this.lastId.substr(6), 10);
+
+    // Generate the next number by incrementing the last number
+    const nextNumber = lastNumber + 1;
+
+    // Pad the next number with zeros to ensure it has three digits
+    const paddedNumber = nextNumber.toString().padStart(3, '0');
+
+    // Construct the nextId in the format "2023PTxxx"
+    const nextId = "2023PT" + paddedNumber;
+
+    return nextId
+  }
+
+  sendData(){
+    console.log("werr", this.selectedValues)
   }
 
   save( data : any){
     console.log("aa", data)
+    console.log("werr", this.selectedValues)
+
+    this.dataObj = {
+      formData : data,
+      tableData : this.selectedValues
+    }
+    console.log("uuu", this.dataObj)
+
+    this.portfolioServiceProxy.create(this.dataObj).subscribe(async (res: any) => {
+      console.log("assessmentData : ", res)
+
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Portfolio created successfully',
+          closable: true,
+        })
+     },error => {
+      console.log(error)
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Portfolio detail saving failed',
+        closable: true,
+      })
+    }
+
+     );
   }
+
+  onInput(event: any, dt: any) {
+    const value = event.target.value;
+    dt.filterGlobal(value, 'contains');
+  }
+
+  onCheckboxChange(event: any, assessList: any) {
+    console.log("event", event)
+    console.log("assessList", assessList)
+     if (event) {
+      this.selectedValues.push(assessList);
+    } else {
+      const index = this.selectedValues.findIndex((item: any) => item === assessList);
+      if (index !== -1) {
+        this.selectedValues.splice(index, 1);
+      }
+    }
+
+
+    console.log("aaaa", this.selectedValues)
+  }
+
 
 }
