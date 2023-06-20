@@ -20,6 +20,7 @@ export class PortfolioDashboardComponent implements OnInit {
 
   @ViewChild('myCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('myCanvas2', { static: true }) canvasRef2!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('portfolioBarChart', { static: true }) canvasRef3!: ElementRef<HTMLCanvasElement>;
   chart: any = [];
   tool : string;
   resultData : any = []
@@ -43,6 +44,7 @@ export class PortfolioDashboardComponent implements OnInit {
   /////
   portfolioPieChart:any=[];
   portfolioBarChart:any =[];
+  barChartData:any=[];
 
   ngOnInit(): void {
     this.loadSelectedTable = false;
@@ -92,6 +94,10 @@ export class PortfolioDashboardComponent implements OnInit {
 
     this.portfolioServiceProxy.assessmentsDataByAssessmentId(this.selectedPortfolio.id).subscribe(async (res: any) => {
       console.log("arrayyy : ", res)
+     
+      this.barChartData=res;
+      this.viewPortfolioBarChart();
+
       this.processData = [];
       this.outcomeData = [];
       this.outcomeData2 = [];
@@ -133,6 +139,7 @@ export class PortfolioDashboardComponent implements OnInit {
      // console.log(" this.outcomeData : ",  this.outcomeData)
 
      this.loadSelectedTable = true;
+     
 
     });
 
@@ -484,100 +491,133 @@ export class PortfolioDashboardComponent implements OnInit {
   // });
 
   // }
-  // viewPortfolioBarChart(){
-  //   let label =this.CMsectorCount.map((item) => item.sectoral_boundary);
-  //   let data =this.CMsectorCount.map((item) => item.average_tc_value);
-  //   console.log("label",label,"data",data)
-  //   this.portfolioBarChart =new Chart('portfolioBarChart', {
-  //     type: 'bar',
+  viewPortfolioBarChart(){
+    
+    if (!this.canvasRef3) {
+      console.error('Could not find canvas element');
+      return;
+    }
 
-  //     data: {
-  //       labels: label,
-  //       datasets: [{
-  //         label: 'Bar Chart',
-  //         data: data,
-  //         backgroundColor: [
-  //           'rgba(153, 102, 255, 1)',
-  //           'rgba(75, 192, 192,1)',
-  //           'rgba(54, 162, 235, 1)',
-  //           'rgba(123, 122, 125, 1)',
-  //           'rgba(255, 99, 132, 1)',
-  //           'rgba(255, 205, 86, 1)',
-  //           'rgba(255, 99, 132, 1)',
+    const pcanvas = this.canvasRef3.nativeElement;
+    const pctx = pcanvas.getContext('2d');
 
-  //         ],
-  //         borderColor:[
-  //           'rgba(153, 102, 255, 1)',
-  //           'rgba(75, 192, 192,1)',
-  //           'rgba(54, 162, 235, 1)',
-  //           'rgba(123, 122, 125, 1)',
-  //           'rgba(255, 99, 132, 1)',
-  //           'rgba(255, 205, 86, 1)',
-  //           'rgba(255, 99, 132, 1)',],
+    if (!pctx) {
+      console.error('Could not get canvas context');
+      return;
+    }
+    let label =this.barChartData.map((item:any) => item?.assessment?.climateAction?.policyName );
+    let data =this.barChartData.map((item:any) => item.ghgValue?item.ghgValue:0);
+    console.log("label",label,"data",data)
+    this.portfolioBarChart =new Chart(pctx, {
+      type: 'bar',
 
-  //         borderWidth: 1
-  //       }]
-  //     },
-  //     options:{
-  //       scales: {
-  //         x: {
-  //           beginAtZero: true,
-  //           title: {
-  //             display: true,
-  //             text: 'Sectors',
-  //             font: {
-  //               size: 16,
-  //               weight: 'bold',
+      data: {
+        labels: label,
+        datasets: [{
+          label: 'Bar Chart',
+          data: data,
+          backgroundColor: [
+            'rgb(250,227,114)',
+            'rgb(51,51,51)',
+            'rgb(0,170,187)',
+            'rgb(227,120,42)',
+            'rgb(150,131,141)',
+            'rgb(42,61,227)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(75, 192, 192,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(123, 122, 125, 1)',
+            'rgba(255, 99, 132, 1)',
+            'rgba(255, 205, 86, 1)',
+            'rgba(255, 99, 132, 1)',
 
-  //             }
-  //           }
-  //         },
-  //         y: {
-  //           beginAtZero: true,
-  //           title: {
-  //             display: true,
-  //             text: 'Average Transformational Change (%)',
-  //             font: {
-  //               size: 12,
-  //               weight: 'bold',
+          ],
+          borderColor:[
+            'rgb(250,227,114)',
+            'rgb(51,51,51)',
+            'rgb(0,170,187)',
+            'rgb(227,120,42)',
+            'rgb(150,131,141)',
+            'rgb(42,61,227)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(75, 192, 192,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(123, 122, 125, 1)',
+            'rgba(255, 99, 132, 1)',
+            'rgba(255, 205, 86, 1)',
+            'rgba(255, 99, 132, 1)',],
 
-  //             }
-  //           }
-  //         }
-  //       },
-  //       plugins:{
-  //         legend: {
-  //           display: false
-  //         },
-  //         tooltip:{
-  //           position:'average',
-  //           boxWidth:10,
-  //           callbacks:{
+          borderWidth: 1
+        }]
+      },
+      options:{
+        scales: {
+          x: {
+            ticks: {
+              callback: function(value:any, index, values) {
+                return value.length > 10 ? value.substring(0, 10) + '...' : value;
+              },
+              maxRotation: 90,
+             
+            },
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Interventions',
+              font: {
+                size: 16,
+                weight: 'bold',
 
-  //             label:(context)=>{
+              }
+            },
+            
+          },
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Expected GHG Mitigation (Mt CO2-eq)',
+              font: {
+                size: 10,
+                weight: 'bold',
 
-  //               return[
+              }
+            }
+          }
+        },
+        plugins:{
+          legend: {
+            display: false
+          },
+          tooltip:{
+            position:'average',
+            boxWidth:10,
+            callbacks:{
 
-  //                 `Average TC value: ${data[context.dataIndex]}`,
-  //               ];
-  //              }
-  //           },
-  //           backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
-  //             titleFont: {
-  //               size: 14,
-  //               weight: 'bold'
-  //             },
-  //             bodyFont: {
-  //               size: 14
-  //             },
-  //             displayColors: true, // Hide the color box in the tooltip
-  //             bodyAlign: 'left'
-  //         }
-  //       }
+              label:(context)=>{
 
-  //     }
-  // });
+                return[
 
-  // }
+                  `Expected GHG Mitigation (Mt CO2-eq): ${data[context.dataIndex]}`,
+                ];
+               }
+            },
+            backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
+              titleFont: {
+                size: 14,
+                weight: 'bold'
+              },
+              bodyFont: {
+                size: 14
+              },
+              displayColors: true, // Hide the color box in the tooltip
+              bodyAlign: 'left'
+          }
+        }
+
+      }
+  });
+
+  }
 
 }
