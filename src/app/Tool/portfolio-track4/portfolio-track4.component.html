@@ -47,7 +47,7 @@
               </p>
             </div>
             <div class="p-field p-2">
-              <label for="Level of implementation">Level of implementation*</label>
+              <label for="Level of implementation">Level of implementation *</label>
               <p-dropdown appendTo="body" name="investorAssessment.level_of_implemetation" #type="ngModel"
                 placeholder="Select Level of implementation" [(ngModel)]="investorAssessment.level_of_implemetation"
                 [options]="levelOfImplementation" optionLabel="name" optionValue="name" [required]="true"></p-dropdown>
@@ -59,7 +59,7 @@
               </p>
             </div>
             <div class="p-field p-2">
-              <label for="Level of implementation">Geographical Areas Covered*</label>
+              <label for="Level of implementation">Geographical Areas Covered *</label>
               <p-dropdown appendTo="body" name="investorAssessment.geographical_areas_covered" #type="ngModel"
                 placeholder="Select Geographical Areas Covered"
                 [(ngModel)]="investorAssessment.geographical_areas_covered" [options]="levelOfImplementation"
@@ -72,7 +72,7 @@
               </p>
             </div>
             <div class="p-field p-2">
-              <label for="Sectors Covered">Sectors Covered*</label>
+              <label for="Sectors Covered">Sectors Covered *</label>
 
               <p-multiSelect appendTo="body" name="sectors" #type="ngModel" placeholder="Select Sectors Covered"
                 [(ngModel)]="sectorArray" [options]="sectorList" (ngModelChange)="onItemSelectSectors($event)"
@@ -86,7 +86,7 @@
             </div>
 
             <div class="p-field p-2">
-              <label for="Sectors Covered">Impact Covered*</label>
+              <label for="Sectors Covered">Impacts Covered *</label>
               <p-multiSelect appendTo="body" name="impact" #type="ngModel" placeholder="Select Impact Covered" [(ngModel)]="impactArray"
                 [options]="impactCovered" (ngModelChange)="onItemSelectImpacts($event)" optionLabel="name"
                 [required]="true"></p-multiSelect>
@@ -114,17 +114,20 @@
 
             <div class="p-field p-2">
 
-              <label for="date1">Assessment Period</label>
+              <label for="date1">Assessment Period *</label>
               <div class="p-inputgroup">
                 <span class="p-inputgroup-addon">
                   <i class="pi pi-calendar"></i>
                 </span>
-                <p-calendar dateFormat="mm-dd-yy" inputId="date1" placeholder="From" [(ngModel)]="assessment.from"
+                <p-calendar dateFormat="mm-dd-yy" inputId="date1" placeholder="From" [(ngModel)]="assessment.from"  #date1="ngModel"
                   name="date1"></p-calendar>
                 <span class="p-inputgroup-addon">to</span>
-                <p-calendar dateFormat="mm-dd-yy" inputId="date2" placeholder="To" [(ngModel)]="assessment.to"
+                <p-calendar dateFormat="mm-dd-yy" inputId="date2" placeholder="To" [(ngModel)]="assessment.to" #date2="ngModel"
                   name="date2"></p-calendar>
               </div>
+              <p class="info-message text-danger" *ngIf="(date1.invalid || date2.invalid) && (fData.submitted || date1.touched || date2.touched)">
+                Assessment Period is required
+              </p>
             </div>
 
 

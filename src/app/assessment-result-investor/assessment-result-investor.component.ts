@@ -54,6 +54,10 @@ export class AssessmentResultInvestorComponent implements OnInit {
   assessategory : any = []
 load: boolean
 
+investerTool : boolean;
+loadTitle :boolean = false;
+title2 : string;
+
 card : any = []
   constructor( private route: ActivatedRoute,
     private methassess : MethodologyAssessmentControllerServiceProxy,
@@ -70,6 +74,8 @@ card : any = []
 
   ngOnInit(): void {
 
+    this.investerTool = true;
+    this.loadTitle = false;
     this.route.queryParams.subscribe(params => {
       this.assessmentId = params['assessmentId'];
       this.averageProcess = params['averageProcess'];
@@ -88,16 +94,32 @@ card : any = []
         this.assessmentType = x.assessmentType
         this.date1 = x.from
           this.date2 = x.to
-          this.tool = x.tool
+        this.tool = x.tool
           this.assessment_approach = x.assessment_approach
           this.assessment_method= x.assessment_method
       }
+      console.log("toool", this.tool)
+      if(this.tool === 'Portfolio Tool'){
+        this.investerTool = false;
+        this.loadTitle = true;
+        this.title2 = 'Result - Assess the Transformational Change due to a Portfolio of Interventions'
+      }
+      else if(this.tool === 'Investment & Private Sector Tool'){
+        this.investerTool = true;
+        this.loadTitle = true;
+        this.title2 = 'Result - Invesment & Private Sector Tool - Nitric Acid Climate Action Group Initiative'
+      }
+
     });
+
+
+
 
     this.investorToolControllerproxy.getResultByAssessment( this.assessmentId).subscribe((res: any) => {
       console.log("getResultByAssessment: ", res)
       this.levelofImplemetation = res.level_of_implemetation
       this.geographicalAreasCovered = res.geographical_areas_covered
+      this.tool = res.assessment.tool
 
     });
 
@@ -129,6 +151,7 @@ card : any = []
       }
       console.log("yyyy",this.meth1Process )
     });
+
 
 
     this.investorToolControllerproxy.findAllAssessData( this.assessmentId).subscribe((res: any) => {
@@ -171,7 +194,7 @@ card : any = []
         categoryData.categoryLikelihood = (totalLikelihood/countLikelihood).toFixed(3)
         this.categoryDataArray.push(categoryData)
 
-        console.log("categoryDataArray: ", this.categoryDataArray)
+       // console.log("categoryDataArray: ", this.categoryDataArray)
       }
 
       for(let category of this.meth1Outcomes){
@@ -252,6 +275,7 @@ card : any = []
 
         console.log("cardddd", this.card)
       this.load = true;
+
     }, 1000);
 
   }
