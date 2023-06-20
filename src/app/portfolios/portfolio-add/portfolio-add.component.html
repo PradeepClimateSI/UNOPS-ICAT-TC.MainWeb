@@ -11,63 +11,90 @@
         <div class="row p-2">
           <div class="col-12 col-md-6">
 
-            <div class="p-field p-2">
+            <!--  <div class="p-field p-2">
               <label for="portfolioId">Portfolio ID *</label>
-              <input pInputText type="text" #portfolioId="ngModel" name="portfolioId" [(ngModel)]="portfolio.portfolioId" placeholder="portfolio Id" required />
-              <p class="info-message text-danger" *ngIf="!portfolioId.value && (fData.submitted || portfolioId.touched)">This is a mandatory field</p>
+              <input pInputText type="text" #portfolioId="ngModel" name="portfolioId"
+                [(ngModel)]="portfolio.portfolioId" placeholder="portfolio Id" required />
+              <p class="info-message text-danger"
+                *ngIf="!portfolioId.value && (fData.submitted || portfolioId.touched)">This is a mandatory field</p>
+            </div> -->
+
+            <div class="p-field p-2">
+              <label for="portfolioId">Portfolio ID </label>
+              <input pInputText type="text" #portfolioId="ngModel" name="portfolioId"
+                [(ngModel)]="portfolio.portfolioId" disabled ="portfolio Id" required pattern="2023PT\d{3}" />
+              <p class="info-message text-danger"
+                *ngIf="!portfolioId.value && (fData.submitted || portfolioId.touched)">This is a mandatory field</p>
+            </div>
+
+
+
+            <div class="p-field p-2">
+              <label for="portfolioName">Name of the Portfolio *</label>
+              <input pInputText type="text" #portfolioName="ngModel" name="portfolioName"
+                [(ngModel)]="portfolio.portfolioName" placeholder="portfolio Name" required />
+              <p class="info-message text-danger"
+                *ngIf="!portfolioName.value && (fData.submitted || portfolioName.touched)">This is a mandatory field</p>
+            </div>
+
+            <div class="p-field p-2">
+              <label for="description">Description *</label>
+              <input pInputText type="text" #description="ngModel" name="description"
+                [(ngModel)]="portfolio.description" placeholder="Description" required />
+              <p class="info-message text-danger"
+                *ngIf="!description.value && (fData.submitted || description.touched)">This is a mandatory field</p>
+            </div>
+
+            <div class="p-field p-2">
+              <label for="person">Person(s)/ organization(s) doing the assessment *</label>
+              <input pInputText type="text" #person="ngModel" name="person" [(ngModel)]="portfolio.person"
+                placeholder="Person(s)/ organization(s) doing the assessment" required />
+              <p class="info-message text-danger" *ngIf="!person.value && (fData.submitted || person.touched)">This is a
+                mandatory field</p>
             </div>
 
 
             <div class="p-field p-2">
-              <label for="portfolioName">Name of the Portfolio</label>
-              <input pInputText type="text" #portfolioName="ngModel" name="portfolioName" [(ngModel)]="portfolio.portfolioName" placeholder="portfolio Name" required />
-             <!--  <p class="info-message text-danger" *ngIf="!portfolioName.value && (fData.submitted || portfolioName.touched)">This is a mandatory field</p> -->
-            </div>
-
-            <div class="p-field p-2">
-              <label for="description">Description</label>
-              <input pInputText type="text" #description="ngModel" name="description" [(ngModel)]="portfolio.description" placeholder="Description" required />
-              <p class="info-message text-danger" *ngIf="!description.value && (fData.submitted || description.touched)">This is a mandatory field</p>
-            </div>
-
-            <div class="p-field p-2">
-              <label for="person">Person(s)/ organization(s) doing the assessment</label>
-              <input pInputText type="text" #person="ngModel" name="person" [(ngModel)]="portfolio.person" placeholder="Person(s)/ organization(s) doing the assessment" required />
-<!--               <p class="info-message text-danger" *ngIf="!person.value && (fData.submitted || person.touched)">This is a mandatory field</p> -->
-            </div>
-
-
-            <div class="p-field p-2">
-              <label for="IsPreviousAssessment">Is this assessment an update of a previous assessment?</label>
+              <label for="IsPreviousAssessment">Is this assessment an update of a previous assessment? *</label>
               <p-dropdown appendTo="body" name="IsPreviousAssessment" #IsPreviousAssessment="ngModel"
-              placeholder="Yes or No"  [(ngModel)]="portfolio.isPreviousAssessment"
-              ngModel [options]="optionList"
-              optionLabel="name" optionValue="name" [required]="true"></p-dropdown>
-<!--               <p class="info-message text-danger" *ngIf="!IsPreviousAssessment.value && (fData.submitted || IsPreviousAssessment.touched)">This is a mandatory field</p> -->
-           </div>
-
-            <div class="p-field p-2">
-              <label for="objectives">Objective(s) of the assessment</label>
-              <input pInputText type="text" #objectives="ngModel" name="objectives" [(ngModel)]="portfolio.objectives" placeholder="Objective(s) of the assessment" required />
-  <!--             <p class="info-message text-danger" *ngIf="!objectives.value && (fData.submitted || objectives.touched)">This is a mandatory field</p> -->
+                placeholder="Yes or No" [(ngModel)]="portfolio.isPreviousAssessment" ngModel [options]="optionList"
+                optionLabel="name" optionValue="name" [required]="true"></p-dropdown>
+              <p class="info-message text-danger"
+                *ngIf="!IsPreviousAssessment.value && (fData.submitted || IsPreviousAssessment.touched)">This is a
+                mandatory field</p>
             </div>
 
             <div class="p-field p-2">
-              <label for="audience">Intended audience(s) of the assessment</label>
-              <input pInputText type="text" #audience="ngModel" name="audience" [(ngModel)]="portfolio.audience" placeholder="Intended audience(s) of the assessment" required />
-<!--               <p class="info-message text-danger" *ngIf="!audience.value && (fData.submitted || audience.touched)">This is a mandatory field</p> -->
+              <label for="objectives">Objective(s) of the assessment *</label>
+              <input pInputText type="text" #objectives="ngModel" name="objectives" [(ngModel)]="portfolio.objectives"
+                placeholder="Objective(s) of the assessment" required />
+              <p class="info-message text-danger" *ngIf="!objectives.value && (fData.submitted || objectives.touched)">
+                This is a mandatory field</p>
             </div>
 
             <div class="p-field p-2">
-              <label for="opportunities">Opportunities for stakeholders to participate in the assessment</label>
-              <input pInputText type="text" #opportunities="ngModel" name="opportunities" [(ngModel)]="portfolio.opportunities" placeholder="Opportunities for stakeholders to participate in the assessment" required />
-<!--               <p class="info-message text-danger" *ngIf="!opportunities.value && (fData.submitted || opportunities.touched)">This is a mandatory field</p> -->
+              <label for="audience">Intended audience(s) of the assessment *</label>
+              <input pInputText type="text" #audience="ngModel" name="audience" [(ngModel)]="portfolio.audience"
+                placeholder="Intended audience(s) of the assessment" required />
+              <p class="info-message text-danger" *ngIf="!audience.value && (fData.submitted || audience.touched)">This
+                is a mandatory field</p>
             </div>
 
             <div class="p-field p-2">
-              <label for="principles">Principles on which the assessment is based</label>
-              <input pInputText type="text" #principles="ngModel" name="principles" [(ngModel)]="portfolio.principles" placeholder="Principles on which the assessment is based" required />
-         <!--      <p class="info-message text-danger" *ngIf="!principles.value && (fData.submitted || principles.touched)">This is a mandatory field</p> -->
+              <label for="opportunities">Opportunities for stakeholders to participate in the assessment *</label>
+              <input pInputText type="text" #opportunities="ngModel" name="opportunities"
+                [(ngModel)]="portfolio.opportunities"
+                placeholder="Opportunities for stakeholders to participate in the assessment" required />
+              <p class="info-message text-danger"
+                *ngIf="!opportunities.value && (fData.submitted || opportunities.touched)">This is a mandatory field</p>
+            </div>
+
+            <div class="p-field p-2">
+              <label for="principles">Principles on which the assessment is based *</label>
+              <input pInputText type="text" #principles="ngModel" name="principles" [(ngModel)]="portfolio.principles"
+                placeholder="Principles on which the assessment is based" required />
+              <p class="info-message text-danger" *ngIf="!principles.value && (fData.submitted || principles.touched)">
+                This is a mandatory field</p>
             </div>
 
 
@@ -75,20 +102,132 @@
         </div>
       </div>
 
+      <br>
+      <h4>Add Interventions</h4>
+
+      <p-table #dt2 [value]="assessList" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
+        [rowsPerPageOptions]="[10, 25, 50]" [paginator]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['tc_value', 'climateAction.policyName', 'assessmentType', 'assessment_approach', 'climateAction.typeofAction', 'from', 'to']"
+        [tableStyle]="{ 'min-width': '20rem' }">
+        <ng-template pTemplate="caption">
+          <div class="row">
+
+            <div class="col-md-3 ">
+              <p-columnFilter field="climateAction.policyName" matchMode="equals" [showMenu]="false">
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-dropdown [ngModel]="value" [options]="interventionsList" (onChange)="filter($event.value)"
+                    placeholder="Select Intervention Type" [showClear]="true">
+                  </p-dropdown>
+                </ng-template>
+              </p-columnFilter>
+            </div>
+
+            <div class="col-md-3 ">
+              <p-columnFilter field="assessmentType" matchMode="equals" [showMenu]="false">
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-dropdown [ngModel]="value" [options]="statuses" (onChange)="filter($event.value)"
+                    placeholder="Select Type" [showClear]="true">
+                  </p-dropdown>
+                </ng-template>
+              </p-columnFilter>
+            </div>
+
+            <div class="col-md-3 ">
+              <p-columnFilter field="assessment_approach" matchMode="equals" [showMenu]="false">
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-dropdown [ngModel]="value" [options]="apporoachList" (onChange)="filter($event.value)"
+                    placeholder="Select Approach" [showClear]="true">
+                  </p-dropdown>
+                </ng-template>
+              </p-columnFilter>
+            </div>
+
+            <div class="col-md-3 ">
+              <div class="d-flex justify-content-end">
+                <span class="p-input-icon-left ml-auto">
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text" (input)="onInput($event, dt2)" placeholder="Search keyword" />
+                </span>
+              </div>
+            </div>
+
+          </div>
+
+        </ng-template>
+        <ng-template pTemplate="header">
+
+          <tr>
+            <th style="width:8%"></th>
+            <th style="width:22%">Intervention</th>
+            <th style="width:22%">Intervention Type</th>
+            <th style="width:12%">Assessment Approach</th>
+            <th style="width:12%">Assessment Type</th>
+            <th style="width:22%">Assessment Period</th>
+
+          </tr>
+
+        </ng-template>
+        <ng-template pTemplate="body" let-assessList>
+          <tr>
+            <td>
+              <p-tableCheckbox #e [value]="assessList"
+                (click)="onCheckboxChange(e.checked, assessList.id)"></p-tableCheckbox>
+            </td>
+            <td>
+              {{ assessList.climateAction.policyName }}
+            </td>
+            <td>
+              {{ assessList.climateAction.typeofAction }}
+            </td>
+            <td>
+              {{ assessList.assessment_approach }}
+            </td>
+            <td>
+              {{ assessList.assessmentType }}
+            </td>
+            <td>
+              {{ assessList.from | date:'yyyy-MM-dd' }} - {{ assessList.to | date:'yyyy-MM-dd'}}
+            </td>
+
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="5">No assessment found.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <br>
 
       <div class="row justify-content-end">
         <div>
 
-            <div class="d-flex flex-row-reverse  ">
-                <button class="btn btn-primary text-uppercase" type="submit">
-                    Continue
-                </button>
-            </div>
+          <div class="d-flex flex-row-reverse  ">
+            <button class="btn btn-primary text-uppercase" type="submit">
+              Save
+            </button>
+          </div>
         </div>
-    </div>
+      </div>
 
 
     </div>
 
   </form>
+
+
+
+
+  <!--   <div class="row justify-content-end">
+    <div>
+
+      <div class="d-flex flex-row-reverse  ">
+        <button class="btn btn-primary text-uppercase" type="submit" (click)="sendData()">
+          send
+        </button>
+      </div>
+    </div>
+  </div> -->
 </div>

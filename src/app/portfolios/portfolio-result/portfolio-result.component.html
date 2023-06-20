@@ -1,1 +1,467 @@
-<p>portfolio-result works!</p>
+<div class="container pl-20 pr-20">
+  <div class="mb-12">
+    <h4 class="mt-4"> {{portfolio.portfolioName}}</h4>
+  </div>
+
+  <div class="p-grid p-fluid card">
+
+    <div class="p-grid p-fluid col-md-12 col-sm-12 text-title">
+      <div class="row p-2" *ngFor="let item of card">
+        <div class="col-6">{{item.title}} :</div>
+        <div class="col-6">{{item.data}}</div>
+      </div>
+    </div>
+
+    <br><br>
+    <h4>Interventions</h4><br>
+
+    <div *ngIf="load">
+      <p-table [value]="assessList" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width:40%">INTERVENTION</th>
+            <th style="width:20%">ASSESSMENT TYPE</th>
+            <th style="width:40%">ASSESSMENT PERIOD</th>
+            <!--     <th style="width:20%">TRANSFORMATIONAL CHANGE</th> -->
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-assessList>
+          <tr>
+            <td>{{ assessList.assessment.climateAction.policyName }}</td>
+            <td>{{ assessList.assessment.assessmentType }}</td>
+            <td>{{ assessList.assessment.from | date:'yyyy-MM-dd'}} - {{ assessList.assessment.to | date:'yyyy-MM-dd'}}
+            </td>
+            <!--           <td>{{ assessList.assessment.tc_value }}</td> -->
+          </tr>
+        </ng-template>
+      </p-table>
+
+
+      <br><br><br>
+
+      <h4>Process of Change</h4><br>
+      <!-- ================================================================================== -->
+      <p-table [value]="allData" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width:70%">LIKELIHOOD COMPARISON</th>
+            <th style="width:10%">PROCESSES</th>
+            <th style="width:20%"></th>
+
+          </tr>
+        </ng-template>
+      </p-table><br>
+
+      <p-table [value]="allData" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width:50%">INTERVENTION INFORMATION</th>
+            <th style="width:10%">{{allData[0].process[0].name }}</th>
+            <th style="width:10%">{{allData[0].process[1].name }}</th>
+            <th style="width:10%">{{allData[0].process[2].name }}</th>
+            <th style="width:10%">{{allData[0].process[3].name }}</th>
+            <th style="width:10%"></th>
+          </tr>
+        </ng-template>
+      </p-table><br>
+
+      <p-table [value]="allData" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width:10%">ID</th>
+            <th style="width:15%">Name</th>
+            <th style="width:15%">Intervention Type</th>
+            <th style="width:10%">Status</th>
+            <th style="width:10%">Category Score</th>
+            <th style="width:10%">Category Score</th>
+            <th style="width:10%">Category Score</th>
+            <th style="width:10%">Category Score</th>
+            <th style="width:10%">Likelihood Score</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-allData>
+          <tr>
+            <td>{{ allData.assess.climateAction.intervention_id}}</td>
+            <td>{{ allData.assess.climateAction.policyName }}</td>
+            <td>{{ allData.assess.climateAction.typeofAction }}</td>
+            <td>{{ allData.assess.climateAction.projectStatus.name }}</td>
+            <td class="clickable-row" (click)="handleClick(allData.process[0])"
+              [ngClass]="getColorClass(allData.process[0].likelihoodAverage)">{{ allData.process[0].likelihoodAverage }}
+            </td>
+            <td class="clickable-row" (click)="handleClick(allData.process[1])"
+              [ngClass]="getColorClass(allData.process[1].likelihoodAverage)">{{ allData.process[1].likelihoodAverage }}
+            </td>
+            <td class="clickable-row" (click)="handleClick(allData.process[2])"
+              [ngClass]="getColorClass(allData.process[2].likelihoodAverage)">{{ allData.process[2].likelihoodAverage }}
+            </td>
+            <td class="clickable-row" (click)="handleClick(allData.process[3])"
+              [ngClass]="getColorClass(allData.process[3].likelihoodAverage)">{{ allData.process[3].likelihoodAverage }}
+            </td>
+            <td [ngClass]="getColorClass(calculateAverage(allData.process.slice(0, 4)))">{{
+              calculateAverage(allData.process.slice(0, 4)) }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <!-- =============================================================================================================================== -->
+      <br><br><br>
+      <p-table [value]="allData" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width:70%">RELEVANCE COMPARISON</th>
+            <th style="width:10%">PROCESSES</th>
+            <th style="width:20%"></th>
+
+          </tr>
+        </ng-template>
+      </p-table><br>
+
+      <p-table [value]="allData" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width:50%">INTERVENTION INFORMATION</th>
+            <th style="width:10%">{{allData[0].process[0].name }}</th>
+            <th style="width:10%">{{allData[0].process[1].name }}</th>
+            <th style="width:10%">{{allData[0].process[2].name }}</th>
+            <th style="width:10%">{{allData[0].process[3].name }}</th>
+            <th style="width:10%"></th>
+          </tr>
+        </ng-template>
+      </p-table><br>
+
+      <p-table [value]="allData" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width:10%">ID</th>
+            <th style="width:15%">Name</th>
+            <th style="width:15%">Intervention Type</th>
+            <th style="width:10%">Status</th>
+            <th style="width:10%">Category Score</th>
+            <th style="width:10%">Category Score</th>
+            <th style="width:10%">Category Score</th>
+            <th style="width:10%">Category Score</th>
+            <th style="width:10%">Relevance Score</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-allData>
+          <tr>
+            <td>{{ allData.assess.climateAction.intervention_id}}</td>
+            <td>{{ allData.assess.climateAction.policyName }}</td>
+            <td>{{ allData.assess.climateAction.typeofAction }}</td>
+            <td>{{ allData.assess.climateAction.projectStatus.name }}</td>
+            <td class="clickable-row" (click)="handleClick2(allData.process[0])"
+              [ngClass]="getColorClass(allData.process[0].relevanceAverage)">{{ allData.process[0].relevanceAverage }}
+            </td>
+            <td class="clickable-row" (click)="handleClick2(allData.process[1])"
+              [ngClass]="getColorClass(allData.process[1].relevanceAverage)">{{ allData.process[1].relevanceAverage }}
+            </td>
+            <td class="clickable-row" (click)="handleClick2(allData.process[2])"
+              [ngClass]="getColorClass(allData.process[2].relevanceAverage)">{{ allData.process[2].relevanceAverage }}
+            </td>
+            <td class="clickable-row" (click)="handleClick2(allData.process[3])"
+              [ngClass]="getColorClass(allData.process[3].relevanceAverage)">{{ allData.process[3].relevanceAverage }}
+            </td>
+            <td [ngClass]="getColorClass(calculateAverageRelevance(allData.process.slice(0, 4)))">{{
+              calculateAverageRelevance(allData.process.slice(0, 4)) }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+
+      <!-- =============================================================================================================================== -->
+      <br><br><br>
+
+      <h4>Outcome of Change</h4><br>
+
+      <p-table [value]="allData" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width:70%">SCALE COMPARISON</th>
+            <th style="width:10%">OUTCOMES</th>
+            <th style="width:20%"></th>
+
+          </tr>
+        </ng-template>
+      </p-table><br>
+
+      <p-table [value]="allData" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width:70%">INTERVENTION INFORMATION</th>
+            <th style="width:10%">{{allData[0].scale[0].name }}</th>
+            <th style="width:10%">{{allData[0].scale[1].name }}</th>
+            <th style="width:10%"></th>
+          </tr>
+        </ng-template>
+      </p-table><br>
+
+      <p-table [value]="allData" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width:10%">ID</th>
+            <th style="width:25%">Name</th>
+            <th style="width:20%">Intervention Type</th>
+            <th style="width:15%">Status</th>
+            <th style="width:10%">Category Score</th>
+            <th style="width:10%">Category Score</th>
+            <th style="width:10%">Scale Score</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-allData>
+          <tr>
+            <td>{{ allData.assess.climateAction.intervention_id}}</td>
+            <td>{{ allData.assess.climateAction.policyName }}</td>
+            <td>{{ allData.assess.climateAction.typeofAction }}</td>
+            <td>{{ allData.assess.climateAction.projectStatus.name }}</td>
+            <td class="clickable-row" (click)="handleClick3(allData.scale[0])"
+              [ngClass]="getColorClass2(allData.scale[0].scoreAverage)">{{ allData.scale[0].scoreAverage }}
+            </td>
+            <td class="clickable-row" (click)="handleClick3(allData.scale[1])"
+              [ngClass]="getColorClass2(allData.scale[1].scoreAverage)">{{ allData.scale[1].scoreAverage }}
+            </td>
+            <td [ngClass]="getColorClass2(calculateAverageScale(allData.scale.slice(0, 2)))">{{
+              calculateAverageScale(allData.scale.slice(0, 2)) }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <!-- =============================================================================================================================== -->
+      <br><br><br>
+      <p-table [value]="allData" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width:70%">SUSTAINED COMPARISON</th>
+            <th style="width:10%">OUTCOMES</th>
+            <th style="width:20%"></th>
+
+          </tr>
+        </ng-template>
+      </p-table><br>
+
+      <p-table [value]="allData" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width:70%">INTERVENTION INFORMATION</th>
+            <th style="width:10%">{{allData[0].sustained[0].name }}</th>
+            <th style="width:10%">{{allData[0].sustained[1].name }}</th>
+            <th style="width:10%"></th>
+          </tr>
+        </ng-template>
+      </p-table><br>
+
+      <p-table [value]="allData" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width:10%">ID</th>
+            <th style="width:25%">Name</th>
+            <th style="width:20%">Intervention Type</th>
+            <th style="width:15%">Status</th>
+            <th style="width:10%">Category Score</th>
+            <th style="width:10%">Category Score</th>
+            <th style="width:10%">Sustained Score</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-allData>
+          <tr>
+            <td>{{ allData.assess.climateAction.intervention_id}}</td>
+            <td>{{ allData.assess.climateAction.policyName }}</td>
+            <td>{{ allData.assess.climateAction.typeofAction }}</td>
+            <td>{{ allData.assess.climateAction.projectStatus.name }}</td>
+            <td class="clickable-row" (click)="handleClick4(allData.sustained[0])"
+              [ngClass]="getColorClass2(allData.sustained[0].scoreAverage)">{{ allData.sustained[0].scoreAverage }}
+            </td>
+            <td class="clickable-row" (click)="handleClick4(allData.sustained[1])"
+              [ngClass]="getColorClass2(allData.sustained[1].scoreAverage)">{{ allData.sustained[1].scoreAverage }}
+            </td>
+            <td [ngClass]="getColorClass2(calculateAverageSustained(allData.sustained.slice(0, 2)))">{{
+              calculateAverageSustained(allData.sustained.slice(0, 2)) }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+
+
+
+       <!-- =============================================================================================================================== -->
+       <br><br><br>
+
+       <h4>Expected GHG Mitigation</h4><br>
+
+       <p-table [value]="allData" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width:10%">ID</th>
+            <th style="width:30%">Name</th>
+            <th style="width:25%">Intervention Type</th>
+            <th style="width:10%">Status</th>
+            <th style="width:20%">Expected GHG Mitigation (MT CO2-EQ)</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-allData>
+          <tr>
+            <td>{{ allData.assess.climateAction.intervention_id}}</td>
+            <td>{{ allData.assess.climateAction.policyName }}</td>
+            <td>{{ allData.assess.climateAction.typeofAction }}</td>
+            <td>{{ allData.assess.climateAction.projectStatus.name }}</td>
+            <td>{{ allData.ghgValue}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+       <!-- =============================================================================================================================== -->
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<p-dialog [(visible)]="tableShow" [style]="{ width: '500px' }" [showHeader]="false" [modal]="true" [responsive]="true"
+  showEffect="fade" (onHide)="showTable()">
+  <div class="row">
+    <div class="col-11">
+
+    </div>
+    <div class="col-1">
+      <p-button icon="pi pi-times" (click)="showTable()"
+        styleClass="p-button-text p-button-icon-right close-button"></p-button>
+    </div>
+  </div>
+
+  <div>
+    <h6 style="text-align: center;">Category: {{clickData.name}}</h6>
+    <h6 style="text-align: center;">Category Score: {{clickData.likelihoodAverage}}</h6>
+  </div> <br>
+
+  <p-table [value]="clickData.characteristics" [tableStyle]="{ 'min-width': '3rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width:3%">Characteristic</th>
+        <th style="width:3%">Score</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-clickData>
+      <tr>
+        <td>{{ clickData.name }}</td>
+        <td [ngClass]="getColorClass(clickData.likelihood)">{{ clickData.likelihood }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-dialog>
+
+<!-- =============================================================================================================================== -->
+
+
+<p-dialog [(visible)]="tableShow2" [style]="{ width: '500px' }" [showHeader]="false" [modal]="true" [responsive]="true"
+  showEffect="fade" (onHide)="showTable2()">
+  <div class="row">
+    <div class="col-11">
+
+    </div>
+    <div class="col-1">
+      <p-button icon="pi pi-times" (click)="showTable2()"
+        styleClass="p-button-text p-button-icon-right close-button"></p-button>
+    </div>
+  </div>
+
+  <div>
+    <h6 style="text-align: center;">Category: {{clickData2.name}}</h6>
+    <h6 style="text-align: center;">Category Score: {{clickData2.relevanceAverage}}</h6>
+  </div> <br>
+
+  <p-table [value]="clickData2.characteristics" [tableStyle]="{ 'min-width': '3rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width:3%">Characteristic</th>
+        <th style="width:3%">Score</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-clickData2>
+      <tr>
+        <td>{{ clickData2.name }}</td>
+        <td [ngClass]="getColorClass(clickData2.relevance)">{{ clickData2.relevance }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-dialog>
+
+
+<!-- =============================================================================================================================== -->
+<p-dialog [(visible)]="tableShow3" [style]="{ width: '500px' }" [showHeader]="false" [modal]="true" [responsive]="true"
+  showEffect="fade" (onHide)="showTable3()">
+  <div class="row">
+    <div class="col-11">
+
+    </div>
+    <div class="col-1">
+      <p-button icon="pi pi-times" (click)="showTable3()"
+        styleClass="p-button-text p-button-icon-right close-button"></p-button>
+    </div>
+  </div>
+
+  <div>
+    <h6 style="text-align: center;">Category: {{clickData3.name}}</h6>
+    <h6 style="text-align: center;">Category Score: {{clickData3.scoreAverage}}</h6>
+  </div> <br>
+
+  <p-table [value]="clickData3.characteristics" [tableStyle]="{ 'min-width': '3rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width:3%">Characteristic</th>
+        <th style="width:3%">Score</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-clickData3>
+      <tr>
+        <td>{{ clickData3.name }}</td>
+        <td [ngClass]="getColorClass2(clickData3.score)">{{ clickData3.score }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-dialog>
+
+<!-- =============================================================================================================================== -->
+
+
+<p-dialog [(visible)]="tableShow4" [style]="{ width: '500px' }" [showHeader]="false" [modal]="true" [responsive]="true"
+  showEffect="fade" (onHide)="showTable4()">
+  <div class="row">
+    <div class="col-11">
+
+    </div>
+    <div class="col-1">
+      <p-button icon="pi pi-times" (click)="showTable4()"
+        styleClass="p-button-text p-button-icon-right close-button"></p-button>
+    </div>
+  </div>
+
+  <div>
+    <h6 style="text-align: center;">Category: {{clickData4.name}}</h6>
+    <h6 style="text-align: center;">Category Score: {{clickData4.scoreAverage}}</h6>
+  </div> <br>
+
+  <p-table [value]="clickData4.characteristics" [tableStyle]="{ 'min-width': '3rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width:3%">Characteristic</th>
+        <th style="width:3%">Score</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-clickData4>
+      <tr>
+        <td>{{ clickData4.name }}</td>
+        <td [ngClass]="getColorClass2(clickData4.score)">{{ clickData4.score }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-dialog>
+
+<!-- =============================================================================================================================== -->
