@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
 import { UsersControllerServiceProxy, ServiceProxy, User, Institution, InstitutionControllerServiceProxy, UserTypeControllerServiceProxy, Country, InstitutionType, InstitutionCategory, UserType, CountryControllerServiceProxy } from 'shared/service-proxies/service-proxies';
-import { CreateManyUserTypeDto, LoginProfile,UserType as AuthUserType, LoginProfileControllerServiceProxy, ServiceProxy as authServiceProxy } from 'shared/service-proxies/auth-service-proxies';
+import { CreateManyUserTypeDto, LoginProfile, UserType as AuthUserType, LoginProfileControllerServiceProxy, ServiceProxy as authServiceProxy } from 'shared/service-proxies/auth-service-proxies';
 import { UserDetailsFormComponent } from '../user-details-form/user-details-form.component';
 import decode from 'jwt-decode';
 
@@ -14,13 +14,13 @@ import decode from 'jwt-decode';
   styleUrls: ['./user-form.component.css']
 })
 
-export class UserFormComponent implements OnInit,AfterViewInit {
+export class UserFormComponent implements OnInit, AfterViewInit {
   temp1: string;
   temp2: string;
   temp3: string;
 
   user: User = new User();
-  userInstitution:Institution;
+  userInstitution: Institution;
   userTypes: any[] = [];
   selectedUserTypesFordrop: UserType[] = [];
   selecteduserType: any = {};
@@ -63,7 +63,7 @@ export class UserFormComponent implements OnInit,AfterViewInit {
   countryId: number;
   sectorId: number;
   userRole: string;
-  country:Country = new Country();
+  country: Country = new Country();
 
   constructor(
     private serviceProxy: ServiceProxy,
@@ -76,7 +76,7 @@ export class UserFormComponent implements OnInit,AfterViewInit {
     private userController: UsersControllerServiceProxy,
     private authUser: LoginProfileControllerServiceProxy,
     private authServiceProxy: authServiceProxy,
-    private countryProxy:CountryControllerServiceProxy,
+    private countryProxy: CountryControllerServiceProxy,
     private ref: ChangeDetectorRef
   ) { }
   ngAfterViewInit(): void {
@@ -98,14 +98,14 @@ export class UserFormComponent implements OnInit,AfterViewInit {
     //  const tokenPayload = token ? decode<any>(token):'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3IiOiJzZWN0b3JhZG1pbjJAY2xpbWF0ZXNpLmNvbSIsImZuYW1lIjoiTWFkaHV3YW50aGEiLCJsbmFtZSI6IkhpbmRhZ29kYSIsImNvdW50cnlJZCI6MSwiaW5zdE5hbWUiOiJUcmFuc3BvcnQgTWluaXN0cnkiLCJtb2R1bGVMZXZlbHMiOlsxLDEsMSwxLDFdLCJzZWN0b3JJZCI6MSwicm9sZXMiOlsiU2VjdG9yIEFkbWluIl0sImlhdCI6MTY3ODE3MzM4MiwiZXhwIjoxNjc5MDM3MzgyfQ.0bpc5Jm3TxUhoOU8sNwnLGRtsonGAY4et1O2PlmicGA';
     this.countryId = tokenPayload.countryId;
     this.countryProxy.getCountrySector(this.countryId).subscribe((res: any) => {
-      this.country =res;
+      this.country = res;
     });
 
     let country = new Country()
     country.id = this.countryId;
     // country.id=2;
     this.sectorId = tokenPayload.sectorId;
-    this.userRole = tokenPayload.role[0]
+    this.userRole = tokenPayload.role.code
     console.log("user role..", this.userRole)
 
     this.user.userType = undefined!;
@@ -136,9 +136,9 @@ export class UserFormComponent implements OnInit,AfterViewInit {
               "ae_id": this.user.userType.id
             }
 
-                                     
+
             this.selectedUserTypesFordrop.push(this.selecteduserType)
-            console.log( "selectedUserTypesFordrop",this.selectedUserTypesFordrop )
+            console.log("selectedUserTypesFordrop", this.selectedUserTypesFordrop)
 
           });
       }
@@ -227,18 +227,18 @@ export class UserFormComponent implements OnInit,AfterViewInit {
         this.user.username = this.user.email;
         this.user.status = 0;
         // this.user.status = 1;
-        
+
         let userType = new UserType;
         // userType.id= this.selecteduserType.id
         userType.init(this.selecteduserType)
         console.log("userd", userType)
         this.user.userType = userType;
         let co = new Country;
-        co.id=this.countryId 
+        co.id = this.countryId
         // co.init(this.country);
 
-      
-        this.user.country= co;
+
+        this.user.country = co;
 
         let insTemp = this.user.institution;
         this.user.institution = new Institution();
@@ -251,22 +251,22 @@ export class UserFormComponent implements OnInit,AfterViewInit {
         // authUser.password = res.password;
         // authUser.salt = res.salt;
         let authUserType = new AuthUserType;
-        authUserType.id =this.selecteduserType.id;
-        authUser.userType =authUserType;
-        authUser.coutryId = this.countryId ;
+        authUserType.id = this.selecteduserType.id;
+        authUser.userType = authUserType;
+        authUser.coutryId = this.countryId;
         authUser.insId = this.user.institution.id;
 
 
         this.authServiceProxy.createOneBaseLoginProfileControllerLoginProfile(authUser).subscribe(
           (res) => {
             let sa
-            this.authUser.getById(res.id).subscribe((res)=>{
+            this.authUser.getById(res.id).subscribe((res) => {
 
             })
             console.log(res)
-            this.user.loginProfile =res.id;
+            this.user.loginProfile = res.id;
             this.user.password = res.password;
-            this.user.salt=res.salt;
+            this.user.salt = res.salt;
             this.userController
               .create(this.user)
               .subscribe(
@@ -323,7 +323,7 @@ export class UserFormComponent implements OnInit,AfterViewInit {
         //   console.log("Error", error);
         // });
       } else {
-        console.log("update",this.user.id, this.user)
+        console.log("update", this.user.id, this.user)
         // this.user.institution =new Institution()
 
         let userType = new UserType;
@@ -358,9 +358,9 @@ export class UserFormComponent implements OnInit,AfterViewInit {
               });
               setTimeout(() => {
                 this.router.navigate(['/app/user/list']);
-              },1000);
-      
-              
+              }, 1000);
+
+
             },
             (error) => {
               this.messageService.add({
@@ -436,51 +436,31 @@ export class UserFormComponent implements OnInit,AfterViewInit {
 
 
   async onInstitutionChange(event: any) {
-    console.log('event====1', event);
-
+    console.log('event====1', event.type.id, this.userRole);
     let tempList = this.userTypes
-
-    //in here check if there are any users  for inst type 1,2,3 for that certent country
-
-    // if(event.type.id==1){
-    //   let res= await this.instProxy.getInstitutionForUsers(event.id,3).toPromise()
-    // }
-
-
-    if (event.type.id == 2) {
-      let res = await this.instProxy.getInstitutionForUsers(event.id, 3).toPromise()
-
-      if (res == 1) {
-
-        tempList = tempList.filter((a) => a.ae_name != "Sector Admin")
-      }
+    if (event.type.id == 1) {
+      this.selectedUserTypesFordrop = tempList.filter((a) => (a.id == 2))
     }
-    else if (event.type.id == 3) {
-
-      let res = await this.instProxy.getInstitutionForUsers(event.id, 8).toPromise();
-
-      if (res == 1) {
-        tempList = tempList.filter((a) => a.ae_name != "Institution Admin")
-      }
+    if (event.type.id == 3) {
+      this.selectedUserTypesFordrop = tempList.filter((a) => (a.id == 8 || a.id == 9))
     }
-
-    if (this.userRole === "Institution Admin") {
-      this.selectedUserTypesFordrop = tempList.filter((a) => a.ae_name === "Data Entry Operator")
-      // console.log(this.userTypes)
-    }
-    else {
-
-      this.selectedUserTypesFordrop = tempList.filter(
-        (a) => a.int_institutionTypeId === event.type.id
-      );
-
-
+    else if (event.type.id == 2) {
+      this.selectedUserTypesFordrop = tempList.filter((a) => (a.id == 2 || a.id == 3 || a.id == 4 || a.id == 5 || a.id == 6 || a.id == 7))
 
     }
+    if (event.type.id == 4) {
+      this.selectedUserTypesFordrop = tempList.filter((a) => (a.id == 5))
+    }
+    if (event.type.id == 5) {
+      this.selectedUserTypesFordrop = tempList.filter((a) => (a.id == 6))
+    }
+    if (event.type.id == 6) {
+      this.selectedUserTypesFordrop = tempList.filter((a) => (a.id == 7))
+    }
 
+    console.log('eventtypeID===', tempList);
     console.log('eventtypeID===', event.type.id);
     console.log('selectedUserTypesFordrop=====', this.selectedUserTypesFordrop);
-
   }
 
   onInstitutionChange2(aaa: any) {
