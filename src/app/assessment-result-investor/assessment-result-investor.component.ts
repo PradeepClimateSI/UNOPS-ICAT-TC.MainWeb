@@ -104,7 +104,7 @@ card : any = []
         this.loadTitle = true;
         this.title2 = 'Result - Assess the Transformational Change due to a Portfolio of Interventions'
       }
-      else if(this.tool === 'Investment & Private Sector Tool'){
+      else if(this.tool === 'Investor & Private Sector Tool'){
         this.investerTool = true;
         this.loadTitle = true;
         this.title2 = 'Result - Invesment & Private Sector Tool - Nitric Acid Climate Action Group Initiative'

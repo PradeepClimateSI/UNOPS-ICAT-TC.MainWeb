@@ -101,7 +101,7 @@ onInput(event: any, dt: any) {
 myFunction(assessId: any, averageProcess: any, averageOutcome: any, tool: string, assessment_method: string) {
   console.log("dddd", assessId, tool, assessment_method, averageProcess, averageOutcome);
 
-  if (tool === 'Investment & Private Sector Tool' || (tool === 'Portfolio Tool' && assessment_method === 'Track 4')) {
+  if (tool === 'Investor & Private Sector Tool' || (tool === 'Portfolio Tool' && assessment_method === 'Track 4')) {
     this.router.navigate(['/assessment-result-investor', assessId], {
       queryParams: {
         assessmentId: assessId

@@ -109,12 +109,12 @@
         [rowsPerPageOptions]="[10, 25, 50]" [paginator]="true"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
         [globalFilterFields]="['tc_value', 'climateAction.policyName', 'assessmentType', 'assessment_approach', 'climateAction.typeofAction', 'from', 'to']"
-        [tableStyle]="{ 'min-width': '20rem' }">
+        [tableStyle]="{ 'min-width': '100%' }">
         <ng-template pTemplate="caption">
           <div class="row">
 
             <div class="col-md-3 ">
-              <p-columnFilter field="climateAction.policyName" matchMode="equals" [showMenu]="false">
+              <p-columnFilter field="climateAction.typeofAction" matchMode="equals" [showMenu]="false">
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                   <p-dropdown [ngModel]="value" [options]="interventionsList" (onChange)="filter($event.value)"
                     placeholder="Select Intervention Type" [showClear]="true">

@@ -85,21 +85,38 @@
   </div>
 </div>
 
+
+
 <div class="p-grid p-fluid card m-3">
   <div class="row text-center ">
-    <h3>Transformational Change of Interventions</h3>
-
+   <!--  <h3>Transformational Change of Interventions</h3> -->
     <div class="row">
       <div class="col-6 ">
         <canvas class="chart-canvas" #myCanvas></canvas>
       </div>
 
       <div class="col-6 ">
-        <canvas class="chart-canvas" #myCanvas2></canvas>
+        <canvas class="chart2-canvas" #myCanvas2></canvas>
       </div>
     </div>
   </div>
 </div>
+
+<!-- <div *ngIf="loadSelectedTable">
+  <div class="p-grid p-fluid card m-3">
+    <div class="row text-center ">
+      <div class="row">
+        <div class="col-6 ">
+          <canvas class="chart-canvas" #myCanvas3></canvas>
+        </div>
+
+        <div class="col-6 ">
+          <canvas class="chart-canvas" #myCanvas4></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
 
 <div class="p-grid p-fluid card m-3">
   <div class="row">
@@ -137,17 +154,62 @@
               <td>{{
                 calResults?.assesment?.climateAction?.policyName?calResults?.assesment?.climateAction?.policyName:'-' }}
               </td>
-              <td style="text-align: center">{{ calResults?.relevance==null?'-':calResults?.relevance }}</td>
-              <td style="text-align: center">{{ calResults?.likelihood==null?'-':calResults?.likelihood }}</td>
-              <td style="text-align: center">{{ calResults?.scaleScore==null?'-':calResults?.scaleScore }}</td>
-              <td style="text-align: center">{{ calResults?.sustainedScore==null?'-':calResults?.sustainedScore }}</td>
+              <td  [ngClass]="getColorClass(calResults?.relevance)" style="text-align: center">{{ calResults?.relevance==null?'-':calResults?.relevance }}</td>
+              <td [ngClass]="getColorClass2(calResults?.likelihood)" style="text-align: center">{{ calResults?.likelihood==null?'-':calResults?.likelihood }}</td>
+              <td [ngClass]="getColorClass3(calResults?.scaleScore)" style="text-align: center">{{ calResults?.scaleScore==null?'-':calResults?.scaleScore }}</td>
+              <td  [ngClass]="getColorClass3(calResults?.sustainedScore)" style="text-align: center">{{ calResults?.sustainedScore==null?'-':calResults?.sustainedScore }}</td>
             </tr>
           </ng-template>
 
         </p-table>
       </div>
 
+      <div *ngIf="loadSelectedTable">
+        <h3>Comparison - {{selectedPortfolio.portfolioName}}</h3>
 
+        <p-table [value]="allData" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+          [rowsPerPageOptions]="[5, 10, 20]">
+
+          <ng-template pTemplate="header">
+
+            <tr>
+              <th colspan="1" class="table-header"></th>
+              <th colspan="2" class="table-header">Process</th>
+              <th colspan="2" class="table-header">Outcomes</th>
+            </tr>
+
+
+
+            <tr>
+              <th class="table-header-3">Intervention Name</th>
+              <th class="table-header-2">Relevence</th>
+              <th class="table-header-2">Likelihood</th>
+              <th class="table-header-2">Scaled</th>
+              <th class="table-header-2">Sustained</th>
+
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-allData>
+            <tr>
+              <td>{{ allData.assess.climateAction?.policyName }}</td>
+              <td [ngClass]="getColorClass(calculateAverageRelevance(allData.process.slice(0, 4)))">{{
+                calculateAverageRelevance(allData.process.slice(0, 4)) }}</td>
+
+              <td [ngClass]="getColorClass2(calculateAverage(allData.process.slice(0, 4)))">{{
+                calculateAverage(allData.process.slice(0, 4)) }}</td>
+
+              <td [ngClass]="getColorClass3(calculateAverageScale(allData.scale.slice(0, 2)))">{{
+                calculateAverageScale(allData.scale.slice(0, 2)) }}</td>
+
+              <td [ngClass]="getColorClass3(calculateAverageSustained(allData.sustained.slice(0, 2)))">{{
+                calculateAverageSustained(allData.sustained.slice(0, 2)) }}</td>
+
+            </tr>
+          </ng-template>
+
+        </p-table>
+      </div>
 
 
     </div>
