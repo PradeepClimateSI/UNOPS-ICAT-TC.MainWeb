@@ -55,7 +55,7 @@ export class PortfolioAddComponent implements OnInit {
         console.log("assessmentData : ", res)
         this.assessList = res;
 
-        const uniqueNamesSet = new Set<string>(this.assessList.map((item: { climateAction: { policyName: any; }; })=> item.climateAction.policyName));
+        const uniqueNamesSet = new Set<string>(this.assessList.map((item: { climateAction: { typeofAction: any; }; })=> item.climateAction.typeofAction));
         this.interventionsList = Array.from(uniqueNamesSet, value => ({ value, label: value }));
 
         console.log("distinctNames : ", this.interventionsList)

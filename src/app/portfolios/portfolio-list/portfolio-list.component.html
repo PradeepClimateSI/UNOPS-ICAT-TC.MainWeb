@@ -16,7 +16,7 @@
     <br><br>
 
     <p-table #dt2 [value]="portfolioList" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
-      [tableStyle]="{ 'min-width': '60rem' }" [globalFilterFields]="['portfolioId', 'portfolioName', 'person']"
+      [tableStyle]="{ 'min-width': '100%' }" [globalFilterFields]="['portfolioId', 'portfolioName', 'person']"
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
       [rowsPerPageOptions]="[5, 10, 20, 50]">
       <ng-template pTemplate="caption">
