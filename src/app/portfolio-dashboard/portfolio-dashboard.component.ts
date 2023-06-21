@@ -56,9 +56,10 @@ export class PortfolioDashboardComponent implements OnInit {
   portfolioBarChart:Chart;
   barChartData:any=[];
   sdgDetailsList:any=[];
-
+  loadLast2graphs:boolean=false;
   ngOnInit(): void {
     this.loadSelectedTable = false;
+    this.loadSelectedTable =false;
     this.averageTCValue =63.78
     this.tool = 'Portfolio Tool'
     this.methassess.getResultForTool(this.tool).subscribe((res: any) => {
@@ -106,11 +107,14 @@ export class PortfolioDashboardComponent implements OnInit {
 
   selectPortfolio(portfolio : any){
     console.log("portfolio : ", this.selectedPortfolio)
+    this.loadLast2graphs=true;
+    console.log("loadLast2graphs",this.loadLast2graphs)
     this.sdgDetailsList=[];
     this.barChartData=[];
     this.resultData = []
     this.resultData2 = []
     this.allData = []
+    
 
     this.portfolioServiceProxy.assessmentsDataByAssessmentId(this.selectedPortfolio.id).subscribe(async (res: any) => {
       console.log("arrayyy : ", res)
@@ -197,6 +201,7 @@ export class PortfolioDashboardComponent implements OnInit {
 
   }
   sdgResults(portfolio : any){
+    this.sdgDetailsList=[]
     this.portfolioServiceProxy.sdgSumCalculate(this.selectedPortfolio.id).subscribe(async (res: any) => {
       console.log("sdgDetailsList : ", res)
       this.sdgDetailsList = res;
@@ -487,10 +492,10 @@ export class PortfolioDashboardComponent implements OnInit {
 
 
   viewPortfolioPieChart(){
-    const labels = this.sdgDetailsList.map((item:any) => item.sdg);
+    let labels = this.sdgDetailsList.map((item:any) => item.sdg);
     let counts:number[] = this.sdgDetailsList.map((item:any) => item.count);
-    const total = counts.reduce((acc, val) => acc + val, 0);
-    const percentages = counts.map(count => ((count / total) * 100).toFixed(2));
+    let total = counts.reduce((acc, val) => acc + val, 0);
+    let percentages = counts.map(count => ((count / total) * 100).toFixed(2));
 
     if (!this.canvasRefPieChart) {
       console.error('Could not find canvas element');
@@ -507,7 +512,8 @@ export class PortfolioDashboardComponent implements OnInit {
 
     if (this.portfolioPieChart) {
       // Update the chart data
-      this.portfolioPieChart.data.datasets[0].data = this.sdgDetailsList;
+      this.portfolioPieChart.data.datasets[0].data = counts;
+      this.portfolioPieChart.data.labels=labels
       this.portfolioPieChart.update();
     }
     else{
@@ -566,20 +572,22 @@ export class PortfolioDashboardComponent implements OnInit {
                 
                 label:(ctx)=>{ 
                   // console.log(ctx)
+                  // console.log(ctx)
                   // let sum = ctx.dataset._meta[0].total;
                   // let percentage = (value * 100 / sum).toFixed(2) + "%";
                   // return percentage;
                   let sum = 0;
-                  let array =counts
+                  let array =ctx.dataset.data
                   array.forEach((number) => {
                     sum += Number(number);
                   });
+                  console.log("sum",sum,ctx.parsed)
                   // console.log(sum, counts[ctx.dataIndex])
-                  let percentage = (counts[ctx.dataIndex]*100 / sum).toFixed(2)+"%";
-  
+                  let percentage = (ctx.parsed/ sum*100).toFixed(2)+"%";
+                  
                   return[
-                    `SDG: ${labels[ctx.dataIndex]}`,
-                    `Count: ${counts[ctx.dataIndex]}`,
+                    `SDG: ${ctx.label}`,
+                    `Count: ${ctx.raw}`,
                     `Percentage: ${percentage}`
                   ];
                  }
@@ -626,8 +634,10 @@ export class PortfolioDashboardComponent implements OnInit {
 
     if (this.portfolioBarChart) {
       // Update the chart data
-      console.log("======", this.portfolioBarChart.data.datasets[0].data)
-      this.portfolioBarChart.data.datasets[0].data = this.barChartData;
+      console.log("======", this.portfolioBarChart.data)
+      this.portfolioBarChart.data.datasets[0].data = data;
+      this.portfolioBarChart.data.labels=label;
+      console.log("======", this.portfolioBarChart.data)
       this.portfolioBarChart.update();
     }
     else{
@@ -718,10 +728,10 @@ export class PortfolioDashboardComponent implements OnInit {
               callbacks:{
   
                 label:(context)=>{
-  
+                  // console.log("context",context,"4444",data[context.dataIndex])
                   return[
   
-                    `Expected GHG Mitigation (Mt CO2-eq): ${data[context.dataIndex]}`,
+                    `Expected GHG Mitigation (Mt CO2-eq): ${context.raw}`,
                   ];
                  }
               },
