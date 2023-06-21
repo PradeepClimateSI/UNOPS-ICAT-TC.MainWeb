@@ -26,6 +26,10 @@ export class PortfolioDashboardComponent implements OnInit {
   @ViewChild('myCanvas4', { static: true }) canvasRef4!: ElementRef<HTMLCanvasElement>;
 
 
+  @ViewChild('portfolioBarChart', { static: true }) canvasRefBarChart!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('portfolioPieChart2', { static: true }) canvasRefPieChart!: ElementRef<HTMLCanvasElement>;
+
+
   chart: Chart;
   chart2: Chart;
   tool : string;
@@ -48,9 +52,10 @@ export class PortfolioDashboardComponent implements OnInit {
 
 
   /////
-  portfolioPieChart:any=[];
-  portfolioBarChart:any =[];
+  portfolioPieChart:Chart;
+  portfolioBarChart:Chart;
   barChartData:any=[];
+  sdgDetailsList:any=[];
 
   ngOnInit(): void {
     this.loadSelectedTable = false;
@@ -94,7 +99,7 @@ export class PortfolioDashboardComponent implements OnInit {
       this.portfolioList = res;
      });
 
-
+    
 
   }
 
@@ -190,7 +195,13 @@ export class PortfolioDashboardComponent implements OnInit {
     });
 
   }
-
+  sdgResults(portfolio : any){
+    this.portfolioServiceProxy.sdgSumCalculate(this.selectedPortfolio.id).subscribe(async (res: any) => {
+      console.log("sdgDetailsList : ", res)
+      this.sdgDetailsList = res;
+      this.viewPortfolioPieChart();
+     });
+  }
  viewResults(): void {
 
     if (!this.canvasRef) {
@@ -474,222 +485,262 @@ export class PortfolioDashboardComponent implements OnInit {
 
 
 
-  // viewPortfolioPieChart(){
-  //   const labels = this.sectorCount.map((item) => item.sector);
-  //   let counts:number[] = this.sectorCount.map((item) => item.count);
-  //   const total = counts.reduce((acc, val) => acc + val, 0);
-  //   const percentages = counts.map(count => ((count / total) * 100).toFixed(2));
-  //   this.portfolioPieChart =new Chart('portfolioPieChart', {
-  //     type: 'pie',
+  viewPortfolioPieChart(){
+    const labels = this.sdgDetailsList.map((item:any) => item.sdg);
+    let counts:number[] = this.sdgDetailsList.map((item:any) => item.count);
+    const total = counts.reduce((acc, val) => acc + val, 0);
+    const percentages = counts.map(count => ((count / total) * 100).toFixed(2));
 
-  //     data: {
-  //       labels: labels,
-  //       datasets: [{
-  //         data: counts,
-  //         backgroundColor: [
-  //           'rgba(153, 102, 255, 1)',
-  //           'rgba(75, 192, 192,1)',
-  //           'rgba(54, 162, 235, 1)',
-  //           'rgba(123, 122, 125, 1)',
-  //           'rgba(255, 99, 132, 1)',
-  //           'rgba(255, 205, 86, 1)',
-  //           'rgba(255, 99, 132, 1)',
-
-  //         ],
-         
-  //       }]
-  //     },
-  //     options: {
-  //       responsive: true,
-  //       maintainAspectRatio: false,
-  //       plugins:{
-  //         legend:{
-  //           position: 'bottom',
-  //           labels: {
-  //             padding: 20
-  //           }
-  //         },
-  //         datalabels: {
-  //           color: '#fff',
-  //           font: {
-  //             size: 12
-  //           },
-  //           formatter: (value, ctx) => {
-  //             const label = ctx.chart.data.labels![ctx.dataIndex];
-  //             const percentage = percentages[ctx.dataIndex];
-  //             return `${label}: ${value} (${percentage}%)`;
-  //           },
-
-  //         },
-  //         tooltip:{
-  //           position:'average',
-  //           boxWidth:10,
-  //           callbacks:{
-              
-  //             label:(ctx)=>{ 
-  //               // console.log(ctx)
-  //               // let sum = ctx.dataset._meta[0].total;
-  //               // let percentage = (value * 100 / sum).toFixed(2) + "%";
-  //               // return percentage;
-  //               let sum = 0;
-  //               let array =counts
-  //               array.forEach((number) => {
-  //                 sum += Number(number);
-  //               });
-  //               // console.log(sum, counts[ctx.dataIndex])
-  //               let percentage = (counts[ctx.dataIndex]*100 / sum).toFixed(2)+"%";
-
-  //               return[
-  //                 `Sector: ${labels[ctx.dataIndex]}`,
-  //                 `Count: ${counts[ctx.dataIndex]}`,
-  //                 `Percentage: ${percentage}`
-  //               ];
-  //              }
-  //           },
-  //           backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
-  //             titleFont: {
-  //               size: 14,
-  //               weight: 'bold'
-  //             },
-  //             bodyFont: {
-  //               size: 14
-  //             },
-  //             displayColors: true, // Hide the color box in the tooltip
-  //             bodyAlign: 'left'
-  //         }
-  //      }
-
-  //     },
-
-  // });
-
-  // }
-  viewPortfolioBarChart(){
-    
-    if (!this.canvasRef3) {
+    if (!this.canvasRefPieChart) {
       console.error('Could not find canvas element');
       return;
     }
 
-    const pcanvas = this.canvasRef3.nativeElement;
-    const pctx = pcanvas.getContext('2d');
+    const canvas = this.canvasRefPieChart.nativeElement;
+    const ctx = canvas.getContext('2d');
 
-    if (!pctx) {
+    if (!ctx) {
       console.error('Could not get canvas context');
       return;
     }
+
+    if (this.portfolioPieChart) {
+      // Update the chart data
+      this.portfolioPieChart.data.datasets[0].data = this.resultData;
+      this.portfolioPieChart.update();
+    }
+    else{
+      this.portfolioPieChart =new Chart(ctx, {
+        type: 'pie',
+  
+        data: {
+          labels: labels,
+          datasets: [{
+            data: counts,
+            backgroundColor: [
+              'rgb(250,227,114)',
+              'rgb(51,51,51)',
+              'rgb(0,170,187)',
+              'rgb(227,120,42)',
+              'rgb(150,131,141)',
+              'rgb(42,61,227)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(75, 192, 192,1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(123, 122, 125, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 205, 86, 1)',
+              'rgba(255, 99, 132, 1)',
+  
+            ],
+           
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins:{
+            legend:{
+              position: 'bottom',
+              labels: {
+                padding: 20
+              }
+            },
+            datalabels: {
+              color: '#fff',
+              font: {
+                size: 12
+              },
+              formatter: (value, ctx) => {
+                const label = ctx.chart.data.labels![ctx.dataIndex];
+                const percentage = percentages[ctx.dataIndex];
+                return `${label}: ${value} (${percentage}%)`;
+              },
+  
+            },
+            tooltip:{
+              position:'average',
+              boxWidth:10,
+              callbacks:{
+                
+                label:(ctx)=>{ 
+                  // console.log(ctx)
+                  // let sum = ctx.dataset._meta[0].total;
+                  // let percentage = (value * 100 / sum).toFixed(2) + "%";
+                  // return percentage;
+                  let sum = 0;
+                  let array =counts
+                  array.forEach((number) => {
+                    sum += Number(number);
+                  });
+                  // console.log(sum, counts[ctx.dataIndex])
+                  let percentage = (counts[ctx.dataIndex]*100 / sum).toFixed(2)+"%";
+  
+                  return[
+                    `SDG: ${labels[ctx.dataIndex]}`,
+                    `Count: ${counts[ctx.dataIndex]}`,
+                    `Percentage: ${percentage}`
+                  ];
+                 }
+              },
+              backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
+                titleFont: {
+                  size: 14,
+                  weight: 'bold'
+                },
+                bodyFont: {
+                  size: 14
+                },
+                displayColors: true, // Hide the color box in the tooltip
+                bodyAlign: 'left'
+            }
+         }
+  
+        },
+  
+    });
+    }
+   
+
+  }
+  viewPortfolioBarChart(){
+
     let label =this.barChartData.map((item:any) => item?.assessment?.climateAction?.policyName );
     let data =this.barChartData.map((item:any) => item.ghgValue?item.ghgValue:0);
     console.log("label",label,"data",data)
-    this.portfolioBarChart =new Chart(pctx, {
-      type: 'bar',
+   
+    
+    if (!this.canvasRefBarChart) {
+      console.error('Could not find canvas element');
+      return;
+    }
 
-      data: {
-        labels: label,
-        datasets: [{
-          label: 'Bar Chart',
-          data: data,
-          backgroundColor: [
-            'rgb(250,227,114)',
-            'rgb(51,51,51)',
-            'rgb(0,170,187)',
-            'rgb(227,120,42)',
-            'rgb(150,131,141)',
-            'rgb(42,61,227)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(75, 192, 192,1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(123, 122, 125, 1)',
-            'rgba(255, 99, 132, 1)',
-            'rgba(255, 205, 86, 1)',
-            'rgba(255, 99, 132, 1)',
+    const canvas = this.canvasRefBarChart.nativeElement;
+    const ctx = canvas.getContext('2d');
 
-          ],
-          borderColor:[
-            'rgb(250,227,114)',
-            'rgb(51,51,51)',
-            'rgb(0,170,187)',
-            'rgb(227,120,42)',
-            'rgb(150,131,141)',
-            'rgb(42,61,227)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(75, 192, 192,1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(123, 122, 125, 1)',
-            'rgba(255, 99, 132, 1)',
-            'rgba(255, 205, 86, 1)',
-            'rgba(255, 99, 132, 1)',],
+    if (!ctx) {
+      console.error('Could not get canvas context');
+      return;
+    }
 
-          borderWidth: 1
-        }]
-      },
-      options:{
-        scales: {
-          x: {
-            ticks: {
-              callback: function(value:any, index, values) {
-                return value.length > 10 ? value.substring(0, 10) + '...' : value;
+    if (this.portfolioBarChart) {
+      // Update the chart data
+      this.portfolioBarChart.data.datasets[0].data = this.resultData;
+      this.portfolioBarChart.update();
+    }
+    else{
+      this.portfolioBarChart =new Chart(ctx, {
+        type: 'bar',
+  
+        data: {
+          labels: label,
+          datasets: [{
+            label: 'Bar Chart',
+            data: data,
+            backgroundColor: [
+              'rgb(250,227,114)',
+              'rgb(51,51,51)',
+              'rgb(0,170,187)',
+              'rgb(227,120,42)',
+              'rgb(150,131,141)',
+              'rgb(42,61,227)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(75, 192, 192,1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(123, 122, 125, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 205, 86, 1)',
+              'rgba(255, 99, 132, 1)',
+  
+            ],
+            borderColor:[
+              'rgb(250,227,114)',
+              'rgb(51,51,51)',
+              'rgb(0,170,187)',
+              'rgb(227,120,42)',
+              'rgb(150,131,141)',
+              'rgb(42,61,227)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(75, 192, 192,1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(123, 122, 125, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 205, 86, 1)',
+              'rgba(255, 99, 132, 1)',],
+  
+            borderWidth: 1
+          }]
+        },
+        options:{
+          scales: {
+            x: {
+              ticks: {
+                callback: function(value:any, index, values) {
+                  return value.length > 10 ? value.substring(0, 10) + '...' : value;
+                },
+                maxRotation: 90,
+               
               },
-              maxRotation: 90,
-             
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Interventions',
+                font: {
+                  size: 16,
+                  weight: 'bold',
+  
+                }
+              },
+              
             },
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Interventions',
-              font: {
-                size: 16,
-                weight: 'bold',
-
-              }
-            },
-            
-          },
-          y: {
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Expected GHG Mitigation (Mt CO2-eq)',
-              font: {
-                size: 10,
-                weight: 'bold',
-
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Expected GHG Mitigation (Mt CO2-eq)',
+                font: {
+                  size: 10,
+                  weight: 'bold',
+  
+                }
               }
             }
-          }
-        },
-        plugins:{
-          legend: {
-            display: false
           },
-          tooltip:{
-            position:'average',
-            boxWidth:10,
-            callbacks:{
-
-              label:(context)=>{
-
-                return[
-
-                  `Expected GHG Mitigation (Mt CO2-eq): ${data[context.dataIndex]}`,
-                ];
-               }
+          plugins:{
+            legend: {
+              display: false
             },
-            backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
-              titleFont: {
-                size: 14,
-                weight: 'bold'
+            tooltip:{
+              position:'average',
+              boxWidth:10,
+              callbacks:{
+  
+                label:(context)=>{
+  
+                  return[
+  
+                    `Expected GHG Mitigation (Mt CO2-eq): ${data[context.dataIndex]}`,
+                  ];
+                 }
               },
-              bodyFont: {
-                size: 14
-              },
-              displayColors: true, // Hide the color box in the tooltip
-              bodyAlign: 'left'
+              backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
+                titleFont: {
+                  size: 14,
+                  weight: 'bold'
+                },
+                bodyFont: {
+                  size: 14
+                },
+                displayColors: true, // Hide the color box in the tooltip
+                bodyAlign: 'left'
+            }
           }
+  
         }
-
-      }
-  });
+    });
+      
+    } 
+    
 
   }
 

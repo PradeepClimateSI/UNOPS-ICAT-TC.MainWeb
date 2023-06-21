@@ -62,6 +62,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   levelofImplementation:number=0;
 
   yesNoAnswer: any[] = [{ id: 1, name: "Yes" }, { id: 2, name: "No" },  { id: 3, name: "Maybe" }];
+  investmentType: any[] = [{ id: 1, name: "Type 01" }, { id: 2, name: "Type 02" },  { id: 3, name: "Type 03" }];
  angle:string
 
   processData: {

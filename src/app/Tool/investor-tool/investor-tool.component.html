@@ -197,6 +197,15 @@
                                 This is a mandatory field
                             </p>
                             </div>
+                            <div class="p-field p-2">
+                                <label for="Sectors Covered">Type of Investment</label>
+                                <p-dropdown name="investment_type" #investment_type="ngModel" placeholder="Select Assessment Method"
+                                    [(ngModel)]="investorAssessment.investment_type" [options]="investmentType"  appendTo="body"
+                                    
+                                    [disabled]="isSavedAssessment"
+                                    optionLabel="name" optionValue="name"></p-dropdown>
+                               
+                                </div>
                     </div>
 
 
@@ -221,8 +230,8 @@
     <!-- <div class="p-grid p-fluid col-sm-12" *ngIf="showSections">
         <app-cm-section [assessment]="assessmentres"></app-cm-section>
     </div> -->
-    <!-- <div class="card" *ngIf="isSavedAssessment"> -->
-        <div class="card" >
+    <div class="card" *ngIf="isSavedAssessment">
+        <!-- <div class="card" > -->
         <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)" >
         <p-tabView  (onChange)="onMainTabChange($event) " [(activeIndex)]="activeIndexMain ">
 
