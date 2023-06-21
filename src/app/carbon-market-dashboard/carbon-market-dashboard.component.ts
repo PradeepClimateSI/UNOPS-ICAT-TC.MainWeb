@@ -158,7 +158,7 @@ CMPrerequiste: {
             beginAtZero: true,
             title: {
               display: true,
-              text: 'Interventions',
+              text: 'Intervention ID',
               font: {
                 size: 16,
                 weight: 'bold',

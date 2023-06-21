@@ -106,7 +106,8 @@ export class PortfolioDashboardComponent implements OnInit {
 
   selectPortfolio(portfolio : any){
     console.log("portfolio : ", this.selectedPortfolio)
-
+    this.sdgDetailsList=[];
+    this.barChartData=[];
     this.resultData = []
     this.resultData2 = []
     this.allData = []
@@ -506,7 +507,7 @@ export class PortfolioDashboardComponent implements OnInit {
 
     if (this.portfolioPieChart) {
       // Update the chart data
-      this.portfolioPieChart.data.datasets[0].data = this.resultData;
+      this.portfolioPieChart.data.datasets[0].data = this.sdgDetailsList;
       this.portfolioPieChart.update();
     }
     else{
@@ -625,7 +626,8 @@ export class PortfolioDashboardComponent implements OnInit {
 
     if (this.portfolioBarChart) {
       // Update the chart data
-      this.portfolioBarChart.data.datasets[0].data = this.resultData;
+      console.log("======", this.portfolioBarChart.data.datasets[0].data)
+      this.portfolioBarChart.data.datasets[0].data = this.barChartData;
       this.portfolioBarChart.update();
     }
     else{
