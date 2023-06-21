@@ -15,6 +15,9 @@ export class DashboardComponent implements OnInit {
   togglemenu: boolean = true;
   innerWidth = 0;
 
+  clickcarbon: boolean = true;
+  clickInvest: boolean = false;
+  clickpor: boolean = false;
 
   indtituteadmin: boolean = false;
   userType: string = "countryAdmin";
@@ -76,17 +79,26 @@ export class DashboardComponent implements OnInit {
 
 
   goToInvestment(){
+    this.clickcarbon = false;
+    this.clickInvest = true;
+    this.clickpor= false;
    // this.router.navigate(['/app/investment-dashboard'],);
 
    this.SelectedTool =1;
   }
 
   goToPortfolio(){
+    this.clickcarbon = false;
+    this.clickInvest = false;
+    this.clickpor= true;
     //this.router.navigate(['/app/portfolio-dashboard'],);
     this.SelectedTool = 2
   }
 
   goToCarbonMarket(){
+    this.clickcarbon = true;
+    this.clickInvest = false;
+    this.clickpor= false;
     //this.router.navigate(['/app/carbon-dashboard'],);
     this.SelectedTool = 3
   }
