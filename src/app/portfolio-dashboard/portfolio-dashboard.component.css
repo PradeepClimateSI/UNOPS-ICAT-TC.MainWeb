@@ -4,6 +4,14 @@
   padding-bottom: 5px;
 
 }
+
+.chart2-canvas {
+  background: linear-gradient(to bottom left, rgba(0,255,0,0.5), rgba(255,255,0,0.5), rgba(255, 0, 0,0.5), rgba(255,0,0,1));
+  padding: 30px;
+  padding-bottom: 5px;
+
+}
+
 .first{
   height: 45px;
   width: 100%;
@@ -12,7 +20,7 @@
   background-image: linear-gradient(to right,  red, rgb(255, 191, 0),rgb(72, 255, 0));
   border: 1px solid rgb(52, 52, 52);
 
-} 
+}
 .second{
   height: 44px;
   background-color:transparent;
@@ -45,12 +53,71 @@
   font-size: 18px;
   color: black !important;
   background-color: white !important;
-  
-  
+
+
 }
 .table-header-3{
   font-size: 18px;
   color: black !important;
   background-color: white !important;
 }
+
+
+.color-class-1 {
+  background-color: #ef686a;
+}
+
+.color-class-2 {
+  background-color:#feeb84;
+}
+
+.color-class-3 {
+  background-color:#63be7b;
+}
+
+.color-class-21 {
+  background-color: #ef686a;
+}
+
+.color-class-22 {
+  background-color:#f5aa76;
+}
+
+.color-class-23 {
+  background-color:#feeb84;
+}
+
+.color-class-24 {
+  background-color:#b1d580;
+}
+
+.color-class-25 {
+  background-color:#63be7b;
+}
+
+
+.color-class-31 {
+  background-color: #ef686a;
+}
+
+.color-class-32 {
+  background-color:#f5b3b4;
+}
+
+.color-class-33 {
+  background-color:#ffffff;
+}
+
+.color-class-34 {
+  background-color:#abc3e3;
+}
+
+.color-class-35 {
+  background-color:#5a8ac6;
+}
+
+.default-color-class{
+  background-color: rgb(54, 159, 216);
+}
+
 
