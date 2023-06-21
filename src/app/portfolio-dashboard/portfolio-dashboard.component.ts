@@ -581,7 +581,7 @@ export class PortfolioDashboardComponent implements OnInit {
                   array.forEach((number) => {
                     sum += Number(number);
                   });
-                  console.log("sum",sum,ctx.parsed)
+                  // console.log("sum",sum,ctx.parsed)
                   // console.log(sum, counts[ctx.dataIndex])
                   let percentage = (ctx.parsed/ sum*100).toFixed(2)+"%";
                   
