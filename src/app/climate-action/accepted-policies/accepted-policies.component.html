@@ -108,7 +108,7 @@
                 </td>
               </ng-container> -->
               <td>
-                {{(climateactions.projectApprovalStatus?.id == undefined || climateactions.projectApprovalStatus?.id == 4)?'Proposed':(climateactions.projectApprovalStatus.id == 3?'Data Requested':(climateactions.projectApprovalStatus.id == 1?'Accept':(climateactions.projectApprovalStatus.id == 5?'Active':'Reject')))}}
+                {{(climateactions.projectApprovalStatus?.id == undefined || climateactions.projectApprovalStatus?.id == 4)?'Proposed':(climateactions.projectApprovalStatus.id == 3?'Data Requested':(climateactions.projectApprovalStatus.id == 1?'Accepted':(climateactions.projectApprovalStatus.id == 5?'Active':'Reject')))}}
               </td>
               <td>
                 <!-- <button 
