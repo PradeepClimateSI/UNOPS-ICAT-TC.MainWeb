@@ -19,4 +19,7 @@
     line-height: 1.5;
     margin: 0;
 }
- 
+.array-item {
+    display: inline-block;
+    margin-right: 5px;
+  } 

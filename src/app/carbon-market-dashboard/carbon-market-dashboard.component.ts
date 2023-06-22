@@ -150,6 +150,7 @@ CMPrerequiste: {
               backgroundColor: 'blue',
               borderColor: "#black",
               pointRadius:10,
+              borderWidth: 0,
           }],
       },
       options:{
