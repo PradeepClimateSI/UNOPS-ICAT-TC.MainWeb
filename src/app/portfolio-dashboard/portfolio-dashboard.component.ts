@@ -93,6 +93,10 @@ export class PortfolioDashboardComponent implements OnInit {
   }
 
 
+  goToFunction(){
+this.selectedPortfolio = ''
+  }
+
   selectPortfolio(portfolio : any){
     console.log("portfolio : ", this.selectedPortfolio)
 

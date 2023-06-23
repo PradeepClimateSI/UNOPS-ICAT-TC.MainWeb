@@ -177,6 +177,12 @@ trigger : boolean = false;
   }
    */
 
+  assessmentMethodList: any[] = [
+    { name: 'Track 1' },
+    { name: 'Track 2' },
+    { name: 'Track 3' },
+    { name: 'Track 4' }
+  ];
 
 
   chart(): void {
@@ -247,7 +253,6 @@ trigger : boolean = false;
       },
     });
   }
-
 
 
   ngOnInit(): void {
@@ -1417,7 +1422,7 @@ onRemove(event :any,x:number) {
 track4Select : boolean = false
 onChangeTrack(event : any){
   this.track4Select = false
-  this.selectedTrack = event.target.value;
+  this.selectedTrack = event.value;
   console.log("selectedTrack : ", this.selectedTrack)
 
   if(this.selectedTrack === 'Track 4'){

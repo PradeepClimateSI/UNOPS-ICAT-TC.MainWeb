@@ -31,7 +31,7 @@
             </div>
           </div>
  -->
-          <div class="row p-2">
+          <!-- <div class="row p-2">
             <div class="col-12 col-md-8">
               <div class="p-field">
                 <label for="assessment_method">Assessment Method *</label>
@@ -46,9 +46,23 @@
                 <p class="info-message text-danger" *ngIf="!assessment_method && (userPost.submitted || assessmentMethod.touched)">This is a mandatory field</p>
               </div>
             </div>
+          </div> -->
+
+
+
+
+          <div class="row p-2">
+            <div class="col-12 col-md-8">
+              <div class="p-field">
+                <label for="assessment_method">Assessment Method *</label>
+                <p-dropdown appendTo="body" name="assessment_method" #assessmentMethod="ngModel"
+                placeholder="Select Assessment Method"  [(ngModel)]="assessment_method"
+                ngModel [options]="assessmentMethodList" (onChange)="onChangeTrack($event)"
+                optionLabel="name" optionValue="name" [required]="true"></p-dropdown>
+                <p class="info-message text-danger" *ngIf="!assessment_method && (userPost.submitted || assessmentMethod.touched)">This is a mandatory field</p>
+              </div>
+            </div>
           </div>
-
-
 
 
 

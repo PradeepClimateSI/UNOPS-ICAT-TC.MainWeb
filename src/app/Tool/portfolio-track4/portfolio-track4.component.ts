@@ -65,6 +65,12 @@ export class PortfolioTrack4Component implements OnInit {
     // Add other options if needed
   ];
 
+  assessmentMethodList: any[] = [
+    { name: 'Track 1' },
+    { name: 'Track 2' },
+    { name: 'Track 3' },
+    { name: 'Track 4' }
+  ];
 
   processData: {
     type: string,
@@ -220,7 +226,7 @@ export class PortfolioTrack4Component implements OnInit {
     console.log("form", form)
     // this.showSections = true
     //save assessment
-    this.load = true
+
     this.assessment.tool = 'Portfolio Tool'
     this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
 
@@ -228,7 +234,7 @@ export class PortfolioTrack4Component implements OnInit {
       this.methodologyAssessmentControllerServiceProxy.saveAssessment(this.assessment)
         .subscribe(res => {
           console.log("res", res)
-
+          this.load = true
           if (res) {
 
 
@@ -289,7 +295,7 @@ export class PortfolioTrack4Component implements OnInit {
 
   onChangeTrack(event: any) {
     this.track4Selectt = true
-    this.selectedTrack = event.target.value;
+    this.selectedTrack = event.value;
     console.log("selectedTrack : ", this.selectedTrack)
 
     if (this.selectedTrack === 'Track 1' || this.selectedTrack === 'Track 2' || this.selectedTrack === 'Track 3') {
