@@ -6,13 +6,69 @@
   <form #fLogin="ngForm" (ngSubmit)="saveUser(fLogin)" novalidate>
     <div class="card">
       
+      <div class="p-grid p-fluid col-md-9 col-sm-12">
+        <div class="row p-2">
+          <div class="col-12 col-md-8">
+            <div class="p-field" *ngIf="!isNewUser && user.institution">
+              <label for="institution">Assign Institution *</label>
+              <p-dropdown              
+                name="institution"
+                [options]="institutions"
+                [(ngModel)]="userInstitution"
+                #finstitution="ngModel"
+                placeholder={{user.institution?.name}}
+                optionLabel="name"
+                (ngModelChange)="onInstitutionChange($event)"
+                [required]="true"
+                
+              ></p-dropdown>
+              
+              
+              <p
+                class="info-message text-danger"
+                *ngIf="
+                  !userInstitution &&
+                  (fLogin.submitted ||
+                    finstitution.touched ||
+                    finstitution.dirty)
+                ">
+                This is a mandatory field
+              </p>
+            </div>
+            <div class="p-field" *ngIf="isNewUser">
+              <label for="institution">Assign Institution *</label>
+              <p-dropdown              
+                name="institution"
+                [options]="institutions"
+                [(ngModel)]="user.institution"
+                #finstitution="ngModel"
+                [filter]="true"
+                placeholder="Please select an institution"
+                optionLabel="name"
+                (ngModelChange)="onInstitutionChange($event)"
+                [required]="true"
+              ></p-dropdown>
+              <p
+                class="info-message text-danger"
+                *ngIf="
+                  !user.institution &&
+                  (
+                    finstitution.touched ||
+                    finstitution.dirty)
+                ">
+                This is a mandatory field
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div class="p-grid p-fluid col-md-9 col-sm-12">
         <div class="row p-2">
           <div class="col-12 col-md-8">
             <div class="p-field" *ngIf="isNewUser">
               <label for="contatname">User Type*</label>
-              <p-dropdown [options]="userTypes" name="usertype" [(ngModel)]="selecteduserType" 
+              <p-dropdown [options]="selectedUserTypesFordrop" name="usertype" [(ngModel)]="selecteduserType" 
                 placeholder="select user type" optionLabel="name" #fut="ngModel"></p-dropdown>
 
               <!-- <p class="info-message text-danger" *ngIf="
@@ -24,7 +80,7 @@
             </div>
             <div class="p-field" *ngIf="!isNewUser ">
               <label for="contatname">User Type*</label>
-              <p-dropdown [options]="userTypes" name="usertype" [(ngModel)]="selecteduserType"
+              <p-dropdown [options]="selectedUserTypesFordrop" name="usertype" [(ngModel)]="selecteduserType"
                 placeholder={{user.userType?.name}} optionLabel="name" #fut="ngModel"></p-dropdown>
 
               <p class="info-message text-danger" *ngIf="
@@ -98,62 +154,7 @@
         </div>
       </div>
 
-      <div class="p-grid p-fluid col-md-9 col-sm-12">
-        <div class="row p-2">
-          <div class="col-12 col-md-8">
-            <div class="p-field" *ngIf="!isNewUser && user.institution">
-              <label for="institution">Assign Institution *</label>
-              <p-dropdown              
-                name="institution"
-                [options]="institutions"
-                [(ngModel)]="userInstitution"
-                #finstitution="ngModel"
-                placeholder={{user.institution?.name}}
-                optionLabel="name"
-                (ngModelChange)="onInstitutionChange($event)"
-                [required]="true"
-                
-              ></p-dropdown>
-              
-              
-              <p
-                class="info-message text-danger"
-                *ngIf="
-                  !userInstitution &&
-                  (fLogin.submitted ||
-                    finstitution.touched ||
-                    finstitution.dirty)
-                ">
-                This is a mandatory field
-              </p>
-            </div>
-            <div class="p-field" *ngIf="isNewUser">
-              <label for="institution">Assign Institution *</label>
-              <p-dropdown              
-                name="institution"
-                [options]="institutions"
-                [(ngModel)]="user.institution"
-                #finstitution="ngModel"
-                [filter]="true"
-                placeholder="Please select an institution"
-                optionLabel="name"
-                (ngModelChange)="onInstitutionChange($event)"
-                [required]="true"
-              ></p-dropdown>
-              <p
-                class="info-message text-danger"
-                *ngIf="
-                  !user.institution &&
-                  (
-                    finstitution.touched ||
-                    finstitution.dirty)
-                ">
-                This is a mandatory field
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+     
 
       <div class="p-grid p-fluid col-md-9 col-sm-12">
         <div class="row p-2">

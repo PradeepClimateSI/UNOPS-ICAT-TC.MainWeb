@@ -26,6 +26,10 @@ export class PortfolioDashboardComponent implements OnInit {
   @ViewChild('myCanvas4', { static: true }) canvasRef4!: ElementRef<HTMLCanvasElement>;
 
 
+  @ViewChild('portfolioBarChart', { static: true }) canvasRefBarChart!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('portfolioPieChart2', { static: true }) canvasRefPieChart!: ElementRef<HTMLCanvasElement>;
+
+
   chart: Chart;
   chart2: Chart;
   tool : string;
@@ -46,8 +50,16 @@ export class PortfolioDashboardComponent implements OnInit {
 
   loadSelectedTable : boolean = false;
 
+
+  /////
+  portfolioPieChart:Chart;
+  portfolioBarChart:Chart;
+  barChartData:any=[];
+  sdgDetailsList:any=[];
+  loadLast2graphs:boolean=false;
   ngOnInit(): void {
     this.loadSelectedTable = false;
+    this.loadSelectedTable =false;
     this.averageTCValue =63.78
     this.tool = 'Portfolio Tool'
     this.methassess.getResultForTool(this.tool).subscribe((res: any) => {
@@ -88,7 +100,7 @@ export class PortfolioDashboardComponent implements OnInit {
       this.portfolioList = res;
      });
 
-
+    
 
   }
 
@@ -99,13 +111,21 @@ this.selectedPortfolio = ''
 
   selectPortfolio(portfolio : any){
     console.log("portfolio : ", this.selectedPortfolio)
-
+    this.loadLast2graphs=true;
+    console.log("loadLast2graphs",this.loadLast2graphs)
+    this.sdgDetailsList=[];
+    this.barChartData=[];
     this.resultData = []
     this.resultData2 = []
     this.allData = []
+    
 
     this.portfolioServiceProxy.assessmentsDataByAssessmentId(this.selectedPortfolio.id).subscribe(async (res: any) => {
       console.log("arrayyy : ", res)
+     
+      this.barChartData=res;
+      this.viewPortfolioBarChart();
+
       this.processData = [];
       this.outcomeData = [];
       this.outcomeData2 = [];
@@ -179,11 +199,19 @@ this.selectedPortfolio = ''
      // console.log(" this.outcomeData : ",  this.outcomeData)
 
      this.loadSelectedTable = true;
+     
 
     });
 
   }
-
+  sdgResults(portfolio : any){
+    this.sdgDetailsList=[]
+    this.portfolioServiceProxy.sdgSumCalculate(this.selectedPortfolio.id).subscribe(async (res: any) => {
+      console.log("sdgDetailsList : ", res)
+      this.sdgDetailsList = res;
+      this.viewPortfolioPieChart();
+     });
+  }
  viewResults(): void {
 
     if (!this.canvasRef) {
@@ -466,5 +494,270 @@ this.selectedPortfolio = ''
 
 
 
+
+  viewPortfolioPieChart(){
+    let labels = this.sdgDetailsList.map((item:any) => item.sdg);
+    let counts:number[] = this.sdgDetailsList.map((item:any) => item.count);
+    let total = counts.reduce((acc, val) => acc + val, 0);
+    let percentages = counts.map(count => ((count / total) * 100).toFixed(2));
+
+    if (!this.canvasRefPieChart) {
+      console.error('Could not find canvas element');
+      return;
+    }
+
+    const canvas = this.canvasRefPieChart.nativeElement;
+    const ctx = canvas.getContext('2d');
+
+    if (!ctx) {
+      console.error('Could not get canvas context');
+      return;
+    }
+
+    if (this.portfolioPieChart) {
+      // Update the chart data
+      this.portfolioPieChart.data.datasets[0].data = counts;
+      this.portfolioPieChart.data.labels=labels
+      this.portfolioPieChart.update();
+    }
+    else{
+      this.portfolioPieChart =new Chart(ctx, {
+        type: 'pie',
+  
+        data: {
+          labels: labels,
+          datasets: [{
+            data: counts,
+            backgroundColor: [
+              'rgb(250,227,114)',
+              'rgb(51,51,51)',
+              'rgb(0,170,187)',
+              'rgb(227,120,42)',
+              'rgb(150,131,141)',
+              'rgb(42,61,227)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(75, 192, 192,1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(123, 122, 125, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 205, 86, 1)',
+              'rgba(255, 99, 132, 1)',
+  
+            ],
+           
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins:{
+            legend:{
+              position: 'bottom',
+              labels: {
+                padding: 20
+              }
+            },
+            datalabels: {
+              color: '#fff',
+              font: {
+                size: 12
+              },
+              formatter: (value, ctx) => {
+                const label = ctx.chart.data.labels![ctx.dataIndex];
+                const percentage = percentages[ctx.dataIndex];
+                return `${label}: ${value} (${percentage}%)`;
+              },
+  
+            },
+            tooltip:{
+              position:'average',
+              boxWidth:10,
+              callbacks:{
+                
+                label:(ctx)=>{ 
+                  // console.log(ctx)
+                  // console.log(ctx)
+                  // let sum = ctx.dataset._meta[0].total;
+                  // let percentage = (value * 100 / sum).toFixed(2) + "%";
+                  // return percentage;
+                  let sum = 0;
+                  let array =ctx.dataset.data
+                  array.forEach((number) => {
+                    sum += Number(number);
+                  });
+                  // console.log("sum",sum,ctx.parsed)
+                  // console.log(sum, counts[ctx.dataIndex])
+                  let percentage = (ctx.parsed/ sum*100).toFixed(2)+"%";
+                  
+                  return[
+                    `SDG: ${ctx.label}`,
+                    `Count: ${ctx.raw}`,
+                    `Percentage: ${percentage}`
+                  ];
+                 }
+              },
+              backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
+                titleFont: {
+                  size: 14,
+                  weight: 'bold'
+                },
+                bodyFont: {
+                  size: 14
+                },
+                displayColors: true, // Hide the color box in the tooltip
+                bodyAlign: 'left'
+            }
+         }
+  
+        },
+  
+    });
+    }
+   
+
+  }
+  viewPortfolioBarChart(){
+
+    let label =this.barChartData.map((item:any) => item?.assessment?.climateAction?.policyName );
+    let data =this.barChartData.map((item:any) => item.ghgValue?item.ghgValue:0);
+    console.log("label",label,"data",data)
+   
+    
+    if (!this.canvasRefBarChart) {
+      console.error('Could not find canvas element');
+      return;
+    }
+
+    const canvas = this.canvasRefBarChart.nativeElement;
+    const ctx = canvas.getContext('2d');
+
+    if (!ctx) {
+      console.error('Could not get canvas context');
+      return;
+    }
+
+    if (this.portfolioBarChart) {
+      // Update the chart data
+      console.log("======", this.portfolioBarChart.data)
+      this.portfolioBarChart.data.datasets[0].data = data;
+      this.portfolioBarChart.data.labels=label;
+      console.log("======", this.portfolioBarChart.data)
+      this.portfolioBarChart.update();
+    }
+    else{
+      this.portfolioBarChart =new Chart(ctx, {
+        type: 'bar',
+  
+        data: {
+          labels: label,
+          datasets: [{
+            label: 'Bar Chart',
+            data: data,
+            backgroundColor: [
+              'rgb(250,227,114)',
+              'rgb(51,51,51)',
+              'rgb(0,170,187)',
+              'rgb(227,120,42)',
+              'rgb(150,131,141)',
+              'rgb(42,61,227)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(75, 192, 192,1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(123, 122, 125, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 205, 86, 1)',
+              'rgba(255, 99, 132, 1)',
+  
+            ],
+            borderColor:[
+              'rgb(250,227,114)',
+              'rgb(51,51,51)',
+              'rgb(0,170,187)',
+              'rgb(227,120,42)',
+              'rgb(150,131,141)',
+              'rgb(42,61,227)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(75, 192, 192,1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(123, 122, 125, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 205, 86, 1)',
+              'rgba(255, 99, 132, 1)',],
+  
+            borderWidth: 1
+          }]
+        },
+        options:{
+          scales: {
+            x: {
+              ticks: {
+                callback: function(value:any, index, values) {
+                  return value.length > 10 ? value.substring(0, 10) + '...' : value;
+                },
+                maxRotation: 90,
+               
+              },
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Interventions',
+                font: {
+                  size: 16,
+                  weight: 'bold',
+  
+                }
+              },
+              
+            },
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Expected GHG Mitigation (Mt CO2-eq)',
+                font: {
+                  size: 10,
+                  weight: 'bold',
+  
+                }
+              }
+            }
+          },
+          plugins:{
+            legend: {
+              display: false
+            },
+            tooltip:{
+              position:'average',
+              boxWidth:10,
+              callbacks:{
+  
+                label:(context)=>{
+                  // console.log("context",context,"4444",data[context.dataIndex])
+                  return[
+  
+                    `Expected GHG Mitigation (Mt CO2-eq): ${context.raw}`,
+                  ];
+                 }
+              },
+              backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
+                titleFont: {
+                  size: 14,
+                  weight: 'bold'
+                },
+                bodyFont: {
+                  size: 14
+                },
+                displayColors: true, // Hide the color box in the tooltip
+                bodyAlign: 'left'
+            }
+          }
+  
+        }
+    });
+      
+    } 
+    
+
+  }
 
 }

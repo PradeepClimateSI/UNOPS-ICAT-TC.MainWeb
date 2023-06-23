@@ -429,8 +429,8 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
               this.isAvailabiltyOfTEch = this.project.availabilityOfTechnology;
               this.originalApprovalStatus =
                 this.project.projectApprovalStatus == undefined
-                  ? 'Propose'
-                  : this.project.projectApprovalStatus?.name;
+                  ? 'Proposed'
+                  : this.project.projectApprovalStatus?.description;
               this.proposedDate = this.project.proposeDateofCommence.toString();
               // this.isMapped = this.project?.isMappedCorrectly;
               // this.disbaleNdcmappedFromDB = this.project?.isMappedCorrectly;

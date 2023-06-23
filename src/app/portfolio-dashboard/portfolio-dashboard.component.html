@@ -77,7 +77,7 @@
     <div class="col-4 ">
       <p-dropdown appendTo="body" name="portfolio" placeholder="Select Portfolio" [(ngModel)]="selectedPortfolio"
         appendTo="body" [options]="portfolioList" optionLabel="portfolioName"
-        (onChange)="selectPortfolio($event)"></p-dropdown>
+        (onChange)="selectPortfolio($event);sdgResults($event)"></p-dropdown>
     </div>
 
   <!--   <div class="col-1 ">
@@ -220,4 +220,29 @@
 
     </div>
   </div>
+</div>
+<div class="row" [hidden]="!loadLast2graphs">
+  <div class="col-md-6 col-12 d-flex align-items-stretch">
+      <div class="p-grid p-fluid card m-3">
+        <div class="row text-center ">
+          <h3>Expected GHG mitigation of portfolios</h3>
+          <div class="col-12  mt-20 "  >
+              <!-- <canvas   id="portfolioBarChart">{{portfolioBarChart}}</canvas> -->
+              <canvas  #portfolioBarChart></canvas>
+           </div>
+      </div>
+      </div>
+  </div>
+  <div class="col-md-6 col-12 d-flex align-items-stretch">
+      <div class="p-grid p-fluid card m-3">
+          <div class="row text-center ">
+              <h3>Meeting Preconditions</h3>
+              <div class="col-12  mt-20 "  >
+                  <!-- <canvas   id="portfolioBarChart">{{portfolioBarChart}}</canvas> -->
+                  <canvas  #portfolioPieChart2></canvas>
+               </div>
+          </div>
+      </div>
+  </div>
+
 </div>
