@@ -108,8 +108,19 @@ export class PortfolioTrack4Component implements OnInit {
 
   instiTutionList : any = []
   userCountryId:number = 0;
+  sdgList : any = []
+  selectedSDGs : any = []
+
+  sdgDataSendArray: any = [];
+
+  sdgDataSendArray3: any= [];
+
+  sdgDataSendArray4: any = [];
+
+  sdgDataSendArray2: any = []
 
   async ngOnInit(): Promise<void> {
+ this.load = false
 
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
@@ -160,8 +171,65 @@ export class PortfolioTrack4Component implements OnInit {
     console.log(this.policies)
     console.log(this.assessment)
 
+    this.investorToolControllerproxy.findAllSDGs().subscribe((res: any) => {
+     console.log("ressssSDGs", res)
+     this.sdgList = res
+    });
 
   }
+
+  assignSDG(sdg : any , data : any){
+    console.log("sdgs", sdg)
+    console.log("data", data)
+
+    data.portfolioSdg = sdg
+
+    console.log("data22", data)
+  }
+
+  onItemSelectSDGs(event: any) {
+    console.log("rrr", this.selectedSDGs);
+    console.log("event", event);
+
+    this.sdgDataSendArray2 = [];
+    this.sdgDataSendArray4 = [];
+
+    for (let index = 0; index < this.selectedSDGs.length; index++) {
+      const sdgData = JSON.parse(JSON.stringify(this.sdgDataSendArray[0]));
+
+      const newObj = {
+        CategoryName: sdgData.CategoryName,
+        categoryID: sdgData.categoryID,
+        type: sdgData.type,
+        data: sdgData.data,
+        index: index
+      };
+
+      this.sdgDataSendArray2.push(newObj);
+    }
+
+
+    for (let index = 0; index < this.selectedSDGs.length; index++) {
+      const sdgData = JSON.parse(JSON.stringify(this.sdgDataSendArray3[0]));
+
+      const newObj = {
+        CategoryName: sdgData.CategoryName,
+        categoryID: sdgData.categoryID,
+        type: sdgData.type,
+        data: sdgData.data,
+        index: index
+      };
+
+      this.sdgDataSendArray4.push(newObj);
+    }
+
+
+
+    console.log("this.sdgDataSendArray2", this.sdgDataSendArray2);
+    console.log("this.sdgDataSendArray4", this.sdgDataSendArray4);
+  }
+
+
   async getPolicies() {
     this.policies = await this.projectControllerServiceProxy.findAllPolicies().toPromise()
   }
@@ -211,11 +279,25 @@ export class PortfolioTrack4Component implements OnInit {
             data: categoryArray
           })
 
+          if(x.name === 'Scale SD'){
+            this.sdgDataSendArray.push({
+              type: 'outcome', CategoryName: x.name, categoryID: x.id,
+              data: categoryArray
+            })
+          }
+
+          if(x.name === 'Sustained nature-SD'){
+            this.sdgDataSendArray3.push({
+              type: 'outcome', CategoryName: x.name, categoryID: x.id,
+              data: categoryArray
+            })
+          }
 
         }
 
       }
-      console.log("processdata", this.processData)
+      console.log("outcomeData", this.outcomeData)
+      console.log("this.sdgDataSendArray", this.sdgDataSendArray)
     });
 
 
@@ -341,16 +423,26 @@ export class PortfolioTrack4Component implements OnInit {
 
 
   onsubmit(form: NgForm) {
-
+    console.log("formDataa", form.value)
     console.log("assesssssssss", this.assessment)
+    console.log("finallsdgDataSendArray2", this.sdgDataSendArray2)
+    console.log("finallsdgDataSendArray4", this.sdgDataSendArray4)
+
     if(this.assessment.assessment_approach === 'Direct'){
       console.log("Directttt")
       let finalArray = this.processData.concat(this.outcomeData)
       finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
-      // finalArray.map(x=>x.data.map(y=>y.investorTool=this.mainAssessment))
+
       console.log("finalArray", finalArray)
       //@ts-ignore
-      this.investorToolControllerproxy.createFinalAssessment(finalArray)
+
+      let data : any ={
+        finalArray : finalArray,
+        scaleSDGs : this.sdgDataSendArray2,
+        sustainedSDGs : this.sdgDataSendArray4,
+        sdgs : this.selectedSDGs
+      }
+      this.investorToolControllerproxy.createFinalAssessment(data)
         .subscribe(_res => {
           console.log("res final", _res)
 
@@ -362,6 +454,8 @@ export class PortfolioTrack4Component implements OnInit {
             closable: true,
           })
           this.showResults();
+
+
           // this.isSavedAssessment = true
           // this.onCategoryTabChange('', this.tabView);
 
