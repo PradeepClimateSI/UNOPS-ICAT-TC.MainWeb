@@ -70,6 +70,7 @@ export class CmResultComponent implements OnInit {
       this.results = res.result
       this.criterias = res.criteria
       this.keys = Object.keys(this.results)
+      // console.log("res",res,"this.keys",this.keys)
   
   
       this.criterias.forEach((c: any) => {
