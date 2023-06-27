@@ -1,12 +1,33 @@
 <p-tabView (onChange)="onMainTabChange($event) " [(activeIndex)]="activeIndexMain ">
     <p-tabPanel *ngFor="let type of types" header="{{type.name}}">
-        <p-tabView #tabView (onChange)="onCategoryTabChange($event)" [(activeIndex)]="activeIndex ">
+        <p-tabView #tabView (onChange)="onCategoryTabChange($event)" [(activeIndex)]="activeIndex"
+            *ngIf="type.code === 'process'">
             <p-tabPanel *ngFor="let category of categories[type.code].categories" [header]="category.name">
                 <ng-container *ngFor="let char of categories[type.code].characteristic[category.code]">
                     <p>{{char.name}}</p>
                     <div *ngFor="let question of questions[char.code]">
                         <app-cm-question [question]="question" [approach]="approach"></app-cm-question>
                     </div>
+                </ng-container>
+            </p-tabPanel>
+        </p-tabView>
+        <p-tabView #tabView (onChange)="onCategoryTabChange2($event)" [(activeIndex)]="activeIndex"
+            *ngIf="type.code === 'outcome'">
+            <p-tabPanel *ngFor="let category of outcome.categories" [header]="category.name">
+                <ng-container *ngFor="let char of outcome.characteristic[category.code]">
+                    <p>{{char.name}}</p>
+                    <ng-container *ngIf="category.type === 'GHG'">
+                        <div class="row p-2">
+                            <div class="col-4">Rationale</div>
+                            <div class="col-8">
+                                <textarea style="width: 100%;" pInputTextarea [rows]="5" wrap="hard" required maxlength="500"
+                                    [(ngModel)]="comment" ></textarea>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="category.type === 'SD'">
+                        <p>SD</p>
+                    </ng-container>
                 </ng-container>
             </p-tabPanel>
         </p-tabView>

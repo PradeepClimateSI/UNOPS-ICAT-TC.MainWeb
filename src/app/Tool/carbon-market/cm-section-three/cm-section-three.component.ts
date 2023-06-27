@@ -8,6 +8,10 @@ import { CMQuestionControllerServiceProxy, MethodologyAssessmentControllerServic
   styleUrls: ['./cm-section-three.component.css']
 })
 export class CmSectionThreeComponent implements OnInit {
+comment: any;
+onCategoryTabChange2($event: any) {
+throw new Error('Method not implemented.');
+}
 
   @Input() approach: string
 
@@ -22,6 +26,7 @@ export class CmSectionThreeComponent implements OnInit {
   selectedType: any
   selectedCategory: any
   questions: any;
+  outcome: any;
 
 
   constructor(
@@ -40,8 +45,8 @@ export class CmSectionThreeComponent implements OnInit {
     console.log(this.categories)
     this.onMainTabChange({index: 0})
     this.onCategoryTabChange({index: 0})
-    let outcome = await this.methodologyAssessmentControllerServiceProxy.getAllOutcomeCharacteristics().toPromise()
-    console.log(outcome)
+    this.outcome = await this.methodologyAssessmentControllerServiceProxy.getAllOutcomeCharacteristics().toPromise()
+    console.log(this.outcome)
   }
 
   onMainTabChange(event: any) {
