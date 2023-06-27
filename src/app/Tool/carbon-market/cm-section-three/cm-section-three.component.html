@@ -1,0 +1,14 @@
+<p-tabView (onChange)="onMainTabChange($event) " [(activeIndex)]="activeIndexMain ">
+    <p-tabPanel *ngFor="let type of types" header="{{type.name}}">
+        <p-tabView #tabView (onChange)="onCategoryTabChange($event)" [(activeIndex)]="activeIndex ">
+            <p-tabPanel *ngFor="let category of categories[type.code].categories" [header]="category.name">
+                <ng-container *ngFor="let char of categories[type.code].characteristic[category.code]">
+                    <p>{{char.name}}</p>
+                    <div *ngFor="let question of questions[char.code]">
+                        <app-cm-question [question]="question" [approach]="approach"></app-cm-question>
+                    </div>
+                </ng-container>
+            </p-tabPanel>
+        </p-tabView>
+    </p-tabPanel>
+</p-tabView>
