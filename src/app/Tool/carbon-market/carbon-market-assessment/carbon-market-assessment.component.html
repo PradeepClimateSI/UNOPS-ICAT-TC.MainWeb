@@ -34,60 +34,41 @@
                         </div>
                         <div class="p-field p-2">
                             <label for="policy">Assessment Boundaries *</label>
-                            <div class="p-field p-2"> 
-                                <div class="row p-2">
-                                    <label class="col-5" for="policy">Sectoral Boundary *</label>
-                                    <!-- <input type="text" name="boundrary" #boundrary="ngModel" [(ngModel)]="cm_detail.sectoral_boundary"
-                                        class="col-7 boundrary" placeholder="Enter Boundary" required /> -->
-                                    <p-dropdown name="sectorial_boundary" #sectorial_boundary="ngModel" placeholder="Select"
-                                        [(ngModel)]="cm_detail.sectoral_boundary" [options]="sectorial_boundires" optionLabel="name"
-                                        optionValue="code" [required]="true" class="col-7 boundrary-dropdown"></p-dropdown>
-                                        <p class="info-message text-danger" *ngIf="
-                                            !cm_detail.sectoral_boundary &&
-                                            (fData.submitted || sectorial_boundary.touched)
-                                        ">
-                                            This is a mandatory field
-                                        </p>
-                                </div>
-                                <div class="row p-2">
-                                    <label class="col-5" for="policy">Temporal Boundary *</label>
-                                    <!-- <input type="text" name="tboundrary" #tboundrary="ngModel" [(ngModel)]="cm_detail.temporal_boundary"
-                                        class=" col-6 boundrary" placeholder="Enter Boundary" required />
-                                        <p class="info-message text-danger" *ngIf="
-                                        !cm_detail.temporal_boundary &&
+                            <input type="text" name="tboundrary" #tboundrary="ngModel"
+                                [(ngModel)]="cm_detail.boundraries" class="form-control"
+                                placeholder="Enter Boundary" required />
+                            <p class="info-message text-danger" *ngIf="
+                                        !cm_detail.boundraries &&
                                         (fData.submitted || tboundrary.touched)
                                         ">
-                                            This is a mandatory field
-                                        </p> -->
-                                    <div class="p-inputgroup col-7">
-                                        <span class="p-inputgroup-addon">
-                                        <i class="pi pi-calendar"></i>
-                                        </span>
-                                        <p-calendar  dateFormat="mm-dd-yy" inputId="date1" placeholder="From"[(ngModel)]="date1" name="date1"></p-calendar>
-                                        <span class="p-inputgroup-addon">to</span>
-                                        <p-calendar  dateFormat="mm-dd-yy" inputId="date2" placeholder="To" [(ngModel)]="date2" name="date2"></p-calendar>
-                                    </div>
-                                    <p class="info-message text-danger" *ngIf="
-                                    (!date1 || !date2) &&
-                                    (fData.submitted)
-                                    ">
-                                        This is a mandatory field
-                                    </p> 
-                                </div>
-                                <div class="row p-2">
-                                    <label class="col-5" for="policy">Geographical Boundary *</label>
-                                    <input type="text" name="gboundrary" #gboundrary="ngModel" [(ngModel)]="cm_detail.geographical_boundary"
-                                        class=" col-7 boundrary" placeholder="Enter Boundary" required />
-                                        <p class="info-message text-danger" *ngIf="
-                                        !cm_detail.geographical_boundary &&
-                                        (fData.submitted || gboundrary.touched)
-                                        ">
-                                            This is a mandatory field
-                                        </p>
-                                </div>
-                            </div>
+                                This is a mandatory field
+                            </p>
                         </div>
                         <div class="p-field p-2">
+                            <label for="policy">International Carbon Market Approach Used *</label>
+                            <p-dropdown name="type" #type="ngModel" placeholder="Select Assessment Type"
+                                [(ngModel)]="cm_detail.intCMApproach" [options]="int_cm_approches" optionLabel="name"
+                                optionValue="code" [required]="true"></p-dropdown>
+                            <p class="info-message text-danger" *ngIf="
+                                !assessment.assessmentType &&
+                                (fData.submitted || type.touched)
+                              ">
+                                This is a mandatory field
+                            </p>
+                        </div>
+                        <div class="p-field p-2" *ngIf="cm_detail.intCMApproach === 'OTHER'">
+                            <label for="policy">Please specify</label>
+                            <input type="text" name="tboundrary" #tboundrary="ngModel"
+                                [(ngModel)]="cm_detail.otherIntCMApproach" class="form-control"
+                                placeholder="Enter Boundary" required />
+                        </div>
+                        <div class="p-field p-2">
+                            <label for="policy">Baseline and monitoring methodology applied by the activity</label>
+                            <input type="text" name="tboundrary" #tboundrary="ngModel"
+                                [(ngModel)]="cm_detail.appliedMethodology" class="form-control"
+                                placeholder="Enter Boundary"/>
+                        </div>
+                        <!-- <div class="p-field p-2">
                             <label for="policy">Impact Types *</label>
                             <p-multiSelect name="impact_types" placeholder="Select .." appendTo="body"
                                 [options]="impact_types" [(ngModel)]="selected_impact_types" optionLabel="name"
@@ -99,8 +80,8 @@
                             ">
                                 This is a mandatory field
                             </p>
-                        </div>
-                        <div class="p-field p-2">
+                        </div> -->
+                        <!-- <div class="p-field p-2">
                             <label for="policy">Impact Categories *</label>
                             <p-multiSelect name="impact_categories" placeholder="Select .." appendTo="body"
                                 [options]="impact_categories" [(ngModel)]="selected_impact_categories"
@@ -112,8 +93,8 @@
                             ">
                                 This is a mandatory field
                             </p>
-                        </div>
-                        <div class="p-field p-2">
+                        </div> -->
+                        <!-- <div class="p-field p-2">
                             <label for="policy">Impact Characteristics *</label>
                             <p-multiSelect name="impact_characteristics" placeholder="Select .." appendTo="body"
                                 [options]="impact_characteristics" [(ngModel)]="selected_impact_characteristics"
@@ -125,8 +106,8 @@
                             ">
                                 This is a mandatory field
                             </p>
-                        </div>
-                        <div class="p-field p-2">
+                        </div> -->
+                        <!-- <div class="p-field p-2">
                             <label for="policy">Impact Indicators *</label>
                             <input type="text" name="boundrary" #boundrary="ngModel"
                                 [(ngModel)]="cm_detail.impact_indicators" class="form-control"
@@ -137,12 +118,12 @@
                             ">
                                 This is a mandatory field
                             </p>
-                        </div>
+                        </div> -->
                         <div class="p-field p-2">
                             <label for="policy">Assessment Approach *</label>
                             <p-dropdown name="type" #type="ngModel" placeholder="Select Assessment Approach"
-                                [(ngModel)]="assessment.assessment_approach" [options]="assessment_approaches" optionLabel="name"
-                                optionValue="code" [required]="true"
+                                [(ngModel)]="assessment.assessment_approach" [options]="assessment_approaches"
+                                optionLabel="name" optionValue="code" [required]="true"
                                 (onChange)="selectAssessmentApproach($event)" appendTo="body"></p-dropdown>
                             <p class="info-message text-danger" *ngIf="
                                 !assessment.assessment_approach &&

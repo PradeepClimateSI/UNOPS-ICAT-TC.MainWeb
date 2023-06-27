@@ -21,6 +21,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   impact_categories: any[] = []
   impact_characteristics: any[] = []
   sectorial_boundires: any[] = []
+  int_cm_approches: any[] = []
 
   selected_impact_types: string[] = []
   selected_impact_categories: string[] = []
@@ -47,6 +48,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     this.impact_types = this.masterDataService.impact_types
     this.sectorial_boundires = this.masterDataService.sectorial_boundries
     this.assessment_approaches = this.masterDataService.assessment_approach
+    this.int_cm_approches = this.masterDataService.int_cm_approaches
 
     await this.getPolicies()
     console.log(this.policies)
@@ -68,11 +70,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
         .subscribe(res => {
           console.log(res)
           if (res) {
-            this.cm_detail.temporal_boundary = moment(this.date1).format("YYYY-MM-DD")  + ' - ' + moment(this.date2).format("YYYY-MM-DD")
             this.cm_detail.cmassessment = res
-            this.cm_detail.impact_categories = this.selected_impact_categories.join(',')
-            this.cm_detail.impact_characteristics = this.selected_impact_characteristics.join(',')
-            this.cm_detail.impact_types = this.selected_impact_types.join(',')
 
             this.serviceProxy.createOneBaseAssessmentCMDetailControllerAssessmentCMDetail(this.cm_detail)
               .subscribe(_res => {
