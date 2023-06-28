@@ -152,8 +152,8 @@
   <!-- <div class="p-grid p-fluid col-sm-12" *ngIf="showSections">
       <app-cm-section [assessment]="assessmentres"></app-cm-section>
   </div> -->
-<div *ngIf=" selectedApproach === 'Direct'">
-
+<div *ngIf=" load && selectedApproach === 'Direct'">
+  <!-- <div > -->
   <div class="card">
     <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)">
       <p-tabView (onChange)="onMainTabChange($event)"  [(activeIndex)]="activeIndexMain ">
@@ -279,7 +279,8 @@
                                     (ngModelChange)="onRelevanceWeightChange(category.CategoryName,data.characteristics.name, $event)">
                                   </p-inputNumber>
 
-                                   <div *ngIf="!chaCategoryTotalEqualsTo1[category.CategoryName]" style="color: red;">
+                                   <!-- <div *ngIf="!chaCategoryTotalEqualsTo1[category.CategoryName]" style="color: red;"> -->
+                                    <div *ngIf="!chaCategoryTotalEqualsTo1[category.CategoryName] && initialRelevance !==0" style="color: red;">
                                     Relevance weights for characteristics of {{category.CategoryName}} category should sum up to 100%.
                                     <br>
                                   </div>
@@ -292,6 +293,7 @@
                                 <div class="p-field">
                                     <label for="Relevance">Likelihood Weight (%)</label>
                                     <p-inputNumber inputId="locale-us" mode="decimal"
+                                         [min]="0" [max]="100"
                                          locale="en-US" [minFractionDigits]="2"
                                         [(ngModel)]="data.likelihood_weight"
                                         placeholder="Enter Likelihood Weight"
@@ -300,7 +302,8 @@
                                         >
                                     </p-inputNumber>
 
-                                  <div *ngIf="!chaCategoryLikelihoodTotalEqualsTo1[category.CategoryName]" style="color: red;">
+                                  <!-- <div *ngIf="!chaCategoryLikelihoodTotalEqualsTo1[category.CategoryName]" style="color: red;"> -->
+                                    <div *ngIf="!chaCategoryLikelihoodTotalEqualsTo1[category.CategoryName] && initialLikelihood !==0 " style="color: red;">
                                       Likelihood weights for characteristics of {{category.CategoryName}} category should sum up to 100%.
                                       <br>
                                     </div>
@@ -435,8 +438,24 @@
 
       <div *ngIf="activeIndex2===3 && activeIndexMain===1" class="row justify-content-end">
         <div>
+          <div class=" col-md-10 offset-md-4" style="color:red" >
+            <div class="col align-self-end" *ngIf="failedLikelihoodArray.length!=0">
+               Please make sure to set Likelihood weights for   
+               <span  *ngFor="let data of failedLikelihoodArray ; let last = last" class="array-item">
+                   {{data.category}}<span  *ngIf="!last">, </span>
+                </span > should sum up to 100%.
+
+            </div>
+            <div class="col align-self-end" *ngIf="failedRelevanceArray.length!=0">
+                Please make sure to set Relevance weights for <span  *ngFor="let data of failedRelevanceArray ; let last = last" class="array-item">
+                    {{data.category}} <span  *ngIf="!last">, </span>
+                 </span > should sum up to 100%.
+                  
+                
+            </div>
+        </div>
           <div class="d-flex flex-row-reverse mt-20 ">
-            <button class="btn btn-primary text-uppercase" type="submit" >
+            <button class="btn btn-primary text-uppercase" type="submit" [disabled]="failedLikelihoodArray.length!=0 ||failedRelevanceArray.length!=0">
               Calculate & Check Results
             </button>
           </div>
@@ -448,9 +467,10 @@
 
             <div
             class="d-flex flex-row-reverse mt-20 ">
-                <div class="btn btn-primary text-uppercase" (click)="next()" >
-                   Next
-                </div>
+            <div class="btn btn-primary text-uppercase" (click)="next()" [class.disabled]="(!isLikelihoodDisabled || !isRelavanceDisabled)">
+                   
+              Next
+           </div>
             </div>
         </div>
     </div>
@@ -458,7 +478,9 @@
   </div>
 </div>
 
+<!-- <div > -->
 <div *ngIf="load && selectedApproach === 'Indirect'">
+
   <div class="card">
     <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)">
       <p-tabView (onChange)="onMainTabChange($event)"  [(activeIndex)]="activeIndexMain ">
@@ -581,7 +603,8 @@
                                     (ngModelChange)="onRelevanceWeightChange(category.CategoryName,data.characteristics.name, $event)">
                                   </p-inputNumber>
 
-                                   <div *ngIf="!chaCategoryTotalEqualsTo1[category.CategoryName]" style="color: red;">
+                                   <!-- <div *ngIf="!chaCategoryTotalEqualsTo1[category.CategoryName]" style="color: red;"> -->
+                                    <div *ngIf="!chaCategoryTotalEqualsTo1[category.CategoryName] && initialRelevance !==0" style="color: red;">
                                     Relevance weights for characteristics of {{category.CategoryName}} category should sum up to 100%.
                                     <br>
                                   </div>
@@ -594,6 +617,7 @@
                                 <div class="p-field">
                                     <label for="Relevance">Likelihood Weight (%)</label>
                                     <p-inputNumber inputId="locale-us" mode="decimal"
+                                    [min]="0" [max]="100"
                                          locale="en-US" [minFractionDigits]="2"
                                         [(ngModel)]="data.likelihood_weight"
                                         placeholder="Enter Likelihood Weight"
@@ -602,7 +626,8 @@
                                         >
                                     </p-inputNumber>
 
-                                  <div *ngIf="!chaCategoryLikelihoodTotalEqualsTo1[category.CategoryName]" style="color: red;">
+                                  <!-- <div *ngIf="!chaCategoryLikelihoodTotalEqualsTo1[category.CategoryName]" style="color: red;"> -->
+                                    <div *ngIf="!chaCategoryLikelihoodTotalEqualsTo1[category.CategoryName] && initialLikelihood !==0 " style="color: red;">
                                       Likelihood weights for characteristics of {{category.CategoryName}} category should sum up to 100%.
                                       <br>
                                     </div>
@@ -736,8 +761,24 @@
 
       <div *ngIf="activeIndex2===3 && activeIndexMain===1" class="row justify-content-end">
         <div>
+          <div class=" col-md-10 offset-md-4" style="color:red" >
+            <div class="col align-self-end" *ngIf="failedLikelihoodArray.length!=0">
+               Please make sure to set Likelihood weights for   
+               <span  *ngFor="let data of failedLikelihoodArray ; let last = last" class="array-item">
+                   {{data.category}}<span  *ngIf="!last">, </span>
+                </span > should sum up to 100%.
+
+            </div>
+            <div class="col align-self-end" *ngIf="failedRelevanceArray.length!=0">
+                Please make sure to set Relevance weights for <span  *ngFor="let data of failedRelevanceArray ; let last = last" class="array-item">
+                    {{data.category}} <span  *ngIf="!last">, </span>
+                 </span > should sum up to 100%.
+                  
+                
+            </div>
+        </div>
           <div class="d-flex flex-row-reverse mt-20 ">
-            <button class="btn btn-primary text-uppercase" type="submit">
+            <button class="btn btn-primary text-uppercase" type="submit" [disabled]="failedLikelihoodArray.length!=0 ||failedRelevanceArray.length!=0">
               {{ selectedApproach === 'Indirect' ? 'Send to Data Collection Team' : 'Calculate & Check Results' }}
             </button>
 
@@ -750,7 +791,7 @@
 
             <div
             class="d-flex flex-row-reverse mt-20 ">
-                <div class="btn btn-primary text-uppercase" (click)="next()" >
+                <div class="btn btn-primary text-uppercase" (click)="next()" [class.disabled]="(!isLikelihoodDisabled || !isRelavanceDisabled)">
                    Next
                 </div>
             </div>
