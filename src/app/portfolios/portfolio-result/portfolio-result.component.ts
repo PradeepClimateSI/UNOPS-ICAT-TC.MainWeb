@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 import { Portfolio, PortfolioControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
@@ -30,6 +32,9 @@ export class PortfolioResultComponent implements OnInit {
   tableShow2 : boolean =false;
   tableShow3 : boolean =false;
   tableShow4 : boolean =false;
+
+  @ViewChild('content', { static: false }) el!: ElementRef;
+  @ViewChild('content') content: ElementRef;
 
   ngOnInit(): void {
 
@@ -116,6 +121,88 @@ export class PortfolioResultComponent implements OnInit {
 
      // console.log("this.processData : ", this.processData)
      // console.log(" this.outcomeData : ",  this.outcomeData)
+
+
+     /* Portfolio toolll */
+
+     for(let assessment of this.allData){
+
+      const data: any = assessment.scale[1]
+
+      const averages: any = {};
+
+     data.characteristics.forEach((obj: { name: string; score: any; }) => {
+       if (obj.name in averages) {
+         averages[obj.name].score += obj.score || 0;
+       //  averages[obj.name].sustainedScore += obj.sustainedScore === '-' ? 0 : parseInt(obj.sustainedScore);
+         averages[obj.name].count++;
+       } else {
+         averages[obj.name] = {
+          score: obj.score || 0,
+         //  sustainedScore: obj.sustainedScore === '-' ? 0 : parseInt(obj.sustainedScore),
+           count: 1
+         };
+       }
+     });
+
+     const result = [];
+
+     for (const name in averages) {
+       const averageScaleScore = averages[name].score / averages[name].count;
+       //const averageSustainedScore = averages[name].sustainedScore / averages[name].count;
+
+       result.push({
+        score: averageScaleScore.toFixed(3),
+        // sustainedScore: '-',
+         name: name
+       });
+     }
+
+     console.log("resulttt", result);
+
+      /* Portfolio toolll */
+      const data2: any =  assessment.sustained[1]
+
+      const averages2: any = {};
+
+      data2.characteristics.forEach((obj: { name: string; score: any; }) => {
+        if (obj.name in averages2) {
+          averages2[obj.name].score += obj.score || 0;
+          //averages2[obj.name].scaleScore += obj.scaleScore === '-' ? 0 : parseInt(obj.scaleScore);
+          averages2[obj.name].count++;
+        } else {
+          averages2[obj.name] = {
+            score: obj.score || 0,
+         //  scaleScore: obj.scaleScore === '-' ? 0 : parseInt(obj.scaleScore),
+            count: 1
+          };
+        }
+      });
+
+      const result2 = [];
+
+      for (const name in averages2) {
+      //  const averageScaleScore2 = averages2[name].scaleScore / averages2[name].count;
+        const averageSustainedScore2 = averages2[name].score / averages2[name].count;
+
+        result2.push({
+         // scaleScore: '-',
+          score: averageSustainedScore2.toFixed(3),
+          name: name
+        });
+      }
+
+      console.log("resulttt22", result2);
+
+     /*  assessment.scale[1].characteristics = []
+      assessment.scale[1].characteristics = result
+      assessment.sustained[1].characteristics = []
+      assessment.sustained[1].characteristics = result2 */
+
+     }
+
+
+
 
     });
 
@@ -229,4 +316,34 @@ export class PortfolioResultComponent implements OnInit {
     this.tableShow4 = false;
   }
 
+
+  makePDF() {
+
+    var data = document.getElementById('content')!;
+
+    html2canvas(data).then((canvas) => {
+      const componentWidth = data.offsetWidth
+      const componentHeight = data.offsetHeight
+
+      const orientation = componentWidth >= componentHeight ? 'l' : 'p'
+
+      const imgData = canvas.toDataURL('image/png')
+      const pdf = new jsPDF({
+        orientation,
+        unit: 'px'
+      })
+
+      pdf.internal.pageSize.width = componentWidth
+      pdf.internal.pageSize.height = componentHeight
+
+      pdf.addImage(imgData, 'PNG', 0, 0, componentWidth, componentHeight)
+      pdf.save('portfolio-result.pdf')
+    })
+
+  }
+
+
+  Back(){
+    this.router.navigate(['/app/portfolio-list'],);
+  }
 }

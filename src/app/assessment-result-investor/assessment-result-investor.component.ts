@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import { DatePipe } from '@angular/common';
 import { DomSanitizer } from '@angular/platform-browser';
-import  {jsPDF} from "jspdf"
+import { jsPDF } from "jspdf"
 import html2canvas from 'html2canvas';
 import * as XLSX from 'xlsx';
 
@@ -15,56 +15,57 @@ import * as XLSX from 'xlsx';
 })
 export class AssessmentResultInvestorComponent implements OnInit {
 
-  @ViewChild('content', {static:false}) el! : ElementRef;
+  @ViewChild('content', { static: false }) el!: ElementRef;
   @ViewChild('content') content: ElementRef;
 
   title = "Angular CLI and isPDF"
   assessmentId: number
-  averageProcess : number
-  averageOutcome : number
+  averageProcess: number
+  averageOutcome: number
 
-  assessmentData :any = []
-  assessmentParameters : any = []
+  assessmentData: any = []
+  assessmentParameters: any = []
 
   impactCoverList: any = []
   sectorList: any = []
   levelofImplementation: string
   areaCovered: string
-  levelofImplemetation : string
-  geographicalAreasCovered : string
-  meth1Process : any = []
-  meth1Outcomes : any = []
-  categoryDataArray : any = []
-  categoryDataArrayOutcome : any = []
+  levelofImplemetation: string
+  geographicalAreasCovered: string
+  meth1Process: any = []
+  meth1Outcomes: any = []
+  categoryDataArray: any = []
+  categoryDataArrayOutcome: any = []
 
-  policyName : string
+  policyName: string
   assessmentType: string
-  date1 : any
+  date1: any
   date2: any
-  barriersList : any =[]
-  tool :string
-  assessment_approach : string
-  assessment_method : string
-  filteredData : any = []
-  barriersData : any = []
+  barriersList: any = []
+  tool: string
+  assessment_approach: string
+  assessment_method: string
+  filteredData: any = []
+  barriersData: any = []
 
-  processCategory : any = []
-  outcomeCategory : any = []
-  characteristicsList  : any = []
-  assessategory : any = []
-load: boolean
+  processCategory: any = []
+  outcomeCategory: any = []
+  characteristicsList: any = []
+  assessategory: any = []
+  load: boolean
 
-investerTool : boolean;
-loadTitle :boolean = false;
-title2 : string;
+  investerTool: boolean;
+  loadTitle: boolean = false;
+  title2: string;
 
-card : any = []
-  constructor( private route: ActivatedRoute,
-    private methassess : MethodologyAssessmentControllerServiceProxy,
+  SDGsList : any = [];
+  card: any = []
+  constructor(private route: ActivatedRoute,
+    private methassess: MethodologyAssessmentControllerServiceProxy,
     private datePipe: DatePipe,
     private sanitizer: DomSanitizer,
     private investorToolControllerproxy: InvestorToolControllerServiceProxy,
-    ) { }
+  ) { }
 
 
 
@@ -82,29 +83,29 @@ card : any = []
       this.averageOutcome = params['averageOutcome'];
     });
 
-    console.log("daaaaa:",this.assessmentId)
-    console.log("daaaaa111:",this.averageProcess)
-    console.log("daaaaa222:",this.averageOutcome)
+    console.log("daaaaa:", this.assessmentId)
+    console.log("daaaaa111:", this.averageProcess)
+    console.log("daaaaa222:", this.averageOutcome)
 
 
-    this.methassess.assessmentData( this.assessmentId).subscribe((res: any) => {
+    this.methassess.assessmentData(this.assessmentId).subscribe((res: any) => {
       console.log("assessmentDataaaaa: ", res)
-      for (let x of res){
+      for (let x of res) {
         this.policyName = x.climateAction.policyName
         this.assessmentType = x.assessmentType
         this.date1 = x.from
-          this.date2 = x.to
+        this.date2 = x.to
         this.tool = x.tool
-          this.assessment_approach = x.assessment_approach
-          this.assessment_method= x.assessment_method
+        this.assessment_approach = x.assessment_approach
+        this.assessment_method = x.assessment_method
       }
       console.log("toool", this.tool)
-      if(this.tool === 'Portfolio Tool'){
+      if (this.tool === 'Portfolio Tool') {
         this.investerTool = false;
         this.loadTitle = true;
         this.title2 = 'Result - Assess the Transformational Change due to a Portfolio of Interventions'
       }
-      else if(this.tool === 'Investor & Private Sector Tool'){
+      else if (this.tool === 'Investment & Private Sector Tool') {
         this.investerTool = true;
         this.loadTitle = true;
         this.title2 = 'Result - Invesment & Private Sector Tool - Nitric Acid Climate Action Group Initiative'
@@ -115,7 +116,7 @@ card : any = []
 
 
 
-    this.investorToolControllerproxy.getResultByAssessment( this.assessmentId).subscribe((res: any) => {
+    this.investorToolControllerproxy.getResultByAssessment(this.assessmentId).subscribe((res: any) => {
       console.log("getResultByAssessment: ", res)
       this.levelofImplemetation = res.level_of_implemetation
       this.geographicalAreasCovered = res.geographical_areas_covered
@@ -123,16 +124,16 @@ card : any = []
 
     });
 
-    this.investorToolControllerproxy.findAllSectorData( this.assessmentId).subscribe((res: any) => {
+    this.investorToolControllerproxy.findAllSectorData(this.assessmentId).subscribe((res: any) => {
       console.log("findAllSectorData: ", res)
-      for(let x of res){
+      for (let x of res) {
         this.sectorList.push(x.sector.name)
       }
     });
 
-    this.investorToolControllerproxy.findAllImpactCoverData( this.assessmentId).subscribe((res: any) => {
+    this.investorToolControllerproxy.findAllImpactCoverData(this.assessmentId).subscribe((res: any) => {
       console.log("findAllImpactCoverData: ", res)
-      for(let x of res){
+      for (let x of res) {
         this.impactCoverList.push(x.name)
       }
     });
@@ -142,114 +143,114 @@ card : any = []
       console.log("categoryList", res2)
       for (let x of res2) {
         //this.categotyList.push(x);
-          if(x.type === 'process'){
-            this.meth1Process.push(x)
-          }
-          if(x.type === 'outcome'){
-            this.meth1Outcomes.push(x)
-          }
+        if (x.type === 'process') {
+          this.meth1Process.push(x)
+        }
+        if (x.type === 'outcome') {
+          this.meth1Outcomes.push(x)
+        }
       }
-      console.log("yyyy",this.meth1Process )
+      console.log("yyyy", this.meth1Process)
     });
 
 
 
-    this.investorToolControllerproxy.findAllAssessData( this.assessmentId).subscribe((res: any) => {
+    this.investorToolControllerproxy.findAllAssessData(this.assessmentId).subscribe(async (res: any) => {
       console.log("findAllAssessData: ", res)
 
 
-      for(let category of this.meth1Process){
+      for (let category of this.meth1Process) {
         let categoryData: any = {
-          categoryName: category.name ,
+          categoryName: category.name,
           characteristics: [],
-          categotyRelevance : 0,
-          categoryLikelihood : 0
+          categotyRelevance: 0,
+          categoryLikelihood: 0
         };
 
         let totalRel = 0
         let countRel = 0
         let totalLikelihood = 0
         let countLikelihood = 0
-        for(let x of res ){
-          if(category.name === x.category.name){
+        for (let x of res) {
+          if (category.name === x.category.name) {
             categoryData.categoryName = category.name;
             categoryData.characteristics.push(
               {
                 relevance: !x.relavance ? '-' : x.relavance,
                 likelihood: !x.likelihood ? '-' : x.likelihood,
-                name : x.characteristics.name
+                name: x.characteristics.name
               }
             )
 
-             totalRel = totalRel +  x.relavance
-             countRel ++
+            totalRel = totalRel + x.relavance
+            countRel++
 
-             totalLikelihood = totalLikelihood + x.likelihood
-             countLikelihood ++
+            totalLikelihood = totalLikelihood + x.likelihood
+            countLikelihood++
 
           }
         }
 
-        categoryData.categotyRelevance = (totalRel/countRel).toFixed(3)
-        categoryData.categoryLikelihood = (totalLikelihood/countLikelihood).toFixed(3)
+        categoryData.categotyRelevance = (totalRel / countRel).toFixed(3)
+        categoryData.categoryLikelihood = (totalLikelihood / countLikelihood).toFixed(3)
         this.categoryDataArray.push(categoryData)
 
-       // console.log("categoryDataArray: ", this.categoryDataArray)
+        // console.log("categoryDataArray: ", this.categoryDataArray)
       }
 
-      for(let category of this.meth1Outcomes){
+      for (let category of this.meth1Outcomes) {
         let categoryData: any = {
-          categoryName: category.name ,
+          categoryName: category.name,
           characteristics: [],
-          categotyRelevance : 0,
-          categoryLikelihood : 0,
-          categoryScaleScore : 0,
-          categorySustainedScore : 0
+          categotyRelevance: 0,
+          categoryLikelihood: 0,
+          categoryScaleScore: 0,
+          categorySustainedScore: 0
         };
 
         let totalScale = 0
         let countScale = 0
         let totalSustained = 0
         let countSustained = 0
-        for(let x of res ){
-          if(category.name === x.category.name && (x.category.name === 'Scale GHGs' || x.category.name === 'Scale SD' )){
+        for (let x of res) {
+          if (category.name === x.category.name && (x.category.name === 'Scale GHGs' || x.category.name === 'Scale SD')) {
             categoryData.categoryName = category.name;
             categoryData.characteristics.push(
               {
-                scaleScore : x.score,
-                sustainedScore : '-',
-                name : x.characteristics.name
+                scaleScore: x.score,
+                sustainedScore: '-',
+                name: x.characteristics.name
               }
             )
 
-            totalScale = totalScale +  x.score
-            countScale ++
+            totalScale = totalScale + x.score
+            countScale++
 
           }
-          if(category.name === x.category.name && (x.category.name === 'Sustained nature-GHGs' || x.category.name === 'Sustained nature-SD' )){
+          if (category.name === x.category.name && (x.category.name === 'Sustained nature-GHGs' || x.category.name === 'Sustained nature-SD')) {
             categoryData.categoryName = category.name;
             categoryData.characteristics.push(
               {
-                scaleScore : '-',
-                sustainedScore : x.score,
-                name : x.characteristics.name
+                scaleScore: '-',
+                sustainedScore: x.score,
+                name: x.characteristics.name
               }
             )
 
-            totalSustained = totalSustained +  x.score
-            countSustained ++
+            totalSustained = totalSustained + x.score
+            countSustained++
 
           }
         }
 
-        if(category.name === 'Scale GHGs' || category.name === 'Scale SD' ){
-          categoryData.categoryScaleScore = (totalScale/countScale).toFixed(3)
+        if (category.name === 'Scale GHGs' || category.name === 'Scale SD') {
+          categoryData.categoryScaleScore = (totalScale / countScale).toFixed(3)
           categoryData.categorySustainedScore = '-'
         }
 
-        if(category.name === 'Sustained nature-GHGs' || category.name === 'Sustained nature-SD'  ){
-          categoryData.categorySustainedScore = (totalSustained/countSustained).toFixed(3)
-          categoryData.categoryScaleScore  = '-'
+        if (category.name === 'Sustained nature-GHGs' || category.name === 'Sustained nature-SD') {
+          categoryData.categorySustainedScore = (totalSustained / countSustained).toFixed(3)
+          categoryData.categoryScaleScore = '-'
         }
 
         this.categoryDataArrayOutcome.push(categoryData)
@@ -257,7 +258,94 @@ card : any = []
 
       console.log("categoryDataArrayOutcome: ", this.categoryDataArrayOutcome)
 
+      /* Portfolio toolll */
+
+      const data: any =  this.categoryDataArrayOutcome[1]
+
+      const averages: any = {};
+
+      data.characteristics.forEach((obj: { name: any; scaleScore: any; sustainedScore: any; }) => {
+        if (obj.name in averages) {
+          averages[obj.name].scaleScore += obj.scaleScore || 0;
+          averages[obj.name].sustainedScore += obj.sustainedScore === '-' ? 0 : parseInt(obj.sustainedScore);
+          averages[obj.name].count++;
+        } else {
+          averages[obj.name] = {
+            scaleScore: obj.scaleScore || 0,
+            sustainedScore: obj.sustainedScore === '-' ? 0 : parseInt(obj.sustainedScore),
+            count: 1
+          };
+        }
+      });
+
+      const result = [];
+
+      for (const name in averages) {
+        const averageScaleScore = averages[name].scaleScore / averages[name].count;
+        const averageSustainedScore = averages[name].sustainedScore / averages[name].count;
+
+        result.push({
+          scaleScore: averageScaleScore.toFixed(3),
+          sustainedScore: '-',
+          name: name
+        });
+      }
+
+      console.log("resulttt", result);
+
+       /* Portfolio toolll */
+       const data2: any =  this.categoryDataArrayOutcome[3];
+
+       const averages2: any = {};
+
+       data2.characteristics.forEach((obj: { name: any; scaleScore: any; sustainedScore: any; }) => {
+         if (obj.name in averages2) {
+           averages2[obj.name].sustainedScore += obj.sustainedScore || 0;
+           averages2[obj.name].scaleScore += obj.scaleScore === '-' ? 0 : parseInt(obj.scaleScore);
+           averages2[obj.name].count++;
+         } else {
+           averages2[obj.name] = {
+            sustainedScore: obj.sustainedScore || 0,
+            scaleScore: obj.scaleScore === '-' ? 0 : parseInt(obj.scaleScore),
+             count: 1
+           };
+         }
+       });
+
+       const result2 = [];
+
+       for (const name in averages2) {
+         const averageScaleScore2 = averages2[name].scaleScore / averages2[name].count;
+         const averageSustainedScore2 = averages2[name].sustainedScore / averages2[name].count;
+
+         result2.push({
+           scaleScore: '-',
+           sustainedScore: averageSustainedScore2.toFixed(3),
+           name: name
+         });
+       }
+
+       console.log("resulttt22", result2);
+
+
+       if(!this.investerTool){
+        this.categoryDataArrayOutcome[1].characteristics = []
+        this.categoryDataArrayOutcome[1].characteristics = result
+
+        this.categoryDataArrayOutcome[3].characteristics = []
+        this.categoryDataArrayOutcome[3].characteristics = result2
+       }
+
+       console.log("categoryDataArrayOutcome222: ", this.categoryDataArrayOutcome)
+        /* Portfolio toolll */
     });
+
+
+    this.investorToolControllerproxy.findSDGs(this.assessmentId).subscribe((res: any) => {
+      console.log("sdgssss: ", res)
+      this.SDGsList = res
+    });
+
 
 
     setTimeout(() => {
@@ -273,7 +361,7 @@ card : any = []
 
         ])
 
-        console.log("cardddd", this.card)
+      console.log("cardddd", this.card)
       this.load = true;
 
     }, 1000);
@@ -287,8 +375,8 @@ card : any = []
       const worksheet = xlsx.utils.table_to_sheet(document.querySelector("#content"));
 
       // add existing data to worksheet
-      const existingData = xlsx.utils.sheet_to_json(worksheet, {header: 1});
-      xlsx.utils.sheet_add_json(ws, existingData, {skipHeader: true, origin: -1});
+      const existingData = xlsx.utils.sheet_to_json(worksheet, { header: 1 });
+      xlsx.utils.sheet_add_json(ws, existingData, { skipHeader: true, origin: -1 });
 
       const workbook = xlsx.utils.book_new();
       xlsx.utils.book_append_sheet(workbook, ws, "Sheet1");
