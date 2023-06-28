@@ -72,7 +72,7 @@ export class PortfolioDashboardComponent implements OnInit {
       this.calResults = res[0]
       console.log("assessdetails",  this.calResults)
 
-      const RecentInterventions = this.calResults.slice(29,32);
+      const RecentInterventions = this.calResults.slice(0,10);
       this.recentResult = RecentInterventions
 
       console.log("RecentInterventions",  RecentInterventions)
@@ -100,13 +100,15 @@ export class PortfolioDashboardComponent implements OnInit {
       this.portfolioList = res;
      });
 
-    
+
 
   }
 
 
   goToFunction(){
 this.selectedPortfolio = ''
+this.loadLast2graphs=false;
+this.ngOnInit();
   }
 
   selectPortfolio(portfolio : any){
@@ -118,11 +120,11 @@ this.selectedPortfolio = ''
     this.resultData = []
     this.resultData2 = []
     this.allData = []
-    
+
 
     this.portfolioServiceProxy.assessmentsDataByAssessmentId(this.selectedPortfolio.id).subscribe(async (res: any) => {
       console.log("arrayyy : ", res)
-     
+
       this.barChartData=res;
       this.viewPortfolioBarChart();
 
@@ -199,7 +201,7 @@ this.selectedPortfolio = ''
      // console.log(" this.outcomeData : ",  this.outcomeData)
 
      this.loadSelectedTable = true;
-     
+
 
     });
 
@@ -523,7 +525,7 @@ this.selectedPortfolio = ''
     else{
       this.portfolioPieChart =new Chart(ctx, {
         type: 'pie',
-  
+
         data: {
           labels: labels,
           datasets: [{
@@ -542,9 +544,9 @@ this.selectedPortfolio = ''
               'rgba(255, 99, 132, 1)',
               'rgba(255, 205, 86, 1)',
               'rgba(255, 99, 132, 1)',
-  
+
             ],
-           
+
           }]
         },
         options: {
@@ -567,14 +569,14 @@ this.selectedPortfolio = ''
                 const percentage = percentages[ctx.dataIndex];
                 return `${label}: ${value} (${percentage}%)`;
               },
-  
+
             },
             tooltip:{
               position:'average',
               boxWidth:10,
               callbacks:{
-                
-                label:(ctx)=>{ 
+
+                label:(ctx)=>{
                   // console.log(ctx)
                   // console.log(ctx)
                   // let sum = ctx.dataset._meta[0].total;
@@ -588,7 +590,7 @@ this.selectedPortfolio = ''
                   // console.log("sum",sum,ctx.parsed)
                   // console.log(sum, counts[ctx.dataIndex])
                   let percentage = (ctx.parsed/ sum*100).toFixed(2)+"%";
-                  
+
                   return[
                     `SDG: ${ctx.label}`,
                     `Count: ${ctx.raw}`,
@@ -608,12 +610,12 @@ this.selectedPortfolio = ''
                 bodyAlign: 'left'
             }
          }
-  
+
         },
-  
+
     });
     }
-   
+
 
   }
   viewPortfolioBarChart(){
@@ -621,8 +623,8 @@ this.selectedPortfolio = ''
     let label =this.barChartData.map((item:any) => item?.assessment?.climateAction?.policyName );
     let data =this.barChartData.map((item:any) => item.ghgValue?item.ghgValue:0);
     console.log("label",label,"data",data)
-   
-    
+
+
     if (!this.canvasRefBarChart) {
       console.error('Could not find canvas element');
       return;
@@ -647,7 +649,7 @@ this.selectedPortfolio = ''
     else{
       this.portfolioBarChart =new Chart(ctx, {
         type: 'bar',
-  
+
         data: {
           labels: label,
           datasets: [{
@@ -667,7 +669,7 @@ this.selectedPortfolio = ''
               'rgba(255, 99, 132, 1)',
               'rgba(255, 205, 86, 1)',
               'rgba(255, 99, 132, 1)',
-  
+
             ],
             borderColor:[
               'rgb(250,227,114)',
@@ -683,7 +685,7 @@ this.selectedPortfolio = ''
               'rgba(255, 99, 132, 1)',
               'rgba(255, 205, 86, 1)',
               'rgba(255, 99, 132, 1)',],
-  
+
             borderWidth: 1
           }]
         },
@@ -695,7 +697,7 @@ this.selectedPortfolio = ''
                   return value.length > 10 ? value.substring(0, 10) + '...' : value;
                 },
                 maxRotation: 90,
-               
+
               },
               beginAtZero: true,
               title: {
@@ -704,10 +706,10 @@ this.selectedPortfolio = ''
                 font: {
                   size: 16,
                   weight: 'bold',
-  
+
                 }
               },
-              
+
             },
             y: {
               beginAtZero: true,
@@ -717,7 +719,7 @@ this.selectedPortfolio = ''
                 font: {
                   size: 10,
                   weight: 'bold',
-  
+
                 }
               }
             }
@@ -730,11 +732,11 @@ this.selectedPortfolio = ''
               position:'average',
               boxWidth:10,
               callbacks:{
-  
+
                 label:(context)=>{
                   // console.log("context",context,"4444",data[context.dataIndex])
                   return[
-  
+
                     `Expected GHG Mitigation (Mt CO2-eq): ${context.raw}`,
                   ];
                  }
@@ -751,12 +753,12 @@ this.selectedPortfolio = ''
                 bodyAlign: 'left'
             }
           }
-  
+
         }
     });
-      
-    } 
-    
+
+    }
+
 
   }
 

@@ -442,7 +442,7 @@ export class PortfolioTrack4Component implements OnInit {
         sustainedSDGs : this.sdgDataSendArray4,
         sdgs : this.selectedSDGs
       }
-      this.investorToolControllerproxy.createFinalAssessment(data)
+      this.investorToolControllerproxy.createFinalAssessment2(data)
         .subscribe(_res => {
           console.log("res final", _res)
 
