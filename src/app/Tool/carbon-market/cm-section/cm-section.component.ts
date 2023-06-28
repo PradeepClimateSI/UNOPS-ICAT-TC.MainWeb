@@ -210,9 +210,10 @@ export class CmSectionComponent implements OnInit {
   }
 
 
-  save(){
+  save(event: CMResultDto[]){
     let result: SaveCMResultDto = new SaveCMResultDto()
     result.result = []
+    result.result = [...event]
     this.result.sections.forEach((section: any) => {
       section.criteria.forEach((cr: any) => {
         cr.questions.forEach((q:any) => {
@@ -262,6 +263,10 @@ export class CmSectionComponent implements OnInit {
   }
   okay(){
     this.visible=false
+  }
+
+  onSubmitSectionThree($event: any) {
+    throw new Error('Method not implemented.');
   }
 
 }
