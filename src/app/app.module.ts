@@ -120,6 +120,7 @@ import { EnterDataPathComponent } from './data-request-flow/enter-data-path/ente
 import { ReviewDataCmComponent } from './data-request-flow/review-data-path/review-data-cm/review-data-cm.component';
 import { ReviewDataInvestmentComponent } from './data-request-flow/review-data-path/review-data-investment/review-data-investment.component';
 import { ReviewDataPathComponent } from './data-request-flow/review-data-path/review-data-path/review-data-path.component';
+import { CmSectionThreeComponent } from './Tool/carbon-market/cm-section-three/cm-section-three.component';
 
 
 
@@ -195,6 +196,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         ReviewDataCmComponent,
         ReviewDataInvestmentComponent,
         ReviewDataPathComponent,
+        CmSectionThreeComponent,
 
     ],
 

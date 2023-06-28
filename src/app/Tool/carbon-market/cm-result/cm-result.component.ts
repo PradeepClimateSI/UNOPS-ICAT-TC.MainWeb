@@ -39,25 +39,20 @@ export class CmResultComponent implements OnInit {
       this.intervention = this.assessment.climateAction
 
       this.assessmentCMDetail = await this.assessmentCMDetailControllerServiceProxy.getAssessmentCMDetailByAssessmentId(assessmentId).toPromise()
-      let types: any = this.assessmentCMDetail.impact_types?.split(',')
-      if(types?.length > 0) types = [...types.map((type: string) => this.masterDataService.impact_types.find(o => o.code === type)?.name)]
-      let cats: any = this.assessmentCMDetail.impact_categories?.split(',')
-      if (cats?.length > 0) cats = [...cats.map((cat: string) => this.masterDataService.impact_categories.find(o => o.code === cat)?.name)]
-      let chara: any = this.assessmentCMDetail.impact_characteristics?.split(',')
-      if (chara?.length > 0) chara = [...chara.map((char: string) => this.masterDataService.impact_characteristics.find(o => o.code === char)?.name)]
-      console.log(chara)
+      // let types: any = this.assessmentCMDetail.impact_types?.split(',')
+      // if(types?.length > 0) types = [...types.map((type: string) => this.masterDataService.impact_types.find(o => o.code === type)?.name)]
+      // let cats: any = this.assessmentCMDetail.impact_categories?.split(',')
+      // if (cats?.length > 0) cats = [...cats.map((cat: string) => this.masterDataService.impact_categories.find(o => o.code === cat)?.name)]
+      // let chara: any = this.assessmentCMDetail.impact_characteristics?.split(',')
+      // if (chara?.length > 0) chara = [...chara.map((char: string) => this.masterDataService.impact_characteristics.find(o => o.code === char)?.name)]
+      // console.log(chara)
       this.card.push(
         ...[
           { title: 'Intervention', data: this.intervention.policyName },
           { title: 'Assessment Type', data: this.assessment.assessmentType },
-          // { title: 'Assessment Boundaries', data: this.assessmentCMDetail.boundraries },
-          { title: 'Sectoral Boundary', data: (this.masterDataService.sectorial_boundries.find(o => o.code === this.assessmentCMDetail.sectoral_boundary)?.name) },
-          { title: 'Temporal Boundary', data: this.assessmentCMDetail.temporal_boundary },
-          { title: 'Geographical Boundary', data: this.assessmentCMDetail.geographical_boundary },
-          { title: 'Impact Types', data: types?.toString() },
-          { title: 'Impact Categories', data: cats?.toString() },
-          { title: 'Impact Characteristics', data: chara?.toString() },
-          { title: 'Impact Indicators', data: this.assessmentCMDetail.impact_indicators }
+          { title: 'Assessment Boundaries', data: this.assessmentCMDetail.boundraries },
+          { title: 'International Carbon Market Approach Used', data: this.assessmentCMDetail.intCMApproach},
+          { title: 'Baseline and monitoring methodology applied by the activity', data: this.assessmentCMDetail.appliedMethodology}
         ])
       await this.getResult()
     })
