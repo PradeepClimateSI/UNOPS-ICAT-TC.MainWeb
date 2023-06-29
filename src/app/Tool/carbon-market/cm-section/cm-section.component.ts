@@ -104,6 +104,8 @@ export class CmSectionComponent implements OnInit {
     console.log("Indirectt222", e.type)
     if (e.type === 'COMMENT'){
       this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['comment'] = e.comment
+    } else if (e.type === 'FILE'){
+      this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['file'] = e.path
     } else {
       if (e.type === 'INDIRECT'){
         this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['institution'] = e.answer
@@ -210,9 +212,10 @@ export class CmSectionComponent implements OnInit {
   }
 
 
-  save(){
+  save(event: CMResultDto[]){
     let result: SaveCMResultDto = new SaveCMResultDto()
     result.result = []
+    result.result = [...event]
     this.result.sections.forEach((section: any) => {
       section.criteria.forEach((cr: any) => {
         cr.questions.forEach((q:any) => {
@@ -227,6 +230,7 @@ export class CmSectionComponent implements OnInit {
           item.comment = q.comment
           item.question = q.question
           item.type = q.type
+          item.filePath = q.file
           result.result.push(item)
         })
       })
@@ -262,6 +266,10 @@ export class CmSectionComponent implements OnInit {
   }
   okay(){
     this.visible=false
+  }
+
+  onSubmitSectionThree($event: any) {
+    throw new Error('Method not implemented.');
   }
 
 }

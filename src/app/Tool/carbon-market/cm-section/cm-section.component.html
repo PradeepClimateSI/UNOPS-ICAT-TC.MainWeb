@@ -1,7 +1,7 @@
 <div class="card" style="min-height: 600px;">
     <div class="p-2" style="min-height: 600px;">
         <div class="p-grid p-fluid  col-sm-12">
-            <app-cm-section-three [approach]="approach"></app-cm-section-three>
+            <!-- <app-cm-section-three [approach]="approach" (onSubmit)="save($event)"></app-cm-section-three> -->
             <p-accordion [activeIndex]="openAccordion" (onOpen)="onOpenTab($event)">
                 <ng-container *ngFor="let section of sections; let idxs = index;">
                     <p-accordionTab *ngIf="shownSections[idxs]"   header="{{section.name}}">
@@ -18,7 +18,7 @@
                             </ng-container>
                         </ng-container>
                         <ng-container *ngIf="section.code === 'SECTION_3'">
-                            <app-cm-section-three [approach]="approach"></app-cm-section-three>
+                            <app-cm-section-three [approach]="approach"  (onSubmit)="save($event)"></app-cm-section-three>
                         </ng-container>
                     </p-accordionTab>
                 </ng-container>
@@ -28,7 +28,7 @@
             <div class="row p-grid p-fluid col-sm-12">
                 <div class="col-10"></div>
                 <div class="d-flex flex-row-reverse mt-20 ">
-                    <button class="btn btn-primary text-uppercase" type="submit" (click)="save()">
+                    <button class="btn btn-primary text-uppercase" type="submit" (click)="save([])">
                       {{ assessment.assessment_approach=== 'INDIRECT' ? 'Send to Data Collection Team' : 'Calculate & Check Results' }}
                     </button>
                 </div>
