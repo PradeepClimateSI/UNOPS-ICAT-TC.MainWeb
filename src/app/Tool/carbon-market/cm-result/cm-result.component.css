@@ -15,4 +15,13 @@
 .font-bold{
     font-weight: 600;
 }
+.table-header{
+    /* text-align: center !important; */
+    /* font-size: 24px; */
+    color: black !important;
+    /* background-color: white !important; */
+    border-color: transparent !important;
+    font-weight: 600 !important;
+    overflow: hidden;
+}
 
