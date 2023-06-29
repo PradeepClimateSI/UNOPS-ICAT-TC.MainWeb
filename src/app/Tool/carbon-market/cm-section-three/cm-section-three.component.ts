@@ -45,8 +45,8 @@ export class CmSectionThreeComponent implements OnInit {
     }
   };
   sdgsToLoop: SDG[]
-uploadedFiles: any = [];
-uploadUrl: string;
+  uploadedFiles: any = [];
+  uploadUrl: string;
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
