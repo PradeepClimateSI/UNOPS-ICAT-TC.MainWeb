@@ -1,8 +1,10 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MasterDataService } from 'app/shared/master-data.service';
+import { SelectedScoreDto } from 'app/shared/score.dto';
 import { environment } from 'environments/environment';
 import { TabView } from 'primeng/tabview';
-import { CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, MethodologyAssessmentControllerServiceProxy, OutcomeCategory } from 'shared/service-proxies/service-proxies';
+import { CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, ScoreDto } from 'shared/service-proxies/service-proxies';
 
 
 interface UploadEvent {
@@ -39,18 +41,18 @@ export class CmSectionThreeComponent implements OnInit {
   selectedSDGsustained: SDG[];
   results: CMResultDto[] = []
   activeIndex2: number = 0;
-  outcomeResult: OutcomeResult = {
-    GHG: {
-      scale: []
-    }
-  };
   sdgsToLoop: SDG[]
   uploadedFiles: any = [];
   uploadUrl: string;
+  GHG_scale_score: SelectedScoreDto[]
+  GHG_sustained_score: SelectedScoreDto[]
+  SDG_scale_score: SelectedScoreDto[]
+  SDG_sustained_score: SelectedScoreDto[]
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
-    private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy
+    private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
+    private masterDataService: MasterDataService
   ) { 
     this.uploadUrl = environment.baseUrlAPI + '/cm-assessment-question/upload-file'
   }
@@ -60,9 +62,10 @@ export class CmSectionThreeComponent implements OnInit {
       { name: 'Process of Change', code: 'process' },
       { name: 'Outcome of Change', code: 'outcome' }
     ]
+    this.GHG_scale_score = this.masterDataService.GHG_scale_score
     this.categories = await this.cMQuestionControllerServiceProxy.getUniqueCharacterisctics().toPromise()
     this.selectedType = this.types[0]
-    this.selectedCategory = this.categories[this.selectedType.code].categories[0]
+    this.selectedCategory = this.categories[this.selectedType.code][0]
     console.log(this.categories)
     this.onMainTabChange({index: 0})
     this.onCategoryTabChange({index: 0})
@@ -77,8 +80,8 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   async onCategoryTabChange(event: any) {
-    this.selectedCategory = this.categories[this.selectedType.code].categories[event.index]
-    let ids = this.categories[this.selectedType.code].characteristic[this.selectedCategory.code].map((item: any) => {
+    this.selectedCategory = this.categories[this.selectedType.code][event.index]
+    let ids = this.selectedCategory.characteristics.map((item: any) => {
       return item.id
     })
     this.questions = await this.cMQuestionControllerServiceProxy.getQuestionsByCharacteristic(ids).toPromise()
@@ -152,7 +155,14 @@ export class CmSectionThreeComponent implements OnInit {
     }
   }
 
- 
+  onSelectScore(event: any, char: CMResultDto) {
+    console.log("onSelectScore", event)
+    let score = new ScoreDto()
+    score.name = event.value.name
+    score.code = event.value.code
+    score.value = event.value.value 
+    char.selectedScore = score
+  }
 
   onAnswer(event: any, question: any, characteristic: Characteristics) {
     let result = this.results.find(o => o.question.code === question.code)
@@ -190,7 +200,7 @@ export class CmSectionThreeComponent implements OnInit {
 
   async submit() {
     console.log(this.results)
-    if (this.selectedSDGscale.length > 0){
+    if (this.selectedSDGscale?.length > 0){
       for await (let sd of this.selectedSDGscale) {
         sd.result.forEach(res => {
           if (res.selectedScore){
@@ -201,7 +211,7 @@ export class CmSectionThreeComponent implements OnInit {
       }
     }
 
-    if (this.selectedSDGsustained.length > 0){
+    if (this.selectedSDGsustained?.length > 0){
       for await (let sd of this.selectedSDGsustained) {
         sd.result.forEach(res => {
           if (res.selectedScore){
@@ -212,7 +222,7 @@ export class CmSectionThreeComponent implements OnInit {
       }
     }
 
-    if (this.outcome.length > 0){
+    if (this.outcome?.length > 0){
       for await (let item of this.outcome) {
         if (item.type === 'GHG'){
           item.results.forEach((res:any) => {
