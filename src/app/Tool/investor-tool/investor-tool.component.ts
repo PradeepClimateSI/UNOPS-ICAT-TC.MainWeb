@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 // import { IndicatorDetails } from './IndicatorDetails';
 
 
-interface CharacteristicWeight {
+interface  CharacteristicWeight {
   [key: string]: number;
 }
 
@@ -88,6 +88,14 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   categoryTabIndex: any;
 
 
+  isLikelihoodDisabled:boolean=false;
+  isRelavanceDisabled:boolean=false;
+  mainTabIndexArray:number[]=[];
+  initialLikelihood:number=0;
+  initialRelevance:number=0;
+  failedLikelihoodArray:{category:string,tabIndex:number}[]=[]
+  failedRelevanceArray:{category:string,tabIndex:number}[]=[]
+
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
     private masterDataService: MasterDataService,
@@ -102,10 +110,11 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
 
   ) { }
-
   async ngOnInit(): Promise<void> {
     this.categoryTabIndex =0;
-
+   
+    this.isLikelihoodDisabled=true;
+    this.isRelavanceDisabled=true;
     this.assessment_types = this.masterDataService.assessment_type;
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;
     this.geographicalAreasCovered = this.masterDataService.level_of_implemetation;
@@ -318,7 +327,32 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     console.log("main index", this.mainTabIndex)
   }
   onCategoryTabChange(event: any, tabview: TabView) {
+    console.log("mainTabIndexArray",this.mainTabIndexArray,this.activeIndex)
+   
     this.categoryTabIndex =event.index;
+    if(!this.failedLikelihoodArray.some(
+      element  => element.tabIndex === this.categoryTabIndex
+    )){
+      this.isLikelihoodDisabled=true;
+      this.initialLikelihood=0
+      
+    }
+    else{
+      this.isLikelihoodDisabled=false;
+      this.initialLikelihood=1
+    }
+    
+    if(!this.failedRelevanceArray.some(
+      element  => element.tabIndex === this.categoryTabIndex
+    )){
+      this.isRelavanceDisabled=true;
+      this.initialRelevance=0
+      
+    }
+    else{
+      this.isRelavanceDisabled=false;
+      this.initialRelevance=1
+    }
     console.log("category index", this.categoryTabIndex)
 
   }
@@ -430,6 +464,20 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
 
 
+    // if(!this.mainTabIndexArray.includes(this.activeIndex)){
+    //   console.log("mainTabIndexArray",this.mainTabIndexArray)
+    //   this.isLikelihoodDisabled=false;
+    //   this.isRelavanceDisabled=false;
+    // }
+    // if (this.mainTabIndexArray.includes(this.activeIndex)) {
+     
+    //   this.isLikelihoodDisabled=true;
+    //   this.isRelavanceDisabled=true;
+    // }
+
+
+
+
 
 
 
@@ -474,42 +522,86 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
 
   onLikelihoodWeightChange(categoryName: string, characteristicName : string, chaWeight: number) {
+    this.isLikelihoodDisabled=false;
+    this.initialLikelihood=1
     this.characteristicLikelihoodWeightScore[characteristicName] = chaWeight
    this.chaCategoryLikelihoodWeightTotal[categoryName] = 0
    this.chaCategoryLikelihoodTotalEqualsTo1[categoryName] = false
-
+   
+ 
   for(let cha of  this.getCategory(characteristicName, categoryName)) {
-     this.chaCategoryLikelihoodWeightTotal[categoryName] =  this.chaCategoryLikelihoodWeightTotal[categoryName] +  this.characteristicLikelihoodWeightScore[cha.name]
+    if(!isNaN(this.characteristicLikelihoodWeightScore[cha.name])){
+      this.chaCategoryLikelihoodWeightTotal[categoryName] =  this.chaCategoryLikelihoodWeightTotal[categoryName] + this.characteristicLikelihoodWeightScore[cha.name]
+    }
+    
 
-     console.log('Characteristicrrrrrrr:',  this.characteristicLikelihoodWeightScore[cha.name]);
+     console.log('Characteristicrrrrrrr:',  this.characteristicLikelihoodWeightScore[cha.name],isNaN(this.characteristicLikelihoodWeightScore[cha.name]));
   }
 
-  if( this.chaCategoryLikelihoodWeightTotal[categoryName] == 100){
+  if( this.chaCategoryLikelihoodWeightTotal[categoryName] == 100|| this.chaCategoryLikelihoodWeightTotal[categoryName] ==0){
    this.chaCategoryLikelihoodTotalEqualsTo1[categoryName] = true
+   this.initialLikelihood=0
+   this.isLikelihoodDisabled=true;
+    // if (!this.mainTabIndexArray.includes(this.activeIndex)) {
+    //   this.mainTabIndexArray.push(this.activeIndex);
+      
+    // }
+    this.failedLikelihoodArray= this.failedLikelihoodArray.filter((element) => element.category !== categoryName);
+      console.log("failedLikelihoodArray",this.failedLikelihoodArray)
+    
+  
+
   }
+  else{
+    if (!this.failedLikelihoodArray.some( (element) => element.category === categoryName)) {
+      this.failedLikelihoodArray.push({category:categoryName,tabIndex:this.activeIndex});
+      console.log("failedLikelihoodArray",this.failedLikelihoodArray)
+    }
+
+  }
+  console.log("failedLikelihoodArray444",this.failedLikelihoodArray)
   console.log('LL Characteristic Name:',categoryName ,  characteristicName, 'chaWeight:', chaWeight);
  console.log( 'LL category :',categoryName,' Total: ',  this.chaCategoryLikelihoodWeightTotal[categoryName]);
+ 
 
  }
 
 
  onRelevanceWeightChange(categoryName: string, characteristicName : string, chaWeight: number) {
+  // console.log('Characteristicrrrrrrr:',  chaWeight);
+  this.isRelavanceDisabled=false;
+  this.initialRelevance=1;
    this.characteristicWeightScore[characteristicName] = chaWeight
   this.chaCategoryWeightTotal[categoryName] = 0
   this.chaCategoryTotalEqualsTo1[categoryName] = false
 
  for(let cha of  this.getCategory(characteristicName, categoryName)) {
+  if(!isNaN(this.characteristicWeightScore[cha.name])){
     this.chaCategoryWeightTotal[categoryName] =  this.chaCategoryWeightTotal[categoryName] +  this.characteristicWeightScore[cha.name]
+  }
+   
 
     console.log('Characteristicrrrrrrr:',  this.characteristicWeightScore[cha.name]);
  }
 
- if( this.chaCategoryWeightTotal[categoryName] == 100){
+ if( this.chaCategoryWeightTotal[categoryName] == 100|| this.chaCategoryWeightTotal[categoryName] == 0){
   this.chaCategoryTotalEqualsTo1[categoryName] = true
+  
+  this.initialRelevance=0
+  this.isRelavanceDisabled=true
+  this.failedRelevanceArray= this.failedRelevanceArray.filter((element) => element.category !== categoryName);
+      console.log("failedRelevanceArray",this.failedRelevanceArray)
  }
+ else{
+  if (!this.failedRelevanceArray.some( (element) => element.category === categoryName)) {
+    this.failedRelevanceArray.push({category:categoryName,tabIndex:this.activeIndex});
+    console.log("failedRelevanceArray",this.failedRelevanceArray)
+  }
+
+}
  console.log('Characteristic Name:',categoryName ,  characteristicName, 'chaWeight:', chaWeight);
   console.log( 'category :',categoryName,' Total: ',  this.chaCategoryWeightTotal[categoryName]);
-
+  console.log("+++++++++",this.characteristicWeightScore );
 }
 
 onAssessmentApproachchange(approach:any){
@@ -529,15 +621,6 @@ onRelavanceChange(data:any,ins:any){
   // }
 
 }
-// validateAngle(value: string): string {
-//   console.log("score",value)
-//   const parsedValue = parseInt(value, 10);
 
-//   if (isNaN(parsedValue) || parsedValue < -1 || parsedValue > 3) {
-//     return ''; // Reset the value if it's not within the desired range
-//   }
-
-//   return value; // Return the validated value
-// }
 
 }

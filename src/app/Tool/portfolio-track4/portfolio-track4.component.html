@@ -9,7 +9,7 @@
         <div class="row p-2">
           <div class="col-12 col-md-8">
 
-            <div class="p-field p-2">
+           <!--  <div class="p-field p-2">
               <label for="assessment_method">Assessment Method *</label>
               <select class="form-control select-with-arrow"  (change)="onChangeTrack($event)" [(ngModel)]="assessment.assessment_method"
                 name="assessment_method" id="exampleFormControlSelect1"  #assessmentMethod="ngModel">
@@ -20,7 +20,19 @@
                 <option>Track 4</option>
               </select>
               <p class="info-message text-danger" *ngIf="!assessment.assessment_method && (fData.submitted || assessmentMethod.touched)">This is a mandatory field</p>
+            </div> -->
+
+
+            <div class="p-field p-2">
+              <label for="assessment_method">Assessment Method *</label>
+              <p-dropdown appendTo="body" name="assessment_method" #assessmentMethod="ngModel"
+                placeholder="Select Assessment Method"  [(ngModel)]="assessment.assessment_method"
+                ngModel [options]="assessmentMethodList" (onChange)="onChangeTrack($event)"
+                optionLabel="name" optionValue="name" [required]="true"></p-dropdown>
+              <p class="info-message text-danger" *ngIf="!assessment.assessment_method && (fData.submitted || assessmentMethod.touched)">This is a mandatory field</p>
             </div>
+
+
 
             <div class="p-field p-2">
               <label for="policy">Select Intervetion *</label>
@@ -46,7 +58,7 @@
                 This is a mandatory field
               </p>
             </div>
-            <div class="p-field p-2">
+           <!--  <div class="p-field p-2">
               <label for="Level of implementation">Level of implementation *</label>
               <p-dropdown appendTo="body" name="investorAssessment.level_of_implemetation" #type="ngModel"
                 placeholder="Select Level of implementation" [(ngModel)]="investorAssessment.level_of_implemetation"
@@ -57,7 +69,7 @@
                             ">
                 This is a mandatory field
               </p>
-            </div>
+            </div> -->
             <div class="p-field p-2">
               <label for="Level of implementation">Geographical Areas Covered *</label>
               <p-dropdown appendTo="body" name="investorAssessment.geographical_areas_covered" #type="ngModel"
@@ -85,7 +97,7 @@
               </p>
             </div>
 
-            <div class="p-field p-2">
+          <!--   <div class="p-field p-2">
               <label for="Sectors Covered">Impacts Covered *</label>
               <p-multiSelect appendTo="body" name="impact" #type="ngModel" placeholder="Select Impact Covered" [(ngModel)]="impactArray"
                 [options]="impactCovered" (ngModelChange)="onItemSelectImpacts($event)" optionLabel="name"
@@ -96,7 +108,7 @@
                             ">
                 This is a mandatory field
               </p>
-            </div>
+            </div> -->
 
 
             <div class="p-field p-2">
@@ -109,28 +121,28 @@
             </div>
 
 
-
-
-
             <div class="p-field p-2">
 
-              <label for="date1">Assessment Period *</label>
+              <label for="date1">Assessment Period*</label>
               <div class="p-inputgroup">
-                <span class="p-inputgroup-addon">
-                  <i class="pi pi-calendar"></i>
-                </span>
-                <p-calendar dateFormat="mm-dd-yy" inputId="date1" placeholder="From" [(ngModel)]="assessment.from"  #date1="ngModel"
-                  name="date1"></p-calendar>
-                <span class="p-inputgroup-addon">to</span>
-                <p-calendar dateFormat="mm-dd-yy" inputId="date2" placeholder="To" [(ngModel)]="assessment.to" #date2="ngModel"
-                  name="date2"></p-calendar>
+                  <span class="p-inputgroup-addon">
+                      <i class="pi pi-calendar"></i>
+                  </span>
+                  <p-calendar dateFormat="mm-dd-yy" inputId="date1" placeholder="From"
+                      [(ngModel)]="assessment.from" name="date1" #date1="ngModel" [required]="true" appendTo="body"  [disabled]="isSavedAssessment">
+                     </p-calendar>
+                  <span class="p-inputgroup-addon">to</span>
+                  <p-calendar dateFormat="mm-dd-yy" inputId="date2" placeholder="To"
+                      [(ngModel)]="assessment.to" name="date2" #date2="ngModel" [required]="true" appendTo="body" [disabled]="isSavedAssessment"></p-calendar>
+
               </div>
-              <p class="info-message text-danger" *ngIf="(date1.invalid || date2.invalid) && (fData.submitted || date1.touched || date2.touched)">
-                Assessment Period is required
-              </p>
-            </div>
+              <div class="col-12">
+                  <p class="info-message text-danger" *ngIf="(date1.invalid || date2.invalid) && (fData.submitted || date1.touched || date2.touched)">
+                      This is a mandatory field
+                    </p>
+              </div>
 
-
+              </div>
 
           </div>
         </div>
@@ -330,11 +342,29 @@
           </p-tabView>
           <!-- </div> -->
         </p-tabPanel>
+
+
         <p-tabPanel header="Outcome of Change">
           <p-tabView #tabView2 (onChange)="onCategoryTabChange($event, tabView2) " [(activeIndex)]="activeIndex2">
 
             <p-tabPanel [header]="category.CategoryName" *ngFor="let category of outcomeData">
 
+              <div *ngIf="category.CategoryName === 'Scale SD' ">
+                <div class="row">
+                  <div class="col-2 "><p>Select SDGs : </p> </div>
+
+                  <div class="col-4 ">
+                    <p-multiSelect appendTo="body" name="sdgs"  placeholder="Select SDGs" [(ngModel)]="selectedSDGs"
+                    [options]="sdgList" (ngModelChange)="onItemSelectSDGs($event)" optionLabel="name"
+                    [required]="true"></p-multiSelect>
+                  </div>
+
+                  <div class="col-5 "></div>
+                </div>
+              </div>
+
+
+              <div *ngIf="category.CategoryName !== 'Scale SD' && category.CategoryName !== 'Sustained nature-SD'  ">
               <div class="characteristic-Topic" *ngFor="let data of category.data; index as i">
                 <h6>{{i+1}}.{{data.characteristics.name}}</h6>
                 <div>
@@ -419,6 +449,149 @@
 
                 </div>
               </div>
+            </div>
+
+            <div *ngIf="category.CategoryName === 'Scale SD'">
+              <div *ngFor="let item of sdgDataSendArray2; index as i">
+                <br>
+                <h6>SDG {{ selectedSDGs[i].number }} - {{ selectedSDGs[i].name }}</h6>
+                <div class="characteristic-Topic" *ngFor="let data of item.data; index as j">
+                  <h6>{{ j+1 }}.{{ data.characteristics.name }}</h6>
+                  <div>
+                    <form>
+                      <div class="container pl-20 pr-20">
+                        <div id="content" #content>
+                          <div class=" mt-2">
+                            <div class="p-grid p-fluid col-12">
+                              <div class="row p-2">
+                                <div class="col-12 col-lg-12">
+                                  <div class="p-field">
+                                    <label for="indicator">Indicator</label>
+                                    <input type="text" (ngModelChange)="assignSDG(selectedSDGs[i], data)"  pInputText [(ngModel)]="data.indicator" placeholder="Indicator Name" name="indicator" />
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="row p-2">
+                                <div class="col-12 col-lg-6">
+                                  <div class="p-field">
+                                    <label for="indicatorStartingVal">Indicator Starting Situation Value</label>
+                                    <p-inputNumber (ngModelChange)="assignSDG(selectedSDGs[i], data)" [(ngModel)]="data.indicatorStartingVal" name="indicatorStartingVal"
+                                      placeholder="Value at the Starting Situation" inputId="locale-us" mode="decimal"
+                                      locale="en-US" [minFractionDigits]="2"></p-inputNumber>
+                                  </div>
+                                </div>
+
+                                <div class="col-12 col-lg-6">
+                                  <div class="p-field">
+                                    <label for="indicatorExpectedVal">Indicator Expected Value</label>
+                                    <p-inputNumber (ngModelChange)="assignSDG(selectedSDGs[i], data)"  [(ngModel)]="data.indicatorExpectedVal" name="indicatorExpectedVal"
+                                      placeholder="Expected Value" inputId="locale-us" mode="decimal" locale="en-US"
+                                      [minFractionDigits]="2"></p-inputNumber>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="row p-2">
+                                <div class="col-12 col-lg-6">
+                                  <div class="p-field">
+                                    <label for="Relevance">Score</label>
+                                    <p-inputNumber (ngModelChange)="assignSDG(selectedSDGs[i], data)"  inputId="integeronly" [(ngModel)]="data.score" [showButtons]="true" [min]="-1"
+                                      [max]="3" [step]="1" inputId="minmax-buttons" placeholder="Enter Score"
+                                      name="data.charData.score"></p-inputNumber>
+                                  </div>
+                                </div>
+
+                                <div class="col-12 col-lg-6">
+                                  <div class="p-field">
+                                    <label for="justification">Justification</label>
+                                    <input (ngModelChange)="assignSDG(selectedSDGs[i], data)"  type="text" pInputText [(ngModel)]="data.justification" placeholder="Enter Justification"
+                                      name="justification" />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+            <div *ngIf="category.CategoryName === 'Sustained nature-SD'  ">
+
+              <div *ngFor="let item of sdgDataSendArray4; index as i">
+                <br>
+                <h6>SDG {{ selectedSDGs[i].number }} - {{ selectedSDGs[i].name }}</h6>
+                <div class="characteristic-Topic" *ngFor="let data of item.data; index as j">
+                  <h6>{{ j+1 }}.{{ data.characteristics.name }}</h6>
+                  <div>
+                    <form>
+                      <div class="container pl-20 pr-20">
+                        <div id="content" #content>
+                          <div class=" mt-2">
+                            <div class="p-grid p-fluid col-12">
+                              <div class="row p-2">
+                                <div class="col-12 col-lg-12">
+                                  <div class="p-field">
+                                    <label for="indicator">Indicator</label>
+                                    <input (ngModelChange)="assignSDG(selectedSDGs[i], data)" type="text" pInputText [(ngModel)]="data.indicator" placeholder="Indicator Name" name="indicator" />
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="row p-2">
+                                <div class="col-12 col-lg-6">
+                                  <div class="p-field">
+                                    <label for="indicatorStartingVal">Indicator Starting Situation Value</label>
+                                    <p-inputNumber (ngModelChange)="assignSDG(selectedSDGs[i], data)" [(ngModel)]="data.indicatorStartingVal" name="indicatorStartingVal"
+                                      placeholder="Value at the Starting Situation" inputId="locale-us" mode="decimal"
+                                      locale="en-US" [minFractionDigits]="2"></p-inputNumber>
+                                  </div>
+                                </div>
+
+                                <div class="col-12 col-lg-6">
+                                  <div class="p-field">
+                                    <label for="indicatorExpectedVal">Indicator Expected Value</label>
+                                    <p-inputNumber (ngModelChange)="assignSDG(selectedSDGs[i], data)" [(ngModel)]="data.indicatorExpectedVal" name="indicatorExpectedVal"
+                                      placeholder="Expected Value" inputId="locale-us" mode="decimal" locale="en-US"
+                                      [minFractionDigits]="2"></p-inputNumber>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="row p-2">
+                                <div class="col-12 col-lg-6">
+                                  <div class="p-field">
+                                    <label for="Relevance">Score</label>
+                                    <p-inputNumber (ngModelChange)="assignSDG(selectedSDGs[i], data)" inputId="integeronly" [(ngModel)]="data.score" [showButtons]="true" [min]="-1"
+                                      [max]="3" [step]="1" inputId="minmax-buttons" placeholder="Enter Score"
+                                      name="data.charData.score"></p-inputNumber>
+                                  </div>
+                                </div>
+
+                                <div class="col-12 col-lg-6">
+                                  <div class="p-field">
+                                    <label for="justification">Justification</label>
+                                    <input (ngModelChange)="assignSDG(selectedSDGs[i], data)" type="text" pInputText [(ngModel)]="data.justification" placeholder="Enter Justification"
+                                      name="justification" />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+            </div>
 
 
 

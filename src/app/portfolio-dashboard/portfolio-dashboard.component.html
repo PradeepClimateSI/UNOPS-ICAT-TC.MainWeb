@@ -70,8 +70,8 @@
   </div>
 
   <div class="row">
-    <div class="col-2 ">
-      <p>Select Portflolio : </p>
+    <div class="col-3 ">
+      <h6>Select Portflolio : </h6>
     </div>
 
     <div class="col-4 ">
@@ -80,7 +80,15 @@
         (onChange)="selectPortfolio($event);sdgResults($event)"></p-dropdown>
     </div>
 
-    <div class="col-6 ">
+
+    <div class="col-1">
+      <button class="btn btn-primary text-uppercase" type="button" (click)="goToFunction()" title="Clear Selected Portfolio">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+
+    <div class="col-4 ">
     </div>
   </div>
 </div>
@@ -215,7 +223,7 @@
     </div>
   </div>
 </div>
-<div class="row">
+<div class="row" [hidden]="!loadLast2graphs">
   <div class="col-md-6 col-12 d-flex align-items-stretch">
       <div class="p-grid p-fluid card m-3">
         <div class="row text-center ">

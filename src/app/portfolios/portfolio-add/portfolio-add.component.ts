@@ -96,6 +96,11 @@ export class PortfolioAddComponent implements OnInit {
   save( data : any){
     console.log("aa", data)
     console.log("werr", this.selectedValues)
+    console.log("kkkkkk", this.portfolio.portfolioId)
+
+    data.portfolioId = this.portfolio.portfolioId
+
+    console.log("aa22", data)
 
     this.dataObj = {
       formData : data,

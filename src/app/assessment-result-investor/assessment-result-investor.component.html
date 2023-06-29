@@ -18,11 +18,19 @@
             <!--    <p><strong>Assessment Approach</strong></p>
          <p><strong>Assessment Method</strong></p> -->
             <!--  <p><strong>Tool</strong></p> -->
-            <p><strong>Level of Implementation</strong></p>
+
+            <div class="mb-12" *ngIf="investerTool">
+              <p><strong>Level of Implementation</strong></p>
+            </div>
+
             <p><strong>Geographical Area Covered</strong></p>
 
             <p><strong>Sectors Covered</strong></p>
-            <p><strong>Impact Covered</strong></p>
+
+            <div class="mb-12" *ngIf="investerTool">
+              <p><strong>Impact Covered</strong></p>
+            </div>
+
             <p><strong>Assessment Period</strong></p>
           </div>
           <div style="flex-basis: 50%;">
@@ -32,11 +40,18 @@
          <p>{{assessment_method}}</p> -->
             <!--   <p>{{tool}}</p> -->
 
-            <p>{{levelofImplemetation}}</p>
+            <div class="mb-12" *ngIf="investerTool">
+              <p>{{levelofImplemetation}}</p>
+            </div>
+
             <p>{{geographicalAreasCovered}}</p>
 
             <p>{{sectorList.join(', ')}}</p>
-            <p>{{impactCoverList.join(', ')}}</p>
+
+            <div class="mb-12" *ngIf="investerTool">
+              <p>{{impactCoverList.join(', ')}}</p>
+            </div>
+
             <p>{{date1 | date:'yyyy-MM-dd'}} to {{date2 | date:'yyyy-MM-dd'}}</p>
           </div>
         </div>
@@ -45,7 +60,6 @@
 
 
 
-        <div *ngIf="load">
 
           <h6>Process of Change</h6><br>
           <p-table [value]="categoryDataArray" [tableStyle]="{ 'width': '50rem' }">
@@ -75,6 +89,79 @@
                 </tr>
               </ng-container>
               <br><br>
+
+            </ng-template>
+          </p-table>
+
+          <h6>Selected SDGs</h6><br>
+          <div *ngFor="let item of SDGsList; index as i">
+            <p> {{i+1}}) SDG {{item.sdg.number}} - {{item.sdg.name}} </p>
+          </div>
+
+          <br> <br>
+          <h6>Outcome of Change</h6><br>
+          <p-table [value]="categoryDataArrayOutcome" [tableStyle]="{ 'width': '50rem' }">
+            <ng-template pTemplate="header">
+              <tr>
+
+                <th> <strong style="color: black; font-size: large;">Characteristic</strong></th>
+                <th> <strong style="color: black;  font-size: large; ">Scale Score</strong></th>
+                <th> <strong style="color: black;  font-size: large; ">Sustained Score</strong></th>
+              </tr>
+            </ng-template>
+          </p-table>
+
+          <br><br>
+          <p-table [value]="categoryDataArrayOutcome" [tableStyle]="{ 'width': '50rem' }">
+            <ng-template pTemplate="body" let-data>
+              <tr>
+                <td><strong>{{ data.categoryName }}</strong></td>
+                <td><strong>{{ data.categoryScaleScore }}</strong></td>
+                <td><strong>{{ data.categorySustainedScore }}</strong></td>
+              </tr>
+              <ng-container *ngFor="let characteristic of data.characteristics">
+                <tr>
+                  <td>{{ characteristic.name }}</td>
+                  <td>{{ characteristic.scaleScore }}</td>
+                  <td>{{ characteristic.sustainedScore }}</td>
+                </tr>
+              </ng-container>
+              <br><br>
+            </ng-template>
+          </p-table>
+
+
+       <!--  <div *ngIf="load && investerTool">
+
+          <h6>Process of Change</h6><br>
+          <p-table [value]="categoryDataArray" [tableStyle]="{ 'width': '50rem' }">
+            <ng-template pTemplate="header">
+              <tr>
+
+                <th> <strong style="color: black; font-size: large;">Characteristic</strong></th>
+                <th> <strong style="color: black;  font-size: large; ">Relevance</strong></th>
+                <th> <strong style="color: black;  font-size: large; ">Likelihood</strong></th>
+              </tr>
+            </ng-template>
+          </p-table>
+
+          <br><br>
+          <p-table [value]="categoryDataArray" [tableStyle]="{ 'width': '50rem' }">
+            <ng-template pTemplate="body" let-data>
+              <tr>
+                <td><strong>{{ data.categoryName }}</strong></td>
+                <td><strong>{{ data.categotyRelevance }}</strong></td>
+                <td><strong>{{ data.categoryLikelihood }}</strong></td>
+              </tr>
+              <ng-container *ngFor="let characteristic of data.characteristics">
+                <tr>
+                  <td>{{ characteristic.name }}</td>
+                  <td>{{ characteristic.relevance }}</td>
+                  <td>{{ characteristic.likelihood }}</td>
+                </tr>
+              </ng-container>
+              <br><br>
+
             </ng-template>
           </p-table>
 
@@ -110,7 +197,8 @@
               <br><br>
             </ng-template>
           </p-table>
-        </div>
+        </div> -->
+
         <br><br>
 
       </div>

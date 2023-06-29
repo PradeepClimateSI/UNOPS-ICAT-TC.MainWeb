@@ -11,7 +11,8 @@
                             <label for="policy">Select Intervetion *</label>
                             <p-dropdown name="policy" #policy="ngModel" placeholder="Select Policy"
                                 [(ngModel)]="assessment.climateAction" appendTo="body" [options]="policies"
-                                optionLabel="policyName" [required]="true"></p-dropdown>
+                                optionLabel="policyName" [required]="true"
+                                [disabled]="isSavedAssessment"></p-dropdown>
                             <p class="info-message text-danger" *ngIf="
                                 !assessment.climateAction &&
                                 (fData.submitted || policy.touched)
@@ -25,6 +26,7 @@
                                 [(ngModel)]="assessment.assessmentType" [options]="assessment_types" optionLabel="name"
                                 optionValue="name" [required]="true"
                                 appendTo="body"
+                                [disabled]="isSavedAssessment"
                                 (onChange)="selectAssessmentType($event)"></p-dropdown>
                             <p class="info-message text-danger" *ngIf="
                                 !assessment.assessmentType &&
@@ -47,6 +49,7 @@
                                 appendTo="body"
                                 [options]="levelOfImplementation" optionLabel="name" optionValue="name"
                                 (ngModelChange)="onLevelofImplementationChange($event)"
+                                [disabled]="isSavedAssessment"
                                 [required]="true"></p-dropdown>
                             <p class="info-message text-danger" *ngIf="
                                 !investorAssessment.level_of_implemetation &&
@@ -65,6 +68,7 @@
                               [required]="true"
                               placeholder="Enter country"
                               [(ngModel)]="investorAssessment.national_country"
+                              [disabled]="isSavedAssessment"
                               name="country" />
                             <p class="info-message text-danger" *ngIf="
                                 !investorAssessment.national_country &&
@@ -83,6 +87,7 @@
                               #country="ngModel"
                               [required]="true"
                               placeholder="Enter region"
+                              [disabled]="isSavedAssessment"
                               [(ngModel)]="investorAssessment.subnational_region"
                               name="country" />
                             <p class="info-message text-danger" *ngIf="
@@ -107,6 +112,7 @@
                             [(ngModel)]="investorAssessment.geographical_areas_covered"
                             [options]="levelOfImplementation" optionLabel="name" optionValue="name"
                             [required]="true"
+                            [disabled]="isSavedAssessment"
                             appendTo="body">
                         </p-dropdown>
                         <p class="info-message text-danger" *ngIf="
@@ -123,6 +129,7 @@
                             [(ngModel)]="sectorArray" [options]="sectorList"
                             (ngModelChange)="onItemSelectSectors($event)" optionLabel="name"
                             [required]="true"
+                            [disabled]="isSavedAssessment"
                             appendTo="body">
                         </p-multiSelect>
                         <p class="info-message text-danger" *ngIf="
@@ -139,6 +146,7 @@
                             [(ngModel)]="impactArray" [options]="impactCovered"
                             (ngModelChange)="onItemSelectImpacts($event)" optionLabel="name"
                             [required]="true"
+                            [disabled]="isSavedAssessment"
                             appendTo="body">
                         </p-multiSelect>
                         <p class="info-message text-danger" *ngIf="
@@ -157,11 +165,12 @@
                                 <i class="pi pi-calendar"></i>
                             </span>
                             <p-calendar dateFormat="mm-dd-yy" inputId="date1" placeholder="From"
-                                [(ngModel)]="assessment.from" name="date1" #date1="ngModel" [required]="true" appendTo="body"></p-calendar>
+                                [(ngModel)]="assessment.from" name="date1" #date1="ngModel" [required]="true" appendTo="body"  [disabled]="isSavedAssessment"> 
+                               </p-calendar>
                             <span class="p-inputgroup-addon">to</span>
                             <p-calendar dateFormat="mm-dd-yy" inputId="date2" placeholder="To"
-                                [(ngModel)]="assessment.to" name="date2" #date2="ngModel" [required]="true" appendTo="body"></p-calendar>
-                               
+                                [(ngModel)]="assessment.to" name="date2" #date2="ngModel" [required]="true" appendTo="body" [disabled]="isSavedAssessment"></p-calendar>
+                                
                         </div>
                         <div class="col-12">
                             <p class="info-message text-danger" *ngIf="(date1.invalid || date2.invalid) && (fData.submitted || date1.touched || date2.touched)">
@@ -199,8 +208,12 @@
                             </div>
                             <div class="p-field p-2">
                                 <label for="Sectors Covered">Type of Investment</label>
-                                <p-dropdown name="investment_type" #investment_type="ngModel" placeholder="Select Assessment Method"
-                                    [(ngModel)]="investorAssessment.investment_type" [options]="investmentType"  appendTo="body"
+                                <p-dropdown 
+                                    name="investment_type" 
+                                    #investment_type="ngModel"
+                                     placeholder="Select type of investment"
+                                    [(ngModel)]="investorAssessment.investment_type"
+                                    [options]="investmentType"  appendTo="body"
                                     
                                     [disabled]="isSavedAssessment"
                                     optionLabel="name" optionValue="name"></p-dropdown>
@@ -235,14 +248,12 @@
         <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)" >
         <p-tabView  (onChange)="onMainTabChange($event) " [(activeIndex)]="activeIndexMain ">
 
-            <p-tabPanel  header="Process of Change">
+            <p-tabPanel  header="Process of Change" >
                 <!-- <div *ngFor="let characteristic of meth1Process"> -->
 
                 <p-tabView #tabView (onChange)="onCategoryTabChange($event, tabView)" [(activeIndex)]="activeIndex "    >
 
                     <p-tabPanel [header]="category.CategoryName" *ngFor="let category of processData" >
-
-
 
                         <div class="characteristic-Topic" *ngFor="let data of category.data; index as i">
                             <h6>{{i+1}}.{{data.characteristics.name}}</h6>
@@ -398,7 +409,7 @@
                                                                     name="data.charData.relevance_weight"
                                                                     (ngModelChange)="onRelevanceWeightChange(category.CategoryName,data.characteristics.name, $event)">
                                                                 </p-inputNumber>
-                                                             <div *ngIf="!chaCategoryTotalEqualsTo1[category.CategoryName]" style="color: red;">
+                                                             <div *ngIf="!chaCategoryTotalEqualsTo1[category.CategoryName] && initialRelevance !==0" style="color: red;">
                                                                   Relevance weights for characteristics of {{category.CategoryName}} category should sum up to 100%.
                                                                   <br>
                                                                 </div>
@@ -418,7 +429,7 @@
                                                                     (ngModelChange)="onLikelihoodWeightChange(category.CategoryName,data.characteristics.name, $event)">
                                                                 </p-inputNumber>
 
-                                                              <div *ngIf="!chaCategoryLikelihoodTotalEqualsTo1[category.CategoryName]" style="color: red;">
+                                                              <div *ngIf="!chaCategoryLikelihoodTotalEqualsTo1[category.CategoryName] && initialLikelihood !==0 " style="color: red;">
                                                                   Likelihood weights for characteristics of {{category.CategoryName}} category should sum up to 100%.
                                                                   <br>
                                                                 </div>
@@ -449,7 +460,7 @@
                 </p-tabView>
                 <!-- </div> -->
             </p-tabPanel>
-            <p-tabPanel header="Outcome of Change">
+            <p-tabPanel header="Outcome of Change" >
                 <p-tabView #tabView2 (onChange)="onCategoryTabChange($event, tabView2) " [(activeIndex)]="activeIndex2">
 
                     <p-tabPanel [header]="category.CategoryName" *ngFor="let category of outcomeData">
@@ -638,10 +649,28 @@
 
         <div  *ngIf="activeIndex2===3 && activeIndexMain===1" class="row justify-content-end">
             <div>
+                <div class=" col-md-10 offset-md-4" style="color:red" >
+                    <div class="col align-self-end" *ngIf="failedLikelihoodArray.length!=0">
+                       Please make sure to set Likelihood weights for   
+                       <span  *ngFor="let data of failedLikelihoodArray ; let last = last" class="array-item">
+                           {{data.category}}<span  *ngIf="!last">, </span>
+                        </span >should sum up to 100%.
+
+                    </div>
+                    <div class="col align-self-end" *ngIf="failedRelevanceArray.length!=0">
+                        Please make sure to set Relevance weights for <span  *ngFor="let data of failedRelevanceArray ; let last = last" class="array-item">
+                            {{data.category}} <span  *ngIf="!last">, </span>
+                         </span > should sum up to 100%.
+                          
+                        
+                    </div>
+                </div>
+                
+               
 
                 <div
                 class="d-flex flex-row-reverse mt-20 ">
-                    <button class="btn btn-primary text-uppercase" type="submit" >
+                    <button class="btn btn-primary text-uppercase" type="submit" [disabled]="failedLikelihoodArray.length!=0 ||failedRelevanceArray.length!=0">
                         {{approach==1 ?'Calculate & Check results': (approach==2 ?'Send to Data Collection Team':'')}} 
                     </button>
                 </div>
@@ -653,7 +682,8 @@
 
                 <div
                 class="d-flex flex-row-reverse mt-20 ">
-                    <div class="btn btn-primary text-uppercase" (click)="next()" >
+                    <div class="btn btn-primary text-uppercase" (click)="next()" [class.disabled]="(!isLikelihoodDisabled || !isRelavanceDisabled)">
+                   
                        Next
                     </div>
                 </div>
