@@ -87,18 +87,18 @@
             <td>{{ allData.assess.climateAction.typeofAction }}</td>
             <td>{{ allData.assess.climateAction.projectStatus.name }}</td>
             <td class="clickable-row" (click)="handleClick(allData.process[0])"
-              [ngClass]="getColorClass(allData.process[0].likelihoodAverage)">{{ allData.process[0].likelihoodAverage }}
+              [ngClass]="getColorClass2(allData.process[0].likelihoodAverage)">{{ allData.process[0].likelihoodAverage }}
             </td>
             <td class="clickable-row" (click)="handleClick(allData.process[1])"
-              [ngClass]="getColorClass(allData.process[1].likelihoodAverage)">{{ allData.process[1].likelihoodAverage }}
+              [ngClass]="getColorClass2(allData.process[1].likelihoodAverage)">{{ allData.process[1].likelihoodAverage }}
             </td>
             <td class="clickable-row" (click)="handleClick(allData.process[2])"
-              [ngClass]="getColorClass(allData.process[2].likelihoodAverage)">{{ allData.process[2].likelihoodAverage }}
+              [ngClass]="getColorClass2(allData.process[2].likelihoodAverage)">{{ allData.process[2].likelihoodAverage }}
             </td>
             <td class="clickable-row" (click)="handleClick(allData.process[3])"
-              [ngClass]="getColorClass(allData.process[3].likelihoodAverage)">{{ allData.process[3].likelihoodAverage }}
+              [ngClass]="getColorClass2(allData.process[3].likelihoodAverage)">{{ allData.process[3].likelihoodAverage }}
             </td>
-            <td [ngClass]="getColorClass(calculateAverage(allData.process.slice(0, 4)))">{{
+            <td [ngClass]="getColorClass2(calculateAverage(allData.process.slice(0, 4)))">{{
               calculateAverage(allData.process.slice(0, 4)) }}</td>
           </tr>
         </ng-template>
@@ -215,12 +215,12 @@
             <td>{{ allData.assess.climateAction.typeofAction }}</td>
             <td>{{ allData.assess.climateAction.projectStatus.name }}</td>
             <td class="clickable-row" (click)="handleClick3(allData.scale[0])"
-              [ngClass]="getColorClass2(allData.scale[0].scoreAverage)">{{ allData.scale[0].scoreAverage }}
+              [ngClass]="getColorClass3(allData.scale[0].scoreAverage)">{{ allData.scale[0].scoreAverage }}
             </td>
             <td class="clickable-row" (click)="handleClick3(allData.scale[1])"
-              [ngClass]="getColorClass2(allData.scale[1].scoreAverage)">{{ allData.scale[1].scoreAverage }}
+              [ngClass]="getColorClass3(allData.scale[1].scoreAverage)">{{ allData.scale[1].scoreAverage }}
             </td>
-            <td [ngClass]="getColorClass2(calculateAverageScale(allData.scale.slice(0, 2)))">{{
+            <td [ngClass]="getColorClass3(calculateAverageScale(allData.scale.slice(0, 2)))">{{
               calculateAverageScale(allData.scale.slice(0, 2)) }}</td>
           </tr>
         </ng-template>
@@ -269,12 +269,12 @@
             <td>{{ allData.assess.climateAction.typeofAction }}</td>
             <td>{{ allData.assess.climateAction.projectStatus.name }}</td>
             <td class="clickable-row" (click)="handleClick4(allData.sustained[0])"
-              [ngClass]="getColorClass2(allData.sustained[0].scoreAverage)">{{ allData.sustained[0].scoreAverage }}
+              [ngClass]="getColorClass3(allData.sustained[0].scoreAverage)">{{ allData.sustained[0].scoreAverage }}
             </td>
             <td class="clickable-row" (click)="handleClick4(allData.sustained[1])"
-              [ngClass]="getColorClass2(allData.sustained[1].scoreAverage)">{{ allData.sustained[1].scoreAverage }}
+              [ngClass]="getColorClass3(allData.sustained[1].scoreAverage)">{{ allData.sustained[1].scoreAverage }}
             </td>
-            <td [ngClass]="getColorClass2(calculateAverageSustained(allData.sustained.slice(0, 2)))">{{
+            <td [ngClass]="getColorClass3(calculateAverageSustained(allData.sustained.slice(0, 2)))">{{
               calculateAverageSustained(allData.sustained.slice(0, 2)) }}</td>
           </tr>
         </ng-template>
@@ -313,12 +313,11 @@
 
 
        <br><br>
-     <!--   <div class="container pl-20 pr-20">
+  <div class="container pl-20 pr-20">
         <div class="d-flex flex-row-reverse mt-2 mb-2">
           <button (click)="Back()" class="btn btn-primary btn-block text-uppercase">Back</button> &nbsp;&nbsp;
         </div>
-      </div>
- -->
+
     </div>
   </div>
 </div>
@@ -360,7 +359,7 @@
     <ng-template pTemplate="body" let-clickData>
       <tr>
         <td>{{ clickData.name }}</td>
-        <td [ngClass]="getColorClass(clickData.likelihood)">{{ clickData.likelihood }}</td>
+        <td [ngClass]="getColorClass2(clickData.likelihood)">{{ clickData.likelihood }}</td>
       </tr>
     </ng-template>
   </p-table>
@@ -431,7 +430,7 @@
     <ng-template pTemplate="body" let-clickData3>
       <tr>
         <td>{{ clickData3.name }}</td>
-        <td [ngClass]="getColorClass2(clickData3.score)">{{ clickData3.score }}</td>
+        <td [ngClass]="getColorClass3(clickData3.score)">{{ clickData3.score }}</td>
       </tr>
     </ng-template>
   </p-table>
@@ -467,7 +466,7 @@
     <ng-template pTemplate="body" let-clickData4>
       <tr>
         <td>{{ clickData4.name }}</td>
-        <td [ngClass]="getColorClass2(clickData4.score)">{{ clickData4.score }}</td>
+        <td [ngClass]="getColorClass3(clickData4.score)">{{ clickData4.score }}</td>
       </tr>
     </ng-template>
   </p-table>
@@ -475,9 +474,9 @@
 
 <!-- =============================================================================================================================== -->
 
-<!-- <div class="container pl-20 pr-20">
+ <div class="container pl-20 pr-20">
   <div class="d-flex flex-row-reverse mt-2 mb-2">
     <button (click)="makePDF()" class="btn btn-primary btn-block text-uppercase">Download as PDF</button> &nbsp;&nbsp;
 
   </div>
-</div> -->
+</div>

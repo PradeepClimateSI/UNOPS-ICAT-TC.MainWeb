@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
-import { AssessmentCMDetailControllerServiceProxy, ClimateAction, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { AssessmentCMDetailControllerServiceProxy, ClimateAction, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-carbon-market-dashboard',
@@ -13,6 +13,7 @@ export class CarbonMarketDashboardComponent implements OnInit {
     private projectProxy: ProjectControllerServiceProxy,
     private assessmentCMProxy:AssessmentCMDetailControllerServiceProxy,
     private methassess : MethodologyAssessmentControllerServiceProxy,
+    private investorProxy: InvestorToolControllerServiceProxy,
   ) { }
 
  // @ViewChild('canvas', { static: false }) canvas: ElementRef;
@@ -42,12 +43,18 @@ CMPrerequiste: {
   count:number
   }[];
 
+  sectorCount: {
+    sector:string,
+    count:number
+    }[];
 
   CMBarChart:any =[];
   pieChartCM:any=[];
   averageTCValue:any;
 
   tool : string;
+
+  pieChart2:any=[];
 
   ngOnInit(): void {
     // this.averageTCValue =58.05;
@@ -130,11 +137,104 @@ CMPrerequiste: {
       this.viewPieChartCM();
     })
 
+    this.investorProxy.getSectorCountByTool(this.tool).subscribe((res: any) => {
+      this.sectorCount = res
+      console.log("sectorcount",this.sectorCount)
+      this.viewPieChart()
+    });
+
   }
 
- /*  ngAfterViewInit(): void {
-    this.viewMainChart();
-  } */
+  viewPieChart(){
+    const labels = this.sectorCount.map((item) => item.sector);
+    let counts:number[] = this.sectorCount.map((item) => item.count);
+    const total = counts.reduce((acc, val) => acc + val, 0);
+    const percentages = counts.map(count => ((count / total) * 100).toFixed(2));
+    this.pieChart2 =new Chart('pieChart2', {
+      type: 'pie',
+
+      data: {
+        labels: labels,
+        datasets: [{
+          data: counts,
+          backgroundColor: [
+            'rgba(153, 102, 255, 1)',
+            'rgba(75, 192, 192,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(123, 122, 125, 1)',
+            'rgba(255, 99, 132, 1)',
+            'rgba(255, 205, 86, 1)',
+            'rgba(255, 99, 132, 1)',
+
+          ],
+
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins:{
+          legend:{
+            position: 'bottom',
+            labels: {
+              padding: 20
+            }
+          },
+          datalabels: {
+            color: '#fff',
+            font: {
+              size: 12
+            },
+            formatter: (value, ctx) => {
+              const label = ctx.chart.data.labels![ctx.dataIndex];
+              const percentage = percentages[ctx.dataIndex];
+              return `${label}: ${value} (${percentage}%)`;
+            },
+
+          },
+          tooltip:{
+            position:'average',
+            boxWidth:10,
+            callbacks:{
+
+              label:(ctx)=>{
+                // console.log(ctx)
+                // let sum = ctx.dataset._meta[0].total;
+                // let percentage = (value * 100 / sum).toFixed(2) + "%";
+                // return percentage;
+                let sum = 0;
+                let array =counts
+                array.forEach((number) => {
+                  sum += Number(number);
+                });
+                // console.log(sum, counts[ctx.dataIndex])
+                let percentage = (counts[ctx.dataIndex]*100 / sum).toFixed(2)+"%";
+
+                return[
+                  `Sector: ${labels[ctx.dataIndex]}`,
+                  `Count: ${counts[ctx.dataIndex]}`,
+                  `Percentage: ${percentage}`
+                ];
+               }
+            },
+            backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
+              titleFont: {
+                size: 14,
+                weight: 'bold'
+              },
+              bodyFont: {
+                size: 14
+              },
+              displayColors: true, // Hide the color box in the tooltip
+              bodyAlign: 'left'
+          }
+       }
+
+      },
+
+  });
+
+  }
 
   viewMainChart(){
    // const canvas = this.canvas.nativeElement.getContext('2d');

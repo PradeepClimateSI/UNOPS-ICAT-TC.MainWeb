@@ -152,7 +152,7 @@ export class PortfolioResultComponent implements OnInit {
        //const averageSustainedScore = averages[name].sustainedScore / averages[name].count;
 
        result.push({
-        score: averageScaleScore.toFixed(3),
+        score: averageScaleScore.toFixed(0),
         // sustainedScore: '-',
          name: name
        });
@@ -187,17 +187,17 @@ export class PortfolioResultComponent implements OnInit {
 
         result2.push({
          // scaleScore: '-',
-          score: averageSustainedScore2.toFixed(3),
+          score: averageSustainedScore2.toFixed(0),
           name: name
         });
       }
 
       console.log("resulttt22", result2);
 
-     /*  assessment.scale[1].characteristics = []
+      assessment.scale[1].characteristics = []
       assessment.scale[1].characteristics = result
       assessment.sustained[1].characteristics = []
-      assessment.sustained[1].characteristics = result2 */
+      assessment.sustained[1].characteristics = result2
 
      }
 
@@ -212,56 +212,77 @@ export class PortfolioResultComponent implements OnInit {
   calculateAverage(data: any[]) {
     const sum = data.reduce((accumulator, item) => accumulator + parseFloat(item.likelihoodAverage), 0);
     const average = sum / data.length;
-    return average.toFixed(3);
+    return average.toFixed(0);
   }
 
   calculateAverageRelevance(data: any[]) {
     const sum = data.reduce((accumulator, item) => accumulator + parseFloat(item.relevanceAverage), 0);
     const average = sum / data.length;
-    return average.toFixed(3);
+    return average.toFixed(0);
   }
 
   calculateAverageScale(data: any[]) {
     const sum = data.reduce((accumulator, item) => accumulator + parseFloat(item.scoreAverage), 0);
     const average = sum / data.length;
-    return average.toFixed(3);
+    return average.toFixed(0);
   }
 
   calculateAverageSustained(data: any[]) {
     const sum = data.reduce((accumulator, item) => accumulator + parseFloat(item.scoreAverage), 0);
     const average = sum / data.length;
-    return average.toFixed(3);
+    return average.toFixed(0);
   }
 
 
   getColorClass(value: any) {
     let value2 = Number(value)
-    if (value2 >= 0 && value2 < 1) {
+    if (value2 == 0) {
       return 'color-class-1';
-    } else if (value2 >= 1 && value2 < 2) {
+    } else if (value2 == 1) {
       return 'color-class-2';
-    } else if (value2 >= 2 && value2 < 3) {
+    } else if (value2 == 2 ) {
       return 'color-class-3';
-    } else if (value2 >= 3 && value2 <= 4) {
-      return 'color-class-4';
-    } else {
+   } else {
       return 'default-color-class';
     }
   }
 
   getColorClass2(value: any) {
     let value2 = Number(value)
-    if (value2 >= -1 && value2 < 0) {
-      return 'color-class-5';
-    } else if (value2 >= 0 && value2 < 1) {
-      return 'color-class-6';
-    } else if (value2 >= 1 && value2 < 2) {
-      return 'color-class-7';
-    } else if (value2 >= 2 && value2 < 3) {
-      return 'color-class-8';
-    }  else if (value2 >= 3 && value2 <= 4) {
-      return 'color-class-9';
-    } else {
+    if (value2 == 0) {
+      return 'color-class-21';
+    } else if (value2 == 1) {
+      return 'color-class-22';
+    } else if (value2 == 2) {
+      return 'color-class-23';
+    }
+    else if (value2 == 3) {
+      return 'color-class-24';
+    }
+    else if (value2 == 4) {
+      return 'color-class-25';
+    }
+    else {
+      return 'default-color-class';
+    }
+  }
+
+  getColorClass3(value: any) {
+    let value2 = Number(value)
+    if (value2 == -1) {
+      return 'color-class-31';
+    } else if (value2 == 0) {
+      return 'color-class-32';
+    } else if (value2 == 1) {
+      return 'color-class-33';
+    }
+    else if (value2 == 2) {
+      return 'color-class-34';
+    }
+    else if (value2 == 3) {
+      return 'color-class-35';
+    }
+    else {
       return 'default-color-class';
     }
   }
