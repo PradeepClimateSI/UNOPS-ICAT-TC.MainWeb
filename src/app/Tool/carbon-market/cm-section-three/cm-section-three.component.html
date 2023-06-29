@@ -56,10 +56,21 @@
                                 </div>
                                 <div class="row col-6">
                                     <div class="col-4">Justification</div>
-                                    <div class="col-8">
+                                    <div class="col-6">
                                         <input type="text" [name]="'justification'+char.id" #tboundrary="ngModel"
                                             [(ngModel)]="char.comment" class="form-control" placeholder="Enter Boundary"
                                             required />
+                                    </div>
+                                    <div class="col-2">
+                                        <!-- <button (click)="upload(char, category)">Upload</button> -->
+                                        <!-- <p>{{char.filePath}}</p> -->
+                                        <p-fileUpload name="demo[]" [url]="uploadUrl" (onUpload)="onUpload($event,char)" [multiple]="true" accept="image/*" [maxFileSize]="1000000">
+                                            <ng-template pTemplate="content">
+                                                <ul *ngIf="uploadedFiles?.length">
+                                                    <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{ file.size }} bytes</li>
+                                                </ul>
+                                            </ng-template>
+                                        </p-fileUpload>
                                     </div>
                                 </div>
                             </div>

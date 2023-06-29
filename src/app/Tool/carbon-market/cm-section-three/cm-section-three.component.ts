@@ -1,7 +1,14 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { environment } from 'environments/environment';
 import { TabView } from 'primeng/tabview';
 import { CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, MethodologyAssessmentControllerServiceProxy, OutcomeCategory } from 'shared/service-proxies/service-proxies';
 
+
+interface UploadEvent {
+  originalEvent: HttpResponse<string[]>;
+  files: File[];
+}
 @Component({
   selector: 'app-cm-section-three',
   templateUrl: './cm-section-three.component.html',
@@ -38,11 +45,15 @@ export class CmSectionThreeComponent implements OnInit {
     }
   };
   sdgsToLoop: SDG[]
+uploadedFiles: any = [];
+uploadUrl: string;
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
     private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy
-  ) { }
+  ) { 
+    this.uploadUrl = environment.baseUrlAPI + '/cm-assessment-question/upload-file'
+  }
 
   async ngOnInit(): Promise<void> {
     this.types = [
@@ -179,35 +190,54 @@ export class CmSectionThreeComponent implements OnInit {
 
   async submit() {
     console.log(this.results)
-    for await (let sd of this.selectedSDGscale) {
-      sd.result.forEach(res => {
-        if (res.selectedScore){
-          this.results.push(res)
-        }
-      })
-      // this.results.push(...sd.result)
-    }
-    for await (let sd of this.selectedSDGsustained) {
-      sd.result.forEach(res => {
-        if (res.selectedScore){
-          this.results.push(res)
-        }
-      })
-      // this.results.push(...sd.result)
-    }
-    for await (let item of this.outcome) {
-      if (item.type === 'GHG'){
-        item.results.forEach((res:any) => {
-          res.type = this.approach
+    if (this.selectedSDGscale.length > 0){
+      for await (let sd of this.selectedSDGscale) {
+        sd.result.forEach(res => {
           if (res.selectedScore){
             this.results.push(res)
           }
         })
-        // this.results.push(...item.results)
+        // this.results.push(...sd.result)
+      }
+    }
+
+    if (this.selectedSDGsustained.length > 0){
+      for await (let sd of this.selectedSDGsustained) {
+        sd.result.forEach(res => {
+          if (res.selectedScore){
+            this.results.push(res)
+          }
+        })
+        // this.results.push(...sd.result)
+      }
+    }
+
+    if (this.outcome.length > 0){
+      for await (let item of this.outcome) {
+        if (item.type === 'GHG'){
+          item.results.forEach((res:any) => {
+            res.type = this.approach
+            if (res.selectedScore){
+              this.results.push(res)
+            }
+          })
+          // this.results.push(...item.results)
+        }
       }
     }
     console.log(this.results)
     this.onSubmit.emit(this.results)
+  }
+
+  onUpload(event:UploadEvent, res: CMResultDto) {
+    console.log(event.originalEvent.body)
+    if(event.originalEvent.body){
+
+      // this.savedDocs = event.originalEvent.body;
+
+    }
+    let path = 'File Path'
+    res.filePath = path
   }
 }
 

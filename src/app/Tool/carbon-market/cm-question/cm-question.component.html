@@ -26,3 +26,15 @@
             [(ngModel)]="comment" (change)="onSelectAnswer($event, 'COMMENT')"></textarea>
     </div>
 </div>
+<div class="row p-2">
+    <div class="col-4"></div>
+    <div class="col-8">
+        <p-fileUpload name="files" [url]="uploadUrl" (onUpload)="onUpload($event,'FILE')" [multiple]="true" accept="image/*" [maxFileSize]="1000000">
+            <ng-template pTemplate="content">
+                <ul *ngIf="uploadedFiles.length">
+                    <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{ file.size }} bytes</li>
+                </ul>
+            </ng-template>
+        </p-fileUpload>
+    </div>
+</div>

@@ -104,6 +104,8 @@ export class CmSectionComponent implements OnInit {
     console.log("Indirectt222", e.type)
     if (e.type === 'COMMENT'){
       this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['comment'] = e.comment
+    } else if (e.type === 'FILE'){
+      this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['file'] = e.path
     } else {
       if (e.type === 'INDIRECT'){
         this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['institution'] = e.answer
@@ -228,6 +230,7 @@ export class CmSectionComponent implements OnInit {
           item.comment = q.comment
           item.question = q.question
           item.type = q.type
+          item.filePath = q.file
           result.result.push(item)
         })
       })
