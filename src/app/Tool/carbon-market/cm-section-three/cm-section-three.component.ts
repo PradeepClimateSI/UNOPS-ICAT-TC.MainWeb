@@ -23,8 +23,8 @@ export class CmSectionThreeComponent implements OnInit {
   @Output() onSubmit = new EventEmitter()
 
   comment: any;
-  SDGscale: SDG[] = [{name: 'No poverty', code: 'NO_POVERTY', result: []}, {name: 'Food', code: 'FOOD', result: []}];
-  SDGsustained: SDG[] = [{name: 'No poverty', code: 'NO_POVERTY', result: []}, {name: 'Food', code: 'FOOD', result: []}];
+  SDGs: SDG[] 
+  // SDGsustained: SDG[] = [{name: 'No poverty', code: 'NO_POVERTY', result: []}, {name: 'Food', code: 'FOOD', result: []}];
   activeIndex: number = 0;
   processData: any;
   outcomeData: any;
@@ -37,8 +37,8 @@ export class CmSectionThreeComponent implements OnInit {
   selectedCategory: any
   questions: any = {}
   outcome: any = []
-  selectedSDGscale: SDG[];
-  selectedSDGsustained: SDG[];
+  selectedSDGs: SDG[];
+  // selectedSDGsustained: SDG[];
   results: CMResultDto[] = []
   activeIndex2: number = 0;
   sdgsToLoop: SDG[]
@@ -48,6 +48,9 @@ export class CmSectionThreeComponent implements OnInit {
   GHG_sustained_score: SelectedScoreDto[]
   SDG_scale_score: SelectedScoreDto[]
   SDG_sustained_score: SelectedScoreDto[]
+  SDGScore: any = 0;
+  SDGWeight: any = '10%';
+  GHGScore: any;
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -63,6 +66,10 @@ export class CmSectionThreeComponent implements OnInit {
       { name: 'Outcome of Change', code: 'outcome' }
     ]
     this.GHG_scale_score = this.masterDataService.GHG_scale_score
+    this.GHG_sustained_score = this.masterDataService.GHG_sustained_score
+    this.SDG_scale_score = this.masterDataService.SDG_scale_score
+    this.SDG_sustained_score = this.masterDataService.SDG_sustained_score
+    this.SDGs = this.masterDataService.SDGs
     this.categories = await this.cMQuestionControllerServiceProxy.getUniqueCharacterisctics().toPromise()
     this.selectedType = this.types[0]
     this.selectedCategory = this.categories[this.selectedType.code][0]
@@ -90,49 +97,67 @@ export class CmSectionThreeComponent implements OnInit {
     this.categoryTabIndex =event.index;
   }
 
-  onSelectSDGScale(event: any, category: OutcomeCategory) {
-    let results: CMResultDto[] = []
-    category.results.forEach(ch => {
-      let res = new CMResultDto()
-      res.characteristic = ch.characteristic
-      res.type = this.approach
-      results.push(res) 
+  onSelectSDG(event: any) {
+    let scaleResults: CMResultDto[] = []
+    let sustainResults: CMResultDto[] = []
+    this.outcome.forEach((category: { type: string; results: any[]; method: string; }) => {
+      if (category.type === 'SD'){
+        category.results.forEach(ch => {
+          let res = new CMResultDto()
+          res.characteristic = ch.characteristic
+          res.type = this.approach
+          if (category.method === 'SCALE') scaleResults.push(res)
+          if (category.method === 'SUSTAINED') sustainResults.push(res)
+        })
+      }
     })
-    this.selectedSDGscale = this.selectedSDGscale.map(sdg => {
-      let res: CMResultDto[] = results.map((o: { [x: string]: any; }) => {
+    this.selectedSDGs = this.selectedSDGs.map(sdg => {
+      let res: CMResultDto[] = scaleResults.map((o:any) => {
         let _r = new CMResultDto()
         Object.keys(_r).forEach(e => {
           _r[e] = o[e]
         })
         _r.selectedSdg = sdg.code
+        _r.isSDG = true
         return _r
       })
-      sdg.result = res
+      let res2: CMResultDto[] = sustainResults.map((o:any) => {
+        let _r = new CMResultDto()
+        Object.keys(_r).forEach(e => {
+          _r[e] = o[e]
+        })
+        _r.selectedSdg = sdg.code
+        _r.isSDG = true
+        return _r
+      })
+      sdg.scaleResult = res
+      sdg.sustainResult = res2
       return sdg
     })
+    console.log(this.selectedSDGs)
   }
 
-  onSelectSDGSustained(event: any, category: OutcomeCategory){
-    let results: CMResultDto[] = []
-    category.results.forEach(ch => {
-      let res = new CMResultDto()
-      res.characteristic = ch.characteristic
-      res.type = this.approach
-      results.push(res) 
-    })
-    this.selectedSDGsustained = this.selectedSDGsustained.map(sdg => {
-      let res: CMResultDto[] = results.map((o: { [x: string]: any; }) => {
-        let _r = new CMResultDto()
-        Object.keys(_r).forEach(e => {
-          _r[e] = o[e]
-        })
-        _r.selectedSdg = sdg.code
-        return _r
-      })
-      sdg.result = res
-      return sdg
-    })
-  }
+  // onSelectSDGSustained(event: any, category: OutcomeCategory){
+  //   let results: CMResultDto[] = []
+  //   category.results.forEach(ch => {
+  //     let res = new CMResultDto()
+  //     res.characteristic = ch.characteristic
+  //     res.type = this.approach
+  //     results.push(res) 
+  //   })
+  //   this.selectedSDGsustained = this.selectedSDGsustained.map(sdg => {
+  //     let res: CMResultDto[] = results.map((o: { [x: string]: any; }) => {
+  //       let _r = new CMResultDto()
+  //       Object.keys(_r).forEach(e => {
+  //         _r[e] = o[e]
+  //       })
+  //       _r.selectedSdg = sdg.code
+  //       return _r
+  //     })
+  //     sdg.result = res
+  //     return sdg
+  //   })
+  // }
 
   onCategoryTabChange2($event: any) {
     throw new Error('Method not implemented.');
@@ -140,14 +165,16 @@ export class CmSectionThreeComponent implements OnInit {
 
   next() {
     console.log(this.outcome)
+
+    console.log(this.selectedSDGs)
     
     if (this.activeIndexMain === 1) {
       this.activeIndex2 = this.activeIndex2 + 1;
     }
-    if (this.activeIndex === this.categories.process.categories.length-1) {
+    if (this.activeIndex === this.categories.process.length-1) {
       this.activeIndexMain = 1;
     }
-    if (this.activeIndex <= this.categories.process.categories.length-2 && this.activeIndex >= 0 && this.activeIndexMain === 0) {
+    if (this.activeIndex <= this.categories.process.length-2 && this.activeIndex >= 0 && this.activeIndexMain === 0) {
       this.activeIndex = this.activeIndex + 1;
     }
     if (this.activeIndexMain === 0){
@@ -200,9 +227,14 @@ export class CmSectionThreeComponent implements OnInit {
 
   async submit() {
     console.log(this.results)
-    if (this.selectedSDGscale?.length > 0){
-      for await (let sd of this.selectedSDGscale) {
-        sd.result.forEach(res => {
+    if (this.selectedSDGs?.length > 0){
+      for await (let sd of this.selectedSDGs) {
+        sd.scaleResult.forEach(res => {
+          if (res.selectedScore){
+            this.results.push(res)
+          }
+        })
+        sd.sustainResult.forEach(res => {
           if (res.selectedScore){
             this.results.push(res)
           }
@@ -211,16 +243,16 @@ export class CmSectionThreeComponent implements OnInit {
       }
     }
 
-    if (this.selectedSDGsustained?.length > 0){
-      for await (let sd of this.selectedSDGsustained) {
-        sd.result.forEach(res => {
-          if (res.selectedScore){
-            this.results.push(res)
-          }
-        })
-        // this.results.push(...sd.result)
-      }
-    }
+    // if (this.selectedSDGsustained?.length > 0){
+    //   for await (let sd of this.selectedSDGsustained) {
+    //     sd.result.forEach(res => {
+    //       if (res.selectedScore){
+    //         this.results.push(res)
+    //       }
+    //     })
+    //     // this.results.push(...sd.result)
+    //   }
+    // }
 
     if (this.outcome?.length > 0){
       for await (let item of this.outcome) {
@@ -261,5 +293,6 @@ export interface OutcomeResult {
 export interface SDG {
   name: string
   code: string
-  result: CMResultDto[]
+  scaleResult: CMResultDto[]
+  sustainResult: CMResultDto[]
 }

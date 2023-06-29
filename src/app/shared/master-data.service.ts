@@ -38,8 +38,7 @@ export class MasterDataService {
   private _GHG_sustained_score: SelectedScoreDto[] = []
   private _SDG_scale_score: SelectedScoreDto[] = []
   private _SDG_sustained_score: SelectedScoreDto[] = []
-  private _SDG_scale: SDG[] = []
-  private _SDG_sustained: SDG[] = []
+  private _SDGs: SDG[] = []
 
 
 
@@ -268,43 +267,24 @@ export class MasterDataService {
       {name: '0 - No expected impact impact for the selected SDG in the activity area', code: '0', value: 0},
       {name: '-1 - Impact expected to reverse over time', code: '-1', value: -1},
     ] 
-    this.SDG_scale = [
-      {name: '1 - No poverty', code: 'NO_POVERTY', result: []},
-      {name: '2 - Zero hunger', code: 'ZERO_HUNGER', result: []},
-      {name: '3 - Good health and well-being', code: 'GOOD_HEALTH_AND_WELL_BEING', result: []},
-      {name: '4 - Quality education', code: 'QULITY_EDUCATION', result: []},
-      {name: '5 - Gender equality', code: 'GENDER_EQUALITY', result: []},
-      {name: '6 - Clean water and sanitation', code: 'CLEAN_WATER_AND_SANITATION', result: []},
-      {name: '7 - Affordable and clean energy', code: 'AFFORDABLE_AND_CLEAN_ENERGY', result: []},
-      {name: '8- Decent work and economic growth', code: 'DECENT_WORK_AND_ECONOMIC_GROWTH', result: []},
-      {name: '9 - Industry innovation and infrastructure', code: 'INDUSTRY_INNOVATION_AND_INFRASTRUCTURE', result: []},
-      {name: '10 - Reduced inequalities', code: 'REDUCED_INEQUALITIES', result: []},
-      {name: '11 - Sustainable cities and communities', code: 'SUSTAINABLE_CITIES_AND_COMMUNIIES', result: []},
-      {name: '12 - Responsible consumption and production', code: 'RESPONSIBLE_CONSUMPTION_AND_PRODUCTION', result: []},
-      {name: '13 - Climate action', code: 'CLIMATE_ACTION', result: []},
-      {name: '14 - Life below water', code: 'LIFE_BELOW_WATER', result: []},
-      {name: '15 - Life on land', code: 'LIFE_ON_LAND', result: []},
-      {name: '16 - Peace, justice and strong institutions', code: 'PEACE_JUSTICE_AND_STRING_INSTITUTIONS', result: []},
-      {name: '17 - Partnerships for the goals', code: 'PARTNERSHIPS_FOR_THE_GOALS', result: []}
-    ] 
-    this.SDG_sustained = [
-      {name: '1 - No poverty', code: 'NO_POVERTY', result: []},
-      {name: '2 - Zero hunger', code: 'ZERO_HUNGER', result: []},
-      {name: '3 - Good health and well-being', code: 'GOOD_HEALTH_AND_WELL_BEING', result: []},
-      {name: '4 - Quality education', code: 'QULITY_EDUCATION', result: []},
-      {name: '5 - Gender equality', code: 'GENDER_EQUALITY', result: []},
-      {name: '6 - Clean water and sanitation', code: 'CLEAN_WATER_AND_SANITATION', result: []},
-      {name: '7 - Affordable and clean energy', code: 'AFFORDABLE_AND_CLEAN_ENERGY', result: []},
-      {name: '8- Decent work and economic growth', code: 'DECENT_WORK_AND_ECONOMIC_GROWTH', result: []},
-      {name: '9 - Industry innovation and infrastructure', code: 'INDUSTRY_INNOVATION_AND_INFRASTRUCTURE', result: []},
-      {name: '10 - Reduced inequalities', code: 'REDUCED_INEQUALITIES', result: []},
-      {name: '11 - Sustainable cities and communities', code: 'SUSTAINABLE_CITIES_AND_COMMUNIIES', result: []},
-      {name: '12 - Responsible consumption and production', code: 'RESPONSIBLE_CONSUMPTION_AND_PRODUCTION', result: []},
-      {name: '13 - Climate action', code: 'CLIMATE_ACTION', result: []},
-      {name: '14 - Life below water', code: 'LIFE_BELOW_WATER', result: []},
-      {name: '15 - Life on land', code: 'LIFE_ON_LAND', result: []},
-      {name: '16 - Peace, justice and strong institutions', code: 'PEACE_JUSTICE_AND_STRING_INSTITUTIONS', result: []},
-      {name: '17 - Partnerships for the goals', code: 'PARTNERSHIPS_FOR_THE_GOALS', result: []}
+    this.SDGs= [
+      {name: '1 - No poverty', code: 'NO_POVERTY', scaleResult: [], sustainResult: []},
+      {name: '2 - Zero hunger', code: 'ZERO_HUNGER', scaleResult: [], sustainResult: []},
+      {name: '3 - Good health and well-being', code: 'GOOD_HEALTH_AND_WELL_BEING', scaleResult: [], sustainResult: []},
+      {name: '4 - Quality education', code: 'QULITY_EDUCATION', scaleResult: [], sustainResult: []},
+      {name: '5 - Gender equality', code: 'GENDER_EQUALITY', scaleResult: [], sustainResult: []},
+      {name: '6 - Clean water and sanitation', code: 'CLEAN_WATER_AND_SANITATION', scaleResult: [], sustainResult: []},
+      {name: '7 - Affordable and clean energy', code: 'AFFORDABLE_AND_CLEAN_ENERGY', scaleResult: [], sustainResult: []},
+      {name: '8- Decent work and economic growth', code: 'DECENT_WORK_AND_ECONOMIC_GROWTH', scaleResult: [], sustainResult: []},
+      {name: '9 - Industry innovation and infrastructure', code: 'INDUSTRY_INNOVATION_AND_INFRASTRUCTURE', scaleResult: [], sustainResult: []},
+      {name: '10 - Reduced inequalities', code: 'REDUCED_INEQUALITIES', scaleResult: [], sustainResult: []},
+      {name: '11 - Sustainable cities and communities', code: 'SUSTAINABLE_CITIES_AND_COMMUNIIES', scaleResult: [], sustainResult: []},
+      {name: '12 - Responsible consumption and production', code: 'RESPONSIBLE_CONSUMPTION_AND_PRODUCTION', scaleResult: [], sustainResult: []},
+      {name: '13 - Climate action', code: 'CLIMATE_ACTION', scaleResult: [], sustainResult: []},
+      {name: '14 - Life below water', code: 'LIFE_BELOW_WATER', scaleResult: [], sustainResult: []},
+      {name: '15 - Life on land', code: 'LIFE_ON_LAND', scaleResult: [], sustainResult: []},
+      {name: '16 - Peace, justice and strong institutions', code: 'PEACE_JUSTICE_AND_STRING_INSTITUTIONS', scaleResult: [], sustainResult: []},
+      {name: '17 - Partnerships for the goals', code: 'PARTNERSHIPS_FOR_THE_GOALS', scaleResult: [], sustainResult: []}
     ] 
 
 
@@ -561,19 +541,11 @@ export class MasterDataService {
     return this._SDG_sustained_score;
   } 
 
-  set SDG_scale(value: SDG[]) {
-    this._SDG_scale = value;
+  set SDGs(value: SDG[]) {
+    this._SDGs = value;
   }
 
-  get SDG_scale (): SDG[] {
-    return this._SDG_scale;
-  } 
-
-  set SDG_sustained(value: SDG[]) {
-    this._SDG_sustained = value;
-  }
-
-  get SDG_sustained (): SDG[] {
-    return this._SDG_sustained;
+  get SDGs (): SDG[] {
+    return this._SDGs;
   } 
 }

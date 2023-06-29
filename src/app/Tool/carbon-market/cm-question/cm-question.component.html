@@ -13,7 +13,7 @@
         <p-multiSelect [options]="answers" optionLabel="label" [(ngModel)]="selectedAnswers"
             (onChange)="onSelectAnswer($event, question.answer_type)"> </p-multiSelect>
     </div>
-    <div class="col-8" *ngIf="question.criteria.section.code === 'SECTION_3' && approach === 'INDIRECT'">
+    <div class="col-8" *ngIf="question.characteristic && approach === 'INDIRECT'">
         <p-dropdown name="institution" [options]="institutions" [(ngModel)]="selectedInstitution" #finstitution="ngModel"
             placeholder="Select an institution" optionLabel="name" (onChange)="onSelectAnswer($event, 'INDIRECT')"
             [required]="true"></p-dropdown>

@@ -77,7 +77,7 @@ export class CmQuestionComponent implements OnInit {
 
   showAnswer(){
     if (this.approach === 'INDIRECT'){
-      if (this.question.criteria.section.code === 'SECTION_3'){
+      if (this.question.characteristic){
         return false
       } else {
         return true
