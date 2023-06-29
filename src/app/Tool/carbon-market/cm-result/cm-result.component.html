@@ -24,7 +24,7 @@
                             <th >
                                 Answer
                             </th>
-                            <th >
+                            <th colspan="2">
                                 Rationale
                             </th>
                         </tr>
@@ -41,11 +41,14 @@
                             </td>
                         </tr>
                     </ng-template>
-                    <ng-template pTemplate="rowexpansion" let-company>
+                    <ng-template let-company>
                         <tr>
                             <td >{{company.question}}</td>
                             <td > {{company.answer}}</td>
                             <td >{{company.comment}}</td>
+                            <td > <a *ngIf="company?.document" target="_blank" [href]="fileServerURL+'/'+company?.document"><i class="pi pi-download download"></i></a></td>
+
+                            
                         </tr>
                     </ng-template>
                 </p-table>
@@ -56,8 +59,9 @@
             <div class="row p-2">
                 <label class="text"><u ><b>Transformational Change Criteria</b> </u></label>
             </div>
-            <div class="row p-2">
-                <p-table   >
+            <div class="row p-2" *ngIf="processData.technology.length!=0">
+                <p-table   [value]="processData.technology" >
+                
                     <ng-template pTemplate="caption" styleClass="table-header"  >
                         <div class="table-header">
                             Process of Change / Technology
@@ -66,24 +70,25 @@
                     <ng-template pTemplate="header">
                         <tr>
                             <th >Characteristic</th>
-                            <th > Question </th>
+                            <th >Question </th>
                             <th >Score</th>
-                            <th >Justification</th>
+                            <th colspan="2">justification</th>
                         </tr>
                     </ng-template>
                    
-                    <ng-template pTemplate="body">
+                    <ng-template pTemplate="body" let-technology>
                         <tr>
-                            <td >Research and Development</td>
-                            <td >'Q1: Is the Article 6 activity directly mandated by law or otherwise triggered by legal requirements (e.g., legally binding agreements, covenants, consent decrees, contracts with government agencies and private parties)? '.e</td>
-                            <td >50.25</td>
-                            <td >justification</td>
+                            <td >{{technology.characteristic}}</td>
+                            <td >{{technology.question}}</td>
+                            <td >{{(technology?.score)?(technology?.score):'-'}}</td>
+                            <td >{{(technology?.justification)?(technology?.justification):'-'}}</td>
+                            <td > <a *ngIf="technology?.document" target="_blank" [href]="fileServerURL+'/'+technology?.document"><i class="pi pi-download download"></i></a></td>
                         </tr>
                     </ng-template>
                 </p-table>
             </div>
-            <div class="row p-2">
-                <p-table   >
+            <div class="row p-2" *ngIf="processData.incentives.length!=0">
+                <p-table [value]="processData.incentives"  >
                     <ng-template pTemplate="caption" styleClass="table-header"  >
                         <div class="table-header">
                             Process of Change / Incentives
@@ -93,24 +98,52 @@
                         <tr>
                             <th >Characteristic</th>
                             <th >Question</th>
-                            <th > Score</th>
-                            <th >Justification</th>
+                            <th >Score</th>
+                            <th colspan="2">Justification</th>
                         </tr>
                     </ng-template>
                    
-                    <ng-template pTemplate="body">
+                    <ng-template pTemplate="body" let-incentives>
                         <tr>
-                            <td >Research and Development</td>
-                            <td >'Q1: Is the Article 6 activity directly mandated by law or otherwise triggered by legal requirements (e.g., legally binding agreements, covenants, consent decrees, contracts with government agencies and private parties)? '.e</td>
-                            <td >50.25</td>
-                            <td >justification</td>
+                            <td >{{incentives.characteristic}}</td>
+                            <td >{{incentives.question}}</td>
+                            <td >{{(incentives?.score)?(incentives?.score):'-'}}</td>
+                            <td >{{(incentives?.justification)?(incentives?.justification):'-'}} </td>
+                            <td><a *ngIf="incentives?.document" target="_blank" [href]="fileServerURL+'/'+incentives?.document"><i class="pi pi-download download"></i></a></td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+            <div class="row p-2" *ngIf="processData.norms.length!=0">
+                <p-table [value]="processData.norms"  >
+                    <ng-template pTemplate="caption" styleClass="table-header"  >
+                        <div class="table-header">
+                            Process of Change / Norms
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th >Characteristic</th>
+                            <th >Question</th>
+                            <th >Score</th>
+                            <th colspan="2">Justification</th>
+                        </tr>
+                    </ng-template>
+                   
+                    <ng-template pTemplate="body" let-norms>
+                        <tr>
+                            <td >{{norms.characteristic}}</td>
+                            <td >{{norms.question}}</td>
+                            <td >{{(norms?.score)?(norms?.score):'-'}}</td>
+                            <td >{{(norms?.justification)?(norms?.justification):'-'}} </td>
+                            <td><a *ngIf="norms?.document" target="_blank" [href]="fileServerURL+'/'+norms?.document"><i class="pi pi-download download"></i></a></td>
                         </tr>
                     </ng-template>
                 </p-table>
             </div>
             
-            <div class="row p-2">
-                <p-table   >
+            <div class="row p-2" *ngIf="outcomeData.scale_GHGs.length!=0">
+                <p-table  [value]="outcomeData.scale_GHGs" >
                     <ng-template pTemplate="caption" styleClass="table-header"  >
                         <div class="table-header">
                             Outcome of Change / Scale GHGs
@@ -122,24 +155,26 @@
                             <th >Starting Situation </th>
                             <th >Expected Impact</th>
                             <th >Score</th>
-                            <th >Justification</th>
+                            <th colspan="2">Justification</th>
                         </tr>
                     </ng-template>
                    
-                    <ng-template pTemplate="body">
+                    <ng-template pTemplate="body" let-scale_GHGs>
                         <tr>
-                            <td >Research and Development</td>
-                            <td >'Q1: Is the Article 6 activity directly mandated by law or otherwise triggered by legal requirements (e.g., legally binding agreements, covenants, consent decrees, contracts with government agencies and private parties)? '.e</td>
-                            <td >Expected Impact</td>
-                            <td >50.25</td>
-                            <td >justification</td>
+                            <td >{{scale_GHGs.characteristic}}</td>
+                            <td >{{(scale_GHGs?.starting_situation)?(scale_GHGs?.starting_situation):'-'}}</td>
+                            <td >{{(scale_GHGs?.expected_impacts)?(scale_GHGs?.expected_impacts):'-'}}</td>
+                            <td >{{(scale_GHGs?.score)?(scale_GHGs?.score):'-'}}</td>
+                            <td >{{(scale_GHGs?.justification)?(scale_GHGs?.justification):'-'}} </td>
+                            <td><a *ngIf="scale_GHGs?.document" target="_blank" [href]="fileServerURL+'/'+scale_GHGs?.document"><i class="pi pi-download download"></i></a></td>
+
                             
                         </tr>
                     </ng-template>
                 </p-table>
             </div>
-            <div class="row p-2">
-                <p-table   >
+            <div class="row p-2" *ngIf="outcomeData.sustained_GHGs.length!=0">
+                <p-table   [value]="outcomeData.sustained_GHGs">
                     <ng-template pTemplate="caption" styleClass="table-header"  >
                         <div class="table-header">
                             Outcome of Change / Sustained GHGs
@@ -149,24 +184,26 @@
                         <tr>
                             <th >Characteristic</th>
                             <th >Question</th>
-                            <th > Score</th>
-                            <th >Justification</th>
+                            <th >Score</th>
+                            <th colspan="2">Justification</th>
                         </tr>
                     </ng-template>
                    
-                    <ng-template pTemplate="body">
+                    <ng-template pTemplate="body" let-sustained_GHGs>
                         <tr>
-                            <td >Research and Development</td>
-                            <td >'Q1: Is the Article 6 activity directly mandated by law or otherwise triggered by legal requirements (e.g., legally binding agreements, covenants, consent decrees, contracts with government agencies and private parties)? '.e</td>
-                            <td >50.25</td>
-                            <td >justification</td>
-                        </tr>
+                            <td >{{sustained_GHGs.characteristic}}</td>
+                            <td >{{(sustained_GHGs?.question)?(sustained_GHGs?.question):'-'}}</td>
+                            <td >{{(sustained_GHGs?.score)?(sustained_GHGs?.score):'-'}}</td>
+                            <td >{{(sustained_GHGs?.justification)?(sustained_GHGs?.justification):'-'}} </td>
+                            <td><a *ngIf="sustained_GHGs?.document" target="_blank" [href]="fileServerURL+'/'+sustained_GHGs?.document"><i class="pi pi-download download"></i></a></td>
+
                     </ng-template>
                 </p-table>
             </div>
            
-            <div class="row p-2">
-                <p-table   >
+            <div class="row p-2" *ngIf="outcomeData.scale_SDs.length!=0">
+            
+                <p-table  [value]="outcomeData.scale_SDs" >
                     <ng-template pTemplate="caption" styleClass="table-header"  >
                         <div class="table-header">
                             Outcome of Change / Scaled SDs
@@ -179,25 +216,26 @@
                             <th >Starting Situation </th>
                             <th >Expected Impact</th>
                             <th >Score</th>
-                            <th >Justification</th>
+                            <th colspan="2">Justification</th>
                         </tr>
                     </ng-template>
                    
-                    <ng-template pTemplate="body">
+                    <ng-template pTemplate="body" let-scale_SDs>
                         <tr>
-                            <td >SDG</td>
-                            <td >Research and Development</td>
-                            <td >'Q1: Is the Article 6 activity directly mandated by law or otherwise triggered by legal requirements (e.g., legally binding agreements, covenants, consent decrees, contracts with government agencies and private parties)? '.e</td>
-                            <td >Expected Impact</td>
-                            <td >50.25</td>
-                            <td >justification</td>
+                            <td >{{(scale_SDs?.SDG)?(scale_SDs?.SDG):'-'}}</td>
+                            <td >{{scale_SDs?.characteristic}}</td>
+                            <td >{{(scale_SDs?.starting_situation)?(scale_SDs?.starting_situation):'-'}}</td>
+                            <td >{{(scale_SDs?.expected_impacts)?(scale_SDs?.expected_impacts):'-'}}</td>
+                            <td >{{(scale_SDs?.score)?(scale_SDs?.score):'-'}}</td>
+                            <td >{{(scale_SDs?.justification)?(scale_SDs?.justification):'-'}} </td>
+                            <td><a *ngIf="scale_SDs?.document" target="_blank" [href]="fileServerURL+'/'+scale_SDs?.document"><i class="pi pi-download download"></i></a></td>
                             
                         </tr>
                     </ng-template>
                 </p-table>
             </div>
-            <div class="row p-2">
-                <p-table   >
+            <div class="row p-2" *ngIf="outcomeData.sustained_SDs.length!=0">
+                <p-table [value]="outcomeData.sustained_SDs" >
                     <ng-template pTemplate="caption" styleClass="table-header"  >
                         <div class="table-header">
                             Outcome of Change / Sustained SDs
@@ -209,17 +247,18 @@
                             <th >Characteristic</th>
                             <th >Question</th>
                             <th > Score</th>
-                            <th >Justification</th>
+                            <th colspan="2">Justification</th>
                         </tr>
                     </ng-template>
                    
-                    <ng-template pTemplate="body">
+                    <ng-template pTemplate="body" let-sustained_SDs>
                         <tr>
-                            <td >SDG</td>
-                            <td >Research and Development</td>
-                            <td >'Q1: Is the Article 6 activity directly mandated by law or otherwise triggered by legal requirements (e.g., legally binding agreements, covenants, consent decrees, contracts with government agencies and private parties)? '.e</td>
-                            <td >50.25</td>
-                            <td >justification</td>
+                            <td >{{(sustained_SDs?.SDG)?(sustained_SDs?.SDG):'-'}}</td>
+                            <td >{{sustained_SDs.characteristic}}</td>
+                            <td >{{(sustained_SDs?.question)?(sustained_SDs?.question):'-'}}</td>
+                            <td >{{(sustained_SDs?.score)?(sustained_SDs?.score):'-'}}</td>
+                            <td >{{(sustained_SDs?.justification)?(sustained_SDs?.justification):'-'}} </td>
+                            <td><a *ngIf="sustained_SDs?.document" target="_blank" [href]="fileServerURL+'/'+sustained_SDs?.document"><i class="pi pi-download download"></i></a></td>
                         </tr>
                     </ng-template>
                 </p-table>
