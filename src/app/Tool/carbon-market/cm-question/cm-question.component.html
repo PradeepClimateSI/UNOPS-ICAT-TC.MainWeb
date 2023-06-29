@@ -1,5 +1,6 @@
-<label for="q">{{question.label}}<i class="pi pi-info-circle" pTooltip="{{tooltip}}" tooltipPosition="top"
-        style="font-size: 1rem"></i></label>
+<label for="q">{{question.label}}</label>
+<!-- <i class="pi pi-info-circle" pTooltip="{{tooltip}}" tooltipPosition="top"
+        style="font-size: 1rem"></i> -->
 
 <div class="row p-2">
     <div class="col-4">
@@ -29,7 +30,7 @@
 <div class="row p-2">
     <div class="col-4"></div>
     <div class="col-8">
-        <p-fileUpload name="files" [url]="uploadUrl" (onUpload)="onUpload($event,'FILE')" [multiple]="true" accept="image/*" [maxFileSize]="1000000">
+        <p-fileUpload name="files" [url]="uploadUrl" (onUpload)="onUpload($event,'FILE')" [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="1000000">
             <ng-template pTemplate="content">
                 <ul *ngIf="uploadedFiles.length">
                     <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{ file.size }} bytes</li>

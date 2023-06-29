@@ -3,8 +3,8 @@
         <p-tabView #tabView (onChange)="onCategoryTabChange($event)" [(activeIndex)]="activeIndex"
             *ngIf="type.code === 'process'">
             <p-tabPanel *ngFor="let category of categories[type.code]" [header]="category.name">
-                <ng-container *ngFor="let char of category.characteristics">
-                    <p>{{char.name}}</p>
+                <ng-container *ngFor="let char of category.characteristics; let idx = index">
+                    <h6>{{idx + 1}}. {{char.name}}</h6>
                     <div *ngFor="let question of questions[char.code]">
                         <app-cm-question [question]="question" [approach]="approach"
                             (prev_answer)="onAnswer($event, question, char)"></app-cm-question>
@@ -25,8 +25,8 @@
             *ngIf="type.code === 'outcome'">
             <p-tabPanel *ngFor="let category of outcome" [header]="category.name">
                 <ng-container *ngIf="category.type === 'GHG'">
-                    <ng-container *ngFor="let char of category.results">
-                        <p>{{char.characteristic.name}}</p>
+                    <ng-container *ngFor="let char of category.results; let idx = index">
+                        <h6>{{idx+1}}. {{char.characteristic.name}}</h6>
                         <ng-container *ngIf="category.method === 'SCALE'">
                             <div class="row p-2">
                                 <div class="col-4">Starting Situation</div>
@@ -50,7 +50,7 @@
                                     <p-dropdown [name]="'score'+char.id" #type="ngModel" placeholder="Select Score"
                                         [(ngModel)]="char.selectedScore" [options]="GHG_scale_score" optionLabel="name"
                                         [required]="true" appendTo="body"
-                                        (onChange)="onSelectScore($event, char)"></p-dropdown>
+                                        (onChange)="onSelectScore($event, char, idx, category.type)"></p-dropdown>
                                 </div>
                             </div>
                             <div class="row p-2">
@@ -65,7 +65,7 @@
                                 <div class="col-4"></div>
                                 <div class="col-8">
                                     <p-fileUpload name="files" [url]="uploadUrl" (onUpload)="onUpload($event,char)"
-                                        [multiple]="true" accept="image/*" [maxFileSize]="1000000">
+                                        [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="1000000">
                                         <ng-template pTemplate="content">
                                             <ul *ngIf="uploadedFiles.length">
                                                 <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{
@@ -83,7 +83,7 @@
                                 <div class="col-8">
                                     <p-dropdown [name]="'score'+char.id" #type="ngModel" placeholder="Select Score"
                                         [(ngModel)]="char.selectedScore" [options]="GHG_sustained_score"
-                                        optionLabel="name" [required]="true" appendTo="body" (onChange)="onSelectScore($event, char)"></p-dropdown>
+                                        optionLabel="name" [required]="true" appendTo="body" (onChange)="onSelectScore($event, char, idx, category.type)"></p-dropdown>
                                 </div>
                             </div>
                             <div class="row p-2">
@@ -98,7 +98,7 @@
                                 <div class="col-4"></div>
                                 <div class="col-8">
                                     <p-fileUpload name="files" [url]="uploadUrl" (onUpload)="onUpload($event,char)"
-                                        [multiple]="true" accept="image/*" [maxFileSize]="1000000">
+                                        [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="1000000">
                                         <ng-template pTemplate="content">
                                             <ul *ngIf="uploadedFiles.length">
                                                 <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{
@@ -111,7 +111,7 @@
                         </ng-container>
                     </ng-container>
                     <ng-container *ngIf="category.method === 'SUSTAINED'">
-                        <p>GHG Score</p>
+                        <h6>GHG Score</h6>
                         <div class="row p-2">
                             <div class="col-4">Aggregated Score</div>
                             <div class="col-8"> 
@@ -147,11 +147,11 @@
                         </div> -->
                     </div>
                     <ng-container selectedSDGs && selectedSDGs.length>
-                        <ng-container *ngFor="let SDG of selectedSDGs">
-                            <p>{{SDG.name}}</p>
+                        <ng-container *ngFor="let SDG of selectedSDGs; let sidx = index">
+                            <h5>{{sidx+1}}. {{SDG.name}}</h5>
                             <ng-container *ngIf="category.method === 'SCALE'">
-                                <ng-container *ngFor="let char of SDG.scaleResult">
-                                    <p>{{char.characteristic.name}}</p>
+                                <ng-container *ngFor="let char of SDG.scaleResult; let idx = index;">
+                                    <h6>{{idx+1}}. {{char.characteristic.name}}</h6>
                                     <div class="row p-2">
                                         <div class="col-4">SDG Indicator</div>
                                         <div class="col-8">
@@ -180,7 +180,7 @@
                                         <div class="col-4">Score</div>
                                         <div class="col-8">
                                             <p-dropdown [name]="'score'+SDG.code" #type="ngModel"
-                                                placeholder="Select Score" [(ngModel)]="char.selectedScore" (onChange)="onSelectScore($event, char)"
+                                                placeholder="Select Score" [(ngModel)]="char.selectedScore" (onChange)="onSelectScore($event, char, idx, category.type)"
                                                 [options]="SDG_scale_score" optionLabel="name" [required]="true"
                                                 appendTo="body"></p-dropdown>
                                         </div>
@@ -197,7 +197,7 @@
                                         <div class="col-4"></div>
                                         <div class="col-8">
                                             <p-fileUpload name="files" [url]="uploadUrl"
-                                                (onUpload)="onUpload($event,char)" [multiple]="true" accept="image/*"
+                                                (onUpload)="onUpload($event,char)" [multiple]="true" accept="{{acceptedFiles}}"
                                                 [maxFileSize]="1000000">
                                                 <ng-template pTemplate="content">
                                                     <ul *ngIf="uploadedFiles.length">
@@ -211,13 +211,14 @@
                                 </ng-container>
                             </ng-container>
                             <ng-container *ngIf="category.method === 'SUSTAINED'">
-                                <ng-container *ngFor="let chSus of SDG.sustainResult">
+                                <ng-container *ngFor="let chSus of SDG.sustainResult; let idx = index">
+                                    <h6>{{idx+1}}. {{chSus.characteristic.name}}</h6>
                                     <p>Is the activity’s contribution to the selected SDG sustained in nature?</p>
                                     <div class="row p-2">
                                         <div class="col-4">Score</div>
                                         <div class="col-8">
                                             <p-dropdown [name]="'susScore'+SDG.code" #type="ngModel"
-                                                placeholder="Select Score" [(ngModel)]="chSus.selectedScore" (onChange)="onSelectScore($event, chSus)"
+                                                placeholder="Select Score" [(ngModel)]="chSus.selectedScore" (onChange)="onSelectScore($event, chSus, idx, category.type)"
                                                 [options]="SDG_sustained_score" optionLabel="name" [required]="true"
                                                 appendTo="body"></p-dropdown>
                                         </div>
@@ -234,7 +235,7 @@
                                         <div class="col-4"></div>
                                         <div class="col-8">
                                             <p-fileUpload name="files" [url]="uploadUrl"
-                                                (onUpload)="onUpload($event,chSus)" [multiple]="true" accept="image/*"
+                                                (onUpload)="onUpload($event,chSus)" [multiple]="true" accept="{{acceptedFiles}}"
                                                 [maxFileSize]="1000000">
                                                 <ng-template pTemplate="content">
                                                     <ul *ngIf="uploadedFiles.length">
@@ -249,7 +250,7 @@
                             </ng-container>
                         </ng-container>
                         <ng-container *ngIf="category.method === 'SUSTAINED'">
-                            <p>SDG Score</p>
+                            <h6>SDG Score</h6>
                             <div class="row p-2">
                                 <div class="col-4">Aggregated Score</div>
                                 <div class="col-8"> 
@@ -266,22 +267,22 @@
                             </div>
                         </ng-container>
                     </ng-container>
-                </ng-container>
-                <div class="row justify-content-end" *ngIf="activeIndex2 < outcome.length - 1">
-                    <div>
-                        <div class="d-flex flex-row-reverse mt-20 ">
-                            <div class="btn btn-primary text-uppercase" (click)="next()">
-                                Next
+                    <div class="row justify-content-end" *ngIf="activeIndex2 < outcome.length - 1">
+                        <div>
+                            <div class="d-flex flex-row-reverse mt-20 ">
+                                <div class="btn btn-primary text-uppercase" (click)="next()">
+                                    Next
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </ng-container>
                 <!-- </ng-container> -->
                 <div class="row justify-content-end" *ngIf="activeIndex2 === outcome.length - 1">
                     <div>
                         <div class="d-flex flex-row-reverse mt-20 ">
                             <div class="btn btn-primary text-uppercase" (click)="submit()">
-                                Submit
+                                {{ approach === 'INDIRECT' ? 'Send to Data Collection Team' : 'Calculate & Check Results' }}
                             </div>
                         </div>
                     </div>

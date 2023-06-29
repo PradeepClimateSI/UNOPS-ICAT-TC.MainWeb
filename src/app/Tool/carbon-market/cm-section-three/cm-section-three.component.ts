@@ -182,13 +182,37 @@ export class CmSectionThreeComponent implements OnInit {
     }
   }
 
-  onSelectScore(event: any, char: CMResultDto) {
+  onSelectScore(event: any, char: CMResultDto, index: number, type: string) {
     console.log("onSelectScore", event)
     let score = new ScoreDto()
     score.name = event.value.name
     score.code = event.value.code
     score.value = event.value.value 
     char.selectedScore = score
+
+    if (index === 2) {
+      if (char.characteristic.category.code === 'SUSTAINED_GHG') {
+        let score = 0
+        this.outcome.forEach((category: { results: CMResultDto[]; }) => {
+          category.results.forEach((result) => {
+            console.log(result.selectedScore)
+              if(result.selectedScore.value) score = score + result.selectedScore.value
+          })
+        })
+        this.GHGScore = (score / 6).toFixed(5)
+      } else if (char.characteristic.category.code === 'SUSTAINED_SD') {
+        let score = 0
+        this.selectedSDGs.forEach(sdg => {
+          sdg.scaleResult.forEach(sr => {
+            if(sr.selectedScore.value) score = score + sr.selectedScore.value
+          })
+          sdg.sustainResult.forEach(susr => {
+            if(susr.selectedScore.value) score = score + susr.selectedScore.value
+          })
+        })
+        this.SDGScore = ((score / 6) * (2.5 / 100)).toFixed(5)
+      }
+    }
   }
 
   onAnswer(event: any, question: any, characteristic: Characteristics) {

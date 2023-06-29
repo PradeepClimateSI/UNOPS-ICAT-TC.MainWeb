@@ -28,6 +28,7 @@ export class CmSectionComponent implements OnInit {
   visible: boolean = false
 
   result: any
+  isPassed: boolean = false
 
   message: string
   defaultMessage = 'The preconditions for transformational change have not been met. <br> Transformational change = 0'
@@ -149,6 +150,7 @@ export class CmSectionComponent implements OnInit {
 
             if (this.criterias[sectionIdx]?.length === this.shownCriterias[sectionIdx].length){
               this.shownSections.push(true)
+              this.isPassed = true
               this.shownCriterias[sectionIdx+1] = [true]
               this.shownQuestions[sectionIdx+1] = []
               this.shownQuestions[sectionIdx+1][0] = [true]
@@ -179,6 +181,7 @@ export class CmSectionComponent implements OnInit {
             this.visible = true
             this.shownCriterias[sectionIdx].splice(criteriaIdx + 1, this.shownCriterias[sectionIdx].length - (criteriaIdx + 1))
             this.shownSections.splice(sectionIdx + 1, this.shownSections.length - (sectionIdx + 1))
+            this.isPassed = false
           }
         }
       } else {
