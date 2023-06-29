@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { SelectedScoreDto } from 'app/shared/score.dto';
 import { environment } from 'environments/environment';
+import { MessageService } from 'primeng/api';
 import { TabView } from 'primeng/tabview';
 import { CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, ScoreDto } from 'shared/service-proxies/service-proxies';
 
@@ -51,11 +52,13 @@ export class CmSectionThreeComponent implements OnInit {
   SDGScore: any = 0;
   SDGWeight: any = '10%';
   GHGScore: any;
+  acceptedFiles: string = ".pdf, .jpg, .png, .doc, .docx, .xls, .xlsx, .csv";
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
     private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
-    private masterDataService: MasterDataService
+    private masterDataService: MasterDataService,
+    private messageService: MessageService
   ) { 
     this.uploadUrl = environment.baseUrlAPI + '/cm-assessment-question/upload-file'
   }
@@ -304,6 +307,7 @@ export class CmSectionThreeComponent implements OnInit {
     }
     let path = 'File Path'
     res.filePath = path
+    this.messageService.add({severity: 'info', summary: 'File Uploaded', detail: ''});
   }
 }
 

@@ -1,6 +1,7 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { environment } from 'environments/environment';
+import { MessageService } from 'primeng/api';
 import { CMAnswer, CMQuestion, CMQuestionControllerServiceProxy, Institution, InstitutionControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 interface UploadEvent {
@@ -34,10 +35,12 @@ export class CmQuestionComponent implements OnInit {
   weight = 0
   uploadUrl: string;
   uploadedFiles: any = [];
+  acceptedFiles: string = ".pdf, .jpg, .png, .doc, .docx, .xls, .xlsx, .csv";
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
-    private institutionControllerServiceProxy: InstitutionControllerServiceProxy
+    private institutionControllerServiceProxy: InstitutionControllerServiceProxy,
+    private messageService: MessageService
   ) {
     this.uploadUrl = environment.baseUrlAPI + '/cm-assessment-question/upload-file'
    }
@@ -89,6 +92,7 @@ export class CmQuestionComponent implements OnInit {
 
   upload(type: string) {
     let filePath = 'File path'
+    this.messageService.add({severity: 'info', summary: 'File Uploaded', detail: ''});
     this.prev_answer.emit({path: filePath, type: type})
   }
 
