@@ -22,6 +22,7 @@ export class MasterDataService {
   private _assessment_type: {name: string, id: number}[] = []
   private _assessment_approach: {name: string, id: number, code: string}[] = []
   private _impact_types: {name: string, id: number, code: string}[] = []
+  private _int_cm_approaches: {name: string, id: number, code: string}[] = []
   private _sectorial_boundries: {name: string, id: number, code: string}[] = []
   private _impact_categories: {name: string, id: number, code: string, type: string}[] = []
   private _impact_characteristics: {name: string, id: number, code: string, type: string[]}[] = []
@@ -146,6 +147,16 @@ export class MasterDataService {
     this.impact_types = [
       { id: 1, name: "Process", code: "PROCESS" },
       { id: 2, name: "Outcomes", code: "OUTCOMES" }
+    ]
+    this.int_cm_approaches = [
+      { id: 1, name: "Article 6.2", code: "ARTICLE_6.2" },
+      { id: 2, name: "Article 6.4", code: "ARTICLE_6.4" },
+      { id: 2, name: "Gold Standard", code: "GOLD_STANDARD" },
+      { id: 2, name: "Verified Carbon Standard", code: "VERIFIED_CARBON_STANDARD" },
+      { id: 2, name: "Plan Vivo", code: "PLAN_VIVO" },
+      { id: 2, name: "American Carbon Registry", code: "AMERICAN_CARBON_REGISTRY" },
+      { id: 2, name: "Climate Action Reserve", code: "CLIMATE_ACTION_RESERVE" },
+      { id: 2, name: "Other", code: "OTHER" },
     ]
     this.impact_categories = [
       { id: 1, name: "Technology", code: "TECHNOLOGY", type: "PROCESS" },
@@ -372,6 +383,14 @@ export class MasterDataService {
 
   get impact_types(): { name: string; id: number, code: string }[] {
     return this._impact_types;
+  }
+
+  set int_cm_approaches(value: { name: string; id: number, code: string }[]) {
+    this._int_cm_approaches = value;
+  }
+
+  get int_cm_approaches(): { name: string; id: number, code: string }[] {
+    return this._int_cm_approaches;
   }
 
   set impact_categories(value: { name: string; id: number, code: string, type: string }[]) {

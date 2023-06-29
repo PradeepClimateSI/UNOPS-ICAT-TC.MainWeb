@@ -1,5 +1,16 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { environment } from 'environments/environment';
 import { CMAnswer, CMQuestion, CMQuestionControllerServiceProxy, Institution, InstitutionControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+
+interface UploadEvent {
+  originalEvent: HttpResponse<FileDocument>;
+  files: File[];
+}
+
+interface FileDocument {
+  fileName: string
+}
 
 @Component({
   selector: 'app-cm-question',
@@ -21,11 +32,15 @@ export class CmQuestionComponent implements OnInit {
 
   tooltip: string = ''
   weight = 0
+  uploadUrl: string;
+  uploadedFiles: any = [];
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
     private institutionControllerServiceProxy: InstitutionControllerServiceProxy
-  ) { }
+  ) {
+    this.uploadUrl = environment.baseUrlAPI + '/cm-assessment-question/upload-file'
+   }
 
   async ngOnInit(): Promise<void> {
     await this.getAnswers()
@@ -69,6 +84,19 @@ export class CmQuestionComponent implements OnInit {
       }
     } else {
       return true
+    }
+  }
+
+  upload(type: string) {
+    let filePath = 'File path'
+    this.prev_answer.emit({path: filePath, type: type})
+  }
+
+  onUpload(event:UploadEvent, type: string) {
+    console.log("onupload", event.originalEvent.body)
+    if(event.originalEvent.body){
+      let filePath = event.originalEvent.body.fileName
+      this.prev_answer.emit({path: filePath, type: type})
     }
   }
 
