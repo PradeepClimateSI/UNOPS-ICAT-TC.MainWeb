@@ -9,8 +9,12 @@ import { CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characterist
 
 
 interface UploadEvent {
-  originalEvent: HttpResponse<string[]>;
+  originalEvent: HttpResponse<FileDocument>;
   files: File[];
+}
+
+interface FileDocument {
+  fileName: string
 }
 @Component({
   selector: 'app-cm-section-three',
@@ -53,6 +57,7 @@ export class CmSectionThreeComponent implements OnInit {
   SDGWeight: any = '10%';
   GHGScore: any;
   acceptedFiles: string = ".pdf, .jpg, .png, .doc, .docx, .xls, .xlsx, .csv";
+  fileServerURL: string;
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -61,6 +66,7 @@ export class CmSectionThreeComponent implements OnInit {
     private messageService: MessageService
   ) { 
     this.uploadUrl = environment.baseUrlAPI + '/cm-assessment-question/upload-file'
+    this.fileServerURL = environment.baseUrlAPI+'/uploads'
   }
 
   async ngOnInit(): Promise<void> {
@@ -74,6 +80,7 @@ export class CmSectionThreeComponent implements OnInit {
     this.SDG_sustained_score = this.masterDataService.SDG_sustained_score
     this.SDGs = this.masterDataService.SDGs
     this.categories = await this.cMQuestionControllerServiceProxy.getUniqueCharacterisctics().toPromise()
+    console.log("categories", this.categories)
     this.selectedType = this.types[0]
     this.selectedCategory = this.categories[this.selectedType.code][0]
     console.log(this.categories)
@@ -90,13 +97,13 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   async onCategoryTabChange(event: any) {
-    this.selectedCategory = this.categories[this.selectedType.code][event.index]
-    let ids = this.selectedCategory.characteristics.map((item: any) => {
-      return item.id
-    })
-    this.questions = await this.cMQuestionControllerServiceProxy.getQuestionsByCharacteristic(ids).toPromise()
-    console.log(this.questions)
-    console.log(this.selectedCategory, ids)
+    // this.selectedCategory = this.categories[this.selectedType.code][event.index]
+    // let ids = this.selectedCategory.characteristics.map((item: any) => {
+    //   return item.id
+    // })
+    // this.questions = await this.cMQuestionControllerServiceProxy.getQuestionsByCharacteristic(ids).toPromise()
+    // console.log(this.questions)
+    // console.log(this.selectedCategory, ids)
     this.categoryTabIndex =event.index;
   }
 
@@ -139,28 +146,6 @@ export class CmSectionThreeComponent implements OnInit {
     })
     console.log(this.selectedSDGs)
   }
-
-  // onSelectSDGSustained(event: any, category: OutcomeCategory){
-  //   let results: CMResultDto[] = []
-  //   category.results.forEach(ch => {
-  //     let res = new CMResultDto()
-  //     res.characteristic = ch.characteristic
-  //     res.type = this.approach
-  //     results.push(res) 
-  //   })
-  //   this.selectedSDGsustained = this.selectedSDGsustained.map(sdg => {
-  //     let res: CMResultDto[] = results.map((o: { [x: string]: any; }) => {
-  //       let _r = new CMResultDto()
-  //       Object.keys(_r).forEach(e => {
-  //         _r[e] = o[e]
-  //       })
-  //       _r.selectedSdg = sdg.code
-  //       return _r
-  //     })
-  //     sdg.result = res
-  //     return sdg
-  //   })
-  // }
 
   onCategoryTabChange2($event: any) {
     throw new Error('Method not implemented.');
@@ -219,41 +204,65 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   onAnswer(event: any, question: any, characteristic: Characteristics) {
-    let result = this.results.find(o => o.question.id === question.id)
-    console.log(result)
-    let isNew: boolean = false
-    if (result === undefined){
-      isNew = true
-      result = new CMResultDto()
-      let q = new CMQuestion()
-      q.id = question.id
-      result.question = q 
-      let ch = new Characteristics()
-      ch.id = characteristic.id 
-      result.characteristic = ch
-      result.type = this.approach
-    } 
-    console.log(result)
+    // let result = this.results.find(o => o.question.id === question.id)
+    // console.log(result)
+    // let isNew: boolean = false
+    // if (result === undefined){
+    //   isNew = true
+    //   result = new CMResultDto()
+    //   let q = new CMQuestion()
+    //   q.id = question.id
+    //   result.question = q 
+    //   let ch = new Characteristics()
+    //   ch.id = characteristic.id 
+    //   result.characteristic = ch
+    //   result.type = this.approach
+    // } 
+    // console.log(result)
+    let q = new CMQuestion()
+    q.id = question.id
+
+    question.result.question = q
+    question.result.type = this.approach
 
     if (event.type === 'COMMENT'){
-      result.comment = event.comment
-    } else {
+      question.result.comment = event.comment
+    } else if (event.type === 'FILE'){
+      question.result.filePath = event.path
+    }
+    else {
       if (event.type === 'INDIRECT'){
-        result.institution = event.answer
+        question.result.institution = event.answer
       } else {
-        result.answer = event.answer
+        question.result.answer = event.answer
       }
     }
 
-    if (isNew){
-      this.results.push(result)
-    }
-    console.log(this.results)
+    // if (isNew){
+    //   this.results.push(result)
+    // }
+    // console.log(this.results)
 
   }
 
   async submit() {
     console.log(this.results)
+
+    for await (let category of this.categories['process']){
+      for await (let char of category.characteristics){
+        for await (let q of char.questions){
+          let res = new CMResultDto()
+          Object.keys(res).forEach(e => {
+            res[e] = q.result[e]
+          })
+          let ch = new Characteristics()
+          ch.id = q.characteristic.id
+          res.characteristic = ch
+          this.results.push(res)
+        }
+      }
+    }
+
     if (this.selectedSDGs?.length > 0){
       for await (let sd of this.selectedSDGs) {
         sd.scaleResult.forEach(res => {
@@ -299,14 +308,10 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   onUpload(event:UploadEvent, res: CMResultDto) {
-    console.log(event.originalEvent.body)
     if(event.originalEvent.body){
-
-      // this.savedDocs = event.originalEvent.body;
-
+      res.filePath = event.originalEvent.body.fileName
     }
-    let path = 'File Path'
-    res.filePath = path
+    
     this.messageService.add({severity: 'info', summary: 'File Uploaded', detail: ''});
   }
 }

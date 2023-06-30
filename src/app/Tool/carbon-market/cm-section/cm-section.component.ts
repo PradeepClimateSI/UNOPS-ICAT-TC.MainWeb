@@ -107,6 +107,8 @@ export class CmSectionComponent implements OnInit {
       this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['comment'] = e.comment
     } else if (e.type === 'FILE'){
       this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['file'] = e.path
+      criteria.questions[idx]['result'] = {}
+      criteria.questions[idx]['result']['filePath'] = e.path
     } else {
       if (e.type === 'INDIRECT'){
         this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['institution'] = e.answer

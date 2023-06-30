@@ -5,7 +5,7 @@
             <p-tabPanel *ngFor="let category of categories[type.code]" [header]="category.name">
                 <ng-container *ngFor="let char of category.characteristics; let idx = index">
                     <h6>{{idx + 1}}. {{char.name}}</h6>
-                    <div *ngFor="let question of questions[char.code]">
+                    <div *ngFor="let question of char.questions">
                         <app-cm-question [question]="question" [approach]="approach"
                             (prev_answer)="onAnswer($event, question, char)"></app-cm-question>
                     </div>
@@ -55,24 +55,25 @@
                             </div>
                             <div class="row p-2">
                                 <div class="col-4">Justification</div>
-                                <div class="col-8">
+                                <div class="col-6">
                                     <input type="text" [name]="'justification'+char.id" #tboundrary="ngModel"
                                         [(ngModel)]="char.comment" class="form-control"
                                         placeholder="Enter Justification" required />
                                 </div>
-                            </div>
-                            <div class="row p-2">
-                                <div class="col-4"></div>
-                                <div class="col-8">
-                                    <p-fileUpload name="files" [url]="uploadUrl" (onUpload)="onUpload($event,char)"
-                                        [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="1000000">
-                                        <ng-template pTemplate="content">
-                                            <ul *ngIf="uploadedFiles.length">
-                                                <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{
-                                                    file.size }} bytes</li>
-                                            </ul>
-                                        </ng-template>
+                                <div class="col-2">
+                                    <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload" name="files" [url]="uploadUrl" 
+                                    (onUpload)="onUpload($event,char)" [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="5000000" 
+                                    [auto]="true">
                                     </p-fileUpload>
+                                </div>
+                            </div>
+                            <div class="row p-2" *ngIf="char.filePath">
+                                <div class="col-4"></div>
+                                <div class="col-4">
+                                    <p class="col-5">{{char.filePath}}</p>
+                                </div>
+                                <div class="col-4">
+                                    <a target="_blank" [href]="fileServerURL+'/'+char.filePath"><i class="pi pi-download download col-4"></i></a>
                                 </div>
                             </div>
                         </ng-container>
@@ -88,32 +89,33 @@
                             </div>
                             <div class="row p-2">
                                 <div class="col-4">Justification</div>
-                                <div class="col-8">
+                                <div class="col-6">
                                     <input type="text" name="tboundrary" #tboundrary="ngModel"
                                         [(ngModel)]="char.comment" class="form-control"
                                         placeholder="Enter Justification" required />
                                 </div>
-                            </div>
-                            <div class="row p-2">
-                                <div class="col-4"></div>
-                                <div class="col-8">
-                                    <p-fileUpload name="files" [url]="uploadUrl" (onUpload)="onUpload($event,char)"
-                                        [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="1000000">
-                                        <ng-template pTemplate="content">
-                                            <ul *ngIf="uploadedFiles.length">
-                                                <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{
-                                                    file.size }} bytes</li>
-                                            </ul>
-                                        </ng-template>
+                                <div class="col-2">
+                                    <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload" name="files" [url]="uploadUrl" 
+                                    (onUpload)="onUpload($event,char)" [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="5000000" 
+                                    [auto]="true">
                                     </p-fileUpload>
+                                </div>
+                            </div>
+                            <div class="row p-2" *ngIf="char.filePath">
+                                <div class="col-4"></div>
+                                <div class="col-4">
+                                    <p class="col-5">{{char.filePath}}</p>
+                                </div>
+                                <div class="col-4">
+                                    <a target="_blank" [href]="fileServerURL+'/'+char.filePath"><i class="pi pi-download download col-4"></i></a>
                                 </div>
                             </div>
                         </ng-container>
                     </ng-container>
                     <ng-container *ngIf="category.method === 'SUSTAINED'">
-                        <h6>GHG Score</h6>
+                        <h6>GHG Answer</h6>
                         <div class="row p-2">
-                            <div class="col-4">Aggregated Score</div>
+                            <div class="col-4">Aggregated Answer</div>
                             <div class="col-8"> 
                                 <input type="text" name="ghgScore" #tboundrary="ngModel" disabled="true"
                                 [(ngModel)]="GHGScore" class="form-control"/>
@@ -187,25 +189,25 @@
                                     </div>
                                     <div class="row p-2">
                                         <div class="col-4">Justification</div>
-                                        <div class="col-8">
+                                        <div class="col-6">
                                             <input type="text" [name]="'justification'+SDG.code"
                                                 [(ngModel)]="char.comment" class="form-control"
                                                 placeholder="Enter Justification" required />
                                         </div>
-                                    </div>
-                                    <div class="row p-2">
-                                        <div class="col-4"></div>
-                                        <div class="col-8">
-                                            <p-fileUpload name="files" [url]="uploadUrl"
-                                                (onUpload)="onUpload($event,char)" [multiple]="true" accept="{{acceptedFiles}}"
-                                                [maxFileSize]="1000000">
-                                                <ng-template pTemplate="content">
-                                                    <ul *ngIf="uploadedFiles.length">
-                                                        <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{
-                                                            file.size }} bytes</li>
-                                                    </ul>
-                                                </ng-template>
+                                        <div class="col-2">
+                                            <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload" name="files" [url]="uploadUrl" 
+                                            (onUpload)="onUpload($event,char)" [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="5000000" 
+                                            [auto]="true">
                                             </p-fileUpload>
+                                        </div>
+                                    </div>
+                                    <div class="row p-2" *ngIf="char.filePath">
+                                        <div class="col-4"></div>
+                                        <div class="col-4">
+                                            <p class="col-5">{{char.filePath}}</p>
+                                        </div>
+                                        <div class="col-4">
+                                            <a target="_blank" [href]="fileServerURL+'/'+char.filePath"><i class="pi pi-download download col-4"></i></a>
                                         </div>
                                     </div>
                                 </ng-container>
@@ -225,25 +227,25 @@
                                     </div>
                                     <div class="row p-2">
                                         <div class="col-4">Justification</div>
-                                        <div class="col-8">
+                                        <div class="col-6">
                                             <input type="text" [name]="'susJustification'+SDG.code"
                                                 [(ngModel)]="chSus.comment" class="form-control"
                                                 placeholder="Enter Justification" required />
                                         </div>
-                                    </div>
-                                    <div class="row p-2">
-                                        <div class="col-4"></div>
-                                        <div class="col-8">
-                                            <p-fileUpload name="files" [url]="uploadUrl"
-                                                (onUpload)="onUpload($event,chSus)" [multiple]="true" accept="{{acceptedFiles}}"
-                                                [maxFileSize]="1000000">
-                                                <ng-template pTemplate="content">
-                                                    <ul *ngIf="uploadedFiles.length">
-                                                        <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{
-                                                            file.size }} bytes</li>
-                                                    </ul>
-                                                </ng-template>
+                                        <div class="col-2">
+                                            <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload" name="files" [url]="uploadUrl" 
+                                            (onUpload)="onUpload($event,chSus)" [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="5000000" 
+                                            [auto]="true">
                                             </p-fileUpload>
+                                        </div>
+                                    </div>
+                                    <div class="row p-2" *ngIf="chSus.filePath">
+                                        <div class="col-4"></div>
+                                        <div class="col-4">
+                                            <p class="col-5">{{chSus.filePath}}</p>
+                                        </div>
+                                        <div class="col-4">
+                                            <a target="_blank" [href]="fileServerURL+'/'+chSus.filePath"><i class="pi pi-download download col-4"></i></a>
                                         </div>
                                     </div>
                                 </ng-container>

@@ -38,7 +38,7 @@
                                 [(ngModel)]="cm_detail.boundraries" class="form-control"
                                 placeholder="Enter Boundary" required />
                             <p class="info-message text-danger" *ngIf="
-                                        !cm_detail.boundraries &&
+                                        (!cm_detail.boundraries || cm_detail.boundraries === '') &&
                                         (fData.submitted || tboundrary.touched)
                                         ">
                                 This is a mandatory field
@@ -58,15 +58,15 @@
                         </div>
                         <div class="p-field p-2" *ngIf="cm_detail.intCMApproach === 'OTHER'">
                             <label for="policy">Please specify</label>
-                            <input type="text" name="tboundrary" #tboundrary="ngModel"
+                            <input type="text" name="cmApproach" #cmApproach="ngModel"
                                 [(ngModel)]="cm_detail.otherIntCMApproach" class="form-control"
-                                placeholder="Enter Boundary" required />
+                                placeholder="Enter carbon market approach" required />
                         </div>
                         <div class="p-field p-2">
                             <label for="policy">Baseline and monitoring methodology applied by the activity</label>
-                            <input type="text" name="tboundrary" #tboundrary="ngModel"
+                            <input type="text" name="methodology" #methodology="ngModel"
                                 [(ngModel)]="cm_detail.appliedMethodology" class="form-control"
-                                placeholder="Enter Boundary"/>
+                                placeholder="Enter methodology"/>
                         </div>
                         <!-- <div class="p-field p-2">
                             <label for="policy">Impact Types *</label>

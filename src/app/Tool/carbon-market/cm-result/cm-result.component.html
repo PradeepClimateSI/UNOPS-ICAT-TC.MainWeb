@@ -15,40 +15,28 @@
                 <label class="text" for=""><u ><b>{{section}}</b> </u></label>
             </div>
             <div class="row p-2">
-                <p-table [value]="results[section]" rowGroupMode="subheader" groupRowsBy="criteria" dataKey="criteria" [expandedRowKeys]="expandedRows">
+                <p-table [value]="results[section]" sortField="question" sortMode="single" dataKey="criteria" rowGroupMode="subheader" groupRowsBy="criteria" [tableStyle]="{'min-width': '70rem'}" [expandedRowKeys]="expandedRows">
                     <ng-template pTemplate="header">
                         <tr>
-                            <th >
-                                Question
-                            </th>
-                            <th >
-                                Answer
-                            </th>
-                            <th colspan="2">
-                                Rationale
-                            </th>
+                            <th>Question</th>
+                            <th> Answer</th>
+                            <th colspan="2"> Rationale</th>
                         </tr>
                     </ng-template>
-                    <ng-template pTemplate="groupheader" let-company let-isExpanded="expanded">
+                    <ng-template pTemplate="groupheader" let-customer let-rowIndex="rowIndex" let-expanded="expanded">
                         <tr>
-                            <td colspan="3">
-                                <button type="button" pButton pRipple [pRowToggler]="company" class="p-button-text 
-                        p-button-rounded p-button-plain mr-4" [icon]="isExpanded ? 
-                        'pi pi-chevron-down' : 
-                        'pi pi-chevron-right'">
-                                </button>
-                                <span class="font-bold">{{company.criteria}}</span>
+                            <td colspan="5">
+                                <button type="button" pButton pRipple [pRowToggler]="customer" class="p-button-text p-button-rounded p-button-plain mr-2" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                                <!-- <img [alt]="customer.representative.name" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{customer.representative.image}}" width="32" style="vertical-align: middle" /> -->
+                                <span class="font-bold ml-2">{{customer.criteria}}</span>
                             </td>
                         </tr>
                     </ng-template>
-                    <ng-template let-company>
+                    <ng-template pTemplate="rowexpansion" let-customer>
                         <tr>
-                            <td >{{company.question}}</td>
-                            <td > {{company.answer}}</td>
-                            <td >{{company.comment}}</td>
-                            <td > <a *ngIf="company?.document" target="_blank" [href]="fileServerURL+'/'+company?.document"><i class="pi pi-download download"></i></a></td>
-
-                            
+                            <td>{{customer.question}}</td>
+                            <td>{{customer.answer}}</td>
+                            <td>{{customer.comment}}</td><td > <a *ngIf="customer?.document" target="_blank" [href]="fileServerURL+'/'+customer?.document"><i class="pi pi-download download"></i></a></td> 
                         </tr>
                     </ng-template>
                 </p-table>
@@ -80,7 +68,7 @@
                         <tr>
                             <td >{{technology.characteristic}}</td>
                             <td >{{technology.question}}</td>
-                            <td >{{(technology?.score)?(technology?.score):'-'}}</td>
+                            <td >{{(technology?.score)!==undefined?(technology?.score):'-'}}</td>
                             <td >{{(technology?.justification)?(technology?.justification):'-'}}</td>
                             <td > <a *ngIf="technology?.document" target="_blank" [href]="fileServerURL+'/'+technology?.document"><i class="pi pi-download download"></i></a></td>
                         </tr>
@@ -164,7 +152,7 @@
                             <td >{{scale_GHGs.characteristic}}</td>
                             <td >{{(scale_GHGs?.starting_situation)?(scale_GHGs?.starting_situation):'-'}}</td>
                             <td >{{(scale_GHGs?.expected_impacts)?(scale_GHGs?.expected_impacts):'-'}}</td>
-                            <td >{{(scale_GHGs?.score)?(scale_GHGs?.score):'-'}}</td>
+                            <td >{{(scale_GHGs?.outcome_score)?getOutcomeScores((scale_GHGs?.outcome_score),'scale_GHGs'):'-'}}</td>
                             <td >{{(scale_GHGs?.justification)?(scale_GHGs?.justification):'-'}} </td>
                             <td><a *ngIf="scale_GHGs?.document" target="_blank" [href]="fileServerURL+'/'+scale_GHGs?.document"><i class="pi pi-download download"></i></a></td>
 
@@ -191,9 +179,9 @@
                    
                     <ng-template pTemplate="body" let-sustained_GHGs>
                         <tr>
-                            <td >{{sustained_GHGs.characteristic}}</td>
-                            <td >{{(sustained_GHGs?.question)?(sustained_GHGs?.question):'-'}}</td>
-                            <td >{{(sustained_GHGs?.score)?(sustained_GHGs?.score):'-'}}</td>
+                            <td >{{changeOutcomeCharacteristicsName(sustained_GHGs.characteristic)}}</td>
+                            <td >Is the activity's contribution to the selected SDG sustained in nature?</td>
+                            <td >{{(sustained_GHGs?.outcome_score)?getOutcomeScores((sustained_GHGs?.outcome_score),'sustained_GHGs'):'-'}}</td>
                             <td >{{(sustained_GHGs?.justification)?(sustained_GHGs?.justification):'-'}} </td>
                             <td><a *ngIf="sustained_GHGs?.document" target="_blank" [href]="fileServerURL+'/'+sustained_GHGs?.document"><i class="pi pi-download download"></i></a></td>
 
@@ -222,11 +210,11 @@
                    
                     <ng-template pTemplate="body" let-scale_SDs>
                         <tr>
-                            <td >{{(scale_SDs?.SDG)?(scale_SDs?.SDG):'-'}}</td>
+                            <td >{{getSDGName(scale_SDs?.SDG)}}</td>
                             <td >{{scale_SDs?.characteristic}}</td>
                             <td >{{(scale_SDs?.starting_situation)?(scale_SDs?.starting_situation):'-'}}</td>
                             <td >{{(scale_SDs?.expected_impacts)?(scale_SDs?.expected_impacts):'-'}}</td>
-                            <td >{{(scale_SDs?.score)?(scale_SDs?.score):'-'}}</td>
+                            <td >{{(scale_SDs?.outcome_score)?getOutcomeScores((scale_SDs?.outcome_score),'scale_SDs'):'-'}}</td>
                             <td >{{(scale_SDs?.justification)?(scale_SDs?.justification):'-'}} </td>
                             <td><a *ngIf="scale_SDs?.document" target="_blank" [href]="fileServerURL+'/'+scale_SDs?.document"><i class="pi pi-download download"></i></a></td>
                             
@@ -253,10 +241,10 @@
                    
                     <ng-template pTemplate="body" let-sustained_SDs>
                         <tr>
-                            <td >{{(sustained_SDs?.SDG)?(sustained_SDs?.SDG):'-'}}</td>
-                            <td >{{sustained_SDs.characteristic}}</td>
-                            <td >{{(sustained_SDs?.question)?(sustained_SDs?.question):'-'}}</td>
-                            <td >{{(sustained_SDs?.score)?(sustained_SDs?.score):'-'}}</td>
+                            <td >{{getSDGName(sustained_SDs?.SDG)}}</td>
+                            <td >{{changeOutcomeCharacteristicsName(sustained_SDs.characteristic)}}</td>
+                            <td >Is the activity's contribution to the selected SDG sustained in nature?</td>
+                            <td >{{(sustained_SDs?.outcome_score)?getOutcomeScores((sustained_SDs?.outcome_score),'sustained_SDs'):'-'}}</td>
                             <td >{{(sustained_SDs?.justification)?(sustained_SDs?.justification):'-'}} </td>
                             <td><a *ngIf="sustained_SDs?.document" target="_blank" [href]="fileServerURL+'/'+sustained_SDs?.document"><i class="pi pi-download download"></i></a></td>
                         </tr>

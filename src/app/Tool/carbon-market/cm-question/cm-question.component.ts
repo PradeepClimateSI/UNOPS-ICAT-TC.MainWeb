@@ -32,10 +32,13 @@ export class CmQuestionComponent implements OnInit {
   selectedInstitution: Institution
 
   tooltip: string = ''
+  adoptionTooltip = 'High-hanging fruit are mitigation actions that are at the higher end of a marginal abatement cost curve (MACC).'
+  tootltipCodes = ['S-3-ADOPTION-Q-1']
   weight = 0
   uploadUrl: string;
   uploadedFiles: any = [];
   acceptedFiles: string = ".pdf, .jpg, .png, .doc, .docx, .xls, .xlsx, .csv";
+  fileServerURL: string;
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -43,6 +46,7 @@ export class CmQuestionComponent implements OnInit {
     private messageService: MessageService
   ) {
     this.uploadUrl = environment.baseUrlAPI + '/cm-assessment-question/upload-file'
+    this.fileServerURL = environment.baseUrlAPI+'/uploads'
    }
 
   async ngOnInit(): Promise<void> {

@@ -6,6 +6,8 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { environment } from 'environments/environment';
+import { SDG } from '../cm-section-three/cm-section-three.component';
+import { SelectedScoreDto } from 'app/shared/score.dto';
 
 @Component({
   selector: 'app-cm-result',
@@ -27,6 +29,11 @@ export class CmResultComponent implements OnInit {
   processData:{technology:any[],incentives:any[], norms:any[],}={ technology: [], incentives: [], norms: [] };
   outcomeData:{scale_GHGs:any[],sustained_GHGs:any[], scale_SDs:any[],sustained_SDs:any[]}={ scale_GHGs: [], sustained_GHGs: [], scale_SDs: [], sustained_SDs: [] };
   fileServerURL:any
+  SDGs: SDG[]
+  scale_GHG_score:SelectedScoreDto[]
+  sustained_GHG_score:SelectedScoreDto[]
+  scale_SD_score:SelectedScoreDto[]
+  sustained_SD_score:SelectedScoreDto[]
   constructor(
     private route: ActivatedRoute,
     private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
@@ -41,6 +48,12 @@ export class CmResultComponent implements OnInit {
       let assessmentId = params['id']
       this.assessment = await this.assessmentControllerServiceProxy.findOne(assessmentId).toPromise()
       this.intervention = this.assessment.climateAction
+      let cmApproaches = this.masterDataService.int_cm_approaches
+      this.SDGs = this.masterDataService.SDGs
+      this.scale_GHG_score=this.masterDataService.GHG_scale_score;
+      this.sustained_GHG_score=this.masterDataService.GHG_sustained_score;
+      this.scale_SD_score =this.masterDataService.SDG_scale_score;
+      this.sustained_SD_score=this.masterDataService.SDG_sustained_score;
 
       this.assessmentCMDetail = await this.assessmentCMDetailControllerServiceProxy.getAssessmentCMDetailByAssessmentId(assessmentId).toPromise()
       // let types: any = this.assessmentCMDetail.impact_types?.split(',')
@@ -50,15 +63,19 @@ export class CmResultComponent implements OnInit {
       // let chara: any = this.assessmentCMDetail.impact_characteristics?.split(',')
       // if (chara?.length > 0) chara = [...chara.map((char: string) => this.masterDataService.impact_characteristics.find(o => o.code === char)?.name)]
       // console.log(chara)
+      let cmApproache = cmApproaches.find(o => o.code === this.assessmentCMDetail.intCMApproach)
       this.card.push(
         ...[
           { title: 'Intervention', data: this.intervention.policyName },
           { title: 'Assessment Type', data: this.assessment.assessmentType },
           { title: 'Assessment Boundaries', data: this.assessmentCMDetail.boundraries },
-          { title: 'International Carbon Market Approach Used', data: this.assessmentCMDetail.intCMApproach},
+          { title: 'International Carbon Market Approach Used', data: cmApproache?.name},
           { title: 'Baseline and monitoring methodology applied by the activity', data: this.assessmentCMDetail.appliedMethodology}
         ])
       await this.getResult()
+      this.criterias.forEach((c: any) => {
+        this.expandedRows[c] = true
+      })
     })
    
   }
@@ -71,7 +88,9 @@ export class CmResultComponent implements OnInit {
       this.processData =res.processData;
       this.outcomeData =res.outComeData;
       this.keys = Object.keys(this.results)
+      this.keys = this.keys.filter(e => e !== "undefined")
       console.log("res",res)
+      console.log("keys", this.keys)
   
   
       this.criterias.forEach((c: any) => {
@@ -100,11 +119,153 @@ export class CmResultComponent implements OnInit {
       XLSX.utils.sheet_add_json(ws, this.results[key], { skipHeader: false, origin: "A" + length });
       length = length + this.results[key].length + 2
     })
+    XLSX.utils.sheet_add_json(ws, [{title: 'Transformational Change Criteria'}], { skipHeader: true, origin: "A" + length });
+    length = length + 2
+
+    let processData =  this.mapProcessData()
+
+    if (processData.technology.length!=0){
+      XLSX.utils.sheet_add_json(ws, [{title: 'Process of Change / Technology'}], { skipHeader: true, origin: "A" + length });
+      length = length + 2
+      XLSX.utils.sheet_add_json(ws, processData.technology, { skipHeader: false, origin: "A" + length });
+      length = length + this.processData.technology.length + 2
+    }
+    if (processData.incentives.length!=0){
+      XLSX.utils.sheet_add_json(ws, [{title: 'Process of Change / Incentives'}], { skipHeader: true, origin: "A" + length });
+      length = length + 2
+      XLSX.utils.sheet_add_json(ws, processData.incentives, { skipHeader: false, origin: "A" + length });
+      length = length + this.processData.incentives.length + 2
+    }
+    if (processData.norms.length!=0){
+      XLSX.utils.sheet_add_json(ws, [{title: 'Process of Change / Norms'}], { skipHeader: true, origin: "A" + length });
+      length = length + 2
+      XLSX.utils.sheet_add_json(ws, processData.norms, { skipHeader: false, origin: "A" + length });
+      length = length + this.processData.norms.length + 2
+    }
+
+    let outcomeData = this.mapOutcomeData()
+    if (outcomeData.scaleGHGs.length!=0){
+      XLSX.utils.sheet_add_json(ws, [{title: 'Outcome of Change / Scale GHGs'}], { skipHeader: true, origin: "A" + length });
+      length = length + 2
+      XLSX.utils.sheet_add_json(ws, outcomeData.scaleGHGs, { skipHeader: false, origin: "A" + length });
+      length = length + outcomeData.scaleGHGs.length + 2
+    }
+    if (outcomeData.sustainedGHGs.length!=0){
+      XLSX.utils.sheet_add_json(ws, [{title: 'Outcome of Change / Sustained GHGs'}], { skipHeader: true, origin: "A" + length });
+      length = length + 2
+      XLSX.utils.sheet_add_json(ws, outcomeData.sustainedGHGs, { skipHeader: false, origin: "A" + length });
+      length = length + outcomeData.scaleGHGs.length + 2
+    }
+    if (outcomeData.scaleSDs.length!=0){
+      XLSX.utils.sheet_add_json(ws, [{title: 'Outcome of Change / Scale SDs'}], { skipHeader: true, origin: "A" + length });
+      length = length + 2
+      XLSX.utils.sheet_add_json(ws, outcomeData.scaleSDs, { skipHeader: false, origin: "A" + length });
+      length = length + outcomeData.scaleSDs.length + 2
+    }
+    if (outcomeData.sustainedSDs.length!=0){
+      XLSX.utils.sheet_add_json(ws, [{title: 'Outcome of Change / Sustained SDs'}], { skipHeader: true, origin: "A" + length });
+      length = length + 2
+      XLSX.utils.sheet_add_json(ws, outcomeData.sustainedSDs, { skipHeader: false, origin: "A" + length });
+      length = length + outcomeData.sustainedSDs.length + 2
+    }
+
     XLSX.utils.sheet_add_json(ws, [{title: 'Transformational Change', value: this.score}], { skipHeader: true, origin: "A" + length });
 
     XLSX.utils.book_append_sheet(wb, ws, 'sheet1');
 
     XLSX.writeFile(wb, book_name + '.xlsx');
+  }
+
+  mapProcessData(){
+    let data = new ProcessData()
+    if (this.processData.technology.length !== 0){
+      data.technology = this.processData.technology.map(ele => {
+        let _data = new ProcessTableData()
+        _data.Characteristic = ele.characteristic
+        _data.Question = ele.question
+        _data.Score = ele.score
+        _data.Justification = ele.justification
+        return _data
+      })
+    }
+
+    if (this.processData.incentives.length !== 0){
+      data.incentives = this.processData.incentives.map(ele => {
+        let _data = new ProcessTableData()
+        _data.Characteristic = ele.characteristic
+        _data.Question = ele.question
+        _data.Score = ele.score
+        _data.Justification = ele.justification
+        return _data
+      })
+    }
+    if (this.processData.norms.length !== 0){
+      data.norms = this.processData.norms.map(ele => {
+        let _data = new ProcessTableData()
+        _data.Characteristic = ele.characteristic
+        _data.Question = ele.question
+        _data.Score = ele.score
+        _data.Justification = ele.justification
+        return _data
+      })
+    }
+
+    return data
+  }
+
+  mapOutcomeData(){
+    let data = new OutcomeData()
+    if (this.outcomeData.scale_GHGs.length !== 0){
+      data.scaleGHGs = this.outcomeData.scale_GHGs.map(ele => {
+        let _data = new ScaleTableData()
+        _data.Characteristic = ele.characteristic
+        _data['Starting Situation'] = ele.starting_situation
+        _data['Expected Impact'] = ele.expected_impacts
+        let score = this.getOutcomeScores(ele.outcome_score,'scale_GHGs') 
+        _data.Score = score ? score : '-'
+        _data.Justification = ele.justification
+        return _data
+      })
+    }
+    if (this.outcomeData.sustained_GHGs.length !== 0){
+      data.sustainedGHGs = this.outcomeData.sustained_GHGs.map(ele => {
+        let _data = new ScaleTableData()
+        _data.Characteristic = this.changeOutcomeCharacteristicsName(ele.characteristic)
+        _data['Starting Situation'] = ele.starting_situation
+        _data['Expected Impact'] = ele.expected_impacts
+        let score = this.getOutcomeScores(ele.outcome_score,'sustained_GHGs') 
+        _data.Score = score ? score : '-'
+        _data.Justification = ele.justification
+        return _data
+      })
+    }
+    if (this.outcomeData.scale_SDs.length !== 0){
+      data.scaleSDs = this.outcomeData.scale_SDs.map(ele => {
+        let _data = new ScaleTableData()
+        _data.SDG = this.getSDGName(ele.SDG)
+        _data.Characteristic = ele.characteristic
+        _data['Starting Situation'] = ele.starting_situation
+        _data['Expected Impact'] = ele.expected_impacts
+        let score = this.getOutcomeScores(ele.outcome_score,'scale_SDs') 
+        _data.Score = score ? score : '-'
+        _data.Justification = ele.justification
+        return _data
+      })
+    }
+    if (this.outcomeData.sustained_SDs.length !== 0){
+      data.sustainedSDs = this.outcomeData.sustained_SDs.map(ele => {
+        let _data = new ScaleTableData()
+        _data.SDG = this.getSDGName(ele.SDG)
+        _data.Characteristic = this.changeOutcomeCharacteristicsName(ele.characteristic)
+        _data['Starting Situation'] = ele.starting_situation
+        _data['Expected Impact'] = ele.expected_impacts
+        let score = this.getOutcomeScores(ele.outcome_score,'sustained_SDs') 
+        _data.Score = score ? score : '-'
+        _data.Justification = ele.justification
+        return _data
+      })
+    }
+    return data
   }
 
   async toDownloadPdf(){
@@ -138,4 +299,85 @@ export class CmResultComponent implements OnInit {
     this.isDownloading = false
   }
 
+  getSDGName(code: any) {
+    if (code){
+      let sdg = this.SDGs.find(o => o.code === code)
+      return sdg !== undefined ? sdg.name : '-'
+    } else {
+      return '-'
+    }
+  }
+  getOutcomeScores(code: any,category:string) {
+    if (code){
+      if(category=='scale_GHGs'){
+        return (this.scale_GHG_score.find(o => o.code === code))?.name
+      }
+      else if(category=='sustained_GHGs'){
+        return (this.sustained_GHG_score.find(o => o.code === code))?.name
+      }
+      else if(category=='scale_SDs'){
+        return (this.scale_SD_score.find(o => o.code === code))?.name
+      }
+      else if(category=='sustained_SDs'){
+        return (this.sustained_SD_score.find(o => o.code === code))?.name
+      }
+      else{
+        return '-'
+      }
+    } else {
+      return '-'
+    }
+  }
+
+  changeOutcomeCharacteristicsName(name:string){
+    if(name=='Long term (>15 years)'){
+      return 'Macro Level';
+    }
+    else if(name=='Medium term (5-15 years)'){
+      return 'Medium Level'
+
+
+    }else if(name=='Short Term (<5 years)'){
+      return 'Micro Level'
+      
+    }else{
+      return name;
+    }
+  }
+}
+
+export class ProcessData{
+  technology: ProcessTableData[]
+  incentives: ProcessTableData[]
+  norms: ProcessTableData[]
+}
+
+export class ProcessTableData {
+  Characteristic: string
+  Question: string
+  Score: number
+  Justification: string
+}
+export class OutcomeData{
+  scaleGHGs: any[]
+  sustainedGHGs: any[]
+  scaleSDs: any[]
+  sustainedSDs: any[]
+}
+
+export class SustainedTableData{
+  SDG: string
+  Characteristic: string
+  Question: string
+  Score: string
+  Justification: string
+}
+
+export class ScaleTableData{
+  SDG: string
+  Characteristic: string
+  'Starting Situation': string
+  'Expected Impact': string
+  Score: string
+  Justification: string
 }
