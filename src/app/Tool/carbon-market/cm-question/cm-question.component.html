@@ -1,6 +1,5 @@
-<label for="q">{{question.label}}</label>
-<!-- <i class="pi pi-info-circle" pTooltip="{{tooltip}}" tooltipPosition="top"
-        style="font-size: 1rem"></i> -->
+<label for="q">{{question.label}}<i *ngIf="tootltipCodes.includes(question.code)" class="pi pi-info-circle" pTooltip="{{adoptionTooltip}}" tooltipPosition="top"
+        style="font-size: 1rem"></i></label>
 
 <div class="row p-2">
     <div class="col-4">
@@ -22,20 +21,23 @@
 </div>
 <div class="row p-2">
     <div class="col-4">Rationale</div>
-    <div class="col-8">
+    <div class="col-6">
         <textarea style="width: 100%;" pInputTextarea [rows]="5" wrap="hard" required maxlength="500"
             [(ngModel)]="comment" (change)="onSelectAnswer($event, 'COMMENT')"></textarea>
     </div>
-</div>
-<div class="row p-2">
-    <div class="col-4"></div>
-    <div class="col-8">
-        <p-fileUpload name="files" [url]="uploadUrl" (onUpload)="onUpload($event,'FILE')" [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="1000000" [auto]="true">
-            <ng-template pTemplate="content">
-                <ul *ngIf="uploadedFiles.length">
-                    <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{ file.size }} bytes</li>
-                </ul>
-            </ng-template>
+    <div class="col-2">
+        <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload" name="files" [url]="uploadUrl" 
+        (onUpload)="onUpload($event,'FILE')" [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="5000000" 
+        [auto]="true">
         </p-fileUpload>
+    </div>
+</div>
+<div class="row p-2" *ngIf="question['result']?.filePath">
+    <div class="col-4"></div>
+    <div class="col-4">
+        <p>{{question['result']?.filePath}}</p>
+    </div>
+    <div class="col-4">
+        <a target="_blank" [href]="fileServerURL+'/'+question['result']?.filePath"><i class="pi pi-download download"></i></a>
     </div>
 </div>

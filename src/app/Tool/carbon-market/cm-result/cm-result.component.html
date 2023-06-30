@@ -80,7 +80,7 @@
                         <tr>
                             <td >{{technology.characteristic}}</td>
                             <td >{{technology.question}}</td>
-                            <td >{{(technology?.score)?(technology?.score):'-'}}</td>
+                            <td >{{(technology?.score)!==undefined?(technology?.score):'-'}}</td>
                             <td >{{(technology?.justification)?(technology?.justification):'-'}}</td>
                             <td > <a *ngIf="technology?.document" target="_blank" [href]="fileServerURL+'/'+technology?.document"><i class="pi pi-download download"></i></a></td>
                         </tr>

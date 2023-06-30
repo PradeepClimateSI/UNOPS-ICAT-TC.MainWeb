@@ -73,6 +73,9 @@ export class CmResultComponent implements OnInit {
           { title: 'Baseline and monitoring methodology applied by the activity', data: this.assessmentCMDetail.appliedMethodology}
         ])
       await this.getResult()
+      this.criterias.forEach((c: any) => {
+        this.expandedRows[c] = true
+      })
     })
    
   }
@@ -218,7 +221,8 @@ export class CmResultComponent implements OnInit {
         _data.Characteristic = ele.characteristic
         _data['Starting Situation'] = ele.starting_situation
         _data['Expected Impact'] = ele.expected_impacts
-        _data.Score = ele.score
+        let score = this.getOutcomeScores(ele.outcome_score,'scale_GHGs') 
+        _data.Score = score ? score : '-'
         _data.Justification = ele.justification
         return _data
       })
@@ -226,10 +230,11 @@ export class CmResultComponent implements OnInit {
     if (this.outcomeData.sustained_GHGs.length !== 0){
       data.sustainedGHGs = this.outcomeData.sustained_GHGs.map(ele => {
         let _data = new ScaleTableData()
-        _data.Characteristic = ele.characteristic
+        _data.Characteristic = this.changeOutcomeCharacteristicsName(ele.characteristic)
         _data['Starting Situation'] = ele.starting_situation
         _data['Expected Impact'] = ele.expected_impacts
-        _data.Score = ele.score
+        let score = this.getOutcomeScores(ele.outcome_score,'sustained_GHGs') 
+        _data.Score = score ? score : '-'
         _data.Justification = ele.justification
         return _data
       })
@@ -241,7 +246,8 @@ export class CmResultComponent implements OnInit {
         _data.Characteristic = ele.characteristic
         _data['Starting Situation'] = ele.starting_situation
         _data['Expected Impact'] = ele.expected_impacts
-        _data.Score = ele.score
+        let score = this.getOutcomeScores(ele.outcome_score,'scale_SDs') 
+        _data.Score = score ? score : '-'
         _data.Justification = ele.justification
         return _data
       })
@@ -250,10 +256,11 @@ export class CmResultComponent implements OnInit {
       data.sustainedSDs = this.outcomeData.sustained_SDs.map(ele => {
         let _data = new ScaleTableData()
         _data.SDG = this.getSDGName(ele.SDG)
-        _data.Characteristic = ele.characteristic
+        _data.Characteristic = this.changeOutcomeCharacteristicsName(ele.characteristic)
         _data['Starting Situation'] = ele.starting_situation
         _data['Expected Impact'] = ele.expected_impacts
-        _data.Score = ele.score
+        let score = this.getOutcomeScores(ele.outcome_score,'sustained_SDs') 
+        _data.Score = score ? score : '-'
         _data.Justification = ele.justification
         return _data
       })
@@ -317,12 +324,11 @@ export class CmResultComponent implements OnInit {
       else{
         return '-'
       }
-
-      
     } else {
       return '-'
     }
   }
+
   changeOutcomeCharacteristicsName(name:string){
     if(name=='Long term (>15 years)'){
       return 'Macro Level';
@@ -337,10 +343,7 @@ export class CmResultComponent implements OnInit {
     }else{
       return name;
     }
-    
   }
-
-
 }
 
 export class ProcessData{
