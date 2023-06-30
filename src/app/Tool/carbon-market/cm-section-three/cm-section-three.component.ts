@@ -9,8 +9,12 @@ import { CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characterist
 
 
 interface UploadEvent {
-  originalEvent: HttpResponse<string[]>;
+  originalEvent: HttpResponse<FileDocument>;
   files: File[];
+}
+
+interface FileDocument {
+  fileName: string
 }
 @Component({
   selector: 'app-cm-section-three',
@@ -299,14 +303,10 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   onUpload(event:UploadEvent, res: CMResultDto) {
-    console.log(event.originalEvent.body)
     if(event.originalEvent.body){
-
-      // this.savedDocs = event.originalEvent.body;
-
+      res.filePath = event.originalEvent.body.fileName
     }
-    let path = 'File Path'
-    res.filePath = path
+    
     this.messageService.add({severity: 'info', summary: 'File Uploaded', detail: ''});
   }
 }
