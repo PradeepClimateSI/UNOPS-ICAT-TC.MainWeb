@@ -324,6 +324,9 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   onMainTabChange(event: any) {
     this.mainTabIndex =event.index;
+    if(this.mainTabIndex==1){
+      this.activeIndex2=0;
+    }
     console.log("main index", this.mainTabIndex)
   }
   onCategoryTabChange(event: any, tabview: TabView) {
@@ -452,8 +455,9 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       console.log( "activeIndex2",this.activeIndex2)
 
     }
-    if (this.activeIndex===3) {
-      this.activeIndexMain =1;
+    if (this.activeIndex === 3 && this.activeIndexMain !== 1) {
+      this.activeIndexMain = 1;
+      this.activeIndex2=0;
 
     }
     if (this.activeIndex<=2 && this.activeIndex>=0 && this.activeIndexMain===0){

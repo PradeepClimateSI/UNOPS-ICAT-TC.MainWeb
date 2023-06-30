@@ -418,6 +418,11 @@ export class PortfolioTrack4Component implements OnInit {
 
   onMainTabChange(event: any) {
     this.mainTabIndex = event.index;
+    console.log(event)
+    if(this.mainTabIndex==1){
+      this.activeIndex2=0;
+    }
+   
     console.log("main index", this.mainTabIndex)
   }
 
@@ -561,8 +566,9 @@ export class PortfolioTrack4Component implements OnInit {
       console.log("activeIndex2", this.activeIndex2)
 
     }
-    if (this.activeIndex === 3) {
+    if (this.activeIndex === 3 && this.activeIndexMain !== 1) {
       this.activeIndexMain = 1;
+      this.activeIndex2=0;
 
     }
     if (this.activeIndex <= 2 && this.activeIndex >= 0 && this.activeIndexMain === 0) {

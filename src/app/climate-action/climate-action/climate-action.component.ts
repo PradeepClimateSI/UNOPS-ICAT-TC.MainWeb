@@ -73,9 +73,9 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
   editEntytyId: number = 0;
   anonymousEditEntytyId: number = 0;
   documentOwnerId: number = 0;
-  proposeDateofCommence: Date;
-  dateOfCompletion: Date;
-  dateOfImplementation:Date;
+  proposeDateofCommence: any ='';
+  dateOfCompletion: any='';
+  dateOfImplementation:any='';
 
   isLoading: boolean = false;
   isDownloading: boolean = true;
@@ -184,7 +184,7 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
 
   ngOnInit(): void {
 
-    
+    // this.project=new Project()
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const countryId = token ? decode<any>(token).countryId : 0;
@@ -266,6 +266,27 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
         this.isDownloading = false;
         console.log("flag", this.flag, "this.editEntytyId", this.editEntytyId)
 
+      }else{
+        console.log("............")
+        this.project=new Project();
+        this.serviceProxy
+        .getOneBaseCountryControllerCountry(
+          countryId,
+          undefined,
+          undefined,
+          undefined
+        )
+        .subscribe((res) => {
+          console.log("sss",res)
+          this.countryList.push(res)
+          console.log("this.countryList",this.countryList)
+          this.project.country =res;
+          this.isSector = true;
+          // console.log('tokenPayloadmasssge',res);
+        });
+        this.proposeDateofCommence=''
+        this.dateOfImplementation =''
+        this.dateOfCompletion =''
       }
     });
 
@@ -413,6 +434,10 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
               this.project = res1;
               // this.project.aggregatedAction = res1.aggregatedAction;
               // this.project.sector = res1.sector;
+              // if(res1.subNationalLevl1||res1.subNationalLevl2||res1.subNationalLevl3){
+              //   this.isCity =1
+              // }
+              this.isCity =res1.isCity;
               const latitude = parseFloat(this.project.latitude + '');
               const longitude = parseFloat(this.project.longitude + '');
               await this.addMarker(longitude, latitude);
@@ -451,9 +476,9 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
               // console.log('this.project.sector...', this.project.sector);
               this.onSectorChange(true);
               this.proposeDateofCommence = new Date(
-                this.project.proposeDateofCommence.year(),
-                this.project.proposeDateofCommence.month(),
-                this.project.proposeDateofCommence.date()
+                this.project.proposeDateofCommence?.year(),
+                this.project.proposeDateofCommence?.month(),
+                this.project.proposeDateofCommence?.date()
               );
               // this.endDateofCommence = new Date(
               //   this.project.endDateofCommence.year(),
@@ -461,15 +486,15 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
               //   this.project.endDateofCommence.date()
               // );
               this.dateOfImplementation = new Date(
-                this.project.dateOfImplementation.year(),
-                this.project.dateOfImplementation.month(),
-                this.project.dateOfImplementation.date()
+                this.project.dateOfImplementation?.year(),
+                this.project.dateOfImplementation?.month(),
+                this.project.dateOfImplementation?.date()
               );
 
               this.dateOfCompletion = new Date(
-                this.project.dateOfCompletion.year(),
-                this.project.dateOfCompletion.month(),
-                this.project.dateOfCompletion.date()
+                this.project.dateOfCompletion?.year(),
+                this.project.dateOfCompletion?.month(),
+                this.project.dateOfCompletion?.date()
               );
 
    
@@ -525,6 +550,7 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
               //   });
             });
         }
+       
 
         //Anonymous form
         if (this.anonymousEditEntytyId && this.anonymousEditEntytyId > 0) {
@@ -765,9 +791,10 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
     }
 
 
-    this.project.proposeDateofCommence = moment(this.proposeDateofCommence);
+    this.project.proposeDateofCommence = moment(new Date());
     this.project.dateOfImplementation = moment(this.dateOfImplementation);
     this.project.dateOfCompletion = moment(this.dateOfCompletion);
+    console.log(this.project.dateOfImplementation, this.project.dateOfCompletion,this.project.proposeDateofCommence)
     //this.project.endDateofCommence = moment(this.endDateofCommence);
     // this.project.mappedInstitution=this.selectedInstitution;/
 
@@ -835,6 +862,7 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
         this.project.actionArea.id =1;
         this.project.sector = new Sector()
         this.project.sector.id =1;
+        this.project.isCity =this.isCity
         // let country = new Country();
         // country.id =this.counID
         // this.project.country =country
