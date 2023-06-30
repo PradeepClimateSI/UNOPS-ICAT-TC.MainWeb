@@ -20,7 +20,7 @@
                         <tr>
                             <th >
                                 Question
-                            </th>
+                            </th> 
                             <th >
                                 Answer
                             </th>
@@ -222,7 +222,7 @@
                    
                     <ng-template pTemplate="body" let-scale_SDs>
                         <tr>
-                            <td >{{(scale_SDs?.SDG)?(scale_SDs?.SDG):'-'}}</td>
+                            <td >{{getSDGName(scale_SDs?.SDG)}}</td>
                             <td >{{scale_SDs?.characteristic}}</td>
                             <td >{{(scale_SDs?.starting_situation)?(scale_SDs?.starting_situation):'-'}}</td>
                             <td >{{(scale_SDs?.expected_impacts)?(scale_SDs?.expected_impacts):'-'}}</td>
@@ -253,7 +253,7 @@
                    
                     <ng-template pTemplate="body" let-sustained_SDs>
                         <tr>
-                            <td >{{(sustained_SDs?.SDG)?(sustained_SDs?.SDG):'-'}}</td>
+                            <td >{{getSDGName(sustained_SDs?.SDG)}}</td>
                             <td >{{sustained_SDs.characteristic}}</td>
                             <td >Is the activity's contribution to the selected SDG sustained in nature?</td>
                             <td >{{(sustained_SDs?.outcome_score)?(sustained_SDs?.outcome_score):'-'}}</td>

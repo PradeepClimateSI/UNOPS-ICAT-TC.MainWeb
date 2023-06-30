@@ -6,6 +6,7 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { environment } from 'environments/environment';
+import { SDG } from '../cm-section-three/cm-section-three.component';
 
 @Component({
   selector: 'app-cm-result',
@@ -27,6 +28,7 @@ export class CmResultComponent implements OnInit {
   processData:{technology:any[],incentives:any[], norms:any[],}={ technology: [], incentives: [], norms: [] };
   outcomeData:{scale_GHGs:any[],sustained_GHGs:any[], scale_SDs:any[],sustained_SDs:any[]}={ scale_GHGs: [], sustained_GHGs: [], scale_SDs: [], sustained_SDs: [] };
   fileServerURL:any
+  SDGs: SDG[]
   constructor(
     private route: ActivatedRoute,
     private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
@@ -41,6 +43,7 @@ export class CmResultComponent implements OnInit {
       let assessmentId = params['id']
       this.assessment = await this.assessmentControllerServiceProxy.findOne(assessmentId).toPromise()
       this.intervention = this.assessment.climateAction
+      this.SDGs = this.masterDataService.SDGs
 
       this.assessmentCMDetail = await this.assessmentCMDetailControllerServiceProxy.getAssessmentCMDetailByAssessmentId(assessmentId).toPromise()
       // let types: any = this.assessmentCMDetail.impact_types?.split(',')
@@ -136,6 +139,14 @@ export class CmResultComponent implements OnInit {
       pdf.save('download.pdf')
     })
     this.isDownloading = false
+  }
+
+  getSDGName(code: any) {
+    if (code){
+      return (this.SDGs.find(o => o.code === code))?.name
+    } else {
+      return '-'
+    }
   }
 
 }
