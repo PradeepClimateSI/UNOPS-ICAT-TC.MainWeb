@@ -5,6 +5,7 @@ import * as XLSX from 'xlsx';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { MasterDataService } from 'app/shared/master-data.service';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-cm-result',
@@ -23,7 +24,9 @@ export class CmResultComponent implements OnInit {
   score: string
   expandedRows: any = {}
   isDownloading: boolean = false
-
+  processData:{technology:any[],incentives:any[], norms:any[],}={ technology: [], incentives: [], norms: [] };
+  outcomeData:{scale_GHGs:any[],sustained_GHGs:any[], scale_SDs:any[],sustained_SDs:any[]}={ scale_GHGs: [], sustained_GHGs: [], scale_SDs: [], sustained_SDs: [] };
+  fileServerURL:any
   constructor(
     private route: ActivatedRoute,
     private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
@@ -33,6 +36,7 @@ export class CmResultComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
+    this.fileServerURL = environment.baseUrlAPI+'/uploads'
     this.route.queryParams.subscribe(async (params) => {
       let assessmentId = params['id']
       this.assessment = await this.assessmentControllerServiceProxy.findOne(assessmentId).toPromise()
@@ -64,8 +68,10 @@ export class CmResultComponent implements OnInit {
     if (res){
       this.results = res.result
       this.criterias = res.criteria
+      this.processData =res.processData;
+      this.outcomeData =res.outComeData;
       this.keys = Object.keys(this.results)
-      // console.log("res",res,"this.keys",this.keys)
+      console.log("res",res)
   
   
       this.criterias.forEach((c: any) => {
