@@ -505,7 +505,7 @@
               <div class="col-12 col-md-6">
                 <div class="p-field">
                   <label for="description">Description of the intervention</label>
-                  <textarea [disabled]="editEntytyId > 0" name="description" placeholder="description"
+                  <textarea [disabled]="editEntytyId > 0" name="description" placeholder="Description"
                     #description="ngModel" [(ngModel)]="project.description" rows="5" cols="130" pInputText
                     autoResize="autoResize" ></textarea>
                 </div>
@@ -513,7 +513,7 @@
               <div class="col-12 col-md-6">
                 <div class="p-field">
                   <label for="objective">Objective of the intervention</label>
-                  <textarea [disabled]="editEntytyId > 0" name="objective" placeholder="objective" #objective="ngModel"
+                  <textarea [disabled]="editEntytyId > 0" name="objective" placeholder="Objective" #objective="ngModel"
                     [(ngModel)]="project.objective" rows="5" cols="130" pInputText autoResize="autoResize"
                     
                     ></textarea>
@@ -711,7 +711,7 @@
               <p-radioButton
               name="isCity"
               [disabled]="flag==1"
-              value="0"
+              value=0
               [(ngModel)]="isCity"
             ></p-radioButton><label >National</label>
 
@@ -720,7 +720,7 @@
               <p-radioButton
               name="isCity"
               [disabled]="flag==1"
-              value="1"
+              value=1
               [(ngModel)]="isCity"
             ></p-radioButton><label >Sub National</label>
             </div>
@@ -729,7 +729,7 @@
               <p-radioButton
               name="isCity"
               [disabled]="flag==1"
-              value="2"
+              value=2
               [(ngModel)]="isCity"
             ></p-radioButton><label >International</label>
             </div>
@@ -1162,7 +1162,7 @@
             <div class="p-2">
               <h6>Project Documents</h6>
 
-              <ng-container *ngIf="isDownloadMode == 0 && editEntytyId==0 ; else elseBlockdocuments">
+              <ng-container *ngIf="isDownloadMode == 0 && !(editEntytyId>0) ; else elseBlockdocuments">
                 <div class="col-12 wrapper-doc-upload mt-4">
                   <app-document-upload [doucmentList]="documents" [documentOwner]="documentsDocumentOwner"
                     [documentOwnerId]="documentOwnerId" [isNew]="false" [showUpload]="true"> 
@@ -1399,7 +1399,7 @@
 
             <div class="col-12 col-md-6">
               <div class="p-field">
-                <p>Justification for your action (Accept/ Reject/ Data Request)* </p>
+                <p>Justification for your action (Accept/ Reject)* </p>
               </div>
               <div type="button" class="pi pi-info-circle"
                 pTooltip="This is a mandatory field to enable accept and reject button"></div>
@@ -1507,7 +1507,7 @@
 
               </div>
             </div>
-            <div class="col-12 col-md-2">
+            <!-- <div class="col-12 col-md-2">
               <div class="p-field">
                 <ng-container>
                   <button type="button" pButton pRipple
@@ -1521,7 +1521,7 @@
                   </button>
                 </ng-container>
               </div>
-            </div>
+            </div> -->
 
             <div class="col-12 col-md-6">
               <div class="p-field">
@@ -1611,8 +1611,8 @@
     <div class="d-flex flex-row-reverse mt-2 mb-2">
       <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 
-      <button pButton pRipple type="button" [label]="editEntytyId>0?'back':(isSaving?'back':'cancel')"
-        class="p-button-raised" (click)="confirmBack(editEntytyId>0?'back':(isSaving?'back':'cancel'))"></button>
+      <button pButton pRipple type="button" [label]="editEntytyId>0?'Back':(isSaving?'Back':'Cancel')"
+        class="p-button-raised" (click)="confirmBack(editEntytyId>0?'Back':(isSaving?'Back':'Cancel'))"></button>
       <!-- <div *ngIf="isDownloading == false">    [disabled]="isSaving || !fData.form.valid" -->
       <button pButton pRipple label="Download PDF" type="button" style="margin-right: 10px"
         [disabled]="!(editEntytyId>0) &&  !isSaving" class="p-button-raised" (click)="toDownload()"></button>
