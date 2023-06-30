@@ -164,7 +164,7 @@
                             <td >{{scale_GHGs.characteristic}}</td>
                             <td >{{(scale_GHGs?.starting_situation)?(scale_GHGs?.starting_situation):'-'}}</td>
                             <td >{{(scale_GHGs?.expected_impacts)?(scale_GHGs?.expected_impacts):'-'}}</td>
-                            <td >{{(scale_GHGs?.outcome_score)?(scale_GHGs?.outcome_score):'-'}}</td>
+                            <td >{{(scale_GHGs?.outcome_score)?getOutcomeScores((scale_GHGs?.outcome_score),'scale_GHGs'):'-'}}</td>
                             <td >{{(scale_GHGs?.justification)?(scale_GHGs?.justification):'-'}} </td>
                             <td><a *ngIf="scale_GHGs?.document" target="_blank" [href]="fileServerURL+'/'+scale_GHGs?.document"><i class="pi pi-download download"></i></a></td>
 
@@ -193,7 +193,7 @@
                         <tr>
                             <td >{{sustained_GHGs.characteristic}}</td>
                             <td >Is the activity's contribution to the selected SDG sustained in nature?</td>
-                            <td >{{(sustained_GHGs?.outcome_score)?(sustained_GHGs?.outcome_score):'-'}}</td>
+                            <td >{{(sustained_GHGs?.outcome_score)?getOutcomeScores((sustained_GHGs?.outcome_score),'sustained_GHGs'):'-'}}</td>
                             <td >{{(sustained_GHGs?.justification)?(sustained_GHGs?.justification):'-'}} </td>
                             <td><a *ngIf="sustained_GHGs?.document" target="_blank" [href]="fileServerURL+'/'+sustained_GHGs?.document"><i class="pi pi-download download"></i></a></td>
 
@@ -226,7 +226,7 @@
                             <td >{{scale_SDs?.characteristic}}</td>
                             <td >{{(scale_SDs?.starting_situation)?(scale_SDs?.starting_situation):'-'}}</td>
                             <td >{{(scale_SDs?.expected_impacts)?(scale_SDs?.expected_impacts):'-'}}</td>
-                            <td >{{(scale_SDs?.outcome_score)?(scale_SDs?.outcome_score):'-'}}</td>
+                            <td >{{(scale_SDs?.outcome_score)?getOutcomeScores((scale_SDs?.outcome_score),'scale_SDs'):'-'}}</td>
                             <td >{{(scale_SDs?.justification)?(scale_SDs?.justification):'-'}} </td>
                             <td><a *ngIf="scale_SDs?.document" target="_blank" [href]="fileServerURL+'/'+scale_SDs?.document"><i class="pi pi-download download"></i></a></td>
                             
@@ -256,7 +256,7 @@
                             <td >{{getSDGName(sustained_SDs?.SDG)}}</td>
                             <td >{{sustained_SDs.characteristic}}</td>
                             <td >Is the activity's contribution to the selected SDG sustained in nature?</td>
-                            <td >{{(sustained_SDs?.outcome_score)?(sustained_SDs?.outcome_score):'-'}}</td>
+                            <td >{{(sustained_SDs?.outcome_score)?getOutcomeScores((sustained_SDs?.outcome_score),'sustained_SDs'):'-'}}</td>
                             <td >{{(sustained_SDs?.justification)?(sustained_SDs?.justification):'-'}} </td>
                             <td><a *ngIf="sustained_SDs?.document" target="_blank" [href]="fileServerURL+'/'+sustained_SDs?.document"><i class="pi pi-download download"></i></a></td>
                         </tr>

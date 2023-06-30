@@ -7,6 +7,7 @@ import jsPDF from 'jspdf';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { environment } from 'environments/environment';
 import { SDG } from '../cm-section-three/cm-section-three.component';
+import { SelectedScoreDto } from 'app/shared/score.dto';
 
 @Component({
   selector: 'app-cm-result',
@@ -29,6 +30,10 @@ export class CmResultComponent implements OnInit {
   outcomeData:{scale_GHGs:any[],sustained_GHGs:any[], scale_SDs:any[],sustained_SDs:any[]}={ scale_GHGs: [], sustained_GHGs: [], scale_SDs: [], sustained_SDs: [] };
   fileServerURL:any
   SDGs: SDG[]
+  scale_GHG_score:SelectedScoreDto[]
+  sustained_GHG_score:SelectedScoreDto[]
+  scale_SD_score:SelectedScoreDto[]
+  sustained_SD_score:SelectedScoreDto[]
   constructor(
     private route: ActivatedRoute,
     private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
@@ -44,6 +49,10 @@ export class CmResultComponent implements OnInit {
       this.assessment = await this.assessmentControllerServiceProxy.findOne(assessmentId).toPromise()
       this.intervention = this.assessment.climateAction
       this.SDGs = this.masterDataService.SDGs
+      this.scale_GHG_score=this.masterDataService.GHG_scale_score;
+      this.sustained_GHG_score=this.masterDataService.GHG_sustained_score;
+      this.scale_SD_score =this.masterDataService.SDG_scale_score;
+      this.sustained_SD_score=this.masterDataService.SDG_sustained_score;
 
       this.assessmentCMDetail = await this.assessmentCMDetailControllerServiceProxy.getAssessmentCMDetailByAssessmentId(assessmentId).toPromise()
       // let types: any = this.assessmentCMDetail.impact_types?.split(',')
@@ -144,6 +153,29 @@ export class CmResultComponent implements OnInit {
   getSDGName(code: any) {
     if (code){
       return (this.SDGs.find(o => o.code === code))?.name
+    } else {
+      return '-'
+    }
+  }
+  getOutcomeScores(code: any,category:string) {
+    if (code){
+      if(category=='scale_GHGs'){
+        return (this.scale_GHG_score.find(o => o.code === code))?.name
+      }
+      else if(category=='sustained_GHGs'){
+        return (this.sustained_GHG_score.find(o => o.code === code))?.name
+      }
+      else if(category=='scale_SDs'){
+        return (this.scale_SD_score.find(o => o.code === code))?.name
+      }
+      else if(category=='sustained_SDs'){
+        return (this.sustained_SD_score.find(o => o.code === code))?.name
+      }
+      else{
+        return '-'
+      }
+
+      
     } else {
       return '-'
     }
