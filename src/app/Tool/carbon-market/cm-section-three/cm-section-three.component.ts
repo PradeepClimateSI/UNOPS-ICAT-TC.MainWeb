@@ -219,7 +219,7 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   onAnswer(event: any, question: any, characteristic: Characteristics) {
-    let result = this.results.find(o => o.question.code === question.code)
+    let result = this.results.find(o => o.question.id === question.id)
     console.log(result)
     let isNew: boolean = false
     if (result === undefined){
