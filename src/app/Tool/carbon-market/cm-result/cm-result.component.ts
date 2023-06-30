@@ -323,6 +323,23 @@ export class CmResultComponent implements OnInit {
       return '-'
     }
   }
+  changeOutcomeCharacteristicsName(name:string){
+    if(name=='Long term (>15 years)'){
+      return 'Macro Level';
+    }
+    else if(name=='Medium term (5-15 years)'){
+      return 'Medium Level'
+
+
+    }else if(name=='Short Term (<5 years)'){
+      return 'Micro Level'
+      
+    }else{
+      return name;
+    }
+    
+  }
+
 
 }
 

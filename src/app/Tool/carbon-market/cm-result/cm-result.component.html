@@ -191,7 +191,7 @@
                    
                     <ng-template pTemplate="body" let-sustained_GHGs>
                         <tr>
-                            <td >{{sustained_GHGs.characteristic}}</td>
+                            <td >{{changeOutcomeCharacteristicsName(sustained_GHGs.characteristic)}}</td>
                             <td >Is the activity's contribution to the selected SDG sustained in nature?</td>
                             <td >{{(sustained_GHGs?.outcome_score)?getOutcomeScores((sustained_GHGs?.outcome_score),'sustained_GHGs'):'-'}}</td>
                             <td >{{(sustained_GHGs?.justification)?(sustained_GHGs?.justification):'-'}} </td>
@@ -254,7 +254,7 @@
                     <ng-template pTemplate="body" let-sustained_SDs>
                         <tr>
                             <td >{{getSDGName(sustained_SDs?.SDG)}}</td>
-                            <td >{{sustained_SDs.characteristic}}</td>
+                            <td >{{changeOutcomeCharacteristicsName(sustained_SDs.characteristic)}}</td>
                             <td >Is the activity's contribution to the selected SDG sustained in nature?</td>
                             <td >{{(sustained_SDs?.outcome_score)?getOutcomeScores((sustained_SDs?.outcome_score),'sustained_SDs'):'-'}}</td>
                             <td >{{(sustained_SDs?.justification)?(sustained_SDs?.justification):'-'}} </td>
