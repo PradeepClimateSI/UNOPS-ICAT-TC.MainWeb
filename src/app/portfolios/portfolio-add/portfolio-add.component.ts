@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import {  MethodologyAssessmentControllerServiceProxy, Portfolio, PortfolioControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
@@ -13,6 +14,8 @@ export class PortfolioAddComponent implements OnInit {
     private methassess : MethodologyAssessmentControllerServiceProxy,
     private portfolioServiceProxy : PortfolioControllerServiceProxy,
     private messageService: MessageService,
+    private router: Router,
+    private route: ActivatedRoute,
   ) { }
 
   portfolio : Portfolio = new Portfolio();
@@ -117,6 +120,10 @@ export class PortfolioAddComponent implements OnInit {
           detail: 'Portfolio created successfully',
           closable: true,
         })
+
+       // this.router.navigate(['/app/portfolio-list'],);
+        this.router.navigate(['app/portfolio-view'], { queryParams: { id: res } });
+
      },error => {
       console.log(error)
       this.messageService.add({

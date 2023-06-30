@@ -93,10 +93,12 @@
             </ng-template>
           </p-table>
 
+          <div class="mb-12" *ngIf="!investerTool">
           <h6>Selected SDGs</h6><br>
           <div *ngFor="let item of SDGsList; index as i">
             <p> {{i+1}}) SDG {{item.sdg.number}} - {{item.sdg.name}} </p>
           </div>
+        </div>
 
           <br> <br>
           <h6>Outcome of Change</h6><br>
