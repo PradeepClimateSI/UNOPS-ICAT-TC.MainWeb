@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { SDG } from 'app/Tool/carbon-market/cm-section-three/cm-section-three.component';
+import { SelectedScoreDto } from './score.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -32,8 +34,11 @@ export class MasterDataService {
   private _assessment_approach2: {name: string, id: number}[] = []
   private _relevance: {name: string, value: number}[] = []
   private _likelihood: {id: string, value: number}[] = []
-
-
+  private _GHG_scale_score: SelectedScoreDto[] = []
+  private _GHG_sustained_score: SelectedScoreDto[] = []
+  private _SDG_scale_score: SelectedScoreDto[] = []
+  private _SDG_sustained_score: SelectedScoreDto[] = []
+  private _SDGs: SDG[] = []
 
 
 
@@ -232,6 +237,54 @@ export class MasterDataService {
       { id: 1, name: "Direct" },
       { id: 2, name: "Indirect" },
 
+    ] 
+
+    this.GHG_scale_score = [
+      {name: '3', code: '3', value: 3},
+      {name: '2', code: '2', value: 2},
+      {name: '1', code: '1', value: 1},
+      {name: '0', code: '0', value: 0},
+      {name: '-1', code: '-1', value: -1}
+    ] 
+    this.GHG_sustained_score = [
+      {name: '3 - Expected impact of over x years on the selected scale', code: '3', value: 3},
+      {name: '2 - Expected impact of x years on the selected scale', code: '2', value: 2},
+      {name: '1 - Expected impact of x years on the selected scale', code: '1', value: 1},
+      {name: '0 - No expected impact impact on the selected scale', code: '0', value: 0},
+      {name: '-1 - Impact expected to reverse over time', code: '-1', value: -1}
+    ] 
+    this.SDG_scale_score = [
+      {name: '3 - Material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the activity area', code: '3', value: 3},
+      {name: '2 - Material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the activity area', code: '2', value: 2},
+      {name: '1 - Material change of more than 5% of the baseline value of the indicator / set of indicators underpinning the SDG in the activity area', code: '1', value: 1},
+      {name: '0 - No material change of the baseline value of the indicator / set of indicators underpinning the SDG in the activity area', code: '0', value: 0},
+      {name: '-1 - Negative impact on the indicator / set of indicators underpinning the SDG in the activity area', code: '-1', value: -1},
+    ] 
+    this.SDG_sustained_score = [
+      {name: '3 - Expected impact of over 15 years for the selected SDG in the activity area', code: '3', value: 3},
+      {name: '2 - Expected impact of 11-15 years for the selected SDG in the activity area', code: '2', value: 2},
+      {name: '1 - Expected impact of 0-10 years for the selected SDG in the activity area', code: '1', value: 1},
+      {name: '0 - No expected impact impact for the selected SDG in the activity area', code: '0', value: 0},
+      {name: '-1 - Impact expected to reverse over time', code: '-1', value: -1},
+    ] 
+    this.SDGs= [
+      {name: 'No poverty', code: 'NO_POVERTY', scaleResult: [], sustainResult: []},
+      {name: 'Zero hunger', code: 'ZERO_HUNGER', scaleResult: [], sustainResult: []},
+      {name: 'Good health and well-being', code: 'GOOD_HEALTH_AND_WELL_BEING', scaleResult: [], sustainResult: []},
+      {name: 'Quality education', code: 'QULITY_EDUCATION', scaleResult: [], sustainResult: []},
+      {name: 'Gender equality', code: 'GENDER_EQUALITY', scaleResult: [], sustainResult: []},
+      {name: 'Clean water and sanitation', code: 'CLEAN_WATER_AND_SANITATION', scaleResult: [], sustainResult: []},
+      {name: 'Affordable and clean energy', code: 'AFFORDABLE_AND_CLEAN_ENERGY', scaleResult: [], sustainResult: []},
+      {name: 'Decent work and economic growth', code: 'DECENT_WORK_AND_ECONOMIC_GROWTH', scaleResult: [], sustainResult: []},
+      {name: 'Industry innovation and infrastructure', code: 'INDUSTRY_INNOVATION_AND_INFRASTRUCTURE', scaleResult: [], sustainResult: []},
+      {name: 'Reduced inequalities', code: 'REDUCED_INEQUALITIES', scaleResult: [], sustainResult: []},
+      {name: 'Sustainable cities and communities', code: 'SUSTAINABLE_CITIES_AND_COMMUNIIES', scaleResult: [], sustainResult: []},
+      {name: 'Responsible consumption and production', code: 'RESPONSIBLE_CONSUMPTION_AND_PRODUCTION', scaleResult: [], sustainResult: []},
+      {name: 'Climate action', code: 'CLIMATE_ACTION', scaleResult: [], sustainResult: []},
+      {name: 'Life below water', code: 'LIFE_BELOW_WATER', scaleResult: [], sustainResult: []},
+      {name: 'Life on land', code: 'LIFE_ON_LAND', scaleResult: [], sustainResult: []},
+      {name: 'Peace, justice and strong institutions', code: 'PEACE_JUSTICE_AND_STRING_INSTITUTIONS', scaleResult: [], sustainResult: []},
+      {name: 'Partnerships for the goals', code: 'PARTNERSHIPS_FOR_THE_GOALS', scaleResult: [], sustainResult: []}
     ] 
 
 
@@ -455,8 +508,44 @@ export class MasterDataService {
   get assessment_approach2 (): { name: string; id: number }[] {
     return this._assessment_approach;
   } 
+  
+  set GHG_scale_score(value: SelectedScoreDto[]) {
+    this._GHG_scale_score = value;
+  }
 
+  get GHG_scale_score (): SelectedScoreDto[] {
+    return this._GHG_scale_score;
+  } 
+  
+  set GHG_sustained_score(value: SelectedScoreDto[]) {
+    this._GHG_sustained_score = value;
+  }
 
+  get GHG_sustained_score (): SelectedScoreDto[] {
+    return this._GHG_sustained_score;
+  } 
+  
+  set SDG_scale_score(value: SelectedScoreDto[]) {
+    this._SDG_scale_score = value;
+  }
 
+  get SDG_scale_score (): SelectedScoreDto[] {
+    return this._SDG_scale_score;
+  } 
+  
+  set SDG_sustained_score(value: SelectedScoreDto[]) {
+    this._SDG_sustained_score = value;
+  }
 
+  get SDG_sustained_score (): SelectedScoreDto[] {
+    return this._SDG_sustained_score;
+  } 
+
+  set SDGs(value: SDG[]) {
+    this._SDGs = value;
+  }
+
+  get SDGs (): SDG[] {
+    return this._SDGs;
+  } 
 }

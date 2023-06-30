@@ -2,9 +2,9 @@
     <p-tabPanel *ngFor="let type of types" header="{{type.name}}">
         <p-tabView #tabView (onChange)="onCategoryTabChange($event)" [(activeIndex)]="activeIndex"
             *ngIf="type.code === 'process'">
-            <p-tabPanel *ngFor="let category of categories[type.code].categories" [header]="category.name">
-                <ng-container *ngFor="let char of categories[type.code].characteristic[category.code]">
-                    <p>{{char.name}}</p>
+            <p-tabPanel *ngFor="let category of categories[type.code]" [header]="category.name">
+                <ng-container *ngFor="let char of category.characteristics; let idx = index">
+                    <h6>{{idx + 1}}. {{char.name}}</h6>
                     <div *ngFor="let question of questions[char.code]">
                         <app-cm-question [question]="question" [approach]="approach"
                             (prev_answer)="onAnswer($event, question, char)"></app-cm-question>
@@ -25,15 +25,15 @@
             *ngIf="type.code === 'outcome'">
             <p-tabPanel *ngFor="let category of outcome" [header]="category.name">
                 <ng-container *ngIf="category.type === 'GHG'">
-                    <ng-container *ngFor="let char of category.results">
-                        <p>{{char.characteristic.name}}</p>
+                    <ng-container *ngFor="let char of category.results; let idx = index">
+                        <h6>{{idx+1}}. {{char.characteristic.name}}</h6>
                         <ng-container *ngIf="category.method === 'SCALE'">
                             <div class="row p-2">
                                 <div class="col-4">Starting Situation</div>
                                 <div class="col-8">
                                     <input type="text" [name]="'stSituation'+char.id" #tboundrary="ngModel"
                                         [(ngModel)]="char.startingSituation" class="form-control"
-                                        placeholder="Enter Boundary" required />
+                                        placeholder="Enter Starting Situation" required />
                                 </div>
                             </div>
                             <div class="row p-2">
@@ -41,37 +41,38 @@
                                 <div class="col-8">
                                     <input type="text" [name]="'impact'+char.id" #tboundrary="ngModel"
                                         [(ngModel)]="char.expectedImpact" class="form-control"
-                                        placeholder="Enter Boundary" required />
+                                        placeholder="Enter Expected Impact" required />
                                 </div>
                             </div>
                             <div class="row p-2">
-                                <div class="row col-6">
-                                    <div class="col-4">Score</div>
-                                    <div class="col-8">
-                                        <!-- p-dropdown -->
-                                        <input type="text" [name]="'scor'+char.id" #tboundrary="ngModel"
-                                            [(ngModel)]="char.selectedScore" class="form-control"
-                                            placeholder="Enter Boundary" required />
-                                    </div>
+                                <div class="col-4">Score</div>
+                                <div class="col-8">
+                                    <p-dropdown [name]="'score'+char.id" #type="ngModel" placeholder="Select Score"
+                                        [(ngModel)]="char.selectedScore" [options]="GHG_scale_score" optionLabel="name"
+                                        [required]="true" appendTo="body"
+                                        (onChange)="onSelectScore($event, char, idx, category.type)"></p-dropdown>
                                 </div>
-                                <div class="row col-6">
-                                    <div class="col-4">Justification</div>
-                                    <div class="col-6">
-                                        <input type="text" [name]="'justification'+char.id" #tboundrary="ngModel"
-                                            [(ngModel)]="char.comment" class="form-control" placeholder="Enter Boundary"
-                                            required />
-                                    </div>
-                                    <div class="col-2">
-                                        <!-- <button (click)="upload(char, category)">Upload</button> -->
-                                        <!-- <p>{{char.filePath}}</p> -->
-                                        <p-fileUpload name="demo[]" [url]="uploadUrl" (onUpload)="onUpload($event,char)" [multiple]="true" accept="image/*" [maxFileSize]="1000000">
-                                            <ng-template pTemplate="content">
-                                                <ul *ngIf="uploadedFiles.length">
-                                                    <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{ file.size }} bytes</li>
-                                                </ul>
-                                            </ng-template>
-                                        </p-fileUpload>
-                                    </div>
+                            </div>
+                            <div class="row p-2">
+                                <div class="col-4">Justification</div>
+                                <div class="col-8">
+                                    <input type="text" [name]="'justification'+char.id" #tboundrary="ngModel"
+                                        [(ngModel)]="char.comment" class="form-control"
+                                        placeholder="Enter Justification" required />
+                                </div>
+                            </div>
+                            <div class="row p-2">
+                                <div class="col-4"></div>
+                                <div class="col-8">
+                                    <p-fileUpload name="files" [url]="uploadUrl" (onUpload)="onUpload($event,char)"
+                                        [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="1000000">
+                                        <ng-template pTemplate="content">
+                                            <ul *ngIf="uploadedFiles.length">
+                                                <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{
+                                                    file.size }} bytes</li>
+                                            </ul>
+                                        </ng-template>
+                                    </p-fileUpload>
                                 </div>
                             </div>
                         </ng-container>
@@ -80,21 +81,44 @@
                             <div class="row p-2">
                                 <div class="col-4">Score</div>
                                 <div class="col-8">
-                                    <!-- p-dropdown -->
-                                    <input type="text" name="tboundrary" #tboundrary="ngModel"
-                                        [(ngModel)]="char.selectedScore" class="form-control"
-                                        placeholder="Enter Boundary" required />
+                                    <p-dropdown [name]="'score'+char.id" #type="ngModel" placeholder="Select Score"
+                                        [(ngModel)]="char.selectedScore" [options]="GHG_sustained_score"
+                                        optionLabel="name" [required]="true" appendTo="body" (onChange)="onSelectScore($event, char, idx, category.type)"></p-dropdown>
                                 </div>
                             </div>
                             <div class="row p-2">
                                 <div class="col-4">Justification</div>
                                 <div class="col-8">
                                     <input type="text" name="tboundrary" #tboundrary="ngModel"
-                                        [(ngModel)]="char.comment" class="form-control" placeholder="Enter Boundary"
-                                        required />
+                                        [(ngModel)]="char.comment" class="form-control"
+                                        placeholder="Enter Justification" required />
+                                </div>
+                            </div>
+                            <div class="row p-2">
+                                <div class="col-4"></div>
+                                <div class="col-8">
+                                    <p-fileUpload name="files" [url]="uploadUrl" (onUpload)="onUpload($event,char)"
+                                        [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="1000000">
+                                        <ng-template pTemplate="content">
+                                            <ul *ngIf="uploadedFiles.length">
+                                                <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{
+                                                    file.size }} bytes</li>
+                                            </ul>
+                                        </ng-template>
+                                    </p-fileUpload>
                                 </div>
                             </div>
                         </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="category.method === 'SUSTAINED'">
+                        <h6>GHG Score</h6>
+                        <div class="row p-2">
+                            <div class="col-4">Aggregated Score</div>
+                            <div class="col-8"> 
+                                <input type="text" name="ghgScore" #tboundrary="ngModel" disabled="true"
+                                [(ngModel)]="GHGScore" class="form-control"/>
+                            </div>
+                        </div>
                     </ng-container>
                     <div class="row justify-content-end">
                         <div>
@@ -109,91 +133,138 @@
                 <ng-container *ngIf="category.type === 'SD'">
                     <div class="row p-2">
                         <div class="col-4">Choose SDG</div>
-                        <div class="col-8" *ngIf="category.method === 'SCALE'">
-                            <p-multiSelect name="impact_categories" placeholder="Select .." appendTo="body"
-                                [options]="SDGscale" [(ngModel)]="selectedSDGscale" optionLabel="name"
-                                (onChange)="onSelectSDGScale($event, category)">
+                        <div class="col-8">
+                            <p-multiSelect name="impact_categories" placeholder="Select SDG(s)" appendTo="body"
+                                [options]="SDGs" [(ngModel)]="selectedSDGs" optionLabel="name"
+                                (onChange)="onSelectSDG($event)" [disabled]="category.method === 'SUSTAINED'">
                             </p-multiSelect>
                         </div>
-                        <div class="col-8" *ngIf="category.method === 'SUSTAINED'">
-                            <p-multiSelect name="impact_categories" placeholder="Select .." appendTo="body"
+                        <!-- <div class="col-8" *ngIf="category.method === 'SUSTAINED'">
+                            <p-multiSelect name="impact_categories" placeholder="Select SDG(s)" appendTo="body"
                                 [options]="SDGsustained" [(ngModel)]="selectedSDGsustained" optionLabel="name"
                                 (onChange)="onSelectSDGSustained($event, category)">
                             </p-multiSelect>
-                        </div>
+                        </div> -->
                     </div>
-                    <ng-container
-                        *ngIf="category.method === 'SCALE' && selectedSDGscale && selectedSDGscale.length > 0">
-                        <ng-container *ngFor="let SDG of selectedSDGscale">
-                            <p>{{SDG.name}}</p>
-                            <ng-container *ngFor="let char of SDG.result">
-                                <p>{{char.characteristic.name}}</p>
-                                <div class="row p-2">
-                                    <div class="col-4">SDG Indicator</div>
-                                    <div class="col-8">
-                                        <input type="text" [name]="'indicator'+SDG.code" [(ngModel)]="char.sdgIndicator"
-                                            class="form-control" placeholder="Enter Boundary" required />
-                                    </div>
-                                </div>
-                                <div class="row p-2">
-                                    <div class="col-4">Starting Situation</div>
-                                    <div class="col-8">
-                                        <input type="text" [name]="'stSituation'+SDG.code"
-                                            [(ngModel)]="char.startingSituation" class="form-control"
-                                            placeholder="Enter Boundary" required />
-                                    </div>
-                                </div>
-                                <div class="row p-2">
-                                    <div class="col-4">Expected Impact</div>
-                                    <div class="col-8">
-                                        <input type="text" [name]="'impact'+SDG.code" [(ngModel)]="char.expectedImpact"
-                                            class="form-control" placeholder="Enter Boundary" required />
-                                    </div>
-                                </div>
-                                <div class="row p-2">
-                                    <div class="row col-6">
-                                        <div class="col-4">Score</div>
+                    <ng-container selectedSDGs && selectedSDGs.length>
+                        <ng-container *ngFor="let SDG of selectedSDGs; let sidx = index">
+                            <h5>{{sidx+1}}. {{SDG.name}}</h5>
+                            <ng-container *ngIf="category.method === 'SCALE'">
+                                <ng-container *ngFor="let char of SDG.scaleResult; let idx = index;">
+                                    <h6>{{idx+1}}. {{char.characteristic.name}}</h6>
+                                    <div class="row p-2">
+                                        <div class="col-4">SDG Indicator</div>
                                         <div class="col-8">
-                                            <input type="text" [name]="'score'+SDG.code"
-                                                [(ngModel)]="char.selectedScore" class="form-control"
-                                                placeholder="Enter Boundary" required />
+                                            <input type="text" [name]="'indicator'+SDG.code"
+                                                [(ngModel)]="char.sdgIndicator" class="form-control"
+                                                placeholder="Enter SDG Indicator" required />
                                         </div>
                                     </div>
-                                    <div class="row col-6">
+                                    <div class="row p-2">
+                                        <div class="col-4">Starting Situation</div>
+                                        <div class="col-8">
+                                            <input type="text" [name]="'stSituation'+SDG.code"
+                                                [(ngModel)]="char.startingSituation" class="form-control"
+                                                placeholder="Enter Starting Situation" required />
+                                        </div>
+                                    </div>
+                                    <div class="row p-2">
+                                        <div class="col-4">Expected Impact</div>
+                                        <div class="col-8">
+                                            <input type="text" [name]="'impact'+SDG.code"
+                                                [(ngModel)]="char.expectedImpact" class="form-control"
+                                                placeholder="Enter Expected Impact" required />
+                                        </div>
+                                    </div>
+                                    <div class="row p-2">
+                                        <div class="col-4">Score</div>
+                                        <div class="col-8">
+                                            <p-dropdown [name]="'score'+SDG.code" #type="ngModel"
+                                                placeholder="Select Score" [(ngModel)]="char.selectedScore" (onChange)="onSelectScore($event, char, idx, category.type)"
+                                                [options]="SDG_scale_score" optionLabel="name" [required]="true"
+                                                appendTo="body"></p-dropdown>
+                                        </div>
+                                    </div>
+                                    <div class="row p-2">
                                         <div class="col-4">Justification</div>
                                         <div class="col-8">
                                             <input type="text" [name]="'justification'+SDG.code"
                                                 [(ngModel)]="char.comment" class="form-control"
-                                                placeholder="Enter Boundary" required />
+                                                placeholder="Enter Justification" required />
                                         </div>
                                     </div>
-                                </div>
+                                    <div class="row p-2">
+                                        <div class="col-4"></div>
+                                        <div class="col-8">
+                                            <p-fileUpload name="files" [url]="uploadUrl"
+                                                (onUpload)="onUpload($event,char)" [multiple]="true" accept="{{acceptedFiles}}"
+                                                [maxFileSize]="1000000">
+                                                <ng-template pTemplate="content">
+                                                    <ul *ngIf="uploadedFiles.length">
+                                                        <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{
+                                                            file.size }} bytes</li>
+                                                    </ul>
+                                                </ng-template>
+                                            </p-fileUpload>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </ng-container>
+                            <ng-container *ngIf="category.method === 'SUSTAINED'">
+                                <ng-container *ngFor="let chSus of SDG.sustainResult; let idx = index">
+                                    <h6>{{idx+1}}. {{chSus.characteristic.name}}</h6>
+                                    <p>Is the activity’s contribution to the selected SDG sustained in nature?</p>
+                                    <div class="row p-2">
+                                        <div class="col-4">Score</div>
+                                        <div class="col-8">
+                                            <p-dropdown [name]="'susScore'+SDG.code" #type="ngModel"
+                                                placeholder="Select Score" [(ngModel)]="chSus.selectedScore" (onChange)="onSelectScore($event, chSus, idx, category.type)"
+                                                [options]="SDG_sustained_score" optionLabel="name" [required]="true"
+                                                appendTo="body"></p-dropdown>
+                                        </div>
+                                    </div>
+                                    <div class="row p-2">
+                                        <div class="col-4">Justification</div>
+                                        <div class="col-8">
+                                            <input type="text" [name]="'susJustification'+SDG.code"
+                                                [(ngModel)]="chSus.comment" class="form-control"
+                                                placeholder="Enter Justification" required />
+                                        </div>
+                                    </div>
+                                    <div class="row p-2">
+                                        <div class="col-4"></div>
+                                        <div class="col-8">
+                                            <p-fileUpload name="files" [url]="uploadUrl"
+                                                (onUpload)="onUpload($event,chSus)" [multiple]="true" accept="{{acceptedFiles}}"
+                                                [maxFileSize]="1000000">
+                                                <ng-template pTemplate="content">
+                                                    <ul *ngIf="uploadedFiles.length">
+                                                        <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{
+                                                            file.size }} bytes</li>
+                                                    </ul>
+                                                </ng-template>
+                                            </p-fileUpload>
+                                        </div>
+                                    </div>
+                                </ng-container>
                             </ng-container>
                         </ng-container>
-                    </ng-container>
-                    <ng-container
-                        *ngIf="category.method === 'SUSTAINED' && selectedSDGsustained && selectedSDGsustained.length > 0">
-                        <ng-container *ngFor="let SDG of selectedSDGsustained">
-                            <p>{{SDG.name}}</p>
-                            <ng-container *ngFor="let char of SDG.result">
-                                <p>Is the activity’s contribution to the selected SDG sustained in nature?</p>
-                                <div class="row p-2">
-                                    <div class="col-4">Score</div>
-                                    <div class="col-8">
-                                        <!-- p-dropdown -->
-                                        <input type="text" [name]="'susScore'+SDG.code" [(ngModel)]="char.selectedScore"
-                                            class="form-control" placeholder="Enter Boundary" required />
-                                    </div>
+                        <ng-container *ngIf="category.method === 'SUSTAINED'">
+                            <h6>SDG Score</h6>
+                            <div class="row p-2">
+                                <div class="col-4">Aggregated Score</div>
+                                <div class="col-8"> 
+                                    <input type="text" name="sdgScore" #tboundrary="ngModel" disabled="true"
+                                    [(ngModel)]="SDGScore" class="form-control"/>
                                 </div>
-                                <div class="row p-2">
-                                    <div class="col-4">Justification</div>
-                                    <div class="col-8">
-                                        <input type="text" [name]="'susJustification'+SDG.code"
-                                            [(ngModel)]="char.comment" class="form-control" placeholder="Enter Boundary"
-                                            required />
-                                    </div>
+                            </div>
+                            <div class="row p-2">
+                                <div class="col-4">Weight</div>
+                                <div class="col-8"> 
+                                    <input type="text" name="sdgWeight" #tboundrary="ngModel" disabled="true"
+                                    [(ngModel)]="SDGWeight" class="form-control"/>
                                 </div>
-                            </ng-container>
+                            </div>
                         </ng-container>
                     </ng-container>
                     <div class="row justify-content-end" *ngIf="activeIndex2 < outcome.length - 1">
@@ -206,11 +277,12 @@
                         </div>
                     </div>
                 </ng-container>
+                <!-- </ng-container> -->
                 <div class="row justify-content-end" *ngIf="activeIndex2 === outcome.length - 1">
                     <div>
                         <div class="d-flex flex-row-reverse mt-20 ">
                             <div class="btn btn-primary text-uppercase" (click)="submit()">
-                                Submit
+                                {{ approach === 'INDIRECT' ? 'Send to Data Collection Team' : 'Calculate & Check Results' }}
                             </div>
                         </div>
                     </div>
