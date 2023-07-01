@@ -137,7 +137,7 @@ export class UserFormComponent implements OnInit, AfterViewInit {
             }
 
 
-            this.selectedUserTypesFordrop.push(this.selecteduserType)
+            // this.selectedUserTypesFordrop.push(this.selecteduserType)
             console.log("selectedUserTypesFordrop", this.selectedUserTypesFordrop)
 
           });
@@ -464,13 +464,28 @@ export class UserFormComponent implements OnInit, AfterViewInit {
   }
 
   onInstitutionChange2(aaa: any) {
+    let ty=[];
     console.log('event====', aaa.institution);
+    console.log('selectedUserTypesFordrop=====', this.selectedUserTypesFordrop);
 
+    let tempList = this.userTypes
+    if (aaa.institution.type.id == 1) {
+      ty = tempList.filter((a) => (a.id == 2))
+    }
+    if (aaa.institution.type.id == 3) {
+      ty = tempList.filter((a) => (a.id == 8 || a.id == 9))
+    }
+    else if (aaa.institution.type.id == 2) {
+      ty = tempList.filter((a) => (a.id == 2 || a.id == 3 || a.id == 5 || a.id == 6 || a.id == 7))
+    }
+    if (aaa.institution.type.id == 5) {
+      ty = tempList.filter((a) => (a.id == 6))
+    }
+    if (aaa.institution.type.id == 6) {
+      ty= tempList.filter((a) => (a.id == 7))
+    }
 
-    this.selectedUserTypesFordrop = this.userTypes.filter(
-      (a) => a.int_institutionTypeId === 1//aaa.institution.type.id
-    );
-    console.log('eventtypeID===', aaa.institution.type.id);
+    this.selectedUserTypesFordrop= ty   
     console.log('selectedUserTypesFordrop=====', this.selectedUserTypesFordrop);
 
   }

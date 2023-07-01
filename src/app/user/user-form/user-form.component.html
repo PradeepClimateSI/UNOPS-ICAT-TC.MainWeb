@@ -9,22 +9,21 @@
       <div class="p-grid p-fluid col-md-9 col-sm-12">
         <div class="row p-2">
           <div class="col-12 col-md-8">
-            <div class="p-field" *ngIf="!isNewUser && user.institution">
+            <div class="p-field" *ngIf="!isNewUser">
               <label for="institution">Assign Institution *</label>
               <p-dropdown              
                 name="institution"
                 [options]="institutions"
-                [(ngModel)]="userInstitution"
+                [(ngModel)]="user.institution"
                 #finstitution="ngModel"
                 placeholder={{user.institution?.name}}
                 optionLabel="name"
                 (ngModelChange)="onInstitutionChange($event)"
                 [required]="true"
-                
               ></p-dropdown>
               
               
-              <p
+              <!-- <p
                 class="info-message text-danger"
                 *ngIf="
                   !userInstitution &&
@@ -33,7 +32,7 @@
                     finstitution.dirty)
                 ">
                 This is a mandatory field
-              </p>
+              </p> -->
             </div>
             <div class="p-field" *ngIf="isNewUser">
               <label for="institution">Assign Institution *</label>
@@ -81,14 +80,14 @@
             <div class="p-field" *ngIf="!isNewUser ">
               <label for="contatname">User Type*</label>
               <p-dropdown [options]="selectedUserTypesFordrop" name="usertype" [(ngModel)]="selecteduserType"
-                placeholder={{user.userType?.name}} optionLabel="name" #fut="ngModel"></p-dropdown>
+                placeholder={{user.userType?.name}} optionLabel="name" #fut="ngModel" ></p-dropdown>
 
-              <p class="info-message text-danger" *ngIf="
+              <!-- <p class="info-message text-danger" *ngIf="
                   !selecteduserType &&
                   (fLogin.submitted || fut.touched || fut.dirty)
                 ">
                 This is a mandatory field
-              </p>
+              </p> -->
             </div>
           </div>
         </div>
