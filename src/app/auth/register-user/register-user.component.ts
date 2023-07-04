@@ -65,11 +65,27 @@ export class RegisterUserComponent implements OnInit {
     console.log(newUser)
 
     let newProfile = new LoginProfile();
-    newProfile.password = form.value.RegPassword;
-    newProfile.userName = form.value.email;
-    
+    // newProfile.password = form.value.RegPassword;
+    // newProfile.userName = form.value.email;
+    newProfile.coutryId =0;
+    newProfile.insId=0;
  
-      const b = await this.service.createOneBaseLoginProfileControllerLoginProfile(newProfile).subscribe((res) => {
+      const b = await this.service.createOneBaseLoginProfileControllerLoginProfile(newProfile).subscribe(async (res) => {
+
+        try {
+          newUser.loginProfile=res.id;
+          newUser.password=res.password;
+          newUser.salt=res.salt;
+          const a = await this.userControllerService.createExternalUser(newUser).toPromise()
+          
+        } catch (error) {
+          // this.messageService.add({
+          //   severity: 'error',
+          //   summary: 'Error',
+          //   detail: 'Username is existing',
+          //   closable: true,
+          // });
+        }
         this.messageService.add({
           severity: 'success',
           summary: '',
@@ -90,17 +106,7 @@ export class RegisterUserComponent implements OnInit {
       });})
     
 
-      try {
-        const a = await this.userControllerService.createExternalUser(newUser).toPromise()
-        
-      } catch (error) {
-        // this.messageService.add({
-        //   severity: 'error',
-        //   summary: 'Error',
-        //   detail: 'Username is existing',
-        //   closable: true,
-        // });
-      }
+      
     
   }
   onChange(event: any) {
