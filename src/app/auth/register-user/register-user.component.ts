@@ -65,8 +65,8 @@ export class RegisterUserComponent implements OnInit {
     console.log(newUser)
 
     let newProfile = new LoginProfile();
-    newProfile.password = form.value.RegPassword;
-    newProfile.userName = form.value.email;
+    // newProfile.password = form.value.RegPassword;
+    // newProfile.userName = form.value.email;
     newProfile.coutryId =0;
     newProfile.insId=0;
  
