@@ -28,7 +28,8 @@ export enum LoginRole {
   Data_Collection_Team = "Data Collection Team",
   QC_Team = "QC Team",
   Institution_Admin ="Institution Admin",
-  Data_Entry_Operator ="Data Entry Operator"
+  Data_Entry_Operator ="Data Entry Operator",
+  External = "External",
 }
 
 export enum AuthData{
