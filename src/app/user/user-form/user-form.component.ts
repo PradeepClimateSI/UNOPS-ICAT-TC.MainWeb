@@ -233,12 +233,13 @@ export class UserFormComponent implements OnInit, AfterViewInit {
         userType.init(this.selecteduserType)
         console.log("userd", userType)
         this.user.userType = userType;
-        let co = new Country;
-        co.id = this.countryId
+        // let co = new Country;
+        // co.id = this.countryId
         // co.init(this.country);
 
 
-        this.user.country = co;
+        this.user.country = new Country();
+        this.user.country.id =this.countryId
 
         let insTemp = this.user.institution;
         this.user.institution = new Institution();
@@ -267,6 +268,7 @@ export class UserFormComponent implements OnInit, AfterViewInit {
             this.user.loginProfile = res.id;
             this.user.password = res.password;
             this.user.salt = res.salt;
+            this.user.userType.id =res.userType.id
             this.userController
               .create(this.user)
               .subscribe(
