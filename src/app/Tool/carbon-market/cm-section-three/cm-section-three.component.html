@@ -47,10 +47,14 @@
                             <div class="row p-2">
                                 <div class="col-4">Score</div>
                                 <div class="col-8">
-                                    <p-dropdown [name]="'score'+char.id" #type="ngModel" placeholder="Select Score"
+                                    <p-dropdown  *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.id" #type="ngModel" placeholder="Select Score"
                                         [(ngModel)]="char.selectedScore" [options]="GHG_scale_score" optionLabel="name"
                                         [required]="true" appendTo="body"
                                         (onChange)="onSelectScore($event, char, idx, category.type)"></p-dropdown>
+                                    <p-dropdown *ngIf="approach === 'INDIRECT'" name="institution" [options]="institutions"
+                                        [(ngModel)]="char.institution" #finstitution="ngModel"
+                                        placeholder="Select an institution" optionLabel="name"
+                                        [required]="true"></p-dropdown>
                                 </div>
                             </div>
                             <div class="row p-2">
@@ -61,9 +65,10 @@
                                         placeholder="Enter Justification" required />
                                 </div>
                                 <div class="col-2">
-                                    <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload" name="files" [url]="uploadUrl" 
-                                    (onUpload)="onUpload($event,char)" [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="5000000" 
-                                    [auto]="true">
+                                    <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload"
+                                        name="files" [url]="uploadUrl" (onUpload)="onUpload($event,char)"
+                                        [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="5000000"
+                                        [auto]="true">
                                     </p-fileUpload>
                                 </div>
                             </div>
@@ -73,7 +78,8 @@
                                     <p class="col-5">{{char.filePath}}</p>
                                 </div>
                                 <div class="col-4">
-                                    <a target="_blank" [href]="fileServerURL+'/'+char.filePath"><i class="pi pi-download download col-4"></i></a>
+                                    <a target="_blank" [href]="fileServerURL+'/'+char.filePath"><i
+                                            class="pi pi-download download col-4"></i></a>
                                 </div>
                             </div>
                         </ng-container>
@@ -82,9 +88,14 @@
                             <div class="row p-2">
                                 <div class="col-4">Score</div>
                                 <div class="col-8">
-                                    <p-dropdown [name]="'score'+char.id" #type="ngModel" placeholder="Select Score"
+                                    <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.id" #type="ngModel" placeholder="Select Score"
                                         [(ngModel)]="char.selectedScore" [options]="GHG_sustained_score"
-                                        optionLabel="name" [required]="true" appendTo="body" (onChange)="onSelectScore($event, char, idx, category.type)"></p-dropdown>
+                                        optionLabel="name" [required]="true" appendTo="body"
+                                        (onChange)="onSelectScore($event, char, idx, category.type)"></p-dropdown>
+                                    <p-dropdown *ngIf="approach === 'INDIRECT'" name="institution" [options]="institutions"
+                                        [(ngModel)]="char.institution" #finstitution="ngModel"
+                                        placeholder="Select an institution" optionLabel="name"
+                                        [required]="true"></p-dropdown>
                                 </div>
                             </div>
                             <div class="row p-2">
@@ -95,9 +106,10 @@
                                         placeholder="Enter Justification" required />
                                 </div>
                                 <div class="col-2">
-                                    <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload" name="files" [url]="uploadUrl" 
-                                    (onUpload)="onUpload($event,char)" [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="5000000" 
-                                    [auto]="true">
+                                    <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload"
+                                        name="files" [url]="uploadUrl" (onUpload)="onUpload($event,char)"
+                                        [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="5000000"
+                                        [auto]="true">
                                     </p-fileUpload>
                                 </div>
                             </div>
@@ -107,7 +119,8 @@
                                     <p class="col-5">{{char.filePath}}</p>
                                 </div>
                                 <div class="col-4">
-                                    <a target="_blank" [href]="fileServerURL+'/'+char.filePath"><i class="pi pi-download download col-4"></i></a>
+                                    <a target="_blank" [href]="fileServerURL+'/'+char.filePath"><i
+                                            class="pi pi-download download col-4"></i></a>
                                 </div>
                             </div>
                         </ng-container>
@@ -116,9 +129,9 @@
                         <h6>GHG Answer</h6>
                         <div class="row p-2">
                             <div class="col-4">Aggregated Answer</div>
-                            <div class="col-8"> 
+                            <div class="col-8">
                                 <input type="text" name="ghgScore" #tboundrary="ngModel" disabled="true"
-                                [(ngModel)]="GHGScore" class="form-control"/>
+                                    [(ngModel)]="GHGScore" class="form-control" />
                             </div>
                         </div>
                     </ng-container>
@@ -181,10 +194,15 @@
                                     <div class="row p-2">
                                         <div class="col-4">Score</div>
                                         <div class="col-8">
-                                            <p-dropdown [name]="'score'+SDG.code" #type="ngModel"
-                                                placeholder="Select Score" [(ngModel)]="char.selectedScore" (onChange)="onSelectScore($event, char, idx, category.type)"
+                                            <p-dropdown  *ngIf="approach !== 'INDIRECT'" [name]="'score'+SDG.code" #type="ngModel"
+                                                placeholder="Select Score" [(ngModel)]="char.selectedScore"
+                                                (onChange)="onSelectScore($event, char, idx, category.type)"
                                                 [options]="SDG_scale_score" optionLabel="name" [required]="true"
                                                 appendTo="body"></p-dropdown>
+                                            <p-dropdown *ngIf="approach === 'INDIRECT'" name="institution" [options]="institutions"
+                                                [(ngModel)]="char.institution" #finstitution="ngModel"
+                                                placeholder="Select an institution" optionLabel="name"
+                                                [required]="true"></p-dropdown>
                                         </div>
                                     </div>
                                     <div class="row p-2">
@@ -195,9 +213,10 @@
                                                 placeholder="Enter Justification" required />
                                         </div>
                                         <div class="col-2">
-                                            <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload" name="files" [url]="uploadUrl" 
-                                            (onUpload)="onUpload($event,char)" [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="5000000" 
-                                            [auto]="true">
+                                            <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload"
+                                                name="files" [url]="uploadUrl" (onUpload)="onUpload($event,char)"
+                                                [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="5000000"
+                                                [auto]="true">
                                             </p-fileUpload>
                                         </div>
                                     </div>
@@ -207,7 +226,8 @@
                                             <p class="col-5">{{char.filePath}}</p>
                                         </div>
                                         <div class="col-4">
-                                            <a target="_blank" [href]="fileServerURL+'/'+char.filePath"><i class="pi pi-download download col-4"></i></a>
+                                            <a target="_blank" [href]="fileServerURL+'/'+char.filePath"><i
+                                                    class="pi pi-download download col-4"></i></a>
                                         </div>
                                     </div>
                                 </ng-container>
@@ -219,10 +239,15 @@
                                     <div class="row p-2">
                                         <div class="col-4">Score</div>
                                         <div class="col-8">
-                                            <p-dropdown [name]="'susScore'+SDG.code" #type="ngModel"
-                                                placeholder="Select Score" [(ngModel)]="chSus.selectedScore" (onChange)="onSelectScore($event, chSus, idx, category.type)"
+                                            <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'susScore'+SDG.code" #type="ngModel"
+                                                placeholder="Select Score" [(ngModel)]="chSus.selectedScore"
+                                                (onChange)="onSelectScore($event, chSus, idx, category.type)"
                                                 [options]="SDG_sustained_score" optionLabel="name" [required]="true"
                                                 appendTo="body"></p-dropdown>
+                                            <p-dropdown *ngIf="approach === 'INDIRECT'" name="institution" [options]="institutions"
+                                                [(ngModel)]="chSus.institution" #finstitution="ngModel"
+                                                placeholder="Select an institution" optionLabel="name"
+                                                [required]="true"></p-dropdown>
                                         </div>
                                     </div>
                                     <div class="row p-2">
@@ -233,9 +258,10 @@
                                                 placeholder="Enter Justification" required />
                                         </div>
                                         <div class="col-2">
-                                            <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload" name="files" [url]="uploadUrl" 
-                                            (onUpload)="onUpload($event,chSus)" [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="5000000" 
-                                            [auto]="true">
+                                            <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload"
+                                                name="files" [url]="uploadUrl" (onUpload)="onUpload($event,chSus)"
+                                                [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="5000000"
+                                                [auto]="true">
                                             </p-fileUpload>
                                         </div>
                                     </div>
@@ -245,7 +271,8 @@
                                             <p class="col-5">{{chSus.filePath}}</p>
                                         </div>
                                         <div class="col-4">
-                                            <a target="_blank" [href]="fileServerURL+'/'+chSus.filePath"><i class="pi pi-download download col-4"></i></a>
+                                            <a target="_blank" [href]="fileServerURL+'/'+chSus.filePath"><i
+                                                    class="pi pi-download download col-4"></i></a>
                                         </div>
                                     </div>
                                 </ng-container>
@@ -255,16 +282,16 @@
                             <h6>SDG Score</h6>
                             <div class="row p-2">
                                 <div class="col-4">Aggregated Score</div>
-                                <div class="col-8"> 
+                                <div class="col-8">
                                     <input type="text" name="sdgScore" #tboundrary="ngModel" disabled="true"
-                                    [(ngModel)]="SDGScore" class="form-control"/>
+                                        [(ngModel)]="SDGScore" class="form-control" />
                                 </div>
                             </div>
                             <div class="row p-2">
                                 <div class="col-4">Weight</div>
-                                <div class="col-8"> 
+                                <div class="col-8">
                                     <input type="text" name="sdgWeight" #tboundrary="ngModel" disabled="true"
-                                    [(ngModel)]="SDGWeight" class="form-control"/>
+                                        [(ngModel)]="SDGWeight" class="form-control" />
                                 </div>
                             </div>
                         </ng-container>
@@ -284,7 +311,8 @@
                     <div>
                         <div class="d-flex flex-row-reverse mt-20 ">
                             <div class="btn btn-primary text-uppercase" (click)="submit()">
-                                {{ approach === 'INDIRECT' ? 'Send to Data Collection Team' : 'Calculate & Check Results' }}
+                                {{ approach === 'INDIRECT' ? 'Send to Data Collection Team' : 'Calculate & CheckResults'
+                                }}
                             </div>
                         </div>
                     </div>

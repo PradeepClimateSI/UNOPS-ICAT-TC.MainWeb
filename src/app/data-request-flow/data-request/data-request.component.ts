@@ -27,6 +27,8 @@ import { LazyLoadEvent, MessageService } from 'primeng/api';
 import { ClimateAction, ServiceProxy } from 'shared/service-proxies/service-proxies';
 import { Tool } from '../enum/tool.enum';
 import { MasterDataService } from 'app/shared/master-data.service';
+import { SDG } from 'app/Tool/carbon-market/cm-section-three/cm-section-three.component';
+import { DataRequestPathService } from 'app/shared/data-request-path.service';
 
 @Component({
   selector: 'app-data-request',
@@ -92,6 +94,13 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
   tabIndex =0;
   assessment_types:any=[]
   tool:any='';
+  startingSituation: any;
+  expectedImpact: any;
+  justification: any;
+  category: any;
+  sdg: any;
+  indicator: any;
+
   constructor(
     private router: Router,
     private serviceProxy: ServiceProxy,
@@ -103,6 +112,7 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
     private prHistoryProxy: ParameterHistoryControllerServiceProxy,
     private institutionProxy: InstitutionControllerServiceProxy,
     private masterDataService: MasterDataService,
+    public dataRequestPathService: DataRequestPathService
   ) { }
   ngAfterViewInit(): void {
     this.cdr.detectChanges();
@@ -610,11 +620,19 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
 
   getInfo(obj: any) {
     console.log('dataRequestList...', obj);
-    if(this.tool==Tool.CM_tool){
-      this.paraId = obj.cmAssessmentAnswer.id; 
+    if (this.tool == Tool.CM_tool) {
+      let res = this.dataRequestPathService.getInfo(obj, this.tool)
+      this.paraId = res?.paraId;
+      this.category = res.category
+      this.sdg = res.sdg
+      this.indicator = res.indicator
+      this.startingSituation = res.startingSituation
+      this.expectedImpact = res.expectedImpact
+      this.justification = res.justification
     }
-    else if(this.tool==Tool.Investor_tool||Tool.Portfolio_tool){
-      this.paraId = obj.investmentParameter.id; 
+    else if (this.tool == Tool.Investor_tool || Tool.Portfolio_tool) {
+      let res = this.dataRequestPathService.getInfo(obj, this.tool)
+      this.paraId = res.paraId
     }
     console.log('this.paraId...', this.paraId);
 
