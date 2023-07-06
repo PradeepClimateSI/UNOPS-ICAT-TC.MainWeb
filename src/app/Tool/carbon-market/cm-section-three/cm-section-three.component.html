@@ -48,7 +48,7 @@
                                 <div class="col-4">Score</div>
                                 <div class="col-8">
                                     <p-dropdown  *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.id" #type="ngModel" placeholder="Select Score"
-                                        [(ngModel)]="char.selectedScore" [options]="GHG_scale_score" optionLabel="name"
+                                        [(ngModel)]="char.selectedScore" [options]="GHG_scale_score" optionLabel="label"
                                         [required]="true" appendTo="body"
                                         (onChange)="onSelectScore($event, char, idx, category.type)"></p-dropdown>
                                     <p-dropdown *ngIf="approach === 'INDIRECT'" name="institution" [options]="institutions"
@@ -90,7 +90,7 @@
                                 <div class="col-8">
                                     <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.id" #type="ngModel" placeholder="Select Score"
                                         [(ngModel)]="char.selectedScore" [options]="GHG_sustained_score"
-                                        optionLabel="name" [required]="true" appendTo="body"
+                                        optionLabel="label" [required]="true" appendTo="body"
                                         (onChange)="onSelectScore($event, char, idx, category.type)"></p-dropdown>
                                     <p-dropdown *ngIf="approach === 'INDIRECT'" name="institution" [options]="institutions"
                                         [(ngModel)]="char.institution" #finstitution="ngModel"
@@ -197,7 +197,7 @@
                                             <p-dropdown  *ngIf="approach !== 'INDIRECT'" [name]="'score'+SDG.code" #type="ngModel"
                                                 placeholder="Select Score" [(ngModel)]="char.selectedScore"
                                                 (onChange)="onSelectScore($event, char, idx, category.type)"
-                                                [options]="SDG_scale_score" optionLabel="name" [required]="true"
+                                                [options]="SDG_scale_score" optionLabel="label" [required]="true"
                                                 appendTo="body"></p-dropdown>
                                             <p-dropdown *ngIf="approach === 'INDIRECT'" name="institution" [options]="institutions"
                                                 [(ngModel)]="char.institution" #finstitution="ngModel"
@@ -242,7 +242,7 @@
                                             <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'susScore'+SDG.code" #type="ngModel"
                                                 placeholder="Select Score" [(ngModel)]="chSus.selectedScore"
                                                 (onChange)="onSelectScore($event, chSus, idx, category.type)"
-                                                [options]="SDG_sustained_score" optionLabel="name" [required]="true"
+                                                [options]="SDG_sustained_score" optionLabel="label" [required]="true"
                                                 appendTo="body"></p-dropdown>
                                             <p-dropdown *ngIf="approach === 'INDIRECT'" name="institution" [options]="institutions"
                                                 [(ngModel)]="chSus.institution" #finstitution="ngModel"
