@@ -31,11 +31,43 @@
 
               </div>
             </div>
+           
+              <div class="col-12 col-md-6">
+                <div class="p-field">
+                  <label for="contatemail"> Email*</label>
+                  <input [disabled]="editEntytyId > 0" pattern="[\w-\.]+@([\w-]+\.)+[\w-]{1,30}$" type="text"
+                    maxlength="300" placeholder="Email" name="contatemail" class="p-inputtext" #contatemail="ngModel"
+                    pInputText [(ngModel)]="project.email" [ngModelOptions]="{ standalone: false }" required />
+                  <p class="info-message text-danger" *ngIf="
+                    !project.email &&
+                    (fData.submitted || contatemail.touched || contatemail.dirty)
+                  ">
+                    This is a mandatory field
+                  </p>
+  
+                </div>
+              </div>
+          
 
 
 
           </div>
           <div class="row p-2">
+            <div class="col-12 col-md-6">
+              <div class="p-field">
+                <label for="institute">Institute*</label>
+                <input [disabled]="editEntytyId > 0" type="text" maxlength="100" placeholder="Institute"
+                  #ins="ngModel" name="ins" class="p-inputtext"
+                  [(ngModel)]="project.institute" [ngModelOptions]="{ standalone: false }"
+                  pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText required />
+                <p class="info-message text-danger" *ngIf="
+                  !project.institute &&
+                  (fData.submitted || ins.touched || ins.dirty)
+                ">
+                  This is a mandatory field
+                </p>
+              </div>
+            </div>
             <div class="col-12 col-md-6">
               <div class="p-field">
                 <label for="designation">Contact Person's Designation*</label>
@@ -54,24 +86,7 @@
 
 
           </div>
-          <div class="row p-2">
-            <div class="col-12 col-md-6">
-              <div class="p-field">
-                <label for="contatemail"> Email*</label>
-                <input [disabled]="editEntytyId > 0" pattern="[\w-\.]+@([\w-]+\.)+[\w-]{1,30}$" type="text"
-                  maxlength="300" placeholder="Email" name="contatemail" class="p-inputtext" #contatemail="ngModel"
-                  pInputText [(ngModel)]="project.email" [ngModelOptions]="{ standalone: false }" required />
-                <p class="info-message text-danger" *ngIf="
-                  !project.email &&
-                  (fData.submitted || contatemail.touched || contatemail.dirty)
-                ">
-                  This is a mandatory field
-                </p>
-
-                <p class="info-message text-danger" *ngIf="!project.email"></p>
-              </div>
-            </div>
-          </div>
+          
           <div class="row p-2">
 
             <div class="col-12 col-md-6">
@@ -108,10 +123,11 @@
           </div>
 
         </div>
-        <div class=" mt-2">
+        <div class=" mt-10">
           <div class="p-grid p-fluid col-sm-12">
             <div class="p-2">
-              <h6>Basic Information of Intervention</h6>
+              <!-- <h6>Basic Information of Intervention</h6> -->
+              <h6>Intervention Description</h6>
             </div>
             <div class="row p-2">
               <div class="col-12 col-md-6">
@@ -473,34 +489,6 @@
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-     <!--    <div class=" mt-2">
-          <div class="p-grid p-fluid col-sm-12">
-            <div class="p-2">
-              <h6>Assessment boundaries</h6>
-            </div>
-            <div class="row p-2">
-              <div class="col-12 col-md-6">
-                <div class="p-field">
-                  <label for="impEntity">Defenition of Assessment</label>
-                  <textarea [disabled]="editEntytyId > 0" name="defenitionofAssessment"
-                    placeholder="Defenition of Assessment" #defenitionofAssessment="ngModel"
-                    [(ngModel)]="project.defenitionofAssessment" rows="5" cols="130" pInputTextarea
-                    autoResize="autoResize" class="p-inputtext"></textarea>
-                </div>
-              </div>
-
-            </div>
-
-
-          </div>
-        </div> -->
-        <div class="mt-2 overflow-visible" style="z-index: 1;">
-          <div class="p-grid p-fluid col-sm-12">
-            <div class="p-2">
-              <h6>Deatailed information on the intervention</h6>
-            </div>
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
@@ -614,6 +602,35 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+     <!--    <div class=" mt-2">
+          <div class="p-grid p-fluid col-sm-12">
+            <div class="p-2">
+              <h6>Assessment boundaries</h6>
+            </div>
+            <div class="row p-2">
+              <div class="col-12 col-md-6">
+                <div class="p-field">
+                  <label for="impEntity">Defenition of Assessment</label>
+                  <textarea [disabled]="editEntytyId > 0" name="defenitionofAssessment"
+                    placeholder="Defenition of Assessment" #defenitionofAssessment="ngModel"
+                    [(ngModel)]="project.defenitionofAssessment" rows="5" cols="130" pInputTextarea
+                    autoResize="autoResize" class="p-inputtext"></textarea>
+                </div>
+              </div>
+
+            </div>
+
+
+          </div>
+        </div> -->
+        <div class="mt-2 overflow-visible" style="z-index: 1;">
+          <div class="p-grid p-fluid col-sm-12">
+            <!-- <div class="p-2">
+              <h6>Deatailed information on the intervention</h6>
+            </div> -->
+            
 
             <!-- <div class="row p-2">
 
