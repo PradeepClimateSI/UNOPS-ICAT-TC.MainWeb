@@ -2,7 +2,8 @@ import { Component, ElementRef, OnInit ,ViewChild } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { AssessmentCMDetailControllerServiceProxy, ClimateAction, InvestorToolControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
-
+import decode from 'jwt-decode';
+import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
 
 @Component({
   selector: 'app-investment-dashboard',
@@ -20,6 +21,10 @@ export class InvestmentDashboardComponent implements OnInit {
   tc:number[]=[];
   tcLables:string[]=[]
   chart: any = [];
+
+  userName: string = "";
+ userRole: string = "";
+ loginRole = LoginRole;
   pieChart2:any=[];
   CMBarChart:any =[];
   pieChartCM:any=[];
@@ -61,6 +66,10 @@ export class InvestmentDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.averageTCValue =75
     let tool ='Investment & Private Sector Tool'
+
+    const token = localStorage.getItem('ACCESS_TOKEN')!;
+    const tokenPayload = decode<any>(token);
+    this.userRole = tokenPayload.role.code;
     // this.projectProxy.findAllPolicies().subscribe((res: any) => {
     //   this.interventions = res
     //   // console.log("policyList : ", this.interventions)
