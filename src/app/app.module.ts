@@ -121,6 +121,7 @@ import { ReviewDataCmComponent } from './data-request-flow/review-data-path/revi
 import { ReviewDataInvestmentComponent } from './data-request-flow/review-data-path/review-data-investment/review-data-investment.component';
 import { ReviewDataPathComponent } from './data-request-flow/review-data-path/review-data-path/review-data-path.component';
 import { CmSectionThreeComponent } from './Tool/carbon-market/cm-section-three/cm-section-three.component';
+import { DataRequestPathService } from "./shared/data-request-path.service";
 
 
 
@@ -295,6 +296,7 @@ export function getAuthRemoteServiceBaseUrl(): string {
         AssessmentCMDetailControllerServiceProxy,
         AuditControllerServiceProxy,
         ReportControllerServiceProxy,
+        DataRequestPathService
     ],
     bootstrap: [AppComponent],
     exports: [

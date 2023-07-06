@@ -3,6 +3,7 @@ import * as moment from 'moment';
 import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api';
 import { ParameterRequestControllerServiceProxy, ParameterRequestTool, ServiceProxy, UpdateDeadlineDto, UpdateDeadlineDtoTool, User, UsersControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
+import { DataRequestPathService } from 'app/shared/data-request-path.service';
 
 @Component({
   selector: 'app-review-data-cm',
@@ -41,7 +42,8 @@ export class ReviewDataCmComponent implements OnInit {
     private serviceProxy: ServiceProxy,
     private messageService: MessageService,
     private usersControllerServiceProxy: UsersControllerServiceProxy,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    public dataRequestPathService: DataRequestPathService
   ) { }
 
   async ngOnInit(): Promise<void> {

@@ -44,7 +44,11 @@
                 </th>
                 <th>Intervention</th>
                 <th>Assessment Type</th>
-                <th>Question</th>
+                <th>Process/Outcome</th>
+                <th>Category</th>
+                <th>Characteristic</th>
+                <th>Indicator</th>
+                <!-- <th>Question</th> -->
                 <th>Answer</th>
                 <th>Deadline</th>
                 <th>User</th>
@@ -67,9 +71,17 @@
                     </div>
                 </td>
                 <td>{{ request.cmAssessmentAnswer.assessment_question.assessment.assessmentType! }}</td>
-                <td>{{ request.cmAssessmentAnswer.assessment_question.question.label}}</td>
-                <td>{{request.cmAssessmentAnswer.answer?.label }}</td>
-
+                <td>{{request.cmAssessmentAnswer.assessment_question.characteristic.category.type}}</td>
+                <td>{{request.cmAssessmentAnswer.assessment_question.characteristic.category.name}}</td>
+                <td>{{dataRequestPathService.mapCharacteristic(request.cmAssessmentAnswer.assessment_question.characteristic)}}</td>
+                <ng-container *ngIf="request.cmAssessmentAnswer.assessment_question.question">
+                    <td>{{ request.cmAssessmentAnswer.assessment_question.question.label}}</td>
+                    <td>{{request.cmAssessmentAnswer.answer?.label }}</td>
+                </ng-container>
+                <ng-container *ngIf="!request.cmAssessmentAnswer.assessment_question.question">
+                    <td>Score</td>
+                    <td>{{request.cmAssessmentAnswer.selectedScore}}</td>
+                </ng-container>
                 <td>
                     {{ request.deadlineDataEntry | date: "yyyy-MM-dd " }}
                 </td>

@@ -310,16 +310,16 @@ export class CmResultComponent implements OnInit {
   getOutcomeScores(code: any,category:string) {
     if (code){
       if(category=='scale_GHGs'){
-        return (this.scale_GHG_score.find(o => o.code === code))?.name
+        return (this.scale_GHG_score.find(o => o.code === code))?.label
       }
       else if(category=='sustained_GHGs'){
-        return (this.sustained_GHG_score.find(o => o.code === code))?.name
+        return (this.sustained_GHG_score.find(o => o.code === code))?.label
       }
       else if(category=='scale_SDs'){
-        return (this.scale_SD_score.find(o => o.code === code))?.name
+        return (this.scale_SD_score.find(o => o.code === code))?.label
       }
       else if(category=='sustained_SDs'){
-        return (this.sustained_SD_score.find(o => o.code === code))?.name
+        return (this.sustained_SD_score.find(o => o.code === code))?.label
       }
       else{
         return '-'
