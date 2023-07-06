@@ -132,7 +132,8 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
   sectorsJoined :string='';
 
   finalSectors:Sector[]=[]
-
+  userRole:any='';
+  isExternalUser:boolean=false;
 
 
 
@@ -187,6 +188,8 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
     // this.project=new Project()
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;
     const token = localStorage.getItem('ACCESS_TOKEN')!;
+    this.userRole =decode<any>(token).role?.code
+    console.log("role",this.userRole)
     const countryId = token ? decode<any>(token).countryId : 0;
     console.log("country", countryId)
     this.counID = countryId;
@@ -267,7 +270,7 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
         console.log("flag", this.flag, "this.editEntytyId", this.editEntytyId)
 
       }else{
-        console.log("............")
+        // console.log("............")
         this.project=new Project();
         this.serviceProxy
         .getOneBaseCountryControllerCountry(
@@ -277,11 +280,21 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
           undefined
         )
         .subscribe((res) => {
-          console.log("sss",res)
+          // console.log("sss",res)
           this.countryList.push(res)
           console.log("this.countryList",this.countryList)
-          this.project.country =res;
-          this.isSector = true;
+          if(this.userRole=='External'){
+            this.isExternalUser=true
+            console.log("external user")
+           this.countryProxy.findall().subscribe((res) => {
+            console.log("country",res)
+            this.countryList=res;
+          })
+          }else{
+            this.project.country =res;
+            this.isSector = true;
+          }
+          
           // console.log('tokenPayloadmasssge',res);
         });
         this.proposeDateofCommence=''
@@ -299,11 +312,17 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
           undefined
         )
         .subscribe((res) => {
-          console.log("sss",res)
+          if(this.userRole=='External'){
+            this.isExternalUser=true
+            console.log("external user")
+          }else{
+            console.log("sss",res)
           this.countryList.push(res)
           console.log("this.countryList",this.countryList)
           this.project.country =res;
           this.isSector = true;
+          }
+          
           // console.log('tokenPayloadmasssge',res);
         });
     } else {
@@ -833,7 +852,7 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
               this.messageService.add({
                 severity: 'success',
                 summary: 'Success',
-                detail: 'project  has updated successfully ',
+                detail: 'Intervention  has updated successfully ',
                 closable: true,
               });
             },
@@ -903,7 +922,7 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
                 this.messageService.add({
                   severity: 'success',
                   summary: 'Success',
-                  detail: 'project  has save successfully',
+                  detail: 'Intervention  has saved successfully',
                   closable: true,
                 },
                 
