@@ -33,6 +33,8 @@ export class PortfolioResultComponent implements OnInit {
   tableShow3 : boolean =false;
   tableShow4 : boolean =false;
 
+  noOfAssessments : number;
+
   @ViewChild('content', { static: false }) el!: ElementRef;
   @ViewChild('content') content: ElementRef;
 
@@ -47,27 +49,6 @@ export class PortfolioResultComponent implements OnInit {
     });
 
     console.log("hhh", this.portfolioId)
-
-    this.portfolioServiceProxy.getPortfolioById(this.portfolioId).subscribe(async (res: any) => {
-      console.log("assesss : ", res)
-      //  this.portfolioList = res;
-      this.portfolio = res[0];
-
-      this.card.push(
-        ...[
-          { title: 'Portfolio ID', data: this.portfolio.portfolioId },
-          { title: 'Name of the Portfolio', data: this.portfolio.portfolioName },
-          { title: 'Description', data: this.portfolio.description },
-          { title: 'Person(s)/ organization(s) doing the assessment', data: this.portfolio.person },
-          { title: 'Is this assessment an update of a previous assessment?', data: res[0].IsPreviousAssessment },
-          { title: 'Objective(s) of the assessment', data: this.portfolio.objectives },
-          { title: 'Intended audience(s) of the assessment', data: this.portfolio.audience },
-          { title: 'Opportunities for stakeholders to participate in the assessment', data: this.portfolio.opportunities },
-          { title: 'Principles on which the assessment is based', data: this.portfolio.principles }
-        ])
-
-
-    });
 
 
     this.portfolioServiceProxy.assessmentsByPortfolioId(this.portfolioId).subscribe(async (res: any) => {
@@ -118,6 +99,9 @@ export class PortfolioResultComponent implements OnInit {
       }
 
       console.log("this.allData : ", this.allData)
+
+
+
 
      // console.log("this.processData : ", this.processData)
      // console.log(" this.outcomeData : ",  this.outcomeData)
@@ -206,6 +190,38 @@ export class PortfolioResultComponent implements OnInit {
 
     });
 
+
+    this.portfolioServiceProxy.getPortfolioById(this.portfolioId).subscribe(async (res: any) => {
+      console.log("assesss : ", res)
+      //  this.portfolioList = res;
+      this.portfolio = res[0];
+
+      await this.portfolioServiceProxy.assessmentsDataByAssessmentId(this.portfolioId).subscribe(async (res5: any) => {
+
+        this.noOfAssessments = res5.length;
+
+      console.log("length : ", this.noOfAssessments)
+
+
+      this.card.push(
+        ...[
+          { title: 'Portfolio ID', data: this.portfolio.portfolioId },
+          { title: 'Name of the Portfolio', data: this.portfolio.portfolioName },
+          { title: 'Description', data: this.portfolio.description },
+          { title: 'Person(s)/ organization(s) doing the assessment', data: this.portfolio.person },
+          { title: 'Is this assessment an update of a previous assessment?', data: res[0].IsPreviousAssessment },
+          { title: 'Objective(s) of the assessment', data: this.portfolio.objectives },
+          { title: 'Intended audience(s) of the assessment', data: this.portfolio.audience },
+          { title: 'Opportunities for stakeholders to participate in the assessment', data: this.portfolio.opportunities },
+          { title: 'Principles on which the assessment is based', data: this.portfolio.principles },
+          { title: 'Number of Assessments', data: await this.noOfAssessments }
+        ])
+      });
+
+
+
+        console.log("cardddd : ", this.card)
+    });
 
   }
 

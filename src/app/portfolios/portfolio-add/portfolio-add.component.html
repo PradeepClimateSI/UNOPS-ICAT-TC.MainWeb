@@ -108,7 +108,7 @@
       <p-table #dt2 [value]="assessList" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
         [rowsPerPageOptions]="[10, 25, 50]" [paginator]="true"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-        [globalFilterFields]="['tc_value', 'climateAction.policyName', 'assessmentType', 'assessment_approach', 'climateAction.typeofAction', 'from', 'to']"
+        [globalFilterFields]="['tc_value', 'climateAction.policyName', 'assessmentType', 'assessment_approach', 'climateAction.typeofAction', 'climateAction.id','from', 'to']"
         [tableStyle]="{ 'min-width': '100%' }">
         <ng-template pTemplate="caption">
           <div class="row">
@@ -159,11 +159,12 @@
 
           <tr>
             <th style="width:8%"></th>
-            <th style="width:22%">Intervention</th>
-            <th style="width:22%">Intervention Type</th>
+            <th style="width:6%">ID</th>
+            <th style="width:20%">Intervention</th>
+            <th style="width:20%">Intervention Type</th>
             <th style="width:12%">Assessment Approach</th>
             <th style="width:12%">Assessment Type</th>
-            <th style="width:22%">Assessment Period</th>
+            <th style="width:20%">Assessment Period</th>
 
           </tr>
 
@@ -173,6 +174,9 @@
             <td>
               <p-tableCheckbox #e [value]="assessList"
                 (click)="onCheckboxChange(e.checked, assessList.id)"></p-tableCheckbox>
+            </td>
+            <td>
+              {{ assessList.climateAction.id }}
             </td>
             <td>
               {{ assessList.climateAction.policyName }}
