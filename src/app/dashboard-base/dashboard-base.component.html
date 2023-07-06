@@ -177,7 +177,7 @@
               *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin  ||  userRole==loginRole.Country_Admin"
               class="sidebar-items--link align-items-start" [routerLink]="['/app/assessment-results']"
               routerLinkActive="selected">
-              Assessments
+              Assessment Results
             </div>
             <div
               *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin ||  userRole==loginRole.Country_Admin ||  userRole==loginRole.Country_Admin"
@@ -195,6 +195,9 @@
               <div class=""></div>
               Password Reset
             </div>
+            <div class="sidebar-items--link" (click)="logout()">
+              <i class="pi pi-sign-out"></i> Logout
+            </div>
             <!-- <p-accordion>
               <p-accordionTab data-assess>
                 <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
@@ -203,9 +206,9 @@
                   </div>
                 </p-header>
               </p-accordionTab>
-            </p-accordion> -->
+            </p-accordion>
 
-            <!--  <p-accordion>
+              <p-accordion>
               <p-accordionTab data-assess>
                 <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
                   <div [routerLink]="['/app/data-request']" routerLinkActive="selected">
@@ -233,11 +236,11 @@
                   [routerLink]="['/app/manage-data']" routerLinkActive="selected">
                   <p class="mb-0 ml-20">Manage Data</p>
                 </div>
-                <!-- <div class="sidebar-items--link d-flex flex-column align-items-start"
-              [routerLink]="['/app/app-approve-data']" routerLinkActive="selected">
-              <p class="mb-0 ml-20">Manage Data</p>
-            </div> 
-              </p-accordionTab>
+                 <div class="sidebar-items--link d-flex flex-column align-items-start"
+                  [routerLink]="['/app/app-approve-data']" routerLinkActive="selected">
+                  <p class="mb-0 ml-20">Manage Data</p>
+                </div>  -->
+              <!-- </p-accordionTab>
             </p-accordion> -->
 
             <!-- <p-accordion>
@@ -373,9 +376,7 @@
           <!--   <div class="sidebar-items--link" [routerLink]="['/app/user/setting']" routerLinkActive="router-link-active">
             <i class="pi pi-cog"></i> Account Settings
           </div> -->
-          <div class="sidebar-items--link" (click)="logout()">
-            <i class="pi pi-sign-out"></i> Logout
-          </div>
+          
         </div>
       </div>
       <div class="main d-flex flex-column flex-grow-1">

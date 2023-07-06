@@ -1,5 +1,5 @@
 export class SelectedScoreDto{
-    name: string
+    label: string
     code: string
     value: number
 

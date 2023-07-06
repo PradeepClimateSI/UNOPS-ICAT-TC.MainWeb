@@ -1,304 +1,240 @@
 <div class="container pl-20 pr-20">
-    <h4 class="mt-4">Assign Data Request</h4>
-    <div class="p-grid p-fluid card">
-      <div class="row">
-        <p-tabView  (onChange)="onMainTabChange($event) " [(activeIndex)]="activeIndexMain ">
-          <p-tabPanel  header="Carbon Market Tool">
-            
-          </p-tabPanel>
-          <p-tabPanel  header="Investment & Private Sector Tool">
-            
-          </p-tabPanel>
-          <p-tabPanel  header="Portfolio Tool">
-            
-          </p-tabPanel>
-        </p-tabView>
-      </div>
-      <div class="row mb-4">
-        <div class="col-md-6">
-          <div class="p-field">
-            <label for="projStatus">Intervention</label>
-            <p-dropdown
-              name="climateActiontype"
-              [options]="climateactionsList"
-              [(ngModel)]="searchBy.climateAction"
-              #fsector="ngModel"
-              [showClear]="true"
-              [filter]="true"
-              placeholder="Select .."
-              optionLabel="policyName"
-              (ngModelChange)="onCAChange($event)"
-            >
-            </p-dropdown>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="p-inputgroup pt-4">
-            <input
-              placeholder="Type Your Keyword"
-              type="text"
-              class="p-inputtext"
-              [(ngModel)]="searchBy.text"
-              pInputText
-            />
-            <button
-              type="button"
-              pButton
-              pRipple
-              label="Search"
-              (click)="onSearchClick($event)"
-            ></button>
-            <p-toast position="top-right"></p-toast>
-          </div>
+  <h4 class="mt-4">Assign Data Request</h4>
+  <div class="p-grid p-fluid card">
+    <div class="row">
+      <p-tabView (onChange)="onMainTabChange($event) " [(activeIndex)]="activeIndexMain ">
+        <p-tabPanel header="Carbon Market Tool">
+
+        </p-tabPanel>
+        <p-tabPanel header="Investment & Private Sector Tool">
+
+        </p-tabPanel>
+        <p-tabPanel header="Portfolio Tool">
+
+        </p-tabPanel>
+      </p-tabView>
+    </div>
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <div class="p-field">
+          <label for="projStatus">Intervention</label>
+          <p-dropdown name="climateActiontype" [options]="climateactionsList" [(ngModel)]="searchBy.climateAction"
+            #fsector="ngModel" [showClear]="true" [filter]="true" placeholder="Select .." optionLabel="policyName"
+            (ngModelChange)="onCAChange($event)">
+          </p-dropdown>
         </div>
       </div>
-  
-      <div class="row p-2">
-        <p-table
-          #table
-          [value]="assignDataRequestList"
-          [lazy]="true"
-          (onLazyLoad)="loadgridData($event)"
-          [paginator]="true"
-          [rows]="rows"
-          [showCurrentPageReport]="true"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-          [rowsPerPageOptions]="[10, 25, 50]"
-          [totalRecords]="totalRecords"
-          [loading]="loading"
-          [responsive]="true"
-          [(selection)]="selectedParameters"
-        >
-          <!-- Table header start search -->
-  
-          <!-- <p-table #tt [value]="climateactions" [columns]="cols" placeholder="Global Filter" [filter]="true" filterMatchMode="contains" >                                                          
+      <div class="col-md-6">
+        <div class="p-inputgroup pt-4">
+          <input placeholder="Type Your Keyword" type="text" class="p-inputtext" [(ngModel)]="searchBy.text"
+            pInputText />
+          <button type="button" pButton pRipple label="Search" (click)="onSearchClick($event)"></button>
+          <p-toast position="top-right"></p-toast>
+        </div>
+      </div>
+    </div>
+
+    <div class="row p-2">
+      <p-table #table [value]="assignDataRequestList" [lazy]="true" (onLazyLoad)="loadgridData($event)"
+        [paginator]="true" [rows]="rows" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [rowsPerPageOptions]="[10, 25, 50]" [totalRecords]="totalRecords" [loading]="loading" [responsive]="true"
+        [(selection)]="selectedParameters">
+        <!-- Table header start search -->
+
+        <!-- <p-table #tt [value]="climateactions" [columns]="cols" placeholder="Global Filter" [filter]="true" filterMatchMode="contains" >                                                          
         <ng-template pTemplate="caption">
             <div style="text-align: right">        
                 <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
                 <input type="text" pInputText size="50" style="width:auto">
             </div>
         </ng-template> -->
-  
-          <!-- Table header END Search -->
-          <ng-template pTemplate="header">
-            <!-- <tr> 
+
+        <!-- Table header END Search -->
+        <ng-template pTemplate="header">
+          <!-- <tr> 
             <th *ngFor="let col of columns" [ngSwitch]="col.field">
               <input *ngSwitchCase="'climateActionName'" pInputText type="text"
                 (input)="dt.filter($event.target.value, col.field, 'contains')" />
             </th>
           </tr> -->
-  
-            <tr>
-              <th style="width: 3rem">
-                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-              </th>
-              <th >Intervention</th>
-              <th >Assessment Type</th>
-              
-              <ng-container *ngIf="tabIndex==1||tabIndex==2" >
-                <th >Assessment Period</th>
-                <th>Process/Outcome</th>
-                <th>Category</th>
-                <th>Characteristic</th>
-                <th>Indicator/Score</th>
-              </ng-container>
-              <ng-container *ngIf="tabIndex==0" >
-                <th>Question</th>
-                
-              </ng-container>
-              <th>Assign To</th>
-              <th>Deadline For DEO</th>
-              <th>Status</th>
-              <th >Info</th>
 
-            
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-assignDataRequestList>
-            <tr>
+          <tr>
+            <th style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th>Intervention</th>
+            <th>Assessment Type</th>
+
+            <ng-container *ngIf="tabIndex==1||tabIndex==2">
+              <th>Assessment Period</th>
+            </ng-container>
+            <th>Process/Outcome</th>
+            <th>Category</th>
+            <th>Characteristic</th>
+            <th>Indicator/Score</th>
+            <ng-container *ngIf="tabIndex==0">
+              <!-- <th>Question</th> -->
+
+            </ng-container>
+            <th>Assign To</th>
+            <th>Deadline For DEO</th>
+            <th>Status</th>
+            <th>Info</th>
+
+
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-assignDataRequestList>
+          <tr>
+            <td>
+              <p-tableCheckbox [value]="assignDataRequestList"> </p-tableCheckbox>
+            </td>
+
+
+            <ng-container *ngIf="tabIndex==1||tabIndex==2">
               <td>
-                <p-tableCheckbox [value]="assignDataRequestList"> </p-tableCheckbox>
-              </td>
-             
-              
-             <ng-container *ngIf="tabIndex==1||tabIndex==2" >
-              <td>
-                <div
-                  class="might-overflow"
-                  [pTooltip]="
+                <div class="might-overflow" [pTooltip]="
                    assignDataRequestList?.investmentParameter?.assessment?.climateAction?.policyName
                      
-                  "
-                  tooltipPosition="top"
-                >
+                  " tooltipPosition="top">
                   {{
-                    assignDataRequestList?.investmentParameter?.assessment?.climateAction?.policyName
+                  assignDataRequestList?.investmentParameter?.assessment?.climateAction?.policyName
                   }}
                 </div>
               </td>
               <td>
-                {{  assignDataRequestList?.investmentParameter?.assessment?.assessmentType}}
+                {{ assignDataRequestList?.investmentParameter?.assessment?.assessmentType}}
               </td>
               <td>
-                {{  assignDataRequestList?.investmentParameter?.assessment?.from | date: "dd-MM-yyyy " }} - {{ assignDataRequestList?.investmentParameter?.assessment?.to | date: "dd-MM-yyyy "}}
+                {{ assignDataRequestList?.investmentParameter?.assessment?.from | date: "dd-MM-yyyy " }} - {{
+                assignDataRequestList?.investmentParameter?.assessment?.to | date: "dd-MM-yyyy "}}
               </td>
               <td>{{ assignDataRequestList?.investmentParameter?.type}}</td>
               <td>{{ assignDataRequestList?.investmentParameter?.category?.name}}</td>
               <td>{{ assignDataRequestList?.investmentParameter?.characteristics?.name}}</td>
-              <td>{{ (assignDataRequestList?.investmentParameter?.question) ?(assignDataRequestList?.investmentParameter?.question?.name): (assignDataRequestList?.investmentParameter?.institutionDescription)}}</td>
+              <td>{{ (assignDataRequestList?.investmentParameter?.question)
+                ?(assignDataRequestList?.investmentParameter?.question?.name):
+                (assignDataRequestList?.investmentParameter?.institutionDescription)}}</td>
 
-            
-              </ng-container>
-              <ng-container *ngIf="tabIndex==0" >
-                <td>
-                  <div
-                    class="might-overflow"
-                    [pTooltip]="
+
+            </ng-container>
+            <ng-container *ngIf="tabIndex==0">
+              <td>
+                <div class="might-overflow" [pTooltip]="
                       assignDataRequestList?.cmAssessmentAnswer?.assessment_question?.assessment?.climateAction?.policyName
                        
-                    "
-                    tooltipPosition="top"
-                  >
-                    {{
-                      assignDataRequestList?.cmAssessmentAnswer?.assessment_question?.assessment?.climateAction?.policyName
-                    }}
-                  </div>
-                </td>
-                <td>
-                  {{  assignDataRequestList?.cmAssessmentAnswer?.assessment_question?.assessment?.assessmentType}}
-                </td>
-                <td>
-                  <!-- <div
-                  class="might-overflow"
-                  [pTooltip]="dataRequestList?.cmAssessmentAnswer?.assessment_question?.question?.label"
-                  tooltipPosition="top"
-                >
-                {{  dataRequestList?.cmAssessmentAnswer?.assessment_question?.question?.label}}
-                </div> -->
-                {{  assignDataRequestList?.cmAssessmentAnswer?.assessment_question?.question?.label}}
-                </td>
-              
-                
-              </ng-container>
-              <td>
-                {{
-                  assignDataRequestList.UserDataEntry?.firstName
-                    
-                }}
+                    " tooltipPosition="top">
+                  {{
+                  assignDataRequestList?.cmAssessmentAnswer?.assessment_question?.assessment?.climateAction?.policyName
+                  }}
+                </div>
               </td>
-              <td>{{ assignDataRequestList.deadlineDataEntry | date: "dd-MM-yyyy " }}</td>
               <td>
-                {{
-                  assignDataRequestList.dataRequestStatus == 2
-                    ? "Data Request"
-                    : ""
-                }}
-                {{ assignDataRequestList.dataRequestStatus == 3 ? "Saved" : "" }}
-                {{
-                  assignDataRequestList.dataRequestStatus == -9 ? "Rejected" : ""
-                }}
-                {{
-                  assignDataRequestList.dataRequestStatus == -10 ? "Rejected(DEO)" : ""
-                }}
+                {{ assignDataRequestList?.cmAssessmentAnswer?.assessment_question?.assessment?.assessmentType}}
               </td>
-            
               <td>
-                <i
-                  class="pi pi-ellipsis-v"
-                  style="font-size: 2rem"
-                  (click)="getInfo(assignDataRequestList)"
-                ></i>
+                {{ assignDataRequestList?.cmAssessmentAnswer?.assessment_question?.characteristic?.category?.type}}
               </td>
-              <!-- <td>{{ dataRequestList.id }}</td> -->
-            </tr>
-          </ng-template>
-        
-        
-        </p-table>
-        <div class="col-md-3 offset-9 mt-3">
-          <button
-            type="button"
-            pButton
-            pRipple
-            label="Assign"
-            (click)="onAssignClick()"
-          ></button>
-        </div>
+              <td>
+                {{ assignDataRequestList?.cmAssessmentAnswer?.assessment_question?.characteristic?.category?.name}}
+              </td>
+              <td>
+                {{ dataRequestPathService.mapCharacteristic(assignDataRequestList?.cmAssessmentAnswer?.assessment_question?.characteristic)}}
+              </td>
+              <td *ngIf="assignDataRequestList?.cmAssessmentAnswer?.assessment_question?.question">
+                {{ assignDataRequestList?.cmAssessmentAnswer?.assessment_question?.question?.label}}
+              </td>
+              <td *ngIf="!assignDataRequestList?.cmAssessmentAnswer?.assessment_question?.question">
+                Score
+              </td>
+
+
+            </ng-container>
+            <td>
+              {{
+              assignDataRequestList.UserDataEntry?.firstName
+
+              }}
+            </td>
+            <td>{{ assignDataRequestList.deadlineDataEntry | date: "dd-MM-yyyy " }}</td>
+            <td>
+              {{
+              assignDataRequestList.dataRequestStatus == 2
+              ? "Data Request"
+              : ""
+              }}
+              {{ assignDataRequestList.dataRequestStatus == 3 ? "Saved" : "" }}
+              {{
+              assignDataRequestList.dataRequestStatus == -9 ? "Rejected" : ""
+              }}
+              {{
+              assignDataRequestList.dataRequestStatus == -10 ? "Rejected(DEO)" : ""
+              }}
+            </td>
+
+            <td>
+              <i class="pi pi-ellipsis-v" style="font-size: 2rem" (click)="getInfo(assignDataRequestList)"></i>
+            </td>
+            <!-- <td>{{ dataRequestList.id }}</td> -->
+          </tr>
+        </ng-template>
+
+
+      </p-table>
+      <div class="col-md-3 offset-9 mt-3">
+        <button type="button" pButton pRipple label="Assign" (click)="onAssignClick()"></button>
       </div>
     </div>
   </div>
-  <p-dialog [(visible)]="confirm1" header="Assign a Deadline">
-    <div class="container" style="width: 600px; height: 500px">
-      <div class="row mb-2">
-        <div class="col-5">Select Data Entry Operator</div>
-        <div class="col-4">
-          <p-dropdown
-            name="userType"
-            [options]="userList"
-            [(ngModel)]="selectedUser"
-            #fsector="ngModel"
-            [showClear]="true"
-            [filter]="true"
-            placeholder="Select .."
-            optionLabel="firstName"
-            (ngModelChange)="onCAChange($event)"
-          >
-          </p-dropdown>
-        </div>
-        <div class="col-3"></div>
+</div>
+<p-dialog [(visible)]="confirm1" header="Assign a Deadline">
+  <div class="container" style="width: 600px; height: 500px">
+    <div class="row mb-2">
+      <div class="col-5">Select Data Entry Operator</div>
+      <div class="col-4">
+        <p-dropdown name="userType" [options]="userList" [(ngModel)]="selectedUser" #fsector="ngModel"
+          [showClear]="true" [filter]="true" placeholder="Select .." optionLabel="firstName"
+          (ngModelChange)="onCAChange($event)">
+        </p-dropdown>
       </div>
-      <div class="row mb-2">
-        <div class="col-5">New Deadline</div>
-        <div class="col-4">
-          <p-calendar
-            [minDate]="minDate"
-            [(ngModel)]="selectedDeadline"
-            placeholder="DD/MM/YYYY"
-            dateFormat="dd/mm/yy"
-          ></p-calendar>
-        </div>
-        <div class="col-3"></div>
-      </div>
-      <div class="row mb-2">
-        <div class="col-5"></div>
-        <div class="col-4">
-          <button
-            type="button"
-            pButton
-            pRipple
-            style="margin-right: 10px"
-            label="Save"
-            (click)="onClickSave(3)"
-          ></button>
-          <button
-            type="button"
-            pButton
-            pRipple
-            label="Send"
-            style="margin-right: 10px"
-            (click)="onClickSave(4)"
-          ></button>
-        </div>
-        <div class="col-3"></div>
-      </div>
+      <div class="col-3"></div>
     </div>
-  </p-dialog>
-  
-  <p-dialog
-    header="Data Request History"
-    [(visible)]="displayHistory"
-    [modal]="true"
-    [style]="{ width: '50vw' }"
-    [draggable]="false"
-    [resizable]="false"
-  >
-    
-    <app-view-datarequest-history
-      [parameterId]="paraId"
-      [listOfHistory] = "requestHistoryList"
-    >
-  
-    </app-view-datarequest-history>
-    
-  </p-dialog>
-  
+    <div class="row mb-2">
+      <div class="col-5">New Deadline</div>
+      <div class="col-4">
+        <p-calendar [minDate]="minDate" [(ngModel)]="selectedDeadline" placeholder="DD/MM/YYYY"
+          dateFormat="dd/mm/yy"></p-calendar>
+      </div>
+      <div class="col-3"></div>
+    </div>
+    <div class="row mb-2">
+      <div class="col-5"></div>
+      <div class="col-4">
+        <button type="button" pButton pRipple style="margin-right: 10px" label="Save" (click)="onClickSave(3)"></button>
+        <button type="button" pButton pRipple label="Send" style="margin-right: 10px" (click)="onClickSave(4)"></button>
+      </div>
+      <div class="col-3"></div>
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog header="" [(visible)]="displayHistory" [modal]="true" [style]="{ width: '50vw' }"
+  [draggable]="false" [resizable]="false">
+
+  <ng-container *ngIf="tabIndex === 0">
+    <h6>More Details</h6>
+    <p *ngIf="category && ['SUSTAINED_SD', 'SCALE_SD'].includes(category)">SDG: {{sdg}}</p>
+    <p *ngIf="category && ['SCALE_SD'].includes(category)">SDG Indicator: {{indicator}}</p>
+    <p *ngIf="category && ['SCALE_GHG', 'SCALE_SD'].includes(category)">Starting situation: {{startingSituation}}</p>
+    <p *ngIf="category && ['SCALE_GHG', 'SCALE_SD'].includes(category)">Expected impact: {{expectedImpact}}</p>
+    <p>Justification: {{justification}}</p>
+  </ng-container>
+
+  <h6>Data Request History</h6>
+
+  <app-view-datarequest-history [parameterId]="paraId" [listOfHistory]="requestHistoryList">
+
+  </app-view-datarequest-history>
+
+</p-dialog>

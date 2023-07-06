@@ -1,12 +1,15 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
-import { CMAnswer, CMAssessmentAnswer, CMAssessmentQuestion, CMQuestionControllerServiceProxy, ParameterRequest, ParameterRequestControllerServiceProxy, ParameterRequestTool, ServiceProxy, UpdateDeadlineDto, UpdateDeadlineDtoTool, UpdateValueEnterData } from 'shared/service-proxies/service-proxies';
+import { CMAnswer, CMAssessmentAnswer, CMAssessmentQuestion, CMQuestionControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequest, ParameterRequestControllerServiceProxy, ParameterRequestTool, ServiceProxy, UpdateDeadlineDto, UpdateDeadlineDtoTool, UpdateValueEnterData } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { DataRequestStatus } from 'app/Model/DataRequestStatus.enum';
 import * as XLSX from 'xlsx';
 import { environment } from 'environments/environment.prod';
 import { HttpClient } from '@angular/common/http';
+import { DataRequestPathService } from 'app/shared/data-request-path.service';
+import { MasterDataService } from 'app/shared/master-data.service';
+import { SelectedScoreDto } from 'app/shared/score.dto';
 
 @Component({
   selector: 'app-enter-data-cm',
@@ -42,7 +45,7 @@ export class EnterDataCmComponent implements OnInit {
   requestHistoryList: any[] = [];
   selectedValue: any;
   selectedAssumption: string;
-  answers: CMAnswer[] = []
+  answers: CMAnswer[] | SelectedScoreDto[] = []
   selectedParameter: any;
   selectedId: number;
   parameterListFilterData: any[];
@@ -53,13 +56,23 @@ export class EnterDataCmComponent implements OnInit {
   myInputVariable: ElementRef;
   assignCAArray: any = []
   climateactions: any = []
+  isOutcome: boolean = false;
+  category: string | undefined;
+  sdg: string | undefined;
+  indicator: string | undefined;
+  startingSituation: string | undefined;
+  expectedImpact: string | undefined;
+  justification: string | undefined;
 
   constructor(
     private parameterRequestControllerServiceProxy: ParameterRequestControllerServiceProxy,
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
     private serviceProxy: ServiceProxy,
     private messageService: MessageService,
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    public dataRequestPathService: DataRequestPathService,
+    private masterDataService: MasterDataService,
+    private prHistoryProxy: ParameterHistoryControllerServiceProxy,
   ) { }
 
   ngOnInit(): void {
@@ -159,10 +172,28 @@ export class EnterDataCmComponent implements OnInit {
   }
 
   async onClickUpdateValue(parameterList: ParameterRequest) {
+    console.log(parameterList)
     this.selectedParameter = parameterList.cmAssessmentAnswer
     this.selectedId = parameterList.id
 
-    this.answers = await this.cMQuestionControllerServiceProxy.getAnswersByQuestion(parameterList.cmAssessmentAnswer.assessment_question.question.id).toPromise()
+    if (parameterList.cmAssessmentAnswer.assessment_question.question){
+      this.answers = await this.cMQuestionControllerServiceProxy.getAnswersByQuestion(parameterList.cmAssessmentAnswer.assessment_question.question.id).toPromise()
+    } else {
+      this.isOutcome = true
+      console.log("else block", parameterList.cmAssessmentAnswer.assessment_question['characteristic']['category']['code'])
+      if (parameterList.cmAssessmentAnswer.assessment_question['characteristic']['category']['code'] === 'SUSTAINED_GHG'){
+        console.log("sustained_ghg")
+        this.answers = this.masterDataService.GHG_sustained_score
+      } else if (parameterList.cmAssessmentAnswer.assessment_question['characteristic']['category']['code'] === 'SUSTAINED_SD'){
+        this.answers = this.masterDataService.SDG_sustained_score
+      } else if (parameterList.cmAssessmentAnswer.assessment_question['characteristic']['category']['code'] === 'SCALE_GHG'){
+        this.answers = this.masterDataService.GHG_scale_score
+      } else if (parameterList.cmAssessmentAnswer.assessment_question['characteristic']['category']['code'] === 'SCALE_SD'){
+        this.answers = this.masterDataService.SDG_scale_score
+      }
+    }
+
+    console.log(this.answers)
 
 
     this.isAddData = true;
@@ -214,17 +245,24 @@ export class EnterDataCmComponent implements OnInit {
 
   getInfo(obj: any) {
     console.log('dataRequestList...', obj);
-    this.paraId = obj.parameterId.id;
+    let res = this.dataRequestPathService.getInfo(obj, ParameterRequestTool.Carbon_Market_Tool)
+    this.paraId = res?.paraId;
+    this.category = res.category
+    this.sdg = res.sdg
+    this.indicator = res.indicator
+    this.startingSituation = res.startingSituation
+    this.expectedImpact = res.expectedImpact
+    this.justification = res.justification
     console.log('this.paraId...', this.paraId);
 
     // let x = 602;
-    // this.prHistoryProxy
-    //   .getHistroyByid(this.paraId) // this.paraId
-    //   .subscribe((res) => {
-    //     this.requestHistoryList = res;
+    this.prHistoryProxy
+      .getHistroyByid(this.paraId) // this.paraId
+      .subscribe((res) => {
+        this.requestHistoryList = res;
 
-    //     console.log('this.requestHistoryList...', this.requestHistoryList);
-    //   });
+        console.log('this.requestHistoryList...', this.requestHistoryList);
+      });
 
     this.displayHistory = true;
   }
@@ -245,22 +283,47 @@ export class EnterDataCmComponent implements OnInit {
 
       this.selectedParameters.map((e) => {
         console.log("====== selected e",e);
+        let questionId
+        let question 
+        let sdg
+        let startingSituation
+        let expectedImpact
+        let indicator
+        let answer
         let id = e.cmAssessmentAnswer.id;
         let intervention = e.cmAssessmentAnswer.assessment_question.assessment.climateAction.policyName;
         let assesmentType = e.cmAssessmentAnswer.assessment_question.assessment.assessmentType;
-        let questionId = e.cmAssessmentAnswer.assessment_question.question.id
-        let question = e.cmAssessmentAnswer.assessment_question.question.label
-        let answer = e.cmAssessmentAnswer?.answer?.label
-  
+        let process_outcome = e.cmAssessmentAnswer.assessment_question.characteristic.category.type;
+        let category = e.cmAssessmentAnswer.assessment_question.characteristic.category.name;
+        let category_code = e.cmAssessmentAnswer.assessment_question.characteristic.category.code;
+        let characteristic = this.dataRequestPathService.mapCharacteristic(e.cmAssessmentAnswer.assessment_question.characteristic)
         let obj = {
           id,
           intervention,
           assesmentType,
-          questionId,
-          question,
-          answer
+          process_outcome,
+          category,
+          category_code,
+          characteristic
         };
   
+        if (e.cmAssessmentAnswer.assessment_question.question){
+          questionId = e.cmAssessmentAnswer.assessment_question.question.id
+          question = e.cmAssessmentAnswer.assessment_question.question.label
+          answer = e.cmAssessmentAnswer?.answer?.label
+          obj = {...obj, ...{questionId, question}}
+        } else {
+          sdg = e.cmAssessmentAnswer.assessment_question.selectedSdg
+          startingSituation = e.cmAssessmentAnswer.assessment_question.startingSituation
+          expectedImpact = e.cmAssessmentAnswer.assessment_question.expectedImpact
+          indicator = e.cmAssessmentAnswer.assessment_question.sdgIndicator
+          answer = e.cmAssessmentAnswer.selectedScore
+          obj = {...obj, ...{sdg, startingSituation, expectedImpact, indicator}}
+        }
+        
+        obj = {...obj, ...{answer}}
+  
+       
         this.parameterListFilterData.push(obj);
   
         console.log('+++++++obj 1======', obj);
@@ -383,8 +446,19 @@ export class EnterDataCmComponent implements OnInit {
 
     let assessmentAnswer = new CMAssessmentAnswer()
     assessmentAnswer.id = this.selectedParameter.id
-    assessmentAnswer.answer = this.selectedValue
-    assessmentAnswer.score = this.selectedValue.score_portion / 100 * this.selectedValue.weight / 100
+    console.log(this.selectedValue)
+    if (this.selectedParameter.assessment_question.question){
+      assessmentAnswer.answer = this.selectedValue
+      assessmentAnswer.score = this.selectedValue.score_portion / 100 * this.selectedValue.weight / 100
+    } else {
+      assessmentAnswer.selectedScore = this.selectedValue.code
+      if (['SUSTAINED_GHG', 'SCALE_GHG'].includes(this.selectedParameter.assessment_question.characteristic.category.code)){
+        assessmentAnswer.score = (this.selectedValue.value / 6) * (10 / 100) 
+      }
+      if (['SUSTAINED_SD', 'SCALE_SD'].includes(this.selectedParameter.assessment_question.characteristic.category.code)){
+        assessmentAnswer.score = (this.selectedValue.value / 6) * (2.5 / 100) * (10 / 100) 
+      }
+    }
 
     if (this.selectedAssumption) {
       let assessmentQuestion = new CMAssessmentQuestion()
@@ -441,21 +515,35 @@ export class EnterDataCmComponent implements OnInit {
     for (let index = 0; index < this.selectedParameters.length; index++) {
       let element = this.selectedParameters[index];
       console.log('++++',element)
-      if (
-        element.cmAssessmentAnswer?.answer != null 
-        // && element.parameterId?.uomDataEntry != null
-      ) {
-        idList.push(element.id);
-        console.log('element Pushed', element);
+      if (element.cmAssessmentAnswer.assessment_question.question){
+        if (
+          element.cmAssessmentAnswer?.answer != null 
+          // && element.parameterId?.uomDataEntry != null
+        ) {
+          idList.push(element.id);
+          console.log('element Pushed', element);
+        } else {
+          console.log('element', element);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error.',
+            detail: 'Selected parameters must have a answer.',
+          });
+          return;
+        }
       } else {
-        console.log('element', element);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error.',
-          detail: 'Selected parameters must have a answer.',
-        });
-        return;
+        if (element.cmAssessmentAnswer.selectedScore !== null){
+          idList.push(element.id);
+        } else {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error.',
+            detail: 'Selected parameters must have a answer.',
+          });
+          return;
+        }
       }
+      
     }
     if (idList.length > 0) {
       let inputParameters = new UpdateDeadlineDto();

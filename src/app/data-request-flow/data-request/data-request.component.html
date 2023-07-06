@@ -155,13 +155,13 @@
               
               <ng-container *ngIf="tabIndex==1||tabIndex==2" >
                 <th >Assessment Period</th>
+              </ng-container>
                 <th>Process/Outcome</th>
                 <th>Category</th>
                 <th>Characteristic</th>
                 <th>Indicator/Score</th>
-              </ng-container>
               <ng-container *ngIf="tabIndex==0" >
-                <th>Question</th>
+                <!-- <th>Question</th> -->
                 
               </ng-container>
               <th >Data Provider</th>
@@ -250,15 +250,18 @@
                   {{  dataRequestList?.cmAssessmentAnswer?.assessment_question?.assessment?.assessmentType}}
                 </td>
                 <td>
-                  <!-- <div
-                  class="might-overflow"
-                  [pTooltip]="dataRequestList?.cmAssessmentAnswer?.assessment_question?.question?.label"
-                  tooltipPosition="top"
-                >
-                {{  dataRequestList?.cmAssessmentAnswer?.assessment_question?.question?.label}}
-                </div> -->
+                  {{dataRequestList?.cmAssessmentAnswer?.assessment_question?.characteristic?.category?.type}}
+                </td>
+                <td>
+                  {{dataRequestList?.cmAssessmentAnswer?.assessment_question?.characteristic?.category?.name}}
+                </td>
+                <td>
+                  {{dataRequestPathService.mapCharacteristic(dataRequestList?.cmAssessmentAnswer?.assessment_question?.characteristic)}}
+                </td>
+                <td *ngIf="dataRequestList?.cmAssessmentAnswer?.assessment_question?.question">
                 {{  dataRequestList?.cmAssessmentAnswer?.assessment_question?.question?.label}}
                 </td>
+                <td *ngIf="!dataRequestList?.cmAssessmentAnswer?.assessment_question?.question">Score</td>
                 <td>
                   <div
                     class="might-overflow"
@@ -376,13 +379,22 @@
   </p-dialog>
   
   <p-dialog
-    header="Data Request History"
+    header=""
     [(visible)]="displayHistory"
     [modal]="true"
     [style]="{ width: '50vw' }"
     [draggable]="false"
     [resizable]="false"
   >
+
+  <ng-container *ngIf="tabIndex === 0">
+    <h6>More Details</h6>
+    <p *ngIf="category && ['SUSTAINED_SD', 'SCALE_SD'].includes(category)">SDG: {{sdg}}</p>
+    <p *ngIf="category && ['SCALE_SD'].includes(category)">SDG Indicator: {{indicator}}</p>
+    <p *ngIf="category && ['SCALE_GHG', 'SCALE_SD'].includes(category)">Starting situation: {{startingSituation}}</p>
+    <p *ngIf="category && ['SCALE_GHG', 'SCALE_SD'].includes(category)">Expected impact: {{expectedImpact}}</p>
+    <p>Justification: {{justification}}</p>
+  </ng-container>
     <!-- <app-raise-concern
       [area]="raiseConcernSection"
       [verificationDetails]="concernVerificationDetails"
@@ -390,6 +402,7 @@
       [isNdC]="concernIsNdC"
       [isMethodology]="concernIsMethodology"
     ></app-raise-concern> -->
+    <h6>Data Request History</h6>
     <app-view-datarequest-history
       [parameterId]="paraId"
       [listOfHistory]="requestHistoryList"

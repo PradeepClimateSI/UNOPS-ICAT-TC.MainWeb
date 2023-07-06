@@ -5,7 +5,7 @@ import { SelectedScoreDto } from 'app/shared/score.dto';
 import { environment } from 'environments/environment';
 import { MessageService } from 'primeng/api';
 import { TabView } from 'primeng/tabview';
-import { CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, ScoreDto } from 'shared/service-proxies/service-proxies';
+import { CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, Institution, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, ScoreDto } from 'shared/service-proxies/service-proxies';
 
 
 interface UploadEvent {
@@ -58,12 +58,14 @@ export class CmSectionThreeComponent implements OnInit {
   GHGScore: any;
   acceptedFiles: string = ".pdf, .jpg, .png, .doc, .docx, .xls, .xlsx, .csv";
   fileServerURL: string;
+  institutions: Institution[] = [];
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
     private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
     private masterDataService: MasterDataService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private institutionControllerServiceProxy: InstitutionControllerServiceProxy
   ) { 
     this.uploadUrl = environment.baseUrlAPI + '/cm-assessment-question/upload-file'
     this.fileServerURL = environment.baseUrlAPI+'/uploads'
@@ -87,6 +89,9 @@ export class CmSectionThreeComponent implements OnInit {
     this.onMainTabChange({index: 0})
     this.onCategoryTabChange({index: 0})
     this.outcome = await this.methodologyAssessmentControllerServiceProxy.getAllOutcomeCharacteristics().toPromise()
+    this.institutionControllerServiceProxy.getAllInstitutions().subscribe((res: any) => {
+      this.institutions = res;
+    });
     
   }
 
@@ -258,6 +263,12 @@ export class CmSectionThreeComponent implements OnInit {
           let ch = new Characteristics()
           ch.id = q.characteristic.id
           res.characteristic = ch
+          if (res.institution?.id){
+            let inst = new Institution()
+            inst.id = res.institution.id
+            res.institution = inst
+          }
+          res.type = this.approach
           this.results.push(res)
         }
       }
@@ -267,11 +278,23 @@ export class CmSectionThreeComponent implements OnInit {
       for await (let sd of this.selectedSDGs) {
         sd.scaleResult.forEach(res => {
           if (res.selectedScore){
+            if (res.institution?.id){
+              let inst = new Institution()
+              inst.id = res.institution.id
+              res.institution = inst
+            }
+            res.type = this.approach
             this.results.push(res)
           }
         })
         sd.sustainResult.forEach(res => {
           if (res.selectedScore){
+            if (res.institution?.id){
+              let inst = new Institution()
+              inst.id = res.institution.id
+              res.institution = inst
+            }
+            res.type = this.approach
             this.results.push(res)
           }
         })
@@ -295,7 +318,13 @@ export class CmSectionThreeComponent implements OnInit {
         if (item.type === 'GHG'){
           item.results.forEach((res:any) => {
             res.type = this.approach
+            if (res.institution?.id){
+              let inst = new Institution()
+              inst.id = res.institution.id
+              res.institution = inst
+            }
             if (res.selectedScore){
+              res.type = this.approach
               this.results.push(res)
             }
           })
