@@ -178,10 +178,10 @@ export class CmSectionThreeComponent implements OnInit {
   onSelectScore(event: any, char: CMResultDto, index: number, type: string) {
     console.log("onSelectScore", event)
     let score = new ScoreDto()
-    score.name = event.value.name
-    score.code = event.value.code
-    score.value = event.value.value 
-    char.selectedScore = score
+    // score.name = event.value.name
+    // score.code = event.value.code
+    // score.value = event.value.value 
+    // char.selectedScore = score
 
     if (index === 2) {
       if (char.characteristic.category.code === 'SUSTAINED_GHG') {
@@ -283,6 +283,11 @@ export class CmSectionThreeComponent implements OnInit {
               inst.id = res.institution.id
               res.institution = inst
             }
+            let score = new ScoreDto()
+            score.name = res.selectedScore.name
+            score.code = res.selectedScore.code
+            score.value = res.selectedScore.value
+            res.selectedScore = score 
             res.type = this.approach
             this.results.push(res)
           }
@@ -294,6 +299,11 @@ export class CmSectionThreeComponent implements OnInit {
               inst.id = res.institution.id
               res.institution = inst
             }
+            let susScore = new ScoreDto()
+            susScore.name = res.selectedScore.name
+            susScore.code = res.selectedScore.code
+            susScore.value = res.selectedScore.value
+            res.selectedScore = susScore 
             res.type = this.approach
             this.results.push(res)
           }
@@ -324,6 +334,11 @@ export class CmSectionThreeComponent implements OnInit {
               res.institution = inst
             }
             if (res.selectedScore){
+              let score = new ScoreDto()
+              score.name = res.selectedScore.name
+              score.code = res.selectedScore.code
+              score.value = res.selectedScore.value
+              res.selectedScore = score
               res.type = this.approach
               this.results.push(res)
             }
