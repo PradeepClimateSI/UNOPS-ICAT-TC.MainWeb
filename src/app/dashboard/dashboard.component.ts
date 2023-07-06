@@ -4,7 +4,8 @@ import { Chart } from 'chart.js';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
-
+import decode from 'jwt-decode';
+import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -44,6 +45,9 @@ export class DashboardComponent implements OnInit {
   public marker: Object;
   public title: string;
   public items:any =[];
+  userName: string = "";
+  userRole: string = "";
+  loginRole = LoginRole;
   typeofInterventionCount:  {
     name:string,
     count:number
@@ -65,6 +69,13 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
+    const token = localStorage.getItem('ACCESS_TOKEN')!;
+    const tokenPayload = decode<any>(token);
+    // this.userName = tokenPayload.username;
+    // this.userName = `${this.appService.getUserName()}`;
+    this.userRole = tokenPayload.role.code;
+
     this.projectProxy.findTypeofAction().subscribe((res: any) => {
       this.typeofInterventionCount = res;
       console.log("typeofInterventionCount", res);
