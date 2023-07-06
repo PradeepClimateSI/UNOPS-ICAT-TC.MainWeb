@@ -76,9 +76,9 @@
 
             <div class="col-12 col-md-6">
               <div class="p-field">
-                <label for="telephoneNumber">Telephone No</label>
+                <label for="telephoneNumber">Telephone No *</label>
                 <p-inputMask type="text" name="telephoneNumber" mask="+99 99-999-9999" [autoClear]="true"
-                  placeholder="+99 999 999-9999" [(ngModel)]="project.telephoneNumber"
+                  placeholder="+99 999 999-9999" [(ngModel)]="project.telephoneNumber" 
                   [ngModelOptions]="{ standalone: false }" #telephoneNumber="ngModel" 
                   [disabled]="editEntytyId > 0"
                   
@@ -96,10 +96,10 @@
 
             <div class="col-12 col-md-6">
               <div class="p-field">
-                <label for="mobileNumber">Mobile No</label>
+                <label for="mobileNumber">Mobile No *</label>
 
                 <p-inputMask type="text" name="mobileNumber" mask="+99 99-999-9999" [autoClear]="false" 
-                  placeholder="+99 999 999-9999" [(ngModel)]="project.mobileNumber"
+                  placeholder="+99 999 999-9999" [(ngModel)]="project.mobileNumber" [required]="true"
                   [ngModelOptions]="{ standalone: true }" #telephoneNumber="ngModel" 
                   [disabled]="editEntytyId > 0"
                  ></p-inputMask>

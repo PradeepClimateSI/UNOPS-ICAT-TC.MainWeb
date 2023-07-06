@@ -1,7 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
 import { AssessmentCMDetailControllerServiceProxy, ClimateAction, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
-
+import decode from 'jwt-decode';
+import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
 @Component({
   selector: 'app-carbon-market-dashboard',
   templateUrl: './carbon-market-dashboard.component.html',
@@ -18,6 +19,9 @@ export class CarbonMarketDashboardComponent implements OnInit {
 
  // @ViewChild('canvas', { static: false }) canvas: ElementRef;
 
+ userName: string = "";
+ userRole: string = "";
+ loginRole = LoginRole;
   interventions:any
   tcData: {
     x:string,
@@ -58,6 +62,9 @@ CMPrerequiste: {
 
   ngOnInit(): void {
     // this.averageTCValue =58.05;
+    const token = localStorage.getItem('ACCESS_TOKEN')!;
+    const tokenPayload = decode<any>(token);
+    this.userRole = tokenPayload.role.code;
 
     this.tool = 'Carbon Market Tool';
 
