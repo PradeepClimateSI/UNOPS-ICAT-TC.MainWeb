@@ -43,7 +43,7 @@
         <div class="p-grid p-fluid card m-3">
             <div class="row text-center ">
                 <h3>Sectors Targeted</h3>
-                <div class="col-12  mt-20 "  >
+                <div *ngIf="userRole !=loginRole.External" class="col-12  mt-20 "  >
                     <canvas   id="pieChart2">{{pieChart2}}</canvas>
                  </div>
             </div>
