@@ -8,6 +8,8 @@ import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { Dropdown } from 'primeng/dropdown';
 import { Router } from '@angular/router';
+import { environment } from 'environments/environment';
+import { HttpResponse } from '@angular/common/http';
 
 
 interface CharacteristicWeight {
@@ -54,7 +56,10 @@ export class PortfolioTrack4Component implements OnInit {
   activeIndex2: number = 0;
   likelihood: any[] = [];
   relevance: any[] = [];
-  selectedApproach: any
+  selectedApproach: any;
+  fileServerURL: string;
+  uploadUrl: string;
+  acceptedFiles: string = ".pdf, .jpg, .png, .doc, .docx, .xls, .xlsx, .csv";
 
   description = ''
   load: boolean = false
@@ -71,6 +76,8 @@ export class PortfolioTrack4Component implements OnInit {
     { name: 'Track 3' },
     { name: 'Track 4' }
   ];
+
+  filePath : any
 
   processData: {
     type: string,
@@ -113,6 +120,8 @@ export class PortfolioTrack4Component implements OnInit {
     private instituionProxy: InstitutionControllerServiceProxy,
 
   ) {
+    this.uploadUrl = environment.baseUrlAPI + '/investor-tool/upload-file'
+    this.fileServerURL = environment.baseUrlAPI+'/portfolio'
 
   }
 
@@ -422,7 +431,7 @@ export class PortfolioTrack4Component implements OnInit {
     if(this.mainTabIndex==1){
       this.activeIndex2=0;
     }
-   
+
     console.log("main index", this.mainTabIndex)
   }
 
@@ -434,19 +443,19 @@ export class PortfolioTrack4Component implements OnInit {
     )){
       this.isLikelihoodDisabled=true;
       this.initialLikelihood=0
-      
+
     }
     else{
       this.isLikelihoodDisabled=false;
       this.initialLikelihood=1
     }
-    
+
     if(!this.failedRelevanceArray.some(
       element  => element.tabIndex === this.categoryTabIndex
     )){
       this.isRelavanceDisabled=true;
       this.initialRelevance=0
-      
+
     }
     else{
       this.isRelavanceDisabled=false;
@@ -494,7 +503,7 @@ export class PortfolioTrack4Component implements OnInit {
             detail: 'Assessment created successfully',
             closable: true,
           })
-          this.showResults();
+         this.showResults();
 
 
           // this.isSavedAssessment = true
@@ -671,19 +680,19 @@ export class PortfolioTrack4Component implements OnInit {
         this.isLikelihoodDisabled=true;
          // if (!this.mainTabIndexArray.includes(this.activeIndex)) {
          //   this.mainTabIndexArray.push(this.activeIndex);
-           
+
          // }
          this.failedLikelihoodArray= this.failedLikelihoodArray.filter((element) => element.category !== categoryName);
            console.log("failedLikelihoodArray",this.failedLikelihoodArray)
-         
-       
+
+
        }
        else{
          if (!this.failedLikelihoodArray.some( (element) => element.category === categoryName)) {
            this.failedLikelihoodArray.push({category:categoryName,tabIndex:this.activeIndex});
            console.log("failedLikelihoodArray",this.failedLikelihoodArray)
          }
-     
+
       // this.chaCategoryLikelihoodTotalEqualsTo1[categoryName] = true
     }
     console.log('LL Characteristic Name:', categoryName, characteristicName, 'chaWeight:', chaWeight);
@@ -731,4 +740,20 @@ export class PortfolioTrack4Component implements OnInit {
     console.log("selectedApproach : ", this.selectedApproach)
   }
 
+  onUpload(event:UploadEvent, data : InvestorAssessment) {
+    if(event.originalEvent.body){
+      data.uploadedDocumentPath = event.originalEvent.body.fileName
+    }
+
+    this.messageService.add({severity: 'info', summary: 'File Uploaded', detail: ''});
+  }
+}
+
+interface UploadEvent {
+  originalEvent: HttpResponse<FileDocument>;
+  files: File[];
+}
+
+interface FileDocument {
+  fileName: string
 }
