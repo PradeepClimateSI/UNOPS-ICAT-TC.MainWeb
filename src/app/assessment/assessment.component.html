@@ -34,12 +34,12 @@
   <ng-template pTemplate="header">
       <tr  style="height:4rem;">
 <!--         <th pSortableColumn="id" >Id <p-sortIcon field="meth"></p-sortIcon></th> -->
-          <th pSortableColumn="meth" >Intervention <p-sortIcon field="meth"></p-sortIcon></th>
+          <th style="width:30%" pSortableColumn="meth" >Intervention <p-sortIcon field="meth"></p-sortIcon></th>
        <!--    <th pSortableColumn="method" >Assessment Method <p-sortIcon field="method"></p-sortIcon></th> -->
-          <th pSortableColumn="approach">Assessment Approach <p-sortIcon field="approach"></p-sortIcon></th>
-          <th pSortableColumn="assessmentType" >Assessment Type <p-sortIcon field="assessmentType"></p-sortIcon></th>
-          <th pSortableColumn="tool" >Tool <p-sortIcon field="tool"></p-sortIcon></th>
-          <th>Action</th>
+          <th  style="width:15%" pSortableColumn="approach">Assessment Approach <p-sortIcon field="approach"></p-sortIcon></th>
+          <th  style="width:15%" pSortableColumn="assessmentType" >Assessment Type <p-sortIcon field="assessmentType"></p-sortIcon></th>
+          <th  style="width:25%" pSortableColumn="tool" >Tool <p-sortIcon field="tool"></p-sortIcon></th>
+          <th style="width:15%">Action</th>
       </tr>
   </ng-template>
   <ng-template pTemplate="body" let-results>
@@ -47,7 +47,7 @@
        <!--  <td>{{results.id}}</td> -->
         <td>{{results.meth}}</td>
        <!--  <td>{{results.method}}</td> -->
-        <td>{{results.approach}}</td>
+       <td>{{ results.approach.charAt(0).toUpperCase() + results.approach.slice(1).toLowerCase() }}</td>
         <td>{{results.assessmentType}}</td>
         <td>{{results.tool}}</td>
         <td >
