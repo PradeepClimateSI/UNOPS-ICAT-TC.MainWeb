@@ -158,7 +158,7 @@ export class UserDetailsFormComponent implements OnInit {
     await this.serviceProxy.updateOneBaseUsersControllerUser(this.user.id, this.user).toPromise();
   }
   onBackClick() {
-    this.router.navigate(['/list']);
+    this.router.navigate(['../list'], { relativeTo:this.activatedRoute});
   }
   onDeleteClick(){
    // console.log(alert('helooooo'))
