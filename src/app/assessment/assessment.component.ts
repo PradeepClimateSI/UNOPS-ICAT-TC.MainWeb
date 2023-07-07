@@ -102,7 +102,7 @@ myFunction(assessId: any, averageProcess: any, averageOutcome: any, tool: string
   console.log("dddd", assessId, tool, assessment_method, averageProcess, averageOutcome);
 
   if (tool === 'Investment & Private Sector Tool' || (tool === 'Portfolio Tool' && assessment_method === 'Track 4')) {
-    this.router.navigate(['/assessment-result-investor', assessId], {
+    this.router.navigate(['/app/assessment-result-investor', assessId], {
       queryParams: {
         assessmentId: assessId
       },

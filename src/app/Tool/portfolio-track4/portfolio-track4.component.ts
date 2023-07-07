@@ -7,7 +7,7 @@ import { Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, Impa
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { Dropdown } from 'primeng/dropdown';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 interface CharacteristicWeight {
@@ -111,6 +111,7 @@ export class PortfolioTrack4Component implements OnInit {
     private investorToolControllerproxy: InvestorToolControllerServiceProxy,
     private router: Router,
     private instituionProxy: InstitutionControllerServiceProxy,
+    private activatedRoute: ActivatedRoute
 
   ) {
 
@@ -554,7 +555,7 @@ export class PortfolioTrack4Component implements OnInit {
   showResults() {
 
     setTimeout(() => {
-      this.router.navigate(['/assessment-result-investor', this.mainAssessment.id], { queryParams: { assessmentId: this.mainAssessment.id } });
+      this.router.navigate(['../assessment-result-investor', this.mainAssessment.id], { queryParams: { assessmentId: this.mainAssessment.id }, relativeTo: this.activatedRoute });
     }, 2000);
   }
 
