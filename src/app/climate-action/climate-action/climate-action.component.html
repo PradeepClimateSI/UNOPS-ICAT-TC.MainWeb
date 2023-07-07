@@ -115,9 +115,18 @@
 
                 <p-inputMask type="text" name="mobileNumber" mask="+99 99-999-9999" [autoClear]="false" 
                   placeholder="+99 999 999-9999" [(ngModel)]="project.mobileNumber" [required]="true"
-                  [ngModelOptions]="{ standalone: true }" #telephoneNumber="ngModel" 
+                  [ngModelOptions]="{ standalone: true }" #mobileNumber="ngModel" 
                   [disabled]="editEntytyId > 0"
                  ></p-inputMask>
+
+                 <p class="info-message text-danger" *ngIf="
+                 !project.mobileNumber &&
+                 (fData.submitted ||
+                 mobileNumber.touched ||
+                 mobileNumber.dirty)
+               ">
+                 This is a mandatory field
+               </p>
               </div>
             </div>
           </div>
@@ -182,7 +191,7 @@
                   <input [disabled]="editEntytyId > 0" type="text" maxlength="50" placeholder="ID of the intervention"
                     #interventionID="ngModel" name="interventionID" pInputText
                     [(ngModel)]="project.intervention_id" [ngModelOptions]="{ standalone: false }"
-                    pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText required />
+                    pInputText required />
 
 
                  
@@ -200,7 +209,7 @@
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="projStatus">Current Status of the intervention</label>
+                  <label for="projStatus">Current Status of the intervention*</label>
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlockprojStatus">
                     <p-dropdown [disabled]="editEntytyId > 0" placeholder="Please Select Status" name="projStatus"
                       #projStatus="ngModel" [(ngModel)]="project.projectStatus" [ngModelOptions]="{ standalone: false }"
@@ -274,7 +283,8 @@
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="sector">Sectors Targeted</label>
+                  <label for="sector">Sectors Targeted*</label>
+                 
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocksector">
                     <p-multiSelect [disabled]="editEntytyId > 0" placeholder="Select Sector" name="sector"
                       #sector="ngModel" [(ngModel)]="finalSectors" [options]="sectorList" appendTo="body"
@@ -287,16 +297,25 @@
                     </p>
                   </ng-container>
                   <ng-template #elseBlocksector>
-                    <input [disabled]="editEntytyId > 0" type="text" maxlength="50" name="projsector"
+                    <ng-container *ngIf="isDownloadMode == 1 ">
+                      <p-multiSelect [disabled]="editEntytyId > 0"  name="sector"
+                        #sector="ngModel" [(ngModel)]="finalSectors" [options]="sectorList" appendTo="body"
+                        optionLabel="name" ></p-multiSelect>
+                      
+                    </ng-container>
+                    <ng-container *ngIf="isDownloadMode == 0">
+                      <input [disabled]="editEntytyId > 0" type="text" maxlength="50" name="projsector"
                       #projsector="ngModel" class="p-inputtext" [(ngModel)]="sectorsJoined"
                       [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
+                    </ng-container>
+                    
                   </ng-template>
                 </div>
               </div>
 
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="projStatus">Type of intervention</label>
+                  <label for="projStatus">Type of intervention*</label>
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlockprojStatus">
                     <p-dropdown [disabled]="editEntytyId > 0" placeholder="Please Select the type of intervention"
                       #typeOfIntervention="ngModel"
@@ -452,7 +471,7 @@
              
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="projStatus">Level of Implementation</label>
+                  <label for="projStatus">Level of Implementation*</label>
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocklevelofIpml">
                     <p-dropdown [disabled]="editEntytyId > 0" placeholder="Please Select the Level of Implementation"
                       name="level_of_implemetation" #level_of_implemetation="ngModel" [(ngModel)]="project.levelofImplemenation" 
@@ -823,7 +842,7 @@
                 </div>
               </div>
               <div class="col-md-3" [hidden]="isCity==2">
-                <ng-container *ngIf="isDownloadMode == 0; else elseBlockMaps">
+                <ng-container>
                   <div class="col-12 col-md-12">
                     <div class="p-field">
                       <label for="projectProgress">Select in Google Maps</label>
@@ -836,9 +855,9 @@
                     </div>
                   </div>
                 </ng-container>
-                <ng-template #elseBlockMaps>
+                <!-- <ng-template #elseBlockMaps>
 
-                </ng-template>
+                </ng-template> -->
               </div>
 
             </div>
