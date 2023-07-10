@@ -128,7 +128,7 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
   onUploadComplete(event: any) {
     console.log(event);
     this.messageService.add({
-      severity: 'success',
+      severity: 'info',
       summary: 'Success',
       detail: 'Document  has been uploaded successfully ',
       closable: true,
@@ -194,7 +194,7 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
               this.docArrayforSave.removeItem(doc.id)
               this.docArrayforSave.getArray()
               this.messageService.add({
-                severity: 'success',
+                severity: 'info',
                 summary: 'Success',
                 detail: 'Document  has been deleted successfully ',
                 closable: true,
