@@ -138,6 +138,7 @@ export class ClimateActionComponent implements OnInit {
   userRole:any='';
   isExternalUser:boolean=false;
   showUpload:boolean=true;
+  showDeleteButton:boolean=true
 
 
 

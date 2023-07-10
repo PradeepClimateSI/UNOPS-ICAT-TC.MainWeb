@@ -1201,7 +1201,7 @@
               <ng-container *ngIf="isDownloadMode == 0 ; else elseBlockdocuments">
                 <div class="col-12 wrapper-doc-upload mt-4" (click)="uploadedfiles()">
                   <app-document-upload [doucmentList]="documents" [documentOwner]="documentsDocumentOwner"
-                    [documentOwnerId]="documentOwnerId" [isNew]="false" [showUpload]="showUpload"> 
+                    [documentOwnerId]="documentOwnerId" [isNew]="false" [showUpload]="showUpload" [showDeleteButton]="showDeleteButton"> 
                   </app-document-upload>
                 </div>
               </ng-container>
