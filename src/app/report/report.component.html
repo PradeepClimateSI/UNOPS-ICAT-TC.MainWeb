@@ -95,6 +95,11 @@
                         <p-dropdown [disabled]="assessments.length === 0" appendTo="body" name="ndc"
                             [options]="assessments" placeholder="Select .." [(ngModel)]="selectedAssessment"
                             #fndc="ngModel" [showClear]="true" [filter]="true" optionLabel="climateAction.policyName">
+                            <ng-template let-assessment pTemplate="item">
+                                <div class="item">
+                                    <div>{{assessment.tool}} - {{assessment.assessmentType}} - {{assessment.assessment_approach | titlecase}} </div>
+                                </div>
+                            </ng-template>
                         </p-dropdown>
                     </div>
                 </div>
