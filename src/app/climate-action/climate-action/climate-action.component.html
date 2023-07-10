@@ -1198,10 +1198,10 @@
             <div class="p-2">
               <h6>Project Documents</h6>
 
-              <ng-container *ngIf="isDownloadMode == 0 && !(editEntytyId>0) ; else elseBlockdocuments">
-                <div class="col-12 wrapper-doc-upload mt-4">
+              <ng-container *ngIf="isDownloadMode == 0 ; else elseBlockdocuments">
+                <div class="col-12 wrapper-doc-upload mt-4" (click)="uploadedfiles()">
                   <app-document-upload [doucmentList]="documents" [documentOwner]="documentsDocumentOwner"
-                    [documentOwnerId]="documentOwnerId" [isNew]="false" [showUpload]="true"> 
+                    [documentOwnerId]="documentOwnerId" [isNew]="false" [showUpload]="showUpload"> 
                   </app-document-upload>
                 </div>
               </ng-container>
