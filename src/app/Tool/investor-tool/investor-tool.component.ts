@@ -112,7 +112,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   ) { }
   async ngOnInit(): Promise<void> {
     this.categoryTabIndex =0;
-   
+    
     this.isLikelihoodDisabled=true;
     this.isRelavanceDisabled=true;
     this.assessment_types = this.masterDataService.assessment_type;
