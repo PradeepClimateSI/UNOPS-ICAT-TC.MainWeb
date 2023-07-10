@@ -283,6 +283,7 @@ export class ClimateActionComponent implements OnInit {
         
         this.project=new Project();
         this.showUpload=true
+        this.showDeleteButton=true
         this.serviceProxy
         .getOneBaseCountryControllerCountry(
           countryId,
@@ -453,6 +454,7 @@ export class ClimateActionComponent implements OnInit {
         if (this.editEntytyId && this.editEntytyId > 0) {
           console.log("woorking")
           this.showUpload=false;
+          this.showDeleteButton=false;
           this.serviceProxy
             .getOneBaseProjectControllerClimateAction(
               this.editEntytyId,

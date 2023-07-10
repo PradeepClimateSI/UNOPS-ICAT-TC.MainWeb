@@ -7,7 +7,8 @@ export const environment = {
   baseUrlAPI: 'http://3.108.9.184:7080',
   esbaseUrlAPI: 'http://3.108.9.184:7090',
   authBaseUrlAPI: 'http://3.108.9.184:7090',
-  baseUrlAPIDocUploadAPI: 'http:/3.108.9.184:7080/document/upload2',
+  baseUrlAPIDocUploadAPI: 'http://3.108.9.184:7080/document/upload2',
+  
   baseUrlAuditlog :  'http://3.108.9.184:7000',
   baseUrlJsonFile: 'http://3.108.9.184:3600/filename',
   baseUrlAPIDocUploadAnonymousAPI: 'http://3.108.9.184:7080/document/upload2',
