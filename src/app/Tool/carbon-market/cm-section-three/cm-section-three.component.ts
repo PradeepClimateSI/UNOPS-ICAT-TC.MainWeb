@@ -257,7 +257,7 @@ export class CmSectionThreeComponent implements OnInit {
       for await (let char of category.characteristics){
         for await (let q of char.questions){
           let res = new CMResultDto()
-          Object.keys(res).forEach(e => {
+          Object.keys(q.result).forEach(e => {
             res[e] = q.result[e]
           })
           let ch = new Characteristics()
