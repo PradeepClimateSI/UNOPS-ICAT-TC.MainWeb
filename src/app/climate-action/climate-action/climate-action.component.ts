@@ -33,6 +33,8 @@ import {
   ActionArea,
   Characteristics,
   PolicySector,
+  DocumentControllerServiceProxy,
+  DocOwnerUpdateDto,
 
 } from 'shared/service-proxies/service-proxies';
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
@@ -44,6 +46,7 @@ import decode from 'jwt-decode';
 import { Token } from '@angular/compiler';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { BarrierSelected } from './barrier-selected';
+import { GlobalArrayService } from 'app/shared/global-documents/global-documents.service';
 
 /// <reference types="googlemaps" />
 
@@ -52,7 +55,7 @@ import { BarrierSelected } from './barrier-selected';
   templateUrl: './climate-action.component.html',
   styleUrls: ['./climate-action.component.css']
 })
-export class ClimateActionComponent implements OnInit, AfterContentChecked {
+export class ClimateActionComponent implements OnInit {
   isSaving: boolean = false;
   project: Project = new Project();
   policyBar: PolicyBarriers[] = [];
@@ -134,6 +137,7 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
   finalSectors:Sector[]=[]
   userRole:any='';
   isExternalUser:boolean=false;
+  showUpload:boolean=true;
 
 
 
@@ -174,6 +178,8 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
     private asses: MethodologyAssessmentControllerServiceProxy,
     private cdref: ChangeDetectorRef ,
     private masterDataService: MasterDataService,
+    private docArrayforSave:GlobalArrayService,
+    private docService: DocumentControllerServiceProxy,
     
   ) // private usersControllerServiceProxy: UsersControllerServiceProxy,
   // private ndcProxy:NdcControllerServiceProxy
@@ -253,11 +259,13 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
     //   });
 
     this.route.queryParams.subscribe((params) => {
+    
       this.editEntytyId = 0;
       this.anonymousEditEntytyId = 0;
       this.documentOwnerId = 0;
       this.editEntytyId = params['id'];
       this.anonymousEditEntytyId = params['anonymousId'];
+      console.log("5555555",this.editEntytyId,this.anonymousEditEntytyId)
       if (this.editEntytyId > 0) {
         this.documentOwnerId = this.editEntytyId;
       } else if (this.anonymousEditEntytyId > 0) {
@@ -271,7 +279,9 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
 
       }else{
         // console.log("............")
+        
         this.project=new Project();
+        this.showUpload=true
         this.serviceProxy
         .getOneBaseCountryControllerCountry(
           countryId,
@@ -441,6 +451,7 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
         // if (token && this.editEntytyId && this.editEntytyId > 0) {
         if (this.editEntytyId && this.editEntytyId > 0) {
           console.log("woorking")
+          this.showUpload=false;
           this.serviceProxy
             .getOneBaseProjectControllerClimateAction(
               this.editEntytyId,
@@ -748,6 +759,7 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
       let docFilter: string[] = new Array();
 
       docFilter.push('documentOwnerId||$eq||' + this.editEntytyId);
+      console.log("docFilter",docFilter)
       this.serviceProxy
         .getManyBaseDocumentControllerDocuments(
           undefined,
@@ -793,6 +805,9 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
   }
   changInstitute(event: any) {
     console.log(this.project.mappedInstitution);
+  }
+  uploadedfiles(){
+    console.log("called")
   }
 
   //
@@ -852,7 +867,7 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
               this.messageService.add({
                 severity: 'success',
                 summary: 'Success',
-                detail: 'Intervention  has updated successfully ',
+                detail: 'Intervention  has been updated successfully ',
                 closable: true,
               });
             },
@@ -888,6 +903,16 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
           this.serviceProxy.createOneBaseProjectControllerClimateAction(this.project)
           .subscribe(
             (res) => {
+              let docUpdate:any={
+                
+              };
+              docUpdate.ids=this.docArrayforSave.getArray();
+              docUpdate.projectID=res.id;
+              console.log("docUpload",docUpdate),
+              this.docService.updateDocOwner(docUpdate).subscribe((res) => {
+                console.log('docUploadfinal', res);
+               
+              })
 
               for (let sec of this.finalSectors) {
                 let ps = new PolicySector();
@@ -922,7 +947,7 @@ export class ClimateActionComponent implements OnInit, AfterContentChecked {
                 this.messageService.add({
                   severity: 'success',
                   summary: 'Success',
-                  detail: 'Intervention  has saved successfully',
+                  detail: 'Intervention  has been saved successfully',
                   closable: true,
                 },
                 

@@ -1,5 +1,5 @@
 import { async } from '@angular/core/testing';
-import { LazyLoadEvent, ConfirmationService } from 'primeng/api';
+import { LazyLoadEvent, ConfirmationService, MessageService } from 'primeng/api';
 // import {FileUploadModule} from 'primeng/api';
 import { HttpClient } from '@angular/common/http';
 import {
@@ -17,6 +17,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import { GlobalArrayService } from '../global-documents/global-documents.service';
 
 @Component({
   selector: 'app-document-upload',
@@ -42,10 +43,12 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
   constructor(
     private docService: DocumentControllerServiceProxy,
     private httpClient: HttpClient,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private docArrayforSave:GlobalArrayService,
+    private messageService: MessageService,
   ) {
     // this.showDeleteButton = false;
-    this.token = localStorage.getItem('access_token')!;
+    this.token = localStorage.getItem('ACCESS_TOKEN')!;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -78,6 +81,7 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
   }
 
   loadDocments(event: LazyLoadEvent) {
+    
     this.load();
   }
 
@@ -86,14 +90,21 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
       this.loading = true;
 
       if (this.token) {
-        console.log('token123', this.token);
+        // console.log('token123', this.token);
         await this.docService
           .getDocuments(this.documentOwnerId, this.documentOwner)
           .subscribe(
             (res) => {
-              console.log('token1234', res);
+              console.log('token12344444', res);
               this.doucmentList = res;
               this.loading = false;
+              let ids=res.map(item=>{return item.id})
+            
+                this.docArrayforSave.addItem(ids)
+              
+              this.docArrayforSave.getArray();
+              
+             
             },
             (err: any) => console.log(err)
           );
@@ -116,7 +127,16 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
 
   onUploadComplete(event: any) {
     console.log(event);
-    this.load();
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: 'Document  has been uploaded successfully ',
+      closable: true,
+    });
+    setTimeout(() => {
+      this.load();
+    }, 1500);
+    
   }
 
   async myUploader(event: any) {
@@ -145,6 +165,8 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
       this.httpClient.post<any>(fullUrl, formData).subscribe(
         (res) => {
           this.valueClicked.emit({ data: res, fullUrl})
+          console.log("333333",res)
+          
           this.load();
         },
         (err) => {
@@ -160,7 +182,7 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
   async deleteConfirm(doc: Documents) {
     console.log('name');
     this.confirmationService.confirm({
-      message: `Do you want to delete ${(doc.fileName, doc.id)} ?`,
+      message: `Do you want to delete ${(doc.fileName)} ?`,
       header: 'Delete Confirmation',
       icon: 'pi pi-info-circle',
       accept: () => {
@@ -168,7 +190,18 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
           this.docService.deleteDoc(doc.id).subscribe(
             (res: any) => {
               console.log('token12345', res);
-              this.load();
+             
+              this.docArrayforSave.removeItem(doc.id)
+              this.docArrayforSave.getArray()
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Document  has been deleted successfully ',
+                closable: true,
+              });
+              setTimeout(() => {
+                this.load();
+              }, 1500);
             },
             (err: any) => console.log(err)
           );
