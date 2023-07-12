@@ -84,7 +84,7 @@ export class CmQuestionComponent implements OnInit {
 
   showAnswer(){
     if (this.approach === 'INDIRECT'){
-      if (this.question.characteristic){
+      if (this.question.characteristic.id){
         return false
       } else {
         return true

@@ -1,4 +1,5 @@
 import {
+  Characteristics,
   Notification,
   ParameterHistoryControllerServiceProxy,
   UpdateDeadlineDto,
@@ -26,6 +27,7 @@ import {
   UsersControllerServiceProxy,
 } from 'shared/service-proxies/service-proxies';
 import { Tool } from '../enum/tool.enum';
+import { DataRequestPathService } from 'app/shared/data-request-path.service';
 
 @Component({
   selector: 'app-assign-data-request',
@@ -78,6 +80,12 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
   activeIndexMain =0;
   tabIndex =0;
   tool:any='';
+  category: string | undefined;
+  sdg: string | undefined;
+  indicator: string | undefined;
+  startingSituation: string | undefined;
+  expectedImpact: string | undefined;
+  justification: string | undefined;
   constructor(
     private router: Router,
     private serviceProxy: ServiceProxy,
@@ -86,7 +94,8 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
     private usersControllerServiceProxy: UsersControllerServiceProxy,
     private messageService: MessageService,
     private prHistoryProxy: ParameterHistoryControllerServiceProxy,
-    private climateProxy: ProjectControllerServiceProxy
+    private climateProxy: ProjectControllerServiceProxy,
+    public dataRequestPathService: DataRequestPathService
 
   ) { }
   ngAfterViewInit(): void {
@@ -226,6 +235,7 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
           console.log('aa', res);
           if (res) {
             this.assignDataRequestList = res.items;
+            console.log(this.assignDataRequestList)
             this.totalRecords = res.meta.totalItems;
             this.assignCAArray.length=0;
             this.climateactionsList.length=0;
@@ -312,11 +322,19 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
 
   getInfo(obj: any) {
     // console.log("dataRequestList...", obj)
-    if(this.tool==Tool.CM_tool){
-      this.paraId = obj.cmAssessmentAnswer.id; 
+    if (this.tool == Tool.CM_tool) {
+      let res = this.dataRequestPathService.getInfo(obj, this.tool)
+      this.paraId = res?.paraId;
+      this.category = res?.category
+      this.sdg = res.sdg
+      this.indicator = res.indicator
+      this.startingSituation = res.startingSituation
+      this.expectedImpact = res.expectedImpact
+      this.justification = res.justification
     }
-    else if(this.tool==Tool.Investor_tool||Tool.Portfolio_tool){
-      this.paraId = obj.investmentParameter.id; 
+    else if (this.tool == Tool.Investor_tool || Tool.Portfolio_tool) {
+      let res = this.dataRequestPathService.getInfo(obj, this.tool)
+      this.paraId = res.paraId
     }
     // console.log("this.paraId...", this.paraId)
 

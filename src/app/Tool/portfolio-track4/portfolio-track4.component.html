@@ -467,6 +467,16 @@
                                     </div>
                                   </div>
 
+                            <div class="row p-2" *ngIf=" category.CategoryName ==='Scale GHGs' && data.characteristics.name === 'Micro Level'">
+                              <div class="col-12 col-lg-6">
+                                <div class="p-field">
+                                  <label for="expected_ghg_mitigation">Expected GHG mitgation (Mt CO2-eq)</label>
+                                  <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation" name="expected_ghg_mitigation"
+                                      placeholder="Expected GHG mitgation Value" inputId="locale-us" mode="decimal"
+                                    locale="en-US" [minFractionDigits]="2">
+                                  </p-inputNumber>
+                                  </div>
+                                </div>
                                   <!-- lllllllllllllllllllllllllllll -->
                                   <div class="row p-2 align-items-center">
                                     <div class="col-2 d-flex align-items-center">
@@ -1029,17 +1039,16 @@
                                   </div>
                                 </div>
 
-                                <div class="row p-2"
-                                  *ngIf="categoryTabIndex===0 && mainTabIndex===1 && category.CategoryName ==='Scale GHGs' && data.characteristics.name === 'Micro Level'">
-                                  <div class="col-12 col-lg-6">
-                                    <div class="p-field">
-                                      <label for="expected_ghg_mitigation">Expected GHG mitgation (Mt CO2-eq)</label>
-                                      <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation"
-                                        name="expected_ghg_mitigation" placeholder="Expected GHG mitgation Value"
-                                        inputId="locale-us" mode="decimal" locale="en-US" [minFractionDigits]="2">
-                                      </p-inputNumber>
-                                    </div>
+                            <div class="row p-2" *ngIf=" category.CategoryName ==='Scale GHGs' && data.characteristics.name === 'Micro Level'">
+                              <div class="col-12 col-lg-6">
+                                <div class="p-field">
+                                  <label for="expected_ghg_mitigation">Expected GHG mitgation (Mt CO2-eq)</label>
+                                  <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation" name="expected_ghg_mitigation"
+                                      placeholder="Expected GHG mitgation Value" inputId="locale-us" mode="decimal"
+                                    locale="en-US" [minFractionDigits]="2">
+                                  </p-inputNumber>
                                   </div>
+                                </div>
 
 
                                 </div>

@@ -240,32 +240,32 @@ export class MasterDataService {
     ] 
 
     this.GHG_scale_score = [
-      {name: '3', code: '3', value: 3},
-      {name: '2', code: '2', value: 2},
-      {name: '1', code: '1', value: 1},
-      {name: '0', code: '0', value: 0},
-      {name: '-1', code: '-1', value: -1}
+      {label: '3', code: '3', value: 3},
+      {label: '2', code: '2', value: 2},
+      {label: '1', code: '1', value: 1},
+      {label: '0', code: '0', value: 0},
+      {label: '-1', code: '-1', value: -1}
     ] 
     this.GHG_sustained_score = [
-      {name: '3 - Expected impact of over x years on the selected scale', code: '3', value: 3},
-      {name: '2 - Expected impact of x years on the selected scale', code: '2', value: 2},
-      {name: '1 - Expected impact of x years on the selected scale', code: '1', value: 1},
-      {name: '0 - No expected impact impact on the selected scale', code: '0', value: 0},
-      {name: '-1 - Impact expected to reverse over time', code: '-1', value: -1}
+      {label: '3 - Expected impact of over x years on the selected scale', code: '3', value: 3},
+      {label: '2 - Expected impact of x years on the selected scale', code: '2', value: 2},
+      {label: '1 - Expected impact of x years on the selected scale', code: '1', value: 1},
+      {label: '0 - No expected impact impact on the selected scale', code: '0', value: 0},
+      {label: '-1 - Impact expected to reverse over time', code: '-1', value: -1}
     ] 
     this.SDG_scale_score = [
-      {name: '3 - Material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the activity area', code: '3', value: 3},
-      {name: '2 - Material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the activity area', code: '2', value: 2},
-      {name: '1 - Material change of more than 5% of the baseline value of the indicator / set of indicators underpinning the SDG in the activity area', code: '1', value: 1},
-      {name: '0 - No material change of the baseline value of the indicator / set of indicators underpinning the SDG in the activity area', code: '0', value: 0},
-      {name: '-1 - Negative impact on the indicator / set of indicators underpinning the SDG in the activity area', code: '-1', value: -1},
+      {label: '3 - Material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the activity area', code: '3', value: 3},
+      {label: '2 - Material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the activity area', code: '2', value: 2},
+      {label: '1 - Material change of more than 5% of the baseline value of the indicator / set of indicators underpinning the SDG in the activity area', code: '1', value: 1},
+      {label: '0 - No material change of the baseline value of the indicator / set of indicators underpinning the SDG in the activity area', code: '0', value: 0},
+      {label: '-1 - Negative impact on the indicator / set of indicators underpinning the SDG in the activity area', code: '-1', value: -1},
     ] 
     this.SDG_sustained_score = [
-      {name: '3 - Expected impact of over 15 years for the selected SDG in the activity area', code: '3', value: 3},
-      {name: '2 - Expected impact of 11-15 years for the selected SDG in the activity area', code: '2', value: 2},
-      {name: '1 - Expected impact of 0-10 years for the selected SDG in the activity area', code: '1', value: 1},
-      {name: '0 - No expected impact impact for the selected SDG in the activity area', code: '0', value: 0},
-      {name: '-1 - Impact expected to reverse over time', code: '-1', value: -1},
+      {label: '3 - Expected impact of over 15 years for the selected SDG in the activity area', code: '3', value: 3},
+      {label: '2 - Expected impact of 11-15 years for the selected SDG in the activity area', code: '2', value: 2},
+      {label: '1 - Expected impact of 0-10 years for the selected SDG in the activity area', code: '1', value: 1},
+      {label: '0 - No expected impact impact for the selected SDG in the activity area', code: '0', value: 0},
+      {label: '-1 - Impact expected to reverse over time', code: '-1', value: -1},
     ] 
     this.SDGs= [
       {name: 'No poverty', code: 'NO_POVERTY', scaleResult: [], sustainResult: []},

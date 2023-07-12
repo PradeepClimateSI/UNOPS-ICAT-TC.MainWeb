@@ -178,9 +178,9 @@ trigger : boolean = false;
    */
 
   assessmentMethodList: any[] = [
-    { name: 'Track 1' },
-    { name: 'Track 2' },
-    { name: 'Track 3' },
+    // { name: 'Track 1' },
+    // { name: 'Track 2' },
+    // { name: 'Track 3' },
     { name: 'Track 4' }
   ];
 

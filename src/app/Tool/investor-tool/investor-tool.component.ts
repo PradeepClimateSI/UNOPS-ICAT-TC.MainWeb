@@ -6,7 +6,7 @@ import { MessageService } from 'primeng/api';
 import { Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 // import { IndicatorDetails } from './IndicatorDetails';
 
 
@@ -106,13 +106,13 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     private router: Router,
     private instituionProxy: InstitutionControllerServiceProxy,
     private changeDetector: ChangeDetectorRef,
-
+    private activatedRoute: ActivatedRoute
 
 
   ) { }
   async ngOnInit(): Promise<void> {
     this.categoryTabIndex =0;
-   
+    
     this.isLikelihoodDisabled=true;
     this.isRelavanceDisabled=true;
     this.assessment_types = this.masterDataService.assessment_type;
@@ -442,7 +442,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   showResults(){
     setTimeout(() => {
 
-       this.router.navigate(['/assessment-result-investor',this.mainAssessment.id], { queryParams: { assessmentId: this.mainAssessment.id} });
+       this.router.navigate(['../assessment-result-investor',this.mainAssessment.id], { queryParams: { assessmentId: this.mainAssessment.id}, relativeTo: this.activatedRoute });
 
        }, 2000);
 

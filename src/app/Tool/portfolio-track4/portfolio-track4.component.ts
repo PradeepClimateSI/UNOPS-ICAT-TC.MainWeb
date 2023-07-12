@@ -7,9 +7,9 @@ import { Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, Impa
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { Dropdown } from 'primeng/dropdown';
-import { Router } from '@angular/router';
 import { environment } from 'environments/environment';
 import { HttpResponse } from '@angular/common/http';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 interface CharacteristicWeight {
@@ -71,9 +71,9 @@ export class PortfolioTrack4Component implements OnInit {
   ];
 
   assessmentMethodList: any[] = [
-    { name: 'Track 1' },
-    { name: 'Track 2' },
-    { name: 'Track 3' },
+    // { name: 'Track 1' },
+    // { name: 'Track 2' },
+    // { name: 'Track 3' },
     { name: 'Track 4' }
   ];
 
@@ -118,6 +118,7 @@ export class PortfolioTrack4Component implements OnInit {
     private investorToolControllerproxy: InvestorToolControllerServiceProxy,
     private router: Router,
     private instituionProxy: InstitutionControllerServiceProxy,
+    private activatedRoute: ActivatedRoute
 
   ) {
     this.uploadUrl = environment.baseUrlAPI + '/investor-tool/upload-file'
@@ -563,7 +564,7 @@ export class PortfolioTrack4Component implements OnInit {
   showResults() {
 
     setTimeout(() => {
-      this.router.navigate(['/assessment-result-investor', this.mainAssessment.id], { queryParams: { assessmentId: this.mainAssessment.id } });
+      this.router.navigate(['../assessment-result-investor', this.mainAssessment.id], { queryParams: { assessmentId: this.mainAssessment.id }, relativeTo: this.activatedRoute });
     }, 2000);
   }
 
