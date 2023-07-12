@@ -360,21 +360,10 @@
                         </div>
                       </div>
 
-
-
                     </div>
                   </div>
 
-
-
-
                 </p-tabPanel>
-
-
-
-
-
-
               </p-tabView>
               <!-- </div> -->
             </p-tabPanel>
@@ -412,6 +401,7 @@
                             <div id="content" #content>
                               <div class=" mt-2">
                                 <div class="p-grid p-fluid col-12">
+
                                   <div class="row p-2">
                                     <div class="col-12 col-lg-12">
                                       <div class="p-field">
@@ -467,6 +457,30 @@
                                     </div>
                                   </div>
 
+
+                                  <!-- lllllllllllllllllllllllllllll -->
+                              <div class="row p-2 align-items-center">
+                                <div class="col-2 d-flex align-items-center">
+                                  <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload" name="files"
+                                    [url]="uploadUrl" (onUpload)="onUpload($event,data)" [multiple]="true"
+                                    accept="{{acceptedFiles}}" [maxFileSize]="5000000" [auto]="true">
+                                  </p-fileUpload>
+                                </div>
+
+                                <div class="col-2 d-flex align-items-center" *ngIf="data.uploadedDocumentPath">
+                                  <p>{{data.uploadedDocumentPath}}</p>
+                                </div>
+
+                                <div class="col-2 d-flex align-items-center" *ngIf="data.uploadedDocumentPath">
+                                  <a target="_blank" [href]="fileServerURL+'/'+data.uploadedDocumentPath"><i
+                                      class="pi pi-download download"></i></a>
+                                </div>
+                              </div>
+
+
+                              <!-- lllllllllllllllllllllllllllll -->
+
+
                             <div class="row p-2" *ngIf=" category.CategoryName ==='Scale GHGs' && data.characteristics.name === 'Micro Level'">
                               <div class="col-12 col-lg-6">
                                 <div class="p-field">
@@ -477,50 +491,14 @@
                                   </p-inputNumber>
                                   </div>
                                 </div>
-                                  <!-- lllllllllllllllllllllllllllll -->
-                                  <div class="row p-2 align-items-center">
-                                    <div class="col-2 d-flex align-items-center">
-                                      <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload"
-                                        name="files" [url]="uploadUrl" (onUpload)="onUpload($event,data)"
-                                        [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="5000000"
-                                        [auto]="true">
-                                      </p-fileUpload>
-                                    </div>
 
-                                    <div class="col-2 d-flex align-items-center" *ngIf="data.uploadedDocumentPath">
-                                      <p>{{data.uploadedDocumentPath}}</p>
-                                    </div>
-
-                                    <div class="col-2 d-flex align-items-center" *ngIf="data.uploadedDocumentPath">
-                                      <a target="_blank" [href]="fileServerURL+'/'+data.uploadedDocumentPath"><i
-                                          class="pi pi-download download"></i></a>
-                                    </div>
-                                  </div>
-
-
-                                  <!-- lllllllllllllllllllllllllllll -->
-
-
-
-                                  <div class="row p-2"
-                                    *ngIf="categoryTabIndex===0 && mainTabIndex===1 && category.CategoryName ==='Scale GHGs' && data.characteristics.name === 'Micro Level'">
-                                    <div class="col-12 col-lg-6">
-                                      <div class="p-field">
-                                        <label for="expected_ghg_mitigation">Expected GHG mitgation (Mt CO2-eq)</label>
-                                        <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation"
-                                          name="expected_ghg_mitigation" placeholder="Expected GHG mitgation Value"
-                                          inputId="locale-us" mode="decimal" locale="en-US" [minFractionDigits]="2">
-                                        </p-inputNumber>
-                                      </div>
-                                    </div>
-
-
-                                  </div>
                                 </div>
+
+
                               </div>
                             </div>
                           </div>
-
+                        </div>
                         </form>
 
                       </div>
@@ -734,9 +712,6 @@
 
 
                 </p-tabPanel>
-
-
-
 
               </p-tabView>
             </p-tabPanel>
