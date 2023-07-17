@@ -6,12 +6,14 @@
 
   <div class="p-grid p-fluid card">
 
+
     <div class="p-grid p-fluid col-md-12 col-sm-12 text-title">
       <div class="row p-2" *ngFor="let item of card">
         <div class="col-6">{{item.title}} :</div>
         <div class="col-6">{{item.data}}</div>
       </div>
-    </div>
+
+  </div>
 
     <br><br>
     <h4>Interventions</h4><br>
@@ -56,7 +58,7 @@
       <p-table [value]="allData" [tableStyle]="{ 'min-width': '100%' }">
         <ng-template pTemplate="header">
           <tr>
-            <th style="width:50%">INTERVENTION INFORMATION</th>
+            <th style="width:50%">PROCESS CATEGORIES</th>
             <th style="width:10%">{{allData[0].process[0].name }}</th>
             <th style="width:10%">{{allData[0].process[1].name }}</th>
             <th style="width:10%">{{allData[0].process[2].name }}</th>
@@ -120,7 +122,7 @@
       <p-table [value]="allData" [tableStyle]="{ 'min-width': '100%' }">
         <ng-template pTemplate="header">
           <tr>
-            <th style="width:50%">INTERVENTION INFORMATION</th>
+            <th style="width:50%">PROCESS CATEGORIES</th>
             <th style="width:10%">{{allData[0].process[0].name }}</th>
             <th style="width:10%">{{allData[0].process[1].name }}</th>
             <th style="width:10%">{{allData[0].process[2].name }}</th>
@@ -188,7 +190,7 @@
       <p-table [value]="allData" [tableStyle]="{ 'min-width': '100%' }">
         <ng-template pTemplate="header">
           <tr>
-            <th style="width:70%">INTERVENTION INFORMATION</th>
+            <th style="width:70%">OUTCOMES CATEGORIES</th>
             <th style="width:10%">{{allData[0].scale[0].name }}</th>
             <th style="width:10%">{{allData[0].scale[1].name }}</th>
             <th style="width:10%"></th>
@@ -242,7 +244,7 @@
       <p-table [value]="allData" [tableStyle]="{ 'min-width': '100%' }">
         <ng-template pTemplate="header">
           <tr>
-            <th style="width:70%">INTERVENTION INFORMATION</th>
+            <th style="width:70%">OUTCOMES CATEGORIES</th>
             <th style="width:10%">{{allData[0].sustained[0].name }}</th>
             <th style="width:10%">{{allData[0].sustained[1].name }}</th>
             <th style="width:10%"></th>
@@ -313,13 +315,18 @@
 
 
        <br><br>
- 
   </div>
 </div>
 </div>
-
+</div>
+<div class="container pl-20 pr-20">
+  <div class="d-flex flex-row-reverse mt-2 mb-2">
+    <button (click)="Back()" class="btn btn-primary btn-block text-uppercase">Back</button> &nbsp;&nbsp;
+  </div>
 
 </div>
+
+
 <div class="container pl-20 pr-20">
   <div class="d-flex flex-row-reverse mt-2 mb-2">
     <button (click)="Back()" class="btn btn-primary btn-block text-uppercase">Back</button> &nbsp;&nbsp;
