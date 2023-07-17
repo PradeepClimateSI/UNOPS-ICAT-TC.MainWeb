@@ -98,6 +98,7 @@ export class ViewComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     // this.totalRecords = 0;
+    // this.showData=false;
 
     this.projectProxy.findAllPolicies().subscribe((res: any) => {
         // this.climateactions = res
@@ -295,8 +296,11 @@ export class ViewComponent implements OnInit, AfterViewInit {
 
         .subscribe((a) => {
           console.log( a," this.climateactions")
-         this.climateactions = a.items
-           this.totalRecords=a.meta.totalItems
+          // if(a.items.length>0){
+          //   this.showData=true
+          // }
+         this.climateactions = a.items.filter((obj:any) => obj !== null);
+           this.totalRecords= a.meta.totalItems
           this.loading = false;
         }, err => {this.loading = false;});
     }, 1000);

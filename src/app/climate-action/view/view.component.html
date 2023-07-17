@@ -46,21 +46,21 @@
             <th>Actions</th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-climateactions>
+    <ng-template  pTemplate="body" let-climateactions >
         <tr>
           <!-- <td>{{climateactions.id}}</td> -->
           <td>
-            {{ climateactions.policyName }}</td>
+            {{ climateactions?.policyName }}</td>
           <!-- <td>{{ climateactions.contactPersoFullName }}</td> -->
           <td>
-             {{climateactions.typeofAction}}
+             {{climateactions?.typeofAction}}
          </td>
            <td>
-             {{climateactions.projectStatus?.name}}
+             {{climateactions?.projectStatus?.name}}
           </td>
           <td>
-            {{(climateactions.projectApprovalStatus?.id == undefined || climateactions.projectApprovalStatus?.id ==
-            4)?'Proposed':(climateactions.projectApprovalStatus.id == 3?'Data
+            {{(climateactions?.projectApprovalStatus?.id == undefined || climateactions?.projectApprovalStatus?.id ==
+            4)?'Proposed':(climateactions?.projectApprovalStatus.id == 3?'Data
             Requested':(climateactions.projectApprovalStatus.id == 1?'Accepted':(climateactions.projectApprovalStatus.id
             == 5?'Active':'Rejected')))}}
           </td>
