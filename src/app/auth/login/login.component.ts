@@ -59,6 +59,7 @@ export class LoginComponent implements OnInit {
       try{
         const res = await this.authControllerServiceProxy.login(a).toPromise();
         console.log("returned user data",res);
+        //@ts-ignore
         if(res.isEmailConfirmed){
           this.appService.steToken(res.accessToken);
         this.appService.steRefreshToken(res.refreshToken);
