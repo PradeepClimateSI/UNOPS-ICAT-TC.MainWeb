@@ -254,7 +254,7 @@ export class AcceptedPoliciesComponent implements OnInit, AfterViewInit {
  loadgridData = (event: LazyLoadEvent) => {
     //console.log("below loarding data")
   //  this.loading = true;
-    this.totalRecords = 0;
+    // this.totalRecords = 0;
     let statusId = this.searchBy.status ? this.searchBy.status.id : 0;
     let currentProgress = this.searchBy.currentProgress ? this.searchBy.currentProgress : '';
    // console.log("status",statusId)
@@ -271,11 +271,13 @@ export class AcceptedPoliciesComponent implements OnInit, AfterViewInit {
       this.projectProxy
         .getAllClimateActionList(pageNumber, this.rows, filtertext, statusId,projectApprovalStatusId,currentProgress,this.sectorId)
         .subscribe((a) => {
+          console.log('first time climation',a);
           this.climateactions = a.items;
           this.totalRecords = a.meta.totalItems;
-          console.log('first time climation',this.climateactions);
+          this.loading = false;
         });
-    });
+    },1000);
+   
   };
   addproject() {
     this.router.navigate(['/add-polocies']);

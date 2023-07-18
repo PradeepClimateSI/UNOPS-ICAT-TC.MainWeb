@@ -100,12 +100,12 @@ export class ViewComponent implements OnInit, AfterViewInit {
     // this.totalRecords = 0;
     // this.showData=false;
 
-    this.projectProxy.findAllPolicies().subscribe((res: any) => {
-        // this.climateactions = res
+    // this.projectProxy.findAllPolicies().subscribe((res: any) => {
+    //     // this.climateactions = res
 
-      console.log("policyList : ", this.climateactions)
+    //   console.log("policyList : ", this.climateactions)
 
-    });
+    // });
 
     this.userName = localStorage.getItem('user_name')!;
     const token = localStorage.getItem('access_token')!;
