@@ -140,7 +140,7 @@ export class ClimateActionComponent implements OnInit {
   showUpload:boolean=true;
   showDeleteButton:boolean=true
 
-
+  proposingUser:User
 
   // institutionList: Institution[] = [];
   // institutionTypeID: number = 3;
@@ -181,6 +181,7 @@ export class ClimateActionComponent implements OnInit {
     private masterDataService: MasterDataService,
     private docArrayforSave:GlobalArrayService,
     private docService: DocumentControllerServiceProxy,
+    private userproxy:UsersControllerServiceProxy,
     
   ) // private usersControllerServiceProxy: UsersControllerServiceProxy,
   // private ndcProxy:NdcControllerServiceProxy
@@ -195,12 +196,13 @@ export class ClimateActionComponent implements OnInit {
     // this.project=new Project()
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;
     const token = localStorage.getItem('ACCESS_TOKEN')!;
+    console.log("token--------",decode<any>(token)) 
     this.userRole =decode<any>(token).role?.code
     console.log("role",this.userRole)
     const countryId = token ? decode<any>(token).countryId : 0;
     console.log("country", countryId)
     this.counID = countryId;
-    // this.userName = localStorage.getItem('user_name')!;
+ ;
     let filterUser: string[] = [];
     filterUser.push('username||$eq||' + this.userName);
 
@@ -225,6 +227,14 @@ export class ClimateActionComponent implements OnInit {
       // console.log("ressss3333", res3)
       this.characteristicsList = res3
       // console.log("ressss3333", this.characteristicsList)
+
+    });
+
+    this.userName = localStorage.getItem('USER_NAME')!
+    this.userproxy.findUserByEmail(this.userName).subscribe((res3: any) => {
+      // console.log("ressss3333", res3)
+      this.proposingUser = res3
+      console.log("ressss3333", this.proposingUser)
 
     });
 
@@ -900,6 +910,8 @@ export class ClimateActionComponent implements OnInit {
         this.project.sector = new Sector()
         this.project.sector.id =1;
         this.project.isCity =this.isCity
+        this.project.user = new User()
+        this.project.user.id =this.proposingUser.id;
         // let country = new Country();
         // country.id =this.counID
         // this.project.country =country

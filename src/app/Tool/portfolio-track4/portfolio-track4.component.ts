@@ -255,6 +255,8 @@ export class PortfolioTrack4Component implements OnInit {
 
   async getPolicies() {
     this.policies = await this.projectControllerServiceProxy.findAllPolicies().toPromise()
+
+    console.log("this.policies",this.policies)
   }
   async getAllImpactsCovered() {
     this.impactCovered = await this.investorToolControllerproxy.findAllImpactCovered().toPromise()
