@@ -4,7 +4,7 @@
         <div class="p-grid p-fluid card m-3">
             <div class="row text-center ">
               <h3>Transformational Change </h3>
-              <ng-container *ngIf="tcData.length==0; else elseBlock">
+              <ng-container *ngIf="tcData.length==0; else elseBlock1">
                 <div  class="col-12 " >
                   <p-messages severity="warn" >
                     <ng-template pTemplate>
@@ -16,7 +16,7 @@
                
                  </div>
               </ng-container>
-              <ng-template #elseBlock>
+              <ng-template #elseBlock1>
                 <h2  class="tc-value">{{averageTCValue}}%</h2>
                 <div class="col-12  mt-20 ml-10" >
                   <!-- <p-progressBar [value]="value" [style]="{ 'height': '20px' }" ></p-progressBar>
@@ -71,7 +71,7 @@
   <div class="row text-center ">
       <h3>Transformational Change by Interventions</h3>
       <div  class="col-12  mt-20 ml-10 chart-container"  style="max-height: 600px;">
-        <ng-container *ngIf="tcData.length==0; else elseBlock">
+        <ng-container *ngIf="tcData.length==0; else elseBlock2">
           <div  class="col-12 " >
             <p-messages severity="warn" >
               <ng-template pTemplate>
@@ -83,7 +83,7 @@
          
            </div>
         </ng-container>
-        <ng-template #elseBlock>
+        <ng-template #elseBlock2>
           <canvas  id="canvas">{{chart}}</canvas>
         </ng-template>
        
@@ -98,7 +98,7 @@
       <div class="p-grid p-fluid card m-3">
           <div class="row text-center ">
               <h3>Recent Assessments Done</h3>
-              <ng-container *ngIf="tcData.length==0; else elseBlock">
+              <ng-container *ngIf="tcData.length==0; else elseBlock3">
                 <div  class="col-12 " >
                   <p-messages severity="warn" >
                     <ng-template pTemplate>
@@ -110,7 +110,7 @@
                
                  </div>
               </ng-container>
-              <ng-template #elseBlock>
+              <ng-template #elseBlock3>
                 <div  class="col-12  mt-20 ml-10" >
 
                   <p-table
