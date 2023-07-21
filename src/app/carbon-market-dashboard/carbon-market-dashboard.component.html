@@ -52,10 +52,20 @@
         <div class="p-grid p-fluid card m-3">
           <div class="row text-center ">
             <h3>Sectors Targeted</h3>
-            <div *ngIf="userRole !=loginRole.External " class="col-12  mt-20 ml-10 chart-container"  >
+            <div [hidden]="sectorCount?.length==0" class="col-12  mt-20 ml-10 chart-container"  >
              <!--     <canvas  id="CMBarCahart">{{CMBarChart}}</canvas> -->
               <canvas   id="pieChart2">{{pieChart2}}</canvas>
             </div>
+            <div  class="col-12 " [hidden]="sectorCount?.length!==0">
+              <p-messages severity="warn" >
+                <ng-template pTemplate>
+                    <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
+                    <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
+                    <div class="ml-2">No data to show.</div>
+                </ng-template>
+            </p-messages>
+           
+             </div>
         </div>
         </div>
     </div>
@@ -68,11 +78,11 @@
 
 
 <div class="p-grid p-fluid card mt-20 m-3">
-  <div class="row text-center ">
+  <div class="row text-center " >
       <h3>Transformational Change by Interventions</h3>
       <div  class="col-12  mt-20 ml-10 chart-container"  style="max-height: 600px;">
-        <ng-container *ngIf="tcData.length==0; else elseBlock2">
-          <div  class="col-12 " >
+       
+          <div  class="col-12 " [hidden]="tcData.length!==0">
             <p-messages severity="warn" >
               <ng-template pTemplate>
                   <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
@@ -82,10 +92,12 @@
           </p-messages>
          
            </div>
-        </ng-container>
-        <ng-template #elseBlock2>
-          <canvas  id="canvas">{{chart}}</canvas>
-        </ng-template>
+           <div [hidden]="tcData.length==0">
+              <canvas  id="canvas">{{chart}}</canvas>
+           </div>
+        
+
+          
        
          
        </div>
@@ -155,9 +167,19 @@
     <div class="p-grid p-fluid card m-3 ">
       <div class="row text-center ">
           <h3>Meeting Preconditions</h3>
-          <div *ngIf="userRole !=loginRole.External " class="col-12  mt-20 ml-10 chart-container"  >
+          <div [hidden]="CMPrerequiste[0]?.count==0 && CMPrerequiste[1]?.count==0" class="col-12  mt-20 ml-10 chart-container"  >
               <canvas  id="pieChartCM">{{pieChartCM}}</canvas>
           </div>
+          <div  class="col-12 " [hidden]="CMPrerequiste[0]?.count!=0 || CMPrerequiste[1]?.count!=0">
+            <p-messages severity="warn" >
+              <ng-template pTemplate>
+                  <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
+                  <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
+                  <div class="ml-2">No data to show.</div>
+              </ng-template>
+          </p-messages>
+         
+           </div>
       </div>
   </div>
   </div>

@@ -140,7 +140,7 @@ CMPrerequiste: {
     this.assessmentCMProxy.getPrerequisite().subscribe((res:any)=>{
 
       this.CMPrerequiste=res
-      console.log("CMPrerequiste",res)
+      console.log("CMPrerequiste",res, this.CMPrerequiste[0]?.count, this.CMPrerequiste[1]?.count)
       this.viewPieChartCM();
     })
 
