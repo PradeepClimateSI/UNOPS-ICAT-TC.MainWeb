@@ -107,7 +107,7 @@ export class AuditComponent implements OnInit {
         this.userTypes = res.data.filter((a) => (a.id == 9));
       }
       else if (userTypeId == 10) {
-        this.userTypes = res.data.filter((a) => (a.id = 1 || a.id == 2 || a.id == 3 || a.id == 5 || a.id == 6 || a.id == 7 || a.id == 8 || a.id == 9 || a.id == 10 || a.id == 11));
+        this.userTypes = res.data.filter((a) => (a.id == 1 || a.id == 2 || a.id == 3 || a.id == 5 || a.id == 6 || a.id == 7 || a.id == 8 || a.id == 9 || a.id == 10 || a.id == 11));
       }
       else if (userTypeId == 11) {
         this.userTypes = res.data.filter((a) => (a.id == 11));
