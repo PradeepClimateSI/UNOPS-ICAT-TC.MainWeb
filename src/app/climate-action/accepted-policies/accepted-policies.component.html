@@ -39,7 +39,7 @@
           [value]="climateactions"
           [lazy]="true"
           (onLazyLoad)="loadgridData($event)"
-
+          [totalRecords]="totalRecords" [sortField]="'id'" [sortOrder]="-1"
           [paginator]="true"
           [rows]="rows"
           [showCurrentPageReport]="true"
@@ -47,6 +47,9 @@
           [rowsPerPageOptions]="[1, 10, 25, 50]"
           [loading]="loading"
           [responsive]="true"
+
+
+        
         >
          
   

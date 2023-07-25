@@ -16,17 +16,15 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 import * as moment from 'moment';
 import { environment } from 'environments/environment';
 
-export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
-export const  baseURLEnv:string= environment.baseUrlAuditlog;
+export const API_BASE_AUDIT = new InjectionToken<string>('API_BASE_AUDIT');
+
 @Injectable()
-
-
 export class AppControllerServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
-    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_AUDIT) baseUrl?: string) {
         this.http = http;
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
@@ -82,7 +80,7 @@ export class ServiceProxy {
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
-    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_AUDIT) baseUrl?: string) {
         this.http = http;
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
@@ -554,7 +552,7 @@ export class AuditControllerServiceProxy {
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
-    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_AUDIT) baseUrl?: string) {
         this.http = http;
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
@@ -689,10 +687,8 @@ export class AuditControllerServiceProxy {
         return _observableOf(null as any);
     }
 
-    getAuditDetailsCountry(page: number, limit: number, userType: string, actionStatus: string, logDate: string, filterText: string, institutionId: number): Observable<any> {
-      this.baseUrl = baseURLEnv;
-      console.log("urlll : " ,this.baseUrl)
-        let url_ = this.baseUrl + "/audit/audit/auditCountryinfo/{page}/{limit}/{userType}/{actionStatus}/{logDate}/{filterText}/{institutionId}?";
+    getAuditDetailsCountry(page: number, limit: number, userType: string, actionStatus: string, logDate: string, filterText: string, institutionId: number, countryId:number, loginusertype:string): Observable<any> {
+        let url_ = this.baseUrl + "/audit/audit/auditCountryinfo/{page}/{limit}/{userType}/{actionStatus}/{logDate}/{filterText}/{institutionId}/{countryId}/{loginusertype}?";
         if (page === undefined || page === null)
             throw new Error("The parameter 'page' must be defined and cannot be null.");
         else
@@ -721,6 +717,14 @@ export class AuditControllerServiceProxy {
             throw new Error("The parameter 'institutionId' must be defined and cannot be null.");
         else
             url_ += "institutionId=" + encodeURIComponent("" + institutionId) + "&";
+        if (countryId === undefined || countryId === null)
+            throw new Error("The parameter 'countryId' must be defined and cannot be null.");
+        else
+            url_ += "countryId=" + encodeURIComponent("" + countryId) + "&";
+        if (loginusertype === undefined || loginusertype === null)
+            throw new Error("The parameter 'loginusertype' must be defined and cannot be null.");
+        else
+            url_ += "loginusertype=" + encodeURIComponent("" + loginusertype) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -774,7 +778,7 @@ export class ErrorlogControllerServiceProxy {
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
-    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_AUDIT) baseUrl?: string) {
         this.http = http;
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }

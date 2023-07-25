@@ -59,7 +59,7 @@ CMPrerequiste: {
   tool : string;
 
   pieChart2:any=[];
-
+  loading:boolean=false;
   ngOnInit(): void {
     // this.averageTCValue =58.05;
     const token = localStorage.getItem('ACCESS_TOKEN')!;
@@ -140,7 +140,8 @@ CMPrerequiste: {
     this.assessmentCMProxy.getPrerequisite().subscribe((res:any)=>{
 
       this.CMPrerequiste=res
-      console.log("CMPrerequiste",res)
+      // console.log("CMPrerequiste",res, this.CMPrerequiste[0]?.count, this.CMPrerequiste[1]?.count)
+      this.loading=true
       this.viewPieChartCM();
     })
 
