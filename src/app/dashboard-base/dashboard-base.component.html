@@ -166,7 +166,7 @@
               </p-accordion>
             </div>
             <div
-              *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin ||  userRole==loginRole.Country_Admin"
+              *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin ||  userRole==loginRole.Country_Admin  || userRole==loginRole.External "
               class="sidebar-items--link align-items-start" [routerLink]="['/app/portfolio-list']"
               routerLinkActive="selected">
               Portfolios
