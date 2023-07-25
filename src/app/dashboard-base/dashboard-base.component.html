@@ -17,7 +17,7 @@
               Dashboard
             </div>
             <div
-              *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin || userRole==loginRole.Data_Collection_Team || userRole==loginRole.Institution_Admin ||  userRole==loginRole.Country_Admin">
+              *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin || userRole==loginRole.Technical_Team || userRole==loginRole.MRV_Admin||  userRole==loginRole.Data_Collection_Team || userRole==loginRole.Institution_Admin ||  userRole==loginRole.Country_Admin">
               <p-accordion>
                 <p-accordionTab data-assess>
                   <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
@@ -39,7 +39,7 @@
             </div>
 
             <div
-              *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin || userRole==loginRole.Data_Collection_Team || userRole==loginRole.Institution_Admin ||  userRole==loginRole.Country_Admin">
+              *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin || userRole==loginRole.Technical_Team || userRole==loginRole.MRV_Admin||  userRole==loginRole.Data_Collection_Team || userRole==loginRole.Institution_Admin ||  userRole==loginRole.Country_Admin">
               <p-accordion>
                 <p-accordionTab data-assess>
                   <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
@@ -94,22 +94,22 @@
               </div> -->
             <p-accordion>
               <div
-                *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin ||  userRole==loginRole.Country_Admin ||  userRole==loginRole.External ">
+                *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin || userRole==loginRole.Technical_Team || userRole==loginRole.MRV_Admin||  userRole==loginRole.Data_Collection_Team ||  userRole==loginRole.Country_Admin ||  userRole==loginRole.External ">
                 <p-accordionTab data-assess>
                   <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
                     <div
-                      *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin ||  userRole==loginRole.Country_Admin ||  userRole==loginRole.External ">
+                      *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin || userRole==loginRole.Technical_Team || userRole==loginRole.MRV_Admin||  userRole==loginRole.Data_Collection_Team ||  userRole==loginRole.Country_Admin ||  userRole==loginRole.External ">
                       <p class="mb-2">Interventions</p>
                     </div>
                   </p-header>
                   <div
-                    *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin ||   userRole==loginRole.External ||  userRole==loginRole.Country_Admin"
+                    *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin || userRole==loginRole.Technical_Team || userRole==loginRole.MRV_Admin||  userRole==loginRole.Data_Collection_Team ||   userRole==loginRole.External ||  userRole==loginRole.Country_Admin"
                     class="sidebar-items--link d-flex flex-column align-items-start"
                     [routerLink]="['/app/add-polocies']" routerLinkActive="selected">
                     <p class="mb-0 ml-20">Propose</p>
                   </div>
                   <div
-                    *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin ||  userRole==loginRole.Country_Admin"
+                    *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin || userRole==loginRole.Technical_Team || userRole==loginRole.MRV_Admin||  userRole==loginRole.Data_Collection_Team||  userRole==loginRole.Country_Admin"
                     class="sidebar-items--link d-flex flex-column align-items-start"
                     [routerLink]="['/app/view-polocies']" routerLinkActive="selected">
                     <p class="mb-0 ml-20">Manage</p>
@@ -167,20 +167,20 @@
               </p-accordion>
             </div>
             <div
-              *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin ||  userRole==loginRole.Country_Admin"
+              *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin || userRole==loginRole.Technical_Team || userRole==loginRole.MRV_Admin||  userRole==loginRole.Data_Collection_Team ||  userRole==loginRole.Country_Admin"
               class="sidebar-items--link align-items-start" [routerLink]="['/app/portfolio-list']"
               routerLinkActive="selected">
               Portfolios
             </div>
 
             <div
-              *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin  ||  userRole==loginRole.Country_Admin"
+              *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin || userRole==loginRole.Technical_Team || userRole==loginRole.MRV_Admin||  userRole==loginRole.Data_Collection_Team ||  userRole==loginRole.Country_Admin"
               class="sidebar-items--link align-items-start" [routerLink]="['/app/assessment-results']"
               routerLinkActive="selected">
               Assessment Results
             </div>
             <div
-              *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin ||  userRole==loginRole.Country_Admin ||  userRole==loginRole.Country_Admin"
+              *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin || userRole==loginRole.Technical_Team || userRole==loginRole.MRV_Admin||  userRole==loginRole.Data_Collection_Team||  userRole==loginRole.Country_Admin ||  userRole==loginRole.Country_Admin"
               class="sidebar-items--link align-items-start" [routerLink]="['/app/report']" routerLinkActive="selected">
               <div class=""></div>
               Reports
