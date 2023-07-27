@@ -1,6 +1,6 @@
 import { Component, OnInit ,ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { FormBuilder, UntypedFormGroup, NgForm, Validators } from '@angular/forms';
 import decode from 'jwt-decode';
 import { AuthControllerServiceProxy, AuthCredentialDto } from 'shared/service-proxies/auth-service-proxies';
 
@@ -20,7 +20,7 @@ export class SetPasswordComponent implements OnInit {
   resetPasswordDto = new AuthCredentialDto;
   islSuccessPopup: boolean;
   isErrorPopup: boolean;
-  setPasswordForm: FormGroup;
+  setPasswordForm: UntypedFormGroup;
   isPasswordType: boolean = true;
   isConfirmPasswordType?: boolean = true;
   passwordConfirm: string = "";

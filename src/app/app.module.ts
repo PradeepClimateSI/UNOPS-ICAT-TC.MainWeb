@@ -19,7 +19,6 @@ import { ViewInstitutionComponent } from "./institution/view-institution/view-in
 import { MethodologyComponent } from "./methodology/methodology.component";
 import { DocumentUploadComponent } from "./shared/document-upload/document-upload.component";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgImageSliderModule } from 'ng-image-slider';
 import { ToastModule } from 'primeng/toast';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { ToggleButtonModule } from 'primeng/togglebutton';
@@ -145,6 +144,7 @@ export function getAuditRemoteServiceBaseUrl(): string {
   declarations: [
     AppComponent,
     DashboardBaseComponent,
+    PortfolioTrack4Component,
     ClimateActionComponent,
     ViewComponent,
     DocumentUploadComponent,
@@ -172,7 +172,6 @@ export function getAuditRemoteServiceBaseUrl(): string {
     VerifyParameterComponent,
     QualityCheckDetailComponent,
     AssessmentResultTrack2Component,
-    ClimateActionComponent,
     AcceptedPoliciesComponent,
     RaiseConcernComponent,
     RaiseConcernSectionComponent,
@@ -186,7 +185,6 @@ export function getAuditRemoteServiceBaseUrl(): string {
     ReportComponent,
     InvestorToolComponent,
     AssessmentResultInvestorComponent,
-    PortfolioTrack4Component,
     InvestmentDashboardComponent,
     PortfolioDashboardComponent,
     CarbonMarketDashboardComponent,

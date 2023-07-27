@@ -3,7 +3,7 @@
 @use '@nebular/theme/styles/globals' as *;
 
 @include nb-install() {
-  @include nb-theme-global();
+@include nb-theme-global();
 };
 /* Abstract */
 @import "../src/assets/scss/abstracts/variables";
