@@ -4,15 +4,15 @@
 
 export const environment = {
   production: true,
-  baseUrlAPI: 'http://3.108.9.184:7080',
+  baseUrlAPI: 'http://3.108.9.184/web-api',
   esbaseUrlAPI: 'http://3.108.9.184:7090',
-  authBaseUrlAPI: 'http://3.108.9.184:7090',
-  baseUrlAPIDocUploadAPI: 'http://3.108.9.184:7080/document/upload2',
+  authBaseUrlAPI: 'http://3.108.9.184/auth-api',
+  baseUrlAPIDocUploadAPI: 'http://3.108.9.184/web-api/document/upload2',
   
-  baseUrlAuditlog :  'http://3.108.9.184:7000',
+  baseUrlAuditlog :  'http://3.108.9.184/audit-api',
   baseUrlJsonFile: 'http://3.108.9.184:3600/filename',
-  baseUrlAPIDocUploadAnonymousAPI: 'http://3.108.9.184:7080/document/upload2',
-  baseUrlExcelUpload:  'http://3.108.9.184:7080/parameter/upload',
+  baseUrlAPIDocUploadAnonymousAPI: 'http://3.108.9.184/web-api/document/upload2',
+  baseUrlExcelUpload:  'http://3.108.9.184/web-api/parameter/upload',
 };
 // baseUrlAPI: 'http://3.110.188.89:7080',
 /*
