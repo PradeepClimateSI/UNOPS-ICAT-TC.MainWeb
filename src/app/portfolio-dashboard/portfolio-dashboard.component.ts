@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Chart } from 'chart.js';
+import { Chart, ChartType } from 'chart.js';
 import { InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PortfolioControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
@@ -524,7 +524,7 @@ this.ngOnInit();
     }
     else{
       this.portfolioPieChart =new Chart(ctx, {
-        type: 'pie',
+        type: 'pie' as ChartType,
 
         data: {
           labels: labels,
