@@ -85,33 +85,24 @@ export class UserFormComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
 
-    console.log("ngonitit")
-    // const token = localStorage.getItem('access_token')!;
-    // console.log("token",token)
 
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
     const username = tokenPayload.usr;
-    console.log('username=========', tokenPayload);
 
-
-    //  const tokenPayload = token ? decode<any>(token):'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3IiOiJzZWN0b3JhZG1pbjJAY2xpbWF0ZXNpLmNvbSIsImZuYW1lIjoiTWFkaHV3YW50aGEiLCJsbmFtZSI6IkhpbmRhZ29kYSIsImNvdW50cnlJZCI6MSwiaW5zdE5hbWUiOiJUcmFuc3BvcnQgTWluaXN0cnkiLCJtb2R1bGVMZXZlbHMiOlsxLDEsMSwxLDFdLCJzZWN0b3JJZCI6MSwicm9sZXMiOlsiU2VjdG9yIEFkbWluIl0sImlhdCI6MTY3ODE3MzM4MiwiZXhwIjoxNjc5MDM3MzgyfQ.0bpc5Jm3TxUhoOU8sNwnLGRtsonGAY4et1O2PlmicGA';
-    this.countryId = tokenPayload.countryId;
+ this.countryId = tokenPayload.countryId;
     this.countryProxy.getCountrySector(this.countryId).subscribe((res: any) => {
       this.country = res;
     });
 
     let country = new Country()
     country.id = this.countryId;
-    // country.id=2;
     this.sectorId = tokenPayload.sectorId;
     this.userRole = tokenPayload.role.code
-    console.log("user role..", this.userRole)
 
     this.user.userType = undefined!;
     this.user.mobile = '';
     this.user.landline = '';
-    //this.user.country=country;
 
     this.route.queryParams.subscribe((params) => {
       this.editUserId = params['id'];
@@ -126,9 +117,6 @@ export class UserFormComponent implements OnInit, AfterViewInit {
             0
           )
           .subscribe((res: any) => {
-            console.log('getUser====', res);
-            //  this.onInstitutionChange2(res);
-            //this.selecteduserType =
             this.onInstitutionChange2(res);
             this.user = res;
             this.selecteduserType = {
@@ -136,9 +124,6 @@ export class UserFormComponent implements OnInit, AfterViewInit {
               "ae_id": this.user.userType.id
             }
 
-
-            // this.selectedUserTypesFordrop.push(this.selecteduserType)
-            console.log("selectedUserTypesFordrop", this.selectedUserTypesFordrop)
 
           });
       }
@@ -148,16 +133,8 @@ export class UserFormComponent implements OnInit, AfterViewInit {
       this.userTypes = res;
     });
 
-    this.instProxy.getAllInstitutions().subscribe((res: any) => {
-      console.log('institutions res ============', res);
-      this.institutions = res;
-    });
-
-
-
     this.instProxy.getInstitutionForManageUsers(0, 0)
       .subscribe((res) => {
-        console.log('institutions res ============', res);
         this.institutions = res.items;
 
         if (this.user?.institution) {
@@ -168,13 +145,10 @@ export class UserFormComponent implements OnInit, AfterViewInit {
               ins.category = new InstitutionCategory(cat)
               ins.type = new InstitutionType(type)
               let _ins = new Institution(ins)
-              console.log(_ins)
               this.user.institution = _ins;
-              console.log('ins set =======================');
             }
           });
         }
-        console.log('institutions============', this.institutions);
 
         if (this.userRole == 'Data Collection Team') {
           this.institutions = this.institutions.filter((o) => o.country.id == this.countryId && o.sectorId == this.sectorId && o.type.id == 3);
@@ -185,8 +159,6 @@ export class UserFormComponent implements OnInit, AfterViewInit {
   }
 
   onChangeUser(event: any) {
-    //console.log(event);
-    // this.user.title = event.value?.name;
   }
 
   async saveUser(userForm: NgForm) {
@@ -198,44 +170,11 @@ export class UserFormComponent implements OnInit, AfterViewInit {
         this.isEmailUsed = false;
         this.usedEmail = '';
 
-        /*  let tempUsers = await this.serviceProxy
-           .getManyBaseUsersControllerUser(
-             undefined,
-             undefined,
-             ['email||$eq||' + this.user.email],
-             undefined,
-             ['firstName,ASC'],
-             ['institution'],
-             1,
-             0,
-             0,
-             0
-           )
-           .subscribe((res) => {
-             if (res.data.length > 0) {
-               this.isEmailUsed = true;
-               this.usedEmail = res.data[0].email;
-              
-               this.messageService.add({
-                 severity: 'error',
-                 summary: 'Error.',
-                 detail: 'Email address is already in use, please select a diffrent email address to create a new user.!',
-                 sticky: true,
-               });
-             } else { */
-        // create user
         this.user.username = this.user.email;
         this.user.status = 0;
-        // this.user.status = 1;
 
         let userType = new UserType;
-        // userType.id= this.selecteduserType.id
-        userType.init(this.selecteduserType)
-        console.log("userd", userType)
-        // this.user.userType = userType;
-        // let co = new Country;
-        // co.id = this.countryId
-        // co.init(this.country);
+        userType.init(this.selecteduserType);
 
 
         this.user.country = new Country();
@@ -247,16 +186,12 @@ export class UserFormComponent implements OnInit, AfterViewInit {
         this.user.institution = new Institution();
         this.user.institution.id = insTemp.id;
         this.coreatingUser = true;
-        console.log("userd", this.user)
 
         let authUser = new LoginProfile();
         authUser.userName = this.user.email;
-        // authUser.password = res.password;
-        // authUser.salt = res.salt;
         let authUserType = new AuthUserType;
         authUserType.id = this.selecteduserType.id;
         authUser.userType = authUserType;
-        // this.user.userType.id =authUserType.id 
         authUser.coutryId = this.countryId;
         authUser.insId = this.user.institution.id;
 
@@ -267,11 +202,9 @@ export class UserFormComponent implements OnInit, AfterViewInit {
             this.authUser.getById(res.id).subscribe((res) => {
 
             })
-            console.log(res)
             this.user.loginProfile = res.id;
             this.user.password = res.password;
             this.user.salt = res.salt;
-            console.log( this.user)
             this.userController
               .create(this.user)
               .subscribe(
@@ -302,35 +235,7 @@ export class UserFormComponent implements OnInit, AfterViewInit {
           }
         )
 
-
-
-
-
-
-        // setTimeout(() => {
-        //   this.onBackClick();    
-        // },1000);
-        /*  }
-       }); */
-
-        // this.serviceProxy.createOneBaseUserv2ControllerUser(this.user).subscribe(res => {
-        //   alert("User created !");
-        //   //this.DisplayAlert('User created !', AlertType.Message);
-
-        //   console.log("edit user", res.id);
-
-        //   this.router.navigate(['/user'], { queryParams: { id: res.id } });
-
-        // }, error => {
-        //   alert("An error occurred, please try again.")
-        //   // this.DisplayAlert('An error occurred, please try again.', AlertType.Error);
-
-        //   console.log("Error", error);
-        // });
       } else {
-        console.log("update", this.user.id, this.user)
-        // this.user.institution =new Institution()
-
         let userType = new UserType;
         userType.init(this.selecteduserType)
         this.user.userType = userType;
