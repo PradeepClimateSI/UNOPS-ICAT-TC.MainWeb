@@ -51,7 +51,7 @@ import {
 } from '@nebular/theme';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
-import { GMapModule } from 'primeng/gmap';
+//import { GMapModule } from 'primeng/gmap';
 import { PaginatorModule } from 'primeng/paginator';
 import { CarouselModule } from 'primeng/carousel';
 import { DashboardModule } from './dashboard/dashboard.module';
@@ -235,7 +235,7 @@ export function getAuditRemoteServiceBaseUrl(): string {
     TooltipModule,
     ProgressBarModule,
     ConfirmDialogModule,
-    GMapModule,
+  //  GMapModule,
     ChartModule,
     ProgressSpinnerModule,
     OverlayPanelModule,

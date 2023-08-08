@@ -1,6 +1,6 @@
 <div class="container pl-20 pr-20" id="content">
     <div class="mb-12">
-        <h4 class="mt-4"> Result - {{intervention?.policyName}}</h4>
+        <h4 class="mt-4"> Result - {{intervention.policyName}}</h4>
     </div>
     <div class="card" style="min-height: 600px;">
         <div class="p-grid p-fluid col-md-12 col-sm-12 text-title">
@@ -36,12 +36,12 @@
                         <tr>
                             <td>{{customer.question}}</td>
                             <td>{{customer.answer}}</td>
-                            <td>{{customer.comment}}</td><td > <a *ngIf="customer?.document" target="_blank" [href]="fileServerURL+'/'+customer?.document"><i class="pi pi-download download"></i></a></td> 
+                            <td>{{customer.comment}}</td><td > <a *ngIf="customer?.document" target="_blank" [href]="fileServerURL+'/'+customer?.document"><i class="pi pi-download download"></i></a></td>
                         </tr>
                     </ng-template>
                 </p-table>
             </div>
-           
+
         </div>
         <div class="p-grid p-fluid col-12">
             <div class="row p-2">
@@ -49,7 +49,7 @@
             </div>
             <div class="row p-2" *ngIf="processData.technology.length!=0">
                 <p-table   [value]="processData.technology" >
-                
+
                     <ng-template pTemplate="caption" styleClass="table-header"  >
                         <div class="table-header">
                             Process of Change / Technology
@@ -63,7 +63,7 @@
                             <th colspan="2">Justification</th>
                         </tr>
                     </ng-template>
-                   
+
                     <ng-template pTemplate="body" let-technology>
                         <tr>
                             <td >{{technology.characteristic}}</td>
@@ -90,7 +90,7 @@
                             <th colspan="2">Justification</th>
                         </tr>
                     </ng-template>
-                   
+
                     <ng-template pTemplate="body" let-incentives>
                         <tr>
                             <td >{{incentives.characteristic}}</td>
@@ -117,7 +117,7 @@
                             <th colspan="2">Justification</th>
                         </tr>
                     </ng-template>
-                   
+
                     <ng-template pTemplate="body" let-norms>
                         <tr>
                             <td >{{norms.characteristic}}</td>
@@ -129,7 +129,7 @@
                     </ng-template>
                 </p-table>
             </div>
-            
+
             <div class="row p-2" *ngIf="outcomeData.scale_GHGs.length!=0">
                 <p-table  [value]="outcomeData.scale_GHGs" >
                     <ng-template pTemplate="caption" styleClass="table-header"  >
@@ -146,7 +146,7 @@
                             <th colspan="2">Justification</th>
                         </tr>
                     </ng-template>
-                   
+
                     <ng-template pTemplate="body" let-scale_GHGs>
                         <tr>
                             <td >{{scale_GHGs.characteristic}}</td>
@@ -156,7 +156,7 @@
                             <td >{{(scale_GHGs?.justification)?(scale_GHGs?.justification):'-'}} </td>
                             <td><a *ngIf="scale_GHGs?.document" target="_blank" [href]="fileServerURL+'/'+scale_GHGs?.document"><i class="pi pi-download download"></i></a></td>
 
-                            
+
                         </tr>
                     </ng-template>
                 </p-table>
@@ -176,7 +176,7 @@
                             <th colspan="2">Justification</th>
                         </tr>
                     </ng-template>
-                   
+
                     <ng-template pTemplate="body" let-sustained_GHGs>
                         <tr>
                             <td >{{changeOutcomeCharacteristicsName(sustained_GHGs.characteristic)}}</td>
@@ -188,9 +188,9 @@
                     </ng-template>
                 </p-table>
             </div>
-           
+
             <div class="row p-2" *ngIf="outcomeData.scale_SDs.length!=0">
-            
+
                 <p-table  [value]="outcomeData.scale_SDs" >
                     <ng-template pTemplate="caption" styleClass="table-header"  >
                         <div class="table-header">
@@ -207,7 +207,7 @@
                             <th colspan="2">Justification</th>
                         </tr>
                     </ng-template>
-                   
+
                     <ng-template pTemplate="body" let-scale_SDs>
                         <tr>
                             <td >{{getSDGName(scale_SDs?.SDG)}}</td>
@@ -217,7 +217,7 @@
                             <td >{{(scale_SDs?.outcome_score)?getOutcomeScores((scale_SDs?.outcome_score),'scale_SDs'):'-'}}</td>
                             <td >{{(scale_SDs?.justification)?(scale_SDs?.justification):'-'}} </td>
                             <td><a *ngIf="scale_SDs?.document" target="_blank" [href]="fileServerURL+'/'+scale_SDs?.document"><i class="pi pi-download download"></i></a></td>
-                            
+
                         </tr>
                     </ng-template>
                 </p-table>
@@ -238,7 +238,7 @@
                             <th colspan="2">Justification</th>
                         </tr>
                     </ng-template>
-                   
+
                     <ng-template pTemplate="body" let-sustained_SDs>
                         <tr>
                             <td >{{getSDGName(sustained_SDs?.SDG)}}</td>
@@ -252,7 +252,7 @@
                 </p-table>
             </div>
 
-            
+
             <div class="row p-2 text">
                 <div class="col-5">Transformational Change: </div>
                 <div class="col-7">{{score}}</div>

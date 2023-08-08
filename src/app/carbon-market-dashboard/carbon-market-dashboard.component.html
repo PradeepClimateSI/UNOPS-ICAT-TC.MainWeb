@@ -13,7 +13,7 @@
                         <div class="ml-2">No data to show.</div>
                     </ng-template>
                 </p-messages>
-               
+
                  </div>
               </ng-container>
               <ng-template #elseBlock1>
@@ -43,8 +43,8 @@
                   </div>
                  </div>
               </ng-template>
-               
-                
+
+
             </div>
         </div>
     </div>
@@ -52,11 +52,11 @@
         <div class="p-grid p-fluid card m-3">
           <div class="row text-center ">
             <h3>Sectors Targeted</h3>
-            <div [hidden]="sectorCount?.length==0" class="col-12  mt-20 ml-10 chart-container"  >
+            <div [hidden]="sectorCount.length==0" class="col-12  mt-20 ml-10 chart-container"  >
              <!--     <canvas  id="CMBarCahart">{{CMBarChart}}</canvas> -->
               <canvas   id="pieChart2">{{pieChart2}}</canvas>
             </div>
-            <div  class="col-12 " [hidden]="sectorCount?.length!==0">
+            <div  class="col-12 " [hidden]="sectorCount.length!==0">
               <p-messages severity="warn" >
                 <ng-template pTemplate>
                     <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
@@ -64,7 +64,7 @@
                     <div class="ml-2">No data to show.</div>
                 </ng-template>
             </p-messages>
-           
+
              </div>
         </div>
         </div>
@@ -81,7 +81,7 @@
   <div class="row text-center " >
       <h3>Transformational Change by Interventions</h3>
       <div  class="col-12  mt-20 ml-10 chart-container"  style="max-height: 600px;">
-       
+
           <div  class="col-12 " [hidden]="tcData.length!==0">
             <p-messages severity="warn" >
               <ng-template pTemplate>
@@ -90,16 +90,16 @@
                   <div class="ml-2">No data to show.</div>
               </ng-template>
           </p-messages>
-         
+
            </div>
            <div [hidden]="tcData.length==0">
               <canvas  id="canvas">{{chart}}</canvas>
            </div>
-        
 
-          
-       
-         
+
+
+
+
        </div>
    </div>
 </div>
@@ -119,7 +119,7 @@
                         <div class="ml-2">No data to show.</div>
                     </ng-template>
                 </p-messages>
-               
+
                  </div>
               </ng-container>
               <ng-template #elseBlock3>
@@ -139,7 +139,7 @@
                           <th style="width:15%">ID</th>
                           <th style="width:70%">Intervention</th>
                           <th style="width:15%">TC Value</th>
-  
+
                       </tr>
                   </ng-template>
                   <ng-template pTemplate="body" let-tcTableData>
@@ -158,7 +158,7 @@
               </p-table>
                  </div>
               </ng-template>
-              
+
           </div>
       </div>
   </div>
@@ -167,10 +167,10 @@
     <div class="p-grid p-fluid card m-3 ">
       <div class="row text-center ">
           <h3>Meeting Preconditions</h3>
-          <div [hidden]="CMPrerequiste[0]?.count==0 && CMPrerequiste[1]?.count==0" class="col-12  mt-20 ml-10 chart-container"  >
+          <div [hidden]="CMPrerequiste[0].count==0 && CMPrerequiste[1].count==0" class="col-12  mt-20 ml-10 chart-container"  >
               <canvas  id="pieChartCM">{{pieChartCM}}</canvas>
           </div>
-          <div  class="col-12 " [hidden]="CMPrerequiste[0]?.count!=0 || CMPrerequiste[1]?.count!=0">
+          <div  class="col-12 " [hidden]="CMPrerequiste[0].count!=0 || CMPrerequiste[1].count!=0">
             <p-messages severity="warn" >
               <ng-template pTemplate>
                   <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
@@ -178,7 +178,7 @@
                   <div class="ml-2">No data to show.</div>
               </ng-template>
           </p-messages>
-         
+
            </div>
       </div>
   </div>
