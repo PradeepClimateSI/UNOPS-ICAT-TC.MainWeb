@@ -72,7 +72,7 @@
                                 <p><b>Explanation</b></p>
                             </div>
                             <div class="col-md-6">
-                                <p>{{roundOneList[0]?.explanation}}</p>
+                                <p>{{roundOneList[0].explanation}}</p>
                             </div>
                         </div>
 
@@ -81,7 +81,7 @@
                                 <p><b>Root Cause</b></p>
                             </div>
                             <div class="col-md-6">
-                                <p>{{roundOneList[0]?.rootCause}}</p>
+                                <p>{{roundOneList[0].rootCause}}</p>
                             </div>
                         </div>
 
@@ -90,7 +90,7 @@
                                 <p><b>Corrective Action</b></p>
                             </div>
                             <div class="col-md-6">
-                                <p>{{roundOneList[0]?.correctiveAction}}</p>
+                                <p>{{roundOneList[0].correctiveAction}}</p>
                             </div>
                         </div>
 
@@ -99,7 +99,7 @@
                                 <p><b>Action</b></p>
                             </div>
                             <div class="col-md-6">
-                                <p>{{roundOneList[0]?.action}}</p>
+                                <p>{{roundOneList[0].action}}</p>
                             </div>
                         </div>
                     </div>
@@ -187,7 +187,7 @@
                                 <p><b>Explanation</b></p>
                             </div>
                             <div class="col-md-6">
-                                <p>{{roundTwoList[0]?.explanation}}</p>
+                                <p>{{roundTwoList[0].explanation}}</p>
                             </div>
                         </div>
 
@@ -196,7 +196,7 @@
                                 <p><b>Root Cause</b></p>
                             </div>
                             <div class="col-md-6">
-                                <p>{{roundTwoList[0]?.rootCause}}</p>
+                                <p>{{roundTwoList[0].rootCause}}</p>
                             </div>
                         </div>
 
@@ -205,7 +205,7 @@
                                 <p><b>Corrective Action</b></p>
                             </div>
                             <div class="col-md-6">
-                                <p>{{roundTwoList[0]?.correctiveAction}}</p>
+                                <p>{{roundTwoList[0].correctiveAction}}</p>
                             </div>
                         </div>
 
@@ -214,12 +214,12 @@
                                 <p><b>Action</b></p>
                             </div>
                             <div class="col-md-6">
-                                <p>{{roundTwoList[0]?.action}}</p>
+                                <p>{{roundTwoList[0].action}}</p>
                             </div>
                         </div>
                     </div>
 
-                    
+
                 </ng-container>
                 <ng-template #elseBlockroun2>
                     <p>NO NON CONFORMAMNCE IN ROUND TWO</p>
@@ -300,7 +300,7 @@
                                 <p><b>Explanation</b></p>
                             </div>
                             <div class="col-md-6">
-                                <p>{{roundThreeList[0]?.explanation}}</p>
+                                <p>{{roundThreeList[0].explanation}}</p>
                             </div>
                         </div>
 
@@ -309,7 +309,7 @@
                                 <p><b>Root Cause</b></p>
                             </div>
                             <div class="col-md-6">
-                                <p>{{roundThreeList[0]?.rootCause}}</p>
+                                <p>{{roundThreeList[0].rootCause}}</p>
                             </div>
                         </div>
 
@@ -318,7 +318,7 @@
                                 <p><b>Corrective Action</b></p>
                             </div>
                             <div class="col-md-6">
-                                <p>{{roundThreeList[0]?.correctiveAction}}</p>
+                                <p>{{roundThreeList[0].correctiveAction}}</p>
                             </div>
                         </div>
 
@@ -327,7 +327,7 @@
                                 <p><b>Action</b></p>
                             </div>
                             <div class="col-md-6">
-                                <p>{{roundThreeList[0]?.action}}</p>
+                                <p>{{roundThreeList[0].action}}</p>
                             </div>
                         </div>
                     </div>
@@ -342,9 +342,9 @@
         <div class="col-md-6">
         </div>
         <div class="col-md-2">
-            <button *ngIf="isVerificationHistory !=1 && vStatus != 3" [disabled]="assessment?.verificationStatus == 7"
+            <button *ngIf="isVerificationHistory !=1 && vStatus != 3" [disabled]="assessment.verificationStatus == 7"
                 pButton pRipple type="button" (click)="toChangeStatus()" class="p-button-info">
-                {{assessment?.verificationStatus == 7 ? "Submited" : "Submit" }}
+                {{assessment.verificationStatus == 7 ? "Submited" : "Submit" }}
             </button>
             <!-- <button *ngIf="vStatus != 3 || assementYear.verificationStatus == 7"
              pButton pRipple type="button" label="Submited" [disabled]="true" class="p-button-info"></button> -->

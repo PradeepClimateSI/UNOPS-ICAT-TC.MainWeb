@@ -7,7 +7,6 @@ import { FormsModule } from '@angular/forms';
 import { CASADashboardComponent } from './ca-sa-dashboard/ca-sa-dashboard.component';
 import { TableModule } from 'primeng/table';
 import { ChartModule } from 'primeng/chart';
-import { NgxOrgChartModule } from "ngx-org-chart";
 import { RouterModule, Routes } from '@angular/router';
 
 import {
@@ -362,7 +361,6 @@ const routes: Routes = [
     ChartModule,
     DropdownModule,
     FormsModule,
-    NgxOrgChartModule,
     NbLayoutModule,
     AccordionModule,
     ButtonModule

@@ -1,30 +1,30 @@
 <div class="container pl-20 pr-20">
     <div class="mb-12">
-      
+
       <h4 class="mt-4" > {{title}} </h4>
     </div>
-  
-  
+
+
       <div class="card">
         <div class="p-grid p-fluid col-sm-12">
-          
+
           <div class="row p-2">
-            
-  
+
+
             <div class="col-12 col-md-6">
               <div class="p-field">
                 <label for="type">Type</label>
                 <input
                 type="text"
                 [disabled]="institutionId > 0"
-                placeholder={{institution.type?.name}}
+                placeholder={{institution.type.name}}
                 [(ngModel)]="institution.type.name"
                   name = "type"
                   class="p-inputtext"
                   pInputText
                   optionLabel="name"
                 >
-                
+
               </div>
             </div>
           </div>
@@ -34,15 +34,15 @@
                 <label for="sector">Sector</label>
                 <input
                 [disabled]="institutionId !==0"
-                placeholder={{institution.sector?.name}}
-                  
+                placeholder={{institution.sector.name}}
+
                   name="sector"
                   class="p-inputtext"
                   pInputText
 
-                 
+
                 >
-               
+
               </div>
             </div>
           </div>
@@ -53,9 +53,9 @@
                 <input
                  [disabled]="institutionId > 0"
                   [(ngModel)]="institution.category.name"
-                  placeholder={{institution.category?.name}}
+                  placeholder={{institution.category.name}}
                   name="category"
-                  
+
                   optionLabel="name"
                   class="p-inputtext"
                   pInputText
@@ -64,7 +64,7 @@
               </div>
             </div>
           </div>
-          
+
           <div class="row p-2">
             <div class="col-12 col-md-6">
               <div class="p-field">
@@ -99,9 +99,9 @@
               </div>
             </div>
           </div>
-  
-  
-  
+
+
+
           <div class="row p-2">
             <div class="col-12 col-md-12">
               <div class="p-field">
@@ -121,8 +121,8 @@
               </div>
             </div>
           </div>
-  
-  
+
+
           <div class="row p-2">
             <div class="col-12 col-md-12">
               <div class="p-field">
@@ -142,10 +142,10 @@
               </div>
             </div>
           </div>
-  
+
         </div>
       </div>
-      
+
         <div class="d-flex flex-row-reverse mt-2 mb-2">
 
         <button
@@ -160,23 +160,23 @@
         pButton
         pRipple
         class="btn btn-primary btn-block text-uppercase m-1"
-        (click)="activateInstitution(institution)" 
+        (click)="activateInstitution(institution)"
       >
       Deactivate
       </button>
-  
+
       <button
       *ngIf="institutionId > 0 && institution.status===1"
       pButton
       pRipple
       class="btn btn-primary btn-block text-uppercase m-1"
-      (click)="activateInstitution(institution)" 
+      (click)="activateInstitution(institution)"
     >
     Activate
     </button>
-    
+
         <button
-        *ngIf="institutionId > 0" 
+        *ngIf="institutionId > 0"
         pButton
           pRipple
           class="btn btn-primary btn-block text-uppercase m-1"
@@ -185,10 +185,10 @@
         >
           Edit
         </button>
-  
+
       </div>
     <!-- </form> -->
-  
+
     <p-toast position="top-right"></p-toast>
     <p-toast
       position="bottom-center"
@@ -197,21 +197,20 @@
       [baseZIndex]="5000"
     >
    </p-toast>
-  
-  
-  </div> 
+
+
+  </div>
   <p-confirmDialog
-  
+
   [style]="{ width: '50vw' }"
   [baseZIndex]="10000"
   rejectButtonStyleClass="p-button-text"
   ></p-confirmDialog>
-  
+
   <p-overlayPanel
   #op
   [showCloseIcon]="true"
   [style]="{ width: '50vw' }"
   (onShow)="OnShowOerlay()"
   ></p-overlayPanel>
-  
-  
+

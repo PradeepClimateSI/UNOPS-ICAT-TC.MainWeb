@@ -3,8 +3,21 @@
     <div class="col-md-5 col-12 d-flex align-items-stretch">
         <div class="p-grid p-fluid card m-3">
             <div class="row text-center ">
-                <h3>Transformational Change </h3>
-                <h2 *ngIf="userRole !=loginRole.External " class="tc-value">{{averageTCValue}}%</h2>
+              <h3>Transformational Change </h3>
+              <ng-container *ngIf="tcData.length==0; else elseBlock1">
+                <div  class="col-12 " >
+                  <p-messages severity="warn" >
+                    <ng-template pTemplate>
+                        <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
+                        <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
+                        <div class="ml-2">No data to show.</div>
+                    </ng-template>
+                </p-messages>
+
+                 </div>
+              </ng-container>
+              <ng-template #elseBlock1>
+                <h2  class="tc-value">{{averageTCValue}}%</h2>
                 <div class="col-12  mt-20 ml-10" >
                   <!-- <p-progressBar [value]="value" [style]="{ 'height': '20px' }" ></p-progressBar>
 
@@ -12,23 +25,26 @@
                     <div class="progress-value">{{ value }}%</div>
                   </ng-template> -->
                   <div class="first">
-                    <div *ngIf="userRole !=loginRole.External " class="second" [ngStyle]="{'width.%':averageTCValue}">
+                    <div class="second" [ngStyle]="{'width.%':averageTCValue}">
 
                     </div>
                     <div class="row justify-content-between ">
-                      <div *ngIf="userRole !=loginRole.External " class="col-4 mt-25"  align="left" >
+                      <div  class="col-4 mt-25"  align="left" >
                         <h5>Low</h5>
                       </div>
-                      <div *ngIf="userRole !=loginRole.External " align="right " class="col-4 mt-25">
+                      <div  align="right " class="col-4 mt-25">
                         <h5>High</h5>
                       </div>
                     </div>
                     <div class="d-flex flex-row-reverse mt-60">
-                      <div  *ngIf="userRole !=loginRole.External "align="right " ><p class="fs-6">Average Transformational Change</p></div>
+                      <div  align="right " ><p class="fs-6">Average Transformational Change</p></div>
 
                     </div>
                   </div>
                  </div>
+              </ng-template>
+
+
             </div>
         </div>
     </div>
@@ -36,10 +52,20 @@
         <div class="p-grid p-fluid card m-3">
           <div class="row text-center ">
             <h3>Sectors Targeted</h3>
-            <div *ngIf="userRole !=loginRole.External " class="col-12  mt-20 ml-10 chart-container"  >
+            <div [hidden]="sectorCount.length==0" class="col-12  mt-20 ml-10 chart-container"  >
              <!--     <canvas  id="CMBarCahart">{{CMBarChart}}</canvas> -->
               <canvas   id="pieChart2">{{pieChart2}}</canvas>
             </div>
+            <div  class="col-12 " [hidden]="sectorCount.length!==0">
+              <p-messages severity="warn" >
+                <ng-template pTemplate>
+                    <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
+                    <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
+                    <div class="ml-2">No data to show.</div>
+                </ng-template>
+            </p-messages>
+
+             </div>
         </div>
         </div>
     </div>
@@ -52,10 +78,28 @@
 
 
 <div class="p-grid p-fluid card mt-20 m-3">
-  <div class="row text-center ">
+  <div class="row text-center " >
       <h3>Transformational Change by Interventions</h3>
-      <div *ngIf="userRole !=loginRole.External " class="col-12  mt-20 ml-10 chart-container"  style="max-height: 600px;">
-          <canvas  id="canvas">{{chart}}</canvas>
+      <div  class="col-12  mt-20 ml-10 chart-container"  style="max-height: 600px;">
+
+          <div  class="col-12 " [hidden]="tcData.length!==0">
+            <p-messages severity="warn" >
+              <ng-template pTemplate>
+                  <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
+                  <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
+                  <div class="ml-2">No data to show.</div>
+              </ng-template>
+          </p-messages>
+
+           </div>
+           <div [hidden]="tcData.length==0">
+              <canvas  id="canvas">{{chart}}</canvas>
+           </div>
+
+
+
+
+
        </div>
    </div>
 </div>
@@ -66,40 +110,55 @@
       <div class="p-grid p-fluid card m-3">
           <div class="row text-center ">
               <h3>Recent Assessments Done</h3>
-              <div *ngIf="userRole !=loginRole.External " class="col-12  mt-20 ml-10" >
+              <ng-container *ngIf="tcData.length==0; else elseBlock3">
+                <div  class="col-12 " >
+                  <p-messages severity="warn" >
+                    <ng-template pTemplate>
+                        <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
+                        <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
+                        <div class="ml-2">No data to show.</div>
+                    </ng-template>
+                </p-messages>
 
-                <p-table
-                [value]="tcTableData"
-                [paginator]="true"
-                [rows]="5"
-                [showCurrentPageReport]="true"
-                [tableStyle]="{ 'min-width': '5rem' }"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-                [rowsPerPageOptions]="[5, 10, 20]"
-            >
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th style="width:15%">ID</th>
-                        <th style="width:70%">Intervention</th>
-                        <th style="width:15%">TC Value</th>
+                 </div>
+              </ng-container>
+              <ng-template #elseBlock3>
+                <div  class="col-12  mt-20 ml-10" >
 
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-tcTableData>
-                    <tr>
-                        <td>{{ tcTableData.x }}</td>
-                        <td>{{ tcTableData.data }}</td>
-                        <td>{{ tcTableData.y }}</td>
-                    </tr>
-                </ng-template>
-            <!--     <ng-template pTemplate="paginatorleft">
-                    <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"></p-button>
-                </ng-template> -->
-<!--                 <ng-template pTemplate="paginatorright">
-                    <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
-                </ng-template> -->
-            </p-table>
-               </div>
+                  <p-table
+                  [value]="tcTableData"
+                  [paginator]="true"
+                  [rows]="5"
+                  [showCurrentPageReport]="true"
+                  [tableStyle]="{ 'min-width': '5rem' }"
+                  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                  [rowsPerPageOptions]="[5, 10, 20]"
+              >
+                  <ng-template pTemplate="header">
+                      <tr>
+                          <th style="width:15%">ID</th>
+                          <th style="width:70%">Intervention</th>
+                          <th style="width:15%">TC Value</th>
+
+                      </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-tcTableData>
+                      <tr>
+                          <td>{{ tcTableData.x }}</td>
+                          <td>{{ tcTableData.data }}</td>
+                          <td>{{ tcTableData.y }}</td>
+                      </tr>
+                  </ng-template>
+              <!--     <ng-template pTemplate="paginatorleft">
+                      <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"></p-button>
+                  </ng-template> -->
+  <!--                 <ng-template pTemplate="paginatorright">
+                      <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
+                  </ng-template> -->
+              </p-table>
+                 </div>
+              </ng-template>
+
           </div>
       </div>
   </div>
@@ -108,9 +167,19 @@
     <div class="p-grid p-fluid card m-3 ">
       <div class="row text-center ">
           <h3>Meeting Preconditions</h3>
-          <div *ngIf="userRole !=loginRole.External " class="col-12  mt-20 ml-10 chart-container"  >
+          <div [hidden]="CMPrerequiste[0].count==0 && CMPrerequiste[1].count==0" class="col-12  mt-20 ml-10 chart-container"  >
               <canvas  id="pieChartCM">{{pieChartCM}}</canvas>
           </div>
+          <div  class="col-12 " [hidden]="CMPrerequiste[0].count!=0 || CMPrerequiste[1].count!=0">
+            <p-messages severity="warn" >
+              <ng-template pTemplate>
+                  <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
+                  <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
+                  <div class="ml-2">No data to show.</div>
+              </ng-template>
+          </p-messages>
+
+           </div>
       </div>
   </div>
   </div>
