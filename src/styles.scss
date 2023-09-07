@@ -3,7 +3,7 @@
 @use '@nebular/theme/styles/globals' as *;
 
 @include nb-install() {
-  @include nb-theme-global();
+@include nb-theme-global();
 };
 /* Abstract */
 @import "../src/assets/scss/abstracts/variables";
@@ -29,7 +29,7 @@
 @import "../src/assets/scss/partials/login";
 @import "../src/assets/scss/partials/dashboard";
 
-@import '~ngx-org-chart/_theming.scss';
+//@import '~ngx-org-chart/_theming.scss';
 
 
 .asigned-unit{

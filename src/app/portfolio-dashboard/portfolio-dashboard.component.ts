@@ -211,7 +211,7 @@ this.ngOnInit();
     this.portfolioServiceProxy.sdgSumCalculate(this.selectedPortfolio.id).subscribe(async (res: any) => {
       console.log("sdgDetailsList : ", res)
       this.sdgDetailsList = res;
-      this.viewPortfolioPieChart();
+    //  this.viewPortfolioPieChart();
      });
   }
  viewResults(): void {
@@ -524,7 +524,7 @@ this.ngOnInit();
     }
     else{
       this.portfolioPieChart =new Chart(ctx, {
-        type: 'pie' as ChartType,
+        type: 'pie'as ChartType,
 
         data: {
           labels: labels,
@@ -618,6 +618,7 @@ this.ngOnInit();
 
 
   }
+
   viewPortfolioBarChart(){
 
     let label =this.barChartData.map((item:any) => item?.assessment?.climateAction?.policyName );
