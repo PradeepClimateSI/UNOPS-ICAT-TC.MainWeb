@@ -52,14 +52,23 @@
         <div class="p-grid p-fluid card m-3">
           <div class="row text-center ">
             <h3>Sectors Targeted</h3>
-            <div [hidden]="sectorCount.length==0" class="col-12  mt-20 ml-10 chart-container"  >
+            <div *ngIf="sectorCount" [hidden]="sectorCount.length==0" class="col-12  mt-20 ml-10 chart-container"  >
              <!--     <canvas  id="CMBarCahart">{{CMBarChart}}</canvas> -->
               <canvas   id="pieChart2">{{pieChart2}}</canvas>
             </div>
-            <div  class="col-12 " [hidden]="sectorCount.length!==0">
+            <div  *ngIf="sectorCount" class="col-12 " [hidden]="sectorCount.length!==0 ">
               <p-messages severity="warn" >
                 <ng-template pTemplate>
                     <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
+                    <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
+                    <div class="ml-2">No data to show.</div>
+                </ng-template>
+            </p-messages>
+
+             </div>
+             <div  *ngIf="!sectorCount" >
+              <p-messages severity="warn" >
+                <ng-template pTemplate>
                     <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
                     <div class="ml-2">No data to show.</div>
                 </ng-template>
@@ -167,10 +176,11 @@
     <div class="p-grid p-fluid card m-3 ">
       <div class="row text-center ">
           <h3>Meeting Preconditions</h3>
-          <div [hidden]="CMPrerequiste[0].count==0 && CMPrerequiste[1].count==0" class="col-12  mt-20 ml-10 chart-container"  >
+          
+          <div *ngIf="CMPrerequiste" [hidden]="CMPrerequiste[0].count==0 && CMPrerequiste[1].count==0" class="col-12  mt-20 ml-10 chart-container"  >
               <canvas  id="pieChartCM">{{pieChartCM}}</canvas>
           </div>
-          <div  class="col-12 " [hidden]="CMPrerequiste[0].count!=0 || CMPrerequiste[1].count!=0">
+          <div  *ngIf="CMPrerequiste" class="col-12 " [hidden]="CMPrerequiste[0].count!=0 || CMPrerequiste[1].count!=0">
             <p-messages severity="warn" >
               <ng-template pTemplate>
                   <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->

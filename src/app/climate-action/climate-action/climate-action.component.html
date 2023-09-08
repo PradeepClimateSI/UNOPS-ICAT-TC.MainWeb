@@ -7,10 +7,13 @@
 
       <div class="card">
         <div class="p-grid p-fluid col-sm-12">
-          <div class="mb-12">
-            <h4 class="mt-4">{{ project.projectApprovalStatus?.id! == 1 ?'Accepted':project.projectApprovalStatus?.id!
+          <div *ngIf="project.projectApprovalStatus ; else elseblock" class="mb-12">
+            <h4 class="mt-4">{{ project.projectApprovalStatus.id == 1 ?'Accepted':project.projectApprovalStatus.id
               == 5 ?'Accepted':editEntytyId > 0?'View':'Propose an'}} Intervention</h4>
           </div>
+          <ng-template #elseblock>
+           <h4>Propose anIntervention</h4>
+          </ng-template>
           <div class="p-2">
             <h6>Contact Details</h6>
           </div>
@@ -223,7 +226,7 @@
                     </p>
                   </ng-container>
                   <ng-template #elseBlockprojStatus>
-                    <input [disabled]="editEntytyId > 0" type="text" maxlength="50" name="projStatus"
+                    <input *ngIf="loadProjectStatus" [disabled]="editEntytyId > 0" type="text" maxlength="50" name="projStatus"
                       #projStatus1="ngModel" class="p-inputtext" [(ngModel)]="project.projectStatus.name!"
                       [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
                   </ng-template>
@@ -262,6 +265,7 @@
                 <ng-template #elseBlocknameClimate>
 
                   <input
+                  *ngIf="loadingCountry"
                   [disabled]="editEntytyId > 0"
                   type="text"
                   maxlength="50"
@@ -286,7 +290,7 @@
                   <label for="sector">Sectors Targeted*</label>
 
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocksector">
-                    <p-multiSelect [disabled]="editEntytyId > 0" placeholder="Select Sector" name="sector"
+                    <p-multiSelect [disabled]="editEntytyId > 0" placeholder="Select Sectors" name="sector"
                       #sector="ngModel" [(ngModel)]="finalSectors" [options]="sectorList" appendTo="body"
                       optionLabel="name" (ngModelChange)="onSectorChange($event)" [required]="true"></p-multiSelect>
                     <p class="info-message text-danger" *ngIf="
@@ -778,8 +782,8 @@
                   <div class="col-12 col-md-4"  [hidden]="isCity==2">
                     <div class="p-field">
                       <label for="countrytxt">Country</label>
-                      <input [disabled]="editEntytyId > 0" type="text" name="countrytxt" class="p-inputtext"
-                        #countrytxt="ngModel" [(ngModel)]="project.country.name" pInputText readonly />
+                      <input *ngIf="loadingCountry" [disabled]="editEntytyId > 0" type="text" name="countrytxt" class="p-inputtext"
+                        #countrytxt="ngModel" [(ngModel)]="project.country.name" pInputText  readonly/>
                     </div>
                   </div>
 
@@ -1260,7 +1264,7 @@
           </div>
 
 
-          <div class="row p-2" *ngIf="project.projectStatus.name! == 'Planned'">
+          <div class="row p-2" *ngIf="project.projectStatus?.name! == 'Planned'">
 
             <div class="col-12 col-md-6">
               <div class="p-field">
@@ -1300,7 +1304,7 @@
             </div>
           </div>
 
-          <div class="row p-2" *ngIf="project.projectStatus.name! == 'Planned'">
+          <div class="row p-2" *ngIf="project.projectStatus?.name! == 'Planned'">
 
             <div class="col-12 col-md-6">
               <div class="p-field">
@@ -1342,7 +1346,7 @@
 
           </div>
 
-          <div class="row p-2" *ngIf="project.projectStatus.name! == 'Planned'">
+          <div class="row p-2" *ngIf="project.projectStatus?.name! == 'Planned'">
 
             <div class="col-12 col-md-6">
               <div class="p-field">

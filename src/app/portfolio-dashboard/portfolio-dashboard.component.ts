@@ -211,7 +211,7 @@ this.ngOnInit();
     this.portfolioServiceProxy.sdgSumCalculate(this.selectedPortfolio.id).subscribe(async (res: any) => {
       console.log("sdgDetailsList : ", res)
       this.sdgDetailsList = res;
-    //  this.viewPortfolioPieChart();
+     this.viewPortfolioPieChart();
      });
   }
  viewResults(): void {

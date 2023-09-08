@@ -87,13 +87,19 @@ export class InvestmentDashboardComponent implements OnInit {
         x:intervention?.climateAction?.initialInvestment,
         data:intervention?.climateAction?.policyName}))
         console.log("Tc data:",this.tcData)
-      this.viewMainChart();
+        setTimeout(() => {
+          this.viewMainChart();
+        }, 100);
+      
     })
   
     this.investorProxy.findSectorCount(tool).subscribe((res: any) => {
       this.sectorCount = res
       console.log("sectorcount",this.sectorCount)
-      this.viewPieChart()
+      setTimeout(() => {
+        this.viewPieChart()
+      }, 100);
+     
     });
 
 

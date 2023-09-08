@@ -165,7 +165,7 @@
       <div *ngIf="!loadSelectedTable" >
         <h3>Recent Assessments Done</h3>
 
-        <div  [hidden]="calResults.length==0">
+        <div  *ngIf="calResults" [hidden]="calResults.length==0">
         <p-table [value]="calResults" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
           [rowsPerPageOptions]="[5, 10, 20]">

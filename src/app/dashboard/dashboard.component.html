@@ -10,12 +10,12 @@
           <div class="row">
             <div class="col-md-7 ">
               <h3>Type of Interventions</h3><br>
-              <div [hidden]="typeofInterventionCount.length==0">
+              <div *ngIf="typeofInterventionCount" [hidden]="typeofInterventionCount.length==0">
                 <p-chart type="bar" [data]="data" [options]="options"></p-chart>
               </div>
 
               <!-- a//////////////////////////////////// -->
-              <div class="col-12 " [hidden]="typeofInterventionCount.length!=0">
+              <div  *ngIf="typeofInterventionCount" class="col-12 " [hidden]="typeofInterventionCount.length!=0">
                 <p-messages severity="warn">
                   <ng-template pTemplate>
                     <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
@@ -30,7 +30,7 @@
             <div class="col-md-5 ">
               <div class="row text-center ">
 
-                <div [hidden]="typeofInterventionCount.length==0" class="col-12  mt-20 ml-10">
+                <div   [hidden]="typeofInterventionCount?.length==0" class="col-12  mt-20 ml-10">
                   <canvas id="pieChart">{{chart}}</canvas>
                 </div>
               </div>

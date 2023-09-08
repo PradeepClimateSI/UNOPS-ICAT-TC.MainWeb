@@ -67,11 +67,11 @@
         <div class="p-grid p-fluid card m-3">
             <div class="row text-center ">
                 <h3>Sectors Targeted</h3>
-                <div  class="col-12  mt-20 "  [hidden]="sectorCount.length==0">
+                <div *ngIf="sectorCount" class="col-12  mt-20 "  [hidden]="sectorCount.length==0">
                     <canvas   id="pieChart2">{{pieChart2}}</canvas>
                  </div>
             </div>
-            <div  class="col-12 " [hidden]="sectorCount.length!=0">
+            <div *ngIf="sectorCount" class="col-12 " [hidden]="sectorCount.length!=0">
                 <p-messages severity="warn" >
                   <ng-template pTemplate>
                       <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->

@@ -134,21 +134,29 @@ CMPrerequiste: {
     this.assessmentCMProxy.getSectorCount().subscribe((res: any) => {
       console.log("CMsectorCount",res)
       this.CMsectorCount = res
-       this.viewCMBarChart();
+      setTimeout(() => {
+        this.viewCMBarChart();
+      }, 500);
+       
     })
 
     this.assessmentCMProxy.getPrerequisite().subscribe((res:any)=>{
 
       this.CMPrerequiste=res
       // console.log("CMPrerequiste",res, this.CMPrerequiste[0]?.count, this.CMPrerequiste[1]?.count)
-      this.loading=true
-      this.viewPieChartCM();
+      setTimeout(() => {
+        this.viewPieChartCM();
+      }, 200);
+      
     })
 
     this.investorProxy.getSectorCountByTool(this.tool).subscribe((res: any) => {
       this.sectorCount = res
       console.log("sectorcount",this.sectorCount)
-      this.viewPieChart()
+      setTimeout(() => {
+        this.viewPieChart()
+      }, 100);
+      
     });
 
   }
