@@ -25,7 +25,7 @@ export class DashboardComponent implements OnInit {
   countryAdmin : boolean = false;
   data: any;
   activeprojects=["vv","df","d","d"];
-  loading: boolean;
+  loading: boolean =false;
   totalRecords: number = 0;
   rows: number = 10;
   last: number;
@@ -60,7 +60,7 @@ export class DashboardComponent implements OnInit {
   options: any;
 
   SelectedTool : number;
-
+  
 
   data1: { labels: string[]; datasets: { label: string; data: number[]; fill: boolean; borderColor: string; }[]; };
   constructor(
@@ -79,8 +79,13 @@ export class DashboardComponent implements OnInit {
     this.projectProxy.findTypeofAction().subscribe((res: any) => {
       this.typeofInterventionCount = res;
       console.log("typeofInterventionCount", res);
-      this.viewPieChart();
-      this.viewbarChart();
+      this.loading =true
+      setTimeout(() => {
+        this.viewPieChart();
+        this.viewbarChart();
+      }, 200);
+      
+      
     });
 
     this.SelectedTool = 3;

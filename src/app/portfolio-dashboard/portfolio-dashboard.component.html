@@ -100,11 +100,42 @@
    <!--  <h3>Transformational Change of Interventions</h3> -->
     <div class="row">
       <div class="col-6 ">
-        <canvas class="chart-canvas" #myCanvas></canvas>
+        <div [hidden]="resultData.length==0">
+          <canvas class="chart-canvas" #myCanvas></canvas>
+        </div>
+
+
+                <!-- a//////////////////////////////////// -->
+                <div class="col-12 " [hidden]="resultData?.length!=0">
+                  <p-messages severity="warn">
+                    <ng-template pTemplate>
+                      <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
+                      <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
+                      <div class="ml-2">No data to show.</div>
+                    </ng-template>
+                  </p-messages>
+                </div>
+                <!-- a//////////////////////////////////// -->
       </div>
 
       <div class="col-6 ">
-        <canvas class="chart2-canvas" #myCanvas2></canvas>
+        <div [hidden]="resultData2.length==0">
+          <canvas class="chart2-canvas" #myCanvas2></canvas>
+        </div>
+
+
+         <!-- a//////////////////////////////////// -->
+         <div class="col-12 " [hidden]="resultData2?.length!=0">
+          <p-messages severity="warn">
+            <ng-template pTemplate>
+              <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
+              <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
+              <div class="ml-2">No data to show.</div>
+            </ng-template>
+          </p-messages>
+        </div>
+        <!-- a//////////////////////////////////// -->
+
       </div>
     </div>
   </div>
@@ -131,9 +162,10 @@
 
     <div class="col-12  mt-20 ml-10">
 
-      <div *ngIf="!loadSelectedTable">
+      <div *ngIf="!loadSelectedTable" >
         <h3>Recent Assessments Done</h3>
 
+        <div  *ngIf="calResults" [hidden]="calResults.length==0">
         <p-table [value]="calResults" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
           [rowsPerPageOptions]="[5, 10, 20]">
@@ -172,9 +204,25 @@
         </p-table>
       </div>
 
+       <!-- a//////////////////////////////////// -->
+       <div class="col-12 " [hidden]="calResults?.length!=0">
+        <p-messages severity="warn">
+          <ng-template pTemplate>
+            <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
+            <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
+            <div class="ml-2">No data to show.</div>
+          </ng-template>
+        </p-messages>
+      </div>
+      <!-- a//////////////////////////////////// -->
+
+
+      </div>
+
       <div *ngIf="loadSelectedTable">
         <h3>Comparison - {{selectedPortfolio.portfolioName}}</h3>
 
+        <div  [hidden]="allData.length==0">
         <p-table [value]="allData" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
           [rowsPerPageOptions]="[5, 10, 20]">
@@ -218,6 +266,20 @@
 
         </p-table>
       </div>
+
+      <!-- a//////////////////////////////////// -->
+      <div class="col-12 " [hidden]="allData?.length!=0">
+        <p-messages severity="warn">
+          <ng-template pTemplate>
+            <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
+            <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
+            <div class="ml-2">No data to show.</div>
+          </ng-template>
+        </p-messages>
+      </div>
+      <!-- a//////////////////////////////////// -->
+
+    </div>
 
 
     </div>

@@ -1,6 +1,6 @@
 import { ServiceProxy, User, Institution, UsersControllerServiceProxy, UserType } from 'shared/service-proxies/service-proxies';
 import { LoginProfileControllerServiceProxy } from 'shared/service-proxies/auth-service-proxies';
-
+import decode from 'jwt-decode';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ConfirmationService, LazyLoadEvent, MessageService, SelectItem } from "primeng/api";
 import { RecordStatus } from 'shared/AppService';
@@ -55,6 +55,11 @@ export class UserListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    const token = localStorage.getItem('ACCESS_TOKEN')!;
+    const tokenPayload = decode<any>(token);
+    const userTypeId = tokenPayload.role.id;
+
     this.serviceProxy
       .getManyBaseInstitutionControllerInstitution(
         undefined,
@@ -82,13 +87,46 @@ export class UserListComponent implements OnInit {
         undefined,
         1000,
         0,
-        1,
+        0,
         0
       )
       .subscribe((res) => {
-        this.userTypes = res.data;
-        this.userTypes = this.userTypes.filter((e) => e.id != 1)
-        //console.log("my user types..",this.userTypes)
+        // this.userTypes = res.data;
+        console.log(userTypeId)
+        console.log(res)
+        if (userTypeId == 1) {
+          this.userTypes = res.data.filter((a) => (a.id == 1 || a.id == 2 || a.id == 3 || a.id == 5 || a.id == 6 || a.id == 7 || a.id == 8 || a.id == 9 || a.id == 11));
+        }
+        else if (userTypeId == 2) {
+          this.userTypes = res.data.filter((a) => (a.id == 2));
+        }
+        else if (userTypeId == 3) {
+          this.userTypes = res.data.filter((a) => (a.id == 2 || a.id == 3 || a.id == 5 || a.id == 6 || a.id == 7 || a.id == 8 || a.id == 9 || a.id == 11));
+        }
+        else if (userTypeId == 5) {
+          this.userTypes = res.data.filter((a) => (a.id == 5 || a.id == 6 || a.id == 7 || a.id == 9 || a.id == 11));
+        }
+        else if (userTypeId == 6) {
+          this.userTypes = res.data.filter((a) => (a.id == 6 || a.id == 8 || a.id == 9 ));
+        }
+        else if (userTypeId == 7) {
+          this.userTypes = res.data.filter((a) => (a.id == 7));
+        }
+        else if (userTypeId == 8) {
+          this.userTypes = res.data.filter((a) => (a.id == 8 || a.id == 9));
+        }
+        else if (userTypeId == 9) {
+          this.userTypes = res.data.filter((a) => (a.id == 9));
+        }
+        else if (userTypeId == 10) {
+          this.userTypes = res.data.filter((a) => (a.id ==1 || a.id == 2 || a.id == 3 || a.id == 5 || a.id == 6 || a.id == 7 || a.id == 8 || a.id == 9 || a.id == 10 || a.id == 11));
+        }
+        else if (userTypeId == 11) {
+          this.userTypes = res.data.filter((a) => (a.id == 11));
+        }
+        else if (userTypeId == 12) {
+          this.userTypes = res.data.filter((a) => (a.id == 12));
+        }
       });
 
   }
@@ -234,7 +272,7 @@ export class UserListComponent implements OnInit {
 
   onTypeChange(event: any) {
     this.searchBy.userType = event;
-    console.log('selesct from drop down...', this.searchBy.userType1);
+    console.log('selesct from drop down...', event);
     //console.log('loading.....');
     this.onSearch();
     //console.log('resualt.....', event);

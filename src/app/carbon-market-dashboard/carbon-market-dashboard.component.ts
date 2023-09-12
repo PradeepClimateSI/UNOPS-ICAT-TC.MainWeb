@@ -59,7 +59,7 @@ CMPrerequiste: {
   tool : string;
 
   pieChart2:any=[];
-
+  loading:boolean=false;
   ngOnInit(): void {
     // this.averageTCValue =58.05;
     const token = localStorage.getItem('ACCESS_TOKEN')!;
@@ -134,20 +134,29 @@ CMPrerequiste: {
     this.assessmentCMProxy.getSectorCount().subscribe((res: any) => {
       console.log("CMsectorCount",res)
       this.CMsectorCount = res
-       this.viewCMBarChart();
+      setTimeout(() => {
+        this.viewCMBarChart();
+      }, 500);
+       
     })
 
     this.assessmentCMProxy.getPrerequisite().subscribe((res:any)=>{
 
       this.CMPrerequiste=res
-      console.log("CMPrerequiste",res)
-      this.viewPieChartCM();
+      // console.log("CMPrerequiste",res, this.CMPrerequiste[0]?.count, this.CMPrerequiste[1]?.count)
+      setTimeout(() => {
+        this.viewPieChartCM();
+      }, 200);
+      
     })
 
     this.investorProxy.getSectorCountByTool(this.tool).subscribe((res: any) => {
       this.sectorCount = res
       console.log("sectorcount",this.sectorCount)
-      this.viewPieChart()
+      setTimeout(() => {
+        this.viewPieChart()
+      }, 100);
+      
     });
 
   }

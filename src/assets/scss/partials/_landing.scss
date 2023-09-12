@@ -14,7 +14,7 @@
                 }
             }
         }
-        
+
     }
 }
 
@@ -95,7 +95,7 @@
         right: 0;
         width: 100%;
         height: 100%;
-     
+
         @media screen and (min-width: 992px) {
             background-image: url('../../images/pattern.svg');
             background-position: right -290px top -690px;
@@ -126,12 +126,12 @@
             top: 15px;
             right: 15px;
         }
-        
+
     }
     p{
         margin-bottom: 0;
     }
-    
+
 }
 
 .bg-pattern-purple{
@@ -153,7 +153,7 @@
             bottom: 0;
             left: 15px;
             z-index: -1;
-    
+
             @media screen and (min-width: 992px) {
                 top: 5%;
                 left: 15px;
@@ -166,7 +166,7 @@
                 height: 75%;
                 width: calc(100% - 30px);
             }
-            
+
         }
     }
 }

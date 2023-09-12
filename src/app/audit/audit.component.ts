@@ -7,10 +7,10 @@ import { LazyLoadEvent } from 'primeng/api';
 import decode from 'jwt-decode';
 import {
   ServiceProxy,
-  User,
+  UserType,
 } from 'shared/service-proxies/service-proxies';
 
-import {Audit as audit,AuditControllerServiceProxy as auditControllerServiceProxy} from 'shared/service-proxies-auditlog/service-proxies'
+import { Audit as audit, AuditControllerServiceProxy as auditControllerServiceProxy } from 'shared/service-proxies-auditlog/service-proxies'
 
 @Component({
   selector: 'app-audit',
@@ -23,11 +23,15 @@ export class AuditComponent implements OnInit {
   rows: number = 10;
   last: number;
   event: any;
-  Date =new Date();
+  Date = new Date();
   searchText: string;
   status: string[] = [];
   activityList: string[] = [];
   userTypeList: string[] = [];
+  userTypes: UserType[] = [];
+
+ countryId:number;
+ userType:string;
 
   searchBy: any = {
     text: null,
@@ -39,13 +43,12 @@ export class AuditComponent implements OnInit {
   first = 0;
   activities: audit[];
   dateList: Date[] = [];
-  loggedusers: User[];
   institutionId: number;
 
   constructor(
     private router: Router,
     private serviceProxy: ServiceProxy,
-    private auditserviceproxy:auditControllerServiceProxy,
+    private auditserviceproxy: auditControllerServiceProxy,
     private cdr: ChangeDetectorRef,
     private http: HttpClient
   ) { }
@@ -53,74 +56,66 @@ export class AuditComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
 
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
     const username = tokenPayload.usr;
-    console.log('username=========', tokenPayload);
+    this.countryId = tokenPayload.countryId;
+   this.userType = tokenPayload.role.code;
+    const userTypeId = tokenPayload.role.id;
 
     let filters: string[] = [];
     filters.push('username||$eq||' + username);
 
-     this.institutionId = tokenPayload.insId
-     console.log("institutionId-----", this.institutionId)
+    this.institutionId = tokenPayload.insId;
 
-    // this.serviceProxy
-    //   .getManyBaseAuditControllerAudit(
-    //     undefined,
-    //     undefined,
-    //     undefined,
-    //     undefined,
-    //     ['editedOn,DESC'],
-    //     undefined,
-    //     1000,
-    //     0,
-    //     0,
-    //     0
-    //   )
-    //   .subscribe((res) => {
-    //    this.activities = res.data;
-
-    //     console.log("activiiessss----",this.activities)
-    //     // this.totalRecords = res.totalRecords;
-    //     // if (res.totalRecords !== null) {
-    //     //   this.last = res.count;
-    //     // } else {
-    //     //   this.last = 0;
-    //     // }
-    //     for (let d of res.data) {
-    //       this.activityList.push(d.action);
-    //       this.dateList.push(d.editedOn.toDate());
-    //       this.userTypeList.push(d.userType);
-    //       console.log(this.dateList);
-    //     }
-    //     console.log('activities', this.activityList);
-    //   });
-
-
-    this.serviceProxy
-      .getManyBaseUsersControllerUser(
-        undefined,
-        undefined,
-        filters,
-        undefined,
-        ['editedOn,DESC'],
-        undefined,
-        1000,
-        0,
-        0,
-        0
-
-      )
-      .subscribe((res) => {
-        this.loggedusers = res.data;
-        console.log("loggeduser-----", this.loggedusers)
-      //  this.institutionId = this.loggedusers[0].institution.id;
-      //  console.log("institutionId-----", this.institutionId)
-      });
-
-
+    await this.serviceProxy.getManyBaseUserTypeControllerUserType(
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      ['name,ASC'],
+      undefined,
+      1000,
+      0,
+      1,
+      0
+    ).subscribe((res) => {
+      if (userTypeId == 1) {
+        this.userTypes = res.data.filter((a) => (a.id == 1 || a.id == 2 || a.id == 3 || a.id == 5 || a.id == 6 || a.id == 7 || a.id == 8 || a.id == 9 || a.id == 11));
+      }
+      else if (userTypeId == 2) {
+        this.userTypes = res.data.filter((a) => (a.id == 2));
+      }
+      else if (userTypeId == 3) {
+        this.userTypes = res.data.filter((a) => (a.id == 2 || a.id == 3 || a.id == 5 || a.id == 6 || a.id == 7 || a.id == 8 || a.id == 9 || a.id == 11));
+      }
+      else if (userTypeId == 5) {
+        this.userTypes = res.data.filter((a) => (a.id == 2 || a.id == 5 || a.id == 6 || a.id == 7 || a.id == 9 || a.id == 11));
+      }
+      else if (userTypeId == 6) {
+        this.userTypes = res.data.filter((a) => (a.id == 2 || a.id == 6 || a.id == 7 || a.id == 8 || a.id == 9 || a.id == 11));
+      }
+      else if (userTypeId == 7) {
+        this.userTypes = res.data.filter((a) => (a.id == 7));
+      }
+      else if (userTypeId == 8) {
+        this.userTypes = res.data.filter((a) => (a.id == 8 || a.id == 9));
+      }
+      else if (userTypeId == 9) {
+        this.userTypes = res.data.filter((a) => (a.id == 9));
+      }
+      else if (userTypeId == 10) {
+        this.userTypes = res.data.filter((a) => (a.id == 1 || a.id == 2 || a.id == 3 || a.id == 5 || a.id == 6 || a.id == 7 || a.id == 8 || a.id == 9 || a.id == 10 || a.id == 11));
+      }
+      else if (userTypeId == 11) {
+        this.userTypes = res.data.filter((a) => (a.id == 11));
+      }
+      else if (userTypeId == 12) {
+        this.userTypes = res.data.filter((a) => (a.id == 12));
+      }
+    });
 
   }
 
@@ -149,17 +144,11 @@ export class AuditComponent implements OnInit {
     this.totalRecords = 0;
 
 
-    let usertype = this.searchBy.usertype ? this.searchBy.usertype : '';
+    let usertype = this.searchBy.usertype ? this.searchBy.usertype.name : '';
     let action = this.searchBy.activity ? this.searchBy.activity : '';
     let filtertext = this.searchBy.text ? this.searchBy.text : '';
-    console.log("iiiiiiiii", this.institutionId)
 
 
-
-    console.log(
-      moment(this.searchBy.editedOn).format('YYYY-MM-DD'),
-      'jjjjjjjjjjjjjjjj'
-    );
     let editedOn = this.searchBy.editedOn
       ? moment(this.searchBy.editedOn).format('YYYY-MM-DD')
       : '';
@@ -169,7 +158,7 @@ export class AuditComponent implements OnInit {
         ? 1
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
-    console.log("work1")
+    console.log("work1",pageNumber, this.rows,usertype)
 
 
     setTimeout(() => {
@@ -181,18 +170,15 @@ export class AuditComponent implements OnInit {
           action,
           editedOn,
           filtertext,
-          this.institutionId
+          this.institutionId,
+          this.countryId,
+          "Country Admin"
         )
 
         .subscribe((a) => {
-          console.log("work2 :")
-          console.log(a)
 
           this.activities = a.items;
 
-          console.log("aaaaasssss22--", this.activities)
-
-          console.log(a, 'kk');
           this.totalRecords = a.meta.totalItems;
           this.loading = false;
 
@@ -205,7 +191,6 @@ export class AuditComponent implements OnInit {
               this.userTypeList.push(d.userType);
             }
 
-            console.log(this.dateList);
           }
         });
     }, 1000);

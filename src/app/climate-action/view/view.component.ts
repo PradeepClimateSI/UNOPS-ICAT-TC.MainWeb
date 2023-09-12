@@ -108,9 +108,10 @@ export class ViewComponent implements OnInit, AfterViewInit {
     // });
 
     this.userName = localStorage.getItem('user_name')!;
-    const token = localStorage.getItem('access_token')!;
+    const token = localStorage.getItem('ACCESS_TOKEN')!;
     const currenyUser=decode<any>(token);
-    this.userRole = currenyUser.roles.code;
+    console.log("currenyUser",currenyUser);
+    this.userRole = currenyUser.role.code;
     // this.userName = currenyUser.fname;
     console.log("currenyUser",this.userRole);
     console.log("this.userName...",this.userName);
@@ -118,24 +119,24 @@ export class ViewComponent implements OnInit, AfterViewInit {
     filter1.push('username||$eq||' + this.userName);
     // lmFilter.push('LearningMaterial.isPublish||$eq||' + 1);
 
-    this.serviceProxy
-      .getManyBaseUsersControllerUser(
-        undefined,
-        undefined,
-        filter1,
-        undefined,
-        undefined,
-        undefined,
-        1000,
-        0,
-        0,
-        0
-      )
-      .subscribe((res: any) => {
-        this.loggedUser = res.data[0];
-        console.log("this.loggedUser...",this.loggedUser);
+    // this.serviceProxy
+    //   .getManyBaseUsersControllerUser(
+    //     undefined,
+    //     undefined,
+    //     filter1,
+    //     undefined,
+    //     undefined,
+    //     undefined,
+    //     1000,
+    //     0,
+    //     0,
+    //     0
+    //   )
+    //   .subscribe((res: any) => {
+    //     this.loggedUser = res.data[0];
+    //     console.log("this.loggedUser...",this.loggedUser);
 
-      });
+    //   });
 
 
     // this.serviceProxy

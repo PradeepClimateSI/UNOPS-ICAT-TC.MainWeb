@@ -7,10 +7,13 @@
 
       <div class="card">
         <div class="p-grid p-fluid col-sm-12">
-          <div class="mb-12">
-            <h4 class="mt-4">{{ project?.projectApprovalStatus?.id! == 1 ?'Accepted':project?.projectApprovalStatus?.id!
+          <div *ngIf="project.projectApprovalStatus ; else elseblock" class="mb-12">
+            <h4 class="mt-4">{{ project.projectApprovalStatus.id == 1 ?'Accepted':project.projectApprovalStatus.id
               == 5 ?'Accepted':editEntytyId > 0?'View':'Propose an'}} Intervention</h4>
           </div>
+          <ng-template #elseblock>
+           <h4>Propose anIntervention</h4>
+          </ng-template>
           <div class="p-2">
             <h6>Contact Details</h6>
           </div>
@@ -31,7 +34,7 @@
 
               </div>
             </div>
-           
+
               <div class="col-12 col-md-6">
                 <div class="p-field">
                   <label for="contatemail"> Email*</label>
@@ -44,10 +47,10 @@
                   ">
                     This is a mandatory field
                   </p>
-  
+
                 </div>
               </div>
-          
+
 
 
 
@@ -86,17 +89,17 @@
 
 
           </div>
-          
+
           <div class="row p-2">
 
             <div class="col-12 col-md-6">
               <div class="p-field">
                 <label for="telephoneNumber">Telephone No *</label>
                 <p-inputMask type="text" name="telephoneNumber" mask="+99 99-999-9999" [autoClear]="true"
-                  placeholder="+99 999 999-9999" [(ngModel)]="project.telephoneNumber" 
-                  [ngModelOptions]="{ standalone: false }" #telephoneNumber="ngModel" 
+                  placeholder="+99 999 999-9999" [(ngModel)]="project.telephoneNumber"
+                  [ngModelOptions]="{ standalone: false }" #telephoneNumber="ngModel"
                   [disabled]="editEntytyId > 0"
-                  
+
                   [required]="true"></p-inputMask>
                 <p class="info-message text-danger" *ngIf="
                   !project.telephoneNumber &&
@@ -113,9 +116,9 @@
               <div class="p-field">
                 <label for="mobileNumber">Mobile No *</label>
 
-                <p-inputMask type="text" name="mobileNumber" mask="+99 99-999-9999" [autoClear]="false" 
+                <p-inputMask type="text" name="mobileNumber" mask="+99 99-999-9999" [autoClear]="false"
                   placeholder="+99 999 999-9999" [(ngModel)]="project.mobileNumber" [required]="true"
-                  [ngModelOptions]="{ standalone: true }" #mobileNumber="ngModel" 
+                  [ngModelOptions]="{ standalone: true }" #mobileNumber="ngModel"
                   [disabled]="editEntytyId > 0"
                  ></p-inputMask>
 
@@ -194,7 +197,7 @@
                     pInputText required />
 
 
-                 
+
                   <p class="info-message text-danger" *ngIf="
                     !project.intervention_id &&
                     (fData.submitted || interventionID.touched || interventionID.dirty)
@@ -204,7 +207,7 @@
                 </div>
               </div>
 
-             
+
             </div>
             <div class="row p-2">
               <div class="col-12 col-md-6">
@@ -223,8 +226,8 @@
                     </p>
                   </ng-container>
                   <ng-template #elseBlockprojStatus>
-                    <input [disabled]="editEntytyId > 0" type="text" maxlength="50" name="projStatus"
-                      #projStatus1="ngModel" class="p-inputtext" [(ngModel)]="project.projectStatus?.name!"
+                    <input *ngIf="loadProjectStatus" [disabled]="editEntytyId > 0" type="text" maxlength="50" name="projStatus"
+                      #projStatus1="ngModel" class="p-inputtext" [(ngModel)]="project.projectStatus.name!"
                       [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
                   </ng-template>
                 </div>
@@ -260,21 +263,22 @@
                   </p>
                 </ng-container>
                 <ng-template #elseBlocknameClimate>
-    
+
                   <input
+                  *ngIf="loadingCountry"
                   [disabled]="editEntytyId > 0"
                   type="text"
                   maxlength="50"
                   name="nameCountry"
                   #nameCountry="ngModel"
                   class="p-inputtext"
-                  [(ngModel)]="project.country?.name!"
+                  [(ngModel)]="project.country.name!"
                   [ngModelOptions]="{ standalone: true }"
                   pattern="^[a-zA-Z0-9 ]{1,64}$"
                   pInputText
                   required
                 />
-    
+
                 </ng-template>
                 </div>
               </div>
@@ -284,14 +288,14 @@
               <div class="col-12 col-md-6">
                 <div class="p-field">
                   <label for="sector">Sectors Targeted*</label>
-                 
+
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocksector">
-                    <p-multiSelect [disabled]="editEntytyId > 0" placeholder="Select Sector" name="sector"
+                    <p-multiSelect [disabled]="editEntytyId > 0" placeholder="Select Sectors" name="sector"
                       #sector="ngModel" [(ngModel)]="finalSectors" [options]="sectorList" appendTo="body"
                       optionLabel="name" (ngModelChange)="onSectorChange($event)" [required]="true"></p-multiSelect>
                     <p class="info-message text-danger" *ngIf="
                     !finalSectors &&
-                    (fData.submitted || sector.touched || sector.dirty) 
+                    (fData.submitted || sector.touched || sector.dirty)
                   ">
                       This is a mandatory field
                     </p>
@@ -301,14 +305,14 @@
                       <p-multiSelect [disabled]="editEntytyId > 0"  name="sector"
                         #sector="ngModel" [(ngModel)]="finalSectors" [options]="sectorList" appendTo="body"
                         optionLabel="name" ></p-multiSelect>
-                      
+
                     </ng-container>
                     <ng-container *ngIf="isDownloadMode == 0">
                       <input [disabled]="editEntytyId > 0" type="text" maxlength="50" name="projsector"
                       #projsector="ngModel" class="p-inputtext" [(ngModel)]="sectorsJoined"
                       [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
                     </ng-container>
-                    
+
                   </ng-template>
                 </div>
               </div>
@@ -468,13 +472,13 @@
                   </p>
                 </div>
               </div>
-             
+
               <div class="col-12 col-md-6">
                 <div class="p-field">
                   <label for="projStatus">Level of Implementation*</label>
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocklevelofIpml">
                     <p-dropdown [disabled]="editEntytyId > 0" placeholder="Please Select the Level of Implementation"
-                      name="level_of_implemetation" #level_of_implemetation="ngModel" [(ngModel)]="project.levelofImplemenation" 
+                      name="level_of_implemetation" #level_of_implemetation="ngModel" [(ngModel)]="project.levelofImplemenation"
                       [options]="levelOfImplementation" optionLabel="name" optionValue="name"
                       [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false"  appendTo="body"
                       [required]="false"></p-dropdown>
@@ -490,11 +494,11 @@
                       #level_of_implemetation="ngModel" class="p-inputtext" [(ngModel)]="project.levelofImplemenation"
                       [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
                   </ng-template>
-                 
+
                 </div>
               </div>
 
-              
+
             </div>
             <div class="row p-2">
               <div class="col-12 col-md-6">
@@ -522,7 +526,7 @@
                   <label for="objective">Objective of the intervention</label>
                   <textarea [disabled]="editEntytyId > 0" name="objective" placeholder="Objective" #objective="ngModel"
                     [(ngModel)]="project.objective" rows="5" cols="130" pInputText autoResize="autoResize"
-                    
+
                     ></textarea>
                 </div>
               </div>
@@ -567,11 +571,11 @@
                   <label for="impleDate"> Date of Implementation*</label>
                   <div>
 
-                    <p-calendar [disabled]="editEntytyId > 0" 
-                      placeholder="DD/MM/YYYY" 
+                    <p-calendar [disabled]="editEntytyId > 0"
+                      placeholder="DD/MM/YYYY"
                       dateFormat="dd/mm/yy"
-                      name="impleDate" 
-                      #impleDate="ngModel" 
+                      name="impleDate"
+                      #impleDate="ngModel"
                       [(ngModel)]="dateOfImplementation"  appendTo="body"
                       [required]="true"></p-calendar>
                   </div>
@@ -600,7 +604,7 @@
                   </p>
                 </div>
               </div>
-             
+
             </div>
             <div class="row p-2">
               <div class="col-12 col-md-6">
@@ -649,7 +653,7 @@
             <!-- <div class="p-2">
               <h6>Deatailed information on the intervention</h6>
             </div> -->
-            
+
 
             <!-- <div class="row p-2">
 
@@ -695,7 +699,7 @@
           <div class="row p-2"></div> -->
 
             <div class="row p-2">
-             
+
             </div>
           </div>
         </div>
@@ -734,9 +738,9 @@
                 </div>
               </div>
             </div>
-           
 
-            
+
+
           </div>
         </div>
         <div class="mt-2" style="z-index: 0;">
@@ -769,7 +773,7 @@
               [(ngModel)]="isCity"
             ></p-radioButton><label >International</label>
             </div>
-            
+
             </div>
 
             <div class="row p-2 ">
@@ -778,8 +782,8 @@
                   <div class="col-12 col-md-4"  [hidden]="isCity==2">
                     <div class="p-field">
                       <label for="countrytxt">Country</label>
-                      <input [disabled]="editEntytyId > 0" type="text" name="countrytxt" class="p-inputtext"
-                        #countrytxt="ngModel" [(ngModel)]="project.country?.name!" pInputText readonly />
+                      <input *ngIf="loadingCountry" [disabled]="editEntytyId > 0" type="text" name="countrytxt" class="p-inputtext"
+                        #countrytxt="ngModel" [(ngModel)]="project.country.name" pInputText  readonly/>
                     </div>
                   </div>
 
@@ -841,7 +845,7 @@
 
                 </div>
               </div>
-              <div class="col-md-3" [hidden]="isCity==2">
+            <!--   <div class="col-md-3" [hidden]="isCity==2">
                 <ng-container>
                   <div class="col-12 col-md-12">
                     <div class="p-field">
@@ -855,10 +859,7 @@
                     </div>
                   </div>
                 </ng-container>
-                <!-- <ng-template #elseBlockMaps>
-
-                </ng-template> -->
-              </div>
+              </div> -->
 
             </div>
 
@@ -1001,26 +1002,26 @@
               <div class="row p-2">
                 <div class="col-12 col-md-6">
                   <div class="p-field">
-                    <label style="width:200px" for="impEntity">Barriers Category</label> 
+                    <label style="width:200px" for="impEntity">Barriers Category</label>
                     <p-dropdown [style]="{'width':'50%'}" placeholder="Please select barriers category  " appendTo="body" name="category"
                       [options]="category" [(ngModel)]="barrierSelected.category" optionLabel="category" #cat="ngModel"
                       (ngModelChange)="onCategoryChange($event)">
                     </p-dropdown>
                   </div>
                 </div>
-  
+
               </div>
-  
+
               <div class="row p-2">
                 <div class="col-12 col-md-6">
                   <div class="p-field">
-                    <label style="width:200px" for="impEntity">Barriers</label>  
+                    <label style="width:200px" for="impEntity">Barriers</label>
                     <p-dropdown  [style]="{'width':'50%'}" placeholder="Please select barrier" appendTo="body" name="barrier" [options]="setbarriers"
                       [(ngModel)]="barrierSelected.barrier" optionLabel="barrier" #assyesrw="ngModel">
                     </p-dropdown>
                   </div>
                 </div>
-  
+
               </div>
 
               <div class="row p-2">
@@ -1032,10 +1033,10 @@
                     </p-dropdown>
                   </div>
                 </div>
-  
+
               </div>
 
-              
+
 
               <div class="row p-2">
                 <div class="col-12 col-md-6">
@@ -1045,23 +1046,23 @@
 
                   </div>
                 </div>
-  
+
               </div>
-              
+
             </ng-template>
 
               <ng-template pTemplate="footer">
                 <p-button
                 (click)="barrierBox=false; pushBarriers(barrierSelected)"
-                   
+
                     label="Save"
-                    
+
                 ></p-button>
             </ng-template>
 
-   
-  
-  
+
+
+
           </p-dialog>
           <div class="row p-2" >
             <div class="col-12 col-md-2">
@@ -1088,7 +1089,7 @@
           </div>
           <div *ngIf="finalBarrierList.length !==0" >
             <div class="row p-2" *ngFor="let barriers of finalBarrierList">
-            
+
               <div class="col-12 col-md-2">
                 <div class="p-field">
                  <div></div>
@@ -1102,23 +1103,23 @@
               </div>
               <div class="col-12 col-md-3">
                 <div class="p-field">
-                  <div>{{barriers.characteristics?.name}}</div>
+                  <div>{{barriers.characteristics.name}}</div>
                 </div>
               </div>
               <div class="col-12 col-md-4">
                 <div class="p-field">
                   <div>{{barriers.affectedbyIntervention}} </div>
-                 
+
                 </div>
               </div>
-  
+
             </div>
 
           </div>
 
           <div *ngIf="(editEntytyId > 0)" >
             <div class="row p-2" *ngFor="let barriers of barrierArray">
-            
+
               <div class="col-12 col-md-2">
                 <div class="p-field">
                  <div></div>
@@ -1132,21 +1133,21 @@
               </div>
               <div class="col-12 col-md-3">
                 <div class="p-field">
-                  <div>{{barriers.characteristics?.name}}</div>
+                  <div>{{barriers.characteristics.name}}</div>
                 </div>
               </div>
               <div class="col-12 col-md-4">
                 <div class="p-field">
                   <div>{{barriers.is_affected}} </div>
-                 
+
                 </div>
               </div>
-  
+
             </div>
 
           </div>
-          
-         
+
+
           </div>
         </div>
         <div class=" mt-2">
@@ -1172,7 +1173,7 @@
         </div>
         <div class="mt-2 overflow-visible" style="z-index: 1;">
           <div class="p-grid p-fluid col-sm-12">
-           
+
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
@@ -1201,7 +1202,7 @@
               <ng-container *ngIf="isDownloadMode == 0 ; else elseBlockdocuments">
                 <div class="col-12 wrapper-doc-upload mt-4" >
                   <app-document-upload [doucmentList]="documents" [documentOwner]="documentsDocumentOwner"
-                    [documentOwnerId]="documentOwnerId" [isNew]="false" [showUpload]="showUpload" [showDeleteButton]="showDeleteButton"> 
+                    [documentOwnerId]="documentOwnerId" [isNew]="false" [showUpload]="showUpload" [showDeleteButton]="showDeleteButton">
                   </app-document-upload>
                 </div>
               </ng-container>
@@ -1214,7 +1215,7 @@
           </div>
         </div>
 
-       
+
 
       </div>
 
@@ -1259,7 +1260,7 @@
             <h6>Approval Check List</h6>
           </div>
 
-         
+
           <div class="row p-2" *ngIf="project.projectStatus?.name! == 'Planned'">
 
             <div class="col-12 col-md-6">
@@ -1381,10 +1382,10 @@
                 Indicate the likelihood of TC impact of this intervention
               </div>
             </div>
-  
+
             <div class="col-12 col-md-2">
               <div class=>
-  
+
                 <div class="p-field-radiobutton col-3 col-md-12">
                   <p-radioButton
                   name="likelyHood"
@@ -1393,12 +1394,12 @@
                   [(ngModel)]="likelyHood"
                 ></p-radioButton><label >Low</label>
                 </div>
-  
+
               </div>
             </div>
             <div class="col-12 col-md-2">
               <div class="p-field">
-                
+
                 <div class="p-field-radiobutton col-3 col-md-12">
                   <p-radioButton
                   name="likelyHood"
@@ -1407,12 +1408,12 @@
                   [(ngModel)]="likelyHood"
                 ></p-radioButton><label >Medium</label>
                 </div>
-  
+
               </div>
             </div>
             <div class="col-12 col-md-2">
               <div class="p-field">
-                
+
                 <div class="p-field-radiobutton col-3 col-md-12">
                   <p-radioButton
                   name="likelyHood"
@@ -1421,14 +1422,14 @@
                   [(ngModel)]="likelyHood"
                 ></p-radioButton><label >High</label>
                 </div>
-  
+
               </div>
             </div>
-              
-            
+
+
           </div>
 
-          
+
 
 
           <div class="row p-2">
@@ -1494,46 +1495,42 @@
 
 
 
-            <div class="col-12 col-md-2" *ngIf="isActionButtonSectionEnabled == true && project?.actionJustification! !=''  ">
+            <div class="col-12 col-md-2" *ngIf="isActionButtonSectionEnabled == true && project.actionJustification! !=''  ">
               <div class="p-field">
                 <ng-container
-                  *ngIf="project.projectApprovalStatus?.id == 1 || project.projectApprovalStatus?.id == 5 ; else elseBlockAccept">
+                  *ngIf="project.projectApprovalStatus.id == 1 || project.projectApprovalStatus.id == 5 ; else elseBlockAccept">
                   <button type="button" pButton pRipple
-                    [disabled]="project.projectApprovalStatus?.id == 1 || project.projectApprovalStatus?.id == 5? true: false"
+                    [disabled]="project.projectApprovalStatus.id == 1 || project.projectApprovalStatus.id == 5 ? true: false"
                     class="p-btn-sm" (click)="updateProjectApprovalStatus(project, 1)">
-                    {{project.projectApprovalStatus?.id === 1 ? "Accepted" : "Activated" }}
+                    {{project.projectApprovalStatus.id === 1 ? "Accepted" : "Activated" }}
                   </button>
                 </ng-container>
                 <ng-template #elseBlockAccept>
                   <button type="button" pButton pRipple
-                    [disabled]="project.projectApprovalStatus?.id == 1 || project.projectApprovalStatus?.id == 2? true: false"
+                    [disabled]="project.projectApprovalStatus.id == 1 || project.projectApprovalStatus.id == 2? true: false"
                     class="p-btn-sm" (click)="updateProjectApprovalStatus(project, 1)">
-                    {{project.projectApprovalStatus?.id === 1 ? "Accepted" : "Accept" }}
+                    {{project.projectApprovalStatus.id === 1 ? "Accepted" : "Accept" }}
                   </button>
                 </ng-template>
               </div>
             </div>
 
 
-            <div class="col-12 col-md-2" *ngIf="isActionButtonSectionEnabled == true && project?.actionJustification! !='' ">
+            <div class="col-12 col-md-2" *ngIf="isActionButtonSectionEnabled == true && project.actionJustification! !='' ">
               <div class="p-field">
                 <ng-container
-                  *ngIf="project.projectApprovalStatus?.id == 1 || project.projectApprovalStatus?.id == 5 ; else elseBlockReject">
+                  *ngIf="project.projectApprovalStatus.id == 1 || project.projectApprovalStatus.id == 5 ; else elseBlockReject">
                   <button type="button" pButton pRipple class="p-btn-sm"
-                    [disabled]="project.projectApprovalStatus?.id == 1 || project.projectApprovalStatus?.id == 5?true:false"
+                    [disabled]="project.projectApprovalStatus.id == 1 || project.projectApprovalStatus.id == 5 ? true:false"
                     (click)="updateProjectApprovalStatus(project, 2)">
-                    {{
-                    project.projectApprovalStatus?.id === 2
-                    ? "Rejected"
-                    : "Reject"
-                    }}
+                   <!--  {{ project.projectApprovalStatus.id === 2 ? "Rejected":"Reject"}} -->
                   </button>
                 </ng-container>
                 <ng-template #elseBlockReject>
-                  <button type="button" pButton pRipple [disabled]="project.projectApprovalStatus?.id == 2?true:false"
+                  <button type="button" pButton pRipple [disabled]="project.projectApprovalStatus.id == 2?true:false"
                     class="p-btn-sm" (click)="updateProjectApprovalStatus(project, 2)">
                     {{
-                    project.projectApprovalStatus?.id === 2
+                    project.projectApprovalStatus.id === 2
                     ? "Rejected"
                     : "Reject"
                     }}

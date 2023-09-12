@@ -149,7 +149,8 @@ export class ClimateActionComponent implements OnInit {
   counID: number;
   a = this.project.otherRelatedActivities
   isSector: boolean = false;
-
+  loadingCountry:boolean = false
+  loadProjectStatus:boolean = false
   @ViewChild('gmap') gmap: any;
   @ViewChild('op') overlay: any;
   @ViewChild('opDR') overlayDR: any;
@@ -205,7 +206,9 @@ export class ClimateActionComponent implements OnInit {
  ;
     let filterUser: string[] = [];
     filterUser.push('username||$eq||' + this.userName);
-
+    // let initialCountry= new Country()
+    // initialCountry.name=''
+    // this.project.country= initialCountry;
 
     if (countryId > 0) {
       this.sectorProxy.getCountrySector(countryId).subscribe((res: any) => {
@@ -311,10 +314,14 @@ export class ClimateActionComponent implements OnInit {
            this.countryProxy.findall().subscribe((res) => {
             console.log("country",res)
             this.countryList=res;
+            this.project.country= new Country()
+            this.project.projectApprovalStatus = new ProjectApprovalStatus()
+            this.loadingCountry =true
           })
           }else{
             this.project.country =res;
             this.isSector = true;
+            this.loadingCountry =true
           }
           
           // console.log('tokenPayloadmasssge',res);
@@ -475,6 +482,9 @@ export class ClimateActionComponent implements OnInit {
             .subscribe(async (res1) => {
               console.log("project",res1)
               this.project = res1;
+              this.loadProjectStatus= true
+              this.loadingCountry= true
+              
               // this.project.aggregatedAction = res1.aggregatedAction;
               // this.project.sector = res1.sector;
               // if(res1.subNationalLevl1||res1.subNationalLevl2||res1.subNationalLevl3){
@@ -487,9 +497,7 @@ export class ClimateActionComponent implements OnInit {
               // console.log(latitude);
               // console.log(longitude);
 
-              let map = this.gmap.getMap();
-              this.updateMapBoundaries(map, longitude, latitude);
-
+             
               console.log('ths.project,,,..', this.project);
               this.likelyHood = this.project.likelyhood;
               this.isPoliticalPreference = this.project.politicalPreference;
@@ -539,9 +547,9 @@ export class ClimateActionComponent implements OnInit {
                 this.project.dateOfCompletion?.month(),
                 this.project.dateOfCompletion?.date()
               );
+              console.log("this.dateOfImplementation",this.dateOfImplementation, this.project.dateOfImplementation)
 
    
-    //this.project.endDateofCommence = moment(this.endDateofCommence);
 
               this.isLoading = false;
               if (this.flag == 1) {
@@ -557,7 +565,7 @@ export class ClimateActionComponent implements OnInit {
                   this.barrierArray =res;
                    console.log("barriers",this.barrierArray)
 
-              })
+                })
               this.projectProxy.findPolicySectorData(this.editEntytyId ).subscribe( (res) => {
                 this.policySectorArray =res;
                 for(let x of res){
@@ -566,7 +574,7 @@ export class ClimateActionComponent implements OnInit {
                  this.sectorsJoined=this.sectornames.join(', ')
                 //  console.log("sectors",this.policySectorArray, this.sectorsJoined)
 
-            })
+                 })
               //console.log("id......",this.project.id)
               // this.serviceProxy
               //   .getManyBaseCaActionHistoryControllerCaActionHistory(
@@ -591,6 +599,12 @@ export class ClimateActionComponent implements OnInit {
               //     );
               //     console.log('this.historyList..', res.data);
               //   });
+              setTimeout(() => {
+                let map = this.gmap.getMap();
+                this.updateMapBoundaries(map, longitude, latitude);
+              }, 3000);
+              
+
             });
         }
        
