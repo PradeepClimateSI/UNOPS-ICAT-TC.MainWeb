@@ -3,8 +3,11 @@
         <p-tabView #tabView (onChange)="onCategoryTabChange($event)" [(activeIndex)]="activeIndex"
             *ngIf="type.code === 'process'">
             <p-tabPanel *ngFor="let category of categories[type.code]" [header]="category.name">
+                <p>{{category.description}}</p>
                 <ng-container *ngFor="let char of category.characteristics; let idx = index">
                     <h6>{{idx + 1}}. {{char.name}}</h6>
+                    <p>{{char.description}}</p>
+                    <p>{{char.main_question}}</p>
                     <div *ngFor="let question of char.questions">
                         <app-cm-question [question]="question" [approach]="approach"
                             (prev_answer)="onAnswer($event, question, char)"></app-cm-question>

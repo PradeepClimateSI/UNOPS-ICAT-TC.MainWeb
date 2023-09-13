@@ -11,6 +11,8 @@ import { Assessment, AssessmentCMDetail, ClimateAction, MethodologyAssessmentCon
   styleUrls: ['./carbon-market-assessment.component.css']
 })
 export class CarbonMarketAssessmentComponent implements OnInit {
+visible_ex_ante: any;
+
 
   policies: ClimateAction[]
   assessment: Assessment = new Assessment()
@@ -122,7 +124,9 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   }
 
   selectAssessmentType(e: any){
-
+    if (e.value === 'Ex-ante') {
+      this.visible_ex_ante = true
+    }
   }
 
   selectAssessmentApproach(e: any){
@@ -143,6 +147,10 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     })
 
     this.impact_characteristics = this.impact_characteristics.filter((v,i,a)=>a.findIndex(v2=>(v2.code===v.code))===i)
+  }
+
+  okay() {
+    this.visible_ex_ante = false
   }
 
 }

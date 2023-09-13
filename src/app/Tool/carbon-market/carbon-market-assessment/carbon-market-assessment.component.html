@@ -33,16 +33,16 @@
                             </p>
                         </div>
                         <div class="p-field p-2">
-                            <label for="policy">Assessment Boundaries *</label>
+                            <label for="policy">Assessment Boundaries (If different from the intervention boundary specified in the baseline methodology)</label>
                             <input type="text" name="tboundrary" #tboundrary="ngModel"
                                 [(ngModel)]="cm_detail.boundraries" class="form-control"
-                                placeholder="Enter Boundary" required />
-                            <p class="info-message text-danger" *ngIf="
+                                placeholder="Enter Boundary" />
+                            <!-- <p class="info-message text-danger" *ngIf="
                                         (!cm_detail.boundraries || cm_detail.boundraries === '') &&
                                         (fData.submitted || tboundrary.touched)
                                         ">
                                 This is a mandatory field
-                            </p>
+                            </p> -->
                         </div>
                         <div class="p-field p-2">
                             <label for="policy">International Carbon Market Approach Used *</label>
@@ -155,3 +155,17 @@
         <app-cm-section [assessment]="assessmentres" [approach]="assessment.assessment_approach"></app-cm-section>
     </div>
 </div>
+
+<p-dialog [(visible)]="visible_ex_ante" [closable]="false" >
+    <p-header  class="caution" >
+        <i class="pi pi-exclamation-triangle" style="font-size: 2rem; margin-left: 171px; margin-top: -12px;"></i>
+    </p-header>
+    <div style="text-align: center;">
+        <br>
+        <h4>Caution!</h4>
+        <p>Ex-ante assessments can serve as a preliminary indicator of the potential contribution to transformational change of an intervention. However, all indicators given in an ex-ante assessment must later be verified through an ex-post assessment to confirm the intervention’s true contribution.</p>
+        <button style="background-color: #224373;" class="btn btn-primary text-uppercase" type="submit" (click)="okay()">
+            Okay
+        </button>
+    </div>
+</p-dialog>
