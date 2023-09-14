@@ -3,8 +3,26 @@
         <p-tabView #tabView (onChange)="onCategoryTabChange($event)" [(activeIndex)]="activeIndex"
             *ngIf="type.code === 'process'">
             <p-tabPanel *ngFor="let category of categories[type.code]" [header]="category.name">
+                <br>
+                <p style="font-size: large;">{{category.description}}</p>
+                <br>
                 <ng-container *ngFor="let char of category.characteristics; let idx = index">
                     <h6>{{idx + 1}}. {{char.name}}</h6>
+                    <p>{{char.description}}</p>
+                    <div class="row">
+                        <div class="col-2">
+                            <label for="Description">Relevance</label>
+                        </div>
+                        <div class="col-5">
+                            <p-dropdown name="data.charData.relavance" #type="ngModel" placeholder="Select Relevance"
+                                [(ngModel)]="char.relevance" [options]="relevance" optionLabel="name" appendTo="body"
+                                optionValue="value" [required]="true"></p-dropdown>
+                        </div>
+                    </div>
+                    <br>
+                    <p><strong>{{char.main_question}}</strong></p>
+                    <br>
+                    <p><strong><u>Guiding Question(s)</u></strong></p>
                     <div *ngFor="let question of char.questions">
                         <app-cm-question [question]="question" [approach]="approach"
                             (prev_answer)="onAnswer($event, question, char)"></app-cm-question>
@@ -47,12 +65,13 @@
                             <div class="row p-2">
                                 <div class="col-4">Score</div>
                                 <div class="col-8">
-                                    <p-dropdown  *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.id" #type="ngModel" placeholder="Select Score"
-                                        [(ngModel)]="char.selectedScore" [options]="GHG_scale_score" optionLabel="label"
-                                        [required]="true" appendTo="body"
+                                    <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.id" #type="ngModel"
+                                        placeholder="Select Score" [(ngModel)]="char.selectedScore"
+                                        [options]="GHG_scale_score" optionLabel="label" [required]="true"
+                                        appendTo="body"
                                         (onChange)="onSelectScore($event, char, idx, category.type)"></p-dropdown>
-                                    <p-dropdown *ngIf="approach === 'INDIRECT'" name="institution" [options]="institutions"
-                                        [(ngModel)]="char.institution" #finstitution="ngModel"
+                                    <p-dropdown *ngIf="approach === 'INDIRECT'" name="institution"
+                                        [options]="institutions" [(ngModel)]="char.institution" #finstitution="ngModel"
                                         placeholder="Select an institution" optionLabel="name"
                                         [required]="true"></p-dropdown>
                                 </div>
@@ -88,12 +107,13 @@
                             <div class="row p-2">
                                 <div class="col-4">Score</div>
                                 <div class="col-8">
-                                    <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.id" #type="ngModel" placeholder="Select Score"
-                                        [(ngModel)]="char.selectedScore" [options]="GHG_sustained_score"
-                                        optionLabel="label" [required]="true" appendTo="body"
+                                    <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.id" #type="ngModel"
+                                        placeholder="Select Score" [(ngModel)]="char.selectedScore"
+                                        [options]="GHG_sustained_score" optionLabel="label" [required]="true"
+                                        appendTo="body"
                                         (onChange)="onSelectScore($event, char, idx, category.type)"></p-dropdown>
-                                    <p-dropdown *ngIf="approach === 'INDIRECT'" name="institution" [options]="institutions"
-                                        [(ngModel)]="char.institution" #finstitution="ngModel"
+                                    <p-dropdown *ngIf="approach === 'INDIRECT'" name="institution"
+                                        [options]="institutions" [(ngModel)]="char.institution" #finstitution="ngModel"
                                         placeholder="Select an institution" optionLabel="name"
                                         [required]="true"></p-dropdown>
                                 </div>
@@ -194,15 +214,16 @@
                                     <div class="row p-2">
                                         <div class="col-4">Score</div>
                                         <div class="col-8">
-                                            <p-dropdown  *ngIf="approach !== 'INDIRECT'" [name]="'score'+SDG.code" #type="ngModel"
-                                                placeholder="Select Score" [(ngModel)]="char.selectedScore"
+                                            <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+SDG.code"
+                                                #type="ngModel" placeholder="Select Score"
+                                                [(ngModel)]="char.selectedScore"
                                                 (onChange)="onSelectScore($event, char, idx, category.type)"
                                                 [options]="SDG_scale_score" optionLabel="label" [required]="true"
                                                 appendTo="body"></p-dropdown>
-                                            <p-dropdown *ngIf="approach === 'INDIRECT'" name="institution" [options]="institutions"
-                                                [(ngModel)]="char.institution" #finstitution="ngModel"
-                                                placeholder="Select an institution" optionLabel="name"
-                                                [required]="true"></p-dropdown>
+                                            <p-dropdown *ngIf="approach === 'INDIRECT'" name="institution"
+                                                [options]="institutions" [(ngModel)]="char.institution"
+                                                #finstitution="ngModel" placeholder="Select an institution"
+                                                optionLabel="name" [required]="true"></p-dropdown>
                                         </div>
                                     </div>
                                     <div class="row p-2">
@@ -239,15 +260,16 @@
                                     <div class="row p-2">
                                         <div class="col-4">Score</div>
                                         <div class="col-8">
-                                            <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'susScore'+SDG.code" #type="ngModel"
-                                                placeholder="Select Score" [(ngModel)]="chSus.selectedScore"
+                                            <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'susScore'+SDG.code"
+                                                #type="ngModel" placeholder="Select Score"
+                                                [(ngModel)]="chSus.selectedScore"
                                                 (onChange)="onSelectScore($event, chSus, idx, category.type)"
                                                 [options]="SDG_sustained_score" optionLabel="label" [required]="true"
                                                 appendTo="body"></p-dropdown>
-                                            <p-dropdown *ngIf="approach === 'INDIRECT'" name="institution" [options]="institutions"
-                                                [(ngModel)]="chSus.institution" #finstitution="ngModel"
-                                                placeholder="Select an institution" optionLabel="name"
-                                                [required]="true"></p-dropdown>
+                                            <p-dropdown *ngIf="approach === 'INDIRECT'" name="institution"
+                                                [options]="institutions" [(ngModel)]="chSus.institution"
+                                                #finstitution="ngModel" placeholder="Select an institution"
+                                                optionLabel="name" [required]="true"></p-dropdown>
                                         </div>
                                     </div>
                                     <div class="row p-2">
