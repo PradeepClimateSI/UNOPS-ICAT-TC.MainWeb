@@ -1,10 +1,10 @@
 import { Barriers, BarriersCategory, Characteristics } from "shared/service-proxies/service-proxies"
 
-export class BarrierSelected {
+// export class BarrierSelected {
 
-    barrier: string;
-    explanation: string;
-    affectedbyIntervention: boolean;
-    characteristics:Characteristics[];
+//     barrier: string;
+//     explanation: string;
+//     affectedbyIntervention: boolean;
+//     characteristics:Characteristics[];
 
-}
+// }

@@ -1055,7 +1055,7 @@
                       [(ngModel)]="barrierSelected.barrier" optionLabel="barrier" #assyesrw="ngModel">
                     </p-dropdown> -->
                     <input [disabled]="editEntytyId > 0" type="text" placeholder="Please add explanation"  name="explanation" 
-                    #explanation="ngModel" [(ngModel)]="barrierSelected.barrier" maxlength="300" class="p-inputtext"
+                    #explanation="ngModel" [(ngModel)]="barrierSelected.explanation" maxlength="300" class="p-inputtext"
                     pInputText />
                   </div>
                 </div>
@@ -1066,9 +1066,9 @@
                 <div class="col-12 col-md-6">
                   <div class="p-field">
                     <label style="width:200px"  for="impEntity">Characteristic Affected</label>
-                    <p-dropdown  [style]="{'width':'50%'}" placeholder="Please select characteristic " appendTo="body" name="name" [options]="characteristicsList"
+                    <!-- <p-dropdown  [style]="{'width':'50%'}" placeholder="Please select characteristic " appendTo="body" name="name" [options]="characteristicsList"
                       [(ngModel)]="barrierSelected.characteristics" optionLabel="name" #assyesrw="ngModel">
-                    </p-dropdown>
+                    </p-dropdown> -->
                     <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlockcharacteristics">
                       <p-multiSelect [disabled]="editEntytyId > 0" placeholder="Please select characteristics" name="characteristics"
                         #characteristic="ngModel" [(ngModel)]="barrierSelected.characteristics" [options]="characteristicsList" appendTo="body"
@@ -1166,12 +1166,12 @@
               </div>
               <div class="col-12 col-md-3">
                 <div class="p-field">
-                  <div>{{barriers.characteristics.join(', ')}}</div>
+                  <div>{{barriersNameArray(barriers.characteristics)}}</div>
                 </div>
               </div>
               <div class="col-12 col-md-4">
                 <div class="p-field">
-                  <div>{{barriers.affectedbyIntervention}} </div>
+                  <div>{{barriers.affectedbyIntervention==true?'Yes':'No'}} </div>
 
                 </div>
               </div>
@@ -1186,17 +1186,17 @@
               <div class="col-12 col-md-2">
                 <div class="p-field">
                  <div></div>
-                 <div>{{barriers.barriers.barriersCategory.category}}</div>
+                 <div>{{barriers.barrier}}</div>
                 </div>
               </div>
               <div class="col-12 col-md-3">
                 <div class="p-field">
-                  <div>{{barriers.barriers.barrier}}</div>
+                  <div>{{barriers.explanation}}</div>
                 </div>
               </div>
               <div class="col-12 col-md-3">
                 <div class="p-field">
-                  <div>{{barriers.characteristics.name}}</div>
+                  <!-- <div>{{barriers.characteristic.join(', ')}}</div> -->
                 </div>
               </div>
               <div class="col-12 col-md-4">
