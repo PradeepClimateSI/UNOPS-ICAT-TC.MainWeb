@@ -59,6 +59,7 @@ export class CmSectionThreeComponent implements OnInit {
   acceptedFiles: string = ".pdf, .jpg, .png, .doc, .docx, .xls, .xlsx, .csv";
   fileServerURL: string;
   institutions: Institution[] = [];
+  relevance: any[];
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -92,6 +93,7 @@ export class CmSectionThreeComponent implements OnInit {
     this.institutionControllerServiceProxy.getAllInstitutions().subscribe((res: any) => {
       this.institutions = res;
     });
+    this.relevance = this.masterDataService.relevance;
     
   }
 
@@ -251,10 +253,11 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   async submit() {
-    console.log(this.results)
+    console.log("submit result", this.results, this.categories['process'])
 
     for await (let category of this.categories['process']){
       for await (let char of category.characteristics){
+        console.log(char)
         for await (let q of char.questions){
           let res = new CMResultDto()
           Object.keys(q.result).forEach(e => {
@@ -263,6 +266,8 @@ export class CmSectionThreeComponent implements OnInit {
           let ch = new Characteristics()
           ch.id = q.characteristic.id
           res.characteristic = ch
+          console.log(char,char.relevance)
+          res.relevance = char.relevance
           if (res.institution?.id){
             let inst = new Institution()
             inst.id = res.institution.id
