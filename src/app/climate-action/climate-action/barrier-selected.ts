@@ -2,9 +2,9 @@ import { Barriers, BarriersCategory, Characteristics } from "shared/service-prox
 
 export class BarrierSelected {
 
-    category: BarriersCategory;
-    barrier: Barriers;
+    barrier: string;
+    explanation: string;
     affectedbyIntervention: boolean;
-    characteristics:Characteristics;
+    characteristics:Characteristics[];
 
 }

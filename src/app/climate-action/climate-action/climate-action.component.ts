@@ -960,8 +960,8 @@ export class ClimateActionComponent implements OnInit {
               for (let b of this.finalBarrierList) {
                 let pb = new PolicyBarriers();
                 pb.climateAction = res
-                pb.barriers = b.barrier;
-                pb.characteristics=b.characteristics;
+                // pb.barriers = b.barrier;
+                // pb.characteristics=b.characteristics;
                 pb.is_affected =b.affectedbyIntervention;
                 this.policyBar.push(pb);
               }
