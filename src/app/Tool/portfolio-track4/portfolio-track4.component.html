@@ -6,8 +6,8 @@
     <form #fData="ngForm" (ngSubmit)="save(fData)">
       <div class="card" style="min-height: 600px;">
         <div class="p-grid p-fluid col-md-6 col-sm-12">
-          <div class="row p-2">
-            <div class="col-12 col-md-8">
+  <!--         <div class="row p-2">
+            <div class="col-12 col-md-8"> -->
 
               <!--  <div class="p-field p-2">
               <label for="assessment_method">Assessment Method *</label>
@@ -23,7 +23,7 @@
             </div> -->
 
 
-              <div class="p-field p-2">
+              <!-- <div class="p-field p-2">
                 <label for="assessment_method">Assessment Method *</label>
                 <p-dropdown appendTo="body" name="assessment_method" #assessmentMethod="ngModel"
                   placeholder="Select Assessment Method" [(ngModel)]="assessment.assessment_method" ngModel
@@ -33,7 +33,7 @@
                   *ngIf="!assessment.assessment_method && (fData.submitted || assessmentMethod.touched)">This is a
                   mandatory field</p>
               </div>
-
+ -->
 
 
               <div class="p-field p-2">
@@ -112,6 +112,20 @@
               </p>
             </div> -->
 
+            <div class="p-field p-2">
+                  <label for="opportunities">Opportunities for stakeholders to participate in the assessment *</label>
+                  <input pInputText type="text" #opportunities="ngModel" name="opportunities" ngModel
+                  placeholder="opportunities" [(ngModel)]="assessment.opportunities" required />
+                  <p class="info-message text-danger" *ngIf="!opportunities.value && (fData.submitted || opportunities.touched)">This is a mandatory field</p>
+            </div>
+
+            <div class="p-field p-2">
+                  <label for="principles">Principles on wwhich the assessment is based *</label>
+                  <input pInputText type="text" #principles="ngModel" name="principles" ngModel
+                  placeholder="principles" [(ngModel)]="assessment.principles" required />
+                  <p class="info-message text-danger" *ngIf="!principles.value && (fData.submitted || principles.touched)">This is a mandatory field</p>
+            </div>
+
 
               <div class="p-field p-2">
                 <label for="assessment_approach">Assessment Approach *</label>
@@ -150,8 +164,8 @@
 
               </div>
 
-            </div>
-          </div>
+           <!--  </div>
+          </div> -->
         </div>
         <div class="row justify-content-end" *ngIf="!isSavedAssessment">
           <div>
@@ -194,6 +208,23 @@
                             <div class="p-grid p-fluid col-12">
 
                               <div class="row p-2">
+                                <div class="row" *ngFor="let question of data.portfolioQuestion_details">
+                                  <div class="row">
+                                    <div class="col-2">
+                                      <label for="Description">Description</label>
+                                    </div>
+                                    <div class="col-10">
+                                      <!-- <label for="Description">{{question.question.description}}</label> -->
+                                      <p style="text-align: justify;">{{question.question.description}}</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+
+
+                             <!--  <div class="row p-2">
+
                                 <div class="col-12 col-lg-6">
                                   <div class="p-field">
                                     <label for="Description">Description</label>
@@ -210,10 +241,10 @@
                                     <textarea name="Starting Situation" placeholder="Starting Situation" rows="5"
                                       cols="60" pInputTextarea [(ngModel)]="data.starting_situation"
                                       autoResize="autoResize" class="p-inputtext"></textarea>
-
                                   </div>
                                 </div>
-                              </div>
+
+                              </div> -->
 
                               <div class="row p-2">
                                 <div class="col-12 col-lg-6">
@@ -234,7 +265,42 @@
                                   </div>
                                 </div>
                               </div>
-                              <div class="row p-2">
+
+
+                            <!--   <div class="row p-2">
+                                <div class="row" *ngFor="let question of data.portfolioQuestion_details">
+                                    <div class=" ml-25 col-5 mb-20">
+
+                                    <p class="question">{{question.question.name}}</p>
+                                  </div>
+                                  <div
+                                    class="col-4 mb-20">
+                                    <p-dropdown
+                                        name="data.charData.question01" #type="ngModel"
+                                        placeholder="Select Answer"
+                                        [(ngModel)]="question.value"
+                                        [options]="yesNoAnswer" optionLabel="name"
+                                        appendTo="body"
+                                        optionValue="name" [required]="true">
+                                    </p-dropdown>
+                                </div>
+                                </div>
+
+                            </div> -->
+
+                            <div class="row p-2">
+                              <div class="row" *ngFor="let question of data.portfolioQuestion_details">
+                               <!--    <p class="question">{{question.question.name}}</p> -->
+
+                                  <div class="tooltip-container">
+                                    <label for="question">{{question.question.name}} </label>
+                                   <!--  <span class="tooltip-icon">i</span>
+                                    <div class="tooltip-text">{{question.question.name}}</div> -->
+                                </div>
+                              </div>
+                          </div>
+
+                             <!--  <div class="row p-2">
                                 <div class="col-12 col-lg-12">
                                   <div class="p-field">
                                     <label for="indicator">Indicator</label>
@@ -265,7 +331,7 @@
 
                                   </div>
                                 </div>
-                              </div>
+                              </div> -->
 
                               <div class="row p-2">
                                 <div class="col-12 col-lg-6">
@@ -290,6 +356,10 @@
 
 
                               <!-- lllllllllllllllllllllllllllll -->
+                              <div class="row p-2">
+                                    <label for="question">Supporting Documentation</label>
+                            </div>
+
                               <div class="row p-2 align-items-center">
                                 <div class="col-2 d-flex align-items-center">
                                   <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload" name="files"
