@@ -36,6 +36,119 @@ export class CmResultComponent implements OnInit {
   sustained_GHG_score:SelectedScoreDto[]
   scale_SD_score:SelectedScoreDto[]
   sustained_SD_score:SelectedScoreDto[]
+
+  tableCategories = [{name: 'Technology'}, {name: 'Technology 1'}]
+
+  processTableData = [
+    {
+      name: 'Technology',
+      characteristic: [
+        {
+          name: 'R&D',
+          relevance: 'Relevant',
+          questions: [
+            {
+              question: 'Question 1',
+              weight: 12,
+              score: 2
+            },
+            {
+              question: 'Question 2',
+              weight: 12,
+              score: 2
+            },
+          ]
+        },
+        {
+          name: 'R&D 2',
+          relevance: 'Relevant 2',
+          questions: [
+            {
+              question: 'Question 1',
+              weight: 12,
+              score: 2
+            },
+            {
+              question: 'Question 2',
+              weight: 12,
+              score: 2
+            },
+          ]
+        },
+        {
+          name: 'R&D 3',
+          relevance: 'Relevant 3',
+          questions: [
+            {
+              question: 'Question 1',
+              weight: 12,
+              score: 2
+            },
+            {
+              question: 'Question 2',
+              weight: 12,
+              score: 2
+            },
+          ]
+        }
+      ]
+    },
+    {
+      name: 'Technology 2',
+      characteristic: [
+        {
+          name: 'R&D',
+          relevance: 'Relevant',
+          questions: [
+            {
+              question: 'Question 1',
+              weight: 12,
+              score: 2
+            },
+            {
+              question: 'Question 2',
+              weight: 12,
+              score: 2
+            },
+          ]
+        },
+        {
+          name: 'R&D 2',
+          relevance: 'Relevant 2',
+          questions: [
+            {
+              question: 'Question 1',
+              weight: 12,
+              score: 2
+            },
+            {
+              question: 'Question 2',
+              weight: 12,
+              score: 2
+            },
+          ]
+        },
+        {
+          name: 'R&D 3',
+          relevance: 'Relevant 3',
+          questions: [
+            {
+              question: 'Question 1',
+              weight: 12,
+              score: 2
+            },
+            {
+              question: 'Question 2',
+              weight: 12,
+              score: 2
+            },
+          ]
+        }
+      ]
+    }
+  ]
+
+
   constructor(
     private route: ActivatedRoute,
     private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
