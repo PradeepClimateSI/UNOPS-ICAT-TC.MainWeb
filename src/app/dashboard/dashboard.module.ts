@@ -64,6 +64,7 @@ import { PortfolioAddComponent } from 'app/portfolios/portfolio-add/portfolio-ad
 import { PortfolioResultComponent } from 'app/portfolios/portfolio-result/portfolio-result.component';
 import { EnterDataPathComponent } from 'app/data-request-flow/enter-data-path/enter-data-path/enter-data-path.component';
 import { ReviewDataPathComponent } from 'app/data-request-flow/review-data-path/review-data-path/review-data-path.component';
+import { PortfolioTrack4Component } from 'app/Tool/portfolio-track4/portfolio-track4.component';
 
 
 const routes: Routes = [
@@ -174,19 +175,12 @@ const routes: Routes = [
     data: {}
   },
    {
-     path: 'carbon-market-tool-test',
-     component: CarbonComponent,
+     path: 'portfolio-tool',
+     component: PortfolioTrack4Component,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
      canActivate: [],
      data: {}
    },
-  {
-    path: 'carbon-market-tool-test',
-    component: CarbonComponent,
-    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
-    canActivate: [],
-    data: {}
-  },
   {
     path: 'carbon-market-tool',
     component: CarbonMarketAssessmentComponent,

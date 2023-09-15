@@ -144,7 +144,7 @@
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="nameClimate">Name of the intervention*</label>
+                  <label for="nameClimate">Title of the intervention*</label>
                   <input [disabled]="editEntytyId > 0" [(ngModel)]="project.policyName"
                     [ngModelOptions]="{ standalone: false }" placeholder="Name" #nameClimate="ngModel" type="text"
                     name="nameClimate" class="p-inputtext" pInputText
@@ -456,7 +456,7 @@
             </div> -->
 
             <div class="row p-2">
-              <div class="col-12 col-md-6">
+              <!-- <div class="col-12 col-md-6">
                 <div class="p-field">
                   <label for="projScope">Scope of the intervention*</label>
 
@@ -471,7 +471,7 @@
                     This is a mandatory field
                   </p>
                 </div>
-              </div>
+              </div> -->
 
               <div class="col-12 col-md-6">
                 <div class="p-field">
@@ -500,7 +500,7 @@
 
 
             </div>
-            <div class="row p-2">
+            <!-- <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
                   <label for="projectContext">Context of the intervention</label>
@@ -511,7 +511,7 @@
                     autoResize="autoResize"></textarea>
                 </div>
               </div>
-            </div>
+            </div> -->
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
@@ -606,7 +606,38 @@
               </div>
 
             </div>
+
             <div class="row p-2">
+              <div class="col-12 col-md-6">
+                <div class="p-field">
+                  <label for="impEntity">Implementing entity or entities</label>
+                  <input [disabled]="editEntytyId > 0" type="text" placeholder="Name of the Implementing Entity"
+                    name="impEntity" #impEntity="ngModel" field="contatname" pInputText
+                    [(ngModel)]="project.implementingEntity" />
+                </div>
+              </div>
+
+             
+            </div>
+            <div class="row p-2">
+              <div class="col-12 col-md-6">
+                <div class="p-field">
+                  <label for="relatedPolicies">Related Policies </label>
+                  <textarea [disabled]="editEntytyId > 0" name="relatedPolicies" placeholder="Related interventions"
+                    #relatedPolicies="ngModel" [(ngModel)]="project.related_policies" rows="1" cols="130" pInputText
+                    autoResize="autoResize" class="p-inputtext"></textarea>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="p-field">
+                  <label for="reference">Reference</label>
+                  <textarea [disabled]="editEntytyId > 0" name="reference" placeholder="Reference" #reference="ngModel"
+                    [(ngModel)]="project.reference" rows="1" cols="130" pInputText autoResize="autoResize"
+                    class="p-inputtext"></textarea>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
                   <label for="projDuration">Project Duration (Years)*</label>
@@ -624,7 +655,7 @@
                   </p>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
      <!--    <div class=" mt-2">
@@ -867,7 +898,7 @@
 
           </div>
         </div>
-        <div class=" mt-2">
+        <!-- <div class=" mt-2">
           <div class="p-grid p-fluid col-sm-12">
             <div class="p-2">
               <h6>Outcomes/Benefits/Progress</h6>
@@ -941,10 +972,10 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
 
 
-        <div class=" mt-2">
+        <!-- <div class=" mt-2">
           <div class="p-grid p-fluid col-sm-12">
             <div class="p-2">
               <h6>Stakeholders</h6>
@@ -952,7 +983,7 @@
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="impEntity">Implementing Entity</label>
+                  <label for="impEntity">Implementing entity or entities</label>
                   <input [disabled]="editEntytyId > 0" type="text" placeholder="Name of the Implementing Entity"
                     name="impEntity" #impEntity="ngModel" field="contatname" pInputText
                     [(ngModel)]="project.implementingEntity" />
@@ -991,7 +1022,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
         <div class=" mt-2">
           <div class="p-grid p-fluid col-sm-12">
             <div class="p-2">
@@ -1002,11 +1033,15 @@
               <div class="row p-2">
                 <div class="col-12 col-md-6">
                   <div class="p-field">
-                    <label style="width:200px" for="impEntity">Barriers Category</label>
-                    <p-dropdown [style]="{'width':'50%'}" placeholder="Please select barriers category  " appendTo="body" name="category"
-                      [options]="category" [(ngModel)]="barrierSelected.category" optionLabel="category" #cat="ngModel"
+                    <label style="width:200px" for="impEntity">Barrier</label>
+                    <!-- <p-dropdown [style]="{'width':'50%'}" placeholder="Please select barriers category  " appendTo="body" name="category"
+                      [options]="category" [(ngModel)]="barrierSelected.barrier" optionLabel="category" #cat="ngModel"
                       (ngModelChange)="onCategoryChange($event)">
-                    </p-dropdown>
+                    </p-dropdown> -->
+                    <input [disabled]="editEntytyId > 0" type="text" placeholder="Please add barrier"  name="category"
+                    #cat="ngModel" [(ngModel)]="barrierSelected.barrier" maxlength="300" class="p-inputtext"
+                    pInputText />
+                    
                   </div>
                 </div>
 
@@ -1015,10 +1050,13 @@
               <div class="row p-2">
                 <div class="col-12 col-md-6">
                   <div class="p-field">
-                    <label style="width:200px" for="impEntity">Barriers</label>
-                    <p-dropdown  [style]="{'width':'50%'}" placeholder="Please select barrier" appendTo="body" name="barrier" [options]="setbarriers"
+                    <label style="width:200px" for="impEntity">Explanation</label>
+                    <!-- <p-dropdown  [style]="{'width':'50%'}" placeholder="Please select barrier" appendTo="body" name="barrier" [options]="setbarriers"
                       [(ngModel)]="barrierSelected.barrier" optionLabel="barrier" #assyesrw="ngModel">
-                    </p-dropdown>
+                    </p-dropdown> -->
+                    <input [disabled]="editEntytyId > 0" type="text" placeholder="Please add explanation"  name="explanation" 
+                    #explanation="ngModel" [(ngModel)]="barrierSelected.explanation" maxlength="300" class="p-inputtext"
+                    pInputText />
                   </div>
                 </div>
 
@@ -1028,9 +1066,34 @@
                 <div class="col-12 col-md-6">
                   <div class="p-field">
                     <label style="width:200px"  for="impEntity">Characteristic Affected</label>
-                    <p-dropdown  [style]="{'width':'50%'}" placeholder="Please select characteristic " appendTo="body" name="name" [options]="characteristicsList"
+                    <!-- <p-dropdown  [style]="{'width':'50%'}" placeholder="Please select characteristic " appendTo="body" name="name" [options]="characteristicsList"
                       [(ngModel)]="barrierSelected.characteristics" optionLabel="name" #assyesrw="ngModel">
-                    </p-dropdown>
+                    </p-dropdown> -->
+                    <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlockcharacteristics">
+                      <p-multiSelect [disabled]="editEntytyId > 0" placeholder="Please select characteristics" name="characteristics"
+                        #characteristic="ngModel" [(ngModel)]="barrierSelected.characteristics" [options]="characteristicsList" appendTo="body"
+                        optionLabel="name"  [required]="true"></p-multiSelect>
+                      <p class="info-message text-danger" *ngIf="
+                      !finalSectors &&
+                      (fData.submitted || characteristic.touched || characteristic.dirty)
+                    ">
+                        This is a mandatory field
+                      </p>
+                    </ng-container>
+                    <ng-template #elseBlockcharacteristics>
+                      <ng-container *ngIf="isDownloadMode == 1 ">
+                        <p-multiSelect [disabled]="editEntytyId > 0" placeholder="Please select characteristics" name="characteristics"
+                          #characteristic="ngModel" [(ngModel)]="barrierSelected.characteristics" [options]="characteristicsList" appendTo="body"
+                          optionLabel="name"  [required]="true"></p-multiSelect>
+  
+                      </ng-container>
+                      <ng-container *ngIf="isDownloadMode == 0">
+                        <input [disabled]="editEntytyId > 0" type="text" maxlength="50" name="projsector"
+                        #projsector="ngModel" class="p-inputtext" [(ngModel)]="sectorsJoined"
+                        [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
+                      </ng-container>
+  
+                    </ng-template>
                   </div>
                 </div>
 
@@ -1093,22 +1156,22 @@
               <div class="col-12 col-md-2">
                 <div class="p-field">
                  <div></div>
-                 <div>{{barriers.category.category}}</div>
+                 <div>{{barriers.barrier}}</div>
                 </div>
               </div>
               <div class="col-12 col-md-3">
                 <div class="p-field">
-                  <div>{{barriers.barrier.barrier}}</div>
+                  <div>{{barriers.explanation}}</div>
                 </div>
               </div>
               <div class="col-12 col-md-3">
                 <div class="p-field">
-                  <div>{{barriers.characteristics.name}}</div>
+                  <div>{{barriersNameArray(barriers.characteristics)}}</div>
                 </div>
               </div>
               <div class="col-12 col-md-4">
                 <div class="p-field">
-                  <div>{{barriers.affectedbyIntervention}} </div>
+                  <div>{{barriers.affectedbyIntervention==true?'Yes':'No'}} </div>
 
                 </div>
               </div>
@@ -1123,17 +1186,17 @@
               <div class="col-12 col-md-2">
                 <div class="p-field">
                  <div></div>
-                 <div>{{barriers.barriers.barriersCategory.category}}</div>
+                 <div>{{barriers.barrier}}</div>
                 </div>
               </div>
               <div class="col-12 col-md-3">
                 <div class="p-field">
-                  <div>{{barriers.barriers.barrier}}</div>
+                  <div>{{barriers.explanation}}</div>
                 </div>
               </div>
               <div class="col-12 col-md-3">
                 <div class="p-field">
-                  <div>{{barriers.characteristics.name}}</div>
+                  <!-- <div>{{barriers.characteristic.join(', ')}}</div> -->
                 </div>
               </div>
               <div class="col-12 col-md-4">
@@ -1150,7 +1213,7 @@
 
           </div>
         </div>
-        <div class=" mt-2">
+        <!-- <div class=" mt-2">
           <div class="p-grid p-fluid col-sm-12">
             <div class="p-2">
               <h6>Other Related activities</h6>
@@ -1170,31 +1233,9 @@
 
 
           </div>
-        </div>
-        <div class="mt-2 overflow-visible" style="z-index: 1;">
-          <div class="p-grid p-fluid col-sm-12">
-
-            <div class="row p-2">
-              <div class="col-12 col-md-6">
-                <div class="p-field">
-                  <label for="relatedPolicies">Related Interventions </label>
-                  <textarea [disabled]="editEntytyId > 0" name="relatedPolicies" placeholder="Related interventions"
-                    #relatedPolicies="ngModel" [(ngModel)]="project.related_policies" rows="1" cols="130" pInputText
-                    autoResize="autoResize" class="p-inputtext"></textarea>
-                </div>
-              </div>
-              <div class="col-12 col-md-6">
-                <div class="p-field">
-                  <label for="reference">Reference</label>
-                  <textarea [disabled]="editEntytyId > 0" name="reference" placeholder="Reference" #reference="ngModel"
-                    [(ngModel)]="project.reference" rows="1" cols="130" pInputText autoResize="autoResize"
-                    class="p-inputtext"></textarea>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class=" mt-2  overflow-visible" style="z-index: 1;">
+        </div> -->
+      
+        <!-- <div class=" mt-2  overflow-visible" style="z-index: 1;">
           <div class="p-grid p-fluid col-sm-12">
             <div class="p-2">
               <h6>Project Documents</h6>
@@ -1213,7 +1254,7 @@
               </ng-template>
             </div>
           </div>
-        </div>
+        </div> -->
 
 
 

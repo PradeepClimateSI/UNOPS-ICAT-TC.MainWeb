@@ -54,7 +54,7 @@ export class VerificationDetailComponent implements OnInit {
         {title: 'Intervention', value: this.assessment.climateAction.policyName},
         {title: 'Assessment Type ', value: this.assessment.assessmentType},
         {title: 'Assessment Period ', value: this.assessment.from + '  to ' + this.assessment.to},
-        {title: 'Barriers ', value: this.assessment.climateAction.barriers},
+        // {title: 'Barriers ', value: this.assessment.climateAction.barriers},
         {title: 'Methodology', value: this.assessment.methodology.methodology_name},
         {title: 'Assessment Method', value: 'Track 1'},
       ]
