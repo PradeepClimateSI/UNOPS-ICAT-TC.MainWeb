@@ -738,38 +738,70 @@
         <div class="mt-2 overflow-visible" style="z-index: 1;">
           <div class="p-grid p-fluid col-sm-12">
             <div class="p-2">
-              <h6>Vision for desired societal and technical changes</h6>
+              <h6>Transformational Vision & Stage</h6>
             </div>
             <div class="row p-2">
-              <div class="col-12 col-md-6">
-                <div class="p-field">
-                  <label for="vision_long">Long Term ({{"\u003E"}}15 years)</label>
-                  <textarea [disabled]="editEntytyId > 0" name="vision_long" placeholder="Long Term Vision"
-                    #vision_long="ngModel" [(ngModel)]="project.vision_long" rows="1" cols="130" pInputText
-                    autoResize="autoResize"></textarea>
-                </div>
+              <div class="  col-6">
+                                                        
+                <p class="question">What is the envisioned change in the system the intervention is 
+                  impacting in moving from where the system is currently to where is thould be to achieve 
+                  the transformational shift desired?</p>
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="vision_medium">Medium Term ({{"\u003E"}}5 years and   {{"\u003C"}}15 years)</label>
-                  <textarea [disabled]="editEntytyId > 0" name="vision_medium" placeholder="Medium Term Vision" #vision_medium="ngModel"
-                    [(ngModel)]="project.vision_medium" rows="1" cols="130" pInputText autoResize="autoResize"
+                  <textarea [disabled]="editEntytyId > 0" name="envisioned_change" placeholder="Enter an answer" #envisioned_change="ngModel"
+                    [(ngModel)]="project.envisioned_change" rows="1" cols="130" pInputText autoResize="autoResize"
                     ></textarea>
                 </div>
               </div>
             </div>
-
             <div class="row p-2">
+              <div class="  col-12">
+                                                        
+                <p class="question">How does that change would look like …</p>
+              </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="vision_short">Short Term ({{"\u003C"}}5 years)</label>
+                  <!-- <label for="vision_short">Short Term ({{"\u003C"}}5 years)</label> -->
+                  <label for="vision_short">Within 5 years?</label>
                   <textarea [disabled]="editEntytyId > 0" name="vision_short" placeholder="Short Term Vision" #vision_short="ngModel"
                     [(ngModel)]="project.vision_short" rows="1" cols="130" pInputText autoResize="autoResize"
                     ></textarea>
                 </div>
               </div>
+             
+              <div class="col-12 col-md-6">
+                <div class="p-field">
+                  <!-- <label for="vision_medium">Medium Term ({{"\u003E"}}5 years and   {{"\u003C"}}15 years)</label> -->
+                  <label for="vision_short">Between 5 and 15 years??</label>
+                  <textarea [disabled]="editEntytyId > 0" name="vision_medium" placeholder="Medium Term Vision" #vision_medium="ngModel"
+                    [(ngModel)]="project.vision_medium" rows="1" cols="130" pInputText autoResize="autoResize"
+                    ></textarea>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="p-field">
+                  <!-- <label for="vision_long">Long Term ({{"\u003E"}}15 years)</label> -->
+                  <label for="vision_short">After 15 years?</label>
+                  <textarea [disabled]="editEntytyId > 0" name="vision_long" placeholder="Long Term Vision"
+                    #vision_long="ngModel" [(ngModel)]="project.vision_long" rows="1" cols="130" pInputText
+                    autoResize="autoResize"></textarea>
+                </div>
+              </div>
             </div>
-
+            <div class="row p-2">
+              <div class="  col-6">
+                                                        
+                <p class="question">In which phase of transformation is the system to be transformed?</p>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="p-field">
+                  <textarea [disabled]="editEntytyId > 0" name="phase_of_transformation" placeholder="Enter an answer" #vision_short="ngModel"
+                    [(ngModel)]="project.phase_of_transformation" rows="1" cols="130" pInputText autoResize="autoResize"
+                    ></textarea>
+                </div>
+              </div>
+            </div>
 
 
           </div>
@@ -1196,12 +1228,13 @@
               </div>
               <div class="col-12 col-md-3">
                 <div class="p-field">
-                  <!-- <div>{{barriers.characteristic.join(', ')}}</div> -->
+                  <div>{{barriersNameArray(barriers['characteristics'])}}</div>
+                  <!-- <div>{{(barriers.barrierCategory)}}</div> -->
                 </div>
               </div>
               <div class="col-12 col-md-4">
                 <div class="p-field">
-                  <div>{{barriers.is_affected}} </div>
+                  <div>{{barriers.is_affected==true?'Yes':'No'}} </div>
 
                 </div>
               </div>
