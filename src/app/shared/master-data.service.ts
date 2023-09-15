@@ -39,6 +39,7 @@ export class MasterDataService {
   private _SDG_scale_score: SelectedScoreDto[] = []
   private _SDG_sustained_score: SelectedScoreDto[] = []
   private _SDGs: SDG[] = []
+  private _score: {name: string, value: number}[] = []
 
 
 
@@ -219,17 +220,26 @@ export class MasterDataService {
     ]
 
     this.relevance = [
-      {  name: "Relevant",value:2 },
-      {  name: "Possibly Relevant",value:1 },
-      {  name: "Not Relevant",value:0 },
+      {  name: "Relevant (2)",value:2 },
+      {  name: "Possibly Relevant (1)",value:1 },
+      {  name: "Not Relevant (0)",value:0 },
+    ]
+    this.score = [
+      {  name: "3 - Major",value:3 },
+      {  name: "2 - Moderate",value:2 },
+      {  name: "1 - Minor",value:1 },
+      {  name: "0 - None",value:0 },
+      {  name: "-1 - Minor Negative",value:-1 },
+      {  name: "-2 - Moderate Negative",value:-2 },
+      {  name: "-3 - Major Negative",value:-3 },
     ]
 
     this.likelihood = [
-      {  id: "0",value:0 },
-      {  id: "1",value:1 },
-      {  id: "2",value:2 },
-      {  id: "3",value:3 },
-      {  id: "4",value:4 },
+      {  id: "Very unlikely(0-10%)",value:0 },
+      {  id: "Unlikely(10-33%)",value:1  },
+      {  id: "Possible(33-66%)",value:2 },
+      {  id: "Likely(60-90%)",value:3 },
+      {  id: "Very likely(90-100%)",value:4 },
 
     ]
 
@@ -492,8 +502,15 @@ export class MasterDataService {
   get relevance (): { name: string; value: number }[] {
     return this._relevance;
   }
+  set score(value: { name: string; value: number }[]) {
+    this._score = value;
+  }
 
-  set likelihood(value: { id: string; value: number }[]) {
+  get score (): { name: string; value: number }[] {
+    return this._score;
+  }
+
+  set likelihood(value: { id: string; value: number}[]) {
     this._likelihood = value;
   }
 

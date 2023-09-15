@@ -54,6 +54,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   activeIndex2 :number=0;
   likelihood: any[] = [];
   relevance: any[] = [];
+  score: any[] = [];
   approach:number=0;
   instiTutionList : any = []
   investorQuestions:InvestorQuestions[]=[];
@@ -112,6 +113,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   ) { }
   async ngOnInit(): Promise<void> {
     this.categoryTabIndex =0;
+    this.approach=1
     
     this.isLikelihoodDisabled=true;
     this.isRelavanceDisabled=true;
@@ -120,6 +122,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.geographicalAreasCovered = this.masterDataService.level_of_implemetation;
     this.likelihood = this.masterDataService.likelihood;
     this.relevance = this.masterDataService.relevance;
+    this.score = this.masterDataService.score;
 
     this.assessmentMethods = this.masterDataService.assessment_method;
     this.assessmentApproach =this.masterDataService.assessment_approach2;
