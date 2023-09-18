@@ -272,7 +272,6 @@ export class CmSectionThreeComponent implements OnInit {
           let ch = new Characteristics()
           ch.id = q.characteristic.id
           res.characteristic = ch
-          console.log(char,char.relevance)
           res.relevance = char.relevance
           if (res.institution?.id){
             let inst = new Institution()
@@ -336,7 +335,7 @@ export class CmSectionThreeComponent implements OnInit {
 
     if (this.outcome?.length > 0){
       for await (let item of this.outcome) {
-        if (item.type === 'GHG'){
+        if (item.type === 'GHG' || item.type === 'ADAPTATION'){
           item.results.forEach((res:any) => {
             res.type = this.approach
             if (res.institution?.id){
