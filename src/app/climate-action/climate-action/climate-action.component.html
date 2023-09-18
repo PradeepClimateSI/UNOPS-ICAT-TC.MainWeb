@@ -9,10 +9,10 @@
         <div class="p-grid p-fluid col-sm-12">
           <div *ngIf="project.projectApprovalStatus ; else elseblock" class="mb-12">
             <h4 class="mt-4">{{ project.projectApprovalStatus.id == 1 ?'Accepted':project.projectApprovalStatus.id
-              == 5 ?'Accepted':editEntytyId > 0?'View':'Propose an'}} Intervention</h4>
+              == 5 ?'Accepted':editEntytyId > 0?'View ':'Propose an '}} Intervention</h4>
           </div>
           <ng-template #elseblock>
-           <h4>Propose anIntervention</h4>
+           <h4>Propose an Intervention</h4>
           </ng-template>
           <div class="p-2">
             <h6>Contact Details</h6>
