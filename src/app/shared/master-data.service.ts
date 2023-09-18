@@ -22,6 +22,7 @@ export class MasterDataService {
   private _tieres: {name: string, id: number}[] = []
   private _currencies: {name: string, id: number}[] = []
   private _assessment_type: {name: string, id: number}[] = []
+  private _sdg_answers: {name: string, id: number}[] = []
   private _assessment_approach: {name: string, id: number, code: string}[] = []
   private _impact_types: {name: string, id: number, code: string}[] = []
   private _int_cm_approaches: {name: string, id: number, code: string}[] = []
@@ -137,6 +138,11 @@ export class MasterDataService {
       { id: 2, name: "Ex-post" }
     ]
 
+    this.sdg_answers = [
+      { id: 1, name: "Yes" },
+      { id: 2, name: "No" }
+    ]
+
     this.assessment_approach = [
       { id: 1, name: "Direct", code: "DIRECT" },
       { id: 2, name: "Indirect", code: "INDIRECT" }
@@ -237,7 +243,7 @@ export class MasterDataService {
       { id: 1, name: "Direct" },
       { id: 2, name: "Indirect" },
 
-    ] 
+    ]
 
     this.GHG_scale_score = [
       {label: '3', code: '3', value: 3},
@@ -245,28 +251,28 @@ export class MasterDataService {
       {label: '1', code: '1', value: 1},
       {label: '0', code: '0', value: 0},
       {label: '-1', code: '-1', value: -1}
-    ] 
+    ]
     this.GHG_sustained_score = [
       {label: '3 - Expected impact of over x years on the selected scale', code: '3', value: 3},
       {label: '2 - Expected impact of x years on the selected scale', code: '2', value: 2},
       {label: '1 - Expected impact of x years on the selected scale', code: '1', value: 1},
       {label: '0 - No expected impact impact on the selected scale', code: '0', value: 0},
       {label: '-1 - Impact expected to reverse over time', code: '-1', value: -1}
-    ] 
+    ]
     this.SDG_scale_score = [
       {label: '3 - Material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the activity area', code: '3', value: 3},
       {label: '2 - Material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the activity area', code: '2', value: 2},
       {label: '1 - Material change of more than 5% of the baseline value of the indicator / set of indicators underpinning the SDG in the activity area', code: '1', value: 1},
       {label: '0 - No material change of the baseline value of the indicator / set of indicators underpinning the SDG in the activity area', code: '0', value: 0},
       {label: '-1 - Negative impact on the indicator / set of indicators underpinning the SDG in the activity area', code: '-1', value: -1},
-    ] 
+    ]
     this.SDG_sustained_score = [
       {label: '3 - Expected impact of over 15 years for the selected SDG in the activity area', code: '3', value: 3},
       {label: '2 - Expected impact of 11-15 years for the selected SDG in the activity area', code: '2', value: 2},
       {label: '1 - Expected impact of 0-10 years for the selected SDG in the activity area', code: '1', value: 1},
       {label: '0 - No expected impact impact for the selected SDG in the activity area', code: '0', value: 0},
       {label: '-1 - Impact expected to reverse over time', code: '-1', value: -1},
-    ] 
+    ]
     this.SDGs= [
       {name: 'No poverty', code: 'NO_POVERTY', scaleResult: [], sustainResult: []},
       {name: 'Zero hunger', code: 'ZERO_HUNGER', scaleResult: [], sustainResult: []},
@@ -285,7 +291,7 @@ export class MasterDataService {
       {name: 'Life on land', code: 'LIFE_ON_LAND', scaleResult: [], sustainResult: []},
       {name: 'Peace, justice and strong institutions', code: 'PEACE_JUSTICE_AND_STRING_INSTITUTIONS', scaleResult: [], sustainResult: []},
       {name: 'Partnerships for the goals', code: 'PARTNERSHIPS_FOR_THE_GOALS', scaleResult: [], sustainResult: []}
-    ] 
+    ]
 
 
   }
@@ -414,6 +420,14 @@ export class MasterDataService {
     return this._assessment_type;
   }
 
+  set sdg_answers(value: { name: string; id: number }[]) {
+    this._sdg_answers = value;
+  }
+
+  get sdg_answers(): { name: string; id: number }[] {
+    return this._sdg_answers;
+  }
+
   set assessment_approach(value: { name: string; id: number; code: string }[]) {
     this._assessment_approach = value;
   }
@@ -507,39 +521,39 @@ export class MasterDataService {
 
   get assessment_approach2 (): { name: string; id: number }[] {
     return this._assessment_approach;
-  } 
-  
+  }
+
   set GHG_scale_score(value: SelectedScoreDto[]) {
     this._GHG_scale_score = value;
   }
 
   get GHG_scale_score (): SelectedScoreDto[] {
     return this._GHG_scale_score;
-  } 
-  
+  }
+
   set GHG_sustained_score(value: SelectedScoreDto[]) {
     this._GHG_sustained_score = value;
   }
 
   get GHG_sustained_score (): SelectedScoreDto[] {
     return this._GHG_sustained_score;
-  } 
-  
+  }
+
   set SDG_scale_score(value: SelectedScoreDto[]) {
     this._SDG_scale_score = value;
   }
 
   get SDG_scale_score (): SelectedScoreDto[] {
     return this._SDG_scale_score;
-  } 
-  
+  }
+
   set SDG_sustained_score(value: SelectedScoreDto[]) {
     this._SDG_sustained_score = value;
   }
 
   get SDG_sustained_score (): SelectedScoreDto[] {
     return this._SDG_sustained_score;
-  } 
+  }
 
   set SDGs(value: SDG[]) {
     this._SDGs = value;
@@ -547,5 +561,5 @@ export class MasterDataService {
 
   get SDGs (): SDG[] {
     return this._SDGs;
-  } 
+  }
 }

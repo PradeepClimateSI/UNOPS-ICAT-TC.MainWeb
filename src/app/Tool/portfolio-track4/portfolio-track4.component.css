@@ -1,7 +1,7 @@
 .tooltip-container {
-  position: relative;
   display: inline-block;
-  margin-left: 5px; /* Adjust the margin as needed */
+  margin-left: 5px;
+  position: relative;
 }
 
 .tooltip-icon {
@@ -15,6 +15,7 @@
   color: #fff;
   font-weight: bold;
   cursor: pointer;
+  z-index: 1;
 }
 
 .tooltip-text {
@@ -24,11 +25,13 @@
   padding: 5px;
   border-radius: 5px;
   z-index: 1;
-  left: 30px; /* Adjust the distance from the icon as needed */
-  top: 0;
+  left: 30px;
+  top: -150%; /* Adjust the distance above the icon */
   opacity: 0;
+  pointer-events: none;
   transition: opacity 0.2s ease-in-out;
-  white-space: nowrap;
+  white-space: normal;
+  word-wrap: break-word;
 }
 
 .tooltip-container:hover .tooltip-text {

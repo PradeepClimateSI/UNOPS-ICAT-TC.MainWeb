@@ -10,6 +10,7 @@ import { Dropdown } from 'primeng/dropdown';
 import { environment } from 'environments/environment';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DomSanitizer } from '@angular/platform-browser';
 
 
 interface CharacteristicWeight {
@@ -36,6 +37,7 @@ export class PortfolioTrack4Component implements OnInit {
   sectorArray: Sector[] = [];
   impactArray: ImpactCovered[] = [];
   assessment_types: any[];
+  sdg_answers: any[];
   policies: ClimateAction[];
   isSavedAssessment: boolean = false;
   levelOfImplementation: any[] = [];
@@ -118,7 +120,8 @@ export class PortfolioTrack4Component implements OnInit {
     private investorToolControllerproxy: InvestorToolControllerServiceProxy,
     private router: Router,
     private instituionProxy: InstitutionControllerServiceProxy,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    public sanitizer: DomSanitizer
 
   ) {
     this.uploadUrl = environment.baseUrlAPI + '/investor-tool/upload-file'
@@ -166,6 +169,7 @@ export class PortfolioTrack4Component implements OnInit {
     this.assessment.assessment_method = 'Track 4'
 
     this.assessment_types = this.masterDataService.assessment_type;
+    this.sdg_answers = this.masterDataService.sdg_answers;
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;
     this.geographicalAreasCovered = this.masterDataService.level_of_implemetation;
     this.likelihood = this.masterDataService.likelihood;
@@ -518,6 +522,8 @@ export class PortfolioTrack4Component implements OnInit {
       }
       this.investorToolControllerproxy.createFinalAssessment2(data)
         .subscribe(_res => {
+
+          console.log("finalSentArray", data)
           console.log("res final", _res)
 
           console.log(_res)
@@ -770,6 +776,13 @@ export class PortfolioTrack4Component implements OnInit {
     }
 
     this.messageService.add({severity: 'info', summary: 'File Uploaded', detail: ''});
+  }
+
+   addNewline(text : any) {
+    if (!text) {
+      return '';
+    }
+    return text.replace(/--/g, '\n--');
   }
 }
 
