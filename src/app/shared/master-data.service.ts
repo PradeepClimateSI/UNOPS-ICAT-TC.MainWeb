@@ -235,11 +235,11 @@ export class MasterDataService {
     ]
 
     this.likelihood = [
-      {  id: "Very unlikely(0-10%)",value:0 },
-      {  id: "Unlikely(10-33%)",value:1  },
-      {  id: "Possible(33-66%)",value:2 },
-      {  id: "Likely(60-90%)",value:3 },
-      {  id: "Very likely(90-100%)",value:4 },
+      {  id: "Very unlikely (0-10%)",value:0 },
+      {  id: "Unlikely (10-33%)",value:1  },
+      {  id: "Possible (33-66%)",value:2 },
+      {  id: "Likely (60-90%)",value:3 },
+      {  id: "Very likely (90-100%)",value:4 },
 
     ]
 
