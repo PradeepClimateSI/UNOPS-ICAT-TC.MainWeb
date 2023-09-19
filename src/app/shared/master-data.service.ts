@@ -40,7 +40,11 @@ export class MasterDataService {
   private _SDG_sustained_score: SelectedScoreDto[] = []
   private _SDGs: SDG[] = []
   private _score: {name: string, value: number}[] = []
-
+  private _GHG_scale_score_macro: SelectedScoreDto[] = []
+  private _GHG_scale_score_medium: SelectedScoreDto[] = []
+  private _GHG_scale_score_micro: SelectedScoreDto[] = []
+  private _adaptation_scale_score: SelectedScoreDto[] = []
+  private _adaptation_sustained_score: SelectedScoreDto[] = []
 
 
   constructor() {
@@ -196,8 +200,8 @@ export class MasterDataService {
 
     this.level_of_implemetation = [
       { id: 1, name: "International" },
-      { id: 2, name: "National" },
-      { id: 3, name: "Sub-national" },
+      { id: 2, name: "National/sectorial" },
+      { id: 3, name: "Sub-national/sub-sectorial" },
 
     ]
 
@@ -330,6 +334,27 @@ export class MasterDataService {
       {name: 'Life on land', code: 'LIFE_ON_LAND', scaleResult: [], sustainResult: []},
       {name: 'Peace, justice and strong institutions', code: 'PEACE_JUSTICE_AND_STRING_INSTITUTIONS', scaleResult: [], sustainResult: []},
       {name: 'Partnerships for the goals', code: 'PARTNERSHIPS_FOR_THE_GOALS', scaleResult: [], sustainResult: []}
+    ] 
+    this.GHG_scale_score_macro = [
+      {label: '3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.1% of global emissions in the latest year for which data is available', code: '3', value: 3},
+      {label: '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.05% of global emissions in the latest year for which data is available', code: '2', value: 2},
+      {label: '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.01% of global emissions in the latest year for which data is available', code: '1', value: 1},
+      {label: '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) <0.1% of global emissions in the latest year for which data is available', code: '0', value: 0},
+      {label: '-3 - any emissions increase', code: '-3', value: -3}
+    ] 
+    this.GHG_scale_score_medium = [
+      {label: '3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >1% of national/sectoral emissions in the latest year for which data is available', code: '3', value: 3},
+      {label: '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.5-1% of national/sectoral emissions in the latest year for which data is available', code: '2', value: 2},
+      {label: '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.1-0.5% of national/sectoral emissions in the latest year for which data is available', code: '1', value: 1},
+      {label: '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) <0.1% of national/sectoral emissions in the latest year for which data is available', code: '0', value: 0},
+      {label: '-3 - any emissions increase', code: '-3', value: -3}
+    ] 
+    this.GHG_scale_score_micro = [
+      {label: '3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >5% of subnational/regional/municipal emissions in the latest year for which data is available', code: '3', value: 3},
+      {label: '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 1-5% of subnational/regional/municipal emissions in the latest year for which data is available', code: '2', value: 2},
+      {label: '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.5-1% of subnational/regional/municipal emissions in the latest year for which data is available', code: '1', value: 1},
+      {label: '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) less than 0.5% of subnational/regional/municipal emissions in the latest year for which data is available', code: '0', value: 0},
+      {label: '-3 - any emissions increase', code: '-3', value: -3}
     ] 
 
 
