@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
-import { AssessmentCMDetailControllerServiceProxy, ClimateAction, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { AssessmentCMDetailControllerServiceProxy, CMAssessmentAnswerControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, ClimateAction, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
 @Component({
@@ -11,10 +11,11 @@ import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
 export class CarbonMarketDashboardComponent implements OnInit {
 
   constructor(
-    private projectProxy: ProjectControllerServiceProxy,
+    // private projectProxy: ProjectControllerServiceProxy,
     private assessmentCMProxy:AssessmentCMDetailControllerServiceProxy,
-    private methassess : MethodologyAssessmentControllerServiceProxy,
-    private investorProxy: InvestorToolControllerServiceProxy,
+    // private methassess : MethodologyAssessmentControllerServiceProxy,
+    // private investorProxy: InvestorToolControllerServiceProxy,
+    private cmAssessmentQuestionProxy : CMAssessmentQuestionControllerServiceProxy,
   ) { }
 
  // @ViewChild('canvas', { static: false }) canvas: ElementRef;
@@ -60,6 +61,13 @@ CMPrerequiste: {
 
   pieChart2:any=[];
   loading:boolean=false;
+  tableData:{
+      assessment: number,
+      process_score: number,
+      outcome_score: number,
+      intervention: string
+    }[]=[]
+  
   ngOnInit(): void {
     // this.averageTCValue =58.05;
     const token = localStorage.getItem('ACCESS_TOKEN')!;
@@ -67,7 +75,11 @@ CMPrerequiste: {
     this.userRole = tokenPayload.role.code;
 
     this.tool = 'Carbon Market Tool';
-
+    this.cmAssessmentQuestionProxy.getDashboardData().subscribe((res) => {
+      this.tableData=res;
+      console.log("kkkkk : ", res)
+    })
+      //   console.log("kkkkk : ", res)
     // this.methassess.getTCForTool(this.tool).subscribe((res: any) => {
     //   console.log("kkkkk : ", res)
 
