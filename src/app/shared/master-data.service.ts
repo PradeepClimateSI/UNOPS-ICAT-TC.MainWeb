@@ -34,10 +34,14 @@ export class MasterDataService {
   private _assessment_approach2: {name: string, id: number}[] = []
   private _relevance: {name: string, value: number}[] = []
   private _likelihood: {id: string, value: number}[] = []
-  private _GHG_scale_score: SelectedScoreDto[] = []
+  private _GHG_scale_score_macro: SelectedScoreDto[] = []
+  private _GHG_scale_score_medium: SelectedScoreDto[] = []
+  private _GHG_scale_score_micro: SelectedScoreDto[] = []
   private _GHG_sustained_score: SelectedScoreDto[] = []
   private _SDG_scale_score: SelectedScoreDto[] = []
   private _SDG_sustained_score: SelectedScoreDto[] = []
+  private _adaptation_scale_score: SelectedScoreDto[] = []
+  private _adaptation_sustained_score: SelectedScoreDto[] = []
   private _SDGs: SDG[] = []
   private _score: {name: string, value: number}[] = []
 
@@ -249,34 +253,69 @@ export class MasterDataService {
 
     ] 
 
-    this.GHG_scale_score = [
-      {label: '3', code: '3', value: 3},
-      {label: '2', code: '2', value: 2},
-      {label: '1', code: '1', value: 1},
-      {label: '0', code: '0', value: 0},
-      {label: '-1', code: '-1', value: -1}
+    this.GHG_scale_score_macro = [
+      {label: '3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.1% of global emissions in the latest year for which data is available', code: '3', value: 3},
+      {label: '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.05% of global emissions in the latest year for which data is available', code: '2', value: 2},
+      {label: '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.01% of global emissions in the latest year for which data is available', code: '1', value: 1},
+      {label: '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) <0.1% of global emissions in the latest year for which data is available', code: '0', value: 0},
+      {label: '-3 - any emissions increase', code: '-3', value: -3}
+    ] 
+    this.GHG_scale_score_medium = [
+      {label: '3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >1% of national/sectoral emissions in the latest year for which data is available', code: '3', value: 3},
+      {label: '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.5-1% of national/sectoral emissions in the latest year for which data is available', code: '2', value: 2},
+      {label: '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.1-0.5% of national/sectoral emissions in the latest year for which data is available', code: '1', value: 1},
+      {label: '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) <0.1% of national/sectoral emissions in the latest year for which data is available', code: '0', value: 0},
+      {label: '-3 - any emissions increase', code: '-3', value: -3}
+    ] 
+    this.GHG_scale_score_micro = [
+      {label: '3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >5% of subnational/regional/municipal emissions in the latest year for which data is available', code: '3', value: 3},
+      {label: '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 1-5% of subnational/regional/municipal emissions in the latest year for which data is available', code: '2', value: 2},
+      {label: '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.5-1% of subnational/regional/municipal emissions in the latest year for which data is available', code: '1', value: 1},
+      {label: '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) less than 0.5% of subnational/regional/municipal emissions in the latest year for which data is available', code: '0', value: 0},
+      {label: '-3 - any emissions increase', code: '-3', value: -3}
     ] 
     this.GHG_sustained_score = [
-      {label: '3 - Expected impact of over x years on the selected scale', code: '3', value: 3},
-      {label: '2 - Expected impact of x years on the selected scale', code: '2', value: 2},
-      {label: '1 - Expected impact of x years on the selected scale', code: '1', value: 1},
-      {label: '0 - No expected impact impact on the selected scale', code: '0', value: 0},
-      {label: '-1 - Impact expected to reverse over time', code: '-1', value: -1}
+      {label: '3 - Expected positive impact of over 20 years on the selected scale', code: '3', value: 3},
+      {label: '2 - Expected positive impact of 11-20 years on the selected scale', code: '2', value: 2},
+      {label: '1 - Expected positive impact of 0-10 years on the selected scale', code: '1', value: 1},
+      {label: '0 - No expected impact on the selected scale', code: '0', value: 0},
+      {label: '-1 - Expected negative impact', code: '-1', value: -1}
     ] 
     this.SDG_scale_score = [
-      {label: '3 - Material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the activity area', code: '3', value: 3},
-      {label: '2 - Material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the activity area', code: '2', value: 2},
-      {label: '1 - Material change of more than 5% of the baseline value of the indicator / set of indicators underpinning the SDG in the activity area', code: '1', value: 1},
-      {label: '0 - No material change of the baseline value of the indicator / set of indicators underpinning the SDG in the activity area', code: '0', value: 0},
-      {label: '-1 - Negative impact on the indicator / set of indicators underpinning the SDG in the activity area', code: '-1', value: -1},
+      {label: '3 - Positive material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '3', value: 3},
+      {label: '2 - Positive material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '2', value: 2},
+      {label: '1 - Positive material change of more than 5% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '1', value: 1},
+      {label: '0 - No material change of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '0', value: 0},
+      {label: '-1 - Negative material change of more than 5% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '-1', value: -1},
+      {label: '-2 - Negative material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '-2', value: -2},
+      {label: '-3 - Negative material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '-3', value: -3},
     ] 
     this.SDG_sustained_score = [
-      {label: '3 - Expected impact of over 15 years for the selected SDG in the activity area', code: '3', value: 3},
-      {label: '2 - Expected impact of 11-15 years for the selected SDG in the activity area', code: '2', value: 2},
-      {label: '1 - Expected impact of 0-10 years for the selected SDG in the activity area', code: '1', value: 1},
-      {label: '0 - No expected impact impact for the selected SDG in the activity area', code: '0', value: 0},
-      {label: '-1 - Impact expected to reverse over time', code: '-1', value: -1},
+      {label: '3 - Expected positive impact of over 20 years on the selected scale', code: '3', value: 3},
+      {label: '2 - Expected positive impact of 11-20 years on the selected scale', code: '2', value: 2},
+      {label: '1 - Expected positive impact of 0-10 years on the selected scale', code: '1', value: 1},
+      {label: '0 - No expected impact on the selected scale', code: '0', value: 0},
+      {label: '-1 - Expected negative impact', code: '-1', value: -1},
     ] 
+
+    this.adaptation_scale_score = [
+      {label: '3 - adaptation co-benefit identified and impact is material (indicator value change from baseline to project scenario is above 5%).', code: '3', value: 3},
+      {label: '2 - adaptation co benefit identified but impact is not material (indicator value change from baseline to project scenario is below 5%).', code: '2', value: 2},
+      {label: '1 - adaptation co-benefit identified but not measured.).', code: '1', value: 1},
+      {label: '0 - no adaptation co-benefit', code: '0', value: 0},
+      {label: '-1 - maladaptation identified but not measured.', code: '-1', value: -1},
+      {label: '-2 - maladaptation identified but impact is not material (indicator value change from baseline to project scenario is below 5%).', code: '-2', value: -2},
+      {label: '-3 - maladaptation identified and impact is material (indicator value change from baseline to project scenario is above 5%). ', code: '-3', value: -3},
+    ]
+
+    this.adaptation_sustained_score = [
+      {label: '3 - Expected positive impact of over 20 years on the selected scale', code: '3', value: 3},
+      {label: '2 - Expected positive impact of 11-20 years on the selected scale', code: '2', value: 2},
+      {label: '1 - Expected positive impact of 0-10 years on the selected scale', code: '1', value: 1},
+      {label: '0 - No expected impact on the selected scale', code: '0', value: 0},
+      {label: '-1 - Expected negative impact', code: '-1', value: -1},
+    ]
+
     this.SDGs= [
       {name: 'No poverty', code: 'NO_POVERTY', scaleResult: [], sustainResult: []},
       {name: 'Zero hunger', code: 'ZERO_HUNGER', scaleResult: [], sustainResult: []},
@@ -526,12 +565,28 @@ export class MasterDataService {
     return this._assessment_approach;
   } 
   
-  set GHG_scale_score(value: SelectedScoreDto[]) {
-    this._GHG_scale_score = value;
+  set GHG_scale_score_macro(value: SelectedScoreDto[]) {
+    this._GHG_scale_score_macro = value;
   }
 
-  get GHG_scale_score (): SelectedScoreDto[] {
-    return this._GHG_scale_score;
+  get GHG_scale_score_macro (): SelectedScoreDto[] {
+    return this._GHG_scale_score_macro;
+  } 
+
+  set GHG_scale_score_medium(value: SelectedScoreDto[]) {
+    this._GHG_scale_score_medium = value;
+  }
+
+  get GHG_scale_score_medium (): SelectedScoreDto[] {
+    return this._GHG_scale_score_medium;
+  } 
+
+  set GHG_scale_score_micro(value: SelectedScoreDto[]) {
+    this._GHG_scale_score_micro = value;
+  }
+
+  get GHG_scale_score_micro (): SelectedScoreDto[] {
+    return this._GHG_scale_score_micro;
   } 
   
   set GHG_sustained_score(value: SelectedScoreDto[]) {
@@ -556,6 +611,22 @@ export class MasterDataService {
 
   get SDG_sustained_score (): SelectedScoreDto[] {
     return this._SDG_sustained_score;
+  } 
+
+  set adaptation_scale_score(value: SelectedScoreDto[]) {
+    this._adaptation_scale_score = value;
+  }
+
+  get adaptation_scale_score (): SelectedScoreDto[] {
+    return this._adaptation_scale_score;
+  } 
+  
+  set adaptation_sustained_score(value: SelectedScoreDto[]) {
+    this._adaptation_sustained_score = value;
+  }
+
+  get adaptation_sustained_score (): SelectedScoreDto[] {
+    return this._adaptation_sustained_score;
   } 
 
   set SDGs(value: SDG[]) {
