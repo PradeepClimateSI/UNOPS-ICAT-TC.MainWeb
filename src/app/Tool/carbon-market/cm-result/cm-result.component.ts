@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Assessment, AssessmentCMDetail, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CalculateDto, Characteristics, ClimateAction } from 'shared/service-proxies/service-proxies';
+import { Assessment, AssessmentCMDetail, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CMScoreDto, CalculateDto, Characteristics, ClimateAction } from 'shared/service-proxies/service-proxies';
 import * as XLSX from 'xlsx';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
@@ -23,11 +23,11 @@ export class CmResultComponent implements OnInit {
   results: any;
   criterias: any;
   keys: string[]
-  score: string
+  score: CMScoreDto = new CMScoreDto()
   expandedRows: any = {}
   isDownloading: boolean = false
-  processData:any;
-  outcomeData:{scale_GHGs:any[],sustained_GHGs:any[], scale_SDs:any[],sustained_SDs:any[]}={ scale_GHGs: [], sustained_GHGs: [], scale_SDs: [], sustained_SDs: [] };
+  processData:any = {};
+  outcomeData: { scale_GHGs: any[], sustained_GHGs: any[], scale_SDs: any[], sustained_SDs: any[], scale_adaptation: any[], sustained_adaptation: any[] } = { scale_GHGs: [], sustained_GHGs: [], scale_SDs: [], sustained_SDs: [], scale_adaptation:[], sustained_adaptation: [] };
   fileServerURL:any
   SDGs: SDG[]
   scale_GHG_score_macro:SelectedScoreDto[]
@@ -108,7 +108,7 @@ export class CmResultComponent implements OnInit {
       req.assessmentId = this.assessment.id
 
       let response = await this.cMAssessmentQuestionControllerServiceProxy.calculateResult(req).toPromise()
-      //this.score = response.score
+      this.score = response
     }
   }
 
@@ -229,7 +229,7 @@ export class CmResultComponent implements OnInit {
         _data['Starting Situation'] = ele.starting_situation
         _data['Expected Impact'] = ele.expected_impacts
         let score = this.getOutcomeScores(ele.outcome_score,'scale_GHGs', ele.characteristic)
-        _data.Score = score ? score : '-'
+        _data.Score = score ? score.toString() : '-'
         _data.Justification = ele.justification
         return _data
       })
@@ -241,7 +241,7 @@ export class CmResultComponent implements OnInit {
         _data['Starting Situation'] = ele.starting_situation
         _data['Expected Impact'] = ele.expected_impacts
         let score = this.getOutcomeScores(ele.outcome_score,'sustained_GHGs', ele.characteristic)
-        _data.Score = score ? score : '-'
+        _data.Score = score ? score.toString() : '-'
         _data.Justification = ele.justification
         return _data
       })
@@ -254,7 +254,7 @@ export class CmResultComponent implements OnInit {
         _data['Starting Situation'] = ele.starting_situation
         _data['Expected Impact'] = ele.expected_impacts
         let score = this.getOutcomeScores(ele.outcome_score,'scale_SDs', ele.characteristic)
-        _data.Score = score ? score : '-'
+        _data.Score = score ? score.toString() : '-'
         _data.Justification = ele.justification
         return _data
       })
@@ -267,7 +267,7 @@ export class CmResultComponent implements OnInit {
         _data['Starting Situation'] = ele.starting_situation
         _data['Expected Impact'] = ele.expected_impacts
         let score = this.getOutcomeScores(ele.outcome_score,'sustained_SDs', ele.characteristic)
-        _data.Score = score ? score : '-'
+        _data.Score = score ? score.toString() : '-'
         _data.Justification = ele.justification
         return _data
       })
@@ -318,21 +318,21 @@ export class CmResultComponent implements OnInit {
     if (code) {
       if (category == 'scale_GHGs') {
         if (characteristic.code === 'MACRO_LEVEL') {
-          return (this.scale_GHG_score_macro.find(o => o.code === code))?.label
+          return (this.scale_GHG_score_macro.find(o => o.code === code))?.value
         } else if (characteristic.code === 'MEDIUM_LEVEL') {
-          return (this.scale_GHG_score_medium.find(o => o.code === code))?.label
+          return (this.scale_GHG_score_medium.find(o => o.code === code))?.value
         } else {
-          return (this.scale_GHG_score_micro.find(o => o.code === code))?.label
+          return (this.scale_GHG_score_micro.find(o => o.code === code))?.value
         }
       }
       else if (category == 'sustained_GHGs') {
-        return (this.sustained_GHG_score.find(o => o.code === code))?.label
+        return (this.sustained_GHG_score.find(o => o.code === code))?.value
       }
       else if (category == 'scale_SDs') {
-        return (this.scale_SD_score.find(o => o.code === code))?.label
+        return (this.scale_SD_score.find(o => o.code === code))?.value
       }
       else if (category == 'sustained_SDs') {
-        return (this.sustained_SD_score.find(o => o.code === code))?.label
+        return (this.sustained_SD_score.find(o => o.code === code))?.value
       }
       else {
         return '-'
@@ -342,18 +342,20 @@ export class CmResultComponent implements OnInit {
     }
   }
 
-  changeOutcomeCharacteristicsName(name:string){
-    if(name=='Long term (>15 years)'){
-      return 'Macro Level';
-    }
-    else if(name=='Medium term (5-15 years)'){
-      return 'Medium Level'
-
-
-    }else if(name=='Short Term (<5 years)'){
-      return 'Micro Level'
-
-    }else{
+  changeOutcomeCharacteristicsName(name: string) {
+    if (name == 'Long term (>15 years)') {
+      return 'International Level';
+    } else if (name == 'Medium term (5-15 years)') {
+      return 'National/Sector Level'
+    } else if (name == 'Short Term (<5 years)') {
+      return 'Subnational/ subsectorial'
+    } else if (name === 'Macro Level') {
+      return 'International Level';
+    } else if (name === 'Medium Level') {
+      return 'National/Sector Level'
+    } else if (name === 'Micro Level') {
+      return 'Subnational/ subsectorial'
+    } else {
       return name;
     }
   }
