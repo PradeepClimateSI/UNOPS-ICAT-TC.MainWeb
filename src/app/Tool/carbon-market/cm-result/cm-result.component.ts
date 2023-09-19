@@ -38,6 +38,33 @@ export class CmResultComponent implements OnInit {
   sustained_SD_score:SelectedScoreDto[]
   relevances: any
 
+  xData = [
+    {label: '3 - Major', value: 3},
+    {label: '2 - Moderate', value: 2},
+    {label: '1 - Minor', value: 1},
+    {label: '0 - None', value: 0},
+    {label: '-1 - Minor Negative', value: -1},
+    {label: '-2 - Moderate Negative', value: -2},
+    {label: '-3 - Major Negative', value: -3}
+  ]
+
+  yData = [
+    {label: '4 - Very likely (90-100%)', value: 4},
+    {label: '3 - Likely (60-90%)', value: 3},
+    {label: '2 - Possible (33-66%)', value: 2},
+    {label: '1 - Unlikely (10-33%)', value: 1},
+    {label: '0 - Very Unlikely (0-10%)', value: 0}
+  ]
+
+  // heatmapData = [
+  //   ['Not at all', 'Major negative outcome (90-100%)'],
+  //   ['Minimally', 'Negative outcome (70-90%)'],
+  //   ['Moderately', 'Mixed outcome (50-70%)'],
+  //   ['Substantially', 'Positive outcome (30-50%)'],
+  //   ['Fully', 'Major positive outcome (0-30%)'],
+  // ];
+
+
   constructor(
     private route: ActivatedRoute,
     private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
@@ -85,6 +112,43 @@ export class CmResultComponent implements OnInit {
       })
     })
 
+  }
+
+  getBackgroundColor(value: number): string {
+    switch (value) {
+      case -3:
+        return '#ec6665';
+      case -2:
+        return '#ed816c';
+      case -1:
+        return '#f19f70';
+      case 0:
+        return '#f4b979';
+      case 1:
+        return '#f9d57f';
+      case 2:
+        return '#fcf084';
+      case 3:
+        return '#e0e885';
+      case 4:
+        return '#c1e083';
+      case 5:
+        return '#a3d481';
+      case 6:
+        return '#84cc80';
+      case 7:
+        return '#65c17e';
+      default:
+        return 'white';
+    }
+  }
+
+  getIntervention(x:number, y: number){
+    if (this.score.process_score === y && this.score.outcome_score.outcome_score === x){
+      return true
+    } else {
+      return false
+    }
   }
 
   async getResult() {
