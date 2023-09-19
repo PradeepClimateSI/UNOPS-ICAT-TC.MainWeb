@@ -190,7 +190,9 @@
 
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="interventionID">Intervention ID*</label>
+                  <label for="interventionID">Intervention ID*</label> <div type="button" class="pi pi-info-circle ml-10"
+                  pTooltip="Unique project ID/number identifying
+                  the policy/action/investment"></div>
                   <input [disabled]="editEntytyId > 0" type="text" maxlength="50" placeholder="ID of the intervention"
                     #interventionID="ngModel" name="interventionID" pInputText
                     [(ngModel)]="project.intervention_id" [ngModelOptions]="{ standalone: false }"
