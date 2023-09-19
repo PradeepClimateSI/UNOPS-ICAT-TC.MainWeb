@@ -34,14 +34,10 @@ export class MasterDataService {
   private _assessment_approach2: {name: string, id: number}[] = []
   private _relevance: {name: string, value: number}[] = []
   private _likelihood: {id: string, value: number}[] = []
-  private _GHG_scale_score_macro: SelectedScoreDto[] = []
-  private _GHG_scale_score_medium: SelectedScoreDto[] = []
-  private _GHG_scale_score_micro: SelectedScoreDto[] = []
+  private _GHG_scale_score: SelectedScoreDto[] = []
   private _GHG_sustained_score: SelectedScoreDto[] = []
   private _SDG_scale_score: SelectedScoreDto[] = []
   private _SDG_sustained_score: SelectedScoreDto[] = []
-  private _adaptation_scale_score: SelectedScoreDto[] = []
-  private _adaptation_sustained_score: SelectedScoreDto[] = []
   private _SDGs: SDG[] = []
   private _score: {name: string, value: number}[] = []
 
@@ -200,8 +196,8 @@ export class MasterDataService {
 
     this.level_of_implemetation = [
       { id: 1, name: "International" },
-      { id: 2, name: "National/sectorial" },
-      { id: 3, name: "Sub-national/sub-sectorial" },
+      { id: 2, name: "National" },
+      { id: 3, name: "Sub-national" },
 
     ]
 
@@ -273,14 +269,14 @@ export class MasterDataService {
       {label: '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.5-1% of subnational/regional/municipal emissions in the latest year for which data is available', code: '1', value: 1},
       {label: '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) less than 0.5% of subnational/regional/municipal emissions in the latest year for which data is available', code: '0', value: 0},
       {label: '-3 - any emissions increase', code: '-3', value: -3}
-    ] 
+    ]
     this.GHG_sustained_score = [
       {label: '3 - Expected positive impact of over 20 years on the selected scale', code: '3', value: 3},
       {label: '2 - Expected positive impact of 11-20 years on the selected scale', code: '2', value: 2},
       {label: '1 - Expected positive impact of 0-10 years on the selected scale', code: '1', value: 1},
       {label: '0 - No expected impact on the selected scale', code: '0', value: 0},
       {label: '-1 - Expected negative impact', code: '-1', value: -1}
-    ] 
+    ]
     this.SDG_scale_score = [
       {label: '3 - Positive material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '3', value: 3},
       {label: '2 - Positive material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '2', value: 2},
@@ -289,7 +285,7 @@ export class MasterDataService {
       {label: '-1 - Negative material change of more than 5% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '-1', value: -1},
       {label: '-2 - Negative material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '-2', value: -2},
       {label: '-3 - Negative material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '-3', value: -3},
-    ] 
+    ]
     this.SDG_sustained_score = [
       {label: '3 - Expected positive impact of over 20 years on the selected scale', code: '3', value: 3},
       {label: '2 - Expected positive impact of 11-20 years on the selected scale', code: '2', value: 2},
@@ -563,8 +559,8 @@ export class MasterDataService {
 
   get assessment_approach2 (): { name: string; id: number }[] {
     return this._assessment_approach;
-  } 
-  
+  }
+
   set GHG_scale_score_macro(value: SelectedScoreDto[]) {
     this._GHG_scale_score_macro = value;
   }
@@ -587,8 +583,8 @@ export class MasterDataService {
 
   get GHG_scale_score_micro (): SelectedScoreDto[] {
     return this._GHG_scale_score_micro;
-  } 
-  
+  }
+
   set GHG_sustained_score(value: SelectedScoreDto[]) {
     this._GHG_sustained_score = value;
   }
@@ -611,7 +607,7 @@ export class MasterDataService {
 
   get SDG_sustained_score (): SelectedScoreDto[] {
     return this._SDG_sustained_score;
-  } 
+  }
 
   set adaptation_scale_score(value: SelectedScoreDto[]) {
     this._adaptation_scale_score = value;
