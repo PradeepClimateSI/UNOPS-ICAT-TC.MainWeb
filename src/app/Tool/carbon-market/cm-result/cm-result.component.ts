@@ -26,7 +26,7 @@ export class CmResultComponent implements OnInit {
   score: string
   expandedRows: any = {}
   isDownloading: boolean = false
-  processData:{technology:any[],incentives:any[], norms:any[],}={ technology: [], incentives: [], norms: [] };
+  processData:any;
   outcomeData:{scale_GHGs:any[],sustained_GHGs:any[], scale_SDs:any[],sustained_SDs:any[]}={ scale_GHGs: [], sustained_GHGs: [], scale_SDs: [], sustained_SDs: [] };
   fileServerURL:any
   SDGs: SDG[]
@@ -36,118 +36,7 @@ export class CmResultComponent implements OnInit {
   sustained_GHG_score:SelectedScoreDto[]
   scale_SD_score:SelectedScoreDto[]
   sustained_SD_score:SelectedScoreDto[]
-
-  tableCategories = [{name: 'Technology'}, {name: 'Technology 1'}]
-
-  processTableData = [
-    {
-      name: 'Technology',
-      characteristic: [
-        {
-          name: 'R&D',
-          relevance: 'Relevant',
-          questions: [
-            {
-              question: 'Question 1',
-              weight: 12,
-              score: 2
-            },
-            {
-              question: 'Question 2',
-              weight: 12,
-              score: 2
-            },
-          ]
-        },
-        {
-          name: 'R&D 2',
-          relevance: 'Relevant 2',
-          questions: [
-            {
-              question: 'Question 1',
-              weight: 12,
-              score: 2
-            },
-            {
-              question: 'Question 2',
-              weight: 12,
-              score: 2
-            },
-          ]
-        },
-        {
-          name: 'R&D 3',
-          relevance: 'Relevant 3',
-          questions: [
-            {
-              question: 'Question 1',
-              weight: 12,
-              score: 2
-            },
-            {
-              question: 'Question 2',
-              weight: 12,
-              score: 2
-            },
-          ]
-        }
-      ]
-    },
-    {
-      name: 'Technology 2',
-      characteristic: [
-        {
-          name: 'R&D',
-          relevance: 'Relevant',
-          questions: [
-            {
-              question: 'Question 1',
-              weight: 12,
-              score: 2
-            },
-            {
-              question: 'Question 2',
-              weight: 12,
-              score: 2
-            },
-          ]
-        },
-        {
-          name: 'R&D 2',
-          relevance: 'Relevant 2',
-          questions: [
-            {
-              question: 'Question 1',
-              weight: 12,
-              score: 2
-            },
-            {
-              question: 'Question 2',
-              weight: 12,
-              score: 2
-            },
-          ]
-        },
-        {
-          name: 'R&D 3',
-          relevance: 'Relevant 3',
-          questions: [
-            {
-              question: 'Question 1',
-              weight: 12,
-              score: 2
-            },
-            {
-              question: 'Question 2',
-              weight: 12,
-              score: 2
-            },
-          ]
-        }
-      ]
-    }
-  ]
-
+  relevances: any
 
   constructor(
     private route: ActivatedRoute,
@@ -171,6 +60,7 @@ export class CmResultComponent implements OnInit {
       this.sustained_GHG_score=this.masterDataService.GHG_sustained_score;
       this.scale_SD_score =this.masterDataService.SDG_scale_score;
       this.sustained_SD_score=this.masterDataService.SDG_sustained_score;
+      this.relevances = this.masterDataService.relevance
 
       this.assessmentCMDetail = await this.assessmentCMDetailControllerServiceProxy.getAssessmentCMDetailByAssessmentId(assessmentId).toPromise()
       // let types: any = this.assessmentCMDetail.impact_types?.split(',')
@@ -296,7 +186,7 @@ export class CmResultComponent implements OnInit {
   mapProcessData(){
     let data = new ProcessData()
     if (this.processData.technology.length !== 0){
-      data.technology = this.processData.technology.map(ele => {
+      data.technology = this.processData.technology.map((ele: { characteristic: string; question: string; score: number; justification: string; }) => {
         let _data = new ProcessTableData()
         _data.Characteristic = ele.characteristic
         _data.Question = ele.question
@@ -307,7 +197,7 @@ export class CmResultComponent implements OnInit {
     }
 
     if (this.processData.incentives.length !== 0){
-      data.incentives = this.processData.incentives.map(ele => {
+      data.incentives = this.processData.incentives.map((ele: { characteristic: string; question: string; score: number; justification: string; }) => {
         let _data = new ProcessTableData()
         _data.Characteristic = ele.characteristic
         _data.Question = ele.question
@@ -317,7 +207,7 @@ export class CmResultComponent implements OnInit {
       })
     }
     if (this.processData.norms.length !== 0){
-      data.norms = this.processData.norms.map(ele => {
+      data.norms = this.processData.norms.map((ele: { characteristic: string; question: string; score: number; justification: string; }) => {
         let _data = new ProcessTableData()
         _data.Characteristic = ele.characteristic
         _data.Question = ele.question
@@ -466,6 +356,10 @@ export class CmResultComponent implements OnInit {
     }else{
       return name;
     }
+  }
+
+  getRelevance(relevance: number) {
+    return this.relevances.find((o: any) => o.value === +relevance)?.name
   }
 }
 

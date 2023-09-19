@@ -56,27 +56,27 @@
                 <ng-template pTemplate="body" let-rowData>
                     <tr>
                         <td rowspan="3">Relevance</td>
-                        <ng-container *ngFor="let data of processTableData">
+                        <ng-container *ngFor="let data of processData.data">
                             <td [attr.colspan]="data.characteristic.length*3" >{{data.name}}</td>
                         </ng-container>
                     </tr>
                     <tr>
-                        <ng-container *ngFor="let cat of processTableData">
+                        <ng-container *ngFor="let cat of processData.data">
                             <ng-container *ngFor="let data of cat.characteristic">
                                 <td  colspan="3">{{data.name}}</td>
                             </ng-container>
                         </ng-container>
                     </tr>
                     <tr>
-                        <ng-container *ngFor="let cat of processTableData">
+                        <ng-container *ngFor="let cat of processData.data">
                             <ng-container *ngFor="let data of cat.characteristic">
-                                <td  colspan="3">{{data.relevance}}</td>
+                                <td  colspan="3">{{getRelevance(data.relevance)}}</td>
                             </ng-container>
                         </ng-container>
                     </tr>
                     <tr>
-                        <td rowspan="5">Score</td>
-                        <ng-container *ngFor="let cat of processTableData">
+                        <td rowspan="processData.guidingQuestions.length + 1">Score</td>
+                        <ng-container *ngFor="let cat of processData.data">
                             <ng-container *ngFor="let data of cat.characteristic">
                                 <td>Guiding Question</td>
                                 <td>Weight</td>
@@ -84,17 +84,18 @@
                             </ng-container>
                         </ng-container>
                     </tr>
-                        <ng-container *ngFor="let cat of processTableData">
-                            <tr>
+                    <ng-container *ngFor="let question of processData.guidingQuestions">
+                        <tr>
+                            <td></td>
+                            <ng-container *ngFor="let cat of processData.data">
                                 <ng-container *ngFor="let data of cat.characteristic">
-                                    <ng-container *ngFor="let question of data.questions">
-                                        <td>{{question.question}}</td>
-                                        <td>{{question.weight}}</td>
-                                        <td>{{question.score}}</td>
-                                    </ng-container>
+                                    <td>{{question[data.name + 'question']}}</td>
+                                    <td>{{question[data.name + 'weight']}}</td>
+                                    <td>{{question[data.name + 'score']}}</td>
                                 </ng-container>
-                            </tr>
-                        </ng-container>
+                            </ng-container>
+                        </tr>
+                    </ng-container>
                 </ng-template>
             </p-table>
             <br>
