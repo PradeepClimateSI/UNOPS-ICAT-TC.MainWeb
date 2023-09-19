@@ -22,6 +22,7 @@ export class MasterDataService {
   private _tieres: {name: string, id: number}[] = []
   private _currencies: {name: string, id: number}[] = []
   private _assessment_type: {name: string, id: number}[] = []
+  private _sdg_answers: {name: string, id: number}[] = []
   private _assessment_approach: {name: string, id: number, code: string}[] = []
   private _impact_types: {name: string, id: number, code: string}[] = []
   private _int_cm_approaches: {name: string, id: number, code: string}[] = []
@@ -34,6 +35,9 @@ export class MasterDataService {
   private _assessment_approach2: {name: string, id: number}[] = []
   private _relevance: {name: string, value: number}[] = []
   private _likelihood: {id: string, value: number}[] = []
+  private _outcomeScaleScore: {id: string, value: number}[] = []
+  private _outcomeSustainedScore: {id: string, value: number}[] = []
+  private _GHG_scale_score: SelectedScoreDto[] = []
   private _GHG_scale_score_macro: SelectedScoreDto[] = []
   private _GHG_scale_score_medium: SelectedScoreDto[] = []
   private _GHG_scale_score_micro: SelectedScoreDto[] = []
@@ -43,6 +47,7 @@ export class MasterDataService {
   private _adaptation_scale_score: SelectedScoreDto[] = []
   private _adaptation_sustained_score: SelectedScoreDto[] = []
   private _SDGs: SDG[] = []
+  private _score: {name: string, value: number}[] = []
 
 
 
@@ -141,6 +146,11 @@ export class MasterDataService {
       { id: 2, name: "Ex-post" }
     ]
 
+    this.sdg_answers = [
+      { id: 1, name: "Yes" },
+      { id: 2, name: "No" }
+    ]
+
     this.assessment_approach = [
       { id: 1, name: "Direct", code: "DIRECT" },
       { id: 2, name: "Indirect", code: "INDIRECT" }
@@ -199,8 +209,8 @@ export class MasterDataService {
 
     this.level_of_implemetation = [
       { id: 1, name: "International" },
-      { id: 2, name: "National" },
-      { id: 3, name: "Sub-national" },
+      { id: 2, name: "National/sectorial" },
+      { id: 3, name: "Sub-national/sub-sectorial" },
 
     ]
 
@@ -223,25 +233,54 @@ export class MasterDataService {
     ]
 
     this.relevance = [
-      {  name: "Relevant",value:2 },
-      {  name: "Possibly Relevant",value:1 },
-      {  name: "Not Relevant",value:0 },
+      {  name: "Relevant (2)",value:2 },
+      {  name: "Possibly Relevant (1)",value:1 },
+      {  name: "Not Relevant (0)",value:0 },
+    ]
+    this.score = [
+      {  name: "3 - Major",value:3 },
+      {  name: "2 - Moderate",value:2 },
+      {  name: "1 - Minor",value:1 },
+      {  name: "0 - None",value:0 },
+      {  name: "-1 - Minor Negative",value:-1 },
+      {  name: "-2 - Moderate Negative",value:-2 },
+      {  name: "-3 - Major Negative",value:-3 },
     ]
 
     this.likelihood = [
-      {  id: "0",value:0 },
-      {  id: "1",value:1 },
-      {  id: "2",value:2 },
-      {  id: "3",value:3 },
-      {  id: "4",value:4 },
+      {  id: "Very unlikely (0-10%)",value:0 },
+      {  id: "Unlikely (10-33%)",value:1  },
+      {  id: "Possible (33-66%)",value:2 },
+      {  id: "Likely (60-90%)",value:3 },
+      {  id: "Very likely (90-100%)",value:4 },
 
+    ]
+
+    this.outcomeScaleScore = [
+      {  id: "3 - Major",value:3 },
+      {  id: "2 - Moderate",value:2  },
+      {  id: "1 - Minor",value:1 },
+      {  id: "0 - None",value:0 },
+      {  id: "-1 - Minor Negative",value:-1 },
+      {  id: "-2 - Moderate Negative",value:-2 },
+      {  id: "-3 - Major Negative",value:-3 },
+
+    ]
+
+    this.outcomeSustainedScore = [
+      {  id: "Very likely (90-100%)",value:3 },
+      {  id: "Likely (60-90%)",value:2  },
+      {  id: "Possible (33-66%)",value:1 },
+      {  id: "Less likely (10-33%)",value:0 },
+      {  id: "Unlikely (0-10%)",value:-1 },
     ]
 
     this.assessment_approach2 = [
       { id: 1, name: "Direct" },
       { id: 2, name: "Indirect" },
 
-    ] 
+    ]
+
 
     this.GHG_scale_score_macro = [
       {label: '3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.1% of global emissions in the latest year for which data is available', code: '3', value: 3},
@@ -249,28 +288,28 @@ export class MasterDataService {
       {label: '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.01% of global emissions in the latest year for which data is available', code: '1', value: 1},
       {label: '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) <0.1% of global emissions in the latest year for which data is available', code: '0', value: 0},
       {label: '-3 - any emissions increase', code: '-3', value: -3}
-    ] 
+    ]
     this.GHG_scale_score_medium = [
       {label: '3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >1% of national/sectoral emissions in the latest year for which data is available', code: '3', value: 3},
       {label: '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.5-1% of national/sectoral emissions in the latest year for which data is available', code: '2', value: 2},
       {label: '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.1-0.5% of national/sectoral emissions in the latest year for which data is available', code: '1', value: 1},
       {label: '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) <0.1% of national/sectoral emissions in the latest year for which data is available', code: '0', value: 0},
       {label: '-3 - any emissions increase', code: '-3', value: -3}
-    ] 
+    ]
     this.GHG_scale_score_micro = [
       {label: '3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >5% of subnational/regional/municipal emissions in the latest year for which data is available', code: '3', value: 3},
       {label: '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 1-5% of subnational/regional/municipal emissions in the latest year for which data is available', code: '2', value: 2},
       {label: '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.5-1% of subnational/regional/municipal emissions in the latest year for which data is available', code: '1', value: 1},
       {label: '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) less than 0.5% of subnational/regional/municipal emissions in the latest year for which data is available', code: '0', value: 0},
       {label: '-3 - any emissions increase', code: '-3', value: -3}
-    ] 
+    ]
     this.GHG_sustained_score = [
       {label: '3 - Expected positive impact of over 20 years on the selected scale', code: '3', value: 3},
       {label: '2 - Expected positive impact of 11-20 years on the selected scale', code: '2', value: 2},
       {label: '1 - Expected positive impact of 0-10 years on the selected scale', code: '1', value: 1},
       {label: '0 - No expected impact on the selected scale', code: '0', value: 0},
       {label: '-1 - Expected negative impact', code: '-1', value: -1}
-    ] 
+    ]
     this.SDG_scale_score = [
       {label: '3 - Positive material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '3', value: 3},
       {label: '2 - Positive material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '2', value: 2},
@@ -279,14 +318,14 @@ export class MasterDataService {
       {label: '-1 - Negative material change of more than 5% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '-1', value: -1},
       {label: '-2 - Negative material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '-2', value: -2},
       {label: '-3 - Negative material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '-3', value: -3},
-    ] 
+    ]
     this.SDG_sustained_score = [
       {label: '3 - Expected positive impact of over 20 years on the selected scale', code: '3', value: 3},
       {label: '2 - Expected positive impact of 11-20 years on the selected scale', code: '2', value: 2},
       {label: '1 - Expected positive impact of 0-10 years on the selected scale', code: '1', value: 1},
       {label: '0 - No expected impact on the selected scale', code: '0', value: 0},
       {label: '-1 - Expected negative impact', code: '-1', value: -1},
-    ] 
+    ]
 
     this.adaptation_scale_score = [
       {label: '3 - adaptation co-benefit identified and impact is material (indicator value change from baseline to project scenario is above 5%).', code: '3', value: 3},
@@ -324,7 +363,7 @@ export class MasterDataService {
       {name: 'Life on land', code: 'LIFE_ON_LAND', scaleResult: [], sustainResult: []},
       {name: 'Peace, justice and strong institutions', code: 'PEACE_JUSTICE_AND_STRING_INSTITUTIONS', scaleResult: [], sustainResult: []},
       {name: 'Partnerships for the goals', code: 'PARTNERSHIPS_FOR_THE_GOALS', scaleResult: [], sustainResult: []}
-    ] 
+    ]
 
 
   }
@@ -453,6 +492,14 @@ export class MasterDataService {
     return this._assessment_type;
   }
 
+  set sdg_answers(value: { name: string; id: number }[]) {
+    this._sdg_answers = value;
+  }
+
+  get sdg_answers(): { name: string; id: number }[] {
+    return this._sdg_answers;
+  }
+
   set assessment_approach(value: { name: string; id: number; code: string }[]) {
     this._assessment_approach = value;
   }
@@ -531,13 +578,36 @@ export class MasterDataService {
   get relevance (): { name: string; value: number }[] {
     return this._relevance;
   }
+  set score(value: { name: string; value: number }[]) {
+    this._score = value;
+  }
 
-  set likelihood(value: { id: string; value: number }[]) {
+  get score (): { name: string; value: number }[] {
+    return this._score;
+  }
+
+  set likelihood(value: { id: string; value: number}[]) {
     this._likelihood = value;
   }
 
   get likelihood (): { id: string; value: number }[] {
     return this._likelihood;
+  }
+
+  set outcomeScaleScore(value: { id: string; value: number}[]) {
+    this._outcomeScaleScore = value;
+  }
+
+  get outcomeScaleScore (): { id: string; value: number }[] {
+    return this._outcomeScaleScore;
+  }
+
+  set outcomeSustainedScore(value: { id: string; value: number}[]) {
+    this._outcomeSustainedScore = value;
+  }
+
+  get outcomeSustainedScore (): { id: string; value: number }[] {
+    return this._outcomeSustainedScore;
   }
 
   set assessment_approach2(value: { name: string; id: number }[]) {
@@ -546,15 +616,15 @@ export class MasterDataService {
 
   get assessment_approach2 (): { name: string; id: number }[] {
     return this._assessment_approach;
-  } 
-  
+  }
+
   set GHG_scale_score_macro(value: SelectedScoreDto[]) {
     this._GHG_scale_score_macro = value;
   }
 
   get GHG_scale_score_macro (): SelectedScoreDto[] {
     return this._GHG_scale_score_macro;
-  } 
+  }
 
   set GHG_scale_score_medium(value: SelectedScoreDto[]) {
     this._GHG_scale_score_medium = value;
@@ -562,7 +632,7 @@ export class MasterDataService {
 
   get GHG_scale_score_medium (): SelectedScoreDto[] {
     return this._GHG_scale_score_medium;
-  } 
+  }
 
   set GHG_scale_score_micro(value: SelectedScoreDto[]) {
     this._GHG_scale_score_micro = value;
@@ -570,31 +640,31 @@ export class MasterDataService {
 
   get GHG_scale_score_micro (): SelectedScoreDto[] {
     return this._GHG_scale_score_micro;
-  } 
-  
+  }
+
   set GHG_sustained_score(value: SelectedScoreDto[]) {
     this._GHG_sustained_score = value;
   }
 
   get GHG_sustained_score (): SelectedScoreDto[] {
     return this._GHG_sustained_score;
-  } 
-  
+  }
+
   set SDG_scale_score(value: SelectedScoreDto[]) {
     this._SDG_scale_score = value;
   }
 
   get SDG_scale_score (): SelectedScoreDto[] {
     return this._SDG_scale_score;
-  } 
-  
+  }
+
   set SDG_sustained_score(value: SelectedScoreDto[]) {
     this._SDG_sustained_score = value;
   }
 
   get SDG_sustained_score (): SelectedScoreDto[] {
     return this._SDG_sustained_score;
-  } 
+  }
 
   set adaptation_scale_score(value: SelectedScoreDto[]) {
     this._adaptation_scale_score = value;
@@ -602,15 +672,15 @@ export class MasterDataService {
 
   get adaptation_scale_score (): SelectedScoreDto[] {
     return this._adaptation_scale_score;
-  } 
-  
+  }
+
   set adaptation_sustained_score(value: SelectedScoreDto[]) {
     this._adaptation_sustained_score = value;
   }
 
   get adaptation_sustained_score (): SelectedScoreDto[] {
     return this._adaptation_sustained_score;
-  } 
+  }
 
   set SDGs(value: SDG[]) {
     this._SDGs = value;
@@ -618,5 +688,5 @@ export class MasterDataService {
 
   get SDGs (): SDG[] {
     return this._SDGs;
-  } 
+  }
 }

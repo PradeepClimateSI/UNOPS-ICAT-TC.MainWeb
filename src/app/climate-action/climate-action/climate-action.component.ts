@@ -1743,7 +1743,7 @@ toDownload() {
   }, 1);
 }
 
-  barriersNameArray(Characteristics:Characteristics[]){
+  barriersNameArray(Characteristics:any[]){
     if (Characteristics?.length>0){
       let charArray = Characteristics.map(x=>{return x.name})
       // console.log(charArray,charArray.join(", "))
