@@ -532,13 +532,51 @@
                                     </div>
                                 </div>
 
+                                <!-- Newwwwwww -->
+                                <div class="row p-2" *ngIf=" category.CategoryName ==='Scale GHGs' && data.characteristics.name === 'International/global level'">
+                                  <p>(Major) Is the emissions reduction > 0.1% of global emissions?</p>
+                                  <p>(Moderate) Is the emissions reduction > 0.05% of global emissions?</p>
+                                  <p>(Minor) Is the emissions reduction > 0.01% of global emissions?</p>
+                                  <p>(None) Is the emissions reduction < 0.01% of global emissions?</p>
+                                  <p>(Negative) is there an emissions increase?</p>
+                                </div>
+
+                                <div class="row p-2" *ngIf=" category.CategoryName ==='Scale GHGs' && data.characteristics.name === 'National/Sectorial level'">
+                                  <p>(Major) Is the emissions reduction > 1% of national/sectorial emissions?</p>
+                                  <p>(Moderate) Is the emissions reduction > 0.5-1% of national/sectorial emissions?</p>
+                                  <p>(Minor) Is the emissions reduction > 0.1-0.5% of national/sectorial emissions?</p>
+                                  <p>(None) Is the emissions reduction < 0.1% of national/sectorial emissions?</p>
+                                  <p>(Negative) is there an emissions increase?</p>
+                                </div>
+
+                                <div class="row p-2" *ngIf=" category.CategoryName ==='Scale GHGs' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level'">
+                                  <p>(Major) Is the emissions reduction > 5% of subnational/regional/municipal emissions?</p>
+                                  <p>(Moderate) Is the emissions reduction > 1-5% of subnational/regional/municipal emissions?</p>
+                                  <p>(Minor) Is the emissions reduction > 0.5-1% of subnational/regional/municipal emissions?</p>
+                                  <p>(None) Is the emissions reduction < 0.5% of subnational/regional/municipal emissions?</p>
+                                  <p>(Negative) is there an emissions increase?</p>
+                                </div>
+                                <!-- Newwwwwww - Endddd -->
+
+
                                   <div class="row p-2">
-                                    <div class="col-12 col-lg-6">
+
+                                   <!--  <div class="col-12 col-lg-6">
                                       <div class="p-field">
                                         <label for="Relevance">Score</label>
                                         <p-inputNumber inputId="integeronly" [(ngModel)]="data.score"
                                           [showButtons]="true" [min]="-1" [max]="3" [step]="1" inputId="minmax-buttons"
                                           placeholder="Enter Score" name="data.charData.score"> </p-inputNumber>
+                                      </div>
+                                    </div> -->
+
+                                    <div class="col-12 col-lg-6">
+                                      <div class="p-field">
+                                        <label for="score">Score</label>
+                                        <p-dropdown appendTo="body" name="score" #type="ngModel"
+                                          placeholder="Select Score" [(ngModel)]="data.score"
+                                          [options]="outcomeScaleScore" optionLabel="id" optionValue="value"
+                                          [required]="true"></p-dropdown>
                                       </div>
                                     </div>
 
@@ -672,13 +710,24 @@
                                   </div>
 
                                     <div class="row p-2">
-                                      <div class="col-12 col-lg-6">
+
+                                     <!--  <div class="col-12 col-lg-6">
                                         <div class="p-field">
                                           <label for="Relevance">Score</label>
                                           <p-inputNumber (ngModelChange)="assignSDG(selectedSDGs[i], data)"
                                             inputId="integeronly" [(ngModel)]="data.score" [showButtons]="true"
                                             [min]="-1" [max]="3" [step]="1" inputId="minmax-buttons"
                                             placeholder="Enter Score" name="data.charData.score"></p-inputNumber>
+                                        </div>
+                                      </div> -->
+
+                                      <div class="col-12 col-lg-6">
+                                        <div class="p-field">
+                                          <label for="score">Score</label>
+                                          <p-dropdown appendTo="body" name="score" #type="ngModel"
+                                            placeholder="Select Score" [(ngModel)]="data.score" (ngModelChange)="assignSDG(selectedSDGs[i], data)"
+                                            [options]="outcomeScaleScore" optionLabel="id" optionValue="value"
+                                            [required]="true"></p-dropdown>
                                         </div>
                                       </div>
 
@@ -788,13 +837,24 @@
                                   </div>
 
                                     <div class="row p-2">
-                                      <div class="col-12 col-lg-6">
+
+                                     <!--  <div class="col-12 col-lg-6">
                                         <div class="p-field">
                                           <label for="Relevance">Score</label>
                                           <p-inputNumber (ngModelChange)="assignSDG(selectedSDGs[i], data)"
                                             inputId="integeronly" [(ngModel)]="data.score" [showButtons]="true"
                                             [min]="-1" [max]="3" [step]="1" inputId="minmax-buttons"
                                             placeholder="Enter Score" name="data.charData.score"></p-inputNumber>
+                                        </div>
+                                      </div> -->
+
+                                      <div class="col-12 col-lg-6">
+                                        <div class="p-field">
+                                          <label for="score">Score</label>
+                                          <p-dropdown appendTo="body" name="score" #type="ngModel"
+                                            placeholder="Select Score" [(ngModel)]="data.score" (ngModelChange)="assignSDG(selectedSDGs[i], data)"
+                                            [options]="outcomeSustainedScore" optionLabel="id" optionValue="value"
+                                            [required]="true"></p-dropdown>
                                         </div>
                                       </div>
 

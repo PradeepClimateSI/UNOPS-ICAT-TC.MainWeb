@@ -34,6 +34,8 @@ export class MasterDataService {
   private _assessment_approach2: {name: string, id: number}[] = []
   private _relevance: {name: string, value: number}[] = []
   private _likelihood: {id: string, value: number}[] = []
+  private _outcomeScaleScore: {id: string, value: number}[] = []
+  private _outcomeSustainedScore: {id: string, value: number}[] = []
   private _GHG_scale_score: SelectedScoreDto[] = []
   private _GHG_sustained_score: SelectedScoreDto[] = []
   private _SDG_scale_score: SelectedScoreDto[] = []
@@ -245,6 +247,25 @@ export class MasterDataService {
       {  id: "Likely (60-90%)",value:3 },
       {  id: "Very likely (90-100%)",value:4 },
 
+    ]
+
+    this.outcomeScaleScore = [
+      {  id: "3 - Major",value:3 },
+      {  id: "2 - Moderate",value:2  },
+      {  id: "1 - Minor",value:1 },
+      {  id: "0 - None",value:0 },
+      {  id: "-1 - Minor Negative",value:-1 },
+      {  id: "-2 - Moderate Negative",value:-2 },
+      {  id: "-3 - Major Negative",value:-3 },
+
+    ]
+
+    this.outcomeSustainedScore = [
+      {  id: "Very likely (90-100%)",value:3 },
+      {  id: "Likely (60-90%)",value:2  },
+      {  id: "Possible (33-66%)",value:1 },
+      {  id: "Less likely (10-33%)",value:0 },
+      {  id: "Unlikely (0-10%)",value:-1 },
     ]
 
     this.assessment_approach2 = [
@@ -576,6 +597,22 @@ export class MasterDataService {
 
   get likelihood (): { id: string; value: number }[] {
     return this._likelihood;
+  }
+
+  set outcomeScaleScore(value: { id: string; value: number}[]) {
+    this._outcomeScaleScore = value;
+  }
+
+  get outcomeScaleScore (): { id: string; value: number }[] {
+    return this._outcomeScaleScore;
+  }
+
+  set outcomeSustainedScore(value: { id: string; value: number}[]) {
+    this._outcomeSustainedScore = value;
+  }
+
+  get outcomeSustainedScore (): { id: string; value: number }[] {
+    return this._outcomeSustainedScore;
   }
 
   set assessment_approach2(value: { name: string; id: number }[]) {
