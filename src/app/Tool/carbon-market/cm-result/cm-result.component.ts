@@ -38,23 +38,8 @@ export class CmResultComponent implements OnInit {
   sustained_SD_score:SelectedScoreDto[]
   relevances: any
 
-  xData = [
-    {label: '3 - Major', value: 3},
-    {label: '2 - Moderate', value: 2},
-    {label: '1 - Minor', value: 1},
-    {label: '0 - None', value: 0},
-    {label: '-1 - Minor Negative', value: -1},
-    {label: '-2 - Moderate Negative', value: -2},
-    {label: '-3 - Major Negative', value: -3}
-  ]
-
-  yData = [
-    {label: '4 - Very likely (90-100%)', value: 4},
-    {label: '3 - Likely (60-90%)', value: 3},
-    {label: '2 - Possible (33-66%)', value: 2},
-    {label: '1 - Unlikely (10-33%)', value: 1},
-    {label: '0 - Very Unlikely (0-10%)', value: 0}
-  ]
+  xData: {label: string; value: number}[]
+  yData: {label: string; value: number}[]
 
   // heatmapData = [
   //   ['Not at all', 'Major negative outcome (90-100%)'],
@@ -88,6 +73,8 @@ export class CmResultComponent implements OnInit {
       this.scale_SD_score =this.masterDataService.SDG_scale_score;
       this.sustained_SD_score=this.masterDataService.SDG_sustained_score;
       this.relevances = this.masterDataService.relevance
+      this.xData = this.masterDataService.xData
+      this.yData = this.masterDataService.yData
 
       this.assessmentCMDetail = await this.assessmentCMDetailControllerServiceProxy.getAssessmentCMDetailByAssessmentId(assessmentId).toPromise()
       // let types: any = this.assessmentCMDetail.impact_types?.split(',')
