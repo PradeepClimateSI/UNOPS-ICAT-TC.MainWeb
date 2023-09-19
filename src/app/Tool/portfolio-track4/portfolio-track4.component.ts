@@ -57,6 +57,8 @@ export class PortfolioTrack4Component implements OnInit {
   activeIndexMain = 0;
   activeIndex2: number = 0;
   likelihood: any[] = [];
+  outcomeScaleScore: any[] = [];
+  outcomeSustainedScore : any[] = [];
   relevance: any[] = [];
   selectedApproach: any;
   fileServerURL: string;
@@ -173,6 +175,8 @@ export class PortfolioTrack4Component implements OnInit {
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;
     this.geographicalAreasCovered = this.masterDataService.level_of_implemetation;
     this.likelihood = this.masterDataService.likelihood;
+    this.outcomeScaleScore = this.masterDataService.outcomeScaleScore;
+    this.outcomeSustainedScore= this.masterDataService.outcomeSustainedScore;
     this.relevance = this.masterDataService.relevance;
 
     this.assessmentMethods = this.masterDataService.assessment_method;
