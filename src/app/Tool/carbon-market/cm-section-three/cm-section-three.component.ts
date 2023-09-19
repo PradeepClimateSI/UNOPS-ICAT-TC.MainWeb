@@ -49,10 +49,14 @@ export class CmSectionThreeComponent implements OnInit {
   sdgsToLoop: SDG[]
   uploadedFiles: any = [];
   uploadUrl: string;
-  GHG_scale_score: SelectedScoreDto[]
+  GHG_scale_score_macro: SelectedScoreDto[]
+  GHG_scale_score_medium: SelectedScoreDto[]
+  GHG_scale_score_micro: SelectedScoreDto[]
   GHG_sustained_score: SelectedScoreDto[]
   SDG_scale_score: SelectedScoreDto[]
   SDG_sustained_score: SelectedScoreDto[]
+  adaptation_scale_score: SelectedScoreDto[]
+  adaptation_sustained_score: SelectedScoreDto[]
   SDGScore: any = 0;
   SDGWeight: any = '10%';
   GHGScore: any;
@@ -77,16 +81,18 @@ export class CmSectionThreeComponent implements OnInit {
       { name: 'Process of Change', code: 'process' },
       { name: 'Outcome of Change', code: 'outcome' }
     ]
-    this.GHG_scale_score = this.masterDataService.GHG_scale_score
+    this.GHG_scale_score_macro = this.masterDataService.GHG_scale_score_macro
+    this.GHG_scale_score_medium = this.masterDataService.GHG_scale_score_medium
+    this.GHG_scale_score_micro = this.masterDataService.GHG_scale_score_micro
     this.GHG_sustained_score = this.masterDataService.GHG_sustained_score
     this.SDG_scale_score = this.masterDataService.SDG_scale_score
     this.SDG_sustained_score = this.masterDataService.SDG_sustained_score
+    this.adaptation_scale_score = this.masterDataService.adaptation_scale_score
+    this.adaptation_sustained_score = this.masterDataService.adaptation_sustained_score
     this.SDGs = this.masterDataService.SDGs
     this.categories = await this.cMQuestionControllerServiceProxy.getUniqueCharacterisctics().toPromise()
-    console.log("categories", this.categories)
     this.selectedType = this.types[0]
     this.selectedCategory = this.categories[this.selectedType.code][0]
-    console.log(this.categories)
     this.onMainTabChange({index: 0})
     this.onCategoryTabChange({index: 0})
     this.outcome = await this.methodologyAssessmentControllerServiceProxy.getAllOutcomeCharacteristics().toPromise()
@@ -94,7 +100,7 @@ export class CmSectionThreeComponent implements OnInit {
       this.institutions = res;
     });
     this.relevance = this.masterDataService.relevance;
-    
+    console.log("outcome", this.outcome)
   }
 
   onMainTabChange(event: any) {
@@ -266,7 +272,6 @@ export class CmSectionThreeComponent implements OnInit {
           let ch = new Characteristics()
           ch.id = q.characteristic.id
           res.characteristic = ch
-          console.log(char,char.relevance)
           res.relevance = char.relevance
           if (res.institution?.id){
             let inst = new Institution()
@@ -330,7 +335,7 @@ export class CmSectionThreeComponent implements OnInit {
 
     if (this.outcome?.length > 0){
       for await (let item of this.outcome) {
-        if (item.type === 'GHG'){
+        if (item.type === 'GHG' || item.type === 'ADAPTATION'){
           item.results.forEach((res:any) => {
             res.type = this.approach
             if (res.institution?.id){

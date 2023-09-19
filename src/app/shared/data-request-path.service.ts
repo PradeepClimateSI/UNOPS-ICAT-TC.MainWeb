@@ -60,8 +60,15 @@ export class DataRequestPathService {
             let scores = this.masterDataService.SDG_sustained_score
             return scores.find(o => o.code === answer.selectedScore)?.label
         } else if (category === 'SCALE_GHG') {
-            let scores = this.masterDataService.GHG_scale_score
-            return scores.find(o => o.code === answer.selectedScore)?.label
+            let score
+            if (answer.assessment_question.characteristic.code === 'MACRO_LEVEL'){
+                score = this.masterDataService.GHG_scale_score_macro
+            } else if (answer.assessment_question.characteristic.code === 'MEDIUM_LEVEL'){
+                score = this.masterDataService.GHG_scale_score_medium
+            } else {
+                score = this.masterDataService.GHG_scale_score_micro
+            }
+            return score.find(o => o.code === answer.selectedScore)?.label
         } else {
             let scores = this.masterDataService.SDG_scale_score
             return scores.find(o => o.code === answer.selectedScore)?.label

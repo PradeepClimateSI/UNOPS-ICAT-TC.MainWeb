@@ -187,7 +187,13 @@ export class EnterDataCmComponent implements OnInit {
       } else if (parameterList.cmAssessmentAnswer.assessment_question['characteristic']['category']['code'] === 'SUSTAINED_SD'){
         this.answers = this.masterDataService.SDG_sustained_score
       } else if (parameterList.cmAssessmentAnswer.assessment_question['characteristic']['category']['code'] === 'SCALE_GHG'){
-        this.answers = this.masterDataService.GHG_scale_score
+        if (parameterList.cmAssessmentAnswer.assessment_question.characteristic.code === 'MACRO_LEVEL') {
+          this.answers = this.masterDataService.GHG_scale_score_macro
+        } else if (parameterList.cmAssessmentAnswer.assessment_question.characteristic.code === 'MEDIUM_LEVEL') {
+          this.answers = this.masterDataService.GHG_scale_score_medium
+        } else {
+          this.answers = this.masterDataService.GHG_scale_score_micro
+        }
       } else if (parameterList.cmAssessmentAnswer.assessment_question['characteristic']['category']['code'] === 'SCALE_SD'){
         this.answers = this.masterDataService.SDG_scale_score
       }

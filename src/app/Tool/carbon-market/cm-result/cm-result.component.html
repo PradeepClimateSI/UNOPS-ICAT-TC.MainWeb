@@ -47,7 +47,60 @@
             <div class="row p-2">
                 <label class="text"><u ><b>Transformational Change Criteria</b> </u></label>
             </div>
-            <div class="row p-2" *ngIf="processData.technology.length!=0">
+            <p-table [value]="[{}]" >
+                <ng-template pTemplate="header">
+                   <tr>
+                    <th colspan="15">Process</th>
+                   </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData>
+                    <tr>
+                        <td rowspan="3">Relevance</td>
+                        <ng-container *ngFor="let data of processTableData">
+                            <td [attr.colspan]="data.characteristic.length*3" >{{data.name}}</td>
+                        </ng-container>
+                    </tr>
+                    <tr>
+                        <ng-container *ngFor="let cat of processTableData">
+                            <ng-container *ngFor="let data of cat.characteristic">
+                                <td  colspan="3">{{data.name}}</td>
+                            </ng-container>
+                        </ng-container>
+                    </tr>
+                    <tr>
+                        <ng-container *ngFor="let cat of processTableData">
+                            <ng-container *ngFor="let data of cat.characteristic">
+                                <td  colspan="3">{{data.relevance}}</td>
+                            </ng-container>
+                        </ng-container>
+                    </tr>
+                    <tr>
+                        <td rowspan="5">Score</td>
+                        <ng-container *ngFor="let cat of processTableData">
+                            <ng-container *ngFor="let data of cat.characteristic">
+                                <td>Guiding Question</td>
+                                <td>Weight</td>
+                                <td>Score</td>
+                            </ng-container>
+                        </ng-container>
+                    </tr>
+                        <ng-container *ngFor="let cat of processTableData">
+                            <tr>
+                                <ng-container *ngFor="let data of cat.characteristic">
+                                    <ng-container *ngFor="let question of data.questions">
+                                        <td>{{question.question}}</td>
+                                        <td>{{question.weight}}</td>
+                                        <td>{{question.score}}</td>
+                                    </ng-container>
+                                </ng-container>
+                            </tr>
+                        </ng-container>
+                </ng-template>
+            </p-table>
+            <br>
+            <p style="font-size: large;">Category Score - Process of change - 2</p>
+
+            <!-- <div class="row p-2" *ngIf="processData.technology.length!=0">
                 <p-table   [value]="processData.technology" >
 
                     <ng-template pTemplate="caption" styleClass="table-header"  >
@@ -128,7 +181,7 @@
                         </tr>
                     </ng-template>
                 </p-table>
-            </div>
+            </div> -->
 
             <div class="row p-2" *ngIf="outcomeData.scale_GHGs.length!=0">
                 <p-table  [value]="outcomeData.scale_GHGs" >
@@ -152,7 +205,7 @@
                             <td >{{scale_GHGs.characteristic}}</td>
                             <td >{{(scale_GHGs?.starting_situation)?(scale_GHGs?.starting_situation):'-'}}</td>
                             <td >{{(scale_GHGs?.expected_impacts)?(scale_GHGs?.expected_impacts):'-'}}</td>
-                            <td >{{(scale_GHGs?.outcome_score)?getOutcomeScores((scale_GHGs?.outcome_score),'scale_GHGs'):'-'}}</td>
+                            <td >{{(scale_GHGs?.outcome_score)?getOutcomeScores((scale_GHGs?.outcome_score),'scale_GHGs', scale_GHGs.characteristic):'-'}}</td>
                             <td >{{(scale_GHGs?.justification)?(scale_GHGs?.justification):'-'}} </td>
                             <td><a *ngIf="scale_GHGs?.document" target="_blank" [href]="fileServerURL+'/'+scale_GHGs?.document"><i class="pi pi-download download"></i></a></td>
 
@@ -181,7 +234,7 @@
                         <tr>
                             <td >{{changeOutcomeCharacteristicsName(sustained_GHGs.characteristic)}}</td>
                             <td >Is the activity's contribution to the selected SDG sustained in nature?</td>
-                            <td >{{(sustained_GHGs?.outcome_score)?getOutcomeScores((sustained_GHGs?.outcome_score),'sustained_GHGs'):'-'}}</td>
+                            <td >{{(sustained_GHGs?.outcome_score)?getOutcomeScores((sustained_GHGs?.outcome_score),'sustained_GHGs', sustained_GHGs.characteristic):'-'}}</td>
                             <td >{{(sustained_GHGs?.justification)?(sustained_GHGs?.justification):'-'}} </td>
                             <td><a *ngIf="sustained_GHGs?.document" target="_blank" [href]="fileServerURL+'/'+sustained_GHGs?.document"><i class="pi pi-download download"></i></a></td>
 
@@ -214,7 +267,7 @@
                             <td >{{scale_SDs?.characteristic}}</td>
                             <td >{{(scale_SDs?.starting_situation)?(scale_SDs?.starting_situation):'-'}}</td>
                             <td >{{(scale_SDs?.expected_impacts)?(scale_SDs?.expected_impacts):'-'}}</td>
-                            <td >{{(scale_SDs?.outcome_score)?getOutcomeScores((scale_SDs?.outcome_score),'scale_SDs'):'-'}}</td>
+                            <td >{{(scale_SDs?.outcome_score)?getOutcomeScores((scale_SDs?.outcome_score),'scale_SDs', scale_SDs.characteristic):'-'}}</td>
                             <td >{{(scale_SDs?.justification)?(scale_SDs?.justification):'-'}} </td>
                             <td><a *ngIf="scale_SDs?.document" target="_blank" [href]="fileServerURL+'/'+scale_SDs?.document"><i class="pi pi-download download"></i></a></td>
 
@@ -244,7 +297,7 @@
                             <td >{{getSDGName(sustained_SDs?.SDG)}}</td>
                             <td >{{changeOutcomeCharacteristicsName(sustained_SDs.characteristic)}}</td>
                             <td >Is the activity's contribution to the selected SDG sustained in nature?</td>
-                            <td >{{(sustained_SDs?.outcome_score)?getOutcomeScores((sustained_SDs?.outcome_score),'sustained_SDs'):'-'}}</td>
+                            <td >{{(sustained_SDs?.outcome_score)?getOutcomeScores((sustained_SDs?.outcome_score),'sustained_SDs', sustained_SDs.characteristic):'-'}}</td>
                             <td >{{(sustained_SDs?.justification)?(sustained_SDs?.justification):'-'}} </td>
                             <td><a *ngIf="sustained_SDs?.document" target="_blank" [href]="fileServerURL+'/'+sustained_SDs?.document"><i class="pi pi-download download"></i></a></td>
                         </tr>

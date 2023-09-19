@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Assessment, AssessmentCMDetail, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CalculateDto, ClimateAction } from 'shared/service-proxies/service-proxies';
+import { Assessment, AssessmentCMDetail, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CalculateDto, Characteristics, ClimateAction } from 'shared/service-proxies/service-proxies';
 import * as XLSX from 'xlsx'; 
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
@@ -30,10 +30,125 @@ export class CmResultComponent implements OnInit {
   outcomeData:{scale_GHGs:any[],sustained_GHGs:any[], scale_SDs:any[],sustained_SDs:any[]}={ scale_GHGs: [], sustained_GHGs: [], scale_SDs: [], sustained_SDs: [] };
   fileServerURL:any
   SDGs: SDG[]
-  scale_GHG_score:SelectedScoreDto[]
+  scale_GHG_score_macro:SelectedScoreDto[]
+  scale_GHG_score_medium:SelectedScoreDto[]
+  scale_GHG_score_micro:SelectedScoreDto[]
   sustained_GHG_score:SelectedScoreDto[]
   scale_SD_score:SelectedScoreDto[]
   sustained_SD_score:SelectedScoreDto[]
+
+  tableCategories = [{name: 'Technology'}, {name: 'Technology 1'}]
+
+  processTableData = [
+    {
+      name: 'Technology',
+      characteristic: [
+        {
+          name: 'R&D',
+          relevance: 'Relevant',
+          questions: [
+            {
+              question: 'Question 1',
+              weight: 12,
+              score: 2
+            },
+            {
+              question: 'Question 2',
+              weight: 12,
+              score: 2
+            },
+          ]
+        },
+        {
+          name: 'R&D 2',
+          relevance: 'Relevant 2',
+          questions: [
+            {
+              question: 'Question 1',
+              weight: 12,
+              score: 2
+            },
+            {
+              question: 'Question 2',
+              weight: 12,
+              score: 2
+            },
+          ]
+        },
+        {
+          name: 'R&D 3',
+          relevance: 'Relevant 3',
+          questions: [
+            {
+              question: 'Question 1',
+              weight: 12,
+              score: 2
+            },
+            {
+              question: 'Question 2',
+              weight: 12,
+              score: 2
+            },
+          ]
+        }
+      ]
+    },
+    {
+      name: 'Technology 2',
+      characteristic: [
+        {
+          name: 'R&D',
+          relevance: 'Relevant',
+          questions: [
+            {
+              question: 'Question 1',
+              weight: 12,
+              score: 2
+            },
+            {
+              question: 'Question 2',
+              weight: 12,
+              score: 2
+            },
+          ]
+        },
+        {
+          name: 'R&D 2',
+          relevance: 'Relevant 2',
+          questions: [
+            {
+              question: 'Question 1',
+              weight: 12,
+              score: 2
+            },
+            {
+              question: 'Question 2',
+              weight: 12,
+              score: 2
+            },
+          ]
+        },
+        {
+          name: 'R&D 3',
+          relevance: 'Relevant 3',
+          questions: [
+            {
+              question: 'Question 1',
+              weight: 12,
+              score: 2
+            },
+            {
+              question: 'Question 2',
+              weight: 12,
+              score: 2
+            },
+          ]
+        }
+      ]
+    }
+  ]
+
+
   constructor(
     private route: ActivatedRoute,
     private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
@@ -50,7 +165,9 @@ export class CmResultComponent implements OnInit {
       this.intervention = this.assessment.climateAction
       let cmApproaches = this.masterDataService.int_cm_approaches
       this.SDGs = this.masterDataService.SDGs
-      this.scale_GHG_score=this.masterDataService.GHG_scale_score;
+      this.scale_GHG_score_macro=this.masterDataService.GHG_scale_score_macro;
+      this.scale_GHG_score_medium=this.masterDataService.GHG_scale_score_medium;
+      this.scale_GHG_score_micro=this.masterDataService.GHG_scale_score_micro;
       this.sustained_GHG_score=this.masterDataService.GHG_sustained_score;
       this.scale_SD_score =this.masterDataService.SDG_scale_score;
       this.sustained_SD_score=this.masterDataService.SDG_sustained_score;
@@ -221,7 +338,7 @@ export class CmResultComponent implements OnInit {
         _data.Characteristic = ele.characteristic
         _data['Starting Situation'] = ele.starting_situation
         _data['Expected Impact'] = ele.expected_impacts
-        let score = this.getOutcomeScores(ele.outcome_score,'scale_GHGs') 
+        let score = this.getOutcomeScores(ele.outcome_score,'scale_GHGs', ele.characteristic) 
         _data.Score = score ? score : '-'
         _data.Justification = ele.justification
         return _data
@@ -233,7 +350,7 @@ export class CmResultComponent implements OnInit {
         _data.Characteristic = this.changeOutcomeCharacteristicsName(ele.characteristic)
         _data['Starting Situation'] = ele.starting_situation
         _data['Expected Impact'] = ele.expected_impacts
-        let score = this.getOutcomeScores(ele.outcome_score,'sustained_GHGs') 
+        let score = this.getOutcomeScores(ele.outcome_score,'sustained_GHGs', ele.characteristic) 
         _data.Score = score ? score : '-'
         _data.Justification = ele.justification
         return _data
@@ -246,7 +363,7 @@ export class CmResultComponent implements OnInit {
         _data.Characteristic = ele.characteristic
         _data['Starting Situation'] = ele.starting_situation
         _data['Expected Impact'] = ele.expected_impacts
-        let score = this.getOutcomeScores(ele.outcome_score,'scale_SDs') 
+        let score = this.getOutcomeScores(ele.outcome_score,'scale_SDs', ele.characteristic) 
         _data.Score = score ? score : '-'
         _data.Justification = ele.justification
         return _data
@@ -259,7 +376,7 @@ export class CmResultComponent implements OnInit {
         _data.Characteristic = this.changeOutcomeCharacteristicsName(ele.characteristic)
         _data['Starting Situation'] = ele.starting_situation
         _data['Expected Impact'] = ele.expected_impacts
-        let score = this.getOutcomeScores(ele.outcome_score,'sustained_SDs') 
+        let score = this.getOutcomeScores(ele.outcome_score,'sustained_SDs', ele.characteristic) 
         _data.Score = score ? score : '-'
         _data.Justification = ele.justification
         return _data
@@ -307,21 +424,27 @@ export class CmResultComponent implements OnInit {
       return '-'
     }
   }
-  getOutcomeScores(code: any,category:string) {
-    if (code){
-      if(category=='scale_GHGs'){
-        return (this.scale_GHG_score.find(o => o.code === code))?.label
+  getOutcomeScores(code: any, category: string, characteristic: Characteristics) {
+    if (code) {
+      if (category == 'scale_GHGs') {
+        if (characteristic.code === 'MACRO_LEVEL') {
+          return (this.scale_GHG_score_macro.find(o => o.code === code))?.label
+        } else if (characteristic.code === 'MEDIUM_LEVEL') {
+          return (this.scale_GHG_score_medium.find(o => o.code === code))?.label
+        } else {
+          return (this.scale_GHG_score_micro.find(o => o.code === code))?.label
+        }
       }
-      else if(category=='sustained_GHGs'){
+      else if (category == 'sustained_GHGs') {
         return (this.sustained_GHG_score.find(o => o.code === code))?.label
       }
-      else if(category=='scale_SDs'){
+      else if (category == 'scale_SDs') {
         return (this.scale_SD_score.find(o => o.code === code))?.label
       }
-      else if(category=='sustained_SDs'){
+      else if (category == 'sustained_SDs') {
         return (this.sustained_SD_score.find(o => o.code === code))?.label
       }
-      else{
+      else {
         return '-'
       }
     } else {
