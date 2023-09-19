@@ -31,6 +31,24 @@
     border-radius: 3px;
 }
 
+.caution{
+    width: '50vw';
+    border-radius: 5px;
+    height: '50vh';
+}
+
+:host ::ng-deep .p-dialog .p-dialog-header{
+    background:#224373;
+    color: white;
+    text-align: center;
+    height: 50px;
+}
+
+:host ::ng-deep .p-dialog{
+    width: 29%;
+}
+
+
 /* .col-6{
     width: 44%
 } */

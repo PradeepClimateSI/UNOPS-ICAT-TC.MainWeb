@@ -49,16 +49,21 @@ export class CmSectionThreeComponent implements OnInit {
   sdgsToLoop: SDG[]
   uploadedFiles: any = [];
   uploadUrl: string;
-  GHG_scale_score: SelectedScoreDto[]
+  GHG_scale_score_macro: SelectedScoreDto[]
+  GHG_scale_score_medium: SelectedScoreDto[]
+  GHG_scale_score_micro: SelectedScoreDto[]
   GHG_sustained_score: SelectedScoreDto[]
   SDG_scale_score: SelectedScoreDto[]
   SDG_sustained_score: SelectedScoreDto[]
+  adaptation_scale_score: SelectedScoreDto[]
+  adaptation_sustained_score: SelectedScoreDto[]
   SDGScore: any = 0;
   SDGWeight: any = '10%';
   GHGScore: any;
   acceptedFiles: string = ".pdf, .jpg, .png, .doc, .docx, .xls, .xlsx, .csv";
   fileServerURL: string;
   institutions: Institution[] = [];
+  relevance: any[];
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -76,23 +81,26 @@ export class CmSectionThreeComponent implements OnInit {
       { name: 'Process of Change', code: 'process' },
       { name: 'Outcome of Change', code: 'outcome' }
     ]
-    this.GHG_scale_score = this.masterDataService.GHG_scale_score
+    this.GHG_scale_score_macro = this.masterDataService.GHG_scale_score_macro
+    this.GHG_scale_score_medium = this.masterDataService.GHG_scale_score_medium
+    this.GHG_scale_score_micro = this.masterDataService.GHG_scale_score_micro
     this.GHG_sustained_score = this.masterDataService.GHG_sustained_score
     this.SDG_scale_score = this.masterDataService.SDG_scale_score
     this.SDG_sustained_score = this.masterDataService.SDG_sustained_score
+    this.adaptation_scale_score = this.masterDataService.adaptation_scale_score
+    this.adaptation_sustained_score = this.masterDataService.adaptation_sustained_score
     this.SDGs = this.masterDataService.SDGs
     this.categories = await this.cMQuestionControllerServiceProxy.getUniqueCharacterisctics().toPromise()
-    console.log("categories", this.categories)
     this.selectedType = this.types[0]
     this.selectedCategory = this.categories[this.selectedType.code][0]
-    console.log(this.categories)
     this.onMainTabChange({index: 0})
     this.onCategoryTabChange({index: 0})
     this.outcome = await this.methodologyAssessmentControllerServiceProxy.getAllOutcomeCharacteristics().toPromise()
     this.institutionControllerServiceProxy.getAllInstitutions().subscribe((res: any) => {
       this.institutions = res;
     });
-    
+    this.relevance = this.masterDataService.relevance;
+    console.log("outcome", this.outcome)
   }
 
   onMainTabChange(event: any) {
@@ -251,10 +259,11 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   async submit() {
-    console.log(this.results)
+    console.log("submit result", this.results, this.categories['process'])
 
     for await (let category of this.categories['process']){
       for await (let char of category.characteristics){
+        console.log(char)
         for await (let q of char.questions){
           let res = new CMResultDto()
           Object.keys(q.result).forEach(e => {
@@ -263,6 +272,7 @@ export class CmSectionThreeComponent implements OnInit {
           let ch = new Characteristics()
           ch.id = q.characteristic.id
           res.characteristic = ch
+          res.relevance = char.relevance
           if (res.institution?.id){
             let inst = new Institution()
             inst.id = res.institution.id
@@ -325,7 +335,7 @@ export class CmSectionThreeComponent implements OnInit {
 
     if (this.outcome?.length > 0){
       for await (let item of this.outcome) {
-        if (item.type === 'GHG'){
+        if (item.type === 'GHG' || item.type === 'ADAPTATION'){
           item.results.forEach((res:any) => {
             res.type = this.approach
             if (res.institution?.id){

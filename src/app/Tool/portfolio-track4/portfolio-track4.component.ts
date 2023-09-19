@@ -3,13 +3,14 @@ import { NgForm } from '@angular/forms';
 import { MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import { Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, ImpactCovered, InstitutionControllerServiceProxy, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, ImpactCovered, InstitutionControllerServiceProxy, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PortfolioQuestionDetails, PortfolioQuestions, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { Dropdown } from 'primeng/dropdown';
 import { environment } from 'environments/environment';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DomSanitizer } from '@angular/platform-browser';
 
 
 interface CharacteristicWeight {
@@ -36,6 +37,7 @@ export class PortfolioTrack4Component implements OnInit {
   sectorArray: Sector[] = [];
   impactArray: ImpactCovered[] = [];
   assessment_types: any[];
+  sdg_answers: any[];
   policies: ClimateAction[];
   isSavedAssessment: boolean = false;
   levelOfImplementation: any[] = [];
@@ -55,12 +57,14 @@ export class PortfolioTrack4Component implements OnInit {
   activeIndexMain = 0;
   activeIndex2: number = 0;
   likelihood: any[] = [];
+  outcomeScaleScore: any[] = [];
+  outcomeSustainedScore : any[] = [];
   relevance: any[] = [];
   selectedApproach: any;
   fileServerURL: string;
   uploadUrl: string;
   acceptedFiles: string = ".pdf, .jpg, .png, .doc, .docx, .xls, .xlsx, .csv";
-
+  portfolioQuestions:PortfolioQuestions[]=[];
   description = ''
   load: boolean = false
   yesNoAnswer: any[] = [{ id: 1, name: "Yes" }, { id: 2, name: "No" }, { id: 3, name: "Maybe" }];
@@ -118,7 +122,8 @@ export class PortfolioTrack4Component implements OnInit {
     private investorToolControllerproxy: InvestorToolControllerServiceProxy,
     private router: Router,
     private instituionProxy: InstitutionControllerServiceProxy,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    public sanitizer: DomSanitizer
 
   ) {
     this.uploadUrl = environment.baseUrlAPI + '/investor-tool/upload-file'
@@ -140,8 +145,9 @@ export class PortfolioTrack4Component implements OnInit {
   sdgDataSendArray2: any = []
 
   async ngOnInit(): Promise<void> {
- this.load = false
+ this.load = true   //need to change as false
 
+  await this.getPortfolioQuestions();
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
     this.userCountryId  = tokenPayload.countryId;
@@ -165,9 +171,12 @@ export class PortfolioTrack4Component implements OnInit {
     this.assessment.assessment_method = 'Track 4'
 
     this.assessment_types = this.masterDataService.assessment_type;
+    this.sdg_answers = this.masterDataService.sdg_answers;
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;
     this.geographicalAreasCovered = this.masterDataService.level_of_implemetation;
     this.likelihood = this.masterDataService.likelihood;
+    this.outcomeScaleScore = this.masterDataService.outcomeScaleScore;
+    this.outcomeSustainedScore= this.masterDataService.outcomeSustainedScore;
     this.relevance = this.masterDataService.relevance;
 
     this.assessmentMethods = this.masterDataService.assessment_method;
@@ -262,6 +271,13 @@ export class PortfolioTrack4Component implements OnInit {
     this.impactCovered = await this.investorToolControllerproxy.findAllImpactCovered().toPromise()
   }
 
+  async getPortfolioQuestions(){
+    this.investorToolControllerproxy.findAllPortfolioquestions().subscribe((res3: any) => {
+      this.portfolioQuestions  = res3
+      console.log("portfolioQuestions", this.portfolioQuestions)
+    });
+  }
+
   async getCharacteristics() {
 
     this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().subscribe((res3: any) => {
@@ -270,7 +286,7 @@ export class PortfolioTrack4Component implements OnInit {
 
     });
 
-    this.methodologyAssessmentControllerServiceProxy.findAllCategories().subscribe((res2: any) => {
+    this.methodologyAssessmentControllerServiceProxy.findAllCategories().subscribe(async (res2: any) => {
       console.log("categoryList", res2)
       for (let x of res2) {
         let categoryArray: InvestorAssessment[] = [];
@@ -279,6 +295,17 @@ export class PortfolioTrack4Component implements OnInit {
           if (z.category.name === x.name) {
             let newCharData = new InvestorAssessment();
             newCharData.characteristics = z;
+
+            for(let q of  this.portfolioQuestions){
+              if(newCharData.characteristics.id ===q.characteristics.id){
+                let portfolioQuestionDetails =new PortfolioQuestionDetails()
+                portfolioQuestionDetails.type='question';
+                portfolioQuestionDetails.question = q
+                newCharData.portfolioQuestion_details.push(portfolioQuestionDetails)
+
+              }
+            }
+
 
             categoryArray.push(newCharData);
 
@@ -321,6 +348,8 @@ export class PortfolioTrack4Component implements OnInit {
         }
 
       }
+
+      console.log("processData", this.processData)
       console.log("outcomeData", this.outcomeData)
       console.log("this.sdgDataSendArray", this.sdgDataSendArray)
     });
@@ -497,6 +526,8 @@ export class PortfolioTrack4Component implements OnInit {
       }
       this.investorToolControllerproxy.createFinalAssessment2(data)
         .subscribe(_res => {
+
+          console.log("finalSentArray", data)
           console.log("res final", _res)
 
           console.log(_res)
@@ -749,6 +780,13 @@ export class PortfolioTrack4Component implements OnInit {
     }
 
     this.messageService.add({severity: 'info', summary: 'File Uploaded', detail: ''});
+  }
+
+   addNewline(text : any) {
+    if (!text) {
+      return '';
+    }
+    return text.replace(/--/g, '\n--');
   }
 }
 

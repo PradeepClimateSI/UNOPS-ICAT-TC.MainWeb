@@ -35,6 +35,8 @@ import {
   PolicySector,
   DocumentControllerServiceProxy,
   DocOwnerUpdateDto,
+  AllBarriersSelected,
+  BarrierSelected
 
 } from 'shared/service-proxies/service-proxies';
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
@@ -45,7 +47,6 @@ import html2canvas from 'html2canvas';
 import decode from 'jwt-decode';
 import { Token } from '@angular/compiler';
 import { MasterDataService } from 'app/shared/master-data.service';
-import { BarrierSelected } from './barrier-selected';
 import { GlobalArrayService } from 'app/shared/global-documents/global-documents.service';
 
 /// <reference types="googlemaps" />
@@ -957,21 +958,20 @@ export class ClimateActionComponent implements OnInit {
               })
               console.log(res)
               this.isSaving = true;
-              for (let b of this.finalBarrierList) {
-                let pb = new PolicyBarriers();
-                pb.climateAction = res
-                pb.barriers = b.barrier;
-                pb.characteristics=b.characteristics;
-                pb.is_affected =b.affectedbyIntervention;
-                this.policyBar.push(pb);
-              }
-              
-              
-              console.log("ssss",res)
-              
-
+              // for (let b of this.finalBarrierList) {
+              //   let pb = new PolicyBarriers();
+              //   pb.climateAction = res
+              //   // pb.barriers = b.barrier;
+              //   // pb.characteristics=b.characteristics;
+              //   pb.is_affected =b.affectedbyIntervention;
+              //   this.policyBar.push(pb);
+              // }
+              let allBarriersSelected = new AllBarriersSelected()
+              allBarriersSelected.allBarriers =this.finalBarrierList
+              allBarriersSelected.climateAction =res
+              console.log("allBarriersSelected",allBarriersSelected)
               //@ts-ignore
-              this.projectProxy.policyBar(this.policyBar).subscribe((res) => {
+              this.projectProxy.policyBar(allBarriersSelected).subscribe((res) => {
                 console.log('save', res);
                 this.messageService.add({
                   severity: 'success',
@@ -1742,4 +1742,17 @@ toDownload() {
     });
   }, 1);
 }
+
+  barriersNameArray(Characteristics:any[]){
+    if (Characteristics?.length>0){
+      let charArray = Characteristics.map(x=>{return x.name})
+      // console.log(charArray,charArray.join(", "))
+      return charArray.join(", ")
+    }
+    else{
+      return "-"
+    }
+    
+
+  }
 }
