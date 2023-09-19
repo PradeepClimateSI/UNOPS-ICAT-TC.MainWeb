@@ -196,8 +196,8 @@ export class MasterDataService {
 
     this.level_of_implemetation = [
       { id: 1, name: "International" },
-      { id: 2, name: "National" },
-      { id: 3, name: "Sub-national" },
+      { id: 2, name: "National/sectorial" },
+      { id: 3, name: "Sub-national/sub-sectorial" },
 
     ]
 
