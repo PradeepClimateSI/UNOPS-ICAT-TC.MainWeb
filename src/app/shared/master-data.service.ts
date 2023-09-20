@@ -48,7 +48,8 @@ export class MasterDataService {
   private _adaptation_sustained_score: SelectedScoreDto[] = []
   private _SDGs: SDG[] = []
   private _score: {name: string, value: number}[] = []
-
+  private _xData: {label: string, value: number}[] = []
+  private _yData: {label: string, value: number}[] = []
 
 
   constructor() {
@@ -343,6 +344,24 @@ export class MasterDataService {
       {label: '1 - Expected positive impact of 0-10 years on the selected scale', code: '1', value: 1},
       {label: '0 - No expected impact on the selected scale', code: '0', value: 0},
       {label: '-1 - Expected negative impact', code: '-1', value: -1},
+    ]
+
+    this.xData = [
+      {label: '3 - Major', value: 3},
+      {label: '2 - Moderate', value: 2},
+      {label: '1 - Minor', value: 1},
+      {label: '0 - None', value: 0},
+      {label: '-1 - Minor Negative', value: -1},
+      {label: '-2 - Moderate Negative', value: -2},
+      {label: '-3 - Major Negative', value: -3}
+    ]
+  
+    this.yData = [
+      {label: '4 - Very likely (90-100%)', value: 4},
+      {label: '3 - Likely (60-90%)', value: 3},
+      {label: '2 - Possible (33-66%)', value: 2},
+      {label: '1 - Unlikely (10-33%)', value: 1},
+      {label: '0 - Very Unlikely (0-10%)', value: 0}
     ]
 
     this.SDGs= [
@@ -680,6 +699,22 @@ export class MasterDataService {
 
   get adaptation_sustained_score (): SelectedScoreDto[] {
     return this._adaptation_sustained_score;
+  }
+
+  set xData(value: {label: string; value: number}[]) {
+    this._xData = value;
+  }
+
+  get xData (): {label: string; value: number}[] {
+    return this._xData;
+  }
+
+  set yData(value: {label: string; value: number}[]) {
+    this._yData = value;
+  }
+
+  get yData (): {label: string; value: number}[] {
+    return this._yData;
   }
 
   set SDGs(value: SDG[]) {
