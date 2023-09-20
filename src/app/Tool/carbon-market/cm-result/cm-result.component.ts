@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Assessment, AssessmentCMDetail, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CalculateDto, Characteristics, ClimateAction } from 'shared/service-proxies/service-proxies';
+import { Assessment, AssessmentCMDetail, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CMScoreDto, CalculateDto, Characteristics, ClimateAction } from 'shared/service-proxies/service-proxies';
 import * as XLSX from 'xlsx';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
@@ -23,11 +23,11 @@ export class CmResultComponent implements OnInit {
   results: any;
   criterias: any;
   keys: string[]
-  score: string
+  score: CMScoreDto = new CMScoreDto()
   expandedRows: any = {}
   isDownloading: boolean = false
-  processData:{technology:any[],incentives:any[], norms:any[],}={ technology: [], incentives: [], norms: [] };
-  outcomeData:{scale_GHGs:any[],sustained_GHGs:any[], scale_SDs:any[],sustained_SDs:any[]}={ scale_GHGs: [], sustained_GHGs: [], scale_SDs: [], sustained_SDs: [] };
+  processData:any = {};
+  outcomeData: { scale_GHGs: any[], sustained_GHGs: any[], scale_SDs: any[], sustained_SDs: any[], scale_adaptation: any[], sustained_adaptation: any[] } = { scale_GHGs: [], sustained_GHGs: [], scale_SDs: [], sustained_SDs: [], scale_adaptation:[], sustained_adaptation: [] };
   fileServerURL:any
   SDGs: SDG[]
   scale_GHG_score_macro:SelectedScoreDto[]
@@ -36,117 +36,18 @@ export class CmResultComponent implements OnInit {
   sustained_GHG_score:SelectedScoreDto[]
   scale_SD_score:SelectedScoreDto[]
   sustained_SD_score:SelectedScoreDto[]
+  relevances: any
 
-  tableCategories = [{name: 'Technology'}, {name: 'Technology 1'}]
+  xData: {label: string; value: number}[]
+  yData: {label: string; value: number}[]
 
-  processTableData = [
-    {
-      name: 'Technology',
-      characteristic: [
-        {
-          name: 'R&D',
-          relevance: 'Relevant',
-          questions: [
-            {
-              question: 'Question 1',
-              weight: 12,
-              score: 2
-            },
-            {
-              question: 'Question 2',
-              weight: 12,
-              score: 2
-            },
-          ]
-        },
-        {
-          name: 'R&D 2',
-          relevance: 'Relevant 2',
-          questions: [
-            {
-              question: 'Question 1',
-              weight: 12,
-              score: 2
-            },
-            {
-              question: 'Question 2',
-              weight: 12,
-              score: 2
-            },
-          ]
-        },
-        {
-          name: 'R&D 3',
-          relevance: 'Relevant 3',
-          questions: [
-            {
-              question: 'Question 1',
-              weight: 12,
-              score: 2
-            },
-            {
-              question: 'Question 2',
-              weight: 12,
-              score: 2
-            },
-          ]
-        }
-      ]
-    },
-    {
-      name: 'Technology 2',
-      characteristic: [
-        {
-          name: 'R&D',
-          relevance: 'Relevant',
-          questions: [
-            {
-              question: 'Question 1',
-              weight: 12,
-              score: 2
-            },
-            {
-              question: 'Question 2',
-              weight: 12,
-              score: 2
-            },
-          ]
-        },
-        {
-          name: 'R&D 2',
-          relevance: 'Relevant 2',
-          questions: [
-            {
-              question: 'Question 1',
-              weight: 12,
-              score: 2
-            },
-            {
-              question: 'Question 2',
-              weight: 12,
-              score: 2
-            },
-          ]
-        },
-        {
-          name: 'R&D 3',
-          relevance: 'Relevant 3',
-          questions: [
-            {
-              question: 'Question 1',
-              weight: 12,
-              score: 2
-            },
-            {
-              question: 'Question 2',
-              weight: 12,
-              score: 2
-            },
-          ]
-        }
-      ]
-    }
-  ]
+  // heatmapData = [
+  //   ['Not at all', 'Major negative outcome (90-100%)'],
+  //   ['Minimally', 'Negative outcome (70-90%)'],
+  //   ['Moderately', 'Mixed outcome (50-70%)'],
+  //   ['Substantially', 'Positive outcome (30-50%)'],
+  //   ['Fully', 'Major positive outcome (0-30%)'],
+  // ];
 
 
   constructor(
@@ -171,6 +72,9 @@ export class CmResultComponent implements OnInit {
       this.sustained_GHG_score=this.masterDataService.GHG_sustained_score;
       this.scale_SD_score =this.masterDataService.SDG_scale_score;
       this.sustained_SD_score=this.masterDataService.SDG_sustained_score;
+      this.relevances = this.masterDataService.relevance
+      this.xData = this.masterDataService.xData
+      this.yData = this.masterDataService.yData
 
       this.assessmentCMDetail = await this.assessmentCMDetailControllerServiceProxy.getAssessmentCMDetailByAssessmentId(assessmentId).toPromise()
       // let types: any = this.assessmentCMDetail.impact_types?.split(',')
@@ -197,6 +101,43 @@ export class CmResultComponent implements OnInit {
 
   }
 
+  getBackgroundColor(value: number): string {
+    switch (value) {
+      case -3:
+        return '#ec6665';
+      case -2:
+        return '#ed816c';
+      case -1:
+        return '#f19f70';
+      case 0:
+        return '#f4b979';
+      case 1:
+        return '#f9d57f';
+      case 2:
+        return '#fcf084';
+      case 3:
+        return '#e0e885';
+      case 4:
+        return '#c1e083';
+      case 5:
+        return '#a3d481';
+      case 6:
+        return '#84cc80';
+      case 7:
+        return '#65c17e';
+      default:
+        return 'white';
+    }
+  }
+
+  getIntervention(x:number, y: number){
+    if (this.score.process_score === y && this.score.outcome_score.outcome_score === x){
+      return true
+    } else {
+      return false
+    }
+  }
+
   async getResult() {
     let res = await this.cMAssessmentQuestionControllerServiceProxy.getResults(this.assessment.id).toPromise()
     if (res){
@@ -218,7 +159,7 @@ export class CmResultComponent implements OnInit {
       req.assessmentId = this.assessment.id
 
       let response = await this.cMAssessmentQuestionControllerServiceProxy.calculateResult(req).toPromise()
-      //this.score = response.score
+      this.score = response
     }
   }
 
@@ -296,7 +237,7 @@ export class CmResultComponent implements OnInit {
   mapProcessData(){
     let data = new ProcessData()
     if (this.processData.technology.length !== 0){
-      data.technology = this.processData.technology.map(ele => {
+      data.technology = this.processData.technology.map((ele: { characteristic: string; question: string; score: number; justification: string; }) => {
         let _data = new ProcessTableData()
         _data.Characteristic = ele.characteristic
         _data.Question = ele.question
@@ -307,7 +248,7 @@ export class CmResultComponent implements OnInit {
     }
 
     if (this.processData.incentives.length !== 0){
-      data.incentives = this.processData.incentives.map(ele => {
+      data.incentives = this.processData.incentives.map((ele: { characteristic: string; question: string; score: number; justification: string; }) => {
         let _data = new ProcessTableData()
         _data.Characteristic = ele.characteristic
         _data.Question = ele.question
@@ -317,7 +258,7 @@ export class CmResultComponent implements OnInit {
       })
     }
     if (this.processData.norms.length !== 0){
-      data.norms = this.processData.norms.map(ele => {
+      data.norms = this.processData.norms.map((ele: { characteristic: string; question: string; score: number; justification: string; }) => {
         let _data = new ProcessTableData()
         _data.Characteristic = ele.characteristic
         _data.Question = ele.question
@@ -339,7 +280,7 @@ export class CmResultComponent implements OnInit {
         _data['Starting Situation'] = ele.starting_situation
         _data['Expected Impact'] = ele.expected_impacts
         let score = this.getOutcomeScores(ele.outcome_score,'scale_GHGs', ele.characteristic)
-        _data.Score = score ? score : '-'
+        _data.Score = score ? score.toString() : '-'
         _data.Justification = ele.justification
         return _data
       })
@@ -351,7 +292,7 @@ export class CmResultComponent implements OnInit {
         _data['Starting Situation'] = ele.starting_situation
         _data['Expected Impact'] = ele.expected_impacts
         let score = this.getOutcomeScores(ele.outcome_score,'sustained_GHGs', ele.characteristic)
-        _data.Score = score ? score : '-'
+        _data.Score = score ? score.toString() : '-'
         _data.Justification = ele.justification
         return _data
       })
@@ -364,7 +305,7 @@ export class CmResultComponent implements OnInit {
         _data['Starting Situation'] = ele.starting_situation
         _data['Expected Impact'] = ele.expected_impacts
         let score = this.getOutcomeScores(ele.outcome_score,'scale_SDs', ele.characteristic)
-        _data.Score = score ? score : '-'
+        _data.Score = score ? score.toString() : '-'
         _data.Justification = ele.justification
         return _data
       })
@@ -377,7 +318,7 @@ export class CmResultComponent implements OnInit {
         _data['Starting Situation'] = ele.starting_situation
         _data['Expected Impact'] = ele.expected_impacts
         let score = this.getOutcomeScores(ele.outcome_score,'sustained_SDs', ele.characteristic)
-        _data.Score = score ? score : '-'
+        _data.Score = score ? score.toString() : '-'
         _data.Justification = ele.justification
         return _data
       })
@@ -428,21 +369,21 @@ export class CmResultComponent implements OnInit {
     if (code) {
       if (category == 'scale_GHGs') {
         if (characteristic.code === 'MACRO_LEVEL') {
-          return (this.scale_GHG_score_macro.find(o => o.code === code))?.label
+          return (this.scale_GHG_score_macro.find(o => o.code === code))?.value
         } else if (characteristic.code === 'MEDIUM_LEVEL') {
-          return (this.scale_GHG_score_medium.find(o => o.code === code))?.label
+          return (this.scale_GHG_score_medium.find(o => o.code === code))?.value
         } else {
-          return (this.scale_GHG_score_micro.find(o => o.code === code))?.label
+          return (this.scale_GHG_score_micro.find(o => o.code === code))?.value
         }
       }
       else if (category == 'sustained_GHGs') {
-        return (this.sustained_GHG_score.find(o => o.code === code))?.label
+        return (this.sustained_GHG_score.find(o => o.code === code))?.value
       }
       else if (category == 'scale_SDs') {
-        return (this.scale_SD_score.find(o => o.code === code))?.label
+        return (this.scale_SD_score.find(o => o.code === code))?.value
       }
       else if (category == 'sustained_SDs') {
-        return (this.sustained_SD_score.find(o => o.code === code))?.label
+        return (this.sustained_SD_score.find(o => o.code === code))?.value
       }
       else {
         return '-'
@@ -452,20 +393,26 @@ export class CmResultComponent implements OnInit {
     }
   }
 
-  changeOutcomeCharacteristicsName(name:string){
-    if(name=='Long term (>15 years)'){
-      return 'Macro Level';
-    }
-    else if(name=='Medium term (5-15 years)'){
-      return 'Medium Level'
-
-
-    }else if(name=='Short Term (<5 years)'){
-      return 'Micro Level'
-
-    }else{
+  changeOutcomeCharacteristicsName(name: string) {
+    if (name == 'Long term (>15 years)') {
+      return 'International Level';
+    } else if (name == 'Medium term (5-15 years)') {
+      return 'National/Sector Level'
+    } else if (name == 'Short Term (<5 years)') {
+      return 'Subnational/ subsectorial'
+    } else if (name === 'Macro Level') {
+      return 'International Level';
+    } else if (name === 'Medium Level') {
+      return 'National/Sector Level'
+    } else if (name === 'Micro Level') {
+      return 'Subnational/ subsectorial'
+    } else {
       return name;
     }
+  }
+
+  getRelevance(relevance: number) {
+    return this.relevances.find((o: any) => o.value === +relevance)?.name
   }
 }
 

@@ -9,10 +9,10 @@
         <div class="p-grid p-fluid col-sm-12">
           <div *ngIf="project.projectApprovalStatus ; else elseblock" class="mb-12">
             <h4 class="mt-4">{{ project.projectApprovalStatus.id == 1 ?'Accepted':project.projectApprovalStatus.id
-              == 5 ?'Accepted':editEntytyId > 0?'View':'Propose an'}} Intervention</h4>
+              == 5 ?'Accepted':editEntytyId > 0?'View ':'Propose an '}} Intervention</h4>
           </div>
           <ng-template #elseblock>
-           <h4>Propose anIntervention</h4>
+           <h4>Propose an Intervention</h4>
           </ng-template>
           <div class="p-2">
             <h6>Contact Details</h6>
@@ -190,7 +190,9 @@
 
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="interventionID">Intervention ID*</label>
+                  <label for="interventionID">Intervention ID*</label> <div type="button" class="pi pi-info-circle ml-10"
+                  pTooltip="Unique project ID/number identifying
+                  the policy/action/investment"></div>
                   <input [disabled]="editEntytyId > 0" type="text" maxlength="50" placeholder="ID of the intervention"
                     #interventionID="ngModel" name="interventionID" pInputText
                     [(ngModel)]="project.intervention_id" [ngModelOptions]="{ standalone: false }"
@@ -475,7 +477,8 @@
 
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="projStatus">Level of Implementation*</label>
+                  <label for="projStatus">Level of Implementation*</label><div type="button" class="pi pi-info-circle ml-10"
+                  pTooltip="Who does implement the policy?"></div>
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocklevelofIpml">
                     <p-dropdown [disabled]="editEntytyId > 0" placeholder="Please Select the Level of Implementation"
                       name="level_of_implemetation" #level_of_implemetation="ngModel" [(ngModel)]="project.levelofImplemenation"
@@ -523,7 +526,7 @@
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="objective">Objective of the intervention</label>
+                  <label for="objective">Objectives and intended impacts or benefits of the intervention</label>
                   <textarea [disabled]="editEntytyId > 0" name="objective" placeholder="Objective" #objective="ngModel"
                     [(ngModel)]="project.objective" rows="5" cols="130" pInputText autoResize="autoResize"
 
@@ -741,11 +744,11 @@
               <h6>Transformational Vision & Stage</h6>
             </div>
             <div class="row p-2">
-              <div class="  col-6">
+              <div class="  col-12">
                                                         
-                <p class="question">What is the envisioned change in the system the intervention is 
+                <label >What is the envisioned change in the system the intervention is 
                   impacting in moving from where the system is currently to where is thould be to achieve 
-                  the transformational shift desired?</p>
+                  the transformational shift desired?</label>
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
@@ -790,9 +793,9 @@
               </div>
             </div>
             <div class="row p-2">
-              <div class="  col-6">
+              <div class="  col-12">
                                                         
-                <p class="question">In which phase of transformation is the system to be transformed?</p>
+                <label >In which phase of transformation is the system to be transformed?</label>
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
@@ -1162,12 +1165,12 @@
           <div class="row p-2" >
             <div class="col-12 col-md-2">
               <div class="p-field">
-                <label class ="barrier-top" for="relatedPolicies">Barrier category</label>
+                <label class ="barrier-top" for="relatedPolicies">Barrier </label>
               </div>
             </div>
             <div class="col-12 col-md-3">
               <div class="p-field">
-                <label class ="barrier-top" for="relatedPolicies">Barrier </label>
+                <label class ="barrier-top" for="relatedPolicies">Explanation </label>
               </div>
             </div>
             <div class="col-12 col-md-3">
@@ -1335,7 +1338,7 @@
           </div>
 
 
-          <div class="row p-2" *ngIf="project.projectStatus?.name! == 'Planned'">
+          <div class="row p-2" *ngIf="project.projectStatus?.name! == 'To be Started'">
 
             <div class="col-12 col-md-6">
               <div class="p-field">
@@ -1375,7 +1378,7 @@
             </div>
           </div>
 
-          <div class="row p-2" *ngIf="project.projectStatus?.name! == 'Planned'">
+          <div class="row p-2" *ngIf="project.projectStatus?.name! == 'To be Started'">
 
             <div class="col-12 col-md-6">
               <div class="p-field">
@@ -1417,7 +1420,7 @@
 
           </div>
 
-          <div class="row p-2" *ngIf="project.projectStatus?.name! == 'Planned'">
+          <div class="row p-2" *ngIf="project.projectStatus?.name! == 'To be Started'">
 
             <div class="col-12 col-md-6">
               <div class="p-field">

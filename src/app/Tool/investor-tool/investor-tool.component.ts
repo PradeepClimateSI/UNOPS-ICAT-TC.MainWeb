@@ -7,6 +7,8 @@ import { Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, Impa
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from 'environments/environment';
+import { HttpResponse } from '@angular/common/http';
 // import { IndicatorDetails } from './IndicatorDetails';
 
 
@@ -62,7 +64,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   description = '';
   levelofImplementation:number=0;
 
-  yesNoAnswer: any[] = [{ id: 1, name: "Yes" }, { id: 2, name: "No" },  { id: 3, name: "Maybe" }];
+  // yesNoAnswer: any[] = [{ id: 1, name: "Yes" }, { id: 2, name: "No" },  { id: 3, name: "Maybe" }];
+  yesNoAnswer: any[] = [{ id: 1, name: "Yes" }, { id: 2, name: "No" }];
   investmentType: any[] = [{ id: 1, name: "Type 01" }, { id: 2, name: "Type 02" },  { id: 3, name: "Type 03" }];
  angle:string
 
@@ -97,6 +100,10 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   failedLikelihoodArray:{category:string,tabIndex:number}[]=[]
   failedRelevanceArray:{category:string,tabIndex:number}[]=[]
 
+  uploadUrl: string;
+  fileServerURL: string;
+  acceptedFiles: string = ".pdf, .jpg, .png, .doc, .docx, .xls, .xlsx, .csv";
+
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
     private masterDataService: MasterDataService,
@@ -110,11 +117,15 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     private activatedRoute: ActivatedRoute
 
 
-  ) { }
+  ) { 
+     this.uploadUrl = environment.baseUrlAPI + '/investor-tool/upload-file-investment'
+    this.fileServerURL = environment.baseUrlAPI+'/investment'
+    
+  }
   async ngOnInit(): Promise<void> {
     this.categoryTabIndex =0;
     this.approach=1
-    
+    this.assessment.assessment_approach = 'Direct'
     this.isLikelihoodDisabled=true;
     this.isRelavanceDisabled=true;
     this.assessment_types = this.masterDataService.assessment_type;
@@ -369,6 +380,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   onsubmit(form: NgForm) {
 
     console.log("assesssssssss", this.assessment)
+    
     if(this.assessment.assessment_approach === 'Direct'){
       console.log("Directttt")
       let finalArray = this.processData.concat(this.outcomeData)
@@ -628,6 +640,25 @@ onRelavanceChange(data:any,ins:any){
   // }
 
 }
+onUpload(event:UploadEvent, data : InvestorAssessment) {
+  if(event.originalEvent.body){
+    data.uploadedDocumentPath = event.originalEvent.body.fileName
+  }
+
+  this.messageService.add({severity: 'info', summary: 'File Uploaded', detail: ''});
+  
+}
+
+
 
 
 }
+interface UploadEvent {
+  originalEvent: HttpResponse<FileDocument>;
+  files: File[];
+  }
+  
+  interface FileDocument {
+  fileName: string
+  }
+  
