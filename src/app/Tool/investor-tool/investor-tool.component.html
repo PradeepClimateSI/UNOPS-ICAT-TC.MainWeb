@@ -54,7 +54,7 @@
                             </div>
                         <div class="p-field p-2">
                             <label for="Sectors Covered">Sectors Covered*</label>
-    
+
                             <p-multiSelect name="sectors" #sectors="ngModel" placeholder="Select Sectors Covered"
                                 [(ngModel)]="sectorArray" [options]="sectorList"
                                 (ngModelChange)="onItemSelectSectors($event)" optionLabel="name"
@@ -69,7 +69,7 @@
                                 This is a mandatory field
                             </p>
                             </div>
-    
+
                         <!-- <div class="p-field p-2">
                             <label for="Sectors Covered">Impacts Covered*</label>
                             <p-multiSelect name="impact" #impacts="ngModel" placeholder="Select Impact Covered"
@@ -88,26 +88,26 @@
                         </div>
      -->
                         <div class="p-field p-2">
-    
+
                             <label for="date1">Assessment Period*</label>
                             <div class="p-inputgroup">
                                 <span class="p-inputgroup-addon">
                                     <i class="pi pi-calendar"></i>
                                 </span>
                                 <p-calendar dateFormat="mm-dd-yy" inputId="date1" placeholder="From"
-                                    [(ngModel)]="assessment.from" name="date1" #date1="ngModel"  [disabled]="isSavedAssessment" [required]="true" appendTo="body"  [disabled]="isSavedAssessment"> 
+                                    [(ngModel)]="assessment.from" name="date1" #date1="ngModel"  [disabled]="isSavedAssessment" [required]="true" appendTo="body"  [disabled]="isSavedAssessment">
                                    </p-calendar>
                                 <span class="p-inputgroup-addon">to</span>
                                 <p-calendar dateFormat="mm-dd-yy" inputId="date2" placeholder="To"
                                     [(ngModel)]="assessment.to" name="date2" #date2="ngModel"  [disabled]="isSavedAssessment"  [required]="true" appendTo="body" [disabled]="isSavedAssessment"></p-calendar>
-                                    
+
                             </div>
                             <div class="col-12">
                                 <p class="info-message text-danger" *ngIf="(date1.invalid || date2.invalid) && (fData.submitted || date1.touched || date2.touched)">
                                     This is a mandatory field
                                   </p>
                             </div>
-                            
+
                         </div>
                         <div class="p-field p-2">
                             <label for="opportunities">Opportunities for stakeholders to participate in the assessment *</label>
@@ -115,14 +115,14 @@
                             placeholder="Opportunities" [(ngModel)]="assessment.opportunities" required />
                             <p class="info-message text-danger" *ngIf="!opportunities.value && (fData.submitted || opportunities.touched)">This is a mandatory field</p>
                       </div>
-          
+
                       <div class="p-field p-2">
                             <label for="principles">Principles on wwhich the assessment is based *</label>
                             <input pInputText type="text" #principles="ngModel" name="principles" ngModel
                             placeholder="Principles" [(ngModel)]="assessment.principles" required />
                             <p class="info-message text-danger" *ngIf="!principles.value && (fData.submitted || principles.touched)">This is a mandatory field</p>
                       </div>
-    
+
                             <!-- <div class="p-field p-2">
                             <label for="Sectors Covered">Assessment Method*</label>
                             <p-dropdown name="type" #method="ngModel" placeholder="Select Assessment Method"
@@ -151,16 +151,16 @@
                             </div>
                         <div class="p-field p-2">
                                     <label for="Sectors Covered">Type of Investment</label>
-                                    <p-dropdown 
-                                        name="investment_type" 
+                                    <p-dropdown
+                                        name="investment_type"
                                         #investment_type="ngModel"
                                          placeholder="Select type of investment"
                                         [(ngModel)]="investorAssessment.investment_type"
                                         [options]="investmentType"  appendTo="body"
-                                        
+
                                         [disabled]="isSavedAssessment"
                                         optionLabel="name" optionValue="name"></p-dropdown>
-                                   
+
                         </div> -->
 
 
@@ -232,7 +232,7 @@
                 </div> -->
                 <div class="row p-2">
                     <div class="col-12 col-md-6">
-                   
+
                     </div>
 
 
@@ -278,8 +278,8 @@
                                             <div class=" mt-2">
                                                 <div class="p-grid p-fluid col-12">
                                                     <div class="row p-2">
-                                                     
-                                                       
+
+
                                                                 <div class="col-2">
                                                                     <label for="Description">Relevance</label>
                                                                 </div>
@@ -297,14 +297,14 @@
                                                                     name="data.charData.relavance"
                                                                     placeholder="Select Institution"
                                                                     [(ngModel)]="data.relavance"
-                                                                    [options]="instiTutionList" 
+                                                                    [options]="instiTutionList"
                                                                     optionLabel="name"
                                                                     appendTo="body"
                                                                     optionValue="id"
-                                                                   [required]="true"></p-dropdown>   
+                                                                   [required]="true"></p-dropdown>
                                                                 </div>
-                                                                
-                                                          
+
+
 
                                                         <!-- <div class="col-12 col-lg-6"   *ngIf="approach===1">
                                                             <div class="p-field">
@@ -331,7 +331,7 @@
                                                                     class="p-inputtext"></textarea>
                                                             </div>
                                                         </div> -->
-                                                        
+
                                                             <div class="col-2">
                                                               <label for="Description">Description</label>
                                                             </div>
@@ -339,7 +339,7 @@
                                                               <!-- <label for="Description">{{question.question.description}}</label> -->
                                                               <p style="text-align: justify;">{{data.characteristics.investmentDescription}}</p>
                                                             </div>
-                                                         
+
 
                                                         <!-- <div class="col-12 col-lg-6">
                                                             <div class="p-field">
@@ -356,18 +356,18 @@
                                                         </div> -->
                                                     </div>
 
-                                                   
+
                                                     <div class="row p-2">
                                                         <!-- <label for="Indicator"><u>Indicator</u></label> -->
                                                         <div class="row" *ngFor="let question of data.indicator_details">
                                                             <label *ngIf="question.question.isMain" for="Indicator" class="mt-10 mb-10"><u>{{question.question.name}}</u></label>
-                                                            
+
                                                              <div class="row" *ngIf="!question.question.isMain">
                                                                 <div  class=" ml-25 col-6 mb-20">
                                                                     <p  class="question">{{question.question.name}}</p>
                                                                  </div>
                                                                  <div class="col-4 mb-20">
-                                                            
+
                                                                     <p-dropdown *ngIf="approach===1"
                                                                         name="data.charData.question01" #type="ngModel"
                                                                         placeholder="Select Answer"
@@ -383,13 +383,13 @@
                                                                         [options]="instiTutionList" optionLabel="name"
                                                                         appendTo="body"
                                                                         optionValue="id" [required]="true">
-                                                                    </p-dropdown> 
-        
+                                                                    </p-dropdown>
+
                                                                  </div>
                                                              </div>
                                                              <div class="row" *ngIf="!question.question.isMain">
                                                                 <div class=" ml-25 col-6 mb-20">
-                                                        
+
                                                                     <p class="justifiaction" class="question">Comment and justifiaction</p>
                                                                   </div>
                                                                   <div class="col-4 mb-20">
@@ -397,12 +397,12 @@
                                                                     [(ngModel)]="question.justification"
                                                                     placeholder="Enter Justifiaction"
                                                                     name="data.charData.likelihood_justification" />
-                                                                    
+
                                                                  </div>
                                                              </div>
-                                                         
-                                                            
-                                                         
+
+
+
                                                         </div>
 
                                                     </div>
@@ -411,7 +411,7 @@
                                                         <div class="col-12 col-lg-6">
                                                             <div class="p-field">
                                                                 <label for="likelihood">Likelihood</label>
-                                                                <p-dropdown *ngIf="approach===1" 
+                                                                <p-dropdown *ngIf="approach===1"
                                                                     name="data.charData.likelihood"
                                                                     #type="ngModel" placeholder="Select Likelihood"
                                                                     [(ngModel)]="data.likelihood"
@@ -426,7 +426,7 @@
                                                                     [options]="instiTutionList" optionLabel="name"
                                                                     appendTo="body"
                                                                     optionValue="id" [required]="true">
-                                                                </p-dropdown> 
+                                                                </p-dropdown>
 
                                                             </div>
                                                         </div>
@@ -445,7 +445,7 @@
                                                     <div class="row p-2">
                                                         <label for="question">Supporting Documentation</label>
                                                 </div>
-                    
+
                                                   <div class="row p-2 align-items-center">
                                                     <div class="col-2 d-flex align-items-center">
                                                       <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload" name="files"
@@ -453,11 +453,11 @@
                                                         accept="{{acceptedFiles}}" [maxFileSize]="5000000" [auto]="true">
                                                       </p-fileUpload>
                                                     </div>
-                    
+
                                                     <div class="col-2 d-flex align-items-center" *ngIf="data.uploadedDocumentPath">
                                                       <p>{{data.uploadedDocumentPath}}</p>
                                                     </div>
-                    
+
                                                     <div class="col-2 d-flex align-items-center" *ngIf="data.uploadedDocumentPath">
                                                       <a target="_blank" [href]="fileServerURL+'/'+data.uploadedDocumentPath"><i
                                                           class="pi pi-download download"></i></a>
@@ -470,7 +470,7 @@
                                                                 <label for="Relevance">Relevance Weight (%)</label>
                                                                 <p-inputNumber inputId="locale-us" mode="decimal"
                                                                     [min]="0" [max]="100"
-                                                                    locale="en-US" 
+                                                                    locale="en-US"
                                                                     [minFractionDigits]="2"
                                                                     [(ngModel)]="data.relevance_weight"
                                                                     placeholder="Enter Relevance Weight"
@@ -489,7 +489,7 @@
                                                                 <label for="Relevance">Likelihood Weight (%)</label>
                                                                 <p-inputNumber inputId="locale-us" mode="decimal"
                                                                     [min]="0" [max]="100"
-                                                                    locale="en-US" 
+                                                                    locale="en-US"
                                                                     [minFractionDigits]="2"
                                                                     [(ngModel)]="data.likelihood_weight"
                                                                     placeholder="Enter Likelihood Weight"
@@ -545,10 +545,10 @@
                                                         <!-- <label for="Indicator"><u>Indicator</u></label> -->
                                                         <div class="row" *ngFor="let question of data.indicator_details">
                                                             <div class=" ml-25 col-5 mb-20">
-                                                        
+
                                                             <p class="question">{{question.question.name}}</p>
                                                           </div>
-                                                          <div 
+                                                          <div
                                                             class="col-4 mb-20">
                                                             <p-dropdown  *ngIf="approach===1"
                                                                 name="data.charData.question01" #type="ngModel"
@@ -566,7 +566,7 @@
                                                                 [options]="instiTutionList" optionLabel="name"
                                                                 appendTo="body"
                                                                 optionValue="id" [required]="true">
-                                                            </p-dropdown> 
+                                                            </p-dropdown>
 
                                                             </div>
                                                         </div>
@@ -617,12 +617,12 @@
                                                                 <label for="Relevance">Score</label>
                                                                 <!-- <p-inputNumber *ngIf="approach===1"
                                                                     inputId="horizontal"
-                                                                    [(ngModel)]="data.score"  
+                                                                    [(ngModel)]="data.score"
                                                                     [showButtons]="true" [min]="-1" [max]="3" [step]="1"
                                                                     inputId="minmax-buttons"
                                                                     placeholder="Enter an integer between -1 and 3"
-                                                                    
-                                                                    name="data.charData.score"> 
+
+                                                                    name="data.charData.score">
                                                                 </p-inputNumber> -->
                                                                 <p-dropdown  *ngIf="approach===1"
                                                                     name=data.charData.score
@@ -631,27 +631,27 @@
                                                                     [options]="score" optionLabel="name"
                                                                     appendTo="body"
                                                                     optionValue="value" [required]="true">
-                                                                 </p-dropdown> 
+                                                                 </p-dropdown>
                                                                 <!-- <p-inputMask type="text" name="telephoneNumber" mask="9" [autoClear]="true" characterPattern="[1-3]\d*$"
-                                                                placeholder="+99 999 999-9999"  [(ngModel)]="data.score"  
-                                                                [ngModelOptions]="{ standalone: false }" #telephoneNumber="ngModel" 
-                                                               
+                                                                placeholder="+99 999 999-9999"  [(ngModel)]="data.score"
+                                                                [ngModelOptions]="{ standalone: false }" #telephoneNumber="ngModel"
+
                                                                 placeholder="Enter an integer between -1 and 3"
                                                                 [required]="true"></p-inputMask>   -->
-                                                                <!-- <input type="number" [(ngModel)]="data.score" 
+                                                                <!-- <input type="number" [(ngModel)]="data.score"
                                                                 name="data.charData.score" min="-1" max="3" readonly> -->
-                                                               
-                                                             
+
+
                                                                 <!-- <p-inputNumber [(ngModel)]="data.score" [min]="-1" [max]="3" [readonly]="true"  name="data.charData.score" (onInput)="validateScore($event)"></p-inputNumber> -->
-                                                                
+
                                                                 <p-dropdown  *ngIf="approach===2"
                                                                     name={{data}}_charData.relavance
                                                                     placeholder="Select Institution"
-                                                                    [(ngModel)]="data.score"  
+                                                                    [(ngModel)]="data.score"
                                                                     [options]="instiTutionList" optionLabel="name"
                                                                     appendTo="body"
                                                                     optionValue="id" [required]="true">
-                                                                </p-dropdown> 
+                                                                </p-dropdown>
                                                             </div>
                                                         </div>
 
@@ -667,7 +667,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="row p-2" *ngIf=" category.CategoryName ==='Scale GHGs' && data.characteristics.name === 'Micro Level'">
+                                                    <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level'">
                                                         <div class="col-12 col-lg-6">
                                                           <div class="p-field">
                                                             <label for="expected_ghg_mitigation">Expected GHG mitgation (Mt CO2-eq)</label>
@@ -684,7 +684,7 @@
                                                                 [options]="instiTutionList" optionLabel="name"
                                                                 appendTo="body"
                                                                 optionValue="id" [required]="true">
-                                                            </p-dropdown> 
+                                                            </p-dropdown>
                                                           </div>
                                                         </div>
 
@@ -716,7 +716,7 @@
             <div>
                 <!-- <div class=" col-md-10 offset-md-4" style="color:red" >
                     <div class="col align-self-end" *ngIf="failedLikelihoodArray.length!=0">
-                       Please make sure to set Likelihood weights for   
+                       Please make sure to set Likelihood weights for
                        <span  *ngFor="let data of failedLikelihoodArray ; let last = last" class="array-item">
                            {{data.category}}<span  *ngIf="!last">, </span>
                         </span > should sum up to 100%.
@@ -726,17 +726,17 @@
                         Please make sure to set Relevance weights for <span  *ngFor="let data of failedRelevanceArray ; let last = last" class="array-item">
                             {{data.category}} <span  *ngIf="!last">, </span>
                          </span > should sum up to 100%.
-                          
-                        
+
+
                     </div>
                 </div> -->
-                
-               
+
+
 
                 <div
                 class="d-flex flex-row-reverse mt-20 ">
                     <button class="btn btn-primary text-uppercase" type="submit" [disabled]="failedLikelihoodArray.length!=0 ||failedRelevanceArray.length!=0">
-                        {{approach==1 ?'Calculate & Check results': (approach==2 ?'Send to Data Collection Team':'')}} 
+                        {{approach==1 ?'Calculate & Check results': (approach==2 ?'Send to Data Collection Team':'')}}
                     </button>
                 </div>
             </div>
@@ -748,7 +748,7 @@
                 <div
                 class="d-flex flex-row-reverse mt-20 ">
                     <div class="btn btn-primary text-uppercase" (click)="next()" [class.disabled]="(!isLikelihoodDisabled || !isRelavanceDisabled)">
-                   
+
                        Next
                     </div>
                 </div>
