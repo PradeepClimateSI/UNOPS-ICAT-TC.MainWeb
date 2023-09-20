@@ -1,5 +1,5 @@
 
-  <div class="row">
+  <!-- <div class="row">
     <div class="col-md-5 col-12 d-flex align-items-stretch">
         <div class="p-grid p-fluid card m-3">
             <div class="row text-center ">
@@ -8,7 +8,6 @@
                 <div  class="col-12 " >
                   <p-messages severity="warn" >
                     <ng-template pTemplate>
-                        <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
                         <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
                         <div class="ml-2">No data to show.</div>
                     </ng-template>
@@ -19,11 +18,6 @@
               <ng-template #elseBlock1>
                 <h2  class="tc-value">{{averageTCValue}}%</h2>
                 <div class="col-12  mt-20 ml-10" >
-                  <!-- <p-progressBar [value]="value" [style]="{ 'height': '20px' }" ></p-progressBar>
-
-                  <ng-template #displayTemplate let-value>
-                    <div class="progress-value">{{ value }}%</div>
-                  </ng-template> -->
                   <div class="first">
                     <div class="second" [ngStyle]="{'width.%':averageTCValue}">
 
@@ -53,13 +47,11 @@
           <div class="row text-center ">
             <h3>Sectors Targeted</h3>
             <div *ngIf="sectorCount" [hidden]="sectorCount.length==0" class="col-12  mt-20 ml-10 chart-container"  >
-             <!--     <canvas  id="CMBarCahart">{{CMBarChart}}</canvas> -->
               <canvas   id="pieChart2">{{pieChart2}}</canvas>
             </div>
             <div  *ngIf="sectorCount" class="col-12 " [hidden]="sectorCount.length!==0 ">
               <p-messages severity="warn" >
                 <ng-template pTemplate>
-                    <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
                     <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
                     <div class="ml-2">No data to show.</div>
                 </ng-template>
@@ -79,14 +71,14 @@
         </div>
     </div>
 
-  </div>
+  </div> -->
 
 
 
 
 
 
-<div class="p-grid p-fluid card mt-20 m-3">
+<!-- <div class="p-grid p-fluid card mt-20 m-3">
   <div class="row text-center " >
       <h3>Transformational Change by Interventions</h3>
       <div  class="col-12  mt-20 ml-10 chart-container"  style="max-height: 600px;">
@@ -94,7 +86,6 @@
           <div  class="col-12 " [hidden]="tcData.length!==0">
             <p-messages severity="warn" >
               <ng-template pTemplate>
-                  <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
                   <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
                   <div class="ml-2">No data to show.</div>
               </ng-template>
@@ -111,7 +102,7 @@
 
        </div>
    </div>
-</div>
+</div> -->
 
 
 <div class="row">
@@ -119,11 +110,10 @@
       <div class="p-grid p-fluid card m-3">
           <div class="row text-center ">
               <h3>Recent Assessments Done</h3>
-              <ng-container *ngIf="tcData.length==0; else elseBlock3">
+              <ng-container *ngIf="tableData.length==0; else elseBlock3">
                 <div  class="col-12 " >
                   <p-messages severity="warn" >
                     <ng-template pTemplate>
-                        <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
                         <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
                         <div class="ml-2">No data to show.</div>
                     </ng-template>
@@ -135,7 +125,7 @@
                 <div  class="col-12  mt-20 ml-10" >
 
                   <p-table
-                  [value]="tcTableData"
+                  [value]="tableData"
                   [paginator]="true"
                   [rows]="5"
                   [showCurrentPageReport]="true"
@@ -145,17 +135,17 @@
               >
                   <ng-template pTemplate="header">
                       <tr>
-                          <th style="width:15%">ID</th>
-                          <th style="width:70%">Intervention</th>
-                          <th style="width:15%">TC Value</th>
+                          <th style="width:15%">Intervention Name</th>
+                          <th style="width:70%">Process of Change Score</th>
+                          <th style="width:15%">Outcome of Change Score</th>
 
                       </tr>
                   </ng-template>
-                  <ng-template pTemplate="body" let-tcTableData>
+                  <ng-template pTemplate="body" let-tableData>
                       <tr>
-                          <td>{{ tcTableData.x }}</td>
-                          <td>{{ tcTableData.data }}</td>
-                          <td>{{ tcTableData.y }}</td>
+                          <td>{{ tableData?.intervention }}</td>
+                          <td>{{ tableData.process_score }}</td>
+                          <td>{{ tableData.outcome_score }}</td>
                       </tr>
                   </ng-template>
               <!--     <ng-template pTemplate="paginatorleft">
