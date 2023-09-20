@@ -58,6 +58,7 @@ export class CmSectionThreeComponent implements OnInit {
   adaptation_scale_score: SelectedScoreDto[]
   adaptation_sustained_score: SelectedScoreDto[]
   SDGScore: any = 0;
+  adaptationScore: any = 0;
   SDGWeight: any = '10%';
   GHGScore: any;
   acceptedFiles: string = ".pdf, .jpg, .png, .doc, .docx, .xls, .xlsx, .csv";
@@ -91,11 +92,14 @@ export class CmSectionThreeComponent implements OnInit {
     this.adaptation_sustained_score = this.masterDataService.adaptation_sustained_score
     this.SDGs = this.masterDataService.SDGs
     this.categories = await this.cMQuestionControllerServiceProxy.getUniqueCharacterisctics().toPromise()
+    console.log(this.categories)
     this.selectedType = this.types[0]
     this.selectedCategory = this.categories[this.selectedType.code][0]
     this.onMainTabChange({index: 0})
     this.onCategoryTabChange({index: 0})
     this.outcome = await this.methodologyAssessmentControllerServiceProxy.getAllOutcomeCharacteristics().toPromise()
+    console.log(this.outcome)
+    this.outcome = this.outcome.sort((a: any,b: any) => a.order - b.order)
     this.institutionControllerServiceProxy.getAllInstitutions().subscribe((res: any) => {
       this.institutions = res;
     });
@@ -117,7 +121,7 @@ export class CmSectionThreeComponent implements OnInit {
     // this.questions = await this.cMQuestionControllerServiceProxy.getQuestionsByCharacteristic(ids).toPromise()
     // console.log(this.questions)
     // console.log(this.selectedCategory, ids)
-    this.categoryTabIndex =event.index;
+        this.categoryTabIndex =event.index;
   }
 
   onSelectSDG(event: any) {
@@ -164,27 +168,33 @@ export class CmSectionThreeComponent implements OnInit {
     throw new Error('Method not implemented.');
   }
 
-  next() {
-    console.log(this.outcome)
+  next(characteristics?: any[]) {
 
-    console.log(this.selectedSDGs)
+    if (characteristics?.filter(o => o.relevance !== undefined)?.length === characteristics?.length){
+      if (this.activeIndexMain === 1) {
+        this.activeIndex2 = this.activeIndex2 + 1;
+      }
+      if (this.activeIndex === this.categories.process.length-1) {
+        this.activeIndexMain = 1;
+      }
+      if (this.activeIndex <= this.categories.process.length-2 && this.activeIndex >= 0 && this.activeIndexMain === 0) {
+        this.activeIndex = this.activeIndex + 1;
+      }
+      if (this.activeIndexMain === 0){
+        this.onCategoryTabChange({index: this.activeIndex})
+      }
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Please fill all mandotory fields',
+        closable: true,
+      });
+    }
     
-    if (this.activeIndexMain === 1) {
-      this.activeIndex2 = this.activeIndex2 + 1;
-    }
-    if (this.activeIndex === this.categories.process.length-1) {
-      this.activeIndexMain = 1;
-    }
-    if (this.activeIndex <= this.categories.process.length-2 && this.activeIndex >= 0 && this.activeIndexMain === 0) {
-      this.activeIndex = this.activeIndex + 1;
-    }
-    if (this.activeIndexMain === 0){
-      this.onCategoryTabChange({index: this.activeIndex})
-    }
   }
 
   onSelectScore(event: any, char: CMResultDto, index: number, type: string) {
-    console.log("onSelectScore", event)
     let score = new ScoreDto()
     // score.name = event.value.name
     // score.code = event.value.code
@@ -194,13 +204,12 @@ export class CmSectionThreeComponent implements OnInit {
     if (index === 2) {
       if (char.characteristic.category.code === 'SUSTAINED_GHG') {
         let score = 0
-        this.outcome.forEach((category: { results: CMResultDto[]; }) => {
+        this.outcome.forEach((category: OutcomeCategory) => {
           category.results.forEach((result) => {
-            console.log(result.selectedScore)
               if(result.selectedScore.value) score = score + result.selectedScore.value
           })
         })
-        this.GHGScore = (score / 6).toFixed(5)
+        this.GHGScore = Math.round(score / 6)
       } else if (char.characteristic.category.code === 'SUSTAINED_SD') {
         let score = 0
         this.selectedSDGs.forEach(sdg => {
@@ -211,7 +220,15 @@ export class CmSectionThreeComponent implements OnInit {
             if(susr.selectedScore.value) score = score + susr.selectedScore.value
           })
         })
-        this.SDGScore = ((score / 6) * (2.5 / 100)).toFixed(5)
+        this.SDGScore = Math.round(score / 6 / this.selectedSDGs.length)
+      } else if (char.characteristic.category.code === 'ADAPTATION') {
+        let score = 0
+        this.outcome.forEach((category: OutcomeCategory) => {
+          category.results.forEach((result) => {
+              if(result.selectedScore.value) score = score + result.selectedScore.value
+          })
+        })
+        this.GHGScore = Math.round(score / 6)
       }
     }
   }
@@ -367,6 +384,19 @@ export class CmSectionThreeComponent implements OnInit {
     }
     
     this.messageService.add({severity: 'info', summary: 'File Uploaded', detail: ''});
+  }
+
+  checkRelevance(index: number, categories: any[]): boolean {
+    if (index === 0){
+      return false
+    } else {
+      for (let i = 0; i<index+1; i++){
+        if (categories[i].characteristics.filter((o: { relevance: undefined; }) => o.relevance !== undefined).length !== categories[i].characteristics.length){
+          return true
+        }
+      }
+      return false
+    }
   }
 }
 

@@ -119,7 +119,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   ) { 
      this.uploadUrl = environment.baseUrlAPI + '/investor-tool/upload-file-investment'
-    this.fileServerURL = environment.baseUrlAPI+'/investment'
+    this.fileServerURL = environment.baseUrlAPI+'/uploads'
     
   }
   async ngOnInit(): Promise<void> {
@@ -191,22 +191,24 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
     });
     this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().subscribe((res3: any) => {
-      let res:Characteristics[] = res3
-      for(let i of res){
-          if ( !['Beneficiaries', 'Disincentives', 'Institutional and regulatory'].includes(i.name)) {
-          this.characteristicsList.push(i)
-        }
-      }
+      // let res:Characteristics[] = res3
+      this.characteristicsList =res3
+      // for(let i of res){
+      //     if ( !['Beneficiaries', 'Disincentives', 'Institutional and regulatory'].includes(i.name)) {
+      //     this.characteristicsList.push(i)
+      //   }
+      // }
       // console.log("charList",this.characteristicsList)
     });
 
     this.methodologyAssessmentControllerServiceProxy.findAllCategories().subscribe((res2: any) => {
-      console.log("categoryList", res2)
+      // console.log("categoryList", res2)
       for (let x of res2) {
         let categoryArray: InvestorAssessment[] =[];
         for (let z of this.characteristicsList) {
-
+          // console.log(z.category.name,x.name,z.category.name === x.name)
           if (z.category.name === x.name) {
+            // console.log("=========================",x.name)
             let newCharData = new InvestorAssessment();
             newCharData.characteristics = z;
            

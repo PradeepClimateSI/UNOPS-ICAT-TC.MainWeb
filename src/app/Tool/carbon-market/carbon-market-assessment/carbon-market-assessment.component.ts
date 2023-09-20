@@ -66,6 +66,7 @@ visible_ex_ante: any;
     //save assessment
     this.assessment.tool = 'Carbon Market Tool'
     this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
+    this.assessment.assessment_approach = 'DIRECT'
 
     if (form.valid) {
       this.methodologyAssessmentControllerServiceProxy.saveAssessment(this.assessment)
