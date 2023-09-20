@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Assessment, AssessmentCMDetail, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CalculateDto, Characteristics, ClimateAction } from 'shared/service-proxies/service-proxies';
-import * as XLSX from 'xlsx'; 
+import * as XLSX from 'xlsx';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { MasterDataService } from 'app/shared/master-data.service';
@@ -194,7 +194,7 @@ export class CmResultComponent implements OnInit {
         this.expandedRows[c] = true
       })
     })
-   
+
   }
 
   async getResult() {
@@ -208,17 +208,17 @@ export class CmResultComponent implements OnInit {
       this.keys = this.keys.filter(e => e !== "undefined")
       console.log("res",res)
       console.log("keys", this.keys)
-  
-  
+
+
       this.criterias.forEach((c: any) => {
         this.expandedRows[c] = false
       })
-  
+
       let req = new CalculateDto()
       req.assessmentId = this.assessment.id
-  
+
       let response = await this.cMAssessmentQuestionControllerServiceProxy.calculateResult(req).toPromise()
-      this.score = response.score
+      //this.score = response.score
     }
   }
 
@@ -338,7 +338,7 @@ export class CmResultComponent implements OnInit {
         _data.Characteristic = ele.characteristic
         _data['Starting Situation'] = ele.starting_situation
         _data['Expected Impact'] = ele.expected_impacts
-        let score = this.getOutcomeScores(ele.outcome_score,'scale_GHGs', ele.characteristic) 
+        let score = this.getOutcomeScores(ele.outcome_score,'scale_GHGs', ele.characteristic)
         _data.Score = score ? score : '-'
         _data.Justification = ele.justification
         return _data
@@ -350,7 +350,7 @@ export class CmResultComponent implements OnInit {
         _data.Characteristic = this.changeOutcomeCharacteristicsName(ele.characteristic)
         _data['Starting Situation'] = ele.starting_situation
         _data['Expected Impact'] = ele.expected_impacts
-        let score = this.getOutcomeScores(ele.outcome_score,'sustained_GHGs', ele.characteristic) 
+        let score = this.getOutcomeScores(ele.outcome_score,'sustained_GHGs', ele.characteristic)
         _data.Score = score ? score : '-'
         _data.Justification = ele.justification
         return _data
@@ -363,7 +363,7 @@ export class CmResultComponent implements OnInit {
         _data.Characteristic = ele.characteristic
         _data['Starting Situation'] = ele.starting_situation
         _data['Expected Impact'] = ele.expected_impacts
-        let score = this.getOutcomeScores(ele.outcome_score,'scale_SDs', ele.characteristic) 
+        let score = this.getOutcomeScores(ele.outcome_score,'scale_SDs', ele.characteristic)
         _data.Score = score ? score : '-'
         _data.Justification = ele.justification
         return _data
@@ -376,7 +376,7 @@ export class CmResultComponent implements OnInit {
         _data.Characteristic = this.changeOutcomeCharacteristicsName(ele.characteristic)
         _data['Starting Situation'] = ele.starting_situation
         _data['Expected Impact'] = ele.expected_impacts
-        let score = this.getOutcomeScores(ele.outcome_score,'sustained_SDs', ele.characteristic) 
+        let score = this.getOutcomeScores(ele.outcome_score,'sustained_SDs', ele.characteristic)
         _data.Score = score ? score : '-'
         _data.Justification = ele.justification
         return _data
@@ -462,7 +462,7 @@ export class CmResultComponent implements OnInit {
 
     }else if(name=='Short Term (<5 years)'){
       return 'Micro Level'
-      
+
     }else{
       return name;
     }

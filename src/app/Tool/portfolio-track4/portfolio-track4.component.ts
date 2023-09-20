@@ -127,7 +127,7 @@ export class PortfolioTrack4Component implements OnInit {
 
   ) {
     this.uploadUrl = environment.baseUrlAPI + '/investor-tool/upload-file'
-    this.fileServerURL = environment.baseUrlAPI+'/portfolio'
+    this.fileServerURL = environment.baseUrlAPI+'/uploads'
 
   }
 
@@ -287,7 +287,18 @@ export class PortfolioTrack4Component implements OnInit {
     });
 
     this.methodologyAssessmentControllerServiceProxy.findAllCategories().subscribe(async (res2: any) => {
+      const customOrder = [1, 2, 3, 5, 4, 7, 6, 8, 9, 10];
+
       console.log("categoryList", res2)
+
+      const sortedRes2 = res2.sort((a : any, b: any) => {
+        const indexA = customOrder.indexOf(a.id);
+        const indexB = customOrder.indexOf(b.id);
+        return indexA - indexB;
+      });
+
+      console.log("categoryList222", sortedRes2);
+
       for (let x of res2) {
         let categoryArray: InvestorAssessment[] = [];
         for (let z of this.characteristicsList) {
