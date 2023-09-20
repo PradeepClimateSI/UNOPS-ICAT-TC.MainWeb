@@ -9,6 +9,7 @@
         [showCurrentPageReport]="true"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
         [rowsPerPageOptions]="[5, 10, 20]"
+        (onPage)="paginate($event)"
       >
         <ng-template pTemplate="header">
           <tr>

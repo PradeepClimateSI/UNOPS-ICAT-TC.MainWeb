@@ -5,6 +5,7 @@ import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 import decode from 'jwt-decode';
 import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
 import { MasterDataService } from 'app/shared/master-data.service';
+import { Paginator } from 'primeng/paginator';
 
 @Component({
   selector: 'app-investment-dashboard',
@@ -30,6 +31,12 @@ export class InvestmentDashboardComponent implements OnInit {
   pieChart1:any=[];
   CMBarChart:any =[];
   pieChartCM:any=[];
+  slicedData:{
+    assessment: number,
+    process_score: number,
+    outcome_score: number,
+    intervention: string
+  }[]=[];
   tcData: {
     x:number,
     y:number,
@@ -58,7 +65,7 @@ export class InvestmentDashboardComponent implements OnInit {
 
   xData: {label: string; value: number}[]
   yData: {label: string; value: number}[]
-
+  rows :number;
   score={
     process_score: [], outcome_score: [] 
   }
@@ -669,11 +676,18 @@ export class InvestmentDashboardComponent implements OnInit {
   }
 
   getIntervention(x:number, y: number){
-    if (this.score.process_score[y] === 1 && this.score.outcome_score[x] === 1){
-      return true
-    } else {
-      return false
-    }
-  }
+    return this.slicedData.some(item => item.outcome_score === x && item.process_score === y);
 
+  }
+  paginate(event:Paginator|undefined) {
+    if (event){
+      console.log("paginate",event)
+      this.slicedData = this.calResults.slice(event?.first,event?.first+this.rows)
+    }
+    else{
+      this.slicedData = this.calResults.slice(0,this.rows)
+    }
+   
+
+  }
 }
