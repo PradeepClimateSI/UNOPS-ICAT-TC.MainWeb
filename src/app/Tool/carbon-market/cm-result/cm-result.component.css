@@ -46,6 +46,13 @@ td {
     border: 1px solid black;
 }
 
-.p-table td {
+.p-table td{
     border: 1px solid black;
-  }
+    text-align: center;
+}
+
+.p-table th{
+    border: 1px solid black;
+    text-align: center;
+}
+
