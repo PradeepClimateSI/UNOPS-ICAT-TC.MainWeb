@@ -257,8 +257,8 @@
     <!-- <div class="p-grid p-fluid col-sm-12" *ngIf="showSections">
         <app-cm-section [assessment]="assessmentres"></app-cm-section>
     </div> -->
-    <div class="card" *ngIf="isSavedAssessment">
-        <!-- <div class="card" > -->
+    <!-- <div class="card" *ngIf="isSavedAssessment"> -->
+        <div class="card" >
         <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)" >
         <p-tabView  (onChange)="onMainTabChange($event) " [(activeIndex)]="activeIndexMain ">
 
@@ -542,7 +542,7 @@
                                             <div class=" mt-2">
                                                 <div class="p-grid p-fluid col-12">
                                                     <div class="row p-2">
-                                                        <label for="Indicator"><u>Indicator</u></label>
+                                                        <!-- <label for="Indicator"><u>Indicator</u></label> -->
                                                         <div class="row" *ngFor="let question of data.indicator_details">
                                                             <div class=" ml-25 col-5 mb-20">
                                                         
@@ -712,9 +712,9 @@
 
         </p-tabView>
 
-        <div  *ngIf="activeIndex2===3 && activeIndexMain===1" class="row justify-content-end">
+        <div  *ngIf="activeIndex2===5 && activeIndexMain===1" class="row justify-content-end">
             <div>
-                <div class=" col-md-10 offset-md-4" style="color:red" >
+                <!-- <div class=" col-md-10 offset-md-4" style="color:red" >
                     <div class="col align-self-end" *ngIf="failedLikelihoodArray.length!=0">
                        Please make sure to set Likelihood weights for   
                        <span  *ngFor="let data of failedLikelihoodArray ; let last = last" class="array-item">
@@ -729,7 +729,7 @@
                           
                         
                     </div>
-                </div>
+                </div> -->
                 
                
 
@@ -742,7 +742,7 @@
             </div>
         </div>
 
-        <div    *ngIf="activeIndex2!==3 || activeIndexMain!==1" class="row justify-content-end">
+        <div    *ngIf="activeIndex2!==5 || activeIndexMain!==1" class="row justify-content-end">
             <div>
 
                 <div
