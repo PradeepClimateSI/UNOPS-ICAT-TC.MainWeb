@@ -1,64 +1,160 @@
-<div class="p-grid p-fluid card mt-20 m-3">
-    <div class="row text-center ">
-        <h3>Transformational Change of Interventions by Investment</h3>
-        <div [hidden]="tcData.length==0" class="col-12  mt-20 ml-10 chart-container"  style="max-height: 600px;">
-            <canvas  id="canvas">{{chart}}</canvas>
-        </div>
-        <div  class="col-12 " [hidden]="tcData.length!=0">
-            <p-messages severity="warn" >
-              <ng-template pTemplate>
-                  <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
-                  <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
-                  <div class="ml-2">No data to show.</div>
-              </ng-template>
-          </p-messages>
+<div class="p-grid p-fluid card m-3">
+  <div class="row">
+    <h3>Recent Assessments Done</h3>
+    <div class="col-12 mt-20 ml-10" [hidden]="calResults?.length == 0">
+      <p-table
+        [value]="calResults"
+        [paginator]="true"
+        [rows]="5"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [rowsPerPageOptions]="[5, 10, 20]"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="table-header-3">Intervention Name</th>
+            <th class="table-header">Process of change Score</th>
+            <th class="table-header">Outcome of Change Score</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-calResults>
+          <tr>
+            <td>
+              {{
+                calResults?.assesment?.climateAction?.policyName
+                  ? calResults?.assesment?.climateAction?.policyName
+                  : "-"
+              }}
+            </td>
+            <td style="text-align: center">
+              {{ calResults?.relevance == null ? "-" : calResults?.relevance }}
+            </td>
+            <td style="text-align: center">
+              {{
+                calResults?.likelihood == null ? "-" : calResults?.likelihood
+              }}
+            </td>
+          </tr>
+        </ng-template>
+        <!--     <ng-template pTemplate="paginatorleft">
+              <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"></p-button>
+          </ng-template> -->
+        <!--                 <ng-template pTemplate="paginatorright">
+              <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
+          </ng-template> -->
+      </p-table>
+    </div>
+    <div class="col-12" [hidden]="calResults?.length != 0">
+      <p-messages severity="warn">
+        <ng-template pTemplate>
+          <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
+          <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
+          <div class="ml-2">No data to show.</div>
+        </ng-template>
+      </p-messages>
+    </div>
+  </div>
+</div>
 
-       </div>
-     </div>
+<div class="p-grid p-fluid card mt-20 m-3">
+  <div class="row text-center">
+    <table class="heatmap" style="border: 1px solid black; text-align: center">
+      <!-- <thead>
+              <tr>
+                <th>Process: Transformational Change supported</th>
+                <th>Outcomes: Extent and sustained nature of the transformation</th>
+              </tr>
+            </thead> -->
+      <tbody>
+        <tr>
+          <td></td>
+          <td colspan="7">
+            Outcome: Extent and sustained nature of the transformation
+          </td>
+        </tr>
+        <tr>
+          <td rowspan="7">Process: Transformational change supported</td>
+        </tr>
+        <tr>
+          <td></td>
+          <ng-container *ngFor="let x of xData">
+            <td>{{ x.label }}</td>
+          </ng-container>
+        </tr>
+        <tr *ngFor="let y of yData">
+          <td>{{ y.label }}</td>
+          <ng-container *ngFor="let x of xData">
+            <td
+              [style.background-color]="getBackgroundColor(y.value + x.value)"
+            >
+              <span
+                [ngClass]="
+                  getIntervention(x.value, y.value) ? 'intervention' : ''
+                "
+                >{{ y.value + x.value }}</span
+              >
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 <div class="row">
-    
-    <div class="col-md-6 col-12 d-flex align-items-stretch">
-        <div class="p-grid p-fluid card m-3">
-            <div class="row text-center ">
-                <h3>Frequency of SDGs</h3>
-                <div *ngIf="sectorCount" class="col-12  mt-20 "  [hidden]="sectorCount.length==0">
-                    <canvas   id="pieChart1">{{pieChart1}}</canvas>
-                 </div>
-            </div>
-            <div *ngIf="sectorCount" class="col-12 " [hidden]="sectorCount.length!=0">
-                <p-messages severity="warn" >
-                  <ng-template pTemplate>
-                      <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
-                      <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
-                      <div class="ml-2">No data to show.</div>
-                  </ng-template>
-              </p-messages>
-
-           </div>
+  <div class="col-md-6 col-12 d-flex align-items-stretch">
+    <div class="p-grid p-fluid card m-3">
+      <div class="row text-center">
+        <h3>Frequency of SDGs</h3>
+        <div
+          *ngIf="sectorCount"
+          class="col-12 mt-20"
+          [hidden]="sectorCount.length == 0"
+        >
+          <canvas id="pieChart1">{{ pieChart1 }}</canvas>
         </div>
+      </div>
+      <div
+        *ngIf="sectorCount"
+        class="col-12"
+        [hidden]="sectorCount.length != 0"
+      >
+        <p-messages severity="warn">
+          <ng-template pTemplate>
+            <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
+            <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
+            <div class="ml-2">No data to show.</div>
+          </ng-template>
+        </p-messages>
+      </div>
     </div>
-    <div class="col-md-6 col-12 d-flex align-items-stretch">
-        <div class="p-grid p-fluid card m-3">
-            <div class="row text-center ">
-                <h3>Sectors Targeted</h3>
-                <div *ngIf="sectorCount" class="col-12  mt-20 "  [hidden]="sectorCount.length==0">
-                    <canvas   id="pieChart2">{{pieChart2}}</canvas>
-                 </div>
-            </div>
-            <div *ngIf="sectorCount" class="col-12 " [hidden]="sectorCount.length!=0">
-                <p-messages severity="warn" >
-                  <ng-template pTemplate>
-                      <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
-                      <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
-                      <div class="ml-2">No data to show.</div>
-                  </ng-template>
-              </p-messages>
-
-           </div>
+  </div>
+  <div class="col-md-6 col-12 d-flex align-items-stretch">
+    <div class="p-grid p-fluid card m-3">
+      <div class="row text-center">
+        <h3>Sectors Targeted</h3>
+        <div
+          *ngIf="sectorCount"
+          class="col-12 mt-20"
+          [hidden]="sectorCount.length == 0"
+        >
+          <canvas id="pieChart2">{{ pieChart2 }}</canvas>
         </div>
+      </div>
+      <div
+        *ngIf="sectorCount"
+        class="col-12"
+        [hidden]="sectorCount.length != 0"
+      >
+        <p-messages severity="warn">
+          <ng-template pTemplate>
+            <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
+            <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
+            <div class="ml-2">No data to show.</div>
+          </ng-template>
+        </p-messages>
+      </div>
     </div>
-
+  </div>
 </div>
 <!-- <div class="p-grid p-fluid card m-3">
     <div class="row text-center ">
@@ -99,66 +195,3 @@
 
     </div>
 </div> -->
-<div class="p-grid p-fluid card m-3">
-    <div class="row">
-        <h3>Recent Assessments Done</h3>
-        <div class="col-12  mt-20 ml-10"  [hidden]="calResults?.length==0">
-
-          <p-table
-            [value]="calResults"
-            [paginator]="true"
-            [rows]="5"
-            [showCurrentPageReport]="true"
-
-            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-            [rowsPerPageOptions]="[5, 10, 20]">
-
-          <ng-template pTemplate="header">
-
-          <tr>
-              <th colspan="1" class="table-header"></th>
-              <th colspan="2" class="table-header">Process</th>
-              <th colspan="2" class="table-header">Outcomes</th>
-          </tr>
-
-
-
-              <tr>
-                  <th class="table-header-3">Intervention Name</th>
-                  <th class="table-header-2">Relevence</th>
-                  <th class="table-header-2">Likelihood</th>
-                  <th class="table-header-2">Scaled</th>
-                  <th class="table-header-2">Sustained</th>
-
-              </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-calResults>
-              <tr>
-                  <td>{{ calResults?.assesment?.climateAction?.policyName?calResults?.assesment?.climateAction?.policyName:'-' }}</td>
-                  <td style="text-align: center">{{ calResults?.relevance==null?'-':calResults?.relevance }}</td>
-                  <td style="text-align: center">{{ calResults?.likelihood==null?'-':calResults?.likelihood  }}</td>
-                  <td style="text-align: center">{{ calResults?.scaleScore==null?'-':calResults?.scaleScore  }}</td>
-                  <td style="text-align: center">{{ calResults?.sustainedScore==null?'-':calResults?.sustainedScore }}</td>
-              </tr>
-          </ng-template>
-      <!--     <ng-template pTemplate="paginatorleft">
-              <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"></p-button>
-          </ng-template> -->
-<!--                 <ng-template pTemplate="paginatorright">
-              <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
-          </ng-template> -->
-      </p-table>
-         </div>
-         <div  class="col-12" [hidden]="calResults?.length!=0">
-            <p-messages severity="warn" >
-              <ng-template pTemplate>
-                  <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
-                  <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
-                  <div class="ml-2">No data to show.</div>
-              </ng-template>
-          </p-messages>
-
-        </div>
-     </div>
-</div>
-

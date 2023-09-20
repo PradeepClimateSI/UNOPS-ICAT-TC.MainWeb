@@ -4,6 +4,7 @@ import { AssessmentCMDetailControllerServiceProxy, ClimateAction, InvestorToolCo
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 import decode from 'jwt-decode';
 import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
+import { MasterDataService } from 'app/shared/master-data.service';
 
 @Component({
   selector: 'app-investment-dashboard',
@@ -55,10 +56,18 @@ export class InvestmentDashboardComponent implements OnInit {
   resultData2 : any = []
   recentResult : any ;
 
+  xData: {label: string; value: number}[]
+  yData: {label: string; value: number}[]
+
+  score={
+    process_score: [], outcome_score: [] 
+  }
+  sdgDetailsList:any=[];
   constructor(
     private projectProxy: ProjectControllerServiceProxy,
     private investorProxy: InvestorToolControllerServiceProxy,
     private assessmentCMProxy:AssessmentCMDetailControllerServiceProxy,
+    public masterDataService: MasterDataService
   ) {
     Chart.register(...registerables);
   
@@ -80,30 +89,31 @@ export class InvestmentDashboardComponent implements OnInit {
 
 
     // });
-    this.investorProxy.getTCValueByAssessment(tool).subscribe((res: any) => {
-      console.log("policyList : ", res)
-      this.interventions = res
-      this.tcData=this.interventions.map(intervention=>({
-        y:intervention?.tc_value,
-        x:intervention?.climateAction?.initialInvestment,
-        data:intervention?.climateAction?.policyName}))
-        console.log("Tc data:",this.tcData)
-        setTimeout(() => {
-          this.viewMainChart();
-        }, 100);
+    // this.investorProxy.getTCValueByAssessment(tool).subscribe((res: any) => {
+    //   console.log("policyList : ", res)
+    //   this.interventions = res
+    //   this.tcData=this.interventions.map(intervention=>({
+    //     y:intervention?.tc_value,
+    //     x:intervention?.climateAction?.initialInvestment,
+    //     data:intervention?.climateAction?.policyName}))
+    //     console.log("Tc data:",this.tcData)
+    //     setTimeout(() => {
+    //       this.viewMainChart();
+    //     }, 100);
       
-    })
-  
+    // })
+    this.xData = this.masterDataService.xData
+    this.yData = this.masterDataService.yData
     this.investorProxy.findSectorCount(tool).subscribe((res: any) => {
       this.sectorCount = res
       console.log("sectorcount",this.sectorCount)
       setTimeout(() => {
-        this.viewFrequencyofSDGsChart();
+       
         this.viewSecterTargetedPieChart();
       }, 100);
      
     });
-
+    
 
     this.investorProxy.calculateAssessmentResults(tool).subscribe((res: any) => {
       this.calResults = res[0]
@@ -111,328 +121,337 @@ export class InvestmentDashboardComponent implements OnInit {
       const RecentInterventions = this.calResults.slice(0,10);
       this.recentResult = RecentInterventions
 
-      this.resultData= this.recentResult.map((intervention: { likelihood: any; relevance: any; assesment: { climateAction: { policyName: any; }; }; })=>({
-        y:intervention?.likelihood,
-        x:intervention?.relevance,
-        data:intervention?.assesment?.climateAction?.policyName}))
+      // this.resultData= this.recentResult.map((intervention: { likelihood: any; relevance: any; assesment: { climateAction: { policyName: any; }; }; })=>({
+      //   y:intervention?.likelihood,
+      //   x:intervention?.relevance,
+      //   data:intervention?.assesment?.climateAction?.policyName}))
 
-        this.resultData2= this.recentResult.map((a: { scaleScore: any; sustainedScore: any; assesment: { climateAction: { policyName: any; }; }; })=>({
-          y:a?.scaleScore,
-          x:a?.sustainedScore,
-          data:a?.assesment?.climateAction?.policyName}))
+      //   this.resultData2= this.recentResult.map((a: { scaleScore: any; sustainedScore: any; assesment: { climateAction: { policyName: any; }; }; })=>({
+      //     y:a?.scaleScore,
+      //     x:a?.sustainedScore,
+      //     data:a?.assesment?.climateAction?.policyName}))
 
-        console.log("kkkkkk : ",   this.resultData)
-        console.log("kkkkkk2 : ",   this.resultData2)
-        this.viewResults();
-        this.viewResults2();
+      //   console.log("kkkkkk : ",   this.resultData)
+      //   console.log("kkkkkk2 : ",   this.resultData2)
+        // this.viewResults();
+        // this.viewResults2();
 
 
     });
      
-
-
-  }
-  viewMainChart(){
-    this.chart =new Chart('canvas', {
-      type: 'scatter',
-
-      data: {
-
-          datasets: [
-            {
-              label:'TC change with investments',
-              data: this.tcData,
-              backgroundColor: this.getRandomColors(this.tcData.length+1),
-              borderColor: "#black",
-              pointRadius:10,
-          }],
-      },
-      options:{
-        scales: {
-          x: {
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Investments ($)',
-              font: {
-                size: 16,
-                weight: 'bold',
-
-              }
-            }
-          },
-          y: {
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Transformational Change',
-              font: {
-                size: 16,
-                weight: 'bold',
-
-              }
-            }
-          }
-        },
-        plugins:{
-          legend: {
-            display: false
-          },
-          tooltip:{
-            position:'average',
-            boxWidth:10,
-            callbacks:{
-
-              label:(context)=>{
-
-                return[
-                  `Intervention: ${this.tcData[context.dataIndex].data}`,
-                  `Investment: ${this.tcData[context.dataIndex].x}`,
-                  `TC value: ${this.tcData[context.dataIndex].y}`
-                ];
-               }
-            },
-            backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
-              titleFont: {
-                size: 14,
-                weight: 'bold'
-              },
-              bodyFont: {
-                size: 14
-              },
-              displayColors: true, // Hide the color box in the tooltip
-              bodyAlign: 'left'
-          }
-        }
-
-      }
-  });
+    this.sdgResults()
 
   }
 
-
-  viewResults(): void {
-    if (!this.canvasRef) {
-      console.error('Could not find canvas element');
-      return;
-    }
-
-    const canvas = this.canvasRef.nativeElement;
-    const ctx = canvas.getContext('2d');
-
-    if (!ctx) {
-      console.error('Could not get canvas context');
-      return;
-    }
-
-    const gradient = ctx.createLinearGradient(0, 0, 500, 500);
-    gradient.addColorStop(0, 'red');
-    gradient.addColorStop(0.5, 'yellow');
-    gradient.addColorStop(1, 'green');
-
-    this.chart = new Chart(ctx, {
-      type: 'scatter',
-      data: {
-        datasets: [
-          {
-            label: '',
-            data: this.resultData,
-            backgroundColor: gradient,
-            borderColor: 'black',
-            borderWidth: 1,
-            pointRadius: 8,
-            pointBackgroundColor: ['#0000FF','#FF6384', '#36A2EB', '#FFCE56', '#800000', '#66BB6A', '#FF7043', '#9575CD'],
-            pointBorderColor: 'black',
-            pointBorderWidth: 1,
-          },
-        ],
-      },
-      options: {
-        scales: {
-          x: {
-            type: 'linear',
-            min: 0,
-            max: 4,
-            ticks: {
-              stepSize: 1,
-           /*    callback: (value, index, ticks) => {
-                 if (value === 0) {
-                  return 'Major 4';
-                } else if (value === 1) {
-                  return 'Moderate 3';
-                } else if (value === 2) {
-                  return 'Minor 2';
-                } else if (value === 3) {
-                  return 'None 1';
-                }  else if (value === 4) {
-                  return 'Negative 0';
-                }
-                else {
-                  return value;
-                }
-              }, */
-            },
-            title: {
-              display: true,
-              text: 'Relevance',
-              font: {
-                weight: 'bold',
-                size: 16, // Adjust the font size as desired
-              },
-            },
-          },
-          y: {
-            type: 'linear',
-            min: 0,
-            max: 4,
-            ticks: {
-              stepSize: 1,
-            },
-            title: {
-              display: true,
-              text: 'Likelihood',
-              font: {
-                weight: 'bold',
-                size: 16, // Adjust the font size as desired
-              },
-            },
-          },
-        },
-        plugins: {
-          tooltip: {
-            callbacks: {
-              label: (context) => {
-                const data = context.dataset.data[context.dataIndex];
-                return[
-                  `Intervention: ${this.resultData[context.dataIndex].data}`,
-                  `Likelihood: ${this.resultData[context.dataIndex].y}`,
-                  `Relevance: ${this.resultData[context.dataIndex].x}`
-
-                ];
-              },
-            },
-          },
-          legend: {
-            display: false, // Hide the legend
-          },
-        },
-      },
-    });
+  sdgResults(){
+    this.sdgDetailsList=[]
+    this.investorProxy.sdgSumCalculate().subscribe(async (res: any) => {
+      console.log("sdgDetailsList : ", res)
+      this.sdgDetailsList = res;
+     this.viewFrequencyofSDGsChart();
+     });
   }
+  // viewMainChart(){
+  //   this.chart =new Chart('canvas', {
+  //     type: 'scatter',
 
-  viewResults2(): void {
-    if (!this.canvasRef2) {
-      console.error('Could not find canvas element');
-      return;
-    }
+  //     data: {
 
-    const canvas = this.canvasRef2.nativeElement;
-    const ctx = canvas.getContext('2d');
+  //         datasets: [
+  //           {
+  //             label:'TC change with investments',
+  //             data: this.tcData,
+  //             backgroundColor: this.getRandomColors(this.tcData.length+1),
+  //             borderColor: "#black",
+  //             pointRadius:10,
+  //         }],
+  //     },
+  //     options:{
+  //       scales: {
+  //         x: {
+  //           beginAtZero: true,
+  //           title: {
+  //             display: true,
+  //             text: 'Investments ($)',
+  //             font: {
+  //               size: 16,
+  //               weight: 'bold',
 
-    if (!ctx) {
-      console.error('Could not get canvas context');
-      return;
-    }
+  //             }
+  //           }
+  //         },
+  //         y: {
+  //           beginAtZero: true,
+  //           title: {
+  //             display: true,
+  //             text: 'Transformational Change',
+  //             font: {
+  //               size: 16,
+  //               weight: 'bold',
 
-    const gradient = ctx.createLinearGradient(0, 0, 500, 500);
-    gradient.addColorStop(0, 'red');
-    gradient.addColorStop(0.5, 'yellow');
-    gradient.addColorStop(1, 'green');
+  //             }
+  //           }
+  //         }
+  //       },
+  //       plugins:{
+  //         legend: {
+  //           display: false
+  //         },
+  //         tooltip:{
+  //           position:'average',
+  //           boxWidth:10,
+  //           callbacks:{
 
-    this.chart = new Chart(ctx, {
-      type: 'scatter',
-      data: {
-        datasets: [
-          {
-            label: '',
-            data: this.resultData2,
-            backgroundColor: gradient,
-            borderColor: 'black',
-            borderWidth: 1,
-            pointRadius: 8,
-            pointBackgroundColor: ['#0000FF','#FF6384', '#36A2EB', '#FFCE56', '#800000', '#66BB6A', '#FF7043', '#9575CD'],
-            pointBorderColor: 'black',
-            pointBorderWidth: 1,
-          },
-        ],
-      },
-      options: {
-        scales: {
-          x: {
-            type: 'linear',
-            min: -1,
-            max: 3,
-            ticks: {
-              stepSize: 1,
-           /*    callback: (value, index, ticks) => {
-                 if (value === 0) {
-                  return 'Major 4';
-                } else if (value === 1) {
-                  return 'Moderate 3';
-                } else if (value === 2) {
-                  return 'Minor 2';
-                } else if (value === 3) {
-                  return 'None 1';
-                }  else if (value === 4) {
-                  return 'Negative 0';
-                }
-                else {
-                  return value;
-                }
-              }, */
-            },
-            title: {
-              display: true,
-              text: 'Sustained',
-              font: {
-                weight: 'bold',
-                size: 16, // Adjust the font size as desired
-              },
-            },
-          },
-          y: {
-            type: 'linear',
-            min: -1,
-            max: 3,
-            ticks: {
-              stepSize: 1,
-            },
-            title: {
-              display: true,
-              text: 'Scaled',
-              font: {
-                weight: 'bold',
-                size: 16, // Adjust the font size as desired
-              },
-            },
-          },
-        },
-        plugins: {
-          tooltip: {
-            callbacks: {
-              label: (context) => {
-                const data = context.dataset.data[context.dataIndex];
-                return[
-                  `Intervention: ${this.resultData2[context.dataIndex].data}`,
-                  `Scaled: ${this.resultData2[context.dataIndex].y}`,
-                  `Sustained: ${this.resultData2[context.dataIndex].x}`
+  //             label:(context)=>{
 
-                ];
-              },
-            },
-          },
-          legend: {
-            display: false, // Hide the legend
-          },
-        },
-      },
-    });
-  }
+  //               return[
+  //                 `Intervention: ${this.tcData[context.dataIndex].data}`,
+  //                 `Investment: ${this.tcData[context.dataIndex].x}`,
+  //                 `TC value: ${this.tcData[context.dataIndex].y}`
+  //               ];
+  //              }
+  //           },
+  //           backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
+  //             titleFont: {
+  //               size: 14,
+  //               weight: 'bold'
+  //             },
+  //             bodyFont: {
+  //               size: 14
+  //             },
+  //             displayColors: true, // Hide the color box in the tooltip
+  //             bodyAlign: 'left'
+  //         }
+  //       }
+
+  //     }
+  // });
+
+  // }
+
+
+  // viewResults(): void {
+  //   if (!this.canvasRef) {
+  //     console.error('Could not find canvas element');
+  //     return;
+  //   }
+
+  //   const canvas = this.canvasRef.nativeElement;
+  //   const ctx = canvas.getContext('2d');
+
+  //   if (!ctx) {
+  //     console.error('Could not get canvas context');
+  //     return;
+  //   }
+
+  //   const gradient = ctx.createLinearGradient(0, 0, 500, 500);
+  //   gradient.addColorStop(0, 'red');
+  //   gradient.addColorStop(0.5, 'yellow');
+  //   gradient.addColorStop(1, 'green');
+
+  //   this.chart = new Chart(ctx, {
+  //     type: 'scatter',
+  //     data: {
+  //       datasets: [
+  //         {
+  //           label: '',
+  //           data: this.resultData,
+  //           backgroundColor: gradient,
+  //           borderColor: 'black',
+  //           borderWidth: 1,
+  //           pointRadius: 8,
+  //           pointBackgroundColor: ['#0000FF','#FF6384', '#36A2EB', '#FFCE56', '#800000', '#66BB6A', '#FF7043', '#9575CD'],
+  //           pointBorderColor: 'black',
+  //           pointBorderWidth: 1,
+  //         },
+  //       ],
+  //     },
+  //     options: {
+  //       scales: {
+  //         x: {
+  //           type: 'linear',
+  //           min: 0,
+  //           max: 4,
+  //           ticks: {
+  //             stepSize: 1,
+  //          /*    callback: (value, index, ticks) => {
+  //                if (value === 0) {
+  //                 return 'Major 4';
+  //               } else if (value === 1) {
+  //                 return 'Moderate 3';
+  //               } else if (value === 2) {
+  //                 return 'Minor 2';
+  //               } else if (value === 3) {
+  //                 return 'None 1';
+  //               }  else if (value === 4) {
+  //                 return 'Negative 0';
+  //               }
+  //               else {
+  //                 return value;
+  //               }
+  //             }, */
+  //           },
+  //           title: {
+  //             display: true,
+  //             text: 'Relevance',
+  //             font: {
+  //               weight: 'bold',
+  //               size: 16, // Adjust the font size as desired
+  //             },
+  //           },
+  //         },
+  //         y: {
+  //           type: 'linear',
+  //           min: 0,
+  //           max: 4,
+  //           ticks: {
+  //             stepSize: 1,
+  //           },
+  //           title: {
+  //             display: true,
+  //             text: 'Likelihood',
+  //             font: {
+  //               weight: 'bold',
+  //               size: 16, // Adjust the font size as desired
+  //             },
+  //           },
+  //         },
+  //       },
+  //       plugins: {
+  //         tooltip: {
+  //           callbacks: {
+  //             label: (context) => {
+  //               const data = context.dataset.data[context.dataIndex];
+  //               return[
+  //                 `Intervention: ${this.resultData[context.dataIndex].data}`,
+  //                 `Likelihood: ${this.resultData[context.dataIndex].y}`,
+  //                 `Relevance: ${this.resultData[context.dataIndex].x}`
+
+  //               ];
+  //             },
+  //           },
+  //         },
+  //         legend: {
+  //           display: false, // Hide the legend
+  //         },
+  //       },
+  //     },
+  //   });
+  // }
+
+  // viewResults2(): void {
+  //   if (!this.canvasRef2) {
+  //     console.error('Could not find canvas element');
+  //     return;
+  //   }
+
+  //   const canvas = this.canvasRef2.nativeElement;
+  //   const ctx = canvas.getContext('2d');
+
+  //   if (!ctx) {
+  //     console.error('Could not get canvas context');
+  //     return;
+  //   }
+
+  //   const gradient = ctx.createLinearGradient(0, 0, 500, 500);
+  //   gradient.addColorStop(0, 'red');
+  //   gradient.addColorStop(0.5, 'yellow');
+  //   gradient.addColorStop(1, 'green');
+
+  //   this.chart = new Chart(ctx, {
+  //     type: 'scatter',
+  //     data: {
+  //       datasets: [
+  //         {
+  //           label: '',
+  //           data: this.resultData2,
+  //           backgroundColor: gradient,
+  //           borderColor: 'black',
+  //           borderWidth: 1,
+  //           pointRadius: 8,
+  //           pointBackgroundColor: ['#0000FF','#FF6384', '#36A2EB', '#FFCE56', '#800000', '#66BB6A', '#FF7043', '#9575CD'],
+  //           pointBorderColor: 'black',
+  //           pointBorderWidth: 1,
+  //         },
+  //       ],
+  //     },
+  //     options: {
+  //       scales: {
+  //         x: {
+  //           type: 'linear',
+  //           min: -1,
+  //           max: 3,
+  //           ticks: {
+  //             stepSize: 1,
+  //          /*    callback: (value, index, ticks) => {
+  //                if (value === 0) {
+  //                 return 'Major 4';
+  //               } else if (value === 1) {
+  //                 return 'Moderate 3';
+  //               } else if (value === 2) {
+  //                 return 'Minor 2';
+  //               } else if (value === 3) {
+  //                 return 'None 1';
+  //               }  else if (value === 4) {
+  //                 return 'Negative 0';
+  //               }
+  //               else {
+  //                 return value;
+  //               }
+  //             }, */
+  //           },
+  //           title: {
+  //             display: true,
+  //             text: 'Sustained',
+  //             font: {
+  //               weight: 'bold',
+  //               size: 16, // Adjust the font size as desired
+  //             },
+  //           },
+  //         },
+  //         y: {
+  //           type: 'linear',
+  //           min: -1,
+  //           max: 3,
+  //           ticks: {
+  //             stepSize: 1,
+  //           },
+  //           title: {
+  //             display: true,
+  //             text: 'Scaled',
+  //             font: {
+  //               weight: 'bold',
+  //               size: 16, // Adjust the font size as desired
+  //             },
+  //           },
+  //         },
+  //       },
+  //       plugins: {
+  //         tooltip: {
+  //           callbacks: {
+  //             label: (context) => {
+  //               const data = context.dataset.data[context.dataIndex];
+  //               return[
+  //                 `Intervention: ${this.resultData2[context.dataIndex].data}`,
+  //                 `Scaled: ${this.resultData2[context.dataIndex].y}`,
+  //                 `Sustained: ${this.resultData2[context.dataIndex].x}`
+
+  //               ];
+  //             },
+  //           },
+  //         },
+  //         legend: {
+  //           display: false, // Hide the legend
+  //         },
+  //       },
+  //     },
+  //   });
+  // }
   viewFrequencyofSDGsChart(){
-    const labels = this.sectorCount.map((item) => item.sector);
-    let counts:number[] = this.sectorCount.map((item) => item.count);
-    const total = counts.reduce((acc, val) => acc + val, 0);
-    const percentages = counts.map(count => ((count / total) * 100).toFixed(2));
+    let labels = this.sdgDetailsList.map((item:any) => item.sdg);
+    let counts:number[] = this.sdgDetailsList.map((item:any) => item.count);
+    let total = counts.reduce((acc, val) => acc + val, 0);
+    let percentages = counts.map(count => ((count / total) * 100).toFixed(2));
     this.pieChart1 =new Chart('pieChart1', {
       type: 'pie',
 
@@ -620,7 +639,41 @@ export class InvestmentDashboardComponent implements OnInit {
   ngAfterViewInit() {
 
 }
+ getBackgroundColor(value: number): string {
+    switch (value) {
+      case -3:
+        return '#ec6665';
+      case -2:
+        return '#ed816c';
+      case -1:
+        return '#f19f70';
+      case 0:
+        return '#f4b979';
+      case 1:
+        return '#f9d57f';
+      case 2:
+        return '#fcf084';
+      case 3:
+        return '#e0e885';
+      case 4:
+        return '#c1e083';
+      case 5:
+        return '#a3d481';
+      case 6:
+        return '#84cc80';
+      case 7:
+        return '#65c17e';
+      default:
+        return 'white';
+    }
+  }
 
-
+  getIntervention(x:number, y: number){
+    if (this.score.process_score[y] === 1 && this.score.outcome_score[x] === 1){
+      return true
+    } else {
+      return false
+    }
+  }
 
 }
