@@ -131,9 +131,14 @@
                   [rows]="rows"
                   [showCurrentPageReport]="true"
                   [tableStyle]="{ 'min-width': '5rem' }"
+                  [lazy]="true"
+                  (onLazyLoad)="loadgridData($event)"
+                  paginatorDropdownAppendTo="body"
                   currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-                  [rowsPerPageOptions]="[rows, rows*2, rows*4]"
-                  (onPage)="paginate($event)"
+                  [rowsPerPageOptions]="[ 5, 10, 20]"
+                  [totalRecords]="totalRecords"
+                  [loading]="loading"
+                  [responsive]="true"
               >
                   <ng-template pTemplate="header">
                       <tr>
