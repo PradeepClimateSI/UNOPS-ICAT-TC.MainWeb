@@ -146,6 +146,8 @@ export class PortfolioTrack4Component implements OnInit {
 
   async ngOnInit(): Promise<void> {
  this.load = true   //need to change as false
+ this.selectedApproach = 'Direct';
+ this.assessment.assessment_approach = 'Direct';
 
   await this.getPortfolioQuestions();
     const token = localStorage.getItem('ACCESS_TOKEN')!;
@@ -287,7 +289,7 @@ export class PortfolioTrack4Component implements OnInit {
     });
 
     this.methodologyAssessmentControllerServiceProxy.findAllCategories().subscribe(async (res2: any) => {
-      const customOrder = [1, 2, 3, 5, 4, 7, 6, 8, 9, 10];
+      const customOrder = [1, 2, 3, 4, 5, 7, 6, 8, 9, 10];
 
       console.log("categoryList", res2)
 
@@ -342,14 +344,14 @@ export class PortfolioTrack4Component implements OnInit {
             data: categoryArray
           })
 
-          if(x.name === 'Scale SD'){
+          if(x.name === 'SDG Scale of the Outcome'){
             this.sdgDataSendArray.push({
               type: 'outcome', CategoryName: x.name, categoryID: x.id,
               data: categoryArray
             })
           }
 
-          if(x.name === 'Sustained nature-SD'){
+          if(x.name === 'SDG Time frame over which the outcome is sustained'){
             this.sdgDataSendArray3.push({
               type: 'outcome', CategoryName: x.name, categoryID: x.id,
               data: categoryArray

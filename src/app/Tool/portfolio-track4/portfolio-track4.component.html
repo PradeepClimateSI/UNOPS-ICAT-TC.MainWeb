@@ -127,7 +127,7 @@
             </div>
 
 
-              <div class="p-field p-2">
+              <!-- <div class="p-field p-2">
                 <label for="assessment_approach">Assessment Approach *</label>
                 <p-dropdown appendTo="body" name="assessment_approach" #assessment_approach="ngModel"
                   placeholder="Select Assessment Approach" [(ngModel)]="assessment.assessment_approach" ngModel
@@ -136,7 +136,7 @@
                 <p class="info-message text-danger"
                   *ngIf="!assessment_approach.value && (fData.submitted || assessment_approach.touched)">This is a
                   mandatory field</p>
-              </div>
+              </div> -->
 
 
               <div class="p-field p-2">
@@ -395,7 +395,7 @@
 
                               <!-- lllllllllllllllllllllllllllll -->
 
-                              <div class="row p-2">
+                             <!--  <div class="row p-2">
                                 <div class="col-12 col-lg-6">
                                   <div class="p-field">
                                     <label for="Relevance">Relevance Weight (%)</label>
@@ -404,8 +404,6 @@
                                       placeholder="Enter Relevance Weight" name="data.charData.relevance_weight"
                                       (ngModelChange)="onRelevanceWeightChange(category.CategoryName,data.characteristics.name, $event)">
                                     </p-inputNumber>
-
-                                    <!-- <div *ngIf="!chaCategoryTotalEqualsTo1[category.CategoryName]" style="color: red;"> -->
                                     <div
                                       *ngIf="!chaCategoryTotalEqualsTo1[category.CategoryName] && initialRelevance !==0"
                                       style="color: red;">
@@ -426,8 +424,6 @@
                                       placeholder="Enter Likelihood Weight" name="data.charData.likelihood_weight"
                                       (ngModelChange)="onLikelihoodWeightChange(category.CategoryName,data.characteristics.name, $event)">
                                     </p-inputNumber>
-
-                                    <!-- <div *ngIf="!chaCategoryLikelihoodTotalEqualsTo1[category.CategoryName]" style="color: red;"> -->
                                     <div
                                       *ngIf="!chaCategoryLikelihoodTotalEqualsTo1[category.CategoryName] && initialLikelihood !==0 "
                                       style="color: red;">
@@ -438,6 +434,8 @@
                                   </div>
                                 </div>
                               </div>
+ -->
+
                             </div>
                           </div>
 
@@ -453,12 +451,17 @@
             </p-tabPanel>
 
 
-            <p-tabPanel header="Outcome of Change">
+            <p-tabPanel header="Outcomett of Change">
               <p-tabView #tabView2 (onChange)="onCategoryTabChange($event, tabView2) " [(activeIndex)]="activeIndex2">
 
-                <p-tabPanel [header]="category.CategoryName" *ngFor="let category of outcomeData">
+                <p-tabPanel *ngFor="let category of outcomeData">
 
-                  <div *ngIf="category.CategoryName === 'Scale SD' ">
+                  <ng-template pTemplate="header">
+                    <!-- Use a container div for the header -->
+                    <div class="custom-tab-header">{{ category.CategoryName }}</div>
+                  </ng-template>
+
+                  <div *ngIf="category.CategoryName === 'SDG Scale of the Outcome' ">
                     <div class="row">
                       <div class="col-2 ">
                         <p>Select SDGs : </p>
@@ -476,7 +479,7 @@
 
 
                   <div
-                    *ngIf="category.CategoryName !== 'Scale SD' && category.CategoryName !== 'Sustained nature-SD'  ">
+                    *ngIf="category.CategoryName !== 'SDG Scale of the Outcome' && category.CategoryName !== 'SDG Time frame over which the outcome is sustained'  ">
                     <div class="characteristic-Topic" *ngFor="let data of category.data; index as i">
                       <h6>{{i+1}}.{{data.characteristics.name}}</h6>
                       <div>
@@ -533,7 +536,7 @@
                                 </div>
 
                                 <!-- Newwwwwww -->
-                                <div class="row p-2" *ngIf=" category.CategoryName ==='Scale GHGs' && data.characteristics.name === 'International/global level'">
+                                <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'International/global level'">
                                   <p>(Major) Is the emissions reduction > 0.1% of global emissions?</p>
                                   <p>(Moderate) Is the emissions reduction > 0.05% of global emissions?</p>
                                   <p>(Minor) Is the emissions reduction > 0.01% of global emissions?</p>
@@ -541,7 +544,7 @@
                                   <p>(Negative) is there an emissions increase?</p>
                                 </div>
 
-                                <div class="row p-2" *ngIf=" category.CategoryName ==='Scale GHGs' && data.characteristics.name === 'National/Sectorial level'">
+                                <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'National/Sectorial level'">
                                   <p>(Major) Is the emissions reduction > 1% of national/sectorial emissions?</p>
                                   <p>(Moderate) Is the emissions reduction > 0.5-1% of national/sectorial emissions?</p>
                                   <p>(Minor) Is the emissions reduction > 0.1-0.5% of national/sectorial emissions?</p>
@@ -549,7 +552,7 @@
                                   <p>(Negative) is there an emissions increase?</p>
                                 </div>
 
-                                <div class="row p-2" *ngIf=" category.CategoryName ==='Scale GHGs' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level'">
+                                <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level'">
                                   <p>(Major) Is the emissions reduction > 5% of subnational/regional/municipal emissions?</p>
                                   <p>(Moderate) Is the emissions reduction > 1-5% of subnational/regional/municipal emissions?</p>
                                   <p>(Minor) Is the emissions reduction > 0.5-1% of subnational/regional/municipal emissions?</p>
@@ -614,7 +617,7 @@
                               <!-- lllllllllllllllllllllllllllll -->
 
 
-                            <div class="row p-2" *ngIf=" category.CategoryName ==='Scale GHGs' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level'">
+                            <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level'">
                               <div class="col-12 col-lg-6">
                                 <div class="p-field">
                                   <label for="expected_ghg_mitigation">Expected GHG mitgation (Mt CO2-eq)</label>
@@ -638,7 +641,7 @@
                     </div>
                   </div>
 
-                  <div *ngIf="category.CategoryName === 'Scale SD'">
+                  <div *ngIf="category.CategoryName === 'SDG Scale of the Outcome'">
                     <div *ngFor="let item of sdgDataSendArray2; index as i">
                       <br>
                       <h6>SDG {{ selectedSDGs[i].number }} - {{ selectedSDGs[i].name }}</h6>
@@ -777,7 +780,7 @@
 
 
 
-                  <div *ngIf="category.CategoryName === 'Sustained nature-SD'  ">
+                  <div *ngIf="category.CategoryName === 'SDG Time frame over which the outcome is sustained'  ">
 
                     <div *ngFor="let item of sdgDataSendArray4; index as i">
                       <br>
@@ -915,7 +918,7 @@
           <div *ngIf="activeIndex2===5 && activeIndexMain===1" class="row justify-content-end">
             <div>
               <div class=" col-md-10 offset-md-4" style="color:red">
-                <div class="col align-self-end" *ngIf="failedLikelihoodArray.length!=0">
+                <!-- <div class="col align-self-end" *ngIf="failedLikelihoodArray.length!=0">
                   Please make sure to set Likelihood weights for
                   <span *ngFor="let data of failedLikelihoodArray ; let last = last" class="array-item">
                     {{data.category}}<span *ngIf="!last">, </span>
@@ -929,7 +932,7 @@
                   </span> should sum up to 100%.
 
 
-                </div>
+                </div> -->
               </div>
               <div class="d-flex flex-row-reverse mt-20 ">
                 <button class="btn btn-primary text-uppercase" type="submit"
@@ -1073,7 +1076,7 @@
                                 </div>
                               </div>
 
-                              <div class="row p-2">
+                              <!-- <div class="row p-2">
                                 <div class="col-12 col-lg-6">
                                   <div class="p-field">
                                     <label for="Relevance">Relevance Weight (%)</label>
@@ -1082,8 +1085,6 @@
                                       placeholder="Enter Relevance Weight" name="data.charData.relevance_weight"
                                       (ngModelChange)="onRelevanceWeightChange(category.CategoryName,data.characteristics.name, $event)">
                                     </p-inputNumber>
-
-                                    <!-- <div *ngIf="!chaCategoryTotalEqualsTo1[category.CategoryName]" style="color: red;"> -->
                                     <div
                                       *ngIf="!chaCategoryTotalEqualsTo1[category.CategoryName] && initialRelevance !==0"
                                       style="color: red;">
@@ -1104,8 +1105,6 @@
                                       placeholder="Enter Likelihood Weight" name="data.charData.likelihood_weight"
                                       (ngModelChange)="onLikelihoodWeightChange(category.CategoryName,data.characteristics.name, $event)">
                                     </p-inputNumber>
-
-                                    <!-- <div *ngIf="!chaCategoryLikelihoodTotalEqualsTo1[category.CategoryName]" style="color: red;"> -->
                                     <div
                                       *ngIf="!chaCategoryLikelihoodTotalEqualsTo1[category.CategoryName] && initialLikelihood !==0 "
                                       style="color: red;">
@@ -1115,7 +1114,9 @@
                                     </div>
                                   </div>
                                 </div>
-                              </div>
+                              </div> -->
+
+
                             </div>
                           </div>
 
@@ -1143,7 +1144,7 @@
             <p-tabPanel header="Outcome of Change">
               <p-tabView #tabView2 (onChange)="onCategoryTabChange($event, tabView2) " [(activeIndex)]="activeIndex2">
 
-                <p-tabPanel [header]="category.CategoryName" *ngFor="let category of outcomeData">
+                <p-tabPanel [header]="category.CategoryName" *ngFor="let category of outcomeData" >
 
                   <div class="characteristic-Topic" *ngFor="let data of category.data; index as i">
                     <h6>{{i+1}}.{{data.characteristics.name}}</h6>
@@ -1208,7 +1209,7 @@
                                   </div>
                                 </div>
 
-                            <div class="row p-2" *ngIf=" category.CategoryName ==='Scale GHGs' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level'">
+                            <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level'">
                               <div class="col-12 col-lg-6">
                                 <div class="p-field">
                                   <label for="expected_ghg_mitigation">Expected GHG mitgation (Mt CO2-eq)</label>
@@ -1246,7 +1247,7 @@
           <div *ngIf="activeIndex2===3 && activeIndexMain===1" class="row justify-content-end">
             <div>
               <div class=" col-md-10 offset-md-4" style="color:red">
-                <div class="col align-self-end" *ngIf="failedLikelihoodArray.length!=0">
+                <!-- <div class="col align-self-end" *ngIf="failedLikelihoodArray.length!=0">
                   Please make sure to set Likelihood weights for
                   <span *ngFor="let data of failedLikelihoodArray ; let last = last" class="array-item">
                     {{data.category}}<span *ngIf="!last">, </span>
@@ -1260,7 +1261,7 @@
                   </span> should sum up to 100%.
 
 
-                </div>
+                </div> -->
               </div>
               <div class="d-flex flex-row-reverse mt-20 ">
                 <button class="btn btn-primary text-uppercase" type="submit"

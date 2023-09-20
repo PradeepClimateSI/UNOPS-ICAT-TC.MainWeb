@@ -213,7 +213,7 @@ export class AssessmentResultInvestorComponent implements OnInit {
         let totalSustained = 0
         let countSustained = 0
         for (let x of res) {
-          if (category.name === x.category.name && (x.category.name === 'Scale GHGs' || x.category.name === 'Scale SD')) {
+          if (category.name === x.category.name && (x.category.name === 'GHG Scale of the Outcome' || x.category.name === 'SDG Scale of the Outcome')) {
             categoryData.categoryName = category.name;
             categoryData.characteristics.push(
               {
@@ -227,7 +227,7 @@ export class AssessmentResultInvestorComponent implements OnInit {
             countScale++
 
           }
-          if (category.name === x.category.name && (x.category.name === 'Sustained nature-GHGs' || x.category.name === 'Sustained nature-SD')) {
+          if (category.name === x.category.name && (x.category.name === 'GHG Time frame over which the outcome is sustained' || x.category.name === 'SDG Time frame over which the outcome is sustained')) {
             categoryData.categoryName = category.name;
             categoryData.characteristics.push(
               {
@@ -243,12 +243,12 @@ export class AssessmentResultInvestorComponent implements OnInit {
           }
         }
 
-        if (category.name === 'Scale GHGs' || category.name === 'Scale SD') {
+        if (category.name === 'GHG Scale of the Outcome' || category.name === 'SDG Scale of the Outcome') {
           categoryData.categoryScaleScore = (totalScale / countScale).toFixed(3)
           categoryData.categorySustainedScore = '-'
         }
 
-        if (category.name === 'Sustained nature-GHGs' || category.name === 'Sustained nature-SD') {
+        if (category.name === 'GHG Time frame over which the outcome is sustained' || category.name === 'SDG Time frame over which the outcome is sustained') {
           categoryData.categorySustainedScore = (totalSustained / countSustained).toFixed(3)
           categoryData.categoryScaleScore = '-'
         }
