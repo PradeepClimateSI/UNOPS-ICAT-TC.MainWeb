@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
 import { AssessmentCMDetailControllerServiceProxy, CMAssessmentAnswerControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CMScoreDto, ClimateAction, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
@@ -12,7 +12,7 @@ import { LazyLoadEvent } from 'primeng/api';
   templateUrl: './carbon-market-dashboard.component.html',
   styleUrls: ['./carbon-market-dashboard.component.css']
 })
-export class CarbonMarketDashboardComponent implements OnInit {
+export class CarbonMarketDashboardComponent implements OnInit,AfterViewInit {
 
   constructor(
     // private projectProxy: ProjectControllerServiceProxy,
@@ -20,8 +20,8 @@ export class CarbonMarketDashboardComponent implements OnInit {
     // private methassess : MethodologyAssessmentControllerServiceProxy,
     // private investorProxy: InvestorToolControllerServiceProxy,
     private cmAssessmentQuestionProxy : CMAssessmentQuestionControllerServiceProxy,
-    public masterDataService: MasterDataService
-    
+    public masterDataService: MasterDataService,
+    private cdr: ChangeDetectorRef
   ) { 
     // Chart.register(ChartDataLabels)
   }
@@ -209,6 +209,9 @@ CMPrerequiste: {
     // setTimeout(() => {
     // }, 1);
   };
+  ngAfterViewInit(): void {
+    this.cdr.detectChanges();
+  }
 
   // viewPieChart(){
   //   const labels = this.sectorCount.map((item) => item.sector);

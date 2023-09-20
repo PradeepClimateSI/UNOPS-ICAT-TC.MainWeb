@@ -122,21 +122,22 @@
 
                  </div>
               </ng-container>
-              <ng-template #elseBlock3>
+              <ng-template #elseBlock3 >
                 <div  class="col-12  mt-20 ml-10" >
 
                   <p-table
+                  #mainTable
                   [value]="tableData"
                   [paginator]="true"
                   [rows]="rows"
-                  [showCurrentPageReport]="true"
-                  [tableStyle]="{ 'min-width': '5rem' }"
+                  [totalRecords]="totalRecords"
                   [lazy]="true"
                   (onLazyLoad)="loadgridData($event)"
+                  [showCurrentPageReport]="true"
+                  [tableStyle]="{ 'min-width': '5rem' }"
                   paginatorDropdownAppendTo="body"
                   currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                   [rowsPerPageOptions]="[ 5, 10, 20]"
-                  [totalRecords]="totalRecords"
                   [loading]="loading"
                   [responsive]="true"
               >
