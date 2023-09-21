@@ -1,8 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
-import { AssessmentCMDetailControllerServiceProxy, CMAssessmentAnswerControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, ClimateAction, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { AssessmentCMDetailControllerServiceProxy, CMAssessmentAnswerControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CMScoreDto, ClimateAction, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
+import { MasterDataService } from 'app/shared/master-data.service';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { Paginator } from 'primeng/paginator';
 @Component({
   selector: 'app-carbon-market-dashboard',
   templateUrl: './carbon-market-dashboard.component.html',
@@ -16,10 +19,15 @@ export class CarbonMarketDashboardComponent implements OnInit {
     // private methassess : MethodologyAssessmentControllerServiceProxy,
     // private investorProxy: InvestorToolControllerServiceProxy,
     private cmAssessmentQuestionProxy : CMAssessmentQuestionControllerServiceProxy,
-  ) { }
+    public masterDataService: MasterDataService
+    
+  ) { 
+    // Chart.register(ChartDataLabels)
+  }
 
  // @ViewChild('canvas', { static: false }) canvas: ElementRef;
-
+ 
+ score: CMScoreDto = new CMScoreDto()
  userName: string = "";
  userRole: string = "";
  loginRole = LoginRole;
@@ -67,7 +75,15 @@ CMPrerequiste: {
       outcome_score: number,
       intervention: string
     }[]=[]
-  
+    xData: {label: string; value: number}[]
+    yData: {label: string; value: number}[]
+    rows :number;
+    slicedData:{
+      assessment: number,
+      process_score: number,
+      outcome_score: number,
+      intervention: string
+    }[]=[];
   ngOnInit(): void {
     // this.averageTCValue =58.05;
     const token = localStorage.getItem('ACCESS_TOKEN')!;
@@ -78,6 +94,7 @@ CMPrerequiste: {
     this.cmAssessmentQuestionProxy.getDashboardData().subscribe((res) => {
       this.tableData=res;
       console.log("kkkkk : ", res)
+      this.paginate(undefined);
     })
       //   console.log("kkkkk : ", res)
     // this.methassess.getTCForTool(this.tool).subscribe((res: any) => {
@@ -151,7 +168,9 @@ CMPrerequiste: {
     //   }, 500);
        
     // })
-
+    this.rows = 5;
+    this.xData = this.masterDataService.xData
+    this.yData = this.masterDataService.yData
     this.assessmentCMProxy.getPrerequisite().subscribe((res:any)=>{
 
       this.CMPrerequiste=res
@@ -466,7 +485,8 @@ CMPrerequiste: {
       },
       options: {
         responsive: true,
-        maintainAspectRatio: false,
+        // maintainAspectRatio: false,
+        
         plugins:{
           legend:{
             position: 'bottom',
@@ -475,16 +495,19 @@ CMPrerequiste: {
             }
           },
           datalabels: {
-            color: '#fff',
+            display: true,
+            align: 'bottom',
+            color:'#fff',
+            // backgroundColor: '#fff',
+            // borderRadius: 3,
             font: {
-              size: 12
+              size: 12,
             },
             formatter: (value, ctx) => {
               const label = ctx.chart.data.labels![ctx.dataIndex];
-              const percentage = percentages[ctx.dataIndex];
-              return `${label}: ${value} (${percentage}%)`;
+              const percentage = ((value / counts.reduce((a, b) => a + b, 0)) * 100).toFixed(2) + "%";
+              return percentage;
             },
-
           },
           tooltip:{
             position:'average',
@@ -522,10 +545,57 @@ CMPrerequiste: {
        }
 
       },
+      plugins:[ChartDataLabels]
 
   });
 
   }
+  getBackgroundColor(value: number): string {
+    switch (value) {
+      case -3:
+        return '#ec6665';
+      case -2:
+        return '#ed816c';
+      case -1:
+        return '#f19f70';
+      case 0:
+        return '#f4b979';
+      case 1:
+        return '#f9d57f';
+      case 2:
+        return '#fcf084';
+      case 3:
+        return '#e0e885';
+      case 4:
+        return '#c1e083';
+      case 5:
+        return '#a3d481';
+      case 6:
+        return '#84cc80';
+      case 7:
+        return '#65c17e';
+      default:
+        return 'white';
+    }
+  }
+  // getCircleColor(): string {
+  //   const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+  //   return randomColor
+  // }
 
+  getIntervention(p:number, q: number){
+    return this.slicedData.some(item => item.outcome_score === p && item.process_score === q);
+  }
+  paginate(event:Paginator|undefined) {
+    if (event){
+      console.log("paginate",event)
+      this.slicedData = this.tableData.slice(event?.first,event?.first+this.rows)
+    }
+    else{
+      this.slicedData = this.tableData.slice(0,this.rows)
+    }
+   
+
+  }
 
 }

@@ -88,7 +88,7 @@ export class DashboardComponent implements OnInit {
       
     });
 
-    this.SelectedTool = 1;
+    this.SelectedTool = 3;
 
   }
 
