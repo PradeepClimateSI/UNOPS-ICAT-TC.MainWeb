@@ -31,17 +31,17 @@
                     </tr>
                 </ng-template>
             </p-table>
-            
+
             <br>
             <h4>Process of change</h4>
-            <app-portfolio-process-data></app-portfolio-process-data>
+            <app-portfolio-process-data [process_data]="process_data"></app-portfolio-process-data>
 
             <br>
             <h4>Outcome of change</h4>
-            <app-portfolio-outcome-data></app-portfolio-outcome-data>
+            <app-portfolio-outcome-data [outcome_data]="outcome_data"></app-portfolio-outcome-data>
 
             <br>
-            <app-portfolio-aggregation></app-portfolio-aggregation>
+            <app-portfolio-aggregation [aggregation_data]="aggregation_data" [alignment_data]="alignment_data"></app-portfolio-aggregation>
         </div>
     </div>
 </div>
