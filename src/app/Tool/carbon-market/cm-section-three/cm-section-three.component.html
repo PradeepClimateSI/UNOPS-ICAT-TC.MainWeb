@@ -11,7 +11,7 @@
                     <p>{{char.description}}</p>
                     <div class="row">
                         <div class="col-2">
-                            <label for="Description">Relevance</label>
+                            <label for="Description">Relevance *</label>
                         </div>
                         <div class="col-5">
                             <p-dropdown name="data.charData.relavance" #type="ngModel" placeholder="Select Relevance"
@@ -31,7 +31,7 @@
                 <div class="row justify-content-end">
                     <div>
                         <div class="d-flex flex-row-reverse mt-20 ">
-                            <div class="btn btn-primary text-uppercase" (click)="next()">
+                            <div class="btn btn-primary text-uppercase" (click)="next(category.characteristics)">
                                 Next
                             </div>
                         </div>
@@ -105,7 +105,7 @@
                             </div>
                         </ng-container>
                         <ng-container *ngIf="category.method === 'SUSTAINED'">
-                            <p>Is the activity’s contribution to the selected SDG sustained in nature?</p>
+                            <p>Is the intervention’s GHG outcome sustained over time, i.e. the mitigation continues to accrue beyond the crediting period? Note: this is different from permanence of the achieved mitigation</p>
                             <div class="row p-2">
                                 <div class="col-4">Score</div>
                                 <div class="col-8">
@@ -284,7 +284,7 @@
                             <div class="col-4">Aggregated Answer</div>
                             <div class="col-8">
                                 <input type="text" name="ghgScore" #tboundrary="ngModel" disabled="true"
-                                    [(ngModel)]="GHGScore" class="form-control" />
+                                    [(ngModel)]="adaptationScore" class="form-control" />
                             </div>
                         </div>
                     </ng-container>
@@ -443,13 +443,13 @@
                                         [(ngModel)]="SDGScore" class="form-control" />
                                 </div>
                             </div>
-                            <div class="row p-2">
+                            <!-- <div class="row p-2">
                                 <div class="col-4">Weight</div>
                                 <div class="col-8">
                                     <input type="text" name="sdgWeight" #tboundrary="ngModel" disabled="true"
                                         [(ngModel)]="SDGWeight" class="form-control" />
                                 </div>
-                            </div>
+                            </div> -->
                         </ng-container>
                     </ng-container>
                     <div class="row justify-content-end" *ngIf="activeIndex2 < outcome.length - 1">

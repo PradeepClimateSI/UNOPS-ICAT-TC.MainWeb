@@ -29,6 +29,7 @@ export class CmSectionComponent implements OnInit {
 
   result: any
   isPassed: boolean = false
+  preQuestionIdx: number | undefined
 
   message: string
   defaultMessage = 'The preconditions for transformational change have not been met. <br> Transformational change = 0'
@@ -37,14 +38,14 @@ export class CmSectionComponent implements OnInit {
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
     private cMAssessmentQuestionControllerServiceProxy: CMAssessmentQuestionControllerServiceProxy,
     private messageService: MessageService,
-    private activatedRoute:ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private router: Router,
   ) { }
 
   async ngOnInit(): Promise<void> {
-   // this.approach = 'INDIRECT' //TODO REMOVE ON COMMIT
+    // this.approach = 'INDIRECT' //TODO REMOVE ON COMMIT
     await this.getSections()
-    this.onOpenTab({index: 0})
+    this.onOpenTab({ index: 0 })
     this.shownQuestions[0] = []
     this.shownQuestions[0].push([])
     this.shownQuestions[0][0] = []
@@ -74,14 +75,14 @@ export class CmSectionComponent implements OnInit {
 
   }
 
-  async getSections(){
+  async getSections() {
     let res = await this.cMQuestionControllerServiceProxy.getAllSection().toPromise()
-    this.sections = res.sort((a,b) => a.order - b.order)
+    this.sections = res.sort((a, b) => a.order - b.order)
   }
 
-  async getCriteriaBySection(sectionId: number){
+  async getCriteriaBySection(sectionId: number) {
     let res = await this.cMQuestionControllerServiceProxy.getCriteriaBySectionId(sectionId).toPromise()
-    let _criterias = res.sort((a,b) => a.order - b.order)
+    let _criterias = res.sort((a, b) => a.order - b.order)
     _criterias = await Promise.all(
       _criterias.map(async criteria => {
         let q = await this.cMQuestionControllerServiceProxy.getQuestionsByCriteria(criteria.id).toPromise()
@@ -90,27 +91,25 @@ export class CmSectionComponent implements OnInit {
       })
     )
     this.criterias.push(_criterias)
-    console.log(this.criterias)
 
   }
 
-  async onOpenTab(e: any){
+  async onOpenTab(e: any) {
     let section = this.sections[e.index]
     await this.getCriteriaBySection(section.id)
   }
 
-  onAnswer(e: any, message: string, criteria: any, sectionIdx: number, criteriaIdx: number, idx: number ) {
+  onAnswer(e: any, message: string, criteria: any, sectionIdx: number, criteriaIdx: number, idx: number) {
     this.prev_answer = e.answer
     let question = criteria.questions[idx]
-    console.log("Indirectt222", e.type)
-    if (e.type === 'COMMENT'){
+    if (e.type === 'COMMENT') {
       this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['comment'] = e.comment
-    } else if (e.type === 'FILE'){
+    } else if (e.type === 'FILE') {
       this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['file'] = e.path
       criteria.questions[idx]['result'] = {}
       criteria.questions[idx]['result']['filePath'] = e.path
     } else {
-      if (e.type === 'INDIRECT'){
+      if (e.type === 'INDIRECT') {
         this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['institution'] = e.answer
       } else {
         this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['answer'] = e.answer
@@ -120,16 +119,16 @@ export class CmSectionComponent implements OnInit {
 
       if (criteria.questions.length === idx + 1 && !this.recievedQuestions.includes(idx)) {
         if (e.type === 'MULTI') {
-          if (this.criterias[sectionIdx]?.length === this.shownCriterias[sectionIdx].length){
+          if (this.criterias[sectionIdx]?.length === this.shownCriterias[sectionIdx].length) {
             // this.openAccordion = this.openAccordion + 1
-            if (this.prev_answer.isPassing){
+            if (this.prev_answer.isPassing) {
               this.shownSections.push(true)
-              this.shownCriterias[sectionIdx+1] = [true]
-              this.shownQuestions[sectionIdx+1][0] = [true]
-              if (!this.result.sections[sectionIdx+1] && this.result.sections.length !== this.sections.length){
-                this.result.sections.push({id: sectionIdx+1})
-                this.result.sections[sectionIdx+1]['criteria'] = [{id: 0}]
-                this.result.sections[sectionIdx+1].criteria[0]['questions'] = [{id: 0}]
+              this.shownCriterias[sectionIdx + 1] = [true]
+              this.shownQuestions[sectionIdx + 1][0] = [true]
+              if (!this.result.sections[sectionIdx + 1] && this.result.sections.length !== this.sections.length) {
+                this.result.sections.push({ id: sectionIdx + 1 })
+                this.result.sections[sectionIdx + 1]['criteria'] = [{ id: 0 }]
+                this.result.sections[sectionIdx + 1].criteria[0]['questions'] = [{ id: 0 }]
               }
             } else {
               this.shownCriterias[sectionIdx].splice(criteriaIdx + 1, this.shownCriterias[sectionIdx].length - (criteriaIdx + 1))
@@ -146,38 +145,32 @@ export class CmSectionComponent implements OnInit {
 
           this.recievedQuestions = []
         } else {
-          console.log("Indirectt", e.type)
-          if (this.prev_answer.isPassing || (e.type === "INDIRECT")){
-            console.log("Insiddeee", e.type)
-
-            if (this.criterias[sectionIdx]?.length === this.shownCriterias[sectionIdx].length){
+          if (this.prev_answer.isPassing || (e.type === "INDIRECT")) {
+            if (this.criterias[sectionIdx]?.length === this.shownCriterias[sectionIdx].length) {
               this.shownSections.push(true)
               this.isPassed = true
-              this.shownCriterias[sectionIdx+1] = [true]
-              this.shownQuestions[sectionIdx+1] = []
-              this.shownQuestions[sectionIdx+1][0] = [true]
-              if (!this.result.sections[sectionIdx+1] && this.result.sections.length !== this.sections.length){
-                this.result.sections.push({id: sectionIdx+1})
-                this.result.sections[sectionIdx+1]['criteria'] = [{id: 0}]
-                this.result.sections[sectionIdx+1].criteria[0]['questions'] = [{id: 0}]
+              this.shownCriterias[sectionIdx + 1] = [true]
+              this.shownQuestions[sectionIdx + 1] = []
+              this.shownQuestions[sectionIdx + 1][0] = [true]
+              if (!this.result.sections[sectionIdx + 1] && this.result.sections.length !== this.sections.length) {
+                this.result.sections.push({ id: sectionIdx + 1 })
+                this.result.sections[sectionIdx + 1]['criteria'] = [{ id: 0 }]
+                this.result.sections[sectionIdx + 1].criteria[0]['questions'] = [{ id: 0 }]
               }
+              this.preQuestionIdx = idx
             } else {
               this.shownCriterias[sectionIdx].push(true)
-              this.shownQuestions[sectionIdx][criteriaIdx+1] = [true]
-              // this.shownQuestions.push(true)
-              if (!this.result.sections[sectionIdx].criteria[criteriaIdx+1]){
-                this.result.sections[sectionIdx].criteria.push({id: criteriaIdx+1})
-                this.result.sections[sectionIdx].criteria[criteriaIdx+1]['questions'] = [{id: 0}]
+              this.shownQuestions[sectionIdx][criteriaIdx + 1] = [true]
+              if (!this.result.sections[sectionIdx].criteria[criteriaIdx + 1]) {
+                this.result.sections[sectionIdx].criteria.push({ id: criteriaIdx + 1 })
+                this.result.sections[sectionIdx].criteria[criteriaIdx + 1]['questions'] = [{ id: 0 }]
               }
             }
-
             this.recievedQuestions = []
           } else {
-            // alert("TC score is 0")
-            if (message){
+            if (message) {
               this.message = message
             } else {
-              console.log("1111111111", e.type)
               this.message = this.defaultMessage
             }
             this.visible = true
@@ -187,48 +180,48 @@ export class CmSectionComponent implements OnInit {
           }
         }
       } else {
-        if ((e.type === 'MULTI' || e.type === "INDIRECT") && !this.recievedQuestions.includes(idx)){
+        if ((e.type === 'MULTI' || e.type === "INDIRECT") && !this.recievedQuestions.includes(idx)) {
           this.shownQuestions[sectionIdx][criteriaIdx].push(true)
-          if (!this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx+1]){
-            this.result.sections[sectionIdx].criteria[criteriaIdx].questions.push({id: idx+1})
+          if (!this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx + 1]) {
+            this.result.sections[sectionIdx].criteria[criteriaIdx].questions.push({ id: idx + 1 })
           }
         } else {
-            if (this.prev_answer.isPassing) {
-              this.shownQuestions[sectionIdx][criteriaIdx].push(true)
-              if (!this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx+1]){
-                this.result.sections[sectionIdx].criteria[criteriaIdx].questions.push({id: idx+1})
-              }
-            } else {
-              this.visible = true
-              if (message){
-                this.message = message
-              } else {
-                console.log("222222", e.type)
-                this.message = this.defaultMessage
-              }
-              this.shownQuestions[sectionIdx][criteriaIdx].splice(idx + 1, this.shownQuestions[sectionIdx][criteriaIdx].length - (idx + 1))
-              this.shownCriterias[sectionIdx].splice(criteriaIdx + 1, this.shownCriterias[sectionIdx].length - (criteriaIdx + 1))
-              this.shownSections.splice(sectionIdx + 1, this.shownSections.length - (sectionIdx + 1))
+          if (this.prev_answer.isPassing) {
+            if (this.preQuestionIdx !== idx) this.shownQuestions[sectionIdx][criteriaIdx].push(true)
+            this.preQuestionIdx = idx
+            if (!this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx + 1]) {
+              this.result.sections[sectionIdx].criteria[criteriaIdx].questions.push({ id: idx + 1 })
             }
+          } else {
+            this.visible = true
+            if (message) {
+              this.message = message
+            } else {
+              this.message = this.defaultMessage
+            }
+            this.shownQuestions[sectionIdx][criteriaIdx].splice(idx + 1, this.shownQuestions[sectionIdx][criteriaIdx].length - (idx + 1))
+            this.shownCriterias[sectionIdx].splice(criteriaIdx + 1, this.shownCriterias[sectionIdx].length - (criteriaIdx + 1))
+            this.shownSections.splice(sectionIdx + 1, this.shownSections.length - (sectionIdx + 1))
+            this.preQuestionIdx = undefined
+          }
         }
-        this.recievedQuestions.push(idx)
+        if (!this.recievedQuestions.includes(idx)) {
+          this.recievedQuestions.push(idx)
+        }
       }
     }
   }
 
 
-  save(event: CMResultDto[]){
+  save(event: CMResultDto[]) {
     let result: SaveCMResultDto = new SaveCMResultDto()
     result.result = []
     result.result = [...event]
     this.result.sections.forEach((section: any) => {
       section.criteria.forEach((cr: any) => {
-        cr.questions.forEach((q:any) => {
+        cr.questions.forEach((q: any) => {
           let item = new CMResultDto()
           if (q.answer) item.answer = q.answer
-
-          console.log("inss",q.institution)
-
           let ins = new Institution()
           ins.id = q.institution?.id
           if (q.institution) item.institution = ins
@@ -241,36 +234,33 @@ export class CmSectionComponent implements OnInit {
       })
     })
     result.assessment = this.assessment
-
-    console.log("kkkkk",result)
-
     this.cMAssessmentQuestionControllerServiceProxy.saveResult(result)
-    .subscribe(res => {
-      if (res) {
+      .subscribe(res => {
+        if (res) {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Assessment created successfully',
+            closable: true,
+          })
+          // this.cMAssessmentQuestionControllerServiceProxy.saveTcValue(this.assessment.id).subscribe();
+
+          if (result.assessment.assessment_approach === 'DIRECT') {
+            this.router.navigate(['../carbon-market-tool-result'], { queryParams: { id: this.assessment.id }, relativeTo: this.activatedRoute });
+          }
+
+        }
+      }, error => {
         this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Assessment created successfully',
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error in result saving',
           closable: true,
         })
-        // this.cMAssessmentQuestionControllerServiceProxy.saveTcValue(this.assessment.id).subscribe();
-        
-        if(result.assessment.assessment_approach=== 'DIRECT'){
-          this.router.navigate(['../carbon-market-tool-result'], {queryParams: { id: this.assessment.id }, relativeTo:this.activatedRoute});
-        }
-
-      }
-    }, error => {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Error in result saving',
-        closable: true,
       })
-    })
   }
-  okay(){
-    this.visible=false
+  okay() {
+    this.visible = false
   }
 
   onSubmitSectionThree($event: any) {
