@@ -38,7 +38,7 @@
 
               <div class="p-field p-2">
                 <label for="policy">Select Intervetion *</label>
-                <p-dropdown appendTo="body" name="policy" #policy="ngModel" placeholder="Select Policy"
+                <p-dropdown appendTo="body" name="policy" #policy="ngModel" placeholder="Select Intervetion" [disabled]="isSavedAssessment"
                   [(ngModel)]="assessment.climateAction" appendTo="body" [options]="policies" optionLabel="policyName"
                   [required]="true"></p-dropdown>
                 <p class="info-message text-danger" *ngIf="
@@ -51,7 +51,7 @@
               <div class="p-field p-2">
                 <label for="policy">Assessment Type *</label>
                 <p-dropdown appendTo="body" name="type" #type="ngModel" placeholder="Select Assessment Type"
-                  [(ngModel)]="assessment.assessmentType" [options]="assessment_types" optionLabel="name"
+                  [(ngModel)]="assessment.assessmentType" [options]="assessment_types" optionLabel="name" [disabled]="isSavedAssessment"
                   optionValue="name" [required]="true" (onChange)="selectAssessmentType($event)"></p-dropdown>
                 <p class="info-message text-danger" *ngIf="
                               !assessment.assessmentType &&
@@ -75,7 +75,7 @@
               <div class="p-field p-2">
                 <label for="Level of implementation">Geographical Areas Covered *</label>
                 <p-dropdown appendTo="body" name="investorAssessment.geographical_areas_covered" #type="ngModel"
-                  placeholder="Select Geographical Areas Covered"
+                  placeholder="Select Geographical Areas Covered" [disabled]="isSavedAssessment"
                   [(ngModel)]="investorAssessment.geographical_areas_covered" [options]="levelOfImplementation"
                   optionLabel="name" optionValue="name" [required]="true"></p-dropdown>
                 <p class="info-message text-danger" *ngIf="
@@ -89,7 +89,7 @@
                 <label for="Sectors Covered">Sectors Covered *</label>
 
                 <p-multiSelect appendTo="body" name="sectors" #type="ngModel" placeholder="Select Sectors Covered"
-                  [(ngModel)]="sectorArray" [options]="sectorList" (ngModelChange)="onItemSelectSectors($event)"
+                  [(ngModel)]="sectorArray" [options]="sectorList" (ngModelChange)="onItemSelectSectors($event)" [disabled]="isSavedAssessment"
                   optionLabel="name" [required]="true"></p-multiSelect>
                 <p class="info-message text-danger" *ngIf="
                               sectorArray.length===0 &&
@@ -114,14 +114,14 @@
 
             <div class="p-field p-2">
                   <label for="opportunities">Opportunities for stakeholders to participate in the assessment *</label>
-                  <input pInputText type="text" #opportunities="ngModel" name="opportunities" ngModel
+                  <input pInputText type="text" #opportunities="ngModel" name="opportunities" ngModel [disabled]="isSavedAssessment"
                   placeholder="opportunities" [(ngModel)]="assessment.opportunities" required />
                   <p class="info-message text-danger" *ngIf="!opportunities.value && (fData.submitted || opportunities.touched)">This is a mandatory field</p>
             </div>
 
             <div class="p-field p-2">
                   <label for="principles">Principles on wwhich the assessment is based *</label>
-                  <input pInputText type="text" #principles="ngModel" name="principles" ngModel
+                  <input pInputText type="text" #principles="ngModel" name="principles" ngModel [disabled]="isSavedAssessment"
                   placeholder="principles" [(ngModel)]="assessment.principles" required />
                   <p class="info-message text-danger" *ngIf="!principles.value && (fData.submitted || principles.touched)">This is a mandatory field</p>
             </div>
@@ -576,10 +576,17 @@
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
                                         <label for="score">Score</label>
+                                        <div *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' ||  category.CategoryName ==='Adaptation Scale of the Outcome' ">
                                         <p-dropdown appendTo="body" name="score" #type="ngModel"
                                           placeholder="Select Score" [(ngModel)]="data.score"
                                           [options]="outcomeScaleScore" optionLabel="id" optionValue="value"
-                                          [required]="true"></p-dropdown>
+                                          [required]="true"></p-dropdown></div>
+
+                                          <div *ngIf=" category.CategoryName ==='GHG Time frame over which the outcome is sustained' ||  category.CategoryName ==='Adaptation Time frame over which the outcome is sustained' ">
+                                            <p-dropdown appendTo="body" name="score" #type="ngModel"
+                                              placeholder="Select Score" [(ngModel)]="data.score"
+                                              [options]="outcomeSustainedScore" optionLabel="id" optionValue="value"
+                                              [required]="true"></p-dropdown></div>
                                       </div>
                                     </div>
 
@@ -958,6 +965,23 @@
         </form>
       </div>
     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <!-- <div > -->
     <div *ngIf="load && selectedApproach === 'Indirect'">
