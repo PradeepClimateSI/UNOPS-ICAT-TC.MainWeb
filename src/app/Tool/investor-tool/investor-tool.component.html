@@ -9,7 +9,7 @@
                     <div class="col-12 col-md-6">
                         <div class="p-field p-2">
                             <label for="policy">Select Intervetion *</label>
-                            <p-dropdown name="policy" #policy="ngModel" placeholder="Select Policy"
+                            <p-dropdown name="policy" #policy="ngModel" placeholder="Select Intervetion"
                                 [(ngModel)]="assessment.climateAction" appendTo="body" [options]="policies"
                                 optionLabel="policyName" [required]="true"
                                 [disabled]="isSavedAssessment"></p-dropdown>
@@ -112,14 +112,14 @@
                         <div class="p-field p-2">
                             <label for="opportunities">Opportunities for stakeholders to participate in the assessment *</label>
                             <input pInputText type="text" #opportunities="ngModel" name="opportunities" ngModel
-                            placeholder="Opportunities" [(ngModel)]="assessment.opportunities" required />
+                            placeholder="Opportunities" [(ngModel)]="assessment.opportunities" required [disabled]="isSavedAssessment"/>
                             <p class="info-message text-danger" *ngIf="!opportunities.value && (fData.submitted || opportunities.touched)">This is a mandatory field</p>
                       </div>
 
                       <div class="p-field p-2">
                             <label for="principles">Principles on wwhich the assessment is based *</label>
                             <input pInputText type="text" #principles="ngModel" name="principles" ngModel
-                            placeholder="Principles" [(ngModel)]="assessment.principles" required />
+                            placeholder="Principles" [(ngModel)]="assessment.principles" required [disabled]="isSavedAssessment"/>
                             <p class="info-message text-danger" *ngIf="!principles.value && (fData.submitted || principles.touched)">This is a mandatory field</p>
                       </div>
 
