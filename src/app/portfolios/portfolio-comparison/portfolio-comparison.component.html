@@ -1,0 +1,47 @@
+<div id="content" #content>
+    <div class="container pl-20 pr-20">
+        <div class="mb-12">
+            <h4 class="mt-4"> {{portfolio.portfolioName}}</h4>
+        </div>
+        <div class="p-grid p-fluid card">
+            <div class="p-grid p-fluid col-md-12 col-sm-12 text-title">
+                <div class="row p-2" *ngFor="let item of card">
+                    <div class="col-6">{{item.title}} :</div>
+                    <div class="col-6">{{item.data}}</div>
+                </div>
+            </div>
+            <br>
+            <p-table [value]="assessmentList" [tableStyle]="{ 'min-width': '100%' }">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>INTERVENTION ID</th>
+                        <th style="width:40%">INTERVENTION</th>
+                        <th style="width:20%">ASSESSMENT TYPE</th>
+                        <th style="width:40%">ASSESSMENT PERIOD</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-assessList>
+                    <tr>
+                        <td>{{ assessList.assessment.climateAction.intervention_id }}</td>
+                        <td>{{ assessList.assessment.climateAction.policyName }}</td>
+                        <td>{{ assessList.assessment.assessmentType }}</td>
+                        <td>{{ assessList.assessment.from | date:'yyyy-MM-dd'}} - {{ assessList.assessment.to |
+                            date:'yyyy-MM-dd'}}
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            
+            <br>
+            <h4>Process of change</h4>
+            <app-portfolio-process-data></app-portfolio-process-data>
+
+            <br>
+            <h4>Outcome of change</h4>
+            <app-portfolio-outcome-data></app-portfolio-outcome-data>
+
+            <br>
+            <app-portfolio-aggregation></app-portfolio-aggregation>
+        </div>
+    </div>
+</div>

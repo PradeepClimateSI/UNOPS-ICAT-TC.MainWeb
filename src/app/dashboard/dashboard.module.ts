@@ -65,6 +65,7 @@ import { PortfolioResultComponent } from 'app/portfolios/portfolio-result/portfo
 import { EnterDataPathComponent } from 'app/data-request-flow/enter-data-path/enter-data-path/enter-data-path.component';
 import { ReviewDataPathComponent } from 'app/data-request-flow/review-data-path/review-data-path/review-data-path.component';
 import { PortfolioTrack4Component } from 'app/Tool/portfolio-track4/portfolio-track4.component';
+import { PortfolioComparisonComponent } from 'app/portfolios/portfolio-comparison/portfolio-comparison.component';
 
 
 const routes: Routes = [
@@ -338,7 +339,7 @@ const routes: Routes = [
   },
   {
     path: 'portfolio-view',
-    component: PortfolioResultComponent,
+    component: PortfolioComparisonComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}
