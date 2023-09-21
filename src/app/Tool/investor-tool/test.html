@@ -1,0 +1,181 @@
+<p-tabPanel header="Outcome of Change" >
+  <p-tabView #tabView2 (onChange)="onCategoryTabChange($event, tabView2) " [(activeIndex)]="activeIndex2">
+
+      <p-tabPanel [header]="category.CategoryName" *ngFor="let category of outcomeData">
+
+          <div class="characteristic-Topic" *ngFor="let data of category.data; index as i">
+              <h6>{{i+1}}.{{data.characteristics.name}}</h6>
+              <div>
+                  <form>
+                      <div class="container pl-20 pr-20">
+                          <div id="content" #content>
+                              <div class=" mt-2">
+                                  <div class="p-grid p-fluid col-12">
+                                      <div class="row p-2">
+                                          <!-- <label for="Indicator"><u>Indicator</u></label> -->
+                                          <div class="row" *ngFor="let question of data.indicator_details">
+                                              <div class=" ml-25 col-5 mb-20">
+
+                                              <p class="question">{{question.question.name}}</p>
+                                            </div>
+                                            <div
+                                              class="col-4 mb-20">
+                                              <p-dropdown  *ngIf="approach===1"
+                                                  name="data.charData.question01" #type="ngModel"
+                                                  placeholder="Select Answer"
+                                                  [(ngModel)]="question.value"
+                                                  [options]="yesNoAnswer" optionLabel="name"
+                                                  appendTo="body"
+                                                  optionValue="name" [required]="true">
+                                              </p-dropdown>
+
+                                              <p-dropdown  *ngIf="approach===2"
+                                                  name={{data}}_charData.relavance
+                                                  placeholder="Select Institution"
+                                                  [(ngModel)]="question.value"
+                                                  [options]="instiTutionList" optionLabel="name"
+                                                  appendTo="body"
+                                                  optionValue="id" [required]="true">
+                                              </p-dropdown>
+
+                                              </div>
+                                          </div>
+
+                                      </div>
+
+                                      <!-- <div class="row p-2"
+                                          *ngIf=" category.CategoryName ==='Scale SD'|| category.CategoryName ==='Sustained nature-SD'">
+                                          <div class="col-12 col-lg-12">
+                                              <div class="p-field">
+                                                  <input type="text" pInputText
+                                                      [(ngModel)]="data.indicator"
+                                                      placeholder="Enter an Indicator"
+                                                      name="justification" />
+                                              </div>
+                                          </div>
+                                      </div> -->
+
+                                      <!-- <div class="row p-2" *ngIf=" approach===1 && (category.CategoryName ==='Scale SD'|| category.CategoryName ==='Sustained nature-SD')">
+                                          <div class="col-12 col-lg-6">
+                                            <div class="p-field">
+                                              <label for="indicatorStartingVal">Indicator Starting Situation Value</label>
+                                              <p-inputNumber [(ngModel)]="data.indicatorStartingVal" name="indicatorStartingVal"
+                                                placeholder="Value at the Starting Situation" inputId="locale-us" mode="decimal"
+                                                locale="en-US" [minFractionDigits]="2">
+                                              </p-inputNumber>
+                                            </div>
+                                          </div>
+
+                                          <div class="col-12 col-lg-6">
+                                            <div class="p-field">
+                                              <label for="indicatorExpectedVal">Indicator Expected Value</label>
+                                              <p-inputNumber [(ngModel)]="data.indicatorExpectedVal" name="indicatorExpectedVal"
+                                                placeholder="Expected Value" inputId="locale-us" mode="decimal" locale="en-US"
+                                                [minFractionDigits]="2">
+                                              </p-inputNumber>
+
+                                            </div>
+                                          </div>
+                                      </div> -->
+
+
+
+
+                                      <div class="row p-2">
+                                          <div class="col-12 col-lg-6">
+                                              <div class="p-field">
+                                                  <label for="Relevance">Score</label>
+                                                  <!-- <p-inputNumber *ngIf="approach===1"
+                                                      inputId="horizontal"
+                                                      [(ngModel)]="data.score"
+                                                      [showButtons]="true" [min]="-1" [max]="3" [step]="1"
+                                                      inputId="minmax-buttons"
+                                                      placeholder="Enter an integer between -1 and 3"
+
+                                                      name="data.charData.score">
+                                                  </p-inputNumber> -->
+                                                  <p-dropdown  *ngIf="approach===1"
+                                                      name=data.charData.score
+                                                      placeholder="Select score"
+                                                      [(ngModel)]="data.score"
+                                                      [options]="score" optionLabel="name"
+                                                      appendTo="body"
+                                                      optionValue="value" [required]="true">
+                                                   </p-dropdown>
+                                                  <!-- <p-inputMask type="text" name="telephoneNumber" mask="9" [autoClear]="true" characterPattern="[1-3]\d*$"
+                                                  placeholder="+99 999 999-9999"  [(ngModel)]="data.score"
+                                                  [ngModelOptions]="{ standalone: false }" #telephoneNumber="ngModel"
+
+                                                  placeholder="Enter an integer between -1 and 3"
+                                                  [required]="true"></p-inputMask>   -->
+                                                  <!-- <input type="number" [(ngModel)]="data.score"
+                                                  name="data.charData.score" min="-1" max="3" readonly> -->
+
+
+                                                  <!-- <p-inputNumber [(ngModel)]="data.score" [min]="-1" [max]="3" [readonly]="true"  name="data.charData.score" (onInput)="validateScore($event)"></p-inputNumber> -->
+
+                                                  <p-dropdown  *ngIf="approach===2"
+                                                      name={{data}}_charData.relavance
+                                                      placeholder="Select Institution"
+                                                      [(ngModel)]="data.score"
+                                                      [options]="instiTutionList" optionLabel="name"
+                                                      appendTo="body"
+                                                      optionValue="id" [required]="true">
+                                                  </p-dropdown>
+                                              </div>
+                                          </div>
+
+                                          <div   *ngIf="approach===1" class="col-12 col-lg-6">
+                                              <div class="p-field">
+                                                  <label for="justification">Justification</label>
+                                                  <input type="text" pInputText
+                                                      [(ngModel)]="data.justification"
+                                                      placeholder="Enter Justifiaction"
+                                                      name="justification" />
+
+                                              </div>
+                                          </div>
+                                      </div>
+
+                                      <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level'">
+                                          <div class="col-12 col-lg-6">
+                                            <div class="p-field">
+                                              <label for="expected_ghg_mitigation">Expected GHG mitgation (Mt CO2-eq)</label>
+                                              <p-inputNumber *ngIf="approach===1"
+                                                [(ngModel)]="data.expected_ghg_mitigation" name="expected_ghg_mitigation"
+                                                placeholder="Expected GHG mitgation Value" inputId="locale-us" mode="decimal"
+                                                locale="en-US" [minFractionDigits]="2">
+                                              </p-inputNumber>
+
+                                              <p-dropdown  *ngIf="approach===2"
+                                                  name={{data}}_charData.relavance
+                                                  placeholder="Select Institution"
+                                                  [(ngModel)]="data.expected_ghg_mitigation"
+                                                  [options]="instiTutionList" optionLabel="name"
+                                                  appendTo="body"
+                                                  optionValue="id" [required]="true">
+                                              </p-dropdown>
+                                            </div>
+                                          </div>
+
+
+                                        </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+                  </form>
+
+              </div>
+          </div>
+
+
+
+      </p-tabPanel>
+
+
+
+
+  </p-tabView>
+</p-tabPanel>

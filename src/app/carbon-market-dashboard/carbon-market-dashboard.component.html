@@ -122,18 +122,24 @@
 
                  </div>
               </ng-container>
-              <ng-template #elseBlock3>
+              <ng-template #elseBlock3 >
                 <div  class="col-12  mt-20 ml-10" >
 
                   <p-table
+                  #mainTable
                   [value]="tableData"
                   [paginator]="true"
                   [rows]="rows"
+                  [totalRecords]="totalRecords"
+                  [lazy]="true"
+                  (onLazyLoad)="loadgridData($event)"
                   [showCurrentPageReport]="true"
                   [tableStyle]="{ 'min-width': '5rem' }"
+                  paginatorDropdownAppendTo="body"
                   currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-                  [rowsPerPageOptions]="[rows, rows*2, rows*4]"
-                  (onPage)="paginate($event)"
+                  [rowsPerPageOptions]="[ 5, 10, 20]"
+                  [loading]="loading"
+                  [responsive]="true"
               >
                   <ng-template pTemplate="header">
                       <tr>
@@ -230,7 +236,8 @@
                             <td>{{y.label}}</td>
                             <ng-container *ngFor="let x of xData">
                                 <td  [style.background-color]="getBackgroundColor(y.value+x.value)">
-                                    <span [ngClass]="getIntervention(x.value, y.value)? 'intervention':''" >{{y.value+x.value}}</span>
+                                    <span
+                                    [style.background-color]=" getIntervention(x.value, y.value) ?getDotColor(y.value + x.value):''" [ngClass]="getIntervention(x.value, y.value)? 'intervention':''" >{{y.value+x.value}}</span>
                                 </td>
                             </ng-container>
                         </tr>
