@@ -67,11 +67,17 @@
                             </div>
                             <div class="row p-2">
                                 <div class="col-4">Score</div>
-                                <div class="col-8">
-                                    <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.id" #type="ngModel"
-                                        placeholder="Select Score" [(ngModel)]="char.selectedScore"
+                                <div class="col-6">
+                                    <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.id" #type="ngModel" 
+                                        placeholder="Select Score" [(ngModel)]="char.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}" 
                                         [options]="char.characteristic.code === 'INTERNATIONAL' ? GHG_scale_score_macro : (char.characteristic.code === 'NATIONAL' ? GHG_scale_score_medium : GHG_scale_score_micro)" 
-                                        optionLabel="label" [required]="true" appendTo="body" (onChange)="onSelectScore($event, char, idx, category.type)"></p-dropdown>
+                                         [required]="true" appendTo="body" (onChange)="onSelectScore($event, char, idx, category.type)" optionLabel="label">
+                                        <ng-template let-option pTemplate="item" >
+                                            <div class="custom-option">
+                                               {{ option.label }}
+                                            </div>
+                                         </ng-template>
+                                    </p-dropdown>
                                     <p-dropdown *ngIf="approach === 'INDIRECT'" name="institution"
                                         [options]="institutions" [(ngModel)]="char.institution" #finstitution="ngModel"
                                         placeholder="Select an institution" optionLabel="name"
@@ -108,12 +114,18 @@
                             <p>Is the intervention’s GHG outcome sustained over time, i.e. the mitigation continues to accrue beyond the crediting period? Note: this is different from permanence of the achieved mitigation</p>
                             <div class="row p-2">
                                 <div class="col-4">Score</div>
-                                <div class="col-8">
+                                <div class="col-6">
                                     <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.id" #type="ngModel"
-                                        placeholder="Select Score" [(ngModel)]="char.selectedScore"
+                                        placeholder="Select Score" [(ngModel)]="char.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
                                         [options]="GHG_sustained_score" optionLabel="label" [required]="true"
                                         appendTo="body"
-                                        (onChange)="onSelectScore($event, char, idx, category.type)"></p-dropdown>
+                                        (onChange)="onSelectScore($event, char, idx, category.type)">
+                                        <ng-template let-option pTemplate="item" >
+                                            <div class="custom-option">
+                                               {{ option.label }}
+                                            </div>
+                                         </ng-template>
+                                    </p-dropdown>
                                     <p-dropdown *ngIf="approach === 'INDIRECT'" name="institution"
                                         [options]="institutions" [(ngModel)]="char.institution" #finstitution="ngModel"
                                         placeholder="Select an institution" optionLabel="name"
@@ -198,11 +210,17 @@
                             </div>
                             <div class="row p-2">
                                 <div class="col-4">Score</div>
-                                <div class="col-8">
+                                <div class="col-6">
                                     <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.id" #type="ngModel"
                                         placeholder="Select Score" [(ngModel)]="char.selectedScore"
-                                        [options]="adaptation_scale_score" 
-                                        optionLabel="label" [required]="true" appendTo="body" (onChange)="onSelectScore($event, char, idx, category.type)"></p-dropdown>
+                                        [options]="adaptation_scale_score"  [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
+                                        optionLabel="label" [required]="true" appendTo="body" (onChange)="onSelectScore($event, char, idx, category.type)">
+                                        <ng-template let-option pTemplate="item" >
+                                            <div class="custom-option">
+                                               {{ option.label }}
+                                            </div>
+                                         </ng-template>
+                                    </p-dropdown>
                                     <p-dropdown *ngIf="approach === 'INDIRECT'" name="institution"
                                         [options]="institutions" [(ngModel)]="char.institution" #finstitution="ngModel"
                                         placeholder="Select an institution" optionLabel="name"
@@ -239,12 +257,18 @@
                             <p>Is the intervention’s contribution to the adaptation co-benefit sustained in nature?</p>
                             <div class="row p-2">
                                 <div class="col-4">Score</div>
-                                <div class="col-8">
+                                <div class="col-6">
                                     <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.id" #type="ngModel"
                                         placeholder="Select Score" [(ngModel)]="char.selectedScore"
                                         [options]="adaptation_sustained_score" optionLabel="label" [required]="true"
-                                        appendTo="body"
-                                        (onChange)="onSelectScore($event, char, idx, category.type)"></p-dropdown>
+                                        appendTo="body" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
+                                        (onChange)="onSelectScore($event, char, idx, category.type)">
+                                        <ng-template let-option pTemplate="item" >
+                                            <div class="custom-option">
+                                               {{ option.label }}
+                                            </div>
+                                         </ng-template>
+                                    </p-dropdown>
                                     <p-dropdown *ngIf="approach === 'INDIRECT'" name="institution"
                                         [options]="institutions" [(ngModel)]="char.institution" #finstitution="ngModel"
                                         placeholder="Select an institution" optionLabel="name"
@@ -350,10 +374,16 @@
                                         <div class="col-8">
                                             <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+SDG.code"
                                                 #type="ngModel" placeholder="Select Score"
-                                                [(ngModel)]="char.selectedScore"
+                                                [(ngModel)]="char.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
                                                 (onChange)="onSelectScore($event, char, idx, category.type)"
                                                 [options]="SDG_scale_score" optionLabel="label" [required]="true"
-                                                appendTo="body"></p-dropdown>
+                                                appendTo="body">
+                                                <ng-template let-option pTemplate="item" >
+                                                    <div class="custom-option">
+                                                       {{ option.label }}
+                                                    </div>
+                                                 </ng-template>
+                                            </p-dropdown>
                                             <p-dropdown *ngIf="approach === 'INDIRECT'" name="institution"
                                                 [options]="institutions" [(ngModel)]="char.institution"
                                                 #finstitution="ngModel" placeholder="Select an institution"
@@ -393,13 +423,19 @@
                                     <p>Is the activity’s contribution to the selected SDG sustained in nature?</p>
                                     <div class="row p-2">
                                         <div class="col-4">Score</div>
-                                        <div class="col-8">
+                                        <div class="col-6">
                                             <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'susScore'+SDG.code"
                                                 #type="ngModel" placeholder="Select Score"
-                                                [(ngModel)]="chSus.selectedScore"
+                                                [(ngModel)]="chSus.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
                                                 (onChange)="onSelectScore($event, chSus, idx, category.type)"
                                                 [options]="SDG_sustained_score" optionLabel="label" [required]="true"
-                                                appendTo="body"></p-dropdown>
+                                                appendTo="body">
+                                                <ng-template let-option pTemplate="item" >
+                                                    <div class="custom-option">
+                                                       {{ option.label }}
+                                                    </div>
+                                                 </ng-template>
+                                            </p-dropdown>
                                             <p-dropdown *ngIf="approach === 'INDIRECT'" name="institution"
                                                 [options]="institutions" [(ngModel)]="chSus.institution"
                                                 #finstitution="ngModel" placeholder="Select an institution"

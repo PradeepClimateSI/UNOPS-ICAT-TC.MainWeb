@@ -5,9 +5,15 @@
     <div class="col-4">
         <label for="ans">Answer</label>
     </div>
-    <div class="col-8" *ngIf="question.answer_type === 'SINGLE' && showAnswer()">
-        <p-dropdown placeholder="Select answer" [options]="answers" optionLabel="label"
-            (onChange)="onSelectAnswer($event, question.answer_type)"> </p-dropdown>
+    <div class="col-6" *ngIf="question.answer_type === 'SINGLE' && showAnswer()">
+        <p-dropdown placeholder="Select answer" [options]="answers" optionLabel="label" [virtualScroll]="true" [virtualScrollItemSize]="5" [style]="{'width': '100%'}" 
+            (onChange)="onSelectAnswer($event, question.answer_type)"> 
+            <ng-template let-option pTemplate="item" >
+                <div class="custom-option">
+                   {{ option.label }}
+                </div>
+             </ng-template>
+        </p-dropdown>
     </div>
     <div class="col-8" *ngIf="question.answer_type === 'MULTI' && showAnswer() ">
         <p-multiSelect [options]="answers" optionLabel="label" [(ngModel)]="selectedAnswers"

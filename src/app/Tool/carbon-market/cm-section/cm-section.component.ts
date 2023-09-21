@@ -118,6 +118,7 @@ export class CmSectionComponent implements OnInit {
       this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['type'] = e.type
 
       if (criteria.questions.length === idx + 1 && !this.recievedQuestions.includes(idx)) {
+        this.preQuestionIdx = undefined
         if (e.type === 'MULTI') {
           if (this.criterias[sectionIdx]?.length === this.shownCriterias[sectionIdx].length) {
             // this.openAccordion = this.openAccordion + 1

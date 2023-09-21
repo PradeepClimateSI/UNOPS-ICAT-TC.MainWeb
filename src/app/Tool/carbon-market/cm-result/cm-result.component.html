@@ -91,7 +91,7 @@
                         </ng-container>
                     </tr>
                     <tr>
-                        <td [attr.rowspan]="processData.guidingQuestions.length + 1">Score</td>
+                        <td [attr.rowspan]="processData.guidingQuestions.length + 2">Score</td>
                         <ng-container *ngFor="let cat of processData.data">
                             <ng-container *ngFor="let data of cat.characteristic">
                                 <td>Guiding Question</td>
@@ -106,12 +106,34 @@
                             <ng-container *ngFor="let cat of processData.data">
                                 <ng-container *ngFor="let data of cat.characteristic">
                                     <td>{{question[data.name + 'question']}}</td>
-                                    <td>{{question[data.name + 'weight']}}</td>
+                                    <td>{{question[data.name + 'weight']}}%</td>
                                     <td>{{question[data.name + 'score']}}</td>
                                 </ng-container>
                             </ng-container>
                         </tr>
                     </ng-container>
+                    <tr>
+                        <ng-container *ngFor="let cat of processData.data">
+                            <ng-container *ngFor="let data of cat.characteristic">
+                                <td colspan="3">
+                                    <span>
+                                        {{data.name}} score: {{data.ch_score}} <br>  Weight: {{data.weight}}%
+                                    </span>
+                                </td>
+                            </ng-container>
+                        </ng-container>
+                    </tr>
+                    <tr>
+                        <!-- <th rowspan="3">Relevance</th> -->
+                        <td></td>
+                        <ng-container *ngFor="let data of processData.data">
+                            <td [attr.colspan]="data.characteristic.length*3">
+                                <span>
+                                    {{data.name}} score: {{data.cat_score}} <br> Weight: {{data.weight}}%
+                                </span>
+                            </td>
+                        </ng-container>
+                    </tr>
                 </ng-template>
             </p-table>
             <br>
@@ -217,6 +239,7 @@
                             <!-- <th >Expected Impact</th> -->
                             <th>Score</th>
                             <th colspan="2">Evidence Provided?</th>
+                            <th>Scale/sustained score</th>
                             <th>Weight</th>
                             <th>Category Score</th>
                         </tr>
@@ -224,7 +247,7 @@
 
                     <ng-template pTemplate="body" let-rowData>
                         <tr>
-                            <td rowspan="4">Scale GHG</td>
+                            <td [attr.rowspan]="outcomeData.scale_GHGs.length + 1">Scale GHG</td>
                         </tr>
                         <ng-container *ngFor="let scale_GHGs of outcomeData.scale_GHGs;let i=index">
                             <tr>
@@ -237,12 +260,14 @@
                                 <td><a *ngIf="scale_GHGs?.document" target="_blank"
                                         [href]="fileServerURL+'/'+scale_GHGs?.document"><i
                                             class="pi pi-download download"></i></a></td>
-                                <td *ngIf="i==0" rowspan="7">{{scale_GHGs.weight}}</td>
-                                <td *ngIf="i==0" rowspan="7">{{score.outcome_score.ghg_score}}</td>
+                                <td *ngIf="i==0"
+                                [attr.rowspan]="outcomeData.scale_GHGs.length + 1" >{{score.outcome_score.scale_ghg_score}}</td> 
+                                <td *ngIf="i==0" [attr.rowspan]="outcomeData.scale_GHGs.length + outcomeData.sustained_GHGs.length + 1">{{scale_GHGs.weight}}%</td>
+                                <td *ngIf="i==0" [attr.rowspan]="outcomeData.scale_GHGs.length + outcomeData.sustained_GHGs.length + 1">{{score.outcome_score.ghg_score}}</td>
                             </tr>
                         </ng-container>
                         <tr>
-                            <td rowspan="4">Sustained GHG</td>
+                            <td [attr.rowspan]="outcomeData.sustained_GHGs.length + 1">Sustained GHG</td>
                         </tr>
                         <ng-container *ngFor="let sustained_GHGs of outcomeData.sustained_GHGs; let i = index">
                             <tr>
@@ -254,6 +279,8 @@
                                 <td><a *ngIf="sustained_GHGs?.document" target="_blank"
                                         [href]="fileServerURL+'/'+sustained_GHGs?.document"><i
                                             class="pi pi-download download"></i></a></td>
+                                <td *ngIf="i==0"
+                                [attr.rowspan]="outcomeData.sustained_GHGs.length + 1" >{{score.outcome_score.sustained_ghg_score}}</td> 
                         </ng-container>
                     </ng-template>
                 </p-table>
@@ -303,6 +330,7 @@
                             <!-- <th >Expected Impact</th> -->
                             <th>Score</th>
                             <th colspan="2">Evidence Provided?</th>
+                            <th>Scale/sustained score</th>
                             <th>Weight</th>
                             <th>Category Score</th>
                         </tr>
@@ -325,8 +353,10 @@
                                         [href]="fileServerURL+'/'+scale_SDs?.document"><i
                                             class="pi pi-download download"></i></a></td>
                                 <td *ngIf="i==0"
+                                [attr.rowspan]="outcomeData.sustained_SDs.length + 1" >{{score.outcome_score.sustained_sdg_score}}</td>            
+                                <td *ngIf="i==0"
                                     [attr.rowspan]="outcomeData.sustained_SDs.length + outcomeData.scale_SDs.length + 1">
-                                    {{scale_SDs.weight}}</td>
+                                    {{scale_SDs.weight}}%</td>
                                 <td *ngIf="i==0"
                                     [attr.rowspan]="outcomeData.sustained_SDs.length + outcomeData.scale_SDs.length + 1">
                                     {{score.outcome_score.sdg_score}}</td>
@@ -346,6 +376,8 @@
                                 <td><a *ngIf="sustained_SDs?.document" target="_blank"
                                         [href]="fileServerURL+'/'+sustained_SDs?.document"><i
                                             class="pi pi-download download"></i></a></td>
+                                <td *ngIf="i==0"
+                                [attr.rowspan]="outcomeData.sustained_SDs.length + 1" >{{score.outcome_score.sustained_sdg_score}}</td>  
                             </tr>
                         </ng-container>
                     </ng-template>
@@ -369,6 +401,7 @@
                             <!-- <th >Expected Impact</th> -->
                             <th>Score</th>
                             <th colspan="2">Evidence Provided?</th>
+                            <th>Scale/sustained score</th>
                             <th>Weight</th>
                             <th>Category Score</th>
                         </tr>
@@ -391,8 +424,10 @@
                                         [href]="fileServerURL+'/'+scale_ADs?.document"><i
                                             class="pi pi-download download"></i></a></td>
                                 <td *ngIf="i==0"
+                                [attr.rowspan]="outcomeData.scale_adaptation.length + 1" >{{score.outcome_score.scale_adaptation_score}}</td> 
+                                <td *ngIf="i==0"
                                     [attr.rowspan]="outcomeData.sustained_SDs.length + outcomeData.scale_SDs.length + 1">
-                                    {{scale_ADs.weight}}</td>
+                                    {{scale_ADs.weight}}%</td>
                                 <td *ngIf="i==0"
                                     [attr.rowspan]="outcomeData.sustained_SDs.length + outcomeData.scale_SDs.length + 1">
                                     {{score.outcome_score.adaptation_score}}</td>
@@ -412,6 +447,8 @@
                                 <td><a *ngIf="sustained_ADs?.document" target="_blank"
                                         [href]="fileServerURL+'/'+sustained_ADs?.document"><i
                                             class="pi pi-download download"></i></a></td>
+                                <td *ngIf="i==0"
+                                [attr.rowspan]="outcomeData.sustained_adaptation.length + 1" >{{score.outcome_score.sustained_adaptation_score}}</td> 
                             </tr>
                         </ng-container>
                     </ng-template>
