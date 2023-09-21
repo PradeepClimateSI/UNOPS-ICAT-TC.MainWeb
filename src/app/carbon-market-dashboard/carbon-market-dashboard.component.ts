@@ -620,4 +620,33 @@ CMPrerequiste: {
 
   }
 
+  getDotColor(value: number): string {
+    switch (value) {
+      case -3:
+        return '#004040';
+      case -2:
+        return '#00A0A0';
+      case -1:
+        return '#FFD700';
+      case 0:
+        return '#0080FF';
+      case 1:
+        return '#FF4136';
+      case 2:
+        return '#8000FF';
+      case 3:
+        return '#800000';
+      case 4:
+        return '#FF0000';
+      case 5:
+        return '#FF8000';
+      case 6:
+        return '#FFD700';
+      case 7:
+        return '#808000';
+      default:
+        return 'white';
+    }
+  }
+
 }

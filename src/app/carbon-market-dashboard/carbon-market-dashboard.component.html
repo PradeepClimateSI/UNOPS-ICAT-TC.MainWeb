@@ -236,7 +236,8 @@
                             <td>{{y.label}}</td>
                             <ng-container *ngFor="let x of xData">
                                 <td  [style.background-color]="getBackgroundColor(y.value+x.value)">
-                                    <span [ngClass]="getIntervention(x.value, y.value)? 'intervention':''" >{{y.value+x.value}}</span>
+                                    <span
+                                    [style.background-color]=" getIntervention(x.value, y.value) ?getDotColor(y.value + x.value):''" [ngClass]="getIntervention(x.value, y.value)? 'intervention':''" >{{y.value+x.value}}</span>
                                 </td>
                             </ng-container>
                         </tr>
