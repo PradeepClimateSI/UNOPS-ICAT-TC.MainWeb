@@ -576,10 +576,17 @@
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
                                         <label for="score">Score</label>
+                                        <div *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' ||  category.CategoryName ==='Adaptation Scale of the Outcome' ">
                                         <p-dropdown appendTo="body" name="score" #type="ngModel"
                                           placeholder="Select Score" [(ngModel)]="data.score"
                                           [options]="outcomeScaleScore" optionLabel="id" optionValue="value"
-                                          [required]="true"></p-dropdown>
+                                          [required]="true"></p-dropdown></div>
+
+                                          <div *ngIf=" category.CategoryName ==='GHG Time frame over which the outcome is sustained' ||  category.CategoryName ==='Adaptation Time frame over which the outcome is sustained' ">
+                                            <p-dropdown appendTo="body" name="score" #type="ngModel"
+                                              placeholder="Select Score" [(ngModel)]="data.score"
+                                              [options]="outcomeSustainedScore" optionLabel="id" optionValue="value"
+                                              [required]="true"></p-dropdown></div>
                                       </div>
                                     </div>
 
@@ -958,6 +965,23 @@
         </form>
       </div>
     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <!-- <div > -->
     <div *ngIf="load && selectedApproach === 'Indirect'">
