@@ -38,7 +38,7 @@ export class PortfolioAddComponent implements OnInit {
   lastId : any ;
 
   ngOnInit(): void {
-    this.tool = 'Portfolio Tool';
+    this.tool = 'Carbon Market Tool';
 
    /*  this.methassess.assessmentDetails().subscribe(async (res: any) => {
        console.log("assessmentData : ", res)

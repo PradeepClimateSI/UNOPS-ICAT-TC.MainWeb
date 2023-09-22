@@ -1,0 +1,29 @@
+<ng-container *ngFor="let data of process_data">
+    <p-table [value]="data.interventions">
+        <ng-template pTemplate="header">
+            <tr>
+                <th colspan="4">LIKELIHOOD COMPARISON</th>
+                <th [attr.colspan]="data.characteristic_count + 1">PROCESS</th>
+            </tr>
+            <tr>
+                <ng-container *ngFor="let col of data.col_set_1">
+                    <th  [attr.colspan]="col.colspan">{{col.label}}</th>
+                </ng-container>
+            </tr>
+            <tr>
+                <ng-container *ngFor="let col of data.col_set_2">
+                    <th>{{col.label}}</th>
+                </ng-container>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-intervention>
+            <tr>
+                <ng-container *ngFor="let col of data.col_set_2">
+                    <td>{{intervention[col.code]}}</td>
+                </ng-container>
+            </tr>
+        </ng-template>
+    </p-table>
+    <br>
+    <br>
+</ng-container>

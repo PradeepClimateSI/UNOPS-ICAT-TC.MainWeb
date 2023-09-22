@@ -1,0 +1,58 @@
+<h4>Aggregation</h4>
+<p-table [value]="aggregation_data.interventions">
+    <ng-template pTemplate="header">
+        <tr>
+            <th colspan="5">AGGREGATION</th>
+        </tr>
+        <tr>
+            <ng-container *ngFor="let col of aggregation_data.col_set_1">
+                <th  [attr.colspan]="col.colspan">{{col.label}}</th>
+            </ng-container>
+        </tr>
+        <tr>
+            <ng-container *ngFor="let col of aggregation_data.col_set_2">
+                <th>{{col.label}}</th>
+            </ng-container>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-intervention>
+        <tr>
+            <ng-container *ngFor="let col of aggregation_data.col_set_2">
+                <td>{{intervention[col.code]}}</td>
+            </ng-container>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <tr>
+            <td colspan="4" style="text-align: end;">Total</td>
+            <td>{{aggregation_data.total}}</td>
+        </tr>
+    </ng-template>
+</p-table>
+<br>
+<h4>Alignment</h4>
+<p-table [value]="alignment_data.interventions">
+    <ng-template pTemplate="header">
+        <tr>
+            <th colspan="4">ALIGNMENT</th>
+            <th [attr.colspan]="alignment_data.sdg_count">SUSTAINABLE DEVELOPMENT</th>
+        </tr>
+        <tr>
+            <ng-container *ngFor="let col of alignment_data.col_set_1">
+                <th  [attr.colspan]="col.colspan">{{col.label}}</th>
+            </ng-container>
+        </tr>
+        <tr>
+            <ng-container *ngFor="let col of alignment_data.col_set_2">
+                <th>{{col.label}}</th>
+            </ng-container>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-intervention>
+        <tr>
+            <ng-container *ngFor="let col of alignment_data.col_set_2">
+                <td>{{intervention[col.code]}}</td>
+            </ng-container>
+        </tr>
+    </ng-template>
+</p-table>

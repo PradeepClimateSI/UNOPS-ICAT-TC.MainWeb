@@ -121,6 +121,10 @@ import { ReviewDataInvestmentComponent } from './data-request-flow/review-data-p
 import { ReviewDataPathComponent } from './data-request-flow/review-data-path/review-data-path/review-data-path.component';
 import { CmSectionThreeComponent } from './Tool/carbon-market/cm-section-three/cm-section-three.component';
 import { DataRequestPathService } from "./shared/data-request-path.service";
+import { PortfolioProcessDataComponent } from "./portfolios/portfolio-process-data/portfolio-process-data.component";
+import { PortfolioOutcomeDataComponent } from './portfolios/portfolio-outcome-data/portfolio-outcome-data.component';
+import { PortfolioAggregationComponent } from './portfolios/portfolio-aggregation/portfolio-aggregation.component';
+import { PortfolioComparisonComponent } from './portfolios/portfolio-comparison/portfolio-comparison.component';
 
 
 
@@ -199,6 +203,10 @@ export function getAuditRemoteServiceBaseUrl(): string {
     ReviewDataInvestmentComponent,
     ReviewDataPathComponent,
     CmSectionThreeComponent,
+    PortfolioProcessDataComponent,
+    PortfolioOutcomeDataComponent,
+    PortfolioAggregationComponent,
+    PortfolioComparisonComponent,
 
   ],
 
