@@ -29,7 +29,7 @@ export class PortfolioComparisonComponent implements OnInit {
       this.portfolioId = params['id'];
       await this.getAssessmentsByPortfolio()
       await this.getPortfolioData()
-      this.getDummyData()
+      await this.getDummyData()
     });
   }
 
@@ -55,7 +55,8 @@ export class PortfolioComparisonComponent implements OnInit {
       ])
   }
 
-  getDummyData() {
+  async getDummyData() {
+    let interventions = await this.portfolioServiceProxy.getPortfolioComparisonData(this.portfolioId).toPromise()
     //TODO sort process data by order before loop the table
     this.process_data = [
       {
