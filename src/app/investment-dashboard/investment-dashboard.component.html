@@ -59,7 +59,7 @@
 
 <div class="p-grid p-fluid card mt-20 m-3">
   <div class="row text-center">
-    <table class="heatmap" style="border: 1px solid black; text-align: center">
+    <table class="heatmap" style="text-align: center">
       <!-- <thead>
               <tr>
                 <th>Process: Transformational Change supported</th>
@@ -108,17 +108,17 @@
       <div class="row text-center">
         <h3>Frequency of SDGs</h3>
         <div
-          *ngIf="sectorCount"
+          *ngIf="sdgDetailsList"
           class="col-12 mt-20"
-          [hidden]="sectorCount.length == 0"
+          [hidden]="sdgDetailsList.length == 0"
         >
-          <canvas id="pieChart1">{{ pieChart1 }}</canvas>
+          <canvas  #investmentSDGsPieChart>{{ pieChart1 }}</canvas>
         </div>
       </div>
       <div
-        *ngIf="sectorCount"
+        *ngIf="sdgDetailsList"
         class="col-12"
-        [hidden]="sectorCount.length != 0"
+        [hidden]="sdgDetailsList.length != 0"
       >
         <p-messages severity="warn">
           <ng-template pTemplate>
@@ -139,7 +139,7 @@
           class="col-12 mt-20"
           [hidden]="sectorCount.length == 0"
         >
-          <canvas id="pieChart2">{{ pieChart2 }}</canvas>
+          <canvas #investmentSectorCountPieChart>{{ pieChart2 }}</canvas>
         </div>
       </div>
       <div

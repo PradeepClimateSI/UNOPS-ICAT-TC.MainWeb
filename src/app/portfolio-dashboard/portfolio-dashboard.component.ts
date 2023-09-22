@@ -1,5 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MasterDataService } from 'app/shared/master-data.service';
 import { Chart, ChartType } from 'chart.js';
+import { Paginator } from 'primeng/paginator';
 import { InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PortfolioControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
@@ -9,25 +11,36 @@ import { InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServ
 })
 export class PortfolioDashboardComponent implements OnInit {
 
+
   constructor(
     private methassess : MethodologyAssessmentControllerServiceProxy,
     private investorProxy: InvestorToolControllerServiceProxy,
     private portfolioServiceProxy : PortfolioControllerServiceProxy,
+    public masterDataService: MasterDataService
   ) {
     this.test= [{data: 'AAA', x:2,y:3}, {data: 'BBB', x:3,y:3},{data: 'CCC', x:4,y:4}]
   }
   test :any = []
 
-  @ViewChild('myCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
-  @ViewChild('myCanvas2', { static: true }) canvasRef2!: ElementRef<HTMLCanvasElement>;
+  // @ViewChild('myCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
+  // @ViewChild('myCanvas2', { static: true }) canvasRef2!: ElementRef<HTMLCanvasElement>;
 
 
-  @ViewChild('myCanvas3', { static: true }) canvasRef3!: ElementRef<HTMLCanvasElement>;
-  @ViewChild('myCanvas4', { static: true }) canvasRef4!: ElementRef<HTMLCanvasElement>;
+  // @ViewChild('myCanvas3', { static: true }) canvasRef3!: ElementRef<HTMLCanvasElement>;
+  // @ViewChild('myCanvas4', { static: true }) canvasRef4!: ElementRef<HTMLCanvasElement>;
 
 
-  @ViewChild('portfolioBarChart', { static: true }) canvasRefBarChart!: ElementRef<HTMLCanvasElement>;
-  @ViewChild('portfolioPieChart2', { static: true }) canvasRefPieChart!: ElementRef<HTMLCanvasElement>;
+  // @ViewChild('portfolioBarChart', { static: true }) canvasRefBarChart!: ElementRef<HTMLCanvasElement>;
+  // @ViewChild('portfolioSDGsPieChart', { static: true }) canvasRefPieChart!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('portfolioBarChart')
+  canvasRefBarChart: ElementRef<HTMLCanvasElement>;
+  @ViewChild('portfolioSDGsPieChart')
+  canvasRefSDGsPieChart: ElementRef<HTMLCanvasElement>;
+
+
+  @ViewChild('portfolioSectorCountPieChart')
+  canvasRefSectorCountPieChart: ElementRef<HTMLCanvasElement>;
+
 
 
   chart: Chart;
@@ -47,17 +60,33 @@ export class PortfolioDashboardComponent implements OnInit {
   outcomeData: any[] = [];
   outcomeData2: any[] = [];
   allData : any = [];
-
+  rows :number;
   loadSelectedTable : boolean = false;
-
-
+  pieChart2: any;
+  slicedData:{
+    assessment: number,
+    process_score: number,
+    outcome_score: number,
+    intervention: string
+  }[]=[];
   /////
-  portfolioPieChart:Chart;
+  portfolioSDGsPieChart:Chart;
+  sectorCountPieChart:Chart;
   portfolioBarChart:Chart;
   barChartData:any=[];
   sdgDetailsList:any=[];
   loadLast2graphs:boolean=false;
-  ngOnInit(): void {
+
+  sectorCount: {
+    sector:string,
+    count:number
+    }[];
+  xData: {label: string; value: number}[]
+  yData: {label: string; value: number}[]
+  async ngOnInit(): Promise<void> {
+    let tool ='Carbon Market Tool'
+    this.xData = this.masterDataService.xData
+    this.yData = this.masterDataService.yData
     this.loadSelectedTable = false;
     this.loadSelectedTable =false;
     this.averageTCValue =63.78
@@ -72,26 +101,8 @@ export class PortfolioDashboardComponent implements OnInit {
       this.calResults = res[0]
       console.log("assessdetails",  this.calResults)
 
-      const RecentInterventions = this.calResults.slice(0,10);
-      this.recentResult = RecentInterventions
-
-      console.log("RecentInterventions",  RecentInterventions)
-
-
-      this.resultData= this.recentResult.map((intervention: { likelihood: any; relevance: any; assesment: { climateAction: { policyName: any; }; }; })=>({
-        y:intervention?.likelihood,
-        x:intervention?.relevance,
-        data:intervention?.assesment?.climateAction?.policyName}))
-
-        this.resultData2= this.recentResult.map((a: { scaleScore: any; sustainedScore: any; assesment: { climateAction: { policyName: any; }; }; })=>({
-          y:a?.scaleScore,
-          x:a?.sustainedScore,
-          data:a?.assesment?.climateAction?.policyName}))
-
-        console.log("kkkkkk : ",   this.resultData)
-        console.log("kkkkkk2 : ",   this.resultData2)
-        this.viewResults();
-        this.viewResults2();
+        // this.viewResults();
+        // this.viewResults2();
     });
 
 
@@ -99,9 +110,9 @@ export class PortfolioDashboardComponent implements OnInit {
       console.log("assesss : ", res)
       this.portfolioList = res;
      });
-
-
-
+    await this.getSectorCount(tool);
+    await this.sdgResults()
+  
   }
 
 
@@ -113,309 +124,50 @@ this.ngOnInit();
 
   selectPortfolio(portfolio : any){
     console.log("portfolio : ", this.selectedPortfolio)
-    this.loadLast2graphs=true;
-    console.log("loadLast2graphs",this.loadLast2graphs)
+
     this.sdgDetailsList=[];
     this.barChartData=[];
-    this.resultData = []
-    this.resultData2 = []
-    this.allData = []
 
 
+   this.sdgResults()
     this.portfolioServiceProxy.assessmentsDataByAssessmentId(this.selectedPortfolio.id).subscribe(async (res: any) => {
       console.log("arrayyy : ", res)
 
       this.barChartData=res;
       this.viewPortfolioBarChart();
 
-      this.processData = [];
-      this.outcomeData = [];
-      this.outcomeData2 = [];
-
-      for (let data of res) {
-      this.processData = [];
-      this.outcomeData = [];
-      this.outcomeData2 = [];
-        for (let x of data.result) {
-          if (x.type === 'process') {
-            this.processData.push(x);
-          }
-
-          if (x.type === 'outcome' && (x.name === 'Scale GHGs' || x.name === 'Scale SD')) {
-
-            this.outcomeData.push(x);
-          }
-
-          if (x.type === 'outcome' && (x.name === 'Sustained nature-GHGs' || x.name === 'Sustained nature-SD')) {
-
-            this.outcomeData2.push(x);
-          }
-        }
-
-        let obj = {
-          assess : data.assessment,
-          process : this.processData,
-          scale : this.outcomeData,
-          sustained : this.outcomeData2,
-          ghgValue : data.ghgValue,
-        }
-
-        this.allData.push(obj)
-      }
-
-      console.log("this.allData : ", this.allData)
-
-      for(let x of this.allData){
-        let t1X = Number(this.calculateAverageRelevance(x.process.slice(0, 4)))
-        let t1Y = Number(this.calculateAverage(x.process.slice(0, 4)))
-        let t2X = Number(this.calculateAverageSustained(x.sustained.slice(0, 2)))
-        let t2Y = Number(this.calculateAverageScale(x.scale.slice(0, 2)))
-
-        let t1 = {
-          x : t1X,
-          y : t1Y,
-          data : x.assess.climateAction?.policyName
-        }
-        let t2 = {
-          x : t2X,
-          y : t2Y,
-          data : x.assess.climateAction?.policyName
-        }
-
-        this.resultData.push(t1)
-        this.resultData2.push(t2)
-
-
-        console.log("llll : ",   this.resultData)
-        console.log("lllll11 : ",   this.resultData2)
-
-      }
-
-
-
-
-
-      this.viewResults();
-      this.viewResults2();
-     // console.log("this.processData : ", this.processData)
-     // console.log(" this.outcomeData : ",  this.outcomeData)
-
-     this.loadSelectedTable = true;
+   
 
 
     });
 
   }
-  sdgResults(portfolio : any){
+
+
+ async getSectorCount(tool:string){
+    this.investorProxy.findSectorCount(tool).subscribe((res: any) => {
+      this.sectorCount = res
+      console.log("sectorcount",this.sectorCount)
+   
+      setTimeout(() => {
+        this.viewPortfolioSectorCountPieChart();
+     
+      },1000)
+     
+     
+    });
+  }
+
+
+  async sdgResults(){
     this.sdgDetailsList=[]
-    this.portfolioServiceProxy.sdgSumCalculate(this.selectedPortfolio.id).subscribe(async (res: any) => {
+    this.portfolioServiceProxy.sdgSumCalculate(this.selectedPortfolio?this.selectedPortfolio.id:0).subscribe(async (res: any) => {
       console.log("sdgDetailsList : ", res)
       this.sdgDetailsList = res;
-     this.viewPortfolioPieChart();
+     this.viewPortfolioSDGsPieChart();
      });
   }
- viewResults(): void {
 
-    if (!this.canvasRef) {
-      console.error('Could not find canvas element');
-      return;
-    }
-
-    const canvas = this.canvasRef.nativeElement;
-    const ctx = canvas.getContext('2d');
-
-    if (!ctx) {
-      console.error('Could not get canvas context');
-      return;
-    }
-
-    if (this.chart) {
-      // Update the chart data
-      this.chart.data.datasets[0].data = this.resultData;
-      this.chart.update();
-    } else{
-
-      const gradient = ctx.createLinearGradient(0, 0, 500, 500);
-    gradient.addColorStop(0, 'red');
-    gradient.addColorStop(0.5, 'yellow');
-    gradient.addColorStop(1, 'green');
-
-    this.chart = new Chart(ctx, {
-      type: 'scatter',
-      data: {
-        datasets: [
-          {
-            label: '',
-            data: this.resultData,
-            backgroundColor: gradient,
-            borderColor: 'black',
-            borderWidth: 1,
-            pointRadius: 8,
-            pointBackgroundColor: ['#0000FF','#FF6384', '#36A2EB', '#FFCE56', '#800000', '#66BB6A', '#FF7043', '#9575CD'],
-            pointBorderColor: 'black',
-            pointBorderWidth: 1,
-          },
-        ],
-      },
-      options: {
-        scales: {
-          x: {
-            type: 'linear',
-            min: 0,
-            max: 4,
-            ticks: {
-              stepSize: 1,
-            },
-            title: {
-              display: true,
-              text: 'Process - Relevance',
-              font: {
-                weight: 'bold',
-                size: 16, // Adjust the font size as desired
-              },
-            },
-          },
-          y: {
-            type: 'linear',
-            min: 0,
-            max: 4,
-            ticks: {
-              stepSize: 1,
-            },
-            title: {
-              display: true,
-              text: 'Process - Likelihood',
-              font: {
-                weight: 'bold',
-                size: 16, // Adjust the font size as desired
-              },
-            },
-          },
-        },
-        plugins: {
-          tooltip: {
-            callbacks: {
-              label: (context) => {
-                const data = context.dataset.data[context.dataIndex];
-                return[
-                  `Intervention: ${this.resultData[context.dataIndex].data}`,
-                  `Likelihood: ${this.resultData[context.dataIndex].y}`,
-                  `Relevance: ${this.resultData[context.dataIndex].x}`
-
-                ];
-              },
-            },
-          },
-          legend: {
-            display: false, // Hide the legend
-          },
-        },
-      },
-    });
-    }
-
-  }
-
-
-
-  viewResults2(): void {
-    if (!this.canvasRef2) {
-      console.error('Could not find canvas element');
-      return;
-    }
-
-    const canvas = this.canvasRef2.nativeElement;
-    const ctx = canvas.getContext('2d');
-
-    if (!ctx) {
-      console.error('Could not get canvas context');
-      return;
-    }
-
-    if (this.chart2) {
-      // Update the chart data
-      this.chart2.data.datasets[0].data = this.resultData2;
-      this.chart2.update();
-    } else{
-    const gradient = ctx.createLinearGradient(0, 0, 500, 500);
-    gradient.addColorStop(0, 'red');
-    gradient.addColorStop(0.5, 'yellow');
-    gradient.addColorStop(1, 'green');
-
-    this.chart2 = new Chart(ctx, {
-      type: 'scatter',
-      data: {
-        datasets: [
-          {
-            label: '',
-            data: this.resultData2,
-            backgroundColor: gradient,
-            borderColor: 'black',
-            borderWidth: 1,
-            pointRadius: 8,
-            pointBackgroundColor: ['#0000FF','#FF6384', '#36A2EB', '#FFCE56', '#800000', '#66BB6A', '#FF7043', '#9575CD'],
-            pointBorderColor: 'black',
-            pointBorderWidth: 1,
-          },
-        ],
-      },
-      options: {
-        scales: {
-          x: {
-            type: 'linear',
-            min: -1,
-            max: 3,
-            ticks: {
-              stepSize: 1,
-            },
-            title: {
-              display: true,
-              text: 'Outcomes - Sustained',
-              font: {
-                weight: 'bold',
-                size: 16, // Adjust the font size as desired
-              },
-            },
-          },
-          y: {
-            type: 'linear',
-            min: -1,
-            max: 3,
-            ticks: {
-              stepSize: 1,
-            },
-            title: {
-              display: true,
-              text: 'Outcomes - Scaled',
-              font: {
-                weight: 'bold',
-                size: 16, // Adjust the font size as desired
-              },
-            },
-          },
-        },
-        plugins: {
-          tooltip: {
-            callbacks: {
-              label: (context) => {
-                const data = context.dataset.data[context.dataIndex];
-                return[
-                  `Intervention: ${this.resultData2[context.dataIndex].data}`,
-                  `Scaled: ${this.resultData2[context.dataIndex].y}`,
-                  `Sustained: ${this.resultData2[context.dataIndex].x}`
-
-                ];
-              },
-            },
-          },
-          legend: {
-            display: false, // Hide the legend
-          },
-        },
-      },
-    });
-  }
-  }
 
   getColorClass(value: any) {
     let value2 = Number(value)
@@ -497,18 +249,18 @@ this.ngOnInit();
 
 
 
-  viewPortfolioPieChart(){
+  viewPortfolioSDGsPieChart(){
     let labels = this.sdgDetailsList.map((item:any) => item.sdg);
     let counts:number[] = this.sdgDetailsList.map((item:any) => item.count);
     let total = counts.reduce((acc, val) => acc + val, 0);
     let percentages = counts.map(count => ((count / total) * 100).toFixed(2));
 
-    if (!this.canvasRefPieChart) {
+    if (!this.canvasRefSDGsPieChart) {
       console.error('Could not find canvas element');
       return;
     }
 
-    const canvas = this.canvasRefPieChart.nativeElement;
+    const canvas = this.canvasRefSDGsPieChart.nativeElement;
     const ctx = canvas.getContext('2d');
 
     if (!ctx) {
@@ -516,14 +268,14 @@ this.ngOnInit();
       return;
     }
 
-    if (this.portfolioPieChart) {
+    if (this.portfolioSDGsPieChart) {
       // Update the chart data
-      this.portfolioPieChart.data.datasets[0].data = counts;
-      this.portfolioPieChart.data.labels=labels
-      this.portfolioPieChart.update();
+      this.portfolioSDGsPieChart.data.datasets[0].data = counts;
+      this.portfolioSDGsPieChart.data.labels=labels
+      this.portfolioSDGsPieChart.update();
     }
     else{
-      this.portfolioPieChart =new Chart(ctx, {
+      this.portfolioSDGsPieChart =new Chart(ctx, {
         type: 'pie'as ChartType,
 
         data: {
@@ -577,18 +329,13 @@ this.ngOnInit();
               callbacks:{
 
                 label:(ctx)=>{
-                  // console.log(ctx)
-                  // console.log(ctx)
-                  // let sum = ctx.dataset._meta[0].total;
-                  // let percentage = (value * 100 / sum).toFixed(2) + "%";
-                  // return percentage;
+                 
                   let sum = 0;
                   let array =ctx.dataset.data
                   array.forEach((number) => {
                     sum += Number(number);
                   });
-                  // console.log("sum",sum,ctx.parsed)
-                  // console.log(sum, counts[ctx.dataIndex])
+              
                   let percentage = (ctx.parsed/ sum*100).toFixed(2)+"%";
 
                   return[
@@ -618,7 +365,123 @@ this.ngOnInit();
 
 
   }
+  viewPortfolioSectorCountPieChart(){
+    let labels = this.sectorCount.map((item:any) => item.sector);
+    let counts:number[] = this.sectorCount.map((item:any) => item.count);
+    let total = counts.reduce((acc, val) => acc + val, 0);
+    let percentages = counts.map(count => ((count / total) * 100).toFixed(2));
 
+    if (!this.canvasRefSectorCountPieChart) {
+      console.error('Could not find canvas element');
+      return;
+    }
+
+    const canvas = this.canvasRefSectorCountPieChart.nativeElement;
+    const ctx = canvas.getContext('2d');
+
+    if (!ctx) {
+      console.error('Could not get canvas context');
+      return;
+    }
+
+    if (this.sectorCountPieChart) {
+      // Update the chart data
+      this.sectorCountPieChart.data.datasets[0].data = counts;
+      this.sectorCountPieChart.data.labels=labels
+      this.sectorCountPieChart.update();
+    }
+    else{
+      this.sectorCountPieChart =new Chart(ctx, {
+        type: 'pie'as ChartType,
+
+        data: {
+          labels: labels,
+          datasets: [{
+            data: counts,
+            backgroundColor: [
+              'rgb(250,227,114)',
+              'rgb(51,51,51)',
+              'rgb(0,170,187)',
+              'rgb(227,120,42)',
+              'rgb(150,131,141)',
+              'rgb(42,61,227)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(75, 192, 192,1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(123, 122, 125, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 205, 86, 1)',
+              'rgba(255, 99, 132, 1)',
+
+            ],
+
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins:{
+            legend:{
+              position: 'bottom',
+              labels: {
+                padding: 20
+              }
+            },
+            datalabels: {
+              color: '#fff',
+              font: {
+                size: 12
+              },
+              formatter: (value, ctx) => {
+                const label = ctx.chart.data.labels![ctx.dataIndex];
+                const percentage = percentages[ctx.dataIndex];
+                return `${label}: ${value} (${percentage}%)`;
+              },
+
+            },
+            tooltip:{
+              position:'average',
+              boxWidth:10,
+              callbacks:{
+
+                label:(ctx)=>{
+              
+                  let sum = 0;
+                  let array =ctx.dataset.data
+                  array.forEach((number) => {
+                    sum += Number(number);
+                  });
+                 
+                  let percentage = (ctx.parsed/ sum*100).toFixed(2)+"%";
+
+                  return[
+                    `SDG: ${ctx.label}`,
+                    `Count: ${ctx.raw}`,
+                    `Percentage: ${percentage}`
+                  ];
+                 }
+              },
+              backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
+                titleFont: {
+                  size: 14,
+                  weight: 'bold'
+                },
+                bodyFont: {
+                  size: 14
+                },
+                displayColors: true, // Hide the color box in the tooltip
+                bodyAlign: 'left'
+            }
+         }
+
+        },
+
+    });
+  }
+
+
+
+  }
   viewPortfolioBarChart(){
 
     let label =this.barChartData.map((item:any) => item?.assessment?.climateAction?.policyName );
@@ -640,11 +503,9 @@ this.ngOnInit();
     }
 
     if (this.portfolioBarChart) {
-      // Update the chart data
-      console.log("======", this.portfolioBarChart.data)
+    
       this.portfolioBarChart.data.datasets[0].data = data;
       this.portfolioBarChart.data.labels=label;
-      console.log("======", this.portfolioBarChart.data)
       this.portfolioBarChart.update();
     }
     else{
@@ -763,4 +624,77 @@ this.ngOnInit();
 
   }
 
+
+
+  getBackgroundColor(value: number): string {
+    switch (value) {
+      case -3:
+        return '#ec6665';
+      case -2:
+        return '#ed816c';
+      case -1:
+        return '#f19f70';
+      case 0:
+        return '#f4b979';
+      case 1:
+        return '#f9d57f';
+      case 2:
+        return '#fcf084';
+      case 3:
+        return '#e0e885';
+      case 4:
+        return '#c1e083';
+      case 5:
+        return '#a3d481';
+      case 6:
+        return '#84cc80';
+      case 7:
+        return '#65c17e';
+      default:
+        return 'white';
+    }
+  }
+
+  getDotColor(value: number): string {
+    switch (value) {
+      case -3:
+        return '#004040';
+      case -2:
+        return '#00A0A0';
+      case -1:
+        return '#FFD700';
+      case 0:
+        return '#0080FF';
+      case 1:
+        return '#FF4136';
+      case 2:
+        return '#8000FF';
+      case 3:
+        return '#800000';
+      case 4:
+        return '#FF0000';
+      case 5:
+        return '#FF8000';
+      case 6:
+        return '#FFD700';
+      case 7:
+        return '#808000';
+      default:
+        return 'white';
+    }
+  }
+
+  getIntervention(x:number, y: number){
+    return this.slicedData.some(item => item.outcome_score === x && item.process_score === y);
+
+  }
+  paginate(event:Paginator|undefined) {
+    if (event){
+      console.log("paginate",event)
+      this.slicedData = this.calResults.slice(event?.first,event?.first+this.rows)
+    }
+    else{
+      this.slicedData = this.calResults.slice(0,this.rows)
+    }
+  }
 }
