@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
 import { AssessmentCMDetailControllerServiceProxy, CMAssessmentAnswerControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CMScoreDto, ClimateAction, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
@@ -6,12 +6,13 @@ import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
 import { MasterDataService } from 'app/shared/master-data.service';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Paginator } from 'primeng/paginator';
+import { LazyLoadEvent } from 'primeng/api';
 @Component({
   selector: 'app-carbon-market-dashboard',
   templateUrl: './carbon-market-dashboard.component.html',
   styleUrls: ['./carbon-market-dashboard.component.css']
 })
-export class CarbonMarketDashboardComponent implements OnInit {
+export class CarbonMarketDashboardComponent implements OnInit,AfterViewInit {
 
   constructor(
     // private projectProxy: ProjectControllerServiceProxy,
@@ -19,14 +20,14 @@ export class CarbonMarketDashboardComponent implements OnInit {
     // private methassess : MethodologyAssessmentControllerServiceProxy,
     // private investorProxy: InvestorToolControllerServiceProxy,
     private cmAssessmentQuestionProxy : CMAssessmentQuestionControllerServiceProxy,
-    public masterDataService: MasterDataService
-    
+    public masterDataService: MasterDataService,
+    private cdr: ChangeDetectorRef
   ) { 
     // Chart.register(ChartDataLabels)
   }
 
  // @ViewChild('canvas', { static: false }) canvas: ElementRef;
- 
+ totalRecords: number = 0;
  score: CMScoreDto = new CMScoreDto()
  userName: string = "";
  userRole: string = "";
@@ -69,15 +70,10 @@ CMPrerequiste: {
 
   pieChart2:any=[];
   loading:boolean=false;
-  tableData:{
-      assessment: number,
-      process_score: number,
-      outcome_score: number,
-      intervention: string
-    }[]=[]
+  tableData:any[]=[]
     xData: {label: string; value: number}[]
     yData: {label: string; value: number}[]
-    rows :number;
+    rows: number = 5;
     slicedData:{
       assessment: number,
       process_score: number,
@@ -91,11 +87,12 @@ CMPrerequiste: {
     this.userRole = tokenPayload.role.code;
 
     this.tool = 'Carbon Market Tool';
-    this.cmAssessmentQuestionProxy.getDashboardData().subscribe((res) => {
-      this.tableData=res;
-      console.log("kkkkk : ", res)
-      this.paginate(undefined);
-    })
+    let event: any = {};
+    event.rows = this.rows;
+    event.first = 0;
+
+    this.loadgridData(event);
+   
       //   console.log("kkkkk : ", res)
     // this.methassess.getTCForTool(this.tool).subscribe((res: any) => {
     //   console.log("kkkkk : ", res)
@@ -168,7 +165,7 @@ CMPrerequiste: {
     //   }, 500);
        
     // })
-    this.rows = 5;
+    
     this.xData = this.masterDataService.xData
     this.yData = this.masterDataService.yData
     this.assessmentCMProxy.getPrerequisite().subscribe((res:any)=>{
@@ -189,6 +186,31 @@ CMPrerequiste: {
       
     // });
 
+  }
+
+  loadgridData = (event: LazyLoadEvent) => {
+    console.log('event Date', event);
+    this.loading = true;
+    this.totalRecords = 0;
+
+    let pageNumber =
+      event.first === 0 || event.first === undefined
+        ? 1
+        : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
+    this.rows = event.rows === undefined ? 10 : event.rows;
+    this.cmAssessmentQuestionProxy.getDashboardData(pageNumber,this.rows).subscribe((res) => {
+      this.tableData=res.items;
+      console.log("kkkkk : ", res)
+      this.totalRecords= res.meta.totalItems
+      this.loading = false;
+    }, err => {
+      this.loading = false;});
+
+    // setTimeout(() => {
+    // }, 1);
+  };
+  ngAfterViewInit(): void {
+    this.cdr.detectChanges();
   }
 
   // viewPieChart(){
@@ -584,8 +606,7 @@ CMPrerequiste: {
   // }
 
   getIntervention(p:number, q: number){
-    
-    return true;
+    return this.tableData.some(item => item.outcome_score === p && item.process_score === q);
   }
   paginate(event:Paginator|undefined) {
     if (event){

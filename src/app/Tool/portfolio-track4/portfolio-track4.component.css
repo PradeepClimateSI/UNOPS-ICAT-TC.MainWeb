@@ -37,3 +37,14 @@
 .tooltip-container:hover .tooltip-text {
   opacity: 1;
 }
+
+
+/* styles.css (global) */
+.custom-tab-header {
+  text-align: center; /* Center the text */
+  white-space: normal; /* Allow text to wrap */
+  word-wrap: break-word; /* Allow breaking long words */
+  max-width: 300px; /* Adjust the maximum width as needed */
+}
+
+

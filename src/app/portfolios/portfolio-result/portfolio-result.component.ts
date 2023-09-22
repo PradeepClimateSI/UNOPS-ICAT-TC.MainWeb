@@ -76,12 +76,12 @@ export class PortfolioResultComponent implements OnInit {
             this.processData.push(x);
           }
 
-          if (x.type === 'outcome' && (x.name === 'Scale GHGs' || x.name === 'Scale SD')) {
+          if (x.type === 'outcome' && (x.name === 'GHG Scale of the Outcome' || x.name === 'SDG Scale of the Outcome')) {
 
             this.outcomeData.push(x);
           }
 
-          if (x.type === 'outcome' && (x.name === 'Sustained nature-GHGs' || x.name === 'Sustained nature-SD')) {
+          if (x.type === 'outcome' && (x.name === 'GHG Time frame over which the outcome is sustained' || x.name === 'SDG Time frame over which the outcome is sustained')) {
 
             this.outcomeData2.push(x);
           }

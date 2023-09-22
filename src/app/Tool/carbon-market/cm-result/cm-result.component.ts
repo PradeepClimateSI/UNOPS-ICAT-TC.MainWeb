@@ -91,7 +91,7 @@ export class CmResultComponent implements OnInit {
           { title: 'Assessment Type', data: this.assessment.assessmentType },
           { title: 'Assessment Boundaries', data: this.assessmentCMDetail.boundraries },
           { title: 'International Carbon Market Approach Used', data: cmApproache?.name},
-          { title: 'Baseline and monitoring methodology applied by the activity', data: this.assessmentCMDetail.appliedMethodology}
+          { title: 'Baseline and monitoring methodology applied by the intervention', data: this.assessmentCMDetail.appliedMethodology}
         ])
       await this.getResult()
       this.criterias.forEach((c: any) => {
