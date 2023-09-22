@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { Chart, ChartType } from 'chart.js';
+import { LazyLoadEvent } from 'primeng/api';
 import { Paginator } from 'primeng/paginator';
 import { InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PortfolioControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
@@ -10,6 +11,8 @@ import { InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServ
   styleUrls: ['./portfolio-dashboard.component.css']
 })
 export class PortfolioDashboardComponent implements OnInit {
+  loading: boolean;
+  totalRecords: number;
 
 
   constructor(
@@ -22,16 +25,6 @@ export class PortfolioDashboardComponent implements OnInit {
   }
   test :any = []
 
-  // @ViewChild('myCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
-  // @ViewChild('myCanvas2', { static: true }) canvasRef2!: ElementRef<HTMLCanvasElement>;
-
-
-  // @ViewChild('myCanvas3', { static: true }) canvasRef3!: ElementRef<HTMLCanvasElement>;
-  // @ViewChild('myCanvas4', { static: true }) canvasRef4!: ElementRef<HTMLCanvasElement>;
-
-
-  // @ViewChild('portfolioBarChart', { static: true }) canvasRefBarChart!: ElementRef<HTMLCanvasElement>;
-  // @ViewChild('portfolioSDGsPieChart', { static: true }) canvasRefPieChart!: ElementRef<HTMLCanvasElement>;
   @ViewChild('portfolioBarChart')
   canvasRefBarChart: ElementRef<HTMLCanvasElement>;
   @ViewChild('portfolioSDGsPieChart')
@@ -42,7 +35,7 @@ export class PortfolioDashboardComponent implements OnInit {
   canvasRefSectorCountPieChart: ElementRef<HTMLCanvasElement>;
 
 
-
+  tableData:any[]=[]
   chart: Chart;
   chart2: Chart;
   tool : string;
@@ -84,34 +77,26 @@ export class PortfolioDashboardComponent implements OnInit {
   xData: {label: string; value: number}[]
   yData: {label: string; value: number}[]
   async ngOnInit(): Promise<void> {
-    let tool ='Carbon Market Tool'
     this.xData = this.masterDataService.xData
     this.yData = this.masterDataService.yData
     this.loadSelectedTable = false;
     this.loadSelectedTable =false;
     this.averageTCValue =63.78
     this.tool = 'Portfolio Tool'
-    this.methassess.getResultForTool(this.tool).subscribe((res: any) => {
-      console.log("resulttt : ", res)
-    //  this.resultData = res
-    //  this.viewResults();
-    });
+  
 
-    this.investorProxy.calculateAssessmentResults(this.tool).subscribe((res: any) => {
-      this.calResults = res[0]
-      console.log("assessdetails",  this.calResults)
-
-        // this.viewResults();
-        // this.viewResults2();
-    });
+  
 
 
     this.portfolioServiceProxy.getAll().subscribe(async (res: any) => {
       console.log("assesss : ", res)
       this.portfolioList = res;
      });
-    await this.getSectorCount(tool);
-    await this.sdgResults()
+
+    
+
+     this.getSectorCount(this.tool);
+     this.sdgResults()
   
   }
 
@@ -119,18 +104,25 @@ export class PortfolioDashboardComponent implements OnInit {
   goToFunction(){
 this.selectedPortfolio = ''
 this.loadLast2graphs=false;
-this.ngOnInit();
+ this.getSectorCount(this.tool);
+this.selectPortfolio();
   }
 
-  selectPortfolio(portfolio : any){
+  selectPortfolio(){
     console.log("portfolio : ", this.selectedPortfolio)
 
     this.sdgDetailsList=[];
     this.barChartData=[];
 
 
+    let event: any = {};
+    event.rows = this.rows;
+    event.first = 0;
+    this.loadgridData(event);
+
+
    this.sdgResults()
-    this.portfolioServiceProxy.assessmentsDataByAssessmentId(this.selectedPortfolio.id).subscribe(async (res: any) => {
+    this.portfolioServiceProxy.assessmentsDataByAssessmentId(this.selectedPortfolio?this.selectedPortfolio.id:0).subscribe(async (res: any) => {
       console.log("arrayyy : ", res)
 
       this.barChartData=res;
@@ -142,7 +134,26 @@ this.ngOnInit();
     });
 
   }
+  loadgridData = (event: LazyLoadEvent) => {
+    console.log('event Date', event);
+    this.loading = true;
+    this.totalRecords = 0;
 
+    let pageNumber =
+      event.first === 0 || event.first === undefined
+        ? 1
+        : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
+    this.rows = event.rows === undefined ? 10 : event.rows;
+    this.portfolioServiceProxy.getDashboardData(this.selectedPortfolio?this.selectedPortfolio.id:0,pageNumber,this.rows).subscribe((res) => {
+      this.tableData=res.items;
+      console.log("kkkkk : ", res)
+      this.totalRecords= res.meta.totalItems
+      this.loading = false;
+    }, err => {
+      this.loading = false;});
+
+  
+  };
 
  async getSectorCount(tool:string){
     this.investorProxy.findSectorCount(tool).subscribe((res: any) => {
@@ -152,7 +163,7 @@ this.ngOnInit();
       setTimeout(() => {
         this.viewPortfolioSectorCountPieChart();
      
-      },1000)
+      },100)
      
      
     });
@@ -164,7 +175,9 @@ this.ngOnInit();
     this.portfolioServiceProxy.sdgSumCalculate(this.selectedPortfolio?this.selectedPortfolio.id:0).subscribe(async (res: any) => {
       console.log("sdgDetailsList : ", res)
       this.sdgDetailsList = res;
+      setTimeout(() => {
      this.viewPortfolioSDGsPieChart();
+      },200);
      });
   }
 
@@ -222,29 +235,7 @@ this.ngOnInit();
     }
   }
 
-  calculateAverage(data: any[]) {
-    const sum = data.reduce((accumulator, item) => accumulator + parseFloat(item.likelihoodAverage), 0);
-    const average = sum / data.length;
-    return average.toFixed(0);
-  }
-
-  calculateAverageRelevance(data: any[]) {
-    const sum = data.reduce((accumulator, item) => accumulator + parseFloat(item.relevanceAverage), 0);
-    const average = sum / data.length;
-    return average.toFixed(0);
-  }
-
-  calculateAverageScale(data: any[]) {
-    const sum = data.reduce((accumulator, item) => accumulator + parseFloat(item.scoreAverage), 0);
-    const average = sum / data.length;
-    return average.toFixed(0);
-  }
-
-  calculateAverageSustained(data: any[]) {
-    const sum = data.reduce((accumulator, item) => accumulator + parseFloat(item.scoreAverage), 0);
-    const average = sum / data.length;
-    return average.toFixed(0);
-  }
+ 
 
 
 
@@ -384,13 +375,7 @@ this.ngOnInit();
       return;
     }
 
-    if (this.sectorCountPieChart) {
-      // Update the chart data
-      this.sectorCountPieChart.data.datasets[0].data = counts;
-      this.sectorCountPieChart.data.labels=labels
-      this.sectorCountPieChart.update();
-    }
-    else{
+  
       this.sectorCountPieChart =new Chart(ctx, {
         type: 'pie'as ChartType,
 
@@ -477,7 +462,7 @@ this.ngOnInit();
         },
 
     });
-  }
+  
 
 
 
@@ -502,13 +487,7 @@ this.ngOnInit();
       return;
     }
 
-    if (this.portfolioBarChart) {
-    
-      this.portfolioBarChart.data.datasets[0].data = data;
-      this.portfolioBarChart.data.labels=label;
-      this.portfolioBarChart.update();
-    }
-    else{
+  
       this.portfolioBarChart =new Chart(ctx, {
         type: 'bar',
 
@@ -619,7 +598,7 @@ this.ngOnInit();
         }
     });
 
-    }
+    
 
 
   }
@@ -685,16 +664,8 @@ this.ngOnInit();
   }
 
   getIntervention(x:number, y: number){
-    return this.slicedData.some(item => item.outcome_score === x && item.process_score === y);
+    return  this.tableData.some(item => item.outcome_score === x && item.process_score === y);
 
   }
-  paginate(event:Paginator|undefined) {
-    if (event){
-      console.log("paginate",event)
-      this.slicedData = this.calResults.slice(event?.first,event?.first+this.rows)
-    }
-    else{
-      this.slicedData = this.calResults.slice(0,this.rows)
-    }
-  }
+
 }

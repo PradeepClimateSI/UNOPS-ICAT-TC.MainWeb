@@ -6,6 +6,7 @@ import decode from 'jwt-decode';
 import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { Paginator } from 'primeng/paginator';
+import { LazyLoadEvent } from 'primeng/api';
 
 @Component({
   selector: 'app-investment-dashboard',
@@ -60,7 +61,9 @@ export class InvestmentDashboardComponent implements OnInit {
   resultData : any = []
   resultData2 : any = []
   recentResult : any ;
-
+  loading:boolean=false;
+  tableData:any[]=[]
+  totalRecords: number = 0;
   xData: {label: string; value: number}[]
   yData: {label: string; value: number}[]
   rows :number;
@@ -107,11 +110,33 @@ export class InvestmentDashboardComponent implements OnInit {
 
 
     });
-     
-    this.sdgResults()
+    let event: any = {};
+    event.rows = this.rows;
+    event.first = 0;
+    this.loadgridData(event);
+    this.sdgResults();
 
   }
+  loadgridData = (event: LazyLoadEvent) => {
+    console.log('event Date', event);
+    this.loading = true;
+    this.totalRecords = 0;
 
+    let pageNumber =
+      event.first === 0 || event.first === undefined
+        ? 1
+        : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
+    this.rows = event.rows === undefined ? 10 : event.rows;
+    this.investorProxy.getDashboardData(pageNumber,this.rows).subscribe((res) => {
+      this.tableData=res.items;
+      console.log("kkkkk : ", res)
+      this.totalRecords= res.meta.totalItems
+      this.loading = false;
+    }, err => {
+      this.loading = false;});
+
+  
+  };
   sdgResults(){
     this.sdgDetailsList=[]
     this.investorProxy.sdgSumCalculate().subscribe(async (res: any) => {
@@ -415,18 +440,8 @@ export class InvestmentDashboardComponent implements OnInit {
   }
 
   getIntervention(x:number, y: number){
-    return this.slicedData.some(item => item.outcome_score === x && item.process_score === y);
+    return this.tableData.some(item => item.outcome_score === x && item.process_score === y);
 
   }
-  paginate(event:Paginator|undefined) {
-    if (event){
-      console.log("paginate",event)
-      this.slicedData = this.calResults.slice(event?.first,event?.first+this.rows)
-    }
-    else{
-      this.slicedData = this.calResults.slice(0,this.rows)
-    }
-   
 
-  }
 }

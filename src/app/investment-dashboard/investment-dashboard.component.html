@@ -3,13 +3,19 @@
     <h3>Recent Assessments Done</h3>
     <div class="col-12 mt-20 ml-10" [hidden]="calResults?.length == 0">
       <p-table
-        [value]="calResults"
-        [paginator]="true"
-        [rows]="5"
-        [showCurrentPageReport]="true"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-        [rowsPerPageOptions]="[5, 10, 20]"
-        (onPage)="paginate($event)"
+      [value]="tableData"
+      [paginator]="true"
+      [rows]="rows"
+      [totalRecords]="totalRecords"
+      [lazy]="true"
+      (onLazyLoad)="loadgridData($event)"
+      [showCurrentPageReport]="true"
+      [tableStyle]="{ 'min-width': '5rem' }"
+      paginatorDropdownAppendTo="body"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [rowsPerPageOptions]="[ 5, 10, 20]"
+      [loading]="loading"
+      [responsive]="true"
       >
         <ng-template pTemplate="header">
           <tr>
@@ -18,31 +24,14 @@
             <th class="table-header">Outcome of Change Score</th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-calResults>
+        <ng-template pTemplate="body" let-tableData>
           <tr>
-            <td>
-              {{
-                calResults?.assesment?.climateAction?.policyName
-                  ? calResults?.assesment?.climateAction?.policyName
-                  : "-"
-              }}
-            </td>
-            <td style="text-align: center">
-              {{ calResults?.relevance == null ? "-" : calResults?.relevance }}
-            </td>
-            <td style="text-align: center">
-              {{
-                calResults?.likelihood == null ? "-" : calResults?.likelihood
-              }}
-            </td>
+                          <td>{{ tableData.climateAction?.policyName }}</td>
+                          <td>{{ tableData.process_score? tableData.process_score:0 }}</td>
+                          <td>{{ tableData.outcome_score?tableData.outcome_score:0 }}</td>
           </tr>
         </ng-template>
-        <!--     <ng-template pTemplate="paginatorleft">
-              <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"></p-button>
-          </ng-template> -->
-        <!--                 <ng-template pTemplate="paginatorright">
-              <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
-          </ng-template> -->
+        
       </p-table>
     </div>
     <div class="col-12" [hidden]="calResults?.length != 0">
@@ -104,7 +93,7 @@
 </div>
 <div class="row">
   <div class="col-md-6 col-12 d-flex align-items-stretch">
-    <div class="p-grid p-fluid card m-3">
+    <div  class="p-grid p-fluid card m-3">
       <div class="row text-center">
         <h3>Frequency of SDGs</h3>
         <div

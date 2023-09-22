@@ -12,7 +12,7 @@
     <div class="col-4 ">
       <p-dropdown appendTo="body" name="portfolio" placeholder="Select Portfolio" [(ngModel)]="selectedPortfolio"
         appendTo="body" [options]="portfolioList" optionLabel="portfolioName"
-        (onChange)="selectPortfolio($event);sdgResults()"></p-dropdown>
+        (onChange)="selectPortfolio()"></p-dropdown>
     </div>
 
 
@@ -33,13 +33,19 @@
     <h3>Recent Assessments Done</h3>
     <div class="col-12 mt-20 ml-10" [hidden]="calResults?.length == 0">
       <p-table
-        [value]="calResults"
-        [paginator]="true"
-        [rows]="5"
-        [showCurrentPageReport]="true"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-        [rowsPerPageOptions]="[5, 10, 20]"
-        (onPage)="paginate($event)"
+      [value]="tableData"
+      [paginator]="true"
+      [rows]="rows"
+      [totalRecords]="totalRecords"
+      [lazy]="true"
+      (onLazyLoad)="loadgridData($event)"
+      [showCurrentPageReport]="true"
+      [tableStyle]="{ 'min-width': '5rem' }"
+      paginatorDropdownAppendTo="body"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [rowsPerPageOptions]="[ 5, 10, 20]"
+      [loading]="loading"
+      [responsive]="true"
       >
         <ng-template pTemplate="header">
           <tr>
@@ -48,23 +54,13 @@
             <th class="table-header">Outcome of Change Score</th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-calResults>
+        <ng-template pTemplate="body" let-tableData>
           <tr>
-            <td>
-              {{
-                calResults?.assesment?.climateAction?.policyName
-                  ? calResults?.assesment?.climateAction?.policyName
-                  : "-"
-              }}
-            </td>
-            <td style="text-align: center">
-              {{ calResults?.relevance == null ? "-" : calResults?.relevance }}
-            </td>
-            <td style="text-align: center">
-              {{
-                calResults?.likelihood == null ? "-" : calResults?.likelihood
-              }}
-            </td>
+            
+            <td>{{ tableData.climateAction?.policyName }}</td>
+                          <td>{{ tableData.process_score? tableData.process_score:0 }}</td>
+                          <td>{{ tableData.outcome_score?tableData.outcome_score:0 }}</td>
+
           </tr>
         </ng-template>
 
