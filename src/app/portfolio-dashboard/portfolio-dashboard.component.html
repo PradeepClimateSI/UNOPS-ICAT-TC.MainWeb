@@ -1,69 +1,4 @@
-<!-- <div class="row" >
-  <div class="col-md-5 col-12 d-flex align-items-stretch " >
-      <div class="p-grid p-fluid card m-3">
-        <div class="row text-center ">
-          <h3>Transformational Change </h3>
-          <h2 class="tc-value">{{averageTCValue}}%</h2>
-          <div class="col-12  mt-5 " >
 
-            <div class="first">
-              <div class="second" [ngStyle]="{'width.%':averageTCValue}">
-
-              </div>
-              <div class="row justify-content-between ">
-                <div class="col-4 mt-5"  align="left" >
-                  <h5>Low</h5>
-                </div>
-                <div  align="right " class="col-4 mt-5">
-                  <h5>High</h5>
-                </div>
-              </div>
-              <div class="d-flex flex-row-reverse mt-10">
-                <div  align="right " ><p class="fs-6">Average Transformational Change</p></div>
-
-              </div>
-            </div>
-           </div>
-      </div>
-      </div>
-  </div>
-  <div class="col-md-7 col-12" >
-      <div class="p-grid p-fluid card m-3 " >
-          <div class="row text-center justify-content-center align-items-center" style="min-height: 8.5vw;">
-            <div class="row justify-content-center align-items-center">
-              <div class="col-9 text-center">
-                <h3 >Average Process of Change Score</h3>
-              </div>
-
-              <div class="col-3">
-                <br>
-                <h2 style="color: #0000CD;">4.51</h2>
-              </div>
-
-            </div>
-          </div>
-      </div>
-
-      <div class="p-grid p-fluid card m-3" >
-        <div class="row text-center  justify-content-center align-items-center" style="min-height: 8.5vw;">
-          <div class="row ">
-            <div class="col-9">
-              <h3 >Average Outcome of Change Score</h3>
-            </div>
-
-            <div class="col-3">
-              <br>
-              <h2 style="color: #0000CD;">4.51</h2>
-            </div>
-
-          </div>
-
-
-        </div>
-    </div>
-  </div>
-
-</div> -->
 
 <div class="p-grid p-fluid card m-3">
   <div class="p-field p-2">
@@ -77,7 +12,7 @@
     <div class="col-4 ">
       <p-dropdown appendTo="body" name="portfolio" placeholder="Select Portfolio" [(ngModel)]="selectedPortfolio"
         appendTo="body" [options]="portfolioList" optionLabel="portfolioName"
-        (onChange)="selectPortfolio($event);sdgResults($event)"></p-dropdown>
+        (onChange)="selectPortfolio()"></p-dropdown>
     </div>
 
 
@@ -93,205 +28,106 @@
   </div>
 </div>
 
-
-
-<div class="p-grid p-fluid card m-3">
-  <div class="row text-center ">
-   
-    <!-- <div class="row">
-      <div class="col-6 ">
-        <div [hidden]="resultData.length==0">
-          <canvas class="chart-canvas" #myCanvas></canvas>
-        </div>
-
-
-               
-                <div class="col-12 " [hidden]="resultData?.length!=0">
-                  <p-messages severity="warn">
-                    <ng-template pTemplate>
-                     
-                      <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
-                      <div class="ml-2">No data to show.</div>
-                    </ng-template>
-                  </p-messages>
-                </div>
-               
-      </div>
-
-      <div class="col-6 ">
-        <div [hidden]="resultData2.length==0">
-          <canvas class="chart2-canvas" #myCanvas2></canvas>
-        </div>
-
-
-       
-         <div class="col-12 " [hidden]="resultData2?.length!=0">
-          <p-messages severity="warn">
-            <ng-template pTemplate>
-           
-              <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
-              <div class="ml-2">No data to show.</div>
-            </ng-template>
-          </p-messages>
-        </div>
-       
-
-      </div>
-    </div> -->
-  </div>
-</div>
-
-<!-- <div *ngIf="loadSelectedTable">
-  <div class="p-grid p-fluid card m-3">
-    <div class="row text-center ">
-      <div class="row">
-        <div class="col-6 ">
-          <canvas class="chart-canvas" #myCanvas3></canvas>
-        </div>
-
-        <div class="col-6 ">
-          <canvas class="chart-canvas" #myCanvas4></canvas>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->
-
 <div class="p-grid p-fluid card m-3">
   <div class="row">
+    <h3>Recent Assessments Done</h3>
+    <div class="col-12 mt-20 ml-10" [hidden]="calResults?.length == 0">
+      <p-table
+      [value]="tableData"
+      [paginator]="true"
+      [rows]="rows"
+      [totalRecords]="totalRecords"
+      [lazy]="true"
+      (onLazyLoad)="loadgridData($event)"
+      [showCurrentPageReport]="true"
+      [tableStyle]="{ 'min-width': '5rem' }"
+      paginatorDropdownAppendTo="body"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [rowsPerPageOptions]="[ 5, 10, 20]"
+      [loading]="loading"
+      [responsive]="true"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="table-header-3">Intervention Name</th>
+            <th class="table-header">Process of change Score</th>
+            <th class="table-header">Outcome of Change Score</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-tableData>
+          <tr>
+            
+            <td>{{ tableData.climateAction?.policyName }}</td>
+                          <td>{{ tableData.process_score? tableData.process_score:0 }}</td>
+                          <td>{{ tableData.outcome_score?tableData.outcome_score:0 }}</td>
 
-    <div class="col-12  mt-20 ml-10">
+          </tr>
+        </ng-template>
 
-      <div *ngIf="!loadSelectedTable" >
-        <h3>Recent Assessments Done</h3>
-
-        <div  *ngIf="calResults" [hidden]="calResults.length==0">
-        <p-table [value]="calResults" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-          [rowsPerPageOptions]="[5, 10, 20]">
-
-          <ng-template pTemplate="header">
-
-            <tr>
-              <th colspan="1" class="table-header"></th>
-              <th colspan="2" class="table-header">Process</th>
-              <th colspan="2" class="table-header">Outcomes</th>
-            </tr>
-
-
-
-            <tr>
-              <th class="table-header-3">Intervention Name</th>
-              <th class="table-header-2">Relevence</th>
-              <th class="table-header-2">Likelihood</th>
-              <th class="table-header-2">Scaled</th>
-              <th class="table-header-2">Sustained</th>
-
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-calResults>
-            <tr>
-              <td>{{
-                calResults?.assesment?.climateAction?.policyName?calResults?.assesment?.climateAction?.policyName:'-' }}
-              </td>
-              <td  [ngClass]="getColorClass(calResults?.relevance)" style="text-align: center">{{ calResults?.relevance==null?'-':calResults?.relevance }}</td>
-              <td [ngClass]="getColorClass2(calResults?.likelihood)" style="text-align: center">{{ calResults?.likelihood==null?'-':calResults?.likelihood }}</td>
-              <td [ngClass]="getColorClass3(calResults?.scaleScore)" style="text-align: center">{{ calResults?.scaleScore==null?'-':calResults?.scaleScore }}</td>
-              <td  [ngClass]="getColorClass3(calResults?.sustainedScore)" style="text-align: center">{{ calResults?.sustainedScore==null?'-':calResults?.sustainedScore }}</td>
-            </tr>
-          </ng-template>
-
-        </p-table>
-      </div>
-
-       <!-- a//////////////////////////////////// -->
-       <div class="col-12 " [hidden]="calResults?.length!=0">
-        <p-messages severity="warn">
-          <ng-template pTemplate>
-            <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
-            <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
-            <div class="ml-2">No data to show.</div>
-          </ng-template>
-        </p-messages>
-      </div>
-      <!-- a//////////////////////////////////// -->
-
-
-      </div>
-
-      <div *ngIf="loadSelectedTable">
-        <h3>Comparison - {{selectedPortfolio.portfolioName}}</h3>
-
-        <div  [hidden]="allData.length==0">
-        <p-table [value]="allData" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-          [rowsPerPageOptions]="[5, 10, 20]">
-
-          <ng-template pTemplate="header">
-
-            <tr>
-              <th colspan="1" class="table-header"></th>
-              <th colspan="2" class="table-header">Process</th>
-              <th colspan="2" class="table-header">Outcomes</th>
-            </tr>
-
-
-
-            <tr>
-              <th class="table-header-3">Intervention Name</th>
-              <th class="table-header-2">Relevence</th>
-              <th class="table-header-2">Likelihood</th>
-              <th class="table-header-2">Scaled</th>
-              <th class="table-header-2">Sustained</th>
-
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-allData>
-            <tr>
-              <td>{{ allData.assess.climateAction?.policyName }}</td>
-              <td [ngClass]="getColorClass(calculateAverageRelevance(allData.process.slice(0, 4)))">{{
-                calculateAverageRelevance(allData.process.slice(0, 4)) }}</td>
-
-              <td [ngClass]="getColorClass2(calculateAverage(allData.process.slice(0, 4)))">{{
-                calculateAverage(allData.process.slice(0, 4)) }}</td>
-
-              <td [ngClass]="getColorClass3(calculateAverageScale(allData.scale.slice(0, 2)))">{{
-                calculateAverageScale(allData.scale.slice(0, 2)) }}</td>
-
-              <td [ngClass]="getColorClass3(calculateAverageSustained(allData.sustained.slice(0, 2)))">{{
-                calculateAverageSustained(allData.sustained.slice(0, 2)) }}</td>
-
-            </tr>
-          </ng-template>
-
-        </p-table>
-      </div>
-
-      <!-- a//////////////////////////////////// -->
-      <div class="col-12 " [hidden]="allData?.length!=0">
-        <p-messages severity="warn">
-          <ng-template pTemplate>
-            <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
-            <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
-            <div class="ml-2">No data to show.</div>
-          </ng-template>
-        </p-messages>
-      </div>
-      <!-- a//////////////////////////////////// -->
-
+      </p-table>
     </div>
-
-
+    <div class="col-12" [hidden]="calResults?.length != 0">
+      <p-messages severity="warn">
+        <ng-template pTemplate>
+          <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
+          <div class="ml-2">No data to show.</div>
+        </ng-template>
+      </p-messages>
     </div>
   </div>
 </div>
-<div class="row" [hidden]="!loadLast2graphs">
+
+<div class="p-grid p-fluid card m-3">
+  <div class="row text-center">
+    <table class="heatmap" style=" text-align: center">
+    
+      <tbody>
+        <tr>
+          <td></td>
+          <td colspan="7">
+            Outcome: Extent and sustained nature of the transformation
+          </td>
+        </tr>
+        <tr>
+          <td rowspan="7">Process: Transformational change supported</td>
+        </tr>
+        <tr>
+          <td></td>
+          <ng-container *ngFor="let x of xData">
+            <td>{{ x.label }}</td>
+          </ng-container>
+        </tr>
+        <tr *ngFor="let y of yData">
+          <td>{{ y.label }}</td>
+          <ng-container *ngFor="let x of xData">
+            <td
+              [style.background-color]="getBackgroundColor(y.value + x.value)"
+            >
+              <span
+               [style.background-color]=" getIntervention(x.value, y.value) ?getDotColor(y.value + x.value):''"
+                [ngClass]="
+                  getIntervention(x.value, y.value) ? 'intervention' : ''
+                "
+                >{{ y.value + x.value }}</span
+              >
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+
+<!-- <div class="row" [hidden]="!loadLast2graphs">
   <div class="col-md-6 col-12 d-flex align-items-stretch">
       <div class="p-grid p-fluid card m-3">
         <div class="row text-center ">
           <h3>Expected GHG mitigation of portfolios</h3>
           <div class="col-12  mt-20 "  >
-              <!-- <canvas   id="portfolioBarChart">{{portfolioBarChart}}</canvas> -->
+      
               <canvas  #portfolioBarChart></canvas>
            </div>
       </div>
@@ -302,11 +138,78 @@
           <div class="row text-center ">
               <h3>Usage of SDGs</h3>
               <div class="col-12  mt-20 "  >
-                  <!-- <canvas   id="portfolioBarChart">{{portfolioBarChart}}</canvas> -->
+               
                   <canvas  #portfolioPieChart2></canvas>
                </div>
           </div>
       </div>
   </div>
 
+</div> -->
+<div class="row" >
+  <div *ngIf="selectedPortfolio" class="col-md-6 col-12 d-flex align-items-stretch">
+    <div class="p-grid p-fluid card m-3">
+      <div class="row text-center ">
+        <h3>Expected GHG mitigation of portfolios</h3>
+        <div class="col-12  mt-20 "  >
+    
+            <canvas  #portfolioBarChart>{{ barChartData }}</canvas>
+         </div>
+    </div>
+    </div>
+</div>
+  <div class="col-md-6 col-12 d-flex align-items-stretch">
+    <div class="p-grid p-fluid card m-3" >
+      <div class="row text-center" style="min-height: 350px;">
+        <h3>Frequency of SDGs</h3>
+        <div
+          *ngIf="sdgDetailsList"
+          class="col-12 mt-20"
+          [hidden]="sdgDetailsList.length == 0"
+        >
+          <canvas #portfolioSDGsPieChart>{{ portfolioSDGsPieChart }}</canvas>
+        </div>
+      </div>
+      <div
+        *ngIf="sdgDetailsList"
+        class="col-12"
+        [hidden]="sdgDetailsList.length != 0"
+      >
+        <p-messages severity="warn">
+          <ng-template pTemplate>
+         
+            <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
+            <div class="ml-2">No data to show.</div>
+          </ng-template>
+        </p-messages>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!selectedPortfolio" class="col-md-6 col-12 d-flex align-items-stretch">
+    <div class="p-grid p-fluid card m-3">
+      <div class="row text-center">
+        <h3>Sectors Targeted</h3>
+        <div
+          *ngIf="sectorCount"
+          class="col-12 mt-20"
+          [hidden]="sectorCount.length == 0"
+        >
+          <canvas #portfolioSectorCountPieChart >{{ sectorCountPieChart }}</canvas>
+        </div>
+      </div>
+      <div
+        *ngIf="sectorCount"
+        class="col-12"
+        [hidden]="sectorCount.length != 0"
+      >
+        <p-messages severity="warn">
+          <ng-template pTemplate>
+           
+            <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
+            <div class="ml-2">No data to show.</div>
+          </ng-template>
+        </p-messages>
+      </div>
+    </div>
+  </div>
 </div>
