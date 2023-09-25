@@ -1,0 +1,30 @@
+.table-header-main{
+    text-align: center !important;
+    font-size: 20px;
+    color: black !important;
+    background-color: rgb(210, 210, 210) !important;
+    font-weight: 700 !important;
+    height: 50px !important;
+}
+.table-header{
+    text-align: center !important;
+    color: black !important;
+    font-weight: 700 !important;
+    background-color: rgb(255, 255, 255) !important;
+}
+.table-header-left{
+    color: black !important;
+    font-weight: 700 !important;
+    background-color:  rgb(255, 255, 255) !important;
+    
+}
+.table-data{
+    text-align: center !important;
+    color: black !important;
+    background-color: rgb(255, 255, 255) !important;
+}
+.category-topic{
+    color: black !important;
+    font-weight: 700 !important;
+    font-size: 20px;
+}

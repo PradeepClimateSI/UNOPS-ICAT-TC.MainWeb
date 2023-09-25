@@ -1,11 +1,12 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { ClimateAction, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import { DatePipe } from '@angular/common';
 import { DomSanitizer } from '@angular/platform-browser';
 import { jsPDF } from "jspdf"
 import html2canvas from 'html2canvas';
 import * as XLSX from 'xlsx';
+import { MasterDataService } from 'app/shared/master-data.service';
 
 
 @Component({
@@ -60,19 +61,34 @@ export class AssessmentResultInvestorComponent implements OnInit {
 
   SDGsList : any = [];
   card: any = []
+ 
+  ////
+  intervention:ClimateAction;
+  principles: string;
+  opportunities:string;
+  xData: {label: string; value: number}[];
+  yData: {label: string; value: number}[];
+  processData: any[] = []
+  outcomeData: any[] = []
+  processScore: number;
+  outcomeScore: number;
+  scale_GHGs: any;
+  sustained_GHGs:any;
+  sustained_SD:any;
+  scale_SD:any;
+  scale_adaptation:any;
+  sustained_adaptation:any;
+  loading: boolean=false;
+
+
   constructor(private route: ActivatedRoute,
     private methassess: MethodologyAssessmentControllerServiceProxy,
     private datePipe: DatePipe,
     private sanitizer: DomSanitizer,
     private investorToolControllerproxy: InvestorToolControllerServiceProxy,
+    public masterDataService: MasterDataService
+
   ) { }
-
-
-
-
-
-
-
   ngOnInit(): void {
 
     this.investerTool = true;
@@ -82,22 +98,48 @@ export class AssessmentResultInvestorComponent implements OnInit {
       this.averageProcess = params['averageProcess'];
       this.averageOutcome = params['averageOutcome'];
     });
+    this.xData = this.masterDataService.xData
+    this.yData = this.masterDataService.yData
 
-    console.log("daaaaa:", this.assessmentId)
-    console.log("daaaaa111:", this.averageProcess)
-    console.log("daaaaa222:", this.averageOutcome)
+    // console.log("daaaaa:", this.assessmentId)
+    // console.log("daaaaa111:", this.averageProcess)
+    // console.log("daaaaa222:", this.averageOutcome)
+    this.investorToolControllerproxy.calculateFinalResults(this.assessmentId).subscribe((res: any) => {
+      console.log(res)
+      this.processData = res?.processData;
+      this.outcomeData = res?.outcomeData;
+      this.outcomeScore = res?.outcomeScore;
+      this.processScore = res?.processScore;
+      this.scale_GHGs = res?.outcomeData.filter((item: { category: string; })=>item?.category=='Scale GHGs')
+      this.scale_SD = res?.outcomeData.filter((item: { category: string; })=>item?.category=='Scale SD')
+      this.sustained_GHGs = res?.outcomeData.filter((item: { category: string; })=>item?.category=='Sustained nature-GHGs')
+      this.sustained_SD = res?.outcomeData.filter((item: { category: string; })=>item?.category=='Sustained nature-SD')
+      this.scale_adaptation = res?.outcomeData.filter((item: { category: string; })=>item?.category=='Scale Adaptation')
+      this.sustained_adaptation = res?.outcomeData.filter((item: { category: string; })=>item?.category=='Sustained Adaptation')
+      console.log("all: ",  this.scale_GHGs,this.scale_SD,this.sustained_GHGs ,this.sustained_SD,this.scale_adaptation,this.sustained_adaptation)
+      console.log("processData: ", this.processData)
+      console.log("outcomeData: ", this.outcomeData)
+      console.log("processData: ", this.processData)
+      console.log("rr: ", this.scale_GHGs[0].characteristicData)
+      this.loading=true 
+    });
 
 
     this.methassess.assessmentData(this.assessmentId).subscribe((res: any) => {
       console.log("assessmentDataaaaa: ", res)
       for (let x of res) {
-        this.policyName = x.climateAction.policyName
+        // this.policyName = x.climateAction.policyName
+        this.intervention = x.climateAction
         this.assessmentType = x.assessmentType
         this.date1 = x.from
         this.date2 = x.to
         this.tool = x.tool
         this.assessment_approach = x.assessment_approach
         this.assessment_method = x.assessment_method
+        this.principles = x.principles
+        this.opportunities = x.opportunities
+        this.assessment_method = x.assessment_method
+        
       }
       console.log("toool", this.tool)
       if (this.tool === 'Portfolio Tool') {
@@ -112,13 +154,12 @@ export class AssessmentResultInvestorComponent implements OnInit {
       }
 
     });
-
-
+   
 
 
     this.investorToolControllerproxy.getResultByAssessment(this.assessmentId).subscribe((res: any) => {
       console.log("getResultByAssessment: ", res)
-      this.levelofImplemetation = res.level_of_implemetation
+      // this.levelofImplemetation = res.level_of_implemetation
       this.geographicalAreasCovered = res.geographical_areas_covered
       this.tool = res.assessment.tool
 
@@ -131,220 +172,220 @@ export class AssessmentResultInvestorComponent implements OnInit {
       }
     });
 
-    this.investorToolControllerproxy.findAllImpactCoverData(this.assessmentId).subscribe((res: any) => {
-      console.log("findAllImpactCoverData: ", res)
-      for (let x of res) {
-        this.impactCoverList.push(x.name)
-      }
-    });
+    // this.investorToolControllerproxy.findAllImpactCoverData(this.assessmentId).subscribe((res: any) => {
+    //   console.log("findAllImpactCoverData: ", res)
+    //   for (let x of res) {
+    //     this.impactCoverList.push(x.name)
+    //   }
+    // });
 
 
-    this.methassess.findAllCategories().subscribe((res2: any) => {
-      console.log("categoryList", res2)
-      for (let x of res2) {
-        //this.categotyList.push(x);
-        if (x.type === 'process') {
-          this.meth1Process.push(x)
-        }
-        if (x.type === 'outcome') {
-          this.meth1Outcomes.push(x)
-        }
-      }
-      console.log("yyyy", this.meth1Process)
-    });
+    // this.methassess.findAllCategories().subscribe((res2: any) => {
+    //   console.log("categoryList", res2)
+    //   for (let x of res2) {
+    //     //this.categotyList.push(x);
+    //     if (x.type === 'process') {
+    //       this.meth1Process.push(x)
+    //     }
+    //     if (x.type === 'outcome') {
+    //       this.meth1Outcomes.push(x)
+    //     }
+    //   }
+    //   console.log("yyyy", this.meth1Process)
+    // });
 
 
 
-    this.investorToolControllerproxy.findAllAssessData(this.assessmentId).subscribe(async (res: any) => {
-      console.log("findAllAssessData: ", res)
+    // this.investorToolControllerproxy.findAllAssessData(this.assessmentId).subscribe(async (res: any) => {
+    //   console.log("findAllAssessData: ", res)
 
 
-      for (let category of this.meth1Process) {
-        let categoryData: any = {
-          categoryName: category.name,
-          characteristics: [],
-          categotyRelevance: 0,
-          categoryLikelihood: 0
-        };
+    //   for (let category of this.meth1Process) {
+    //     let categoryData: any = {
+    //       categoryName: category.name,
+    //       characteristics: [],
+    //       categotyRelevance: 0,
+    //       categoryLikelihood: 0
+    //     };
 
-        let totalRel = 0
-        let countRel = 0
-        let totalLikelihood = 0
-        let countLikelihood = 0
-        for (let x of res) {
-          if (category.name === x.category.name) {
-            categoryData.categoryName = category.name;
-            categoryData.characteristics.push(
-              {
-                relevance: !x.relavance ? '-' : x.relavance,
-                likelihood: !x.likelihood ? '-' : x.likelihood,
-                name: x.characteristics.name
-              }
-            )
+    //     let totalRel = 0
+    //     let countRel = 0
+    //     let totalLikelihood = 0
+    //     let countLikelihood = 0
+    //     for (let x of res) {
+    //       if (category.name === x.category.name) {
+    //         categoryData.categoryName = category.name;
+    //         categoryData.characteristics.push(
+    //           {
+    //             relevance: !x.relavance ? '-' : x.relavance,
+    //             likelihood: !x.likelihood ? '-' : x.likelihood,
+    //             name: x.characteristics.name
+    //           }
+    //         )
 
-            totalRel = totalRel + x.relavance
-            countRel++
+    //         totalRel = totalRel + x.relavance
+    //         countRel++
 
-            totalLikelihood = totalLikelihood + x.likelihood
-            countLikelihood++
+    //         totalLikelihood = totalLikelihood + x.likelihood
+    //         countLikelihood++
 
-          }
-        }
+    //       }
+    //     }
 
-        categoryData.categotyRelevance = (totalRel / countRel).toFixed(3)
-        categoryData.categoryLikelihood = (totalLikelihood / countLikelihood).toFixed(3)
-        this.categoryDataArray.push(categoryData)
+    //     categoryData.categotyRelevance = (totalRel / countRel).toFixed(3)
+    //     categoryData.categoryLikelihood = (totalLikelihood / countLikelihood).toFixed(3)
+    //     this.categoryDataArray.push(categoryData)
 
-        // console.log("categoryDataArray: ", this.categoryDataArray)
-      }
+    //     // console.log("categoryDataArray: ", this.categoryDataArray)
+    //   }
 
-      for (let category of this.meth1Outcomes) {
-        let categoryData: any = {
-          categoryName: category.name,
-          characteristics: [],
-          categotyRelevance: 0,
-          categoryLikelihood: 0,
-          categoryScaleScore: 0,
-          categorySustainedScore: 0
-        };
+    //   for (let category of this.meth1Outcomes) {
+    //     let categoryData: any = {
+    //       categoryName: category.name,
+    //       characteristics: [],
+    //       categotyRelevance: 0,
+    //       categoryLikelihood: 0,
+    //       categoryScaleScore: 0,
+    //       categorySustainedScore: 0
+    //     };
 
-        let totalScale = 0
-        let countScale = 0
-        let totalSustained = 0
-        let countSustained = 0
-        for (let x of res) {
-          if (category.name === x.category.name && (x.category.name === 'GHG Scale of the Outcome' || x.category.name === 'SDG Scale of the Outcome')) {
-            categoryData.categoryName = category.name;
-            categoryData.characteristics.push(
-              {
-                scaleScore: x.score,
-                sustainedScore: '-',
-                name: x.characteristics.name
-              }
-            )
+    //     let totalScale = 0
+    //     let countScale = 0
+    //     let totalSustained = 0
+    //     let countSustained = 0
+    //     for (let x of res) {
+    //       if (category.name === x.category.name && (x.category.name === 'GHG Scale of the Outcome' || x.category.name === 'SDG Scale of the Outcome')) {
+    //         categoryData.categoryName = category.name;
+    //         categoryData.characteristics.push(
+    //           {
+    //             scaleScore: x.score,
+    //             sustainedScore: '-',
+    //             name: x.characteristics.name
+    //           }
+    //         )
 
-            totalScale = totalScale + x.score
-            countScale++
+    //         totalScale = totalScale + x.score
+    //         countScale++
 
-          }
-          if (category.name === x.category.name && (x.category.name === 'GHG Time frame over which the outcome is sustained' || x.category.name === 'SDG Time frame over which the outcome is sustained')) {
-            categoryData.categoryName = category.name;
-            categoryData.characteristics.push(
-              {
-                scaleScore: '-',
-                sustainedScore: x.score,
-                name: x.characteristics.name
-              }
-            )
+    //       }
+    //       if (category.name === x.category.name && (x.category.name === 'GHG Time frame over which the outcome is sustained' || x.category.name === 'SDG Time frame over which the outcome is sustained')) {
+    //         categoryData.categoryName = category.name;
+    //         categoryData.characteristics.push(
+    //           {
+    //             scaleScore: '-',
+    //             sustainedScore: x.score,
+    //             name: x.characteristics.name
+    //           }
+    //         )
 
-            totalSustained = totalSustained + x.score
-            countSustained++
+    //         totalSustained = totalSustained + x.score
+    //         countSustained++
 
-          }
-        }
+    //       }
+    //     }
 
-        if (category.name === 'GHG Scale of the Outcome' || category.name === 'SDG Scale of the Outcome') {
-          categoryData.categoryScaleScore = (totalScale / countScale).toFixed(3)
-          categoryData.categorySustainedScore = '-'
-        }
+    //     if (category.name === 'GHG Scale of the Outcome' || category.name === 'SDG Scale of the Outcome') {
+    //       categoryData.categoryScaleScore = (totalScale / countScale).toFixed(3)
+    //       categoryData.categorySustainedScore = '-'
+    //     }
 
-        if (category.name === 'GHG Time frame over which the outcome is sustained' || category.name === 'SDG Time frame over which the outcome is sustained') {
-          categoryData.categorySustainedScore = (totalSustained / countSustained).toFixed(3)
-          categoryData.categoryScaleScore = '-'
-        }
+    //     if (category.name === 'GHG Time frame over which the outcome is sustained' || category.name === 'SDG Time frame over which the outcome is sustained') {
+    //       categoryData.categorySustainedScore = (totalSustained / countSustained).toFixed(3)
+    //       categoryData.categoryScaleScore = '-'
+    //     }
 
-        this.categoryDataArrayOutcome.push(categoryData)
-      }
+    //     this.categoryDataArrayOutcome.push(categoryData)
+    //   }
 
-      console.log("categoryDataArrayOutcome: ", this.categoryDataArrayOutcome)
+    //   console.log("categoryDataArrayOutcome: ", this.categoryDataArrayOutcome)
 
-      /* Portfolio toolll */
+    //   /* Portfolio toolll */
 
-      const data: any =  this.categoryDataArrayOutcome[1]
+    //   const data: any =  this.categoryDataArrayOutcome[1]
 
-      const averages: any = {};
+    //   const averages: any = {};
 
-      data.characteristics.forEach((obj: { name: any; scaleScore: any; sustainedScore: any; }) => {
-        if (obj.name in averages) {
-          averages[obj.name].scaleScore += obj.scaleScore || 0;
-          averages[obj.name].sustainedScore += obj.sustainedScore === '-' ? 0 : parseInt(obj.sustainedScore);
-          averages[obj.name].count++;
-        } else {
-          averages[obj.name] = {
-            scaleScore: obj.scaleScore || 0,
-            sustainedScore: obj.sustainedScore === '-' ? 0 : parseInt(obj.sustainedScore),
-            count: 1
-          };
-        }
-      });
+    //   data.characteristics.forEach((obj: { name: any; scaleScore: any; sustainedScore: any; }) => {
+    //     if (obj.name in averages) {
+    //       averages[obj.name].scaleScore += obj.scaleScore || 0;
+    //       averages[obj.name].sustainedScore += obj.sustainedScore === '-' ? 0 : parseInt(obj.sustainedScore);
+    //       averages[obj.name].count++;
+    //     } else {
+    //       averages[obj.name] = {
+    //         scaleScore: obj.scaleScore || 0,
+    //         sustainedScore: obj.sustainedScore === '-' ? 0 : parseInt(obj.sustainedScore),
+    //         count: 1
+    //       };
+    //     }
+    //   });
 
-      const result = [];
+    //   const result = [];
 
-      for (const name in averages) {
-        const averageScaleScore = averages[name].scaleScore / averages[name].count;
-        const averageSustainedScore = averages[name].sustainedScore / averages[name].count;
+    //   for (const name in averages) {
+    //     const averageScaleScore = averages[name].scaleScore / averages[name].count;
+    //     const averageSustainedScore = averages[name].sustainedScore / averages[name].count;
 
-        result.push({
-          scaleScore: averageScaleScore.toFixed(3),
-          sustainedScore: '-',
-          name: name
-        });
-      }
+    //     result.push({
+    //       scaleScore: averageScaleScore.toFixed(3),
+    //       sustainedScore: '-',
+    //       name: name
+    //     });
+    //   }
 
-      console.log("resulttt", result);
+    //   console.log("resulttt", result);
 
-       /* Portfolio toolll */
-       const data2: any =  this.categoryDataArrayOutcome[3];
+    //    /* Portfolio toolll */
+    //    const data2: any =  this.categoryDataArrayOutcome[3];
 
-       const averages2: any = {};
+    //    const averages2: any = {};
 
-       data2.characteristics.forEach((obj: { name: any; scaleScore: any; sustainedScore: any; }) => {
-         if (obj.name in averages2) {
-           averages2[obj.name].sustainedScore += obj.sustainedScore || 0;
-           averages2[obj.name].scaleScore += obj.scaleScore === '-' ? 0 : parseInt(obj.scaleScore);
-           averages2[obj.name].count++;
-         } else {
-           averages2[obj.name] = {
-            sustainedScore: obj.sustainedScore || 0,
-            scaleScore: obj.scaleScore === '-' ? 0 : parseInt(obj.scaleScore),
-             count: 1
-           };
-         }
-       });
+    //    data2.characteristics.forEach((obj: { name: any; scaleScore: any; sustainedScore: any; }) => {
+    //      if (obj.name in averages2) {
+    //        averages2[obj.name].sustainedScore += obj.sustainedScore || 0;
+    //        averages2[obj.name].scaleScore += obj.scaleScore === '-' ? 0 : parseInt(obj.scaleScore);
+    //        averages2[obj.name].count++;
+    //      } else {
+    //        averages2[obj.name] = {
+    //         sustainedScore: obj.sustainedScore || 0,
+    //         scaleScore: obj.scaleScore === '-' ? 0 : parseInt(obj.scaleScore),
+    //          count: 1
+    //        };
+    //      }
+    //    });
 
-       const result2 = [];
+    //    const result2 = [];
 
-       for (const name in averages2) {
-         const averageScaleScore2 = averages2[name].scaleScore / averages2[name].count;
-         const averageSustainedScore2 = averages2[name].sustainedScore / averages2[name].count;
+    //    for (const name in averages2) {
+    //      const averageScaleScore2 = averages2[name].scaleScore / averages2[name].count;
+    //      const averageSustainedScore2 = averages2[name].sustainedScore / averages2[name].count;
 
-         result2.push({
-           scaleScore: '-',
-           sustainedScore: averageSustainedScore2.toFixed(3),
-           name: name
-         });
-       }
+    //      result2.push({
+    //        scaleScore: '-',
+    //        sustainedScore: averageSustainedScore2.toFixed(3),
+    //        name: name
+    //      });
+    //    }
 
-       console.log("resulttt22", result2);
-
-
-       if(!this.investerTool){
-        this.categoryDataArrayOutcome[1].characteristics = []
-        this.categoryDataArrayOutcome[1].characteristics = result
-
-        this.categoryDataArrayOutcome[3].characteristics = []
-        this.categoryDataArrayOutcome[3].characteristics = result2
-       }
-
-       console.log("categoryDataArrayOutcome222: ", this.categoryDataArrayOutcome)
-        /* Portfolio toolll */
-    });
+    //    console.log("resulttt22", result2);
 
 
-    this.investorToolControllerproxy.findSDGs(this.assessmentId).subscribe((res: any) => {
-      console.log("sdgssss: ", res)
-      this.SDGsList = res
-    });
+    //    if(!this.investerTool){
+    //     this.categoryDataArrayOutcome[1].characteristics = []
+    //     this.categoryDataArrayOutcome[1].characteristics = result
+
+    //     this.categoryDataArrayOutcome[3].characteristics = []
+    //     this.categoryDataArrayOutcome[3].characteristics = result2
+    //    }
+
+    //    console.log("categoryDataArrayOutcome222: ", this.categoryDataArrayOutcome)
+    //     /* Portfolio toolll */
+    // });
+
+
+    // this.investorToolControllerproxy.findSDGs(this.assessmentId).subscribe((res: any) => {
+    //   console.log("sdgssss: ", res)
+    //   this.SDGsList = res
+    // });
 
 
 
@@ -366,6 +407,42 @@ export class AssessmentResultInvestorComponent implements OnInit {
 
     }, 1000);
 
+  }
+  getBackgroundColor(value: number): string {
+    switch (value) {
+      case -3:
+        return '#ec6665';
+      case -2:
+        return '#ed816c';
+      case -1:
+        return '#f19f70';
+      case 0:
+        return '#f4b979';
+      case 1:
+        return '#f9d57f';
+      case 2:
+        return '#fcf084';
+      case 3:
+        return '#e0e885';
+      case 4:
+        return '#c1e083';
+      case 5:
+        return '#a3d481';
+      case 6:
+        return '#84cc80';
+      case 7:
+        return '#65c17e';
+      default:
+        return 'white';
+    }
+  }
+
+  getIntervention(x:number, y: number){
+    if (this.processScore === y && this.outcomeScore === x){
+      return true
+    } else {
+      return false
+    }
   }
 
 
