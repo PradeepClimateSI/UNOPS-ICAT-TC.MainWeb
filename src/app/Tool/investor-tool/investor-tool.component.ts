@@ -459,7 +459,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
             detail: 'Assessment created successfully',
             closable: true,
           })
-       //   this.showResults();
+          this.showResults();
           // this.isSavedAssessment = true
           // this.onCategoryTabChange('', this.tabView);
 
