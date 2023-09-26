@@ -19,7 +19,8 @@
         <ng-template pTemplate="body" let-intervention>
             <tr>
                 <ng-container *ngFor="let col of data.col_set_2">
-                    <td>{{intervention[col.code]}}</td>
+                    <td *ngIf="intervention[col.code].name">{{intervention[col.code].name}}</td>
+                    <td *ngIf="!intervention[col.code].name">{{intervention[col.code]}}</td>
                 </ng-container>
             </tr>
         </ng-template>
