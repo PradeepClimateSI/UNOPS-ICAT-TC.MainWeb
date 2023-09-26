@@ -35,8 +35,8 @@ export class MasterDataService {
   private _assessment_approach2: {name: string, id: number}[] = []
   private _relevance: {name: string, value: number}[] = []
   private _likelihood: {id: string, value: number}[] = []
-  private _outcomeScaleScore: {id: string, value: number}[] = []
-  private _outcomeSustainedScore: {id: string, value: number}[] = []
+  private _outcomeScaleScore: {id: string, value: number | null}[] = []
+  private _outcomeSustainedScore: {id: string, value: number | null}[] = []
   private _GHG_scale_score: SelectedScoreDto[] = []
   private _GHG_scale_score_macro: SelectedScoreDto[] = []
   private _GHG_scale_score_medium: SelectedScoreDto[] = []
@@ -265,6 +265,7 @@ export class MasterDataService {
       {  id: "-1 - Minor Negative",value:-1 },
       {  id: "-2 - Moderate Negative",value:-2 },
       {  id: "-3 - Major Negative",value:-3 },
+      {  id: "Empty",value:null },
 
     ]
 
@@ -274,6 +275,7 @@ export class MasterDataService {
       {  id: "Possible (33-66%)",value:1 },
       {  id: "Less likely (10-33%)",value:0 },
       {  id: "Unlikely (0-10%)",value:-1 },
+      {  id: "Empty",value:null },
     ]
 
     this.assessment_approach2 = [
@@ -613,19 +615,19 @@ export class MasterDataService {
     return this._likelihood;
   }
 
-  set outcomeScaleScore(value: { id: string; value: number}[]) {
+  set outcomeScaleScore(value: { id: string; value: number | null}[]) {
     this._outcomeScaleScore = value;
   }
 
-  get outcomeScaleScore (): { id: string; value: number }[] {
+  get outcomeScaleScore (): { id: string; value: number | null }[] {
     return this._outcomeScaleScore;
   }
 
-  set outcomeSustainedScore(value: { id: string; value: number}[]) {
+  set outcomeSustainedScore(value: { id: string; value: number | null}[]) {
     this._outcomeSustainedScore = value;
   }
 
-  get outcomeSustainedScore (): { id: string; value: number }[] {
+  get outcomeSustainedScore (): { id: string; value: number | null}[] {
     return this._outcomeSustainedScore;
   }
 

@@ -145,7 +145,7 @@ export class PortfolioTrack4Component implements OnInit {
   sdgDataSendArray2: any = []
 
   async ngOnInit(): Promise<void> {
- this.load = true   //need to change as false
+ this.load = false;   //need to change as false
  this.selectedApproach = 'Direct';
  this.assessment.assessment_approach = 'Direct';
 
@@ -518,6 +518,21 @@ export class PortfolioTrack4Component implements OnInit {
 
 
   onsubmit(form: NgForm) {
+
+    for(let item of this.processData){
+      for(let item2 of item.data){
+        if(item2.likelihood == null || item2.relavance == null){
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Warning',
+            detail: 'Fill all mandatory fields',
+            closable: true,
+          })
+
+          return
+        }
+      }
+    }
     console.log("formDataa", form.value)
     console.log("assesssssssss", this.assessment)
     console.log("finallsdgDataSendArray2", this.sdgDataSendArray2)
@@ -590,7 +605,7 @@ export class PortfolioTrack4Component implements OnInit {
             detail: 'Assessment created successfully',
             closable: true,
           })
-        //  this.showResults();
+          this.showResults();
 
         }, error => {
           console.log(error)
