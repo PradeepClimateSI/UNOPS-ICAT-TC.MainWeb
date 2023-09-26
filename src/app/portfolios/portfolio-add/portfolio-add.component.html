@@ -56,12 +56,22 @@
 
             <div class="p-field p-2">
               <label for="IsPreviousAssessment">Is this assessment an update of a previous assessment? *</label>
-              <p-dropdown appendTo="body" name="IsPreviousAssessment" #IsPreviousAssessment="ngModel"
-                placeholder="Yes or No" [(ngModel)]="portfolio.isPreviousAssessment" ngModel [options]="optionList"
+              <p-dropdown appendTo="body" name="IsPreviousAssessment" #IsPreviousAssessment="ngModel" (ngModelChange)="onChangePreviousAssessment($event)"
+                placeholder="Yes or No" [(ngModel)]="portfolio.isPreviousAssessment" ngModel [options]="optionList" 
                 optionLabel="name" optionValue="name" [required]="true"></p-dropdown>
               <p class="info-message text-danger"
                 *ngIf="!IsPreviousAssessment.value && (fData.submitted || IsPreviousAssessment.touched)">This is a
                 mandatory field</p>
+            </div>
+
+            <div *ngIf="addLink">
+              <div class="p-field p-2">
+                <label for="link">Links to any previous assessments</label>
+                <input pInputText type="text" #link="ngModel" name="link" [(ngModel)]="portfolio.link"
+                  placeholder="Links to any previous assessments" required />
+               <!--  <p class="info-message text-danger" *ngIf="!link.value && (fData.submitted || link.touched)">This is a
+                  mandatory field</p> -->
+              </div>
             </div>
 
             <div class="p-field p-2">
@@ -80,7 +90,7 @@
                 is a mandatory field</p>
             </div>
 
-            <div class="p-field p-2">
+            <!-- <div class="p-field p-2">
               <label for="opportunities">Opportunities for stakeholders to participate in the assessment *</label>
               <input pInputText type="text" #opportunities="ngModel" name="opportunities"
                 [(ngModel)]="portfolio.opportunities"
@@ -95,8 +105,28 @@
                 placeholder="Principles on which the assessment is based" required />
               <p class="info-message text-danger" *ngIf="!principles.value && (fData.submitted || principles.touched)">
                 This is a mandatory field</p>
-            </div>
+            </div> -->
 
+            <div class="p-field p-2">
+
+              <label for="date">Date*</label>
+              <div class="p-inputgroup">
+                <span class="p-inputgroup-addon">
+                  <i class="pi pi-calendar"></i>
+                </span>
+                <p-calendar dateFormat="mm-dd-yy" inputId="date" placeholder="Date" [(ngModel)]="portfolio.date"
+                  name="date" #date="ngModel" [required]="true" appendTo="body">
+                </p-calendar>
+  
+              </div>
+              <div class="col-12">
+                <p class="info-message text-danger"
+                  *ngIf="(date.invalid) && (fData.submitted || date.touched)">
+                  This is a mandatory field
+                </p>
+              </div>
+  
+            </div>
 
           </div>
         </div>

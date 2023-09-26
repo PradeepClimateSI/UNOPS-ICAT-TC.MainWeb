@@ -20,6 +20,7 @@ export class PortfolioAddComponent implements OnInit {
 
   portfolio : Portfolio = new Portfolio();
   tool : string;
+  addLink: boolean = false;
 
   optionList = [
     { name: 'Yes' },
@@ -38,8 +39,8 @@ export class PortfolioAddComponent implements OnInit {
   lastId : any ;
 
   ngOnInit(): void {
-    this.tool = 'Carbon Market Tool';
-
+    this.tool = 'Portfolio Tool';
+    this.addLink=false;
    /*  this.methassess.assessmentDetails().subscribe(async (res: any) => {
        console.log("assessmentData : ", res)
       }); */
@@ -156,6 +157,17 @@ export class PortfolioAddComponent implements OnInit {
 
 
     console.log("aaaa", this.selectedValues)
+  }
+
+  onChangePreviousAssessment(option:any){
+
+    console.log("optionnn", option)
+    if(option === "Yes"){
+      this.addLink = true;
+    }
+    if(option === "No"){
+      this.addLink = false;
+    }
   }
 
 

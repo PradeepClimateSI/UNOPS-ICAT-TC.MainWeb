@@ -212,8 +212,8 @@ export class PortfolioResultComponent implements OnInit {
           { title: 'Is this assessment an update of a previous assessment?', data: res[0].IsPreviousAssessment },
           { title: 'Objective(s) of the assessment', data: this.portfolio.objectives },
           { title: 'Intended audience(s) of the assessment', data: this.portfolio.audience },
-          { title: 'Opportunities for stakeholders to participate in the assessment', data: this.portfolio.opportunities },
-          { title: 'Principles on which the assessment is based', data: this.portfolio.principles },
+/*           { title: 'Opportunities for stakeholders to participate in the assessment', data: this.portfolio.opportunities },
+          { title: 'Principles on which the assessment is based', data: this.portfolio.principles }, */
           { title: 'Number of Assessments', data: await this.noOfAssessments }
         ])
       });

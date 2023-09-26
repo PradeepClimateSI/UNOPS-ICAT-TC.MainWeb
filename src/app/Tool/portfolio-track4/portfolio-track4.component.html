@@ -6,10 +6,10 @@
     <form #fData="ngForm" (ngSubmit)="save(fData)">
       <div class="card" style="min-height: 600px;">
         <div class="p-grid p-fluid col-md-6 col-sm-12">
-  <!--         <div class="row p-2">
+          <!--         <div class="row p-2">
             <div class="col-12 col-md-8"> -->
 
-              <!--  <div class="p-field p-2">
+          <!--  <div class="p-field p-2">
               <label for="assessment_method">Assessment Method *</label>
               <select class="form-control select-with-arrow"  (change)="onChangeTrack($event)" [(ngModel)]="assessment.assessment_method"
                 name="assessment_method" id="exampleFormControlSelect1"  #assessmentMethod="ngModel">
@@ -23,7 +23,7 @@
             </div> -->
 
 
-              <!-- <div class="p-field p-2">
+          <!-- <div class="p-field p-2">
                 <label for="assessment_method">Assessment Method *</label>
                 <p-dropdown appendTo="body" name="assessment_method" #assessmentMethod="ngModel"
                   placeholder="Select Assessment Method" [(ngModel)]="assessment.assessment_method" ngModel
@@ -36,31 +36,32 @@
  -->
 
 
-              <div class="p-field p-2">
-                <label for="policy">Select Intervetion *</label>
-                <p-dropdown appendTo="body" name="policy" #policy="ngModel" placeholder="Select Intervetion" [disabled]="isSavedAssessment"
-                  [(ngModel)]="assessment.climateAction" appendTo="body" [options]="policies" optionLabel="policyName"
-                  [required]="true"></p-dropdown>
-                <p class="info-message text-danger" *ngIf="
+          <div class="p-field p-2">
+            <label for="policy">Select Intervetion *</label>
+            <p-dropdown appendTo="body" name="policy" #policy="ngModel" placeholder="Select Intervetion"
+              [disabled]="isSavedAssessment" [(ngModel)]="assessment.climateAction" appendTo="body" [options]="policies"
+              optionLabel="policyName" [required]="true"></p-dropdown>
+            <p class="info-message text-danger" *ngIf="
                                                   !assessment.climateAction &&
                                                   (fData.submitted || policy.touched)
                                                 ">
-                  This is a mandatory field
-                </p>
-              </div>
-              <div class="p-field p-2">
-                <label for="policy">Assessment Type *</label>
-                <p-dropdown appendTo="body" name="type" #type="ngModel" placeholder="Select Assessment Type"
-                  [(ngModel)]="assessment.assessmentType" [options]="assessment_types" optionLabel="name" [disabled]="isSavedAssessment"
-                  optionValue="name" [required]="true" (onChange)="selectAssessmentType($event)"></p-dropdown>
-                <p class="info-message text-danger" *ngIf="
+              This is a mandatory field
+            </p>
+          </div>
+          <div class="p-field p-2">
+            <label for="policy">Assessment Type *</label>
+            <p-dropdown appendTo="body" name="type" #type="ngModel" placeholder="Select Assessment Type"
+              [(ngModel)]="assessment.assessmentType" [options]="assessment_types" optionLabel="name"
+              [disabled]="isSavedAssessment" optionValue="name" [required]="true"
+              (onChange)="selectAssessmentType($event)"></p-dropdown>
+            <p class="info-message text-danger" *ngIf="
                               !assessment.assessmentType &&
                               (fData.submitted || type.touched)
                             ">
-                  This is a mandatory field
-                </p>
-              </div>
-              <!--  <div class="p-field p-2">
+              This is a mandatory field
+            </p>
+          </div>
+          <!--  <div class="p-field p-2">
               <label for="Level of implementation">Level of implementation *</label>
               <p-dropdown appendTo="body" name="investorAssessment.level_of_implemetation" #type="ngModel"
                 placeholder="Select Level of implementation" [(ngModel)]="investorAssessment.level_of_implemetation"
@@ -72,34 +73,34 @@
                 This is a mandatory field
               </p>
             </div> -->
-              <div class="p-field p-2">
-                <label for="Level of implementation">Geographical Areas Covered *</label>
-                <p-dropdown appendTo="body" name="investorAssessment.geographical_areas_covered" #type="ngModel"
-                  placeholder="Select Geographical Areas Covered" [disabled]="isSavedAssessment"
-                  [(ngModel)]="investorAssessment.geographical_areas_covered" [options]="levelOfImplementation"
-                  optionLabel="name" optionValue="name" [required]="true"></p-dropdown>
-                <p class="info-message text-danger" *ngIf="
+          <div class="p-field p-2">
+            <label for="Level of implementation">Geographical Areas Covered *</label>
+            <p-dropdown appendTo="body" name="investorAssessment.geographical_areas_covered" #type="ngModel"
+              placeholder="Select Geographical Areas Covered" [disabled]="isSavedAssessment"
+              [(ngModel)]="investorAssessment.geographical_areas_covered" [options]="levelOfImplementation"
+              optionLabel="name" optionValue="name" [required]="true"></p-dropdown>
+            <p class="info-message text-danger" *ngIf="
                               !investorAssessment.geographical_areas_covered &&
                               (fData.submitted || type.touched)
                             ">
-                  This is a mandatory field
-                </p>
-              </div>
-              <div class="p-field p-2">
-                <label for="Sectors Covered">Sectors Covered *</label>
+              This is a mandatory field
+            </p>
+          </div>
+          <div class="p-field p-2">
+            <label for="Sectors Covered">Sectors Covered *</label>
 
-                <p-multiSelect appendTo="body" name="sectors" #type="ngModel" placeholder="Select Sectors Covered"
-                  [(ngModel)]="sectorArray" [options]="sectorList" (ngModelChange)="onItemSelectSectors($event)" [disabled]="isSavedAssessment"
-                  optionLabel="name" [required]="true"></p-multiSelect>
-                <p class="info-message text-danger" *ngIf="
+            <p-multiSelect appendTo="body" name="sectors" #type="ngModel" placeholder="Select Sectors Covered"
+              [(ngModel)]="sectorArray" [options]="sectorList" (ngModelChange)="onItemSelectSectors($event)"
+              [disabled]="isSavedAssessment" optionLabel="name" [required]="true"></p-multiSelect>
+            <p class="info-message text-danger" *ngIf="
                               sectorArray.length===0 &&
                               (fData.submitted || type.touched)
                             ">
-                  This is a mandatory field
-                </p>
-              </div>
+              This is a mandatory field
+            </p>
+          </div>
 
-              <!--   <div class="p-field p-2">
+          <!--   <div class="p-field p-2">
               <label for="Sectors Covered">Impacts Covered *</label>
               <p-multiSelect appendTo="body" name="impact" #type="ngModel" placeholder="Select Impact Covered" [(ngModel)]="impactArray"
                 [options]="impactCovered" (ngModelChange)="onItemSelectImpacts($event)" optionLabel="name"
@@ -112,12 +113,14 @@
               </p>
             </div> -->
 
-            <div class="p-field p-2">
-                  <label for="opportunities">Opportunities for stakeholders to participate in the assessment *</label>
-                  <input pInputText type="text" #opportunities="ngModel" name="opportunities" ngModel [disabled]="isSavedAssessment"
-                  placeholder="opportunities" [(ngModel)]="assessment.opportunities" required />
-                  <p class="info-message text-danger" *ngIf="!opportunities.value && (fData.submitted || opportunities.touched)">This is a mandatory field</p>
-            </div>
+          <div class="p-field p-2">
+            <label for="opportunities">Opportunities for stakeholders to participate in the assessment *</label>
+            <input pInputText type="text" #opportunities="ngModel" name="opportunities" ngModel
+              [disabled]="isSavedAssessment" placeholder="opportunities" [(ngModel)]="assessment.opportunities"
+              required />
+            <p class="info-message text-danger"
+              *ngIf="!opportunities.value && (fData.submitted || opportunities.touched)">This is a mandatory field</p>
+          </div>
 
             <div class="p-field p-2">
                   <label for="principles">Principles on which the assessment is based *</label>
@@ -127,7 +130,7 @@
             </div>
 
 
-              <!-- <div class="p-field p-2">
+          <!-- <div class="p-field p-2">
                 <label for="assessment_approach">Assessment Approach *</label>
                 <p-dropdown appendTo="body" name="assessment_approach" #assessment_approach="ngModel"
                   placeholder="Select Assessment Approach" [(ngModel)]="assessment.assessment_approach" ngModel
@@ -139,32 +142,32 @@
               </div> -->
 
 
-              <div class="p-field p-2">
+          <div class="p-field p-2">
 
-                <label for="date1">Assessment Period*</label>
-                <div class="p-inputgroup">
-                  <span class="p-inputgroup-addon">
-                    <i class="pi pi-calendar"></i>
-                  </span>
-                  <p-calendar dateFormat="mm-dd-yy" inputId="date1" placeholder="From" [(ngModel)]="assessment.from"
-                    name="date1" #date1="ngModel" [required]="true" appendTo="body" [disabled]="isSavedAssessment">
-                  </p-calendar>
-                  <span class="p-inputgroup-addon">to</span>
-                  <p-calendar dateFormat="mm-dd-yy" inputId="date2" placeholder="To" [(ngModel)]="assessment.to"
-                    name="date2" #date2="ngModel" [required]="true" appendTo="body"
-                    [disabled]="isSavedAssessment"></p-calendar>
+            <label for="date1">Assessment Period*</label>
+            <div class="p-inputgroup">
+              <span class="p-inputgroup-addon">
+                <i class="pi pi-calendar"></i>
+              </span>
+              <p-calendar dateFormat="mm-dd-yy" inputId="date1" placeholder="From" [(ngModel)]="assessment.from"
+                name="date1" #date1="ngModel" [required]="true" appendTo="body" [disabled]="isSavedAssessment">
+              </p-calendar>
+              <span class="p-inputgroup-addon">to</span>
+              <p-calendar dateFormat="mm-dd-yy" inputId="date2" placeholder="To" [(ngModel)]="assessment.to"
+                name="date2" #date2="ngModel" [required]="true" appendTo="body"
+                [disabled]="isSavedAssessment"></p-calendar>
 
-                </div>
-                <div class="col-12">
-                  <p class="info-message text-danger"
-                    *ngIf="(date1.invalid || date2.invalid) && (fData.submitted || date1.touched || date2.touched)">
-                    This is a mandatory field
-                  </p>
-                </div>
+            </div>
+            <div class="col-12">
+              <p class="info-message text-danger"
+                *ngIf="(date1.invalid || date2.invalid) && (fData.submitted || date1.touched || date2.touched)">
+                This is a mandatory field
+              </p>
+            </div>
 
-              </div>
+          </div>
 
-           <!--  </div>
+          <!--  </div>
           </div> -->
         </div>
         <div class="row justify-content-end" *ngIf="!isSavedAssessment">
@@ -223,7 +226,7 @@
 
 
 
-                             <!--  <div class="row p-2">
+                              <!--  <div class="row p-2">
 
                                 <div class="col-12 col-lg-6">
                                   <div class="p-field">
@@ -250,24 +253,28 @@
                                 <div class="col-12 col-lg-6">
                                   <div class="p-field">
                                     <label for="Description">Relevance</label>
-                                    <p-dropdown appendTo="body" name="data.charData.relavance" #type="ngModel"
-                                      placeholder="Select Relevance" [(ngModel)]="data.relavance" [options]="relevance"
-                                      optionLabel="name" optionValue="value" [required]="true"></p-dropdown>
+                                    <p-dropdown appendTo="body" name="data.charData.relavance" #rel="ngModel" placeholder="Select Relevance"
+                                      [(ngModel)]="data.relavance" [options]="relevance" optionLabel="name" optionValue="value"
+                                      [required]="true"></p-dropdown>
+                                    <p class="info-message text-danger" *ngIf="data.relavance ==null  && (fData1.submitted || rel.touched) ">
+                                      This is a mandatory field </p>
+                                      <!-- <p>Debug: data.relavance = {{ data.relavance }}</p>
+                                      <p>Touch = {{ rel.touched }}</p> -->
                                   </div>
                                 </div>
 
-                                <div class="col-12 col-lg-6">
+                                <!--  <div class="col-12 col-lg-6">
                                   <div class="p-field">
                                     <label for="justification">Justification</label>
                                     <input type="text" pInputText [(ngModel)]="data.justification"
                                       placeholder="Enter Justifiaction" name="justification" />
 
                                   </div>
-                                </div>
+                                </div> -->
                               </div>
 
 
-                            <!--   <div class="row p-2">
+                              <!--   <div class="row p-2">
                                 <div class="row" *ngFor="let question of data.portfolioQuestion_details">
                                     <div class=" ml-25 col-5 mb-20">
 
@@ -288,7 +295,7 @@
 
                             </div> -->
 
-                            <!-- <div class="row p-2">
+                              <!-- <div class="row p-2">
                               <div class="row" *ngFor="let question of data.portfolioQuestion_details">
                                <label for="question">{{question.question.name}} </label>
 
@@ -300,21 +307,21 @@
                               </div>
                           </div> -->
 
-                          <div class="row p-2">
-                            <div class="row" *ngFor="let question of data.portfolioQuestion_details">
-                              <label for="question">{{question.question.name}} </label>
+                              <div class="row p-2">
+                                <div class="row" *ngFor="let question of data.portfolioQuestion_details">
+                                  <label for="question">{{question.question.name}} </label>
 
-                              <div class="tooltip-container">
-                                <div *ngIf="question.question.hint">
-                                  <span class="tooltip-icon">i</span>
-                                  <div class="tooltip-text">{{addNewline(question.question.hint)}}</div>
+                                  <div class="tooltip-container">
+                                    <div *ngIf="question.question.hint">
+                                      <span class="tooltip-icon">i</span>
+                                      <div class="tooltip-text">{{addNewline(question.question.hint)}}</div>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </div>
 
 
-                             <!--  <div class="row p-2">
+                              <!--  <div class="row p-2">
                                 <div class="col-12 col-lg-12">
                                   <div class="p-field">
                                     <label for="indicator">Indicator</label>
@@ -351,10 +358,12 @@
                                 <div class="col-12 col-lg-6">
                                   <div class="p-field">
                                     <label for="Relevance">Likelihood</label>
-                                    <p-dropdown appendTo="body" name="data.charData.likelihood" #type="ngModel"
+                                    <p-dropdown appendTo="body" name="data.charData.likelihood" #likelihood2="ngModel"
                                       placeholder="Select Likelihood" [(ngModel)]="data.likelihood"
                                       [options]="likelihood" optionLabel="id" optionValue="value"
                                       [required]="true"></p-dropdown>
+                                      <p class="info-message text-danger" *ngIf="data.likelihood ==null && (fData1.submitted || likelihood2.touched) ">
+                                        This is a mandatory field </p>
                                   </div>
                                 </div>
 
@@ -371,8 +380,8 @@
 
                               <!-- lllllllllllllllllllllllllllll -->
                               <div class="row p-2">
-                                    <label for="question">Supporting Documentation</label>
-                            </div>
+                                <label for="question">Supporting Documentation</label>
+                              </div>
 
                               <div class="row p-2 align-items-center">
                                 <div class="col-2 d-flex align-items-center">
@@ -395,7 +404,7 @@
 
                               <!-- lllllllllllllllllllllllllllll -->
 
-                             <!--  <div class="row p-2">
+                              <!--  <div class="row p-2">
                                 <div class="col-12 col-lg-6">
                                   <div class="p-field">
                                     <label for="Relevance">Relevance Weight (%)</label>
@@ -470,7 +479,7 @@
                       <div class="col-4 ">
                         <p-multiSelect appendTo="body" name="sdgs" placeholder="Select SDGs" [(ngModel)]="selectedSDGs"
                           [options]="sdgList" (ngModelChange)="onItemSelectSDGs($event)" optionLabel="name"
-                          [required]="true"></p-multiSelect>
+                          ></p-multiSelect>
                       </div>
 
                       <div class="col-5 "></div>
@@ -525,46 +534,56 @@
 
                                   <div class="row p-2">
                                     <div class="row" *ngFor="let question of data.portfolioQuestion_details">
-                                     <label for="question">{{question.question.name}} </label>
+                                      <label for="question">{{question.question.name}} </label>
 
-                                        <div class="tooltip-container">
-                                          <div *ngIf="question.question.hint">
-                                           <span class="tooltip-icon">i</span> </div>
-                                          <div class="tooltip-text">{{addNewline(question.question.hint)}}</div>
+                                      <div class="tooltip-container">
+                                        <div *ngIf="question.question.hint">
+                                          <span class="tooltip-icon">i</span>
+                                        </div>
+                                        <div class="tooltip-text">{{addNewline(question.question.hint)}}</div>
                                       </div>
                                     </div>
-                                </div>
+                                  </div>
 
-                                <!-- Newwwwwww -->
-                                <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'International/global level'">
-                                  <p>(Major) Is the emissions reduction > 0.1% of global emissions?</p>
-                                  <p>(Moderate) Is the emissions reduction > 0.05% of global emissions?</p>
-                                  <p>(Minor) Is the emissions reduction > 0.01% of global emissions?</p>
-                                  <p>(None) Is the emissions reduction < 0.01% of global emissions?</p>
-                                  <p>(Negative) is there an emissions increase?</p>
-                                </div>
+                                  <!-- Newwwwwww -->
+                                  <div class="row p-2"
+                                    *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'International/global level'">
+                                    <p>(Major) Is the emissions reduction > 0.1% of global emissions?</p>
+                                    <p>(Moderate) Is the emissions reduction > 0.05% of global emissions?</p>
+                                    <p>(Minor) Is the emissions reduction > 0.01% of global emissions?</p>
+                                    <p>(None) Is the emissions reduction < 0.01% of global emissions?</p>
+                                        <p>(Negative) is there an emissions increase?</p>
+                                  </div>
 
-                                <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'National/Sectorial level'">
-                                  <p>(Major) Is the emissions reduction > 1% of national/sectorial emissions?</p>
-                                  <p>(Moderate) Is the emissions reduction > 0.5-1% of national/sectorial emissions?</p>
-                                  <p>(Minor) Is the emissions reduction > 0.1-0.5% of national/sectorial emissions?</p>
-                                  <p>(None) Is the emissions reduction < 0.1% of national/sectorial emissions?</p>
-                                  <p>(Negative) is there an emissions increase?</p>
-                                </div>
+                                  <div class="row p-2"
+                                    *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'National/Sectorial level'">
+                                    <p>(Major) Is the emissions reduction > 1% of national/sectorial emissions?</p>
+                                    <p>(Moderate) Is the emissions reduction > 0.5-1% of national/sectorial emissions?
+                                    </p>
+                                    <p>(Minor) Is the emissions reduction > 0.1-0.5% of national/sectorial emissions?
+                                    </p>
+                                    <p>(None) Is the emissions reduction < 0.1% of national/sectorial emissions?</p>
+                                        <p>(Negative) is there an emissions increase?</p>
+                                  </div>
 
-                                <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level'">
-                                  <p>(Major) Is the emissions reduction > 5% of subnational/regional/municipal emissions?</p>
-                                  <p>(Moderate) Is the emissions reduction > 1-5% of subnational/regional/municipal emissions?</p>
-                                  <p>(Minor) Is the emissions reduction > 0.5-1% of subnational/regional/municipal emissions?</p>
-                                  <p>(None) Is the emissions reduction < 0.5% of subnational/regional/municipal emissions?</p>
-                                  <p>(Negative) is there an emissions increase?</p>
-                                </div>
-                                <!-- Newwwwwww - Endddd -->
+                                  <div class="row p-2"
+                                    *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level'">
+                                    <p>(Major) Is the emissions reduction > 5% of subnational/regional/municipal
+                                      emissions?</p>
+                                    <p>(Moderate) Is the emissions reduction > 1-5% of subnational/regional/municipal
+                                      emissions?</p>
+                                    <p>(Minor) Is the emissions reduction > 0.5-1% of subnational/regional/municipal
+                                      emissions?</p>
+                                    <p>(None) Is the emissions reduction < 0.5% of subnational/regional/municipal
+                                        emissions?</p>
+                                        <p>(Negative) is there an emissions increase?</p>
+                                  </div>
+                                  <!-- Newwwwwww - Endddd -->
 
 
                                   <div class="row p-2">
 
-                                   <!--  <div class="col-12 col-lg-6">
+                                    <!--  <div class="col-12 col-lg-6">
                                       <div class="p-field">
                                         <label for="Relevance">Score</label>
                                         <p-inputNumber inputId="integeronly" [(ngModel)]="data.score"
@@ -576,17 +595,21 @@
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
                                         <label for="score">Score</label>
-                                        <div *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' ||  category.CategoryName ==='Adaptation Scale of the Outcome' ">
-                                        <p-dropdown appendTo="body" name="score" #type="ngModel"
-                                          placeholder="Select Score" [(ngModel)]="data.score"
-                                          [options]="outcomeScaleScore" optionLabel="id" optionValue="value"
-                                          [required]="true"></p-dropdown></div>
+                                        <div
+                                          *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' ||  category.CategoryName ==='Adaptation Scale of the Outcome' ">
+                                          <p-dropdown appendTo="body" name="score" #type="ngModel"
+                                            placeholder="Select Score" [(ngModel)]="data.score"
+                                            [options]="outcomeScaleScore" optionLabel="id" optionValue="value"
+                                            ></p-dropdown>
+                                        </div>
 
-                                          <div *ngIf=" category.CategoryName ==='GHG Time frame over which the outcome is sustained' ||  category.CategoryName ==='Adaptation Time frame over which the outcome is sustained' ">
-                                            <p-dropdown appendTo="body" name="score" #type="ngModel"
-                                              placeholder="Select Score" [(ngModel)]="data.score"
-                                              [options]="outcomeSustainedScore" optionLabel="id" optionValue="value"
-                                              [required]="true"></p-dropdown></div>
+                                        <div
+                                          *ngIf=" category.CategoryName ==='GHG Time frame over which the outcome is sustained' ||  category.CategoryName ==='Adaptation Time frame over which the outcome is sustained' ">
+                                          <p-dropdown appendTo="body" name="score" #type="ngModel"
+                                            placeholder="Select Score" [(ngModel)]="data.score"
+                                            [options]="outcomeSustainedScore" optionLabel="id" optionValue="value"
+                                           ></p-dropdown>
+                                        </div>
                                       </div>
                                     </div>
 
@@ -602,46 +625,48 @@
 
 
                                   <!-- lllllllllllllllllllllllllllll -->
-                              <div class="row p-2 align-items-center">
-                                <div class="col-2 d-flex align-items-center">
-                                  <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload" name="files"
-                                    [url]="uploadUrl" (onUpload)="onUpload($event,data)" [multiple]="true"
-                                    accept="{{acceptedFiles}}" [maxFileSize]="5000000" [auto]="true">
-                                  </p-fileUpload>
-                                </div>
+                                  <div class="row p-2 align-items-center">
+                                    <div class="col-2 d-flex align-items-center">
+                                      <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload"
+                                        name="files" [url]="uploadUrl" (onUpload)="onUpload($event,data)"
+                                        [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="5000000"
+                                        [auto]="true">
+                                      </p-fileUpload>
+                                    </div>
 
-                                <div class="col-2 d-flex align-items-center" *ngIf="data.uploadedDocumentPath">
-                                  <p>{{data.uploadedDocumentPath}}</p>
-                                </div>
+                                    <div class="col-2 d-flex align-items-center" *ngIf="data.uploadedDocumentPath">
+                                      <p>{{data.uploadedDocumentPath}}</p>
+                                    </div>
 
-                                <div class="col-2 d-flex align-items-center" *ngIf="data.uploadedDocumentPath">
-                                  <a target="_blank" [href]="fileServerURL+'/'+data.uploadedDocumentPath"><i
-                                      class="pi pi-download download"></i></a>
-                                </div>
-                              </div>
-
-
-                              <!-- lllllllllllllllllllllllllllll -->
-
-
-                            <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level'">
-                              <div class="col-12 col-lg-6">
-                                <div class="p-field">
-                                  <label for="expected_ghg_mitigation">Expected GHG mitgation (Mt CO2-eq)</label>
-                                  <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation" name="expected_ghg_mitigation"
-                                      placeholder="Expected GHG mitgation Value" inputId="locale-us" mode="decimal"
-                                    locale="en-US" [minFractionDigits]="2">
-                                  </p-inputNumber>
+                                    <div class="col-2 d-flex align-items-center" *ngIf="data.uploadedDocumentPath">
+                                      <a target="_blank" [href]="fileServerURL+'/'+data.uploadedDocumentPath"><i
+                                          class="pi pi-download download"></i></a>
+                                    </div>
                                   </div>
-                                </div>
+
+
+                                  <!-- lllllllllllllllllllllllllllll -->
+
+
+                                  <div class="row p-2"
+                                    *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level'">
+                                    <div class="col-12 col-lg-6">
+                                      <div class="p-field">
+                                        <label for="expected_ghg_mitigation">Expected GHG mitgation (Mt CO2-eq)</label>
+                                        <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation"
+                                          name="expected_ghg_mitigation" placeholder="Expected GHG mitgation Value"
+                                          inputId="locale-us" mode="decimal" locale="en-US" [minFractionDigits]="2">
+                                        </p-inputNumber>
+                                      </div>
+                                    </div>
+
+                                  </div>
+
 
                                 </div>
-
-
                               </div>
                             </div>
                           </div>
-                        </div>
                         </form>
 
                       </div>
@@ -659,8 +684,8 @@
                         </div>
                         <div class="col-4">
                           <p-dropdown appendTo="body" name="type" #type="ngModel" placeholder="Select Answer"
-                          [(ngModel)]="selectedSDGs[i].answer" [options]="sdg_answers" optionLabel="name"
-                          optionValue="name" [required]="true" ></p-dropdown>
+                            [(ngModel)]="selectedSDGs[i].answer" [options]="sdg_answers" optionLabel="name"
+                            optionValue="name" ></p-dropdown>
                         </div>
                       </div>
 
@@ -674,7 +699,7 @@
                                   <div class="p-grid p-fluid col-12">
 
 
-                                   <!--  <div class="row p-2">
+                                    <!--  <div class="row p-2">
                                       <div class="col-12 col-lg-12">
                                         <div class="p-field">
                                           <label for="indicator">Indicator</label>
@@ -709,19 +734,20 @@
 
                                     <div class="row p-2">
                                       <div class="row" *ngFor="let question of data.portfolioQuestion_details">
-                                       <label for="question">{{question.question.name}} </label>
+                                        <label for="question">{{question.question.name}} </label>
 
-                                          <div class="tooltip-container">
-                                            <div *ngIf="question.question.hint">
-                                             <span class="tooltip-icon">i</span> </div>
-                                            <div class="tooltip-text">{{addNewline(question.question.hint)}}</div>
+                                        <div class="tooltip-container">
+                                          <div *ngIf="question.question.hint">
+                                            <span class="tooltip-icon">i</span>
+                                          </div>
+                                          <div class="tooltip-text">{{addNewline(question.question.hint)}}</div>
                                         </div>
                                       </div>
-                                  </div>
+                                    </div>
 
                                     <div class="row p-2">
 
-                                     <!--  <div class="col-12 col-lg-6">
+                                      <!--  <div class="col-12 col-lg-6">
                                         <div class="p-field">
                                           <label for="Relevance">Score</label>
                                           <p-inputNumber (ngModelChange)="assignSDG(selectedSDGs[i], data)"
@@ -735,9 +761,10 @@
                                         <div class="p-field">
                                           <label for="score">Score</label>
                                           <p-dropdown appendTo="body" name="score" #type="ngModel"
-                                            placeholder="Select Score" [(ngModel)]="data.score" (ngModelChange)="assignSDG(selectedSDGs[i], data)"
+                                            placeholder="Select Score" [(ngModel)]="data.score"
+                                            (ngModelChange)="assignSDG(selectedSDGs[i], data)"
                                             [options]="outcomeScaleScore" optionLabel="id" optionValue="value"
-                                            [required]="true"></p-dropdown>
+                                            ></p-dropdown>
                                         </div>
                                       </div>
 
@@ -801,7 +828,7 @@
                                 <div class=" mt-2">
                                   <div class="p-grid p-fluid col-12">
 
-                                   <!--  <div class="row p-2">
+                                    <!--  <div class="row p-2">
                                       <div class="col-12 col-lg-12">
                                         <div class="p-field">
                                           <label for="indicator">Indicator</label>
@@ -812,7 +839,7 @@
                                       </div>
                                     </div> -->
 
-                                   <!--  <div class="row p-2">
+                                    <!--  <div class="row p-2">
                                       <div class="col-12 col-lg-6">
                                         <div class="p-field">
                                           <label for="indicatorStartingVal">Indicator Starting Situation Value</label>
@@ -836,19 +863,20 @@
 
                                     <div class="row p-2">
                                       <div class="row" *ngFor="let question of data.portfolioQuestion_details">
-                                       <label for="question">{{question.question.name}} </label>
+                                        <label for="question">{{question.question.name}} </label>
 
-                                          <div class="tooltip-container">
-                                            <div *ngIf="question.question.hint">
-                                             <span class="tooltip-icon">i</span> </div>
-                                            <div class="tooltip-text">{{addNewline(question.question.hint)}}</div>
+                                        <div class="tooltip-container">
+                                          <div *ngIf="question.question.hint">
+                                            <span class="tooltip-icon">i</span>
+                                          </div>
+                                          <div class="tooltip-text">{{addNewline(question.question.hint)}}</div>
                                         </div>
                                       </div>
-                                  </div>
+                                    </div>
 
                                     <div class="row p-2">
 
-                                     <!--  <div class="col-12 col-lg-6">
+                                      <!--  <div class="col-12 col-lg-6">
                                         <div class="p-field">
                                           <label for="Relevance">Score</label>
                                           <p-inputNumber (ngModelChange)="assignSDG(selectedSDGs[i], data)"
@@ -862,9 +890,10 @@
                                         <div class="p-field">
                                           <label for="score">Score</label>
                                           <p-dropdown appendTo="body" name="score" #type="ngModel"
-                                            placeholder="Select Score" [(ngModel)]="data.score" (ngModelChange)="assignSDG(selectedSDGs[i], data)"
+                                            placeholder="Select Score" [(ngModel)]="data.score"
+                                            (ngModelChange)="assignSDG(selectedSDGs[i], data)"
                                             [options]="outcomeSustainedScore" optionLabel="id" optionValue="value"
-                                            [required]="true"></p-dropdown>
+                                            ></p-dropdown>
                                         </div>
                                       </div>
 
@@ -943,7 +972,7 @@
               </div>
               <div class="d-flex flex-row-reverse mt-20 ">
                 <button class="btn btn-primary text-uppercase" type="submit"
-                  [disabled]="failedLikelihoodArray.length!=0 ||failedRelevanceArray.length!=0">
+                  [disabled]="failedLikelihoodArray.length!=0 ||failedRelevanceArray.length!=0 || !fData1.valid">
                   Calculate & Check Results
                 </button>
               </div>
@@ -984,200 +1013,70 @@
 
 
     <!-- <div > -->
-    <div *ngIf="load && selectedApproach === 'Indirect'">
+      <div *ngIf="load && selectedApproach === 'Indirect'">
 
-      <div class="card">
-        <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)">
-          <p-tabView (onChange)="onMainTabChange($event)" [(activeIndex)]="activeIndexMain ">
-
-            <p-tabPanel header="Process of Change">
-              <!-- <div *ngFor="let characteristic of meth1Process"> -->
-
-              <p-tabView #tabView (onChange)="onCategoryTabChange($event, tabView)" [(activeIndex)]="activeIndex ">
-
-                <p-tabPanel [header]="category.CategoryName" *ngFor="let category of processData">
-
-
-                  <div class="characteristic-Topic" *ngFor="let data of category.data; index as i">
-                    <h6>{{i+1}}.{{data.characteristics.name}}</h6>
-                    <div>
-
-                      <div class="container pl-20 pr-20">
-                        <div id="content" #content>
-                          <div class=" mt-2">
-                            <div class="p-grid p-fluid col-12">
-
-                              <div class="row p-2">
-                                <div class="col-12 col-lg-6">
-                                  <div class="p-field">
-                                    <label for="Description">Description</label>
-                                    <textarea name="{{data.characteristics.name}}_description" placeholder="Description"
-                                      rows="5" cols="60" pInputTextarea [(ngModel)]="data.description"
-                                      autoResize="autoResize" class="p-inputtext"></textarea>
-                                  </div>
-                                </div>
-
-                                <div class="col-12 col-lg-6">
-                                  <div class="p-field">
-                                    <label for="StartingSituation">Starting
-                                      Situation</label>
-                                    <textarea name="Starting Situation" placeholder="Starting Situation" rows="5"
-                                      cols="60" pInputTextarea [(ngModel)]="data.starting_situation"
-                                      autoResize="autoResize" class="p-inputtext"></textarea>
-
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div class="row p-2">
-                                <div class="col-12 col-lg-6">
-                                  <div class="p-field">
-                                    <label for="relavance">Relevance</label>
-                                    <p-dropdown appendTo="body" name="relavance" placeholder="Select Institution"
-                                      [(ngModel)]="data.relavance" [options]="instiTutionList" optionLabel="name"
-                                      optionValue="id" [required]="true"></p-dropdown>
-                                  </div>
-                                </div>
-
-                                <div class="col-12 col-lg-6">
-                                  <div class="p-field">
-                                    <label for="justification">Justification</label>
-                                    <input type="text" pInputText [(ngModel)]="data.justification"
-                                      placeholder="Enter Justifiaction" name="justification" />
-
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="row p-2">
-                                <div class="col-12 col-lg-12">
-                                  <div class="p-field">
-                                    <label for="indicator">Indicator</label>
-                                    <input type="text" pInputText [(ngModel)]="data.indicator"
-                                      placeholder="Indicator Name" name="indicator" />
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div class="row p-2">
-                                <div class="col-12 col-lg-6">
-                                  <div class="p-field">
-                                    <label for="indicatorStartingVal">Indicator Starting Situation Value</label>
-                                    <p-dropdown appendTo="body" name="indicatorStartingVal"
-                                      placeholder="Select Institution" [(ngModel)]="data.indicatorStartingVal"
-                                      [options]="instiTutionList" optionLabel="name" optionValue="id"
-                                      [required]="true"></p-dropdown>
-                                  </div>
-                                </div>
-
-                                <div class="col-12 col-lg-6">
-                                  <div class="p-field">
-                                    <label for="indicatorExpectedVal">Indicator Expected Value</label>
-                                    <p-dropdown appendTo="body" name="indicatorExpectedVal"
-                                      placeholder="Select Institution" [(ngModel)]="data.indicatorExpectedVal"
-                                      [options]="instiTutionList" optionLabel="name" optionValue="id"
-                                      [required]="true"></p-dropdown>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div class="row p-2">
-                                <div class="col-12 col-lg-6">
-                                  <div class="p-field">
-                                    <label for="likelihood">Likelihood</label>
-                                    <p-dropdown appendTo="body" name="likelihood" placeholder="Select Institution"
-                                      [(ngModel)]="data.likelihood" [options]="instiTutionList" optionLabel="name"
-                                      optionValue="id" [required]="true"></p-dropdown>
-                                  </div>
-                                </div>
-
-                                <div class="col-12 col-lg-6">
-                                  <div class="p-field">
-                                    <label for="justification">Justification</label>
-                                    <input type="text" pInputText [(ngModel)]="data.likelihood_justification"
-                                      placeholder="Enter Justifiaction" name="data.charData.likelihood_justification" />
-
-                                  </div>
-                                </div>
-                              </div>
-
-                              <!-- <div class="row p-2">
-                                <div class="col-12 col-lg-6">
-                                  <div class="p-field">
-                                    <label for="Relevance">Relevance Weight (%)</label>
-                                    <p-inputNumber inputId="locale-us" mode="decimal" locale="en-US"
-                                      [minFractionDigits]="2" [min]="0" [max]="100" [(ngModel)]="data.relevance_weight"
-                                      placeholder="Enter Relevance Weight" name="data.charData.relevance_weight"
-                                      (ngModelChange)="onRelevanceWeightChange(category.CategoryName,data.characteristics.name, $event)">
-                                    </p-inputNumber>
-                                    <div
-                                      *ngIf="!chaCategoryTotalEqualsTo1[category.CategoryName] && initialRelevance !==0"
-                                      style="color: red;">
-                                      Relevance weights for characteristics of {{category.CategoryName}} category should
-                                      sum up to 100%.
-                                      <br>
-                                    </div>
-                                  </div>
-                                </div>
-
-
-
-                                <div class="col-12 col-lg-4">
-                                  <div class="p-field">
-                                    <label for="Relevance">Likelihood Weight (%)</label>
-                                    <p-inputNumber inputId="locale-us" mode="decimal" [min]="0" [max]="100"
-                                      locale="en-US" [minFractionDigits]="2" [(ngModel)]="data.likelihood_weight"
-                                      placeholder="Enter Likelihood Weight" name="data.charData.likelihood_weight"
-                                      (ngModelChange)="onLikelihoodWeightChange(category.CategoryName,data.characteristics.name, $event)">
-                                    </p-inputNumber>
-                                    <div
-                                      *ngIf="!chaCategoryLikelihoodTotalEqualsTo1[category.CategoryName] && initialLikelihood !==0 "
-                                      style="color: red;">
-                                      Likelihood weights for characteristics of {{category.CategoryName}} category
-                                      should sum up to 100%.
-                                      <br>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div> -->
-
-
-                            </div>
-                          </div>
-
-                        </div>
-                      </div>
-
-
-
-                    </div>
-                  </div>
-
-
-
-
-                </p-tabPanel>
-
-
-
-
-
-
-              </p-tabView>
-              <!-- </div> -->
-            </p-tabPanel>
-            <p-tabPanel header="Outcome of Change">
-              <p-tabView #tabView2 (onChange)="onCategoryTabChange($event, tabView2) " [(activeIndex)]="activeIndex2">
-
-                <p-tabPanel [header]="category.CategoryName" *ngFor="let category of outcomeData" >
-
-                  <div class="characteristic-Topic" *ngFor="let data of category.data; index as i">
-                    <h6>{{i+1}}.{{data.characteristics.name}}</h6>
-                    <div>
-                      <form>
+        <div class="card">
+          <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)">
+            <p-tabView (onChange)="onMainTabChange($event)" [(activeIndex)]="activeIndexMain ">
+  
+              <p-tabPanel header="Process of Change">
+                <!-- <div *ngFor="let characteristic of meth1Process"> -->
+  
+                <p-tabView #tabView (onChange)="onCategoryTabChange($event, tabView)" [(activeIndex)]="activeIndex ">
+  
+                  <p-tabPanel [header]="category.CategoryName" *ngFor="let category of processData">
+  
+  
+                    <div class="characteristic-Topic" *ngFor="let data of category.data; index as i">
+                      <h6>{{i+1}}.{{data.characteristics.name}}</h6>
+                      <div>
+  
                         <div class="container pl-20 pr-20">
                           <div id="content" #content>
                             <div class=" mt-2">
                               <div class="p-grid p-fluid col-12">
+  
+                                <div class="row p-2">
+                                  <div class="col-12 col-lg-6">
+                                    <div class="p-field">
+                                      <label for="Description">Description</label>
+                                      <textarea name="{{data.characteristics.name}}_description" placeholder="Description"
+                                        rows="5" cols="60" pInputTextarea [(ngModel)]="data.description"
+                                        autoResize="autoResize" class="p-inputtext"></textarea>
+                                    </div>
+                                  </div>
+  
+                                  <div class="col-12 col-lg-6">
+                                    <div class="p-field">
+                                      <label for="StartingSituation">Starting
+                                        Situation</label>
+                                      <textarea name="Starting Situation" placeholder="Starting Situation" rows="5"
+                                        cols="60" pInputTextarea [(ngModel)]="data.starting_situation"
+                                        autoResize="autoResize" class="p-inputtext"></textarea>
+  
+                                    </div>
+                                  </div>
+                                </div>
+  
+                                <div class="row p-2">
+                                  <div class="col-12 col-lg-6">
+                                    <div class="p-field">
+                                      <label for="relavance">Relevance</label>
+                                      <p-dropdown appendTo="body" name="relavance" placeholder="Select Institution"
+                                        [(ngModel)]="data.relavance" [options]="instiTutionList" optionLabel="name"
+                                        optionValue="id" [required]="true"></p-dropdown>
+                                    </div>
+                                  </div>
+  
+                                  <!--  <div class="col-12 col-lg-6">
+                                    <div class="p-field">
+                                      <label for="justification">Justification</label>
+                                      <input type="text" pInputText [(ngModel)]="data.justification"
+                                        placeholder="Enter Justifiaction" name="justification" />
+  
+                                    </div>
+                                  </div> -->
+                                </div>
                                 <div class="row p-2">
                                   <div class="col-12 col-lg-12">
                                     <div class="p-field">
@@ -1187,7 +1086,7 @@
                                     </div>
                                   </div>
                                 </div>
-
+  
                                 <div class="row p-2">
                                   <div class="col-12 col-lg-6">
                                     <div class="p-field">
@@ -1198,7 +1097,7 @@
                                         [required]="true"></p-dropdown>
                                     </div>
                                   </div>
-
+  
                                   <div class="col-12 col-lg-6">
                                     <div class="p-field">
                                       <label for="indicatorExpectedVal">Indicator Expected Value</label>
@@ -1206,111 +1105,242 @@
                                         placeholder="Select Institution" [(ngModel)]="data.indicatorExpectedVal"
                                         [options]="instiTutionList" optionLabel="name" optionValue="id"
                                         [required]="true"></p-dropdown>
-
                                     </div>
                                   </div>
                                 </div>
-
-
-
+  
                                 <div class="row p-2">
                                   <div class="col-12 col-lg-6">
                                     <div class="p-field">
-                                      <label for="score">Score</label>
-                                      <p-dropdown appendTo="body" name="score" placeholder="Select Institution"
-                                        [(ngModel)]="data.score" [options]="instiTutionList" optionLabel="name"
+                                      <label for="likelihood">Likelihood</label>
+                                      <p-dropdown appendTo="body" name="likelihood" placeholder="Select Institution"
+                                        [(ngModel)]="data.likelihood" [options]="instiTutionList" optionLabel="name"
                                         optionValue="id" [required]="true"></p-dropdown>
                                     </div>
                                   </div>
-
+  
                                   <div class="col-12 col-lg-6">
                                     <div class="p-field">
                                       <label for="justification">Justification</label>
-                                      <input type="text" pInputText [(ngModel)]="data.justification"
-                                        placeholder="Enter Justifiaction" name="justification" />
-
+                                      <input type="text" pInputText [(ngModel)]="data.likelihood_justification"
+                                        placeholder="Enter Justifiaction" name="data.charData.likelihood_justification" />
+  
                                     </div>
                                   </div>
                                 </div>
-
-                            <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level'">
-                              <div class="col-12 col-lg-6">
-                                <div class="p-field">
-                                  <label for="expected_ghg_mitigation">Expected GHG mitgation (Mt CO2-eq)</label>
-                                  <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation" name="expected_ghg_mitigation"
-                                      placeholder="Expected GHG mitgation Value" inputId="locale-us" mode="decimal"
-                                    locale="en-US" [minFractionDigits]="2">
-                                  </p-inputNumber>
+  
+                                <!-- <div class="row p-2">
+                                  <div class="col-12 col-lg-6">
+                                    <div class="p-field">
+                                      <label for="Relevance">Relevance Weight (%)</label>
+                                      <p-inputNumber inputId="locale-us" mode="decimal" locale="en-US"
+                                        [minFractionDigits]="2" [min]="0" [max]="100" [(ngModel)]="data.relevance_weight"
+                                        placeholder="Enter Relevance Weight" name="data.charData.relevance_weight"
+                                        (ngModelChange)="onRelevanceWeightChange(category.CategoryName,data.characteristics.name, $event)">
+                                      </p-inputNumber>
+                                      <div
+                                        *ngIf="!chaCategoryTotalEqualsTo1[category.CategoryName] && initialRelevance !==0"
+                                        style="color: red;">
+                                        Relevance weights for characteristics of {{category.CategoryName}} category should
+                                        sum up to 100%.
+                                        <br>
+                                      </div>
+                                    </div>
                                   </div>
-                                </div>
-
-
+  
+  
+  
+                                  <div class="col-12 col-lg-4">
+                                    <div class="p-field">
+                                      <label for="Relevance">Likelihood Weight (%)</label>
+                                      <p-inputNumber inputId="locale-us" mode="decimal" [min]="0" [max]="100"
+                                        locale="en-US" [minFractionDigits]="2" [(ngModel)]="data.likelihood_weight"
+                                        placeholder="Enter Likelihood Weight" name="data.charData.likelihood_weight"
+                                        (ngModelChange)="onLikelihoodWeightChange(category.CategoryName,data.characteristics.name, $event)">
+                                      </p-inputNumber>
+                                      <div
+                                        *ngIf="!chaCategoryLikelihoodTotalEqualsTo1[category.CategoryName] && initialLikelihood !==0 "
+                                        style="color: red;">
+                                        Likelihood weights for characteristics of {{category.CategoryName}} category
+                                        should sum up to 100%.
+                                        <br>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div> -->
+  
+  
+                              </div>
+                            </div>
+  
+                          </div>
+                        </div>
+  
+  
+  
+                      </div>
+                    </div>
+  
+  
+  
+  
+                  </p-tabPanel>
+  
+  
+  
+  
+  
+  
+                </p-tabView>
+                <!-- </div> -->
+              </p-tabPanel>
+              <p-tabPanel header="Outcome of Change">
+                <p-tabView #tabView2 (onChange)="onCategoryTabChange($event, tabView2) " [(activeIndex)]="activeIndex2">
+  
+                  <p-tabPanel [header]="category.CategoryName" *ngFor="let category of outcomeData">
+  
+                    <div class="characteristic-Topic" *ngFor="let data of category.data; index as i">
+                      <h6>{{i+1}}.{{data.characteristics.name}}</h6>
+                      <div>
+                        <form>
+                          <div class="container pl-20 pr-20">
+                            <div id="content" #content>
+                              <div class=" mt-2">
+                                <div class="p-grid p-fluid col-12">
+                                  <div class="row p-2">
+                                    <div class="col-12 col-lg-12">
+                                      <div class="p-field">
+                                        <label for="indicator">Indicator</label>
+                                        <input type="text" pInputText [(ngModel)]="data.indicator"
+                                          placeholder="Indicator Name" name="indicator" />
+                                      </div>
+                                    </div>
+                                  </div>
+  
+                                  <div class="row p-2">
+                                    <div class="col-12 col-lg-6">
+                                      <div class="p-field">
+                                        <label for="indicatorStartingVal">Indicator Starting Situation Value</label>
+                                        <p-dropdown appendTo="body" name="indicatorStartingVal"
+                                          placeholder="Select Institution" [(ngModel)]="data.indicatorStartingVal"
+                                          [options]="instiTutionList" optionLabel="name" optionValue="id"
+                                          [required]="true"></p-dropdown>
+                                      </div>
+                                    </div>
+  
+                                    <div class="col-12 col-lg-6">
+                                      <div class="p-field">
+                                        <label for="indicatorExpectedVal">Indicator Expected Value</label>
+                                        <p-dropdown appendTo="body" name="indicatorExpectedVal"
+                                          placeholder="Select Institution" [(ngModel)]="data.indicatorExpectedVal"
+                                          [options]="instiTutionList" optionLabel="name" optionValue="id"
+                                          [required]="true"></p-dropdown>
+  
+                                      </div>
+                                    </div>
+                                  </div>
+  
+  
+  
+                                  <div class="row p-2">
+                                    <div class="col-12 col-lg-6">
+                                      <div class="p-field">
+                                        <label for="score">Score</label>
+                                        <p-dropdown appendTo="body" name="score" placeholder="Select Institution"
+                                          [(ngModel)]="data.score" [options]="instiTutionList" optionLabel="name"
+                                          optionValue="id" [required]="true"></p-dropdown>
+                                      </div>
+                                    </div>
+  
+                                    <div class="col-12 col-lg-6">
+                                      <div class="p-field">
+                                        <label for="justification">Justification</label>
+                                        <input type="text" pInputText [(ngModel)]="data.justification"
+                                          placeholder="Enter Justifiaction" name="justification" />
+  
+                                      </div>
+                                    </div>
+                                  </div>
+  
+                                  <div class="row p-2"
+                                    *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level'">
+                                    <div class="col-12 col-lg-6">
+                                      <div class="p-field">
+                                        <label for="expected_ghg_mitigation">Expected GHG mitgation (Mt CO2-eq)</label>
+                                        <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation"
+                                          name="expected_ghg_mitigation" placeholder="Expected GHG mitgation Value"
+                                          inputId="locale-us" mode="decimal" locale="en-US" [minFractionDigits]="2">
+                                        </p-inputNumber>
+                                      </div>
+                                    </div>
+  
+  
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-
-                      </form>
-
+  
+                        </form>
+  
+                      </div>
                     </div>
+  
+  
+  
+                  </p-tabPanel>
+  
+  
+  
+  
+                </p-tabView>
+              </p-tabPanel>
+  
+            </p-tabView>
+  
+            <div *ngIf="activeIndex2===3 && activeIndexMain===1" class="row justify-content-end">
+              <div>
+                <div class=" col-md-10 offset-md-4" style="color:red">
+                  <!-- <div class="col align-self-end" *ngIf="failedLikelihoodArray.length!=0">
+                    Please make sure to set Likelihood weights for
+                    <span *ngFor="let data of failedLikelihoodArray ; let last = last" class="array-item">
+                      {{data.category}}<span *ngIf="!last">, </span>
+                    </span> should sum up to 100%.
+  
                   </div>
-
-
-
-                </p-tabPanel>
-
-
-
-
-              </p-tabView>
-            </p-tabPanel>
-
-          </p-tabView>
-
-          <div *ngIf="activeIndex2===3 && activeIndexMain===1" class="row justify-content-end">
-            <div>
-              <div class=" col-md-10 offset-md-4" style="color:red">
-                <!-- <div class="col align-self-end" *ngIf="failedLikelihoodArray.length!=0">
-                  Please make sure to set Likelihood weights for
-                  <span *ngFor="let data of failedLikelihoodArray ; let last = last" class="array-item">
-                    {{data.category}}<span *ngIf="!last">, </span>
-                  </span> should sum up to 100%.
-
+                  <div class="col align-self-end" *ngIf="failedRelevanceArray.length!=0">
+                    Please make sure to set Relevance weights for <span
+                      *ngFor="let data of failedRelevanceArray ; let last = last" class="array-item">
+                      {{data.category}} <span *ngIf="!last">, </span>
+                    </span> should sum up to 100%.
+  
+  
+                  </div> -->
                 </div>
-                <div class="col align-self-end" *ngIf="failedRelevanceArray.length!=0">
-                  Please make sure to set Relevance weights for <span
-                    *ngFor="let data of failedRelevanceArray ; let last = last" class="array-item">
-                    {{data.category}} <span *ngIf="!last">, </span>
-                  </span> should sum up to 100%.
-
-
-                </div> -->
+                <div class="d-flex flex-row-reverse mt-20 ">
+                  <button class="btn btn-primary text-uppercase" type="submit"
+                    [disabled]="failedLikelihoodArray.length!=0 ||failedRelevanceArray.length!=0">
+                    {{ selectedApproach === 'Indirect' ? 'Send to Data Collection Team' : 'Calculate & Check Results' }}
+                  </button>
+  
+                </div>
               </div>
-              <div class="d-flex flex-row-reverse mt-20 ">
-                <button class="btn btn-primary text-uppercase" type="submit"
-                  [disabled]="failedLikelihoodArray.length!=0 ||failedRelevanceArray.length!=0">
-                  {{ selectedApproach === 'Indirect' ? 'Send to Data Collection Team' : 'Calculate & Check Results' }}
-                </button>
-
-              </div>
+  
             </div>
-
-          </div>
-          <div *ngIf="activeIndex2!==3 || activeIndexMain!==1" class="row justify-content-end">
-            <div>
-
-              <div class="d-flex flex-row-reverse mt-20 ">
-                <div class="btn btn-primary text-uppercase" (click)="next()"
-                  [class.disabled]="(!isLikelihoodDisabled || !isRelavanceDisabled)">
-                  Next
+            <div *ngIf="activeIndex2!==3 || activeIndexMain!==1" class="row justify-content-end">
+              <div>
+  
+                <div class="d-flex flex-row-reverse mt-20 ">
+                  <div class="btn btn-primary text-uppercase" (click)="next()"
+                    [class.disabled]="(!isLikelihoodDisabled || !isRelavanceDisabled)">
+                    Next
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
-    </div>
 
   </div>
 </div>
