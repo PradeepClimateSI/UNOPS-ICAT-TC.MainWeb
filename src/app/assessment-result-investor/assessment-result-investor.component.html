@@ -9,59 +9,70 @@
         <h4 class="mt-4"> {{title2}}</h4>
       </div>
 
-
-      <div class="card" style="min-height: 600px;">
+<!-- 
+      <div class="card" style="min-height: 600px;"> -->
+      <div class="card" *ngIf="loading">
         <div style="display: flex; flex-direction: row;">
-          <div style="flex-basis: 30%;">
-            <!--   <p><strong>Intervention</strong></p> -->
+          <div style="flex-basis: 40%;">
+            <p><strong>Intervention ID</strong></p>
+            <p><strong>Intervention Type</strong></p>
+            <p><strong>Intervention Status</strong></p>
             <p><strong>Assessment Type</strong></p>
             <!--    <p><strong>Assessment Approach</strong></p>
          <p><strong>Assessment Method</strong></p> -->
             <!--  <p><strong>Tool</strong></p> -->
 
-            <div class="mb-12" *ngIf="investerTool">
+            <!-- <div class="mb-12" *ngIf="investerTool">
               <p><strong>Level of Implementation</strong></p>
-            </div>
+            </div> -->
 
             <p><strong>Geographical Area Covered</strong></p>
 
             <p><strong>Sectors Covered</strong></p>
 
-            <div class="mb-12" *ngIf="investerTool">
+            <!-- <div class="mb-12" *ngIf="investerTool">
               <p><strong>Impact Covered</strong></p>
-            </div>
+            </div> -->
 
             <p><strong>Assessment Period</strong></p>
+            <p><strong>Opportunities for stakeholders to participate in the assessment</strong></p>
+            <p><strong>Principles on which the assessment is based</strong></p>
           </div>
           <div style="flex-basis: 50%;">
             <!--    <p>{{policyName}}</p> -->
+            <p>{{(intervention.intervention_id)?(intervention.intervention_id):'-'}}</p>
+            <p>{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</p>
+            <p>{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</p>
             <p>{{assessmentType}}</p>
             <!--   <p>{{assessment_approach}}</p>
          <p>{{assessment_method}}</p> -->
             <!--   <p>{{tool}}</p> -->
-
+<!-- 
             <div class="mb-12" *ngIf="investerTool">
               <p>{{levelofImplemetation}}</p>
-            </div>
+            </div> -->
 
             <p>{{geographicalAreasCovered}}</p>
 
             <p>{{sectorList.join(', ')}}</p>
 
-            <div class="mb-12" *ngIf="investerTool">
+            <!-- <div class="mb-12" *ngIf="investerTool">
               <p>{{impactCoverList.join(', ')}}</p>
-            </div>
+            </div> -->
 
             <p>{{date1 | date:'yyyy-MM-dd'}} to {{date2 | date:'yyyy-MM-dd'}}</p>
+            <p>{{opportunities}}</p>
+            <p>{{principles}}</p>
+            
           </div>
         </div>
-        <br><br>
+        
 
 
 
 
 
-          <h6>Process of Change</h6><br>
+          <!-- <h6>Process of Change</h6><br>
           <p-table [value]="categoryDataArray" [tableStyle]="{ 'width': '50rem' }">
             <ng-template pTemplate="header">
               <tr>
@@ -130,7 +141,7 @@
               </ng-container>
               <br><br>
             </ng-template>
-          </p-table>
+          </p-table> -->
 
 
        <!--  <div *ngIf="load && investerTool">
@@ -201,8 +212,464 @@
           </p-table>
         </div> -->
 
-        <br><br>
+        <!-- <br><br> -->
 
+      </div>
+      <div class="card" *ngIf="loading">
+        <br>
+        <p class="category-topic">Process of Change</p>
+        <p-table [value]="[{}]" styleClass="p-datatable-gridlines" [scrollable]="true" scrollHeight="700px" >
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="table-header-main" colspan="16">Process</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData>
+                <tr>
+                    <td colspan="4" class="table-header-left">Relevance</td>
+                    <td colspan="12"></td>
+                </tr>
+                <tr>
+                  <td colspan="4" class="table-header-left">Intervention Information</td>
+                  <ng-container *ngFor="let cat of processData">
+                    <td  class="table-header"   [attr.colspan]="cat.characteristicData.length">{{cat.category}}</td>
+                  </ng-container>
+                </tr>
+                <tr>
+                  <td class="table-header">ID</td>
+                  <td class="table-header">Intervention Name</td>
+                  <td class="table-header">Intervention Type</td>
+                  <td class="table-header">Status</td>
+                  <ng-container *ngFor="let cat of processData">
+                    <ng-container *ngFor="let data of cat.characteristicData">
+                        <td class="table-header">{{data.characteristic}}</td>
+                    </ng-container>
+                  </ng-container>
+                </tr>
+                <tr >
+                  <td  class="table-data">{{(intervention.intervention_id)?(intervention.intervention_id):'-'}}</td>
+                  <td  class="table-data">{{(intervention.policyName)?(intervention.policyName):'-'}}</td>
+                  <td  class="table-data">{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</td>
+                  <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
+                  <ng-container *ngFor="let cat of processData">
+                      <ng-container *ngFor="let data of cat.characteristicData">
+                          <td class="table-data">{{(data.relevance.name)?data.relevance.name:'-'}}</td>
+                      </ng-container>
+                  </ng-container>
+                </tr>
+                <tr>
+                  <td  class="table-header-left" colspan="4">Likelihood</td>
+                  <td colspan="12"></td>
+                </tr>
+                <tr>
+                  <td  class="table-header-left" colspan="4">Intervention Information</td>
+                  <ng-container *ngFor="let cat of processData">
+                    <td  class="table-header" [attr.colspan]="cat.characteristicData.length">{{cat.category}}</td>
+                  </ng-container>
+                </tr>
+                <tr  class="table-header">
+                  <td class="table-header">ID</td>
+                  <td class="table-header">Intervention Name</td>
+                  <td class="table-header">Intervention Type</td>
+                  <td class="table-header">Status</td>
+                  <ng-container *ngFor="let cat of processData">
+                    <ng-container *ngFor="let data of cat.characteristicData">
+                        <td  class="table-header">{{data.characteristic}}</td>
+                    </ng-container>
+                  </ng-container>
+                </tr>
+                <tr >
+                  <td  class="table-data">{{(intervention.intervention_id)?(intervention.intervention_id):'-'}}</td>
+                  <td  class="table-data">{{(intervention.policyName)?(intervention.policyName):'-'}}</td>
+                  <td  class="table-data">{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</td>
+                  <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
+                  <ng-container *ngFor="let cat of processData">
+                      <ng-container *ngFor="let data of cat.characteristicData">
+                          <td  class="table-data">{{(data.likelihood.name)?data.likelihood.name:'-'}}</td>
+                      </ng-container>
+                  </ng-container>
+                </tr>
+                <tr>
+                  <td  class="table-header-left" colspan="4">Characteristics Weights</td>
+                  <ng-container *ngFor="let cat of processData">
+                      <ng-container *ngFor="let data of cat.characteristicData">
+                          <td  class="table-data" class="table-data">{{(data.char_weight)?data.char_weight:'-'}}%</td>
+                          
+                      </ng-container>
+                  </ng-container>
+                </tr> 
+                <tr>
+                  <td  class="table-header-left" colspan="4">Recalculated Characteristics Weights</td>
+                  <ng-container *ngFor="let cat of processData">
+                      <ng-container *ngFor="let data of cat.characteristicData">
+                          <td  class="table-data">{{(data.recalculated_char_weight)?data.recalculated_char_weight+'%':'-'}}</td>
+                      </ng-container>
+                  </ng-container>
+                </tr> 
+                <tr>
+                  <td  class="table-header-left" colspan="4">Category Score(quantitative)</td>
+                  <ng-container *ngFor="let cat of processData">
+                    <td   class="table-data" [attr.colspan]="cat.characteristicData.length">{{(cat.category_score.value!=null?cat.category_score.value:"-")}}</td>
+                  </ng-container>
+                </tr> 
+                <tr>
+                  <td  class="table-header-left" colspan="4">Category Score(qualitative)</td>
+                  <ng-container *ngFor="let cat of processData">
+                    <td   class="table-data" [attr.colspan]="cat.characteristicData.length">{{(cat.category_score.name)?cat.category_score.name:'-'}}</td>
+                  </ng-container>
+                </tr>
+                <tr>
+                  <td  class="table-header-left" colspan="4">Category Weights</td>
+                  <ng-container *ngFor="let cat of processData">
+                    <td   class="table-data" [attr.colspan]="cat.characteristicData.length">{{(cat.category_weight)?cat.category_weight+'%':'-'}} </td>
+                  </ng-container>
+                </tr> 
+                <tr>
+                  <td class="table-header-left"  colspan="4">Recalculated Category Weights</td>
+                  <ng-container *ngFor="let cat of processData">
+                    <td  c class="table-data" [attr.colspan]="cat.characteristicData.length">{{(cat.recalculated_category_weight)?cat.recalculated_category_weight+'%':'-'}}</td>
+                  </ng-container>
+                </tr> 
+            </ng-template>
+        </p-table>
+        <br>
+        <p class="category-topic"> Processes Score - {{processScore}}</p>
+        <br>
+        <p class="category-topic">Outcome of Change - GHGs</p>
+        <p-table [value]="[{}]" styleClass="p-datatable-gridlines" *ngIf="loading">
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="table-header-main" colspan="4">Scale</th>
+                <th class="table-header-main" colspan="6">Outcomes</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData>
+                <tr>
+                  <td colspan="4" class="table-header-left">Intervention Information</td>
+                  <td colspan="5" class="table-header">GHG</td>
+                  <td  class="table-header">Weights</td>
+                 
+                </tr>
+                <tr>
+                  <td class="table-header">ID</td>
+                  <td class="table-header">Intervention Name</td>
+                  <td class="table-header">Intervention Type</td>
+                  <td class="table-header">Status</td>
+                  <ng-container *ngFor="let char of scale_GHGs.characteristicData">
+                      <td class="table-header">{{char.characteristic}}</td>
+                  </ng-container>
+                  
+                  <td class="table-header">Category Score</td>
+                  <td class="table-header"></td>
+                  <td class="table-header"></td>
+                </tr>
+                <tr >
+                  <td  class="table-data">{{(intervention.intervention_id)?(intervention.intervention_id):'-'}}</td>
+                  <td  class="table-data">{{(intervention.policyName)?(intervention.policyName):'-'}}</td>
+                  <td  class="table-data">{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</td>
+                  <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
+                  <ng-container *ngFor="let char of scale_GHGs.characteristicData">
+                    <td class="table-data">{{(char.score.value==null?'Empty':(char.score.value + "-" + char.score.name))}}</td>
+                  </ng-container>
+                  <td class="table-data">{{scale_GHGs.category_score.value?(scale_GHGs.category_score.value):'Empty'}}</td>
+                  <td class="table-data">{{scale_GHGs.category_score.value?(scale_GHGs.category_score.value + "-" + scale_GHGs.category_score.name):'Empty'}}</td>
+                  <td class="table-data">{{scale_GHGs.category_weight?scale_GHGs.category_weight+'%':'-'}}</td>
+                </tr>
+            </ng-template>
+            
+        </p-table>
+        <p-table [value]="[{}]" styleClass="p-datatable-gridlines" *ngIf="loading">
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="table-header-main" colspan="4">Sustained</th>
+              <th class="table-header-main" colspan="6">Outcomes</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData>
+              <tr>
+                <td colspan="4" class="table-header-left">Intervention Information</td>
+                <td colspan="5" class="table-header">GHG</td>
+                <td  class="table-header">Weights</td>
+               
+              </tr>
+              <tr>
+                <td class="table-header">ID</td>
+                <td class="table-header">Intervention Name</td>
+                <td class="table-header">Intervention Type</td>
+                <td class="table-header">Status</td>
+                <ng-container *ngFor="let char of sustained_GHGs.characteristicData">
+                    <td class="table-header">{{char.characteristic}}</td>
+                </ng-container>
+                
+                <td class="table-header">Category Score</td>
+                <td class="table-header"></td>
+                <td class="table-header"></td>
+              </tr>
+              <tr >
+                <td  class="table-data">{{(intervention.intervention_id)?(intervention.intervention_id):'-'}}</td>
+                <td  class="table-data">{{(intervention.policyName)?(intervention.policyName):'-'}}</td>
+                <td  class="table-data">{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</td>
+                <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
+                <ng-container *ngFor="let char of sustained_GHGs.characteristicData">
+                  <td class="table-data">{{(char.score.value==null?'Empty':(char.score.value + "-" + char.score.name))}}</td>
+                </ng-container>
+                <td class="table-data">{{(sustained_GHGs.category_score.value!=null)?(sustained_GHGs.category_score.value):'Empty'}}</td>
+                <td class="table-data">{{(sustained_GHGs.category_score.value!=null)?(sustained_GHGs.category_score.value + "-" + sustained_GHGs.category_score.name):'Empty'}}</td>
+                <td class="table-data">{{sustained_GHGs.category_weight?sustained_GHGs.category_weight+'%':'-'}}</td>
+              </tr>
+          </ng-template>
+          
+        </p-table>
+        
+        <br> <br>
+        <p class="category-topic">Outcome of Change - SDGs</p>
+        <p-table [value]="[{}]" styleClass="p-datatable-gridlines" *ngIf="loading">
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="table-header-main" colspan="4">Scale</th>
+                <th class="table-header-main" colspan="7">Outcomes</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData>
+                <tr>
+                  <td colspan="4" class="table-header-left">Intervention Information</td>
+                  <td  class="table-header">SDG</td>
+                  <td colspan="5" class="table-header">Sustainable Development</td>
+                  <td  class="table-header">Weights</td>
+                </tr>
+                <tr>
+                  <td class="table-header">ID</td>
+                  <td class="table-header">Intervention Name</td>
+                  <td class="table-header">Intervention Type</td>
+                  <td class="table-header">Status</td>
+                  <td class="table-header"></td>
+                  <td class="table-header">International/global level</td>
+                  <td class="table-header">National/Sectorial level</td>
+                  <td class="table-header">Subnational/regional/municipal or sub sectorial level</td>
+                  <td class="table-header">SDG Score</td>
+                  <td class="table-header"></td>
+                  <td class="table-header"></td>
+                </tr>
+               
+                  <ng-container *ngFor="let char of scale_SD.characteristicData">
+                    <tr >
+                      <td  class="table-data">{{(intervention.intervention_id)?(intervention.intervention_id):'-'}}</td>
+                      <td  class="table-data">{{(intervention.policyName)?(intervention.policyName):'-'}}</td>
+                      <td  class="table-data">{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</td>
+                      <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
+                      <td  class="table-data">{{(char.name)?(char.name):'-'}}</td>
+                      <ng-container *ngFor="let data of char.data">
+                        <td class="table-data">{{(data.score.value==null?'Empty':(data.score.value + "-" + data.score.name))}}</td>
+                      </ng-container>
+                      <td class="table-data">{{char.sdg_score!=null?(char.sdg_score):'Empty'}}</td>
+                      <td class="table-data"></td>
+                      <td class="table-data"></td>
+                  </ng-container>
+                  <tr *ngIf="scale_SD.characteristicData.length==0">
+                    <td  class="table-data">{{(intervention.intervention_id)?(intervention.intervention_id):'-'}}</td>
+                    <td  class="table-data">{{(intervention.policyName)?(intervention.policyName):'-'}}</td>
+                    <td  class="table-data">{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</td>
+                    <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
+                    <td  class="table-data">Empty</td>
+                    <td  class="table-data">Empty</td>
+                    <td  class="table-data">Empty</td>
+                    <td  class="table-data">Empty</td>
+                    <td  class="table-data">Empty</td>
+                    <td class="table-data"></td>
+                    <td class="table-data"></td>
+                  </tr>
+                <tr>
+                  <td  class="table-header" colspan="8">Category Score</td>
+                  <td class="table-data">{{(scale_SD.category_score.value!=null)?(scale_SD.category_score.value):'Empty'}}</td>
+                  <td class="table-data">{{(scale_SD.category_score.value!=null)?(scale_SD.category_score.value + "-" + scale_SD.category_score.name):'Empty'}}</td>
+                  <td class="table-data">{{scale_SD.category_weight?scale_SD.category_weight+'%':'-'}}</td>
+                </tr>
+                  
+            </ng-template>
+            
+        </p-table>
+        <p-table [value]="[{}]" styleClass="p-datatable-gridlines" *ngIf="loading">
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="table-header-main" colspan="4">Sustained</th>
+              <th class="table-header-main" colspan="7">Outcomes</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData>
+              <tr>
+                <td colspan="4" class="table-header-left">Intervention Information</td>
+                <td  class="table-header">SDG</td>
+                <td colspan="5" class="table-header">Sustainable Development</td>
+                <td  class="table-header">Weights</td>
+              </tr>
+              <tr>
+                <td class="table-header">ID</td>
+                <td class="table-header">Intervention Name</td>
+                <td class="table-header">Intervention Type</td>
+                <td class="table-header">Status</td>
+                <td class="table-header"></td>
+                <td class="table-header">Long term (>15 years)</td>
+                <td class="table-header">Medium term (5-15 years)	</td>
+                <td class="table-header">Short Term (<5 years)</td>
+                <td class="table-header">SDG Score</td>
+                <td class="table-header"></td>
+                <td class="table-header"></td>
+              </tr>
+             
+                <ng-container *ngFor="let char of sustained_SD.characteristicData">
+                  <tr >
+                    <td  class="table-data">{{(intervention.intervention_id)?(intervention.intervention_id):'-'}}</td>
+                    <td  class="table-data">{{(intervention.policyName)?(intervention.policyName):'-'}}</td>
+                    <td  class="table-data">{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</td>
+                    <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
+                    <td  class="table-data">{{(char.name)?(char.name):'-'}}</td>
+                    <ng-container *ngFor="let data of char.data">
+                      <td class="table-data">{{(data.score.value==null?'Empty':(data.score.value + "-" + data.score.name))}}</td>
+                    </ng-container>
+                    <td class="table-data">{{char.sdg_score!=null?(char.sdg_score):'Empty'}}</td>
+                    <td class="table-data"></td>
+                    <td class="table-data"></td>
+                  </tr>
+                </ng-container>
+                  <tr *ngIf="sustained_SD.characteristicData.length==0">
+                    <td  class="table-data">{{(intervention.intervention_id)?(intervention.intervention_id):'-'}}</td>
+                    <td  class="table-data">{{(intervention.policyName)?(intervention.policyName):'-'}}</td>
+                    <td  class="table-data">{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</td>
+                    <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
+                    <td  class="table-data">Empty</td>
+                    <td  class="table-data">Empty</td>
+                    <td  class="table-data">Empty</td>
+                    <td  class="table-data">Empty</td>
+                    <td  class="table-data">Empty</td>
+                    <td class="table-data"></td>
+                    <td class="table-data"></td>
+                  </tr>
+              <tr>
+                <td  class="table-header" colspan="8">Category Score</td>
+                <td class="table-data">{{(sustained_SD.category_score.value!=null)?(sustained_SD.category_score.value):'Empty'}}</td>
+                <td class="table-data">{{(sustained_SD.category_score.value!=null)?(sustained_SD.category_score.value + "-" + sustained_SD.category_score.name):'Empty'}}</td>
+                <td class="table-data">{{sustained_SD.category_weight?sustained_SD.category_weight+'%':'-'}}</td>
+              </tr>
+                
+          </ng-template>
+          
+      </p-table>
+      <br> <br>
+      <p class="category-topic">Outcome of Change - Adaptation</p>
+      <p-table [value]="[{}]" styleClass="p-datatable-gridlines" *ngIf="loading">
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="table-header-main" colspan="4">Scale</th>
+            <th class="table-header-main" colspan="6">Outcomes</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData>
+            <tr>
+              <td colspan="4" class="table-header-left">Intervention Information</td>
+              <td colspan="5" class="table-header">Adaptaion</td>
+              <td  class="table-header">Weights</td>
+             
+            </tr>
+            <tr>
+              <td class="table-header">ID</td>
+              <td class="table-header">Intervention Name</td>
+              <td class="table-header">Intervention Type</td>
+              <td class="table-header">Status</td>
+              <ng-container *ngFor="let char of scale_adaptation.characteristicData">
+                  <td class="table-header">{{char.characteristic}}</td>
+              </ng-container>
+              
+              <td class="table-header">Category Score</td>
+              <td class="table-header"></td>
+              <td class="table-header"></td>
+            </tr>
+            <tr >
+              <td  class="table-data">{{(intervention.intervention_id)?(intervention.intervention_id):'-'}}</td>
+              <td  class="table-data">{{(intervention.policyName)?(intervention.policyName):'-'}}</td>
+              <td  class="table-data">{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</td>
+              <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
+              <ng-container *ngFor="let char of scale_adaptation.characteristicData">
+                <td class="table-data">{{(char.score.value==null?'Empty':(char.score.value + "-" + char.score.name))}}</td>
+              </ng-container>
+              <td class="table-data">{{scale_adaptation.category_score.value?(scale_adaptation.category_score.value):'Empty'}}</td>
+              <td class="table-data">{{scale_adaptation.category_score.value?(scale_adaptation.category_score.value + "-" + scale_adaptation.category_score.name):'Empty'}}</td>
+              <td class="table-data">{{scale_adaptation.category_weight?scale_adaptation.category_weight+'%':'-'}}</td>
+            </tr>
+        </ng-template>
+        
+      </p-table>
+      <p-table [value]="[{}]" styleClass="p-datatable-gridlines" *ngIf="loading">
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="table-header-main" colspan="4">Sustained</th>
+            <th class="table-header-main" colspan="6">Outcomes</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData>
+            <tr>
+              <td colspan="4" class="table-header-left">Intervention Information</td>
+              <td colspan="5" class="table-header">Adaptation</td>
+              <td  class="table-header">Weights</td>
+             
+            </tr>
+            <tr>
+              <td class="table-header">ID</td>
+              <td class="table-header">Intervention Name</td>
+              <td class="table-header">Intervention Type</td>
+              <td class="table-header">Status</td>
+              <ng-container *ngFor="let char of sustained_adaptation.characteristicData">
+                  <td class="table-header">{{char.characteristic}}</td>
+              </ng-container>
+              
+              <td class="table-header">Category Score</td>
+              <td class="table-header"></td>
+              <td class="table-header"></td>
+            </tr>
+            <tr >
+              <td  class="table-data">{{(intervention.intervention_id)?(intervention.intervention_id):'-'}}</td>
+              <td  class="table-data">{{(intervention.policyName)?(intervention.policyName):'-'}}</td>
+              <td  class="table-data">{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</td>
+              <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
+              <ng-container *ngFor="let char of sustained_adaptation.characteristicData">
+                <td class="table-data">{{(char.score.value==null?'Empty':(char.score.value + "-" + char.score.name))}}</td>
+              </ng-container>
+              <td class="table-data">{{(sustained_adaptation.category_score.value!=null)?(sustained_adaptation.category_score.value):'Empty'}}</td>
+              <td class="table-data">{{(sustained_adaptation.category_score.value!=null)?(sustained_adaptation.category_score.value + "-" + sustained_adaptation.category_score.name):'Empty'}}</td>
+              <td class="table-data">{{sustained_adaptation.category_weight?sustained_adaptation.category_weight+'%':'-'}}</td>
+            </tr>
+        </ng-template>
+        
+      </p-table>
+      <br> 
+      <br>
+        <p class="category-topic">Outcome Score - {{outcomeScore}}</p>
+      <br><br>
+      <table class="heatmap" style=" text-align: center;">
+          
+          <tbody>
+              <tr>
+                  <td></td>
+                  <td colspan="7">Outcome: Extent and sustained nature of the transformation</td>
+              </tr>
+              <tr>
+                  <td rowspan="7">Process: Transformational change supported</td>
+              </tr>
+              <tr>
+                  <td></td>
+                  <ng-container *ngFor="let x of xData">
+                      <td>{{x.label}}</td>
+                  </ng-container>
+              </tr>
+              <tr *ngFor="let y of yData">
+                  <td>{{y.label}}</td>
+                  <ng-container *ngFor="let x of xData">
+                      <td  [style.background-color]="getBackgroundColor(y.value+x.value)">
+                          <span [ngClass]="getIntervention(x.value, y.value)? 'intervention':''">{{y.value+x.value}}</span>
+                      </td>
+                  </ng-container>
+              </tr>
+          </tbody>
+      </table>
       </div>
     </div>
   </div>
@@ -211,7 +678,7 @@
 <div class="container pl-20 pr-20">
   <div class="d-flex flex-row-reverse mt-2 mb-2">
     <button (click)="makePDF()" class="btn btn-primary btn-block text-uppercase">Download as PDF</button> &nbsp;&nbsp;
-    <button (click)="exportToExcel()" class="btn btn-primary btn-block text-uppercase">Download as Excel</button>
+    <!-- <button (click)="exportToExcel()" class="btn btn-primary btn-block text-uppercase">Download as Excel</button> -->
 
   </div>
 </div>

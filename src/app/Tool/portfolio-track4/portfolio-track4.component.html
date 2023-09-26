@@ -122,13 +122,12 @@
               *ngIf="!opportunities.value && (fData.submitted || opportunities.touched)">This is a mandatory field</p>
           </div>
 
-          <div class="p-field p-2">
-            <label for="principles">Principles on which the assessment is based *</label>
-            <input pInputText type="text" #principles="ngModel" name="principles" ngModel [disabled]="isSavedAssessment"
-              placeholder="principles" [(ngModel)]="assessment.principles" required />
-            <p class="info-message text-danger" *ngIf="!principles.value && (fData.submitted || principles.touched)">
-              This is a mandatory field</p>
-          </div>
+            <div class="p-field p-2">
+                  <label for="principles">Principles on which the assessment is based *</label>
+                  <input pInputText type="text" #principles="ngModel" name="principles" ngModel [disabled]="isSavedAssessment"
+                  placeholder="principles" [(ngModel)]="assessment.principles" required />
+                  <p class="info-message text-danger" *ngIf="!principles.value && (fData.submitted || principles.touched)">This is a mandatory field</p>
+            </div>
 
 
           <!-- <div class="p-field p-2">

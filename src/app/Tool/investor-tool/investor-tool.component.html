@@ -117,7 +117,7 @@
                       </div>
 
                       <div class="p-field p-2">
-                            <label for="principles">Principles on wwhich the assessment is based *</label>
+                            <label for="principles">Principles on which the assessment is based *</label>
                             <input pInputText type="text" #principles="ngModel" name="principles" ngModel
                             placeholder="Principles" [(ngModel)]="assessment.principles" required [disabled]="isSavedAssessment"/>
                             <p class="info-message text-danger" *ngIf="!principles.value && (fData.submitted || principles.touched)">This is a mandatory field</p>
@@ -257,8 +257,8 @@
     <!-- <div class="p-grid p-fluid col-sm-12" *ngIf="showSections">
         <app-cm-section [assessment]="assessmentres"></app-cm-section>
     </div> -->
-    <!-- <div class="card" *ngIf="isSavedAssessment"> -->
-        <div class="card" >
+    <div class="card" *ngIf="isSavedAssessment">
+        <!-- <div class="card" > -->
         <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)" >
         <p-tabView  (onChange)="onMainTabChange($event) " [(activeIndex)]="activeIndexMain ">
 
