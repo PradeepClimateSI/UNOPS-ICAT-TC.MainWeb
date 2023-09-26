@@ -11,7 +11,7 @@
 
 <!-- 
       <div class="card" style="min-height: 600px;"> -->
-      <div class="card">
+      <div class="card" *ngIf="loading">
         <div style="display: flex; flex-direction: row;">
           <div style="flex-basis: 40%;">
             <p><strong>Intervention ID</strong></p>
@@ -215,7 +215,7 @@
         <!-- <br><br> -->
 
       </div>
-      <div class="card">
+      <div class="card" *ngIf="loading">
         <br>
         <p class="category-topic">Process of Change</p>
         <p-table [value]="[{}]" styleClass="p-datatable-gridlines" [scrollable]="true" scrollHeight="700px" >

@@ -105,18 +105,18 @@ export class AssessmentResultInvestorComponent implements OnInit {
     // console.log("daaaaa111:", this.averageProcess)
     // console.log("daaaaa222:", this.averageOutcome)
     this.investorToolControllerproxy.calculateFinalResults(this.assessmentId).subscribe((res: any) => {
-      // console.log(res)
+      console.log(res)
       this.processData = res?.processData;
       this.outcomeData = res?.outcomeData;
       this.outcomeScore = res?.outcomeScore;
       this.processScore = res?.processScore;
-      this.scale_GHGs = res?.outcomeData.find((item: { category: string; })=>item?.category=='Scale GHGs')
-      this.scale_SD = res?.outcomeData.find((item: { category: string; })=>item?.category=='Scale SD')
-      this.sustained_GHGs = res?.outcomeData.find((item: { category: string; })=>item?.category=='Sustained nature-GHGs')
-      this.sustained_SD = res?.outcomeData.find((item: { category: string; })=>item?.category=='Sustained nature-SD')
-      this.scale_adaptation = res?.outcomeData.find((item: { category: string; })=>item?.category=='Scale Adaptation')
-      this.sustained_adaptation = res?.outcomeData.find((item: { category: string; })=>item?.category=='Sustained Adaptation')
-      // console.log("all: ",  this.scale_GHGs,this.scale_SD,this.sustained_GHGs ,this.sustained_SD,this.scale_adaptation,this.sustained_adaptation)
+      this.scale_GHGs = res?.outcomeData.find((item: { code: string; })=>item?.code=='SCALE_GHG')
+      this.scale_SD = res?.outcomeData.find((item: { code: string; })=>item?.code=='SCALE_SD')
+      this.sustained_GHGs = res?.outcomeData.find((item: { code: string; })=>item?.code=='SUSTAINED_GHG')
+      this.sustained_SD = res?.outcomeData.find((item: { code: string; })=>item?.code=='SUSTAINED_SD')
+      this.scale_adaptation = res?.outcomeData.find((item: { code: string; })=>item?.code=='SCALE_ADAPTATION')
+      this.sustained_adaptation = res?.outcomeData.find((item: { code: string; })=>item?.code=='SUSTAINED_ADAPTATION')
+      console.log("all: ",  this.scale_GHGs,this.scale_SD,this.sustained_GHGs ,this.sustained_SD,this.scale_adaptation,this.sustained_adaptation)
       // console.log("processData: ", this.processData)
       // console.log("outcomeData: ", this.outcomeData)
       // console.log("processData: ", this.processData)
