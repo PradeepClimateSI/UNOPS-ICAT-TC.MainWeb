@@ -270,11 +270,11 @@ export class MasterDataService {
     ]
 
     this.outcomeSustainedScore = [
-      {  id: "Very likely (90-100%)",value:3 },
-      {  id: "Likely (60-90%)",value:2  },
-      {  id: "Possible (33-66%)",value:1 },
-      {  id: "Less likely (10-33%)",value:0 },
-      {  id: "Unlikely (0-10%)",value:-1 },
+      {  id: "3 - Very likely (90-100%)",value:3 },
+      {  id: "2 - Likely (60-90%)",value:2  },
+      {  id: "1 - Possible (33-66%)",value:1 },
+      {  id: "0 - Less likely (10-33%)",value:0 },
+      {  id: "-1 - Unlikely (0-10%)",value:-1 },
       {  id: "Empty",value:null },
     ]
 
