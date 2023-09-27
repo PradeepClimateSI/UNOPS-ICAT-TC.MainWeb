@@ -714,7 +714,9 @@
                               <!-- lllllllllllllllllllllllllllll -->
 
 
-                            <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level'">
+                              <div class="row p-2"
+                              *ngIf=" (category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level') ||
+                               (category.CategoryName ==='Adaptation Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level') ">
                               <div class="col-12 col-lg-6">
                                 <div class="p-field">
                                   <label for="expected_ghg_mitigation">Expected GHG mitgation (Mt CO2-eq)</label>
