@@ -302,7 +302,7 @@
                   <td  class="table-header-left" colspan="4">Recalculated Characteristics Weights</td>
                   <ng-container *ngFor="let cat of processData">
                       <ng-container *ngFor="let data of cat.characteristicData">
-                          <td  class="table-data">{{(data.recalculated_char_weight)?data.recalculated_char_weight+'%':'-'}}</td>
+                          <td  class="table-data">{{(data.recalculated_char_weight!=null)?data.recalculated_char_weight+'%':'-'}}</td>
                       </ng-container>
                   </ng-container>
                 </tr> 
@@ -315,7 +315,7 @@
                 <tr>
                   <td  class="table-header-left" colspan="4">Category Score(qualitative)</td>
                   <ng-container *ngFor="let cat of processData">
-                    <td   class="table-data" [attr.colspan]="cat.characteristicData.length">{{(cat.category_score.name)?cat.category_score.name:'-'}}</td>
+                    <td   class="table-data" [attr.colspan]="cat.characteristicData.length">{{(cat.category_score.name!=null)?cat.category_score.name:'-'}}</td>
                   </ng-container>
                 </tr>
                 <tr>
@@ -327,7 +327,7 @@
                 <tr>
                   <td class="table-header-left"  colspan="4">Recalculated Category Weights</td>
                   <ng-container *ngFor="let cat of processData">
-                    <td  c class="table-data" [attr.colspan]="cat.characteristicData.length">{{(cat.recalculated_category_weight)?cat.recalculated_category_weight+'%':'-'}}</td>
+                    <td  c class="table-data" [attr.colspan]="cat.characteristicData.length">{{(cat.recalculated_category_weight)?cat.recalculated_category_weight+'%':'0%'}}</td>
                   </ng-container>
                 </tr> 
             </ng-template>
@@ -371,8 +371,8 @@
                   <ng-container *ngFor="let char of scale_GHGs.characteristicData">
                     <td class="table-data">{{(char.score.value==null?'Empty':(char.score.value + "-" + char.score.name))}}</td>
                   </ng-container>
-                  <td class="table-data">{{scale_GHGs.category_score.value?(scale_GHGs.category_score.value):'Empty'}}</td>
-                  <td class="table-data">{{scale_GHGs.category_score.value?(scale_GHGs.category_score.value + "-" + scale_GHGs.category_score.name):'Empty'}}</td>
+                  <td class="table-data">{{scale_GHGs.category_score.value!=null?(scale_GHGs.category_score.value):'Empty'}}</td>
+                  <td class="table-data">{{scale_GHGs.category_score.value!=null?(scale_GHGs.category_score.value + "-" + scale_GHGs.category_score.name):'Empty'}}</td>
                   <td class="table-data">{{scale_GHGs.category_weight?scale_GHGs.category_weight+'%':'-'}}</td>
                 </tr>
             </ng-template>
@@ -591,8 +591,8 @@
               <ng-container *ngFor="let char of scale_adaptation.characteristicData">
                 <td class="table-data">{{(char.score.value==null?'Empty':(char.score.value + "-" + char.score.name))}}</td>
               </ng-container>
-              <td class="table-data">{{scale_adaptation.category_score.value?(scale_adaptation.category_score.value):'Empty'}}</td>
-              <td class="table-data">{{scale_adaptation.category_score.value?(scale_adaptation.category_score.value + "-" + scale_adaptation.category_score.name):'Empty'}}</td>
+              <td class="table-data">{{scale_adaptation.category_score.value!=null?(scale_adaptation.category_score.value):'Empty'}}</td>
+              <td class="table-data">{{scale_adaptation.category_score.value!=null?(scale_adaptation.category_score.value + "-" + scale_adaptation.category_score.name):'Empty'}}</td>
               <td class="table-data">{{scale_adaptation.category_weight?scale_adaptation.category_weight+'%':'-'}}</td>
             </tr>
         </ng-template>
