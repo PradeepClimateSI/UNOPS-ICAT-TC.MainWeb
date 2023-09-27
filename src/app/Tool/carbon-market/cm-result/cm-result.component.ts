@@ -182,19 +182,19 @@ export class CmResultComponent implements OnInit {
 
     let processData =  this.mapProcessData()
 
-    if (processData.technology.length!=0){
+    if (processData.technology && processData.technology.length!=0){
       XLSX.utils.sheet_add_json(ws, [{title: 'Process of Change / Technology'}], { skipHeader: true, origin: "A" + length });
       length = length + 2
       XLSX.utils.sheet_add_json(ws, processData.technology, { skipHeader: false, origin: "A" + length });
       length = length + this.processData.technology.length + 2
     }
-    if (processData.incentives.length!=0){
+    if (processData.incentives && processData.incentives.length!=0){
       XLSX.utils.sheet_add_json(ws, [{title: 'Process of Change / Incentives'}], { skipHeader: true, origin: "A" + length });
       length = length + 2
       XLSX.utils.sheet_add_json(ws, processData.incentives, { skipHeader: false, origin: "A" + length });
       length = length + this.processData.incentives.length + 2
     }
-    if (processData.norms.length!=0){
+    if (processData.norms && processData.norms.length!=0){
       XLSX.utils.sheet_add_json(ws, [{title: 'Process of Change / Norms'}], { skipHeader: true, origin: "A" + length });
       length = length + 2
       XLSX.utils.sheet_add_json(ws, processData.norms, { skipHeader: false, origin: "A" + length });
@@ -202,25 +202,25 @@ export class CmResultComponent implements OnInit {
     }
 
     let outcomeData = this.mapOutcomeData()
-    if (outcomeData.scaleGHGs.length!=0){
+    if (outcomeData.scaleGHGs && outcomeData.scaleGHGs.length!=0){
       XLSX.utils.sheet_add_json(ws, [{title: 'Outcome of Change / Scale GHGs'}], { skipHeader: true, origin: "A" + length });
       length = length + 2
       XLSX.utils.sheet_add_json(ws, outcomeData.scaleGHGs, { skipHeader: false, origin: "A" + length });
       length = length + outcomeData.scaleGHGs.length + 2
     }
-    if (outcomeData.sustainedGHGs.length!=0){
+    if (outcomeData.sustainedGHGs && outcomeData.sustainedGHGs.length!=0){
       XLSX.utils.sheet_add_json(ws, [{title: 'Outcome of Change / Sustained GHGs'}], { skipHeader: true, origin: "A" + length });
       length = length + 2
       XLSX.utils.sheet_add_json(ws, outcomeData.sustainedGHGs, { skipHeader: false, origin: "A" + length });
       length = length + outcomeData.scaleGHGs.length + 2
     }
-    if (outcomeData.scaleSDs.length!=0){
+    if (outcomeData.scaleSDs && outcomeData.scaleSDs.length!=0){
       XLSX.utils.sheet_add_json(ws, [{title: 'Outcome of Change / Scale SDs'}], { skipHeader: true, origin: "A" + length });
       length = length + 2
       XLSX.utils.sheet_add_json(ws, outcomeData.scaleSDs, { skipHeader: false, origin: "A" + length });
       length = length + outcomeData.scaleSDs.length + 2
     }
-    if (outcomeData.sustainedSDs.length!=0){
+    if (outcomeData.sustainedSDs && outcomeData.sustainedSDs.length!=0){
       XLSX.utils.sheet_add_json(ws, [{title: 'Outcome of Change / Sustained SDs'}], { skipHeader: true, origin: "A" + length });
       length = length + 2
       XLSX.utils.sheet_add_json(ws, outcomeData.sustainedSDs, { skipHeader: false, origin: "A" + length });
@@ -236,7 +236,7 @@ export class CmResultComponent implements OnInit {
 
   mapProcessData(){
     let data = new ProcessData()
-    if (this.processData.technology.length !== 0){
+    if (this.processData?.technology && this.processData?.technology?.length !== 0){
       data.technology = this.processData.technology.map((ele: { characteristic: string; question: string; score: number; justification: string; }) => {
         let _data = new ProcessTableData()
         _data.Characteristic = ele.characteristic
@@ -247,7 +247,7 @@ export class CmResultComponent implements OnInit {
       })
     }
 
-    if (this.processData.incentives.length !== 0){
+    if (this.processData.incentives && this.processData.incentives.length !== 0){
       data.incentives = this.processData.incentives.map((ele: { characteristic: string; question: string; score: number; justification: string; }) => {
         let _data = new ProcessTableData()
         _data.Characteristic = ele.characteristic
@@ -257,7 +257,7 @@ export class CmResultComponent implements OnInit {
         return _data
       })
     }
-    if (this.processData.norms.length !== 0){
+    if (this.processData.norms && this.processData.norms.length !== 0){
       data.norms = this.processData.norms.map((ele: { characteristic: string; question: string; score: number; justification: string; }) => {
         let _data = new ProcessTableData()
         _data.Characteristic = ele.characteristic
