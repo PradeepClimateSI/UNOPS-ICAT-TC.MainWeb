@@ -189,7 +189,7 @@
   </div> -->
     <div *ngIf=" load && selectedApproach === 'Direct'">
       <!-- <div > -->
-      <div class="card">
+      <div class="card" *ngIf="isSavedAssessment && tabLoading">
         <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)">
           <p-tabView (onChange)="onMainTabChange($event)" [(activeIndex)]="activeIndexMain ">
 

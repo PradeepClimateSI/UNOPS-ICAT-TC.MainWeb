@@ -115,6 +115,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   fileServerURL: string;
   acceptedFiles: string = ".pdf, .jpg, .png, .doc, .docx, .xls, .xlsx, .csv";
   tabLoading: boolean=false;
+  characteristicsLoaded:boolean = false;
+  categoriesLoaded:boolean = false;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -204,8 +206,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
 
   async getCharacteristics() {
-    let characteristicsLoaded = false;
-    let categoriesLoaded = false;
+   
     try{
       this.investorQuestions= await this.investorToolControllerproxy.findAllIndicatorquestions().toPromise();
       // console.log("ressss3333",  this.investorQuestions)
@@ -213,7 +214,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
     // });
     this.characteristicsList = await this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().toPromise();
-    characteristicsLoaded = true;
+    this.characteristicsLoaded = true;
     console.log("22222")
     this.methodologyAssessmentControllerServiceProxy.findAllCategories().toPromise().then((res2: any) => {
 
@@ -289,9 +290,9 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
         }
 
       }
-      categoriesLoaded = true;
+      this.categoriesLoaded = true;
 
-      if (characteristicsLoaded && categoriesLoaded) {
+      if (this.characteristicsLoaded && this.categoriesLoaded) {
         this.tabLoading = true; 
         console.log("33333")
       }
