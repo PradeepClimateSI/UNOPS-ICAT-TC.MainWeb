@@ -194,6 +194,7 @@
             <th style="width:20%">Intervention Type</th>
             <th style="width:12%">Assessment Approach</th>
             <th style="width:12%">Assessment Type</th>
+            <th style="width:12%">Tool</th>
             <th style="width:20%">Assessment Period</th>
 
           </tr>
@@ -219,6 +220,9 @@
             </td>
             <td>
               {{ assessList.assessmentType }}
+            </td>
+            <td>
+              {{ assessList.tool }}
             </td>
             <td>
               {{ assessList.from | date:'yyyy-MM-dd' }} - {{ assessList.to | date:'yyyy-MM-dd'}}

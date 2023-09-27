@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import {  MethodologyAssessmentControllerServiceProxy, Portfolio, PortfolioControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import {  GetAssessmentDetailsDto, MethodologyAssessmentControllerServiceProxy, Portfolio, PortfolioControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-portfolio-add',
@@ -20,6 +20,7 @@ export class PortfolioAddComponent implements OnInit {
 
   portfolio : Portfolio = new Portfolio();
   tool : string;
+  tools: string[];
   addLink: boolean = false;
 
   optionList = [
@@ -40,6 +41,7 @@ export class PortfolioAddComponent implements OnInit {
 
   ngOnInit(): void {
     this.tool = 'Portfolio Tool';
+    this.tools = ['Portfolio Tool', 'Carbon Market Tool', 'Investment & Private Sector Tool']
     this.addLink=false;
    /*  this.methassess.assessmentDetails().subscribe(async (res: any) => {
        console.log("assessmentData : ", res)
@@ -54,8 +56,10 @@ export class PortfolioAddComponent implements OnInit {
         console.log("nexttt : ",  this.portfolio.portfolioId)
        });
 
+      let req = new GetAssessmentDetailsDto()
+      req.tools = this.tools
 
-      this.methassess.assessmentDetailsforTool(this.tool).subscribe(async (res: any) => {
+      this.methassess.assessmentDetailsforTool(req).subscribe(async (res: any) => {
         console.log("assessmentData : ", res)
         this.assessList = res;
 
