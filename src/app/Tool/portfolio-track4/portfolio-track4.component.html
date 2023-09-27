@@ -116,7 +116,7 @@
           <div class="p-field p-2">
             <label for="opportunities">Opportunities for stakeholders to participate in the assessment *</label>
             <input pInputText type="text" #opportunities="ngModel" name="opportunities" ngModel
-              [disabled]="isSavedAssessment" placeholder="opportunities" [(ngModel)]="assessment.opportunities"
+              [disabled]="isSavedAssessment" placeholder="Opportunities" [(ngModel)]="assessment.opportunities"
               required />
             <p class="info-message text-danger"
               *ngIf="!opportunities.value && (fData.submitted || opportunities.touched)">This is a mandatory field</p>
@@ -125,7 +125,7 @@
             <div class="p-field p-2">
                   <label for="principles">Principles on which the assessment is based *</label>
                   <input pInputText type="text" #principles="ngModel" name="principles" ngModel [disabled]="isSavedAssessment"
-                  placeholder="principles" [(ngModel)]="assessment.principles" required />
+                  placeholder="Principles" [(ngModel)]="assessment.principles" required />
                   <p class="info-message text-danger" *ngIf="!principles.value && (fData.submitted || principles.touched)">This is a mandatory field</p>
             </div>
 
@@ -314,7 +314,8 @@
                                   <div class="tooltip-container">
                                     <div *ngIf="question.question.hint">
                                       <span class="tooltip-icon">i</span>
-                                      <div class="tooltip-text">{{addNewline(question.question.hint)}}</div>
+                                      <div class="tooltip-text" [innerHTML]="addNewline(question.question.hint)"></div>
+
                                     </div>
                                   </div>
                                 </div>
@@ -540,7 +541,8 @@
                                         <div *ngIf="question.question.hint">
                                           <span class="tooltip-icon">i</span>
                                         </div>
-                                        <div class="tooltip-text">{{addNewline(question.question.hint)}}</div>
+                                        <!-- <div class="tooltip-text">{{addNewline(question.question.hint)}}</div> -->
+                                        <div class="tooltip-text" [innerHTML]="addNewline(question.question.hint)"></div>
                                       </div>
                                     </div>
                                   </div>
@@ -649,7 +651,8 @@
 
 
                                   <div class="row p-2"
-                                    *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level'">
+                                    *ngIf=" (category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level') ||
+                                     (category.CategoryName ==='Adaptation Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level') ">
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
                                         <label for="expected_ghg_mitigation">Expected GHG mitgation (Mt CO2-eq)</label>
@@ -740,7 +743,8 @@
                                           <div *ngIf="question.question.hint">
                                             <span class="tooltip-icon">i</span>
                                           </div>
-                                          <div class="tooltip-text">{{addNewline(question.question.hint)}}</div>
+                                          <!-- <div class="tooltip-text">{{addNewline(question.question.hint)}}</div> -->
+                                          <div class="tooltip-text" [innerHTML]="addNewline(question.question.hint)"></div>
                                         </div>
                                       </div>
                                     </div>
@@ -869,7 +873,8 @@
                                           <div *ngIf="question.question.hint">
                                             <span class="tooltip-icon">i</span>
                                           </div>
-                                          <div class="tooltip-text">{{addNewline(question.question.hint)}}</div>
+                                          <!-- <div class="tooltip-text">{{addNewline(question.question.hint)}}</div> -->
+                                          <div class="tooltip-text" [innerHTML]="addNewline(question.question.hint)"></div>
                                         </div>
                                       </div>
                                     </div>
@@ -1263,7 +1268,8 @@
                                   </div>
   
                                   <div class="row p-2"
-                                    *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level'">
+                                    *ngIf=" (category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level') ||
+                                     (category.CategoryName ==='Adaptation Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level') ">
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
                                         <label for="expected_ghg_mitigation">Expected GHG mitgation (Mt CO2-eq)</label>

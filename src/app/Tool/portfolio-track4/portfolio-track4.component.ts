@@ -202,6 +202,7 @@ export class PortfolioTrack4Component implements OnInit {
     await this.getPolicies();
     await this.getAllImpactsCovered();
     await this.getCharacteristics();
+    
     console.log(this.policies)
     console.log(this.assessment)
 
@@ -366,7 +367,7 @@ export class PortfolioTrack4Component implements OnInit {
       console.log("outcomeData", this.outcomeData)
       console.log("this.sdgDataSendArray", this.sdgDataSendArray)
     });
-
+    //await this.spliFun();
 
   }
 
@@ -519,7 +520,7 @@ export class PortfolioTrack4Component implements OnInit {
 
   onsubmit(form: NgForm) {
 
-    for(let item of this.processData){
+     for(let item of this.processData){
       for(let item2 of item.data){
         if(item2.likelihood == null || item2.relavance == null){
           this.messageService.add({
@@ -533,6 +534,8 @@ export class PortfolioTrack4Component implements OnInit {
         }
       }
     }
+
+
     console.log("formDataa", form.value)
     console.log("assesssssssss", this.assessment)
     console.log("finallsdgDataSendArray2", this.sdgDataSendArray2)
@@ -545,6 +548,20 @@ export class PortfolioTrack4Component implements OnInit {
 
       console.log("finalArray", finalArray)
       //@ts-ignore
+
+      for(let i=0; i< this.sdgDataSendArray2.length; i++){
+        for(let item of this.sdgDataSendArray2[i].data){
+          item.portfolioSdg = this.selectedSDGs[i];
+        }
+        
+      }
+
+      for(let i=0; i< this.sdgDataSendArray4.length; i++){
+        for(let item of this.sdgDataSendArray4[i].data){
+          item.portfolioSdg = this.selectedSDGs[i];
+        }
+        
+      }
 
       let data : any ={
         finalArray : finalArray,
@@ -810,12 +827,36 @@ export class PortfolioTrack4Component implements OnInit {
     this.messageService.add({severity: 'info', summary: 'File Uploaded', detail: ''});
   }
 
-   addNewline(text : any) {
+  /* addNewline(text: any) {
     if (!text) {
       return '';
     }
-    return text.replace(/--/g, '\n--');
+    return text.replace(/@/g, '@<br>');
+  } */
+
+  addNewline(text: any) {
+    if (!text) {
+      return '';
+    }
+    // Replace three spaces with a line break
+    return text.replace(/ {3}/g, '<br><br>');
   }
+  
+
+  /* spliFun() {
+    for (let item of this.processData) {
+      for (let item2 of item.data) {
+        for (let question of item2.portfolioQuestion_details) {
+          if (question.question.hint) {
+            question.question.hint = question.question.hint.replace(/@/g, '@<br>');
+          }
+        }
+      }
+    }
+    console.log("ppppp", this.processData)
+  } */
+
+
 }
 
 interface UploadEvent {

@@ -82,7 +82,7 @@ dt2 : Table
       setTimeout(() => {
         this.load = true;
         this.loading = false;
-      }, 3500);
+      }, 5000);
 
   }
 

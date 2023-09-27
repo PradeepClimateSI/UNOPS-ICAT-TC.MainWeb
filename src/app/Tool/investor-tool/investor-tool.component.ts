@@ -459,6 +459,19 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       // finalArray.map(x=>x.data.map(y=>y.investorTool=this.mainAssessment))
       console.log("finalArray", finalArray)
 
+      for(let i=0; i< this.sdgDataSendArray2.length; i++){
+        for(let item of this.sdgDataSendArray2[i].data){
+          item.portfolioSdg = this.selectedSDGs[i];
+        }
+        
+      }
+
+      for(let i=0; i< this.sdgDataSendArray4.length; i++){
+        for(let item of this.sdgDataSendArray4[i].data){
+          item.portfolioSdg = this.selectedSDGs[i];
+        }
+        
+      }
 
       let data : any ={
         finalArray : finalArray,
