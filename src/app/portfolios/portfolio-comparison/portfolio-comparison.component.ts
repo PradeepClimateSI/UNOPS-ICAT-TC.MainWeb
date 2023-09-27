@@ -188,6 +188,29 @@ export class PortfolioComparisonComponent implements OnInit {
     //   }
     // ]
 
+    // this.aggregation_data = {
+    //   col_set_1: [
+    //     { label: 'INTERVENTION INFORMATION', colspan: 4 },
+    //     { label: '', colspan: 1 }
+    //   ],
+    //   col_set_2: [
+    //     { label: 'ID', code: 'id' },
+    //     { label: 'INTERVENTION NAME', code: 'name' },
+    //     { label: 'INTERVENTION TYPE', code: 'type' },
+    //     { label: 'STATUS', code: 'status' },
+    //     { label: 'GHG MITIGATION (MT CO2-EG)', code: 'mitigation' },
+    //   ],
+    //   interventions: [
+    //     {
+    //       id: '1',
+    //       name: 'Test 1',
+    //       type: 'Test 1',
+    //       status: 'Complete',
+    //       mitigation: 12234
+    //     }
+    //   ],
+    //   total: 23423423
+    // }
     this.aggregation_data = {
       col_set_1: [
         { label: 'INTERVENTION INFORMATION', colspan: 4 },
@@ -200,16 +223,8 @@ export class PortfolioComparisonComponent implements OnInit {
         { label: 'STATUS', code: 'status' },
         { label: 'GHG MITIGATION (MT CO2-EG)', code: 'mitigation' },
       ],
-      interventions: [
-        {
-          id: '1',
-          name: 'Test 1',
-          type: 'Test 1',
-          status: 'Complete',
-          mitigation: 12234
-        }
-      ],
-      total: 23423423
+      interventions:interventions.aggregation_data.interventions,
+      total: interventions.aggregation_data.total
     }
 
     this.alignment_data = {
