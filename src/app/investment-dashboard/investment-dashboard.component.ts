@@ -235,7 +235,7 @@ export class InvestmentDashboardComponent implements OnInit {
                 let percentage = (counts[ctx.dataIndex]*100 / sum).toFixed(2)+"%";
 
                 return[
-                  `Sector: ${labels[ctx.dataIndex]}`,
+                  `SDG: ${labels[ctx.dataIndex]}`,
                   `Count: ${counts[ctx.dataIndex]}`,
                   `Percentage: ${percentage}`
                 ];
