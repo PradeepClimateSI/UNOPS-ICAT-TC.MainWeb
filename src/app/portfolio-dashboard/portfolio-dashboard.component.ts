@@ -440,7 +440,7 @@ this.selectPortfolio();
                   let percentage = (ctx.parsed/ sum*100).toFixed(2)+"%";
 
                   return[
-                    `SDG: ${ctx.label}`,
+                    `Sector: ${ctx.label}`,
                     `Count: ${ctx.raw}`,
                     `Percentage: ${percentage}`
                   ];

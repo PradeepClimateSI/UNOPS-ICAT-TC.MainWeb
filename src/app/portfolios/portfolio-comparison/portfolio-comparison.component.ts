@@ -40,15 +40,16 @@ export class PortfolioComparisonComponent implements OnInit {
   async getPortfolioData() {
     this.portfolio = (await this.portfolioServiceProxy.getPortfolioById(this.portfolioId).toPromise())[0]
     this.noOfAssessments = (await this.portfolioServiceProxy.assessmentsDataByAssessmentId(this.portfolioId).toPromise()).length
-
+console.log(this.portfolio)
     this.card.push(
       ...[
         { title: 'Portfolio ID', data: this.portfolio.portfolioId },
         { title: 'Name of the Portfolio', data: this.portfolio.portfolioName },
         { title: 'Description', data: this.portfolio.description },
         { title: 'Person(s)/ organization(s) doing the assessment', data: this.portfolio.person },
+        { title: 'Date', data: this.portfolio.date },
         { title: 'Is this assessment an update of a previous assessment?', data: this.portfolio.IsPreviousAssessment },
-        { title: 'Link to previous assessment', data: 'Link' },
+        { title: 'Link to previous assessment', data: this.portfolio.link },
         { title: 'Objective(s) of the assessment', data: this.portfolio.objectives },
         { title: 'Intended audience(s) of the assessment', data: this.portfolio.audience },
         { title: 'Number of Assessments', data: await this.noOfAssessments }
@@ -100,6 +101,7 @@ export class PortfolioComparisonComponent implements OnInit {
 
     this.process_data = interventions.process_data
     this.outcome_data = interventions.outcome_data
+    this.alignment_data = interventions.alignment_data
 
     //TODO sort outcome data by order before loop the table
     // this.outcome_data = [
@@ -227,35 +229,35 @@ export class PortfolioComparisonComponent implements OnInit {
       total: interventions.aggregation_data.total
     }
 
-    this.alignment_data = {
-      col_set_1: [
-        { label: "INTERVENTION INFORMATION", colspan: 4 },
-        { label: '', colspan: 1 },
-        { label: '', colspan: 1 },
-        { label: '', colspan: 1 }
-      ],
-      col_set_2: [
-        { label: 'ID', code: 'id' },
-        { label: 'INTERVENTION NAME', code: 'name' },
-        { label: 'INTERVENTION TYPE', code: 'type' },
-        { label: 'STATUS', code: 'status' },
-        { label: 'SDG 1', code: 'SDG1' },
-        { label: 'SDG 2', code: 'SDG2' },
-        { label: 'SDG 3', code: 'SDG3' },
-      ],
-      interventions: [
-        {
-          id: '1',
-          name: 'Test 1',
-          type: 'Test 1',
-          status: 'Complete',
-          SDG1: 'Yes',
-          SDG2: 'Yes',
-          SDG3: 'Yes'
-        }
-      ],
-      sdg_count: 3
-    }
+    // this.alignment_data = {
+    //   col_set_1: [
+    //     { label: "INTERVENTION INFORMATION", colspan: 4 },
+    //     { label: '', colspan: 1 },
+    //     { label: '', colspan: 1 },
+    //     { label: '', colspan: 1 }
+    //   ],
+    //   col_set_2: [
+    //     { label: 'ID', code: 'id' },
+    //     { label: 'INTERVENTION NAME', code: 'name' },
+    //     { label: 'INTERVENTION TYPE', code: 'type' },
+    //     { label: 'STATUS', code: 'status' },
+    //     { label: 'SDG 1', code: 'SDG1' },
+    //     { label: 'SDG 2', code: 'SDG2' },
+    //     { label: 'SDG 3', code: 'SDG3' },
+    //   ],
+    //   interventions: [
+    //     {
+    //       id: '1',
+    //       name: 'Test 1',
+    //       type: 'Test 1',
+    //       status: 'Complete',
+    //       SDG1: 'Yes',
+    //       SDG2: 'Yes',
+    //       SDG3: 'Yes'
+    //     }
+    //   ],
+    //   sdg_count: 3
+    // }
   }
 
 
