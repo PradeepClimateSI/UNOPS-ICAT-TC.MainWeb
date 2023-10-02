@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit ,ViewChild } from '@angular/core';
 import { Chart, ChartType, registerables } from 'chart.js';
-import { AssessmentCMDetailControllerServiceProxy, ClimateAction, InvestorToolControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Assessment, AssessmentCMDetailControllerServiceProxy, ClimateAction, InvestorToolControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 import decode from 'jwt-decode';
 import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
@@ -63,6 +63,7 @@ export class InvestmentDashboardComponent implements OnInit {
   recentResult : any ;
   loading:boolean=false;
   tableData:any[]=[]
+  pointTableDatas:Assessment[]=[]
   totalRecords: number = 0;
   xData: {label: string; value: number}[]
   yData: {label: string; value: number}[]
@@ -447,6 +448,19 @@ export class InvestmentDashboardComponent implements OnInit {
 
   getIntervention(x:number, y: number){
     return this.tableData.some(item => item.outcome_score === x && item.process_score === y);
+   
+
+  }
+  enterHeatMapPoint(x:number, y: number){
+
+
+    this.pointTableDatas=this.tableData.filter(item=> item.outcome_score === x && item.process_score === y)
+
+
+  }
+  leaveHeatMapPoint(){
+ 
+     this.pointTableDatas=[];
 
   }
 
