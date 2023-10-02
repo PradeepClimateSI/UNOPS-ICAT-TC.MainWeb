@@ -38,15 +38,37 @@ export class PortfolioAddComponent implements OnInit {
   select : any;
   dataObj : any = []
   lastId : any ;
-
-  ngOnInit(): void {
+  resultsList : any = []
+  assessmentData :any =[]
+  async ngOnInit(): Promise<void> {
     this.tool = 'Portfolio Tool';
     this.tools = ['Portfolio Tool', 'Carbon Market Tool', 'Investment & Private Sector Tool']
     this.addLink=false;
    /*  this.methassess.assessmentDetails().subscribe(async (res: any) => {
        console.log("assessmentData : ", res)
       }); */
-
+      this.resultsList = await this.methassess.results().toPromise()
+      this.methassess.assessmentDetails().subscribe(async (res: any) => {
+        //  console.log("assessmentData : ", res)
+          this.assessmentData = res
+    
+    
+          for await (let x of this.assessmentData){
+            for await (let result of this.resultsList){
+    
+              if(result.assessment?.id == x.id){
+    
+                this.assessList.push(result.assessment)
+              }
+            }
+          }
+    
+          console.log("resultdataa",this.assessList)
+          const uniqueNamesSet = new Set<string>(this.assessList.map((item: { climateAction: { typeofAction: any; }; })=> item.climateAction.typeofAction));
+          this.interventionsList = Array.from(uniqueNamesSet, value => ({ value, label: value }));
+    
+        });
+    
       this.portfolioServiceProxy.getLastID().subscribe(async (res: any) => {
         console.log("iddd : ", res)
         this.lastId = res[0].portfolioId;
@@ -59,16 +81,16 @@ export class PortfolioAddComponent implements OnInit {
       let req = new GetAssessmentDetailsDto()
       req.tools = this.tools
 
-      this.methassess.assessmentDetailsforTool(req).subscribe(async (res: any) => {
-        console.log("assessmentData : ", res)
-        this.assessList = res;
+      // this.methassess.assessmentDetailsforTool(req).subscribe(async (res: any) => {
+      //   console.log("assessmentData : ", res)
+      //   // this.assessList = res;
 
-        const uniqueNamesSet = new Set<string>(this.assessList.map((item: { climateAction: { typeofAction: any; }; })=> item.climateAction.typeofAction));
-        this.interventionsList = Array.from(uniqueNamesSet, value => ({ value, label: value }));
+      //   const uniqueNamesSet = new Set<string>(this.assessList.map((item: { climateAction: { typeofAction: any; }; })=> item.climateAction.typeofAction));
+      //   this.interventionsList = Array.from(uniqueNamesSet, value => ({ value, label: value }));
 
-        console.log("distinctNames : ", this.interventionsList)
+      //   console.log("distinctNames : ", this.interventionsList)
 
-       });
+      //  });
 
        this.statuses = [
         { label: 'Ex-post', value: 'Ex-post' },
