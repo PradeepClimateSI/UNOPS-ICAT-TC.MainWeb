@@ -45,7 +45,7 @@ export class CarbonMarketDashboardComponent implements OnInit,AfterViewInit {
     y:number,
     data:string,
   }[]=[];
-
+  pointTableDatas:any[]=[]
   CMsectorCount: {
     sectoral_boundary:number
     average_tc_value:string,
@@ -648,5 +648,16 @@ CMPrerequiste: {
         return 'white';
     }
   }
+  enterHeatMapPoint(x:number, y: number){
 
+
+    this.pointTableDatas=this.tableData.filter(item=> item.outcome_score === x && item.process_score === y)
+
+
+  }
+  leaveHeatMapPoint(){
+ 
+     this.pointTableDatas=[];
+
+  }
 }

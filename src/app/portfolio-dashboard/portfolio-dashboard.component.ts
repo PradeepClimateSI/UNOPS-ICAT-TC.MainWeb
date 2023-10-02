@@ -3,7 +3,7 @@ import { MasterDataService } from 'app/shared/master-data.service';
 import { Chart, ChartType } from 'chart.js';
 import { LazyLoadEvent } from 'primeng/api';
 import { Paginator } from 'primeng/paginator';
-import { InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PortfolioControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Assessment, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PortfolioControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-portfolio-dashboard',
@@ -13,7 +13,7 @@ import { InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServ
 export class PortfolioDashboardComponent implements OnInit {
   loading: boolean;
   totalRecords: number;
-
+ 
 
   constructor(
     private methassess : MethodologyAssessmentControllerServiceProxy,
@@ -36,6 +36,7 @@ export class PortfolioDashboardComponent implements OnInit {
 
 
   tableData:any[]=[]
+  pointTableDatas:Assessment[]=[]
   chart: Chart;
   chart2: Chart;
   tool : string;
@@ -666,6 +667,18 @@ this.selectPortfolio();
   getIntervention(x:number, y: number){
     return  this.tableData.some(item => item.outcome_score === x && item.process_score === y);
 
-  }
 
+  }
+  enterHeatMapPoint(x:number, y: number){
+
+
+    this.pointTableDatas=this.tableData.filter(item=> item.outcome_score === x && item.process_score === y)
+
+
+  }
+  leaveHeatMapPoint(){
+ 
+     this.pointTableDatas=[];
+
+  }
 }
