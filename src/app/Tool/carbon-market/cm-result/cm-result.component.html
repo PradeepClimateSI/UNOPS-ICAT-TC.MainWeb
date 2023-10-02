@@ -409,7 +409,7 @@
 
                     <ng-template pTemplate="body" let-rowData>
                         <tr>
-                            <td [attr.rowspan]="outcomeData.scale_adaptation.length + 1">Scale SDG</td>
+                            <td [attr.rowspan]="outcomeData.scale_adaptation.length + 1">Scale Adaptation Co Benifits</td>
                         </tr>
                         <ng-container *ngFor="let scale_ADs of outcomeData.scale_adaptation;let i=index">
                             <tr>
@@ -434,7 +434,7 @@
                             </tr>
                         </ng-container>
                         <tr>
-                            <td [attr.rowspan]="outcomeData.sustained_adaptation.length + 1">Sustained SDG</td>
+                            <td [attr.rowspan]="outcomeData.sustained_adaptation.length + 1">Sustained Adaptation Co Benifits</td>
                         </tr>
                         <ng-container *ngFor="let sustained_ADs of outcomeData.sustained_adaptation; let i = index">
                             <tr>
