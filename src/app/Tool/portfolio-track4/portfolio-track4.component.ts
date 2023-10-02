@@ -111,7 +111,9 @@ export class PortfolioTrack4Component implements OnInit {
   initialRelevance:number=0;
   failedLikelihoodArray:{category:string,tabIndex:number}[]=[]
   failedRelevanceArray:{category:string,tabIndex:number}[]=[]
-
+  tabLoading: boolean=false;
+  characteristicsLoaded:boolean = false;
+  categoriesLoaded:boolean = false;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -193,7 +195,14 @@ export class PortfolioTrack4Component implements OnInit {
 
 
     if (countryId > 0) {
-      this.sectorList = await this.sectorProxy.getCountrySector(countryId).toPromise()
+      // this.sectorList = await this.sectorProxy.getCountrySector(countryId).toPromise()
+      this.sectorProxy.getSectorDetails(1,100,'').subscribe((res:any) =>{
+        res.items.forEach((re:any)=>{
+          if(re.id !=6){
+            this.sectorList.push(re)
+          }
+        })
+      })
 
       // console.log("++++", this.sectorList)
 
@@ -282,16 +291,18 @@ export class PortfolioTrack4Component implements OnInit {
   }
 
   async getCharacteristics() {
-
-    this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().subscribe((res3: any) => {
+    this.characteristicsList = await this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().toPromise();
+    this.characteristicsLoaded = true;
+     console.log("11111")
+   /*  this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().subscribe((res3: any) => {
       // console.log("ressss3333", res3)
       this.characteristicsList = res3
+      console.log("11111")
+    }); */
 
-    });
-
-    this.methodologyAssessmentControllerServiceProxy.findAllCategories().subscribe(async (res2: any) => {
+    // this.methodologyAssessmentControllerServiceProxy.findAllCategories().subscribe(async (res2: any) => {
+      this.methodologyAssessmentControllerServiceProxy.findAllCategories().toPromise().then((res2: any) => {
       const customOrder = [1, 2, 3, 4, 5, 7, 6, 8, 9, 10];
-
       console.log("categoryList", res2)
 
       const sortedRes2 = res2.sort((a : any, b: any) => {
@@ -360,9 +371,13 @@ export class PortfolioTrack4Component implements OnInit {
           }
 
         }
-
       }
+      this.categoriesLoaded = true;
 
+      if (this.characteristicsLoaded && this.categoriesLoaded) {
+        this.tabLoading = true; 
+        console.log("33333")
+      }
       console.log("processData", this.processData)
       console.log("outcomeData", this.outcomeData)
       console.log("this.sdgDataSendArray", this.sdgDataSendArray)

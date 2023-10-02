@@ -25,7 +25,7 @@ export enum UserRoles {
   VERIFIER = 'Verifier',
   SECTOR_ADMIN = 'Sector Admin',
   MRV_ADMIN = 'MRV Admin',
-  TT = 'Technical Team',
+  TT = 'Country User',
   DCT = 'Data Collection Team',
   QC = 'QC Team',
   INS_ADMIN = 'Institution Admin',
