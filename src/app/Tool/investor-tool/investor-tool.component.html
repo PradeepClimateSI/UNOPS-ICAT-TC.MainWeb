@@ -257,7 +257,7 @@
     <!-- <div class="p-grid p-fluid col-sm-12" *ngIf="showSections">
         <app-cm-section [assessment]="assessmentres"></app-cm-section>
     </div> -->
-    <div class="card" *ngIf="isSavedAssessment">
+    <div class="card" *ngIf="isSavedAssessment && tabLoading">
         <!-- <div class="card" > -->
         <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)" >
         <p-tabView  (onChange)="onMainTabChange($event) " [(activeIndex)]="activeIndexMain ">
@@ -281,19 +281,21 @@
 
 
                                                                 <div class="col-2">
-                                                                    <label for="Description">Relevance</label>
+                                                                    <label for="Description">Relevance*</label>
                                                                 </div>
                                                                 <div class="col-4">
-                                                                    <p-dropdown  *ngIf="approach===1"
+                                                                    <p-dropdown  
                                                                     name="data.charData.relavance"
-                                                                    #type="ngModel"
+                                                                    #rel="ngModel"
                                                                     placeholder="Select Relevance"
                                                                     [(ngModel)]="data.relavance"
                                                                     [options]="relevance" optionLabel="name"
                                                                     appendTo="body"
                                                                     optionValue="value" [required]="true"></p-dropdown>
+                                                                    <p class="info-message text-danger" *ngIf="data.relavance ==null  && (fData1.submitted || rel.touched) ">
+                                                                      This is a mandatory field </p>
 
-                                                                    <p-dropdown  *ngIf="approach===2"
+                                                                    <!-- <p-dropdown  *ngIf="approach===2"
                                                                     name="data.charData.relavance"
                                                                     placeholder="Select Institution"
                                                                     [(ngModel)]="data.relavance"
@@ -301,7 +303,7 @@
                                                                     optionLabel="name"
                                                                     appendTo="body"
                                                                     optionValue="id"
-                                                                   [required]="true"></p-dropdown>
+                                                                   [required]="true"></p-dropdown> -->
                                                                 </div>
 
 
@@ -374,7 +376,7 @@
                                                                         [(ngModel)]="question.value"
                                                                         [options]="yesNoAnswer" optionLabel="name"
                                                                         appendTo="body"
-                                                                        optionValue="name" [required]="true">
+                                                                        optionValue="name">
                                                                     </p-dropdown>
                                                                     <p-dropdown  *ngIf="approach===2"
                                                                         name={{data}}_charData.relavance
@@ -382,7 +384,7 @@
                                                                         [(ngModel)]="question.value"
                                                                         [options]="instiTutionList" optionLabel="name"
                                                                         appendTo="body"
-                                                                        optionValue="id" [required]="true">
+                                                                        optionValue="id" >
                                                                     </p-dropdown>
 
                                                                  </div>
@@ -409,24 +411,27 @@
 
                                                     <div class="row p-2">
                                                         <div class="col-12 col-lg-6">
-                                                            <div class="p-field">
-                                                                <label for="likelihood">Likelihood</label>
-                                                                <p-dropdown *ngIf="approach===1"
+                                                            <div class="p-field" >
+                                                                <label for="likelihood" >Likelihood*</label>
+                                                                <p-dropdown 
+                                                                    appendTo="body"
                                                                     name="data.charData.likelihood"
-                                                                    #type="ngModel" placeholder="Select Likelihood"
+                                                                    #likelihood2="ngModel" 
+                                                                    placeholder="Select Likelihood"
                                                                     [(ngModel)]="data.likelihood"
                                                                     [options]="likelihood" optionLabel="id"
                                                                     optionValue="value" [required]="true"
-                                                                    appendTo="body"></p-dropdown>
-
-                                                                    <p-dropdown  *ngIf="approach===2"
+                                                                    ></p-dropdown>
+                                                                    <p class="info-message text-danger" *ngIf="data.likelihood ==null && (fData1.submitted || likelihood2.touched) ">
+                                                                      This is a mandatory field </p>
+                                                                    <!-- <p-dropdown  *ngIf="approach===2"
                                                                     name={{data}}_charData.relavance
                                                                     placeholder="Select Institution"
                                                                     [(ngModel)]="data.likelihood"
                                                                     [options]="instiTutionList" optionLabel="name"
                                                                     appendTo="body"
                                                                     optionValue="id" [required]="true">
-                                                                </p-dropdown>
+                                                                </p-dropdown> -->
 
                                                             </div>
                                                         </div>
@@ -548,7 +553,7 @@
                       <div class="col-4 ">
                         <p-multiSelect appendTo="body" name="sdgs" placeholder="Select SDGs" [(ngModel)]="selectedSDGs"
                           [options]="sdgList" (ngModelChange)="onItemSelectSDGs($event)" optionLabel="name"
-                          [required]="true"></p-multiSelect>
+                          ></p-multiSelect>
                       </div>
 
                       <div class="col-5 "></div>
@@ -670,13 +675,13 @@
                                         <p-dropdown appendTo="body" name="score" #type="ngModel"
                                           placeholder="Select Score" [(ngModel)]="data.score"
                                           [options]="outcomeScaleScore" optionLabel="id" optionValue="value"
-                                          [required]="true"></p-dropdown></div>
+                                         ></p-dropdown></div>
 
                                           <div *ngIf=" category.CategoryName ==='GHG Time frame over which the outcome is sustained' ||  category.CategoryName ==='Adaptation Time frame over which the outcome is sustained' ">
                                             <p-dropdown appendTo="body" name="score" #type="ngModel"
                                               placeholder="Select Score" [(ngModel)]="data.score"
                                               [options]="outcomeSustainedScore" optionLabel="id" optionValue="value"
-                                              [required]="true"></p-dropdown></div>
+                                              ></p-dropdown></div>
                                       </div>
                                     </div>
 
@@ -752,7 +757,7 @@
                         <div class="col-4">
                           <p-dropdown appendTo="body" name="type" #type="ngModel" placeholder="Select Answer"
                           [(ngModel)]="selectedSDGs[i].answer" [options]="sdg_answers" optionLabel="name"
-                          optionValue="name" [required]="true" ></p-dropdown>
+                          optionValue="name"  ></p-dropdown>
                         </div>
                       </div>
 
@@ -829,7 +834,7 @@
                                           <p-dropdown appendTo="body" name="score" #type="ngModel"
                                             placeholder="Select Score" [(ngModel)]="data.score" (ngModelChange)="assignSDG(selectedSDGs[i], data)"
                                             [options]="outcomeScaleScore" optionLabel="id" optionValue="value"
-                                            [required]="true"></p-dropdown>
+                                           ></p-dropdown>
                                         </div>
                                       </div>
 
@@ -956,7 +961,7 @@
                                           <p-dropdown appendTo="body" name="score" #type="ngModel"
                                             placeholder="Select Score" [(ngModel)]="data.score" (ngModelChange)="assignSDG(selectedSDGs[i], data)"
                                             [options]="outcomeSustainedScore" optionLabel="id" optionValue="value"
-                                            [required]="true"></p-dropdown>
+                                            ></p-dropdown>
                                         </div>
                                       </div>
 
@@ -1038,7 +1043,7 @@
 
                 <div
                 class="d-flex flex-row-reverse mt-20 ">
-                    <button class="btn btn-primary text-uppercase" type="submit" [disabled]="failedLikelihoodArray.length!=0 ||failedRelevanceArray.length!=0">
+                    <button class="btn btn-primary text-uppercase" type="submit" [disabled]="failedLikelihoodArray.length!=0 ||failedRelevanceArray.length!=0 || !fData1.valid">
                         {{approach==1 ?'Calculate & Check results': (approach==2 ?'Send to Data Collection Team':'')}}
                     </button>
                 </div>
