@@ -115,12 +115,14 @@ export class InstitutionComponent implements OnInit {
       }
     }));
 
+    let fil : string[] = new Array()
+    fil.push(('id||$eq||' + 4))
 
     this.serviceProxy
     .getManyBaseInstitutionTypeControllerInstitutionType(
       undefined,
       undefined,
-      undefined,
+      fil,
       undefined,
       ['name,ASC'],
       undefined,
@@ -137,9 +139,10 @@ export class InstitutionComponent implements OnInit {
      
      
       // }
-      if (this.usrrole == "Technical Team") {
+      // if (this.usrrole == "Technical Team") {
+        if (this.usrrole == "Country User") {
 
-        this.selectedTypeList1 = this.selectedTypeList.filter((o: any) => o.name != "UNFCCC Focal Point" && o.name != "NDC Unit" && o.name != "Technical Team" && o.name != "Data Collection Team" && o.name != "QC Team");
+        this.selectedTypeList1 = this.selectedTypeList.filter((o: any) => o.name != "UNFCCC Focal Point" && o.name != "NDC Unit" && o.name != "National Institution" && o.name != "Data Collection Team" && o.name != "QC Team");
       }
       else if (this.usrrole == "Data Collection Team") {
         this.selectedTypeList1 = this.selectedTypeList.filter((o: any) => o.name == "Data provider");
@@ -178,10 +181,13 @@ export class InstitutionComponent implements OnInit {
       filter.push('id||$eq||' + this.sectorId)
     }
 
-    this.sectorProxy.getCountrySector(this.countryId).subscribe((res: any) => {
-      this.sectorList = res;
-      console.log("++++" ,this.sectorList)
-    });
+    this.sectorProxy.getSectorDetails(1,100,'').subscribe((res:any) =>{
+      this.sectorList = res.items;
+    })
+    // this.sectorProxy.getCountrySector(this.countryId).subscribe((res: any) => {
+    //   this.sectorList = res;
+    //   console.log("++++" ,this.sectorList)
+    // });
 
 
   }
@@ -190,7 +196,7 @@ export class InstitutionComponent implements OnInit {
   onInstitutionChange(event:any)
 {
 
-  if(['Data Collection Team','QC Team','Technical Team'].includes(event.name)){
+  if(['Data Collection Team','QC Team','National Institution'].includes(event.name)){
   // this.inname = event.name
   }
   else{
