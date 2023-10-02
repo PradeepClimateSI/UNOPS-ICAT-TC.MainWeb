@@ -125,10 +125,11 @@ this.selectPortfolio();
    this.sdgResults()
     this.portfolioServiceProxy.assessmentsDataByAssessmentId(this.selectedPortfolio?this.selectedPortfolio.id:0).subscribe(async (res: any) => {
       console.log("arrayyy : ", res)
-
+      
       this.barChartData=res;
+      setTimeout(() => {
       this.viewPortfolioBarChart();
-
+    },300)
    
 
 
@@ -488,7 +489,13 @@ this.selectPortfolio();
       return;
     }
 
-  
+    if (this.portfolioBarChart) {
+      // Update the chart data
+      this.portfolioBarChart.data.datasets[0].data = data;
+      this.portfolioBarChart.data.labels=label;
+      this.portfolioBarChart.update();
+    }
+    else{
       this.portfolioBarChart =new Chart(ctx, {
         type: 'bar',
 
@@ -599,7 +606,7 @@ this.selectPortfolio();
         }
     });
 
-    
+  }
 
 
   }
