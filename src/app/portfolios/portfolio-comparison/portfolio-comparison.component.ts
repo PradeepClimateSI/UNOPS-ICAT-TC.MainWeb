@@ -17,6 +17,7 @@ export class PortfolioComparisonComponent implements OnInit {
   outcome_data: any;
   aggregation_data: any;
   alignment_data: any;
+  isLoaded: boolean = false;
 
   constructor(
     private router: Router,
@@ -30,6 +31,7 @@ export class PortfolioComparisonComponent implements OnInit {
       await this.getAssessmentsByPortfolio()
       await this.getPortfolioData()
       await this.getDummyData()
+      this.isLoaded = true
     });
   }
 
@@ -58,6 +60,7 @@ console.log(this.portfolio)
 
   async getDummyData() {
     let interventions = await this.portfolioServiceProxy.getPortfolioComparisonData(this.portfolioId).toPromise()
+    
     //TODO sort process data by order before loop the table
     // this.process_data = [
     //   {
