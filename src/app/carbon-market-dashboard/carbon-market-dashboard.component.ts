@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Chart } from 'chart.js';
+import { Chart, ChartType } from 'chart.js';
 import { AssessmentCMDetailControllerServiceProxy, CMAssessmentAnswerControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CMScoreDto, ClimateAction, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
@@ -13,7 +13,12 @@ import { LazyLoadEvent } from 'primeng/api';
   styleUrls: ['./carbon-market-dashboard.component.css']
 })
 export class CarbonMarketDashboardComponent implements OnInit,AfterViewInit {
+  @ViewChild('cmSDGsPieChart')
+  canvascmRefSDGsPieChart: ElementRef<HTMLCanvasElement>;
 
+
+  @ViewChild('cmSectorCountPieChart')
+  canvascmRefSectorCountPieChart: ElementRef<HTMLCanvasElement>;
   constructor(
     // private projectProxy: ProjectControllerServiceProxy,
     private assessmentCMProxy:AssessmentCMDetailControllerServiceProxy,
@@ -60,8 +65,9 @@ CMPrerequiste: {
   sectorCount: {
     sector:string,
     count:number
-    }[];
-
+    }[]=[];
+    cmPieChartSDG:Chart;
+    cmPieChartSectorCount:Chart;
   CMBarChart:any =[];
   pieChartCM:any=[];
   averageTCValue:any;
@@ -80,6 +86,7 @@ CMPrerequiste: {
       outcome_score: number,
       intervention: string
     }[]=[];
+    sdgDetailsList:any=[];
   ngOnInit(): void {
     // this.averageTCValue =58.05;
     const token = localStorage.getItem('ACCESS_TOKEN')!;
@@ -93,79 +100,7 @@ CMPrerequiste: {
 
     this.loadgridData(event);
    
-      //   console.log("kkkkk : ", res)
-    // this.methassess.getTCForTool(this.tool).subscribe((res: any) => {
-    //   console.log("kkkkk : ", res)
 
-    //   this.interventions = res;
-    // //  console.log("policyList:", this.interventions);
-    //   this.averageTCValue= (res.reduce((total:number, next:any) => total + Number(next.y), 0) / res.length).toFixed(2);
-    //   console.log( "averageTCValue :",this.averageTCValue)
-
-    //   // Sort interventions based on id in descending order
-    //   this.interventions.sort((a: { id: number; }, b: { id: number; }) => b.id - a.id);
-
-    //   // Get the last 5 interventions
-    //   const lastFiveInterventions = this.interventions.slice(0,5);
-
-    //   this.tcData = lastFiveInterventions
-    //  /*  this.tcData = lastFiveInterventions.map(intervention => ({
-    //     y: intervention?.tc_value,
-    //     x: intervention?.intervention_id,
-    //     data: intervention?.data
-    //   }));
-
-    //   this.tcTableData = this.interventions.map(intervention => ({
-    //     y: intervention?.tc_value,
-    //     x: intervention?.intervention_id,
-    //     data: intervention?.policyName
-    //   })); */
-
-    //   this.tcTableData = this.interventions
-
-    //   // this.viewMainChart();
-    //   console.log("aaa", this.tcData);
-    //   console.log("bbb", this.tcTableData);
-
-    // });
-
-
-/*     this.projectProxy.findAllPolicies().subscribe((res: any) => {
-      this.interventions = res;
-      console.log("policyList:", this.interventions);
-
-      // Sort interventions based on id in descending order
-      this.interventions.sort((a, b) => b.id - a.id);
-
-      // Get the last 5 interventions
-      const lastFiveInterventions = this.interventions.slice(0,10);
-
-      this.tcData = lastFiveInterventions.map(intervention => ({
-        y: intervention?.tc_value,
-        x: intervention?.intervention_id,
-        data: intervention?.policyName
-      }));
-
-      this.tcTableData = this.interventions.map(intervention => ({
-        y: intervention?.tc_value,
-        x: intervention?.intervention_id,
-        data: intervention?.policyName
-      }));
-
-      this.viewMainChart();
-      console.log("aaa", this.tcData);
-      console.log("bbb", this.tcTableData);
-    }); */
-
-    // this.assessmentCMProxy.getSectorCount().subscribe((res: any) => {
-    //   console.log("CMsectorCount",res)
-    //   this.CMsectorCount = res
-    //   setTimeout(() => {
-    //     this.viewCMBarChart();
-    //   }, 500);
-       
-    // })
-    
     this.xData = this.masterDataService.xData
     this.yData = this.masterDataService.yData
     this.assessmentCMProxy.getPrerequisite().subscribe((res:any)=>{
@@ -178,13 +113,8 @@ CMPrerequiste: {
       
     })
 
-    // this.investorProxy.getSectorCountByTool(this.tool).subscribe((res: any) => {
-    //   this.sectorCount = res
-    //   console.log("sectorcount",this.sectorCount)
-    //   setTimeout(() => {
-    //   }, 100);
-      
-    // });
+    this.sdgResults();
+    this.sectorCountResult();
 
   }
 
@@ -213,177 +143,267 @@ CMPrerequiste: {
     this.cdr.detectChanges();
   }
 
-  // viewPieChart(){
-  //   const labels = this.sectorCount.map((item) => item.sector);
-  //   let counts:number[] = this.sectorCount.map((item) => item.count);
-  //   const total = counts.reduce((acc, val) => acc + val, 0);
-  //   const percentages = counts.map(count => ((count / total) * 100).toFixed(2));
-  //   this.pieChart2 =new Chart('pieChart2', {
-  //     type: 'pie',
+  sdgResults(){
+    this.sdgDetailsList=[]
+    this.cmAssessmentQuestionProxy.getSDGFrequency().subscribe(async (res: any) => {
+      console.log("sdgDetailsList : ", res)
+      this.sdgDetailsList = res;
+      setTimeout(() => {
+        this.viewFrequencyofSDGsChart();
+      }, 200);
+     });
 
-  //     data: {
-  //       labels: labels,
-  //       datasets: [{
-  //         data: counts,
-  //         backgroundColor: [
-  //           'rgba(153, 102, 255, 1)',
-  //           'rgba(75, 192, 192,1)',
-  //           'rgba(54, 162, 235, 1)',
-  //           'rgba(123, 122, 125, 1)',
-  //           'rgba(255, 99, 132, 1)',
-  //           'rgba(255, 205, 86, 1)',
-  //           'rgba(255, 99, 132, 1)',
+  
+   
+    
+  }
+sectorCountResult(){
+ // this.investorProxy.findSectorCount(tool).subscribe((res: any) => {
+    //   this.sectorCount = res
+    //   console.log("sectorcount",this.sectorCount)
+    //   setTimeout(() => {
+       
+    //     this.viewSecterTargetedPieChart();
+    //   }, 100);
+     
+    // });
 
-  //         ],
+    this.sectorCount=[{sector:'test1',count:23},
+    {sector:'test2',count:10}]
+  
+    setTimeout(() => {
+      this.viewSecterTargetedPieChart();
+    }, 200);
+}
+  viewFrequencyofSDGsChart(){
+    let labels = this.sdgDetailsList.map((item:any) => item.sdg);
+    let counts:number[] = this.sdgDetailsList.map((item:any) => item.count);
+    let total = counts.reduce((acc, val) => acc + val, 0);
+    let percentages = counts.map(count => ((count / total) * 100).toFixed(2));
 
-  //       }]
-  //     },
-  //     options: {
-  //       responsive: true,
-  //       maintainAspectRatio: false,
-  //       plugins:{
-  //         legend:{
-  //           position: 'bottom',
-  //           labels: {
-  //             padding: 20
-  //           }
-  //         },
-  //         datalabels: {
-  //           color: '#fff',
-  //           font: {
-  //             size: 12
-  //           },
-  //           formatter: (value, ctx) => {
-  //             const label = ctx.chart.data.labels![ctx.dataIndex];
-  //             const percentage = percentages[ctx.dataIndex];
-  //             return `${label}: ${value} (${percentage}%)`;
-  //           },
+    if (!this.canvascmRefSDGsPieChart) {
+      console.error('Could not find canvas element');
+      return;
+    }
 
-  //         },
-  //         tooltip:{
-  //           position:'average',
-  //           boxWidth:10,
-  //           callbacks:{
+    const canvas = this.canvascmRefSDGsPieChart.nativeElement;
+    const ctx = canvas.getContext('2d');
 
-  //             label:(ctx)=>{
-  //               // console.log(ctx)
-  //               // let sum = ctx.dataset._meta[0].total;
-  //               // let percentage = (value * 100 / sum).toFixed(2) + "%";
-  //               // return percentage;
-  //               let sum = 0;
-  //               let array =counts
-  //               array.forEach((number) => {
-  //                 sum += Number(number);
-  //               });
-  //               // console.log(sum, counts[ctx.dataIndex])
-  //               let percentage = (counts[ctx.dataIndex]*100 / sum).toFixed(2)+"%";
+    if (!ctx) {
+      console.error('Could not get canvas context');
+      return;
+    }
 
-  //               return[
-  //                 `Sector: ${labels[ctx.dataIndex]}`,
-  //                 `Count: ${counts[ctx.dataIndex]}`,
-  //                 `Percentage: ${percentage}`
-  //               ];
-  //              }
-  //           },
-  //           backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
-  //             titleFont: {
-  //               size: 14,
-  //               weight: 'bold'
-  //             },
-  //             bodyFont: {
-  //               size: 14
-  //             },
-  //             displayColors: true, // Hide the color box in the tooltip
-  //             bodyAlign: 'left'
-  //         }
-  //      }
+    if (this.cmPieChartSDG) {
+      // Update the chart data
+      this.cmPieChartSDG.data.datasets[0].data = counts;
+      this.cmPieChartSDG.data.labels=labels
+      this.cmPieChartSDG.update();
+    }
+    else{
 
-  //     },
 
-  // });
+    this.cmPieChartSDG =new Chart(ctx, {
+      type: 'pie' as ChartType,
 
-  // }
+      data: {
+        labels: labels,
+        datasets: [{
+          data: counts,
+          backgroundColor: [
+            'rgba(153, 102, 255, 1)',
+            'rgba(75, 192, 192,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(123, 122, 125, 1)',
+            'rgba(255, 99, 132, 1)',
+            'rgba(255, 205, 86, 1)',
+            'rgba(255, 99, 132, 1)',
 
-  // viewMainChart(){
-  //  // const canvas = this.canvas.nativeElement.getContext('2d');
-  //   this.chart =new Chart('canvas', {
-  //     type: 'line',
+          ],
+         
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins:{
+          legend:{
+            position: 'bottom',
+            labels: {
+              padding: 20
+            }
+          },
+          datalabels: {
+            color: '#fff',
+            font: {
+              size: 12
+            },
+            formatter: (value, ctx) => {
+              const label = ctx.chart.data.labels![ctx.dataIndex];
+              const percentage = percentages[ctx.dataIndex];
+              return `${label}: ${value} (${percentage}%)`;
+            },
 
-  //     data: {
+          },
+          tooltip:{
+            position:'average',
+            boxWidth:10,
+            callbacks:{
+              
+              label:(ctx)=>{ 
+                // console.log(ctx)
+                // let sum = ctx.dataset._meta[0].total;
+                // let percentage = (value * 100 / sum).toFixed(2) + "%";
+                // return percentage;
+                let sum = 0;
+                let array =counts
+                array.forEach((number) => {
+                  sum += Number(number);
+                });
+                // console.log(sum, counts[ctx.dataIndex])
+                let percentage = (counts[ctx.dataIndex]*100 / sum).toFixed(2)+"%";
 
-  //         datasets: [
-  //           {
-  //             label:'TC change with investments',
-  //             data: this.tcData,
-  //             backgroundColor: 'blue',
-  //             borderColor: "#black",
-  //             pointRadius:10,
-  //             borderWidth: 0,
-  //         }],
-  //     },
-  //     options:{
-  //       scales: {
-  //         x: {
-  //           beginAtZero: true,
-  //           title: {
-  //             display: true,
-  //             text: 'Intervention ID',
-  //             font: {
-  //               size: 16,
-  //               weight: 'bold',
+                return[
+                  `SDG: ${labels[ctx.dataIndex]}`,
+                  `Count: ${counts[ctx.dataIndex]}`,
+                  `Percentage: ${percentage}`
+                ];
+               }
+            },
+            backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
+              titleFont: {
+                size: 14,
+                weight: 'bold'
+              },
+              bodyFont: {
+                size: 14
+              },
+              displayColors: true, // Hide the color box in the tooltip
+              bodyAlign: 'left'
+          }
+       }
 
-  //             }
-  //           }
-  //         },
-  //         y: {
-  //           beginAtZero: true,
-  //           title: {
-  //             display: true,
-  //             text: 'Transformational Change (%)',
-  //             font: {
-  //               size: 16,
-  //               weight: 'bold',
+      },
 
-  //             }
-  //           }
-  //         }
-  //       },
-  //       plugins:{
-  //         legend: {
-  //           display: false
-  //         },
-  //         tooltip:{
-  //           position:'average',
-  //           boxWidth:10,
-  //           callbacks:{
+  });}
 
-  //             label:(context)=>{
+  }
+  viewSecterTargetedPieChart(){
+    const labels = this.sectorCount.map((item) => item.sector);
+    let counts:number[] = this.sectorCount.map((item) => item.count);
+    const total = counts.reduce((acc, val) => acc + val, 0);
+    const percentages = counts.map(count => ((count / total) * 100).toFixed(2));
+    if (!this.canvascmRefSectorCountPieChart) {
+      console.error('Could not find canvas element');
+      return;
+    }
 
-  //               return[
-  //                 `Intervention: ${this.tcData[context.dataIndex].data}`,
-  //                 `Intervention Id: ${this.tcData[context.dataIndex].x}`,
-  //                 `TC value: ${this.tcData[context.dataIndex].y}%`
-  //               ];
-  //              }
-  //           },
-  //           backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
-  //             titleFont: {
-  //               size: 14,
-  //               weight: 'bold'
-  //             },
-  //             bodyFont: {
-  //               size: 14
-  //             },
-  //             displayColors: true, // Hide the color box in the tooltip
-  //             bodyAlign: 'left'
-  //         }
-  //       }
+    const canvas = this.canvascmRefSectorCountPieChart.nativeElement;
+    const ctx = canvas.getContext('2d');
 
-  //     }
-  // });
+    if (!ctx) {
+      console.error('Could not get canvas context');
+      return;
+    }
 
-  // }
+    if (this.cmPieChartSectorCount) {
+      // Update the chart data
+      this.cmPieChartSectorCount.data.datasets[0].data = counts;
+      this.cmPieChartSectorCount.data.labels=labels
+      this.cmPieChartSectorCount.update();
+    }
+    else{
+    this.cmPieChartSectorCount =new Chart(ctx, {
+      type: 'pie' as ChartType,
 
+      data: {
+        labels: labels,
+        datasets: [{
+          data: counts,
+          backgroundColor: [
+            'rgb(250,227,114)',
+              'rgb(51,51,51)',
+              'rgb(0,170,187)',
+              'rgb(227,120,42)',
+              'rgb(150,131,141)',
+              'rgb(42,61,227)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(75, 192, 192,1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(123, 122, 125, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 205, 86, 1)',
+              'rgba(255, 99, 132, 1)',
+
+          ],
+         
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins:{
+          legend:{
+            position: 'bottom',
+            labels: {
+              padding: 20
+            }
+          },
+          datalabels: {
+            color: '#fff',
+            font: {
+              size: 12
+            },
+            formatter: (value, ctx) => {
+              const label = ctx.chart.data.labels![ctx.dataIndex];
+              const percentage = percentages[ctx.dataIndex];
+              return `${label}: ${value} (${percentage}%)`;
+            },
+
+          },
+          tooltip:{
+            position:'average',
+            boxWidth:10,
+            callbacks:{
+              
+              label:(ctx)=>{ 
+                // console.log(ctx)
+                // let sum = ctx.dataset._meta[0].total;
+                // let percentage = (value * 100 / sum).toFixed(2) + "%";
+                // return percentage;
+                let sum = 0;
+                let array =counts
+                array.forEach((number) => {
+                  sum += Number(number);
+                });
+                // console.log(sum, counts[ctx.dataIndex])
+                let percentage = (counts[ctx.dataIndex]*100 / sum).toFixed(2)+"%";
+
+                return[
+                  `Sector: ${labels[ctx.dataIndex]}`,
+                  `Count: ${counts[ctx.dataIndex]}`,
+                  `Percentage: ${percentage}`
+                ];
+               }
+            },
+            backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
+              titleFont: {
+                size: 14,
+                weight: 'bold'
+              },
+              bodyFont: {
+                size: 14
+              },
+              displayColors: true, // Hide the color box in the tooltip
+              bodyAlign: 'left'
+          }
+       }
+
+      },
+
+  });}
+
+  }
   getRandomColors(count: number): string[] {
     const colors: string[] = [];
     for (let i = 0; i < count; i++) {
