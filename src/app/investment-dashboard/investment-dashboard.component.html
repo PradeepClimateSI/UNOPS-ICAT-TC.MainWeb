@@ -77,7 +77,7 @@
             <td
               [style.background-color]="getBackgroundColor(y.value + x.value)"
             >
-              <span (mouseenter)="enterHeatMapPoint(x.value, y.value);op.show($event)" (mouseleave)="leaveHeatMapPoint();op.hide()"
+              <span (mouseenter)="enterHeatMapPoint(x.value, y.value,$event)" (mouseleave)="leaveHeatMapPoint();op.hide()"
                [style.background-color]=" getIntervention(x.value, y.value) ?getDotColor(y.value + x.value):''"
                 [ngClass]="
                   getIntervention(x.value, y.value) ? 'intervention' : ''

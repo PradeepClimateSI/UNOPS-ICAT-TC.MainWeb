@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { Chart, ChartType } from 'chart.js';
 import { LazyLoadEvent } from 'primeng/api';
+import { OverlayPanel } from 'primeng/overlaypanel';
 import { Paginator } from 'primeng/paginator';
 import { Assessment, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PortfolioControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
@@ -33,7 +34,7 @@ export class PortfolioDashboardComponent implements OnInit {
 
   @ViewChild('portfolioSectorCountPieChart')
   canvasRefSectorCountPieChart: ElementRef<HTMLCanvasElement>;
-
+  @ViewChild('op') op: OverlayPanel;
 
   tableData:any[]=[]
   pointTableDatas:Assessment[]=[]
@@ -679,13 +680,16 @@ this.selectPortfolio();
 
 
   }
-  enterHeatMapPoint(x:number, y: number){
+
+enterHeatMapPoint(x:number, y: number,event:any){
 
 
-    this.pointTableDatas=this.tableData.filter(item=> item.outcome_score === x && item.process_score === y)
-
-
+  this.pointTableDatas=this.tableData.filter(item=> item.outcome_score === x && item.process_score === y)
+  if(this.pointTableDatas.length>0){
+    this.op.show(event);
   }
+
+}
   leaveHeatMapPoint(){
  
      this.pointTableDatas=[];
