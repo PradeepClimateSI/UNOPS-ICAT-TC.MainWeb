@@ -251,6 +251,62 @@
       </div>
   </div>
 </div>
+<div class="row">
+  <div class="col-md-6 col-12 d-flex align-items-stretch">
+    <div  class="p-grid p-fluid card m-3">
+      <div style="position: relative; height:100%;" class="row text-center">
+        <h3>Frequency of SDGs</h3>
+        <div
+          *ngIf="sdgDetailsList.length != 0"
+          class="col-12 mt-20"
+         
+        >
+          <canvas  #cmSDGsPieChart>{{ cmPieChartSDG }}</canvas>
+        </div>
+      </div>
+      <div
+        *ngIf="sdgDetailsList.length == 0"
+        class="col-12"
+        
+      >
+        <p-messages severity="warn">
+          <ng-template pTemplate>
+            <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
+            <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
+            <div class="ml-2">No data to show.</div>
+          </ng-template>
+        </p-messages>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-12 d-flex align-items-stretch">
+    <div class="p-grid p-fluid card m-3">
+      <div class="row text-center">
+        <h3>Sectors Targeted</h3>
+        <div
+          *ngIf="sectorCount.length != 0"
+          class="col-12 mt-20"
+        
+        >
+          <canvas #cmSectorCountPieChart>{{ cmPieChartSectorCount }}</canvas>
+        </div>
+      </div>
+      <div
+        *ngIf="sectorCount.length == 0"
+        class="col-12"
+        
+      >
+        <p-messages severity="warn">
+          <ng-template pTemplate>
+            <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
+            <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
+            <div class="ml-2">No data to show.</div>
+          </ng-template>
+        </p-messages>
+      </div>
+    </div>
+  </div>
+</div>
 <p-overlayPanel [hidden]="pointTableDatas.length==0" #op>
   <ng-template pTemplate="content">
     <div *ngFor="let pointTableData of pointTableDatas" style=" border-style: solid;" class="m-3 p-1" >
