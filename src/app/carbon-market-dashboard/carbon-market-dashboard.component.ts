@@ -26,7 +26,7 @@ export class CarbonMarketDashboardComponent implements OnInit,AfterViewInit {
     // private projectProxy: ProjectControllerServiceProxy,
     private assessmentCMProxy:AssessmentCMDetailControllerServiceProxy,
     // private methassess : MethodologyAssessmentControllerServiceProxy,
-    // private investorProxy: InvestorToolControllerServiceProxy,
+    private investorProxy: InvestorToolControllerServiceProxy,
     private cmAssessmentQuestionProxy : CMAssessmentQuestionControllerServiceProxy,
     public masterDataService: MasterDataService,
     private cdr: ChangeDetectorRef
@@ -161,22 +161,22 @@ CMPrerequiste: {
     
   }
 sectorCountResult(){
- // this.investorProxy.findSectorCount(tool).subscribe((res: any) => {
-    //   this.sectorCount = res
-    //   console.log("sectorcount",this.sectorCount)
-    //   setTimeout(() => {
+ this.investorProxy.getSectorCountByTool(this.tool).subscribe((res: any) => {
+      this.sectorCount = res
+      console.log("sectorcount",this.sectorCount)
+      setTimeout(() => {
        
-    //     this.viewSecterTargetedPieChart();
-    //   }, 100);
+        this.viewSecterTargetedPieChart();
+      }, 200);
      
-    // });
+    });
 
-    this.sectorCount=[{sector:'test1',count:23},
-    {sector:'test2',count:10}]
+    // this.sectorCount=[{sector:'test1',count:23},
+    // {sector:'test2',count:10}]
   
-    setTimeout(() => {
-      this.viewSecterTargetedPieChart();
-    }, 200);
+    // setTimeout(() => {
+    //   this.viewSecterTargetedPieChart();
+    // }, 200);
 }
   viewFrequencyofSDGsChart(){
     let labels = this.sdgDetailsList.map((item:any) => item.sdg);
