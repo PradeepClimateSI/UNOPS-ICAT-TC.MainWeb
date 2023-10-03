@@ -50,6 +50,7 @@
                         type="button"
                         pButton
                         pRipple
+                        [disabled]="!this.isCarbonMarketTool &&  userRole !=loginRole.External"
                         (click)="goToCarbonMarket()"
                         label="Carbon Market">
                     </button>
@@ -63,6 +64,7 @@
                         pButton
                         pRipple
                         label="Investment"
+                        [disabled]="!this.isInvesmentTool &&  userRole !=loginRole.External"
                         (click)="goToInvestment()">
                     </button>
 
@@ -75,6 +77,7 @@
                         type="button"
                         pButton
                         pRipple
+                        [disabled]="!this.isPortfolioTool &&  userRole !=loginRole.External"
                         (click)="goToPortfolio()"
                         label="Portfolio">
                     </button>
