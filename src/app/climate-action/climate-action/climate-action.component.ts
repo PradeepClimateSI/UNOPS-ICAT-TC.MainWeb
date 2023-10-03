@@ -567,7 +567,6 @@ export class ClimateActionComponent implements OnInit {
                 }
                  this.sectorsJoined=this.sectornames.join(', ')
                 //  console.log("sectors",this.policySectorArray, this.sectorsJoined)
-
                  })
               //console.log("id......",this.project.id)
               // this.serviceProxy
