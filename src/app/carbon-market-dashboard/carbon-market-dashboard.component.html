@@ -236,7 +236,7 @@
                             <td>{{y.label}}</td>
                             <ng-container *ngFor="let x of xData">
                                 <td  [style.background-color]="getBackgroundColor(y.value+x.value)">
-                                    <span (mouseenter)="enterHeatMapPoint(x.value, y.value);op.show($event)" (mouseleave)="leaveHeatMapPoint();op.hide()"
+                                    <span (mouseenter)="enterHeatMapPoint(x.value, y.value,$event);" (mouseleave)="leaveHeatMapPoint();op.hide()"
                                     [style.background-color]=" getIntervention(x.value, y.value) ?getDotColor(y.value + x.value):''" [ngClass]="getIntervention(x.value, y.value)? 'intervention':''" >{{y.value+x.value}}</span>
                                 </td>
                             </ng-container>
@@ -307,7 +307,7 @@
     </div>
   </div>
 </div>
-<p-overlayPanel [hidden]="pointTableDatas.length==0" #op>
+<p-overlayPanel  [hidden]="pointTableDatas.length==0" #op>
   <ng-template pTemplate="content">
     <div *ngFor="let pointTableData of pointTableDatas" style=" border-style: solid;" class="m-3 p-1" >
 

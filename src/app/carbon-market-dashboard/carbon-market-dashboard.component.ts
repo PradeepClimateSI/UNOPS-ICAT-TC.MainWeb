@@ -7,6 +7,7 @@ import { MasterDataService } from 'app/shared/master-data.service';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Paginator } from 'primeng/paginator';
 import { LazyLoadEvent } from 'primeng/api';
+import { OverlayPanel } from 'primeng/overlaypanel';
 @Component({
   selector: 'app-carbon-market-dashboard',
   templateUrl: './carbon-market-dashboard.component.html',
@@ -19,6 +20,8 @@ export class CarbonMarketDashboardComponent implements OnInit,AfterViewInit {
 
   @ViewChild('cmSectorCountPieChart')
   canvascmRefSectorCountPieChart: ElementRef<HTMLCanvasElement>;
+
+  @ViewChild('op') op: OverlayPanel;
   constructor(
     // private projectProxy: ProjectControllerServiceProxy,
     private assessmentCMProxy:AssessmentCMDetailControllerServiceProxy,
@@ -668,11 +671,13 @@ sectorCountResult(){
         return 'white';
     }
   }
-  enterHeatMapPoint(x:number, y: number){
+  enterHeatMapPoint(x:number, y: number,event:any){
 
-
+ 
     this.pointTableDatas=this.tableData.filter(item=> item.outcome_score === x && item.process_score === y)
-
+    if(this.pointTableDatas.length>0){
+      this.op.show(event);
+    }
 
   }
   leaveHeatMapPoint(){
