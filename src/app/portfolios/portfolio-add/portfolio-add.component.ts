@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import {  GetAssessmentDetailsDto, MethodologyAssessmentControllerServiceProxy, Portfolio, PortfolioControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import {  Assessment, GetAssessmentDetailsDto, MethodologyAssessmentControllerServiceProxy, Portfolio, PortfolioControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-portfolio-add',
@@ -63,9 +63,15 @@ export class PortfolioAddComponent implements OnInit {
             }
           }
     
-          console.log("resultdataa",this.assessList)
+          
           const uniqueNamesSet = new Set<string>(this.assessList.map((item: { climateAction: { typeofAction: any; }; })=> item.climateAction.typeofAction));
           this.interventionsList = Array.from(uniqueNamesSet, value => ({ value, label: value }));
+          this.assessList.sort(function(a:Assessment, b:Assessment) {
+            console.log(a.id)
+            // Convert 'id' properties to numbers and compare them
+            return b.id - a.id;
+        });
+        console.log("resultdataa",this.assessList)
     
         });
     

@@ -36,7 +36,8 @@ import {
   DocumentControllerServiceProxy,
   DocOwnerUpdateDto,
   AllBarriersSelected,
-  BarrierSelected
+  BarrierSelected,
+  AllPolicySectors
 
 } from 'shared/service-proxies/service-proxies';
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
@@ -212,18 +213,19 @@ export class ClimateActionComponent implements OnInit {
     // this.project.country= initialCountry;
 
     if (countryId > 0) {
-      this.sectorProxy.getSectorDetails(1,100,'').subscribe((res:any) =>{
-        res.items.forEach((re:any)=>{
-
-          if(re.id !=6){
-            this.sectorList.push(re)
-          }
-        })
-      })
-      // this.sectorProxy.getCountrySector(countryId).subscribe((res: any) => {
-      //   this.sectorList = res;
-        console.log("++++", this.sectorList)
-      // });
+      // this.sectorProxy.getSectorDetails(1,100,'').subscribe((res:any) =>{
+      //   console.log("++++", res)
+      //   res.items.forEach((re:any)=>{
+          
+      //     if(re.id !=6){
+      //       this.sectorList.push(re)
+      //     }
+      //   })
+      // })
+      this.sectorProxy.getCountrySector(countryId).subscribe((res: any) => {
+        this.sectorList = res;
+   
+      });
     } // countryid = 0
     this.asses.findAllBarriers().subscribe((res: any) => {
       this.barriers = res;
@@ -565,7 +567,6 @@ export class ClimateActionComponent implements OnInit {
                 }
                  this.sectorsJoined=this.sectornames.join(', ')
                 //  console.log("sectors",this.policySectorArray, this.sectorsJoined)
-
                  })
               //console.log("id......",this.project.id)
               // this.serviceProxy
@@ -942,8 +943,9 @@ export class ClimateActionComponent implements OnInit {
                 
                 this.policySectorArray.push(ps);
               }
-              //@ts-ignore
-              this.projectProxy.policySectors(this.policySectorArray).subscribe((res) => {
+              let allSectors= new AllPolicySectors();
+              allSectors.allSectors =this.policySectorArray;
+              this.projectProxy.policySectors(allSectors).subscribe((res) => {
                 console.log('save', res);
                
               })
@@ -1078,18 +1080,18 @@ export class ClimateActionComponent implements OnInit {
 
     this.onSectorChange(event);
 
-    this.sectorProxy.getSectorDetails(1,100,'').subscribe((res:any) =>{
-      res.items.forEach((re:any)=>{
-        if(re.id !=6){
-          this.sectorList.push(re)
-        }
-      })
-    })
+    // this.sectorProxy.getSectorDetails(1,100,'').subscribe((res:any) =>{
+    //   res.items.forEach((re:any)=>{
+    //     if(re.id !=6){
+    //       this.sectorList.push(re)
+    //     }
+    //   })
+    // })
 
-    // this.sectorProxy.getCountrySector(this.project.country.id).subscribe((res: any) => {
-    //   this.sectorList = res;
+    this.sectorProxy.getCountrySector(this.project.country.id).subscribe((res: any) => {
+      this.sectorList = res;
       console.log("++++", this.sectorList)
-    // });
+    });
   }
 
   onSectorChange(event: any) {

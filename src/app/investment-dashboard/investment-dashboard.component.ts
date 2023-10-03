@@ -7,6 +7,7 @@ import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { Paginator } from 'primeng/paginator';
 import { LazyLoadEvent } from 'primeng/api';
+import { OverlayPanel } from 'primeng/overlaypanel';
 
 @Component({
   selector: 'app-investment-dashboard',
@@ -25,7 +26,8 @@ export class InvestmentDashboardComponent implements OnInit {
 
   @ViewChild('investmentSectorCountPieChart')
   canvasRefSectorCountPieChart: ElementRef<HTMLCanvasElement>;
-
+  
+  @ViewChild('op') op: OverlayPanel;
 
   interventions:any[]=[];
   investment:number[]=[];
@@ -451,13 +453,16 @@ export class InvestmentDashboardComponent implements OnInit {
    
 
   }
-  enterHeatMapPoint(x:number, y: number){
+
+enterHeatMapPoint(x:number, y: number,event:any){
 
 
-    this.pointTableDatas=this.tableData.filter(item=> item.outcome_score === x && item.process_score === y)
-
-
+  this.pointTableDatas=this.tableData.filter(item=> item.outcome_score === x && item.process_score === y)
+  if(this.pointTableDatas.length>0){
+    this.op.show(event);
   }
+
+}
   leaveHeatMapPoint(){
  
      this.pointTableDatas=[];

@@ -1271,11 +1271,12 @@
           </div>
         </div> -->
       
-        <!-- <div class=" mt-2  overflow-visible" style="z-index: 1;">
+        <div class=" mt-2  overflow-visible" style="z-index: 1;">
           <div class="p-grid p-fluid col-sm-12">
             <div class="p-2">
-              <h6>Project Documents</h6>
-
+              <h6>Project Documents <div type="button" class="pi pi-info-circle ml-10"
+                pTooltip="File types: .pdf, .docx, .jpg, .png"></div></h6>
+              
               <ng-container *ngIf="isDownloadMode == 0 ; else elseBlockdocuments">
                 <div class="col-12 wrapper-doc-upload mt-4" >
                   <app-document-upload [doucmentList]="documents" [documentOwner]="documentsDocumentOwner"
@@ -1290,7 +1291,7 @@
               </ng-template>
             </div>
           </div>
-        </div> -->
+        </div>
 
 
 
