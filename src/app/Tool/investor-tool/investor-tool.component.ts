@@ -177,14 +177,14 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
      });
 
     if (countryId > 0) {
-      // this.sectorList = await this.sectorProxy.getCountrySector(countryId).toPromise()
-      this.sectorProxy.getSectorDetails(1,100,'').subscribe((res:any) =>{
-        res.items.forEach((re:any)=>{
-          if(re.id !=6){
-            this.sectorList.push(re)
-          }
-        })
-      })
+      this.sectorList = await this.sectorProxy.getCountrySector(countryId).toPromise()
+      // this.sectorProxy.getSectorDetails(1,100,'').subscribe((res:any) =>{
+      //   res.items.forEach((re:any)=>{
+      //     if(re.id !=6){
+      //       this.sectorList.push(re)
+      //     }
+      //   })
+      // })
 
       // console.log("++++", this.sectorList)
 

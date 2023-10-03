@@ -18,6 +18,7 @@ export class PortfolioComparisonComponent implements OnInit {
   aggregation_data: any;
   alignment_data: any;
   isLoaded: boolean = false;
+  hasCMToolAssessments: boolean = false
 
   constructor(
     private router: Router,
@@ -31,6 +32,7 @@ export class PortfolioComparisonComponent implements OnInit {
       await this.getAssessmentsByPortfolio()
       await this.getPortfolioData()
       await this.getDummyData()
+      this.hasCMTool()
       this.isLoaded = true
     });
   }
@@ -56,6 +58,11 @@ console.log(this.portfolio)
         { title: 'Intended audience(s) of the assessment', data: this.portfolio.audience },
         { title: 'Number of Assessments', data: await this.noOfAssessments }
       ])
+  }
+
+  hasCMTool(){
+    if (this.assessmentList.find(o => o.assessment.tool === 'Carbon Market Tool')) this.hasCMToolAssessments = true
+    else this.hasCMToolAssessments = false
   }
 
   async getDummyData() {
