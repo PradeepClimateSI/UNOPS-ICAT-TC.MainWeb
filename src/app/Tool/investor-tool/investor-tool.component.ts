@@ -114,6 +114,9 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   uploadUrl: string;
   fileServerURL: string;
   acceptedFiles: string = ".pdf, .jpg, .png, .doc, .docx, .xls, .xlsx, .csv";
+  tabLoading: boolean=false;
+  characteristicsLoaded:boolean = false;
+  categoriesLoaded:boolean = false;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -174,7 +177,14 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
      });
 
     if (countryId > 0) {
-      this.sectorList = await this.sectorProxy.getCountrySector(countryId).toPromise()
+      // this.sectorList = await this.sectorProxy.getCountrySector(countryId).toPromise()
+      this.sectorProxy.getSectorDetails(1,100,'').subscribe((res:any) =>{
+        res.items.forEach((re:any)=>{
+          if(re.id !=6){
+            this.sectorList.push(re)
+          }
+        })
+      })
 
       // console.log("++++", this.sectorList)
 
@@ -203,24 +213,17 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
 
   async getCharacteristics() {
-
-    this.investorToolControllerproxy.findAllIndicatorquestions().subscribe((res3: any) => {
-      this.investorQuestions  = res3
+   
+    try{
+      this.investorQuestions= await this.investorToolControllerproxy.findAllIndicatorquestions().toPromise();
       // console.log("ressss3333",  this.investorQuestions)
+      console.log("1111")
 
-    });
-    this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().subscribe((res3: any) => {
-      // let res:Characteristics[] = res3
-      this.characteristicsList =res3
-      // for(let i of res){
-      //     if ( !['Beneficiaries', 'Disincentives', 'Institutional and regulatory'].includes(i.name)) {
-      //     this.characteristicsList.push(i)
-      //   }
-      // }
-      // console.log("charList",this.characteristicsList)
-    });
-
-    this.methodologyAssessmentControllerServiceProxy.findAllCategories().subscribe((res2: any) => {
+    // });
+    this.characteristicsList = await this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().toPromise();
+    this.characteristicsLoaded = true;
+    console.log("22222")
+    this.methodologyAssessmentControllerServiceProxy.findAllCategories().toPromise().then((res2: any) => {
 
       const customOrder = [1, 2, 3, 4, 5, 7, 6, 8, 9, 10];
 
@@ -294,12 +297,23 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
         }
 
       }
+      this.categoriesLoaded = true;
+
+      if (this.characteristicsLoaded && this.categoriesLoaded) {
+        this.tabLoading = true; 
+        console.log("33333")
+      }
       console.log("processdata", this.processData)
       console.log("outcomeData", this.outcomeData)
       console.log("this.sdgDataSendArray", this.sdgDataSendArray)
     });
+    }
+    catch (error) {
+      console.log(error)
+    }
+   
 
-
+   
   }
 
   save(form: NgForm) {
@@ -427,6 +441,20 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   }
 
   onsubmit(form: NgForm) {
+    for(let item of this.processData){
+      for(let item2 of item.data){
+        if(item2.likelihood == null || item2.relavance == null){
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Warning',
+            detail: 'Fill all mandatory fields',
+            closable: true,
+          })
+
+          return
+        }
+      }
+    }
 
     console.log("assesssssssss", this.assessment)
     console.log("finallsdgDataSendArray4", this.sdgDataSendArray4)

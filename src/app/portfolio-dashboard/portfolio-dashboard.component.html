@@ -58,8 +58,8 @@
           <tr>
             
             <td>{{ tableData.climateAction?.policyName }}</td>
-                          <td class="text-center">{{ tableData.process_score? tableData.process_score:'-' }}</td>
-                          <td class="text-center">{{ tableData.outcome_score?tableData.outcome_score:'-'}}</td>
+            <td class="text-center">{{ tableData.process_score!=null && tableData.process_score!=undefined? tableData.process_score:'-' }}</td>
+            <td class="text-center">{{ tableData.outcome_score!=null && tableData.outcome_score!=undefined?tableData.outcome_score:'-' }}</td>
 
           </tr>
         </ng-template>
@@ -103,7 +103,7 @@
             <td
               [style.background-color]="getBackgroundColor(y.value + x.value)"
             >
-              <span
+              <span (mouseenter)="enterHeatMapPoint(x.value, y.value);op.show($event)" (mouseleave)="leaveHeatMapPoint();op.hide()"
                [style.background-color]=" getIntervention(x.value, y.value) ?getDotColor(y.value + x.value):''"
                 [ngClass]="
                   getIntervention(x.value, y.value) ? 'intervention' : ''
@@ -213,3 +213,33 @@
     </div>
   </div>
 </div>
+
+<p-overlayPanel [hidden]="pointTableDatas.length==0" #op>
+  <ng-template pTemplate="content">
+    <div *ngFor="let pointTableData of pointTableDatas" style=" border-style: solid;" class="m-3 p-1" >
+
+      <div  class="row">
+         <div class="col-4">Intervation ID :</div>
+         <div class="col-8">{{pointTableData.climateAction?.intervention_id}}</div>
+         
+      </div>
+      <div  class="row">
+        <div class="col-4">Intervation Name :</div>
+        <div class="col-8">{{pointTableData.climateAction?.policyName}}</div>
+      </div>
+      <!-- <div  class="row">
+        <div class="col-4">Assessment period :</div>
+        <div class="col-8"></div>
+      </div> -->
+      <div  class="row">
+        <div class="col-4">Process score :</div>
+        <div class="col-8">{{pointTableData.process_score}}</div>
+      </div>
+      <div  class="row">
+        <div class="col-4">outcome score :</div>
+        <div class="col-8">{{pointTableData.outcome_score}}</div>
+      </div>
+    </div>
+    
+</ng-template>
+</p-overlayPanel>

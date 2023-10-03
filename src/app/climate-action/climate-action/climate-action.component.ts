@@ -212,10 +212,18 @@ export class ClimateActionComponent implements OnInit {
     // this.project.country= initialCountry;
 
     if (countryId > 0) {
-      this.sectorProxy.getCountrySector(countryId).subscribe((res: any) => {
-        this.sectorList = res;
+      this.sectorProxy.getSectorDetails(1,100,'').subscribe((res:any) =>{
+        res.items.forEach((re:any)=>{
+
+          if(re.id !=6){
+            this.sectorList.push(re)
+          }
+        })
+      })
+      // this.sectorProxy.getCountrySector(countryId).subscribe((res: any) => {
+      //   this.sectorList = res;
         console.log("++++", this.sectorList)
-      });
+      // });
     } // countryid = 0
     this.asses.findAllBarriers().subscribe((res: any) => {
       this.barriers = res;
@@ -449,23 +457,6 @@ export class ClimateActionComponent implements OnInit {
         // console.log("projectStatusList all", this.projectOwnerList) //  working
       });
 
-    // this.serviceProxy
-    //   .getManyBaseSectorControllerSector(
-    //     undefined,
-    //     undefined,
-    //     undefined,
-    //     undefined,
-    //     ['name,ASC'],
-    //     undefined,
-    //     1000,
-    //     0,
-    //     0,
-    //     0
-    //   )
-    //   .subscribe((res: any) => {
-    //     console.log("ressssssssss",res)
-
-        // this.sectorList = res.data;
         console.log("editEntytyId",this.editEntytyId)
 
         // if (token && this.editEntytyId && this.editEntytyId > 0) {
@@ -1087,11 +1078,18 @@ export class ClimateActionComponent implements OnInit {
 
     this.onSectorChange(event);
 
+    this.sectorProxy.getSectorDetails(1,100,'').subscribe((res:any) =>{
+      res.items.forEach((re:any)=>{
+        if(re.id !=6){
+          this.sectorList.push(re)
+        }
+      })
+    })
 
-    this.sectorProxy.getCountrySector(this.project.country.id).subscribe((res: any) => {
-      this.sectorList = res;
+    // this.sectorProxy.getCountrySector(this.project.country.id).subscribe((res: any) => {
+    //   this.sectorList = res;
       console.log("++++", this.sectorList)
-    });
+    // });
   }
 
   onSectorChange(event: any) {

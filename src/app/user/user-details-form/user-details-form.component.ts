@@ -97,12 +97,12 @@ export class UserDetailsFormComponent implements OnInit {
                 this.checkRole=loggedUserRole!="Sector Admin"||loggedUserRole!="MRV Admin"
                
               }
-              else if (this.user.userType.name == "Technical Team" ||this.user.userType.name ==   "QC Team" ||this.user.userType.name == "Data Collection Team") {
+              else if (this.user.userType.name == "Country User" ||this.user.userType.name ==   "QC Team" ||this.user.userType.name == "Data Collection Team") {
                 this.checkRole=loggedUserRole!="Sector Admin"&&loggedUserRole!="MRV Admin"
                
               }
               else if ( this.user.userType.name ==   "Institution Admin"||this.user.userType.name == "Data Entry Operator") {
-                this.checkRole=loggedUserRole!="Sector Admin"&&loggedUserRole!="MRV Admin"&&loggedUserRole!="Technical Team"&&loggedUserRole!="Data Collection Team"
+                this.checkRole=loggedUserRole!="Sector Admin"&&loggedUserRole!="MRV Admin"&&loggedUserRole!="Country User"&&loggedUserRole!="Data Collection Team"
              
               }
               // else if (loggedUserRole == "Data Collection Team" ) {

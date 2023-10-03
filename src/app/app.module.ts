@@ -263,6 +263,7 @@ export function getAuditRemoteServiceBaseUrl(): string {
     DialogModule,
     DashboardModule,
     FileUploadModule,
+    OverlayPanelModule,
     // NgMultiSelectDropDownModule.forRoot(),
     UserModule,
   ],

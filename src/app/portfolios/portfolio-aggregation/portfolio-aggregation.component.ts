@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./portfolio-aggregation.component.css']
 })
 export class PortfolioAggregationComponent {
-  @Input() aggregation_data: any;
-  @Input() alignment_data: any;
+  @Input() aggregation_data: any = {};
+  @Input() alignment_data: any = {};
 
 }
