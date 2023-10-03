@@ -3,7 +3,7 @@ import { ConfirmationService } from 'primeng/api';
 import { AvatarModule } from 'primeng/avatar';
 import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
 import { UserType, ServiceProxy } from 'shared/service-proxies/auth-service-proxies';
-import { NotificationControllerServiceProxy, User, UsersControllerServiceProxy,Notification } from 'shared/service-proxies/service-proxies';
+import { NotificationControllerServiceProxy, User, UsersControllerServiceProxy,Notification, CountryControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 
 @Component({
@@ -25,6 +25,9 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
   roles: UserType[] = [];
   confirm: boolean = false;
   loginRole = LoginRole;
+  isInvesmentTool : boolean = false;
+  isCarbonMarketTool : boolean = false;
+  isPortfolioTool : boolean = false;
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -32,6 +35,7 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
     private userProxy: UsersControllerServiceProxy,
     private cdr: ChangeDetectorRef,
     private notificationServiceProxy: NotificationControllerServiceProxy,
+    private countryProxy: CountryControllerServiceProxy,
   ) { }
   ngAfterViewInit(): void {
     this.cdr.detectChanges();
@@ -45,6 +49,17 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
     this.userRole = tokenPayload.role.code;
     // this.userRole = tokenPayload.role[0];
     console.log("++++++++++++++++++",tokenPayload);
+
+    this.countryProxy.getCountry(tokenPayload.countryId).subscribe((res:any)=>{
+         console.log('Countryy',res) 
+         this.isCarbonMarketTool = res.carboneMarketTool;
+         this.isInvesmentTool = res.investmentTool;
+         this.isPortfolioTool = res.portfoloaTool;    
+         
+         console.log('tooll',this.isCarbonMarketTool,this.isInvesmentTool,this.isPortfolioTool)
+         
+       })
+
 
     this.userProxy.findUserByUserName(
       this.userName
