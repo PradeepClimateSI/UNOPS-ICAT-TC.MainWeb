@@ -132,6 +132,16 @@ export class PortfolioAddComponent implements OnInit {
 
     console.log("aa22", data)
 
+    if(this.selectedValues.length < 1){
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Warning',
+        detail: 'Please select at least one assessment',
+        closable: true,
+      })
+      return
+    }
+
     this.dataObj = {
       formData : data,
       tableData : this.selectedValues
