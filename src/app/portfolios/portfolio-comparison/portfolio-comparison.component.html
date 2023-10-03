@@ -33,6 +33,7 @@
             </p-table>
 
             <br>
+            <p *ngIf="hasCMToolAssessments"><i>Note: The Carbon Market tool does not have likelihood scores, as such, characteristic scores and category scores of the carbon market tool have been mapped to align with the other two tools to be compatible for comparison.</i></p>
             <h4>Process of change</h4>
             <app-portfolio-process-data [process_data]="process_data"></app-portfolio-process-data>
 
