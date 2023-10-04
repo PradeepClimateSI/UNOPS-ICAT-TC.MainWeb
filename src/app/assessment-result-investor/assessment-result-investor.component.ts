@@ -448,16 +448,26 @@ export class AssessmentResultInvestorComponent implements OnInit {
 
   public exportToExcel(): void {
     import("xlsx").then(xlsx => {
-      const ws = xlsx.utils.json_to_sheet(this.card, { skipHeader: true });
-      const worksheet = xlsx.utils.table_to_sheet(document.querySelector("#content"));
+      // const ws = xlsx.utils.json_to_sheet(this.card, { skipHeader: true });
+      // const worksheet = xlsx.utils.table_to_sheet(document.querySelector("#content"));
 
       // add existing data to worksheet
-      const existingData = xlsx.utils.sheet_to_json(worksheet, { header: 1 });
-      xlsx.utils.sheet_add_json(ws, existingData, { skipHeader: true, origin: -1 });
+      // const existingData = xlsx.utils.sheet_to_json(worksheet, { header: 1 });
+      // xlsx.utils.sheet_add_json(ws, existingData, { skipHeader: true, origin: -1 });
 
-      const workbook = xlsx.utils.book_new();
-      xlsx.utils.book_append_sheet(workbook, ws, "Sheet1");
-      xlsx.writeFile(workbook, "data.xlsx", { cellStyles: true });
+      // const workbook = xlsx.utils.book_new();
+      // xlsx.utils.book_append_sheet(workbook, ws, "Sheet1");
+      // xlsx.writeFile(workbook, "data.xlsx", { cellStyles: true });
+      // const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      // const table1 = document.getElementById('table1');
+      // const table2 = document.getElementById('table2');
+      // const ws1: XLSX.WorkSheet = XLSX.utils.table_to_sheet([table1,table2], { cellStyles: true });
+      // // const ws2: XLSX.WorkSheet = XLSX.utils.table_to_sheet(table2, { cellStyles: true });
+      
+   
+      const table = document.getElementById('allTables')
+      const workbook:XLSX.WorkBook = XLSX.utils.table_to_book(table,{raw: true})
+      XLSX.writeFile(workbook, "Report.xlsx");
     });
   }
 
