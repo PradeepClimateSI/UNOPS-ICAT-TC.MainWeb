@@ -150,7 +150,7 @@ export class AssessmentResultInvestorComponent implements OnInit {
       else if (this.tool === 'Investment & Private Sector Tool') {
         this.investerTool = true;
         this.loadTitle = true;
-        this.title2 = 'Result - Invesment & Private Sector Tool - Nitric Acid Climate Action Group Initiative'
+        this.title2 = 'Result - Invesment & Private Sector Tool '
       }
 
     });

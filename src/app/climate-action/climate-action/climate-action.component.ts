@@ -567,7 +567,6 @@ export class ClimateActionComponent implements OnInit {
                 }
                  this.sectorsJoined=this.sectornames.join(', ')
                 //  console.log("sectors",this.policySectorArray, this.sectorsJoined)
-
                  })
               //console.log("id......",this.project.id)
               // this.serviceProxy
@@ -1081,18 +1080,18 @@ export class ClimateActionComponent implements OnInit {
 
     this.onSectorChange(event);
 
-    this.sectorProxy.getSectorDetails(1,100,'').subscribe((res:any) =>{
-      res.items.forEach((re:any)=>{
-        if(re.id !=6){
-          this.sectorList.push(re)
-        }
-      })
-    })
+    // this.sectorProxy.getSectorDetails(1,100,'').subscribe((res:any) =>{
+    //   res.items.forEach((re:any)=>{
+    //     if(re.id !=6){
+    //       this.sectorList.push(re)
+    //     }
+    //   })
+    // })
 
-    // this.sectorProxy.getCountrySector(this.project.country.id).subscribe((res: any) => {
-    //   this.sectorList = res;
+    this.sectorProxy.getCountrySector(this.project.country.id).subscribe((res: any) => {
+      this.sectorList = res;
       console.log("++++", this.sectorList)
-    // });
+    });
   }
 
   onSectorChange(event: any) {
