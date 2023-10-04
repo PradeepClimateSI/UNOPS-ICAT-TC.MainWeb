@@ -163,7 +163,28 @@ export class CmResultComponent implements OnInit {
     }
   }
 
+  createColorMap(){
+    let colorMap = []
+    let cols = 'CDEFGHI'
+    let rows = '34567'
+    let col_values = [3,2,1,0,-1,-2,-3]
+    let row_values = [4,3,2,1,0]
+    for (let [idx,row] of row_values.entries()){
+      for (let [index, col] of col_values.entries()){
+        let hasScore = this.getIntervention(col, row)
+        let obj = new ColorMap()
+        obj.cell = cols[index] + rows[idx]
+        obj.value = row + col
+        obj.color = hasScore ? '0000ff' : this.getBackgroundColor(row + col).replace('#', '')
+        colorMap.push(obj)
+      }
+    }
+    return colorMap
+  }
+
   toDownloadExcel() {
+    let colorMap = this.createColorMap()
+    console.log(colorMap)
     this.isDownloading = true
     setTimeout(() =>{
       let book_name = 'Results - ' + this.intervention.policyName
@@ -172,13 +193,24 @@ export class CmResultComponent implements OnInit {
       const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.card, { skipHeader: true });
       let table = document.getElementById('cmtool')
       let worksheet = XLSX.utils.table_to_sheet(table,{})
-      let heatmap = XLSX.utils.table_to_sheet(document.getElementById('heatmap'),{})
-      
-      XLSX.utils.book_append_sheet(workbook, ws, 'Assessment Info');
-      XLSX.utils.book_append_sheet(workbook, worksheet, 'Assessment Results');
-      XLSX.utils.book_append_sheet(workbook, heatmap, 'Heat map');
+      this.isDownloading = false
+      setTimeout(() => {
+        let heatmap = XLSX.utils.table_to_sheet(document.getElementById('heatmap'),{})
+        
+        XLSX.utils.book_append_sheet(workbook, ws, 'Assessment Info');
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Assessment Results');
+        XLSX.utils.book_append_sheet(workbook, heatmap, 'Heat map');
 
-      XLSX.writeFile(workbook, book_name + ".xlsx");
+        for (const itm of colorMap) {
+          if (heatmap[itm.cell]) {
+            heatmap[itm.cell].s = {
+              fill: { fgColor: { rgb: itm.color } },
+            };
+          }
+        }
+  
+        XLSX.writeFile(workbook, book_name + ".xlsx");
+      }, 1000);
       this.isDownloading = false
     }, 1000)
   }
@@ -470,4 +502,10 @@ export class ScaleTableData{
   'Expected Impact': string
   Score: string
   Justification: string
+}
+
+export class ColorMap {
+  cell: string
+  value: number
+  color: string
 }
