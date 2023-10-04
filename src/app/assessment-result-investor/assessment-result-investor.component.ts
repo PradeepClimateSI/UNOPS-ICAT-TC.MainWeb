@@ -392,13 +392,16 @@ export class AssessmentResultInvestorComponent implements OnInit {
     setTimeout(() => {
       this.card.push(
         ...[
+          { title: 'Intervention ID', data: (this.intervention.intervention_id)?(this.intervention.intervention_id):'-' },
+          { title: 'Intervention Type', data: (this.intervention.typeofAction)?(this.intervention.typeofAction):'-' },
+          { title: 'Intervention Status', data: (this.intervention.projectStatus)?(this.intervention.projectStatus.name):'-' },
           { title: 'Assessment Type', data: this.assessmentType },
-          { title: 'Level of Implementation', data: this.levelofImplemetation },
           { title: 'Geographical Area Covered', data: this.geographicalAreasCovered },
           { title: 'Sectors Covered', data: this.sectorList.join(', ') },
-          { title: 'Impact Covered', data: this.impactCoverList.join(', ') },
-          { title: 'Date From', data: this.datePipe.transform(this.date1, 'yyyy-MM-dd') },
+          { title: 'From', data: this.datePipe.transform(this.date1, 'yyyy-MM-dd') },
           { title: 'To', data: this.datePipe.transform(this.date2, 'yyyy-MM-dd') },
+          { title: 'Opportunities for stakeholders to participate in the assessment', data: (this.opportunities)?(this.opportunities):'-' },
+          { title: 'Principles on which the assessment is based', data: (this.principles)?(this.principles):'-' },
 
         ])
 
@@ -463,11 +466,27 @@ export class AssessmentResultInvestorComponent implements OnInit {
       // const table2 = document.getElementById('table2');
       // const ws1: XLSX.WorkSheet = XLSX.utils.table_to_sheet([table1,table2], { cellStyles: true });
       // // const ws2: XLSX.WorkSheet = XLSX.utils.table_to_sheet(table2, { cellStyles: true });
-      
+    let book_name = 'Results - ' + this.intervention.policyName+'.xlsx'
+    const workbook = XLSX.utils.book_new();
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.card, { skipHeader: true });
+    let table = document.getElementById('allTables')
+    let worksheet = XLSX.utils.table_to_sheet(table,{})
+
+    XLSX.utils.book_append_sheet(workbook, ws, 'Assessment Info');
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Assessment Results');
+
+    XLSX.writeFile(workbook, book_name);
    
-      const table = document.getElementById('allTables')
-      const workbook:XLSX.WorkBook = XLSX.utils.table_to_book(table,{raw: true})
-      XLSX.writeFile(workbook, "Report.xlsx");
+      // const table = document.getElementById('allTables')
+      // const card = document.getElementById('card');
+      // const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.card, { skipHeader: true });
+    
+      // const workbook: XLSX.WorkBook = XLSX.utils.book_new()
+      // const wb:XLSX.WorkBook = XLSX.utils.table_to_book(table,{raw: true})
+      // XLSX.utils.book_append_sheet(workbook, ws, 'Assessment Info');
+      // xlsx.utils.book_append_sheet(workbook, wb, "Results");
+      // XLSX.writeFile(wb, "Result.xlsx");
     });
   }
 
