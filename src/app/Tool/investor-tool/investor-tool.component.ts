@@ -137,7 +137,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   }
   async ngOnInit(): Promise<void> {
-    //this.isSavedAssessment = true; this.tabLoading= true; // Need to remove 
+    //this.isSavedAssessment = true; this.tabLoading= true; // Need to remove  
     this.categoryTabIndex =0;
     this.approach=1
     this.assessment.assessment_approach = 'Direct'
