@@ -10,6 +10,7 @@ import { RoleGuardService } from './auth/role-guard.service';
 import { MethodologyComponent } from './methodology/methodology.component';
 import { ChartComponent } from './chart/chart.component';
 import { AuditComponent } from './audit/audit.component';
+import { AuthGuard } from './auth/auth.guard';
 
 export enum CountryModule {
   CLIMATE_ACTION_MODULE = 0,
@@ -47,21 +48,21 @@ export const routes: Routes = [
     path: 'app',
     component: DashboardBaseComponent,
     loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
-    canActivate: [],
+    canActivate: [AuthGuard],
     data: {}
   },
   {
     path: 'app/methodology',
     component: MethodologyComponent,
     loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
-    canActivate: [],
+    canActivate: [AuthGuard],
     data: {}
   },
   {
     path: 'app/chart',
     component: ChartComponent,
     loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
-    canActivate: [],
+    canActivate: [AuthGuard],
     data: {}
   },
   /*  {

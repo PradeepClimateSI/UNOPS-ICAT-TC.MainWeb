@@ -16,6 +16,7 @@ export class AuthGuard  {
 
     let authenticated = this.appService.isAuthenticated();
     if (!authenticated){
+      this.appService.logout();
       return false;
     }
 

@@ -206,7 +206,6 @@ export class AppService {
   }
 
   logout(){
-    console.log("aaaaaaaaaaaa")
     this.clearData();
     this.stopRefreshTokenTimer();
     this.router.navigate(['/auth/login']);
@@ -222,6 +221,9 @@ export class AppService {
 
   steToken(tocken: string): void {
     localStorage.setItem(AuthData.ACCESS_TOKEN, tocken)
+    const token = this.getToken();
+
+    this._isAuthenticated = token!==null;
   }
 
   getToken(): string | null {
