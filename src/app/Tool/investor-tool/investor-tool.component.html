@@ -367,7 +367,16 @@
                                                              <div class="row" *ngIf="!question.question.isMain">
                                                                 <div  class=" ml-25 col-6 mb-20">
                                                                     <p  class="question">{{question.question.name}}</p>
+                                                                    <div class="tooltip-container">
+                                                                      <div *ngIf="question.question.tooltip">
+                                                                        <span class="tooltip-icon">i</span>
+                                                                        <div class="tooltip-text" [innerHTML]="addNewline(question.question.tooltip)"></div>
+                                  
+                                                                      </div>
+                                                                    </div>
                                                                  </div>
+
+
                                                                  <div class="col-4 mb-20">
 
                                                                     <p-dropdown *ngIf="approach===1"
@@ -388,7 +397,10 @@
                                                                     </p-dropdown>
 
                                                                  </div>
+
+                                                                 
                                                              </div>
+                                                             
                                                              <div class="row" *ngIf="!question.question.isMain">
                                                                 <div class=" ml-25 col-6 mb-20">
 
