@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Assessment, AssessmentCMDetail, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CMScoreDto, CalculateDto, Characteristics, ClimateAction } from 'shared/service-proxies/service-proxies';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { MasterDataService } from 'app/shared/master-data.service';
@@ -22,7 +22,7 @@ export class CmResultComponent implements OnInit {
   card: any[] = []
   results: any;
   criterias: any;
-  keys: string[]
+  sections: string[]
   score: CMScoreDto = new CMScoreDto()
   expandedRows: any = {}
   isDownloading: boolean = false
@@ -145,10 +145,10 @@ export class CmResultComponent implements OnInit {
       this.criterias = res.criteria
       this.processData =res.processData;
       this.outcomeData =res.outComeData;
-      this.keys = Object.keys(this.results)
-      this.keys = this.keys.filter(e => e !== "undefined")
+      this.sections = Object.keys(this.results)
+      this.sections = this.sections.filter(e => e !== "undefined")
       console.log("res",res)
-      console.log("keys", this.keys)
+      console.log("keys", this.sections)
 
 
       this.criterias.forEach((c: any) => {
@@ -163,7 +163,27 @@ export class CmResultComponent implements OnInit {
     }
   }
 
-  toDownloadExcel(){
+  toDownloadExcel() {
+    this.isDownloading = true
+    setTimeout(() =>{
+      let book_name = 'Results - ' + this.intervention.policyName
+  
+      const workbook = XLSX.utils.book_new();
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.card, { skipHeader: true });
+      let table = document.getElementById('cmtool')
+      let worksheet = XLSX.utils.table_to_sheet(table,{})
+      let heatmap = XLSX.utils.table_to_sheet(document.getElementById('heatmap'),{})
+      
+      XLSX.utils.book_append_sheet(workbook, ws, 'Assessment Info');
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Assessment Results');
+      XLSX.utils.book_append_sheet(workbook, heatmap, 'Heat map');
+
+      XLSX.writeFile(workbook, book_name + ".xlsx");
+      this.isDownloading = false
+    }, 1000)
+  }
+
+  _toDownloadExcel(){ //Not using
     let length = 0
     let book_name = 'Results - ' + this.intervention.policyName
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.card, { skipHeader: true });
@@ -171,16 +191,16 @@ export class CmResultComponent implements OnInit {
 
     length = length + this.card.length + 2
 
-    this.keys.forEach(key => {
-      XLSX.utils.sheet_add_json(ws, [{section: key}], { skipHeader: true, origin: "A" + length });
+    this.sections.forEach(section => {
+      XLSX.utils.sheet_add_json(ws, [{section: section}], { skipHeader: true, origin: "A" + length });
       length = length + 2
-      XLSX.utils.sheet_add_json(ws, this.results[key], { skipHeader: false, origin: "A" + length });
-      length = length + this.results[key].length + 2
+      XLSX.utils.sheet_add_json(ws, this.results[section], { skipHeader: false, origin: "A" + length });
+      length = length + this.results[section].length + 2
     })
     XLSX.utils.sheet_add_json(ws, [{title: 'Transformational Change Criteria'}], { skipHeader: true, origin: "A" + length });
     length = length + 2
 
-    let processData =  this.mapProcessData()
+    let processData =  this._mapProcessData()
 
     if (processData.technology && processData.technology.length!=0){
       XLSX.utils.sheet_add_json(ws, [{title: 'Process of Change / Technology'}], { skipHeader: true, origin: "A" + length });
@@ -234,7 +254,7 @@ export class CmResultComponent implements OnInit {
     XLSX.writeFile(wb, book_name + '.xlsx');
   }
 
-  mapProcessData(){
+  _mapProcessData(){ // Not using
     let data = new ProcessData()
     if (this.processData?.technology && this.processData?.technology?.length !== 0){
       data.technology = this.processData.technology.map((ele: { characteristic: string; question: string; score: number; justification: string; }) => {
