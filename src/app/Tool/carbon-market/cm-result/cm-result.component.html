@@ -162,6 +162,8 @@
                         <tr>
                             <th></th>
                             <th>Characteristic</th>
+                            <th *ngIf="isDownloading">Starting Situarion</th>
+                            <th *ngIf="isDownloading">Expected Impact</th>
                             <th>Score</th>
                             <th colspan="2">Evidence Provided?</th>
                             <th>Scale/sustained score</th>
@@ -174,7 +176,9 @@
                         <ng-container *ngFor="let scale_GHGs of outcomeData.scale_GHGs;let i=index">
                             <tr>
                                 <td *ngIf="i === 0" [attr.rowspan]="outcomeData.scale_GHGs.length">Scale GHG</td>
-                                <td>{{scale_GHGs.characteristic}}</td>
+                                <td>{{changeOutcomeCharacteristicsName(scale_GHGs.characteristic)}}</td>
+                                <td *ngIf="isDownloading">{{scale_GHGs.starting_situation}}</td>
+                                <td *ngIf="isDownloading">{{scale_GHGs.expected_impact}}</td>
                                 <td>{{(scale_GHGs?.outcome_score)?getOutcomeScores((scale_GHGs?.outcome_score),'scale_GHGs',
                                     scale_GHGs.characteristic):'-'}}</td>
                                 <td>{{(scale_GHGs?.justification)?(scale_GHGs?.justification):'-'}} </td>
@@ -191,6 +195,8 @@
                             <tr>
                                 <td *ngIf="i === 0" [attr.rowspan]="outcomeData.sustained_GHGs.length">Sustained GHG</td>
                                 <td>{{changeOutcomeCharacteristicsName(sustained_GHGs.characteristic)}}</td>
+                                <td *ngIf="isDownloading">-</td>
+                                <td *ngIf="isDownloading">-</td>
                                 <td>{{(sustained_GHGs?.outcome_score)?getOutcomeScores((sustained_GHGs?.outcome_score),'sustained_GHGs',
                                     sustained_GHGs.characteristic):'-'}}</td>
                                 <td>{{(sustained_GHGs?.justification)?(sustained_GHGs?.justification):'-'}} </td>
@@ -218,6 +224,9 @@
                             <th></th>
                             <th>SDG</th>
                             <th>Characteristic</th>
+                            <th *ngIf="isDownloading">SDG Indicator</th>
+                            <th *ngIf="isDownloading">Starting Situation</th>
+                            <th *ngIf="isDownloading">Expected Impact</th>
                             <th>Score</th>
                             <th colspan="2">Evidence Provided?</th>
                             <th>Scale/sustained score</th>
@@ -232,6 +241,9 @@
                                 <td *ngIf="i === 0" [attr.rowspan]="outcomeData.scale_SDs.length">Scale SDG</td>
                                 <td>{{getSDGName(scale_SDs?.SDG)}}</td>
                                 <td>{{changeOutcomeCharacteristicsName(scale_SDs.characteristic)}}</td>
+                                <td *ngIf="isDownloading">{{scale_SDs.SDG_indicator}}</td>
+                                <td *ngIf="isDownloading">{{scale_SDs.starting_situation}}</td>
+                                <td *ngIf="isDownloading">{{scale_SDs.expected_impact}}</td>
                                 <td>{{(scale_SDs?.outcome_score)?getOutcomeScores((scale_SDs?.outcome_score),'scale_SDs',
                                     scale_SDs.characteristic):'-'}}</td>
                                 <td>{{(scale_SDs?.justification)?(scale_SDs?.justification):'-'}} </td>
@@ -253,6 +265,9 @@
                                 <td *ngIf="i === 0" [attr.rowspan]="outcomeData.sustained_SDs.length">Sustained SDG</td>
                                 <td>{{getSDGName(sustained_SDs?.SDG)}}</td>
                                 <td>{{changeOutcomeCharacteristicsName(sustained_SDs.characteristic)}}</td>
+                                <td *ngIf="isDownloading">-</td>
+                                <td *ngIf="isDownloading">-</td>
+                                <td *ngIf="isDownloading">-</td>
                                 <td>{{(sustained_SDs?.outcome_score)?getOutcomeScores((sustained_SDs?.outcome_score),'sustained_SDs',
                                     sustained_SDs.characteristic):'-'}}</td>
                                 <td>{{(sustained_SDs?.justification)?(sustained_SDs?.justification):'-'}} </td>
@@ -280,6 +295,9 @@
                         <tr>
                             <th></th>
                             <th>Characteristic</th>
+                            <th *ngIf="isDownloading">Adaptation Co-benifit</th>
+                            <th *ngIf="isDownloading">Starting Situation</th>
+                            <th *ngIf="isDownloading">Expected Impact</th>
                             <th>Score</th>
                             <th colspan="2">Evidence Provided?</th>
                             <th>Scale/sustained score</th>
@@ -296,6 +314,9 @@
                             <tr>
                                 <td *ngIf="i === 0" [attr.rowspan]="outcomeData.scale_adaptation.length">Scale Adaptation Co Benifits</td>
                                 <td>{{changeOutcomeCharacteristicsName(scale_ADs.characteristic)}}</td>
+                                <td *ngIf="isDownloading">{{scale_ADs.adaptation}}</td>
+                                <td *ngIf="isDownloading">{{scale_ADs.starting_situation}}</td>
+                                <td *ngIf="isDownloading">{{scale_ADs.expected_impact}}</td>
                                 <td>{{(scale_ADs?.outcome_score)?getOutcomeScores((scale_ADs?.outcome_score),'scale_SDs',
                                     scale_ADs.characteristic):'-'}}</td>
                                 <td>{{(scale_ADs?.justification)?(scale_ADs?.justification):'-'}} </td>
@@ -319,6 +340,9 @@
                             <tr>
                                 <td *ngIf="i === 0" [attr.rowspan]="outcomeData.sustained_adaptation.length">Sustained Adaptation Co Benifits</td>
                                 <td>{{changeOutcomeCharacteristicsName(sustained_ADs.characteristic)}}</td>
+                                <td *ngIf="isDownloading">-</td>
+                                <td *ngIf="isDownloading">-</td>
+                                <td *ngIf="isDownloading">-</td>
                                 <td>{{(sustained_ADs?.outcome_score)?getOutcomeScores((sustained_ADs?.outcome_score),'sustained_SDs',
                                     sustained_ADs.characteristic):'-'}}</td>
                                 <td>{{(sustained_ADs?.justification)?(sustained_ADs?.justification):'-'}} </td>
