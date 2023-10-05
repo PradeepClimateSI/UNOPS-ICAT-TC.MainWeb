@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PortfolioControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
+import * as XLSX from 'xlsx';
 @Component({
   selector: 'app-portfolio-comparison',
   templateUrl: './portfolio-comparison.component.html',
@@ -269,6 +270,20 @@ console.log(this.portfolio)
     //   sdg_count: 3
     // }
   }
+  genarateExcel(){
+   
+    let tabledetail = document.getElementById('one')
+    let tableComparison = document.getElementById('two')
+    let workSheettabledetai=XLSX.utils.table_to_sheet(tabledetail,{})
+    let workSheettableComparison=XLSX.utils.table_to_sheet(tableComparison,{});
 
+    // let workbook = XLSX.utils.table_to_book(table,{})
+    let workbook = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(workbook,workSheettabledetai,'Details')
+    XLSX.utils.book_append_sheet(workbook,workSheettableComparison,'Comparison')
+  
+    XLSX.writeFile(workbook, "Report.xlsx");
+
+  }
 
 }
