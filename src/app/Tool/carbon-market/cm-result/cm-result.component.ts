@@ -41,15 +41,6 @@ export class CmResultComponent implements OnInit {
   xData: {label: string; value: number}[]
   yData: {label: string; value: number}[]
 
-  // heatmapData = [
-  //   ['Not at all', 'Major negative outcome (90-100%)'],
-  //   ['Minimally', 'Negative outcome (70-90%)'],
-  //   ['Moderately', 'Mixed outcome (50-70%)'],
-  //   ['Substantially', 'Positive outcome (30-50%)'],
-  //   ['Fully', 'Major positive outcome (0-30%)'],
-  // ];
-
-
   constructor(
     private route: ActivatedRoute,
     private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
@@ -77,13 +68,6 @@ export class CmResultComponent implements OnInit {
       this.yData = this.masterDataService.yData
 
       this.assessmentCMDetail = await this.assessmentCMDetailControllerServiceProxy.getAssessmentCMDetailByAssessmentId(assessmentId).toPromise()
-      // let types: any = this.assessmentCMDetail.impact_types?.split(',')
-      // if(types?.length > 0) types = [...types.map((type: string) => this.masterDataService.impact_types.find(o => o.code === type)?.name)]
-      // let cats: any = this.assessmentCMDetail.impact_categories?.split(',')
-      // if (cats?.length > 0) cats = [...cats.map((cat: string) => this.masterDataService.impact_categories.find(o => o.code === cat)?.name)]
-      // let chara: any = this.assessmentCMDetail.impact_characteristics?.split(',')
-      // if (chara?.length > 0) chara = [...chara.map((char: string) => this.masterDataService.impact_characteristics.find(o => o.code === char)?.name)]
-      // console.log(chara)
       let cmApproache = cmApproaches.find(o => o.code === this.assessmentCMDetail.intCMApproach)
       this.card.push(
         ...[
@@ -147,9 +131,6 @@ export class CmResultComponent implements OnInit {
       this.outcomeData =res.outComeData;
       this.sections = Object.keys(this.results)
       this.sections = this.sections.filter(e => e !== "undefined")
-      console.log("res",res)
-      console.log("keys", this.sections)
-
 
       this.criterias.forEach((c: any) => {
         this.expandedRows[c] = false
@@ -184,7 +165,6 @@ export class CmResultComponent implements OnInit {
 
   toDownloadExcel() {
     let colorMap = this.createColorMap()
-    console.log(colorMap)
     this.isDownloading = true
     setTimeout(() =>{
       let book_name = 'Results - ' + this.intervention.policyName
@@ -417,6 +397,7 @@ export class CmResultComponent implements OnInit {
       return '-'
     }
   }
+
   getOutcomeScores(code: any, category: string, characteristic: Characteristics) {
     if (code) {
       if (category == 'scale_GHGs') {
