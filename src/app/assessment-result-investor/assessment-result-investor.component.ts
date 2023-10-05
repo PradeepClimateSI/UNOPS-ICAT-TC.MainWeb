@@ -453,7 +453,7 @@ export class AssessmentResultInvestorComponent implements OnInit {
     let colorMap = this.createColorMap()
     console.log(colorMap)
     // this.isDownloading = true
-    setTimeout(() =>{
+    
       let book_name = 'Results - ' + this.intervention.policyName
   
       const workbook = XLSX.utils.book_new();
@@ -461,7 +461,7 @@ export class AssessmentResultInvestorComponent implements OnInit {
       let table = document.getElementById('allTables')
       let worksheet = XLSX.utils.table_to_sheet(table,{})
       // this.isDownloading = false
-      setTimeout(() => {
+    
         let heatmap = XLSX.utils.table_to_sheet(document.getElementById('heatmap'),{})
         
         XLSX.utils.book_append_sheet(workbook, ws, 'Assessment Info');
@@ -477,9 +477,9 @@ export class AssessmentResultInvestorComponent implements OnInit {
         }
   
         XLSX.writeFile(workbook, book_name + ".xlsx");
-      }, 1000);
+      
       // this.isDownloading = false
-    }, 1000)
+    
   }
   // public exportToExcel(): void {
   //   import("xlsx").then(xlsx => {

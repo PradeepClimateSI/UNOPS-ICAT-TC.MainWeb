@@ -1,5 +1,5 @@
 <div id="content" #content>
-  <div id="allTables" class="container pl-20 pr-20">
+  <div  class="container pl-20 pr-20">
 
     <div *ngIf="loadTitle">
       <div class="mb-12" *ngIf="investerTool">
@@ -215,7 +215,7 @@
         <!-- <br><br> -->
 
       </div>
-      <div class="card" *ngIf="loading">
+      <div id="allTables" class="card" *ngIf="loading">
         <table> 
           <tr></tr>
           <tr class="table-header-left"> <p class="category-topic">Process of Change</p></tr>
@@ -690,7 +690,10 @@
       
         <!-- <p class="category-topic">Outcome Score - {{outcomeScore}}</p>
       <br><br> -->
-      <table id="heatmap" class="heatmap" style=" text-align: center;">
+      
+      </div>
+      <div id="heatmap">
+        <table id="heatmap" class="heatmap" style=" text-align: center;">
           
           <tbody>
               <tr>
