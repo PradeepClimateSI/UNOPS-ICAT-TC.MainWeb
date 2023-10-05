@@ -5,8 +5,9 @@ import { DatePipe } from '@angular/common';
 import { DomSanitizer } from '@angular/platform-browser';
 import { jsPDF } from "jspdf"
 import html2canvas from 'html2canvas';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { MasterDataService } from 'app/shared/master-data.service';
+import { ColorMap } from 'app/Tool/carbon-market/cm-result/cm-result.component';
 
 
 @Component({
@@ -392,13 +393,16 @@ export class AssessmentResultInvestorComponent implements OnInit {
     setTimeout(() => {
       this.card.push(
         ...[
+          { title: 'Intervention ID', data: (this.intervention.intervention_id)?(this.intervention.intervention_id):'-' },
+          { title: 'Intervention Type', data: (this.intervention.typeofAction)?(this.intervention.typeofAction):'-' },
+          { title: 'Intervention Status', data: (this.intervention.projectStatus)?(this.intervention.projectStatus.name):'-' },
           { title: 'Assessment Type', data: this.assessmentType },
-          { title: 'Level of Implementation', data: this.levelofImplemetation },
           { title: 'Geographical Area Covered', data: this.geographicalAreasCovered },
           { title: 'Sectors Covered', data: this.sectorList.join(', ') },
-          { title: 'Impact Covered', data: this.impactCoverList.join(', ') },
-          { title: 'Date From', data: this.datePipe.transform(this.date1, 'yyyy-MM-dd') },
+          { title: 'From', data: this.datePipe.transform(this.date1, 'yyyy-MM-dd') },
           { title: 'To', data: this.datePipe.transform(this.date2, 'yyyy-MM-dd') },
+          { title: 'Opportunities for stakeholders to participate in the assessment', data: (this.opportunities)?(this.opportunities):'-' },
+          { title: 'Principles on which the assessment is based', data: (this.principles)?(this.principles):'-' },
 
         ])
 
@@ -445,22 +449,88 @@ export class AssessmentResultInvestorComponent implements OnInit {
     }
   }
 
+  exportToExcel() {
+    let colorMap = this.createColorMap()
+    console.log(colorMap)
+    // this.isDownloading = true
+    
+      let book_name = 'Results - ' + this.intervention.policyName
+  
+      const workbook = XLSX.utils.book_new();
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.card, { skipHeader: true });
+      let table = document.getElementById('allTables')
+      let worksheet = XLSX.utils.table_to_sheet(table,{})
+      // this.isDownloading = false
+    
+        let heatmap = XLSX.utils.table_to_sheet(document.getElementById('heatmap'),{})
+        
+        XLSX.utils.book_append_sheet(workbook, ws, 'Assessment Info');
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Assessment Results');
+        XLSX.utils.book_append_sheet(workbook, heatmap, 'Heat map');
 
-  public exportToExcel(): void {
-    import("xlsx").then(xlsx => {
-      const ws = xlsx.utils.json_to_sheet(this.card, { skipHeader: true });
-      const worksheet = xlsx.utils.table_to_sheet(document.querySelector("#content"));
-
-      // add existing data to worksheet
-      const existingData = xlsx.utils.sheet_to_json(worksheet, { header: 1 });
-      xlsx.utils.sheet_add_json(ws, existingData, { skipHeader: true, origin: -1 });
-
-      const workbook = xlsx.utils.book_new();
-      xlsx.utils.book_append_sheet(workbook, ws, "Sheet1");
-      xlsx.writeFile(workbook, "data.xlsx", { cellStyles: true });
-    });
+        for (const itm of colorMap) {
+          if (heatmap[itm.cell]) {
+            heatmap[itm.cell].s = {
+              fill: { fgColor: { rgb: itm.color } },
+            };
+          }
+        }
+  
+        XLSX.writeFile(workbook, book_name + ".xlsx");
+      
+      // this.isDownloading = false
+    
   }
+  // public exportToExcel(): void {
+  //   import("xlsx").then(xlsx => {
+  //     // const ws = xlsx.utils.json_to_sheet(this.card, { skipHeader: true });
+  //     // const worksheet = xlsx.utils.table_to_sheet(document.querySelector("#content"));
 
+  //     // add existing data to worksheet
+  //     // const existingData = xlsx.utils.sheet_to_json(worksheet, { header: 1 });
+  //     // xlsx.utils.sheet_add_json(ws, existingData, { skipHeader: true, origin: -1 });
+
+  //     // const workbook = xlsx.utils.book_new();
+  //     // xlsx.utils.book_append_sheet(workbook, ws, "Sheet1");
+  //     // xlsx.writeFile(workbook, "data.xlsx", { cellStyles: true });
+  //     // const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  //     // const table1 = document.getElementById('table1');
+  //     // const table2 = document.getElementById('table2');
+  //     // const ws1: XLSX.WorkSheet = XLSX.utils.table_to_sheet([table1,table2], { cellStyles: true });
+  //     // // const ws2: XLSX.WorkSheet = XLSX.utils.table_to_sheet(table2, { cellStyles: true });
+  //   let book_name = 'Results - ' + this.intervention.policyName+'.xlsx'
+  //   const workbook = XLSX.utils.book_new();
+  //   const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.card, { skipHeader: true });
+  //   let table = document.getElementById('allTables')
+  //   let worksheet = XLSX.utils.table_to_sheet(table,{})
+
+  //   XLSX.utils.book_append_sheet(workbook, ws, 'Assessment Info');
+
+  //   XLSX.utils.book_append_sheet(workbook, worksheet, 'Assessment Results');
+
+  //   XLSX.writeFile(workbook, book_name);
+   
+     
+  //   });
+  // }
+  createColorMap(){
+    let colorMap = []
+    let cols = 'CDEFGHI'
+    let rows = '34567'
+    let col_values = [3,2,1,0,-1,-2,-3]
+    let row_values = [4,3,2,1,0]
+    for (let [idx,row] of row_values.entries()){
+      for (let [index, col] of col_values.entries()){
+        let hasScore = this.getIntervention(col, row)
+        let obj = new ColorMap()
+        obj.cell = cols[index] + rows[idx]
+        obj.value = row + col
+        obj.color = hasScore ? '0000ff' : this.getBackgroundColor(row + col).replace('#', '')
+        colorMap.push(obj)
+      }
+    }
+    return colorMap
+  }
 
 
 

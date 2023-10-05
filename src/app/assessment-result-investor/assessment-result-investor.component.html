@@ -1,5 +1,5 @@
 <div id="content" #content>
-  <div class="container pl-20 pr-20">
+  <div  class="container pl-20 pr-20">
 
     <div *ngIf="loadTitle">
       <div class="mb-12" *ngIf="investerTool">
@@ -11,7 +11,7 @@
 
 <!-- 
       <div class="card" style="min-height: 600px;"> -->
-      <div class="card" *ngIf="loading">
+      <div id="card" class="card" *ngIf="loading">
         <div style="display: flex; flex-direction: row;">
           <div style="flex-basis: 40%;">
             <p><strong>Intervention ID</strong></p>
@@ -215,10 +215,15 @@
         <!-- <br><br> -->
 
       </div>
-      <div class="card" *ngIf="loading">
-        <br>
-        <p class="category-topic">Process of Change</p>
-        <p-table [value]="[{}]" styleClass="p-datatable-gridlines" [scrollable]="true" scrollHeight="700px" >
+      <div id="allTables" class="card" *ngIf="loading">
+        <table> 
+          <tr></tr>
+          <tr class="table-header-left"> <p class="category-topic">Process of Change</p></tr>
+          <tr></tr>
+        </table>  
+       
+        
+        <p-table id="table1" [value]="[{}]" styleClass="p-datatable-gridlines" [scrollable]="true" scrollHeight="700px" >
             <ng-template pTemplate="header">
               <tr>
                 <th class="table-header-main" colspan="16">Process</th>
@@ -332,11 +337,24 @@
                 </tr> 
             </ng-template>
         </p-table>
-        <br>
+        <!-- <br>
         <p class="category-topic"> Processes Score - {{processScore}}</p>
+        <br> -->
         <br>
-        <p class="category-topic">Outcome of Change - GHGs</p>
-        <p-table [value]="[{}]" styleClass="p-datatable-gridlines" *ngIf="loading">
+        <table> 
+          <tr></tr>
+          <tr class="table-header-left"> <p class="category-topic">Processes Score - {{processScore}}</p></tr>
+          <tr></tr>
+        </table>  
+        <br>
+        
+        <table> 
+          <tr class="table-header-left"> <p class="category-topic">Outcome of Change - GHGs</p></tr>
+          <tr></tr>
+        </table>  
+        <br>
+        <!-- <p class="category-topic">Outcome of Change - GHGs</p> -->
+        <p-table id="table2"[value]="[{}]" styleClass="p-datatable-gridlines" *ngIf="loading">
             <ng-template pTemplate="header">
               <tr>
                 <th class="table-header-main" colspan="4">Scale</th>
@@ -420,9 +438,16 @@
           </ng-template>
           
         </p-table>
+        <br>
         
-        <br> <br>
-        <p class="category-topic">Outcome of Change - SDGs</p>
+        <table> 
+          <tr></tr>
+          <tr class="table-header-left"> <p class="category-topic">Outcome of Change - SDGs</p></tr>
+          <tr></tr>
+        </table>  
+        <br>
+        <!-- <br> <br>
+        <p class="category-topic">Outcome of Change - SDGs</p> -->
         <p-table [value]="[{}]" styleClass="p-datatable-gridlines" *ngIf="loading">
             <ng-template pTemplate="header">
               <tr>
@@ -488,6 +513,9 @@
             </ng-template>
             
         </p-table>
+        <table> 
+          <tr></tr>
+        </table>  
         <p-table [value]="[{}]" styleClass="p-datatable-gridlines" *ngIf="loading">
           <ng-template pTemplate="header">
             <tr>
@@ -554,8 +582,15 @@
           </ng-template>
           
       </p-table>
-      <br> <br>
-      <p class="category-topic">Outcome of Change - Adaptation</p>
+      <br>
+        <table> 
+          <tr></tr>
+          <tr class="table-header-left"> <p class="category-topic">Outcome of Change - Adaptation</p></tr>
+          <tr></tr>
+        </table>  
+      <br>
+      <!-- <br> <br>
+      <p class="category-topic">Outcome of Change - Adaptation</p> -->
       <p-table [value]="[{}]" styleClass="p-datatable-gridlines" *ngIf="loading">
         <ng-template pTemplate="header">
           <tr>
@@ -598,6 +633,9 @@
         </ng-template>
         
       </p-table>
+      <table> 
+        <tr></tr>
+      </table>  
       <p-table [value]="[{}]" styleClass="p-datatable-gridlines" *ngIf="loading">
         <ng-template pTemplate="header">
           <tr>
@@ -640,21 +678,33 @@
         </ng-template>
         
       </p-table>
-      <br> 
       <br>
-        <p class="category-topic">Outcome Score - {{outcomeScore}}</p>
-      <br><br>
-      <table class="heatmap" style=" text-align: center;">
+      <br>
+        <table> 
+          <tr></tr>
+          <tr class="table-header-left"> <p class="category-topic">Outcome Score - {{outcomeScore}}</p></tr>
+          <tr></tr>
+          <tr></tr>
+        </table>  
+      <br>
+      
+        <!-- <p class="category-topic">Outcome Score - {{outcomeScore}}</p>
+      <br><br> -->
+      
+      </div>
+      <div id="heatmap">
+        <table id="heatmap" class="heatmap" style=" text-align: center;">
           
           <tbody>
               <tr>
                   <td></td>
-                  <td colspan="7">Outcome: Extent and sustained nature of the transformation</td>
+                  <td colspan="8">Outcome: Extent and sustained nature of the transformation</td>
               </tr>
-              <tr>
+              <!-- <tr>
                   <td rowspan="7">Process: Transformational change supported</td>
-              </tr>
+              </tr> -->
               <tr>
+                <td rowspan="6">Process: Transformational change supported</td>
                   <td></td>
                   <ng-container *ngFor="let x of xData">
                       <td>{{x.label}}</td>
@@ -675,10 +725,10 @@
   </div>
 </div>
 
-<!-- <div class="container pl-20 pr-20">
+<div class="container pl-20 pr-20">
   <div class="d-flex flex-row-reverse mt-2 mb-2">
-    <button (click)="makePDF()" class="btn btn-primary btn-block text-uppercase">Download as PDF</button> &nbsp;&nbsp;
+    <!-- <button (click)="makePDF()" class="btn btn-primary btn-block text-uppercase">Download as PDF</button> &nbsp;&nbsp; -->
     <button (click)="exportToExcel()" class="btn btn-primary btn-block text-uppercase">Download as Excel</button>
 
   </div>
-</div> -->
+</div>
