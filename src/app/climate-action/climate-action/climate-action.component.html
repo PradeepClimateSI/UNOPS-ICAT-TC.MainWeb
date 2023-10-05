@@ -321,21 +321,21 @@
 
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="projStatus">Type of intervention*</label>
-                  <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlockprojStatus">
+                  <label for="projType">Type of intervention*</label>
+                  <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocktypeOfintevention">
                     <p-dropdown [disabled]="editEntytyId > 0" placeholder="Please Select the type of intervention"
-                      #typeOfIntervention="ngModel"
-                      name="typeOfIntervention" #projStatus="ngModel" [(ngModel)]="project.typeofAction" [options]="typeofAction"
+                    
+                      name="projType" #projType="ngModel" [(ngModel)]="project.typeofAction" [options]="typeofAction"
                       [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false" appendTo="body"
                       [required]="false"></p-dropdown>
                     <p class="info-message text-danger" *ngIf="
                     !project.typeofAction &&
-                    (fData.submitted || typeOfIntervention.touched || typeOfIntervention.dirty)
+                    (fData.submitted || projType.touched || projType.dirty)
                   ">
                       This is a mandatory field
                     </p>
                   </ng-container>
-                  <ng-template #elseBlockprojStatus>
+                  <ng-template #elseBlocktypeOfintevention>
                     <input [disabled]="editEntytyId > 0" type="text" maxlength="50" name="typeofAction"
                       #typeofAction="ngModel" class="p-inputtext" [(ngModel)]="project.typeofAction"
                       [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
