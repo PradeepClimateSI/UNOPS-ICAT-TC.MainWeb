@@ -199,7 +199,7 @@ export class CmResultComponent implements OnInit {
         
         XLSX.utils.book_append_sheet(workbook, ws, 'Assessment Info');
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Assessment Results');
-        XLSX.utils.book_append_sheet(workbook, heatmap, 'Heat map');
+        XLSX.utils.book_append_sheet(workbook, heatmap, 'Score map');
 
         for (const itm of colorMap) {
           if (heatmap[itm.cell]) {
@@ -208,8 +208,8 @@ export class CmResultComponent implements OnInit {
             };
           }
         }
-  
-        XLSX.writeFile(workbook, book_name + ".xlsx");
+
+        XLSX.writeFile(workbook, book_name + ".xlsx", {cellStyles: true});
       }, 1000);
       this.isDownloading = false
     }, 1000)
