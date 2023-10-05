@@ -42,7 +42,7 @@
 
         <div class="p-grid p-fluid ">
             <div class="row">
-                <div class="col-md-3 ">
+                <div class="col-md-3 " *ngIf="this.isCarbonMarketTool ||  userRole ==loginRole.External">
                     <button
 
                         class="p-button-lg"
@@ -55,7 +55,7 @@
                         label="Carbon Market">
                     </button>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3" *ngIf="this.isInvesmentTool ||  userRole ==loginRole.External">
                     <button
 
                         class="p-button-lg"
@@ -69,7 +69,7 @@
                     </button>
 
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3"  *ngIf="this.isPortfolioTool ||  userRole ==loginRole.External">
                     <button
 
                         class="p-button-lg"
