@@ -267,7 +267,7 @@
                                   <div class="p-field">
                                     <label for="justification">Justification</label>
                                     <input type="text" pInputText [(ngModel)]="data.justification"
-                                      placeholder="Enter Justifiaction" name="justification" />
+                                      placeholder="Enter Justification" name="justification" />
 
                                   </div>
                                 </div> -->
@@ -372,7 +372,7 @@
                                   <div class="p-field">
                                     <label for="justification">Justification</label>
                                     <input type="text" pInputText [(ngModel)]="data.likelihood_justification"
-                                      placeholder="Enter Justifiaction" name="data.charData.likelihood_justification" />
+                                      placeholder="Enter Justification" name="data.charData.likelihood_justification" />
 
                                   </div>
                                 </div>
@@ -619,7 +619,7 @@
                                       <div class="p-field">
                                         <label for="justification">Justification</label>
                                         <input type="text" pInputText [(ngModel)]="data.justification"
-                                          placeholder="Enter Justifiaction" name="justification" />
+                                          placeholder="Enter Justification" name="justification" />
 
                                       </div>
                                     </div>
@@ -652,17 +652,39 @@
 
                                   <div class="row p-2"
                                     *ngIf=" (category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level') ||
-                                     (category.CategoryName ==='Adaptation Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level') ">
+                                                                       (category.CategoryName ==='Adaptation Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level') ">
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
                                         <label for="expected_ghg_mitigation">Expected GHG mitgation (Mt CO2-eq)</label>
-                                        <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation"
-                                          name="expected_ghg_mitigation" placeholder="Expected GHG mitgation Value"
-                                          inputId="locale-us" mode="decimal" locale="en-US" [minFractionDigits]="2">
+                                        <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation" name="expected_ghg_mitigation"
+                                          placeholder="Expected GHG mitgation Value" inputId="locale-us" mode="decimal" locale="en-US"
+                                          [minFractionDigits]="2">
                                         </p-inputNumber>
                                       </div>
                                     </div>
-
+                                
+                                    <div *ngIf="category.CategoryName ==='GHG Scale of the Outcome'" style="text-align: justify;">
+                                      <p>  <br><br>
+                                        Note: all reduction in emissions calculated as average reduction in emissions
+                                        (tCO2e/yr calculated as total estimated reductions over lifetime of the project
+                                        divided by project lifetime) and compared respectively to global, national/sectoral or
+                                        subnational and subsectorial emissions for the latest year for which those emissions data
+                                        is available
+                                      </p>
+                                    </div>
+                                  
+                                    <div *ngIf="category.CategoryName ==='Adaptation Scale of the Outcome'" style="text-align: justify;">
+                                      <p>  <br><br>
+                                        Note: A quantitative approach may be applied to estimate a score at international, national and subsectorial level
+                                        provided the data is available. This approach is based on the assumption that achieving the national GHG emission
+                                        goal included in the country´s NDC and its proportional goals at international (e.g., what does a 15.8% GHG
+                                        reduction at national level in country X means at international level) and subnational levels (e.g., what does a
+                                        15.8% GHG reduction at national level in country X means at region A level) would be a "major" outcome and that
+                                        producing GHG emissions equal to that goals would be a "major negative" outcome.
+                                      </p>
+                                    </div>
+                                  
+                                  
                                   </div>
 
 
@@ -1077,7 +1099,7 @@
                                     <div class="p-field">
                                       <label for="justification">Justification</label>
                                       <input type="text" pInputText [(ngModel)]="data.justification"
-                                        placeholder="Enter Justifiaction" name="justification" />
+                                        placeholder="Enter Justification" name="justification" />
   
                                     </div>
                                   </div> -->
@@ -1128,7 +1150,7 @@
                                     <div class="p-field">
                                       <label for="justification">Justification</label>
                                       <input type="text" pInputText [(ngModel)]="data.likelihood_justification"
-                                        placeholder="Enter Justifiaction" name="data.charData.likelihood_justification" />
+                                        placeholder="Enter Justification" name="data.charData.likelihood_justification" />
   
                                     </div>
                                   </div>
@@ -1261,7 +1283,7 @@
                                       <div class="p-field">
                                         <label for="justification">Justification</label>
                                         <input type="text" pInputText [(ngModel)]="data.justification"
-                                          placeholder="Enter Justifiaction" name="justification" />
+                                          placeholder="Enter Justification" name="justification" />
   
                                       </div>
                                     </div>

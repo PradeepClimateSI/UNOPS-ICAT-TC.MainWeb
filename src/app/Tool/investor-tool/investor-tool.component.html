@@ -367,7 +367,16 @@
                                                              <div class="row" *ngIf="!question.question.isMain">
                                                                 <div  class=" ml-25 col-6 mb-20">
                                                                     <p  class="question">{{question.question.name}}</p>
+                                                                    <div class="tooltip-container">
+                                                                      <div *ngIf="question.question.tooltip">
+                                                                        <span class="tooltip-icon">i</span>
+                                                                        <div class="tooltip-text" [innerHTML]="addNewline(question.question.tooltip)"></div>
+                                  
+                                                                      </div>
+                                                                    </div>
                                                                  </div>
+
+
                                                                  <div class="col-4 mb-20">
 
                                                                     <p-dropdown *ngIf="approach===1"
@@ -388,16 +397,19 @@
                                                                     </p-dropdown>
 
                                                                  </div>
+
+                                                                 
                                                              </div>
+                                                             
                                                              <div class="row" *ngIf="!question.question.isMain">
                                                                 <div class=" ml-25 col-6 mb-20">
 
-                                                                    <p class="justifiaction" class="question">Comment and justifiaction</p>
+                                                                    <p class="justifiaction" class="question">Comment and justification</p>
                                                                   </div>
                                                                   <div class="col-4 mb-20">
                                                                     <input type="text" pInputText
                                                                     [(ngModel)]="question.justification"
-                                                                    placeholder="Enter Justifiaction"
+                                                                    placeholder="Enter Justification"
                                                                     name="data.charData.likelihood_justification" />
 
                                                                  </div>
@@ -441,7 +453,7 @@
                                                                 <label for="justification">Justification</label>
                                                                 <input type="text" pInputText
                                                                     [(ngModel)]="data.likelihood_justification"
-                                                                    placeholder="Enter Justifiaction"
+                                                                    placeholder="Enter Justification"
                                                                     name="data.charData.likelihood_justification" />
 
                                                             </div>
@@ -689,7 +701,7 @@
                                       <div class="p-field">
                                         <label for="justification">Justification</label>
                                         <input type="text" pInputText [(ngModel)]="data.justification"
-                                          placeholder="Enter Justifiaction" name="justification" />
+                                          placeholder="Enter Justification" name="justification" />
 
                                       </div>
                                     </div>
@@ -730,6 +742,27 @@
                                     locale="en-US" [minFractionDigits]="2">
                                   </p-inputNumber>
                                   </div>
+                                </div>
+
+                                <div *ngIf="category.CategoryName ==='GHG Scale of the Outcome'" style="text-align: justify;">
+                                  <p>  <br><br>
+                                    Note: all reduction in emissions calculated as average reduction in emissions
+                                    (tCO2e/yr calculated as total estimated reductions over lifetime of the project
+                                    divided by project lifetime) and compared respectively to global, national/sectoral or
+                                    subnational and subsectorial emissions for the latest year for which those emissions data
+                                    is available
+                                  </p>
+                                </div>
+                              
+                                <div *ngIf="category.CategoryName ==='Adaptation Scale of the Outcome'" style="text-align: justify;">
+                                  <p>  <br><br>
+                                    Note: A quantitative approach may be applied to estimate a score at international, national and subsectorial level
+                                    provided the data is available. This approach is based on the assumption that achieving the national GHG emission
+                                    goal included in the country´s NDC and its proportional goals at international (e.g., what does a 15.8% GHG
+                                    reduction at national level in country X means at international level) and subnational levels (e.g., what does a
+                                    15.8% GHG reduction at national level in country X means at region A level) would be a "major" outcome and that
+                                    producing GHG emissions equal to that goals would be a "major negative" outcome.
+                                  </p>
                                 </div>
 
                                 </div>

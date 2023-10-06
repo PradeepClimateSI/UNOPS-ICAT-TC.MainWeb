@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Assessment, AssessmentCMDetail, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CMScoreDto, CalculateDto, Characteristics, ClimateAction } from 'shared/service-proxies/service-proxies';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { MasterDataService } from 'app/shared/master-data.service';
@@ -22,7 +22,7 @@ export class CmResultComponent implements OnInit {
   card: any[] = []
   results: any;
   criterias: any;
-  keys: string[]
+  sections: string[]
   score: CMScoreDto = new CMScoreDto()
   expandedRows: any = {}
   isDownloading: boolean = false
@@ -40,15 +40,6 @@ export class CmResultComponent implements OnInit {
 
   xData: {label: string; value: number}[]
   yData: {label: string; value: number}[]
-
-  // heatmapData = [
-  //   ['Not at all', 'Major negative outcome (90-100%)'],
-  //   ['Minimally', 'Negative outcome (70-90%)'],
-  //   ['Moderately', 'Mixed outcome (50-70%)'],
-  //   ['Substantially', 'Positive outcome (30-50%)'],
-  //   ['Fully', 'Major positive outcome (0-30%)'],
-  // ];
-
 
   constructor(
     private route: ActivatedRoute,
@@ -77,13 +68,6 @@ export class CmResultComponent implements OnInit {
       this.yData = this.masterDataService.yData
 
       this.assessmentCMDetail = await this.assessmentCMDetailControllerServiceProxy.getAssessmentCMDetailByAssessmentId(assessmentId).toPromise()
-      // let types: any = this.assessmentCMDetail.impact_types?.split(',')
-      // if(types?.length > 0) types = [...types.map((type: string) => this.masterDataService.impact_types.find(o => o.code === type)?.name)]
-      // let cats: any = this.assessmentCMDetail.impact_categories?.split(',')
-      // if (cats?.length > 0) cats = [...cats.map((cat: string) => this.masterDataService.impact_categories.find(o => o.code === cat)?.name)]
-      // let chara: any = this.assessmentCMDetail.impact_characteristics?.split(',')
-      // if (chara?.length > 0) chara = [...chara.map((char: string) => this.masterDataService.impact_characteristics.find(o => o.code === char)?.name)]
-      // console.log(chara)
       let cmApproache = cmApproaches.find(o => o.code === this.assessmentCMDetail.intCMApproach)
       this.card.push(
         ...[
@@ -145,11 +129,8 @@ export class CmResultComponent implements OnInit {
       this.criterias = res.criteria
       this.processData =res.processData;
       this.outcomeData =res.outComeData;
-      this.keys = Object.keys(this.results)
-      this.keys = this.keys.filter(e => e !== "undefined")
-      console.log("res",res)
-      console.log("keys", this.keys)
-
+      this.sections = Object.keys(this.results)
+      this.sections = this.sections.filter(e => e !== "undefined")
 
       this.criterias.forEach((c: any) => {
         this.expandedRows[c] = false
@@ -163,7 +144,58 @@ export class CmResultComponent implements OnInit {
     }
   }
 
-  toDownloadExcel(){
+  createColorMap(){
+    let colorMap = []
+    let cols = 'CDEFGHI'
+    let rows = '34567'
+    let col_values = [3,2,1,0,-1,-2,-3]
+    let row_values = [4,3,2,1,0]
+    for (let [idx,row] of row_values.entries()){
+      for (let [index, col] of col_values.entries()){
+        let hasScore = this.getIntervention(col, row)
+        let obj = new ColorMap()
+        obj.cell = cols[index] + rows[idx]
+        obj.value = row + col
+        obj.color = hasScore ? '0000ff' : this.getBackgroundColor(row + col).replace('#', '')
+        colorMap.push(obj)
+      }
+    }
+    return colorMap
+  }
+
+  toDownloadExcel() {
+    let colorMap = this.createColorMap()
+    this.isDownloading = true
+    setTimeout(() =>{
+      let book_name = 'Results - ' + this.intervention.policyName
+  
+      const workbook = XLSX.utils.book_new();
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.card, { skipHeader: true });
+      let table = document.getElementById('cmtool')
+      let worksheet = XLSX.utils.table_to_sheet(table,{})
+      this.isDownloading = false
+      setTimeout(() => {
+        let heatmap = XLSX.utils.table_to_sheet(document.getElementById('heatmap'),{})
+        
+        XLSX.utils.book_append_sheet(workbook, ws, 'Assessment Info');
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Assessment Results');
+        XLSX.utils.book_append_sheet(workbook, heatmap, 'Score map');
+
+        for (const itm of colorMap) {
+          if (heatmap[itm.cell]) {
+            heatmap[itm.cell].s = {
+              fill: { fgColor: { rgb: itm.color } },
+            };
+          }
+        }
+
+        XLSX.writeFile(workbook, book_name + ".xlsx", {cellStyles: true});
+      }, 1000);
+      this.isDownloading = false
+    }, 1000)
+  }
+
+  _toDownloadExcel(){ //Not using
     let length = 0
     let book_name = 'Results - ' + this.intervention.policyName
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.card, { skipHeader: true });
@@ -171,16 +203,16 @@ export class CmResultComponent implements OnInit {
 
     length = length + this.card.length + 2
 
-    this.keys.forEach(key => {
-      XLSX.utils.sheet_add_json(ws, [{section: key}], { skipHeader: true, origin: "A" + length });
+    this.sections.forEach(section => {
+      XLSX.utils.sheet_add_json(ws, [{section: section}], { skipHeader: true, origin: "A" + length });
       length = length + 2
-      XLSX.utils.sheet_add_json(ws, this.results[key], { skipHeader: false, origin: "A" + length });
-      length = length + this.results[key].length + 2
+      XLSX.utils.sheet_add_json(ws, this.results[section], { skipHeader: false, origin: "A" + length });
+      length = length + this.results[section].length + 2
     })
     XLSX.utils.sheet_add_json(ws, [{title: 'Transformational Change Criteria'}], { skipHeader: true, origin: "A" + length });
     length = length + 2
 
-    let processData =  this.mapProcessData()
+    let processData =  this._mapProcessData()
 
     if (processData.technology && processData.technology.length!=0){
       XLSX.utils.sheet_add_json(ws, [{title: 'Process of Change / Technology'}], { skipHeader: true, origin: "A" + length });
@@ -234,7 +266,7 @@ export class CmResultComponent implements OnInit {
     XLSX.writeFile(wb, book_name + '.xlsx');
   }
 
-  mapProcessData(){
+  _mapProcessData(){ // Not using
     let data = new ProcessData()
     if (this.processData?.technology && this.processData?.technology?.length !== 0){
       data.technology = this.processData.technology.map((ele: { characteristic: string; question: string; score: number; justification: string; }) => {
@@ -365,6 +397,7 @@ export class CmResultComponent implements OnInit {
       return '-'
     }
   }
+
   getOutcomeScores(code: any, category: string, characteristic: Characteristics) {
     if (code) {
       if (category == 'scale_GHGs') {
@@ -450,4 +483,10 @@ export class ScaleTableData{
   'Expected Impact': string
   Score: string
   Justification: string
+}
+
+export class ColorMap {
+  cell: string
+  value: number
+  color: string
 }
