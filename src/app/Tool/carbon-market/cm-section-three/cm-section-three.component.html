@@ -339,7 +339,7 @@
                     </div>
                     <ng-container selectedSDGs && selectedSDGs.length>
                         <ng-container *ngFor="let SDG of selectedSDGs; let sidx = index">
-                            <h5>{{sidx+1}}. {{SDG.name}}</h5>
+                            <h5> SDG {{SDG.number}} - {{SDG.name}}</h5>
                             <ng-container *ngIf="category.method === 'SCALE'">
                                 <ng-container *ngFor="let char of SDG.scaleResult; let idx = index;">
                                     <h6>{{idx+1}}. {{char.characteristic.name}}</h6>

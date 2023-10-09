@@ -148,7 +148,7 @@ CMPrerequiste: {
 
   sdgResults(){
     this.sdgDetailsList=[]
-    this.cmAssessmentQuestionProxy.getSDGFrequency().subscribe(async (res: any) => {
+    this.investorProxy.sdgSumCalculate('Carbon Market Tool').subscribe(async (res: any) => {
       console.log("sdgDetailsList : ", res)
       this.sdgDetailsList = res;
       setTimeout(() => {
@@ -179,7 +179,7 @@ sectorCountResult(){
     // }, 200);
 }
   viewFrequencyofSDGsChart(){
-    let labels = this.sdgDetailsList.map((item:any) => item.sdg);
+    let labels = this.sdgDetailsList.map((item:any) => 'SDG ' + item.number + ' - ' + item.sdg);
     let counts:number[] = this.sdgDetailsList.map((item:any) => item.count);
     let total = counts.reduce((acc, val) => acc + val, 0);
     let percentages = counts.map(count => ((count / total) * 100).toFixed(2));

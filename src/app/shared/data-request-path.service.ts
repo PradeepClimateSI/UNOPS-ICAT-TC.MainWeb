@@ -33,7 +33,7 @@ export class DataRequestPathService {
         if (tool === ParameterRequestTool.Carbon_Market_Tool) {
             paraId = obj.cmAssessmentAnswer.id;
             category = obj.cmAssessmentAnswer.assessment_question.characteristic.category.code
-            let sdg = this.sdgs.find(o => o.code === obj.cmAssessmentAnswer.assessment_question.selectedSdg)?.name
+            let sdg = obj.cmAssessmentAnswer.assessment_question.selectedSdg.name
             let indicator = obj.cmAssessmentAnswer.assessment_question.sdgIndicator
             let startingSituation = obj.cmAssessmentAnswer.assessment_question.startingSituation
             let expectedImpact = obj.cmAssessmentAnswer.assessment_question.expectedImpact

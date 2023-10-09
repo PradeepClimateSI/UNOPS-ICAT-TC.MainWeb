@@ -239,7 +239,7 @@
                         <ng-container *ngFor="let scale_SDs of outcomeData.scale_SDs;let i=index">
                             <tr>
                                 <td *ngIf="i === 0" [attr.rowspan]="outcomeData.scale_SDs.length">Scale SDG</td>
-                                <td>{{getSDGName(scale_SDs?.SDG)}}</td>
+                                <td>{{scale_SDs?.SDG}}</td>
                                 <td>{{changeOutcomeCharacteristicsName(scale_SDs.characteristic)}}</td>
                                 <td *ngIf="isDownloading">{{scale_SDs.SDG_indicator}}</td>
                                 <td *ngIf="isDownloading">{{scale_SDs.starting_situation}}</td>
@@ -263,7 +263,7 @@
                         <ng-container *ngFor="let sustained_SDs of outcomeData.sustained_SDs; let i = index">
                             <tr>
                                 <td *ngIf="i === 0" [attr.rowspan]="outcomeData.sustained_SDs.length">Sustained SDG</td>
-                                <td>{{getSDGName(sustained_SDs?.SDG)}}</td>
+                                <td>{{sustained_SDs?.SDG}}</td>
                                 <td>{{changeOutcomeCharacteristicsName(sustained_SDs.characteristic)}}</td>
                                 <td *ngIf="isDownloading">-</td>
                                 <td *ngIf="isDownloading">-</td>

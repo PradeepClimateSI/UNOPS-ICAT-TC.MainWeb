@@ -174,6 +174,7 @@ export class CmSectionThreeComponent implements OnInit {
       let _sdg: SDG = {
         name: sdg.name,
         code: (sdg.name.replace(/ /g, '')).toUpperCase(),
+        number: sdg.number,
         scaleResult: res,
         sustainResult: res2
       }
@@ -393,6 +394,7 @@ export interface OutcomeResult {
 export interface SDG {
   name: string
   code: string
+  number: number
   scaleResult: CMResultDto[]
   sustainResult: CMResultDto[]
 }
