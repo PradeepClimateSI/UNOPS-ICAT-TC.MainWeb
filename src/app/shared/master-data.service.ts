@@ -265,7 +265,7 @@ export class MasterDataService {
       {  id: "-1 - Minor Negative",value:-1 },
       {  id: "-2 - Moderate Negative",value:-2 },
       {  id: "-3 - Major Negative",value:-3 },
-      {  id: "Empty",value:null },
+      {  id: "Outside assessment boundaries",value:null },
 
     ]
 
@@ -275,7 +275,7 @@ export class MasterDataService {
       {  id: "1 - Possible (33-66%)",value:1 },
       {  id: "0 - Less likely (10-33%)",value:0 },
       {  id: "-1 - Unlikely (0-10%)",value:-1 },
-      {  id: "Empty",value:null },
+      {  id: "Outside assessment boundaries",value:null },
     ]
 
     this.assessment_approach2 = [
