@@ -4,7 +4,7 @@ import { MasterDataService } from 'app/shared/master-data.service';
 import { SelectedScoreDto } from 'app/shared/score.dto';
 import { environment } from 'environments/environment';
 import { MessageService } from 'primeng/api';
-import { CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, Institution, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, ScoreDto } from 'shared/service-proxies/service-proxies';
+import { CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, ScoreDto } from 'shared/service-proxies/service-proxies';
 
 
 interface UploadEvent {
@@ -65,13 +65,16 @@ export class CmSectionThreeComponent implements OnInit {
   adaptation_tooltip: string
   starting_situation_tooltip: string
   expected_impact_tooltip: string
+  sdgList: any;
+  selectedSDGsList: PortfolioSdg[];
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
     private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
     private masterDataService: MasterDataService,
     private messageService: MessageService,
-    private institutionControllerServiceProxy: InstitutionControllerServiceProxy
+    private institutionControllerServiceProxy: InstitutionControllerServiceProxy,
+    private investorToolControllerServiceProxy: InvestorToolControllerServiceProxy
   ) {
     this.uploadUrl = environment.baseUrlAPI + '/cm-assessment-question/upload-file'
     this.fileServerURL = environment.baseUrlAPI + '/uploads'
@@ -113,6 +116,12 @@ export class CmSectionThreeComponent implements OnInit {
       this.institutions = res;
     });
     this.relevance = this.masterDataService.relevance;
+
+    await this.getSDGList()
+  }
+
+  async getSDGList(){
+    this.sdgList =  await this.investorToolControllerServiceProxy.findAllSDGs().toPromise()
   }
 
   onMainTabChange(event: any) {
@@ -138,13 +147,17 @@ export class CmSectionThreeComponent implements OnInit {
         })
       }
     })
-    this.selectedSDGs = this.selectedSDGs.map(sdg => {
+    this.selectedSDGs = this.selectedSDGsList.map(sdg => {
+      let pSdg = new PortfolioSdg()
+      pSdg.id = sdg.id
+      pSdg.name = sdg.name
+      console.log("portfolio sdg", pSdg)
       let res: CMResultDto[] = scaleResults.map((o: any) => {
         let _r = new CMResultDto()
         Object.keys(_r).forEach(e => {
           _r[e] = o[e]
         })
-        _r.selectedSdg = sdg.code
+        _r.selectedSdg = pSdg
         _r.isSDG = true
         return _r
       })
@@ -153,13 +166,21 @@ export class CmSectionThreeComponent implements OnInit {
         Object.keys(_r).forEach(e => {
           _r[e] = o[e]
         })
-        _r.selectedSdg = sdg.code
+        _r.selectedSdg = pSdg
         _r.isSDG = true
         return _r
       })
-      sdg.scaleResult = res
-      sdg.sustainResult = res2
-      return sdg
+
+      let _sdg: SDG = {
+        name: sdg.name,
+        code: (sdg.name.replace(/ /g, '')).toUpperCase(),
+        scaleResult: res,
+        sustainResult: res2
+      }
+
+      console.log(_sdg)
+      
+      return _sdg
     })
   }
 
@@ -268,6 +289,7 @@ export class CmSectionThreeComponent implements OnInit {
             res.institution = inst
           }
           res.type = this.approach
+          res.selectedSdg = new PortfolioSdg()
           this.results.push(res)
         }
       }
@@ -288,6 +310,8 @@ export class CmSectionThreeComponent implements OnInit {
             score.value = res.selectedScore.value
             res.selectedScore = score
             res.type = this.approach
+
+          console.log("scale result SDG", res)
             this.results.push(res)
           }
         })
@@ -327,6 +351,7 @@ export class CmSectionThreeComponent implements OnInit {
               score.value = res.selectedScore.value
               res.selectedScore = score
               res.type = this.approach
+              res.selectedSdg = new PortfolioSdg()
               this.results.push(res)
             }
           })

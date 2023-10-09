@@ -98,7 +98,7 @@
                         </ng-container>
                     </tr>
                     <tr>
-                        <td [attr.rowspan]="processData.guidingQuestions.length + 2">Score</td>
+                        <td [attr.rowspan]="processData.guidingQuestions?.length + 2">Score</td>
                         <ng-container *ngFor="let cat of processData.data">
                             <ng-container *ngFor="let data of cat.characteristic">
                                 <td>Guiding Question</td>

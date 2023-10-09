@@ -326,7 +326,7 @@
                         <div class="col-4">Choose SDG</div>
                         <div class="col-8">
                             <p-multiSelect name="impact_categories" placeholder="Select SDG(s)" appendTo="body"
-                                [options]="SDGs" [(ngModel)]="selectedSDGs" optionLabel="name"
+                                [options]="sdgList" [(ngModel)]="selectedSDGsList" optionLabel="name"
                                 (onChange)="onSelectSDG($event)" [disabled]="category.method === 'SUSTAINED'">
                             </p-multiSelect>
                         </div>
