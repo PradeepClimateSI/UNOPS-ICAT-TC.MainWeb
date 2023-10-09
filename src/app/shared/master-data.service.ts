@@ -250,9 +250,9 @@ export class MasterDataService {
 
     this.likelihood = [
       {  id: "Very unlikely (0-10%)",value:0 },
-      {  id: "Unlikely (10-33%)",value:1  },
-      {  id: "Possible (33-66%)",value:2 },
-      {  id: "Likely (66-90%)",value:3 },
+      {  id: "Unlikely (10-30%)",value:1  },
+      {  id: "Possible (30-60%)",value:2 },
+      {  id: "Likely (60-90%)",value:3 },
       {  id: "Very likely (90-100%)",value:4 },
 
     ]
@@ -271,9 +271,9 @@ export class MasterDataService {
 
     this.outcomeSustainedScore = [
       {  id: "3 - Very likely (90-100%)",value:3 },
-      {  id: "2 - Likely (66-90%)",value:2  },
-      {  id: "1 - Possible (33-66%)",value:1 },
-      {  id: "0 - Less likely (10-33%)",value:0 },
+      {  id: "2 - Likely (60-90%)",value:2  },
+      {  id: "1 - Possible (30-60%)",value:1 },
+      {  id: "0 - Less likely (10-30%)",value:0 },
       {  id: "-1 - Unlikely (0-10%)",value:-1 },
       {  id: "Outside assessment boundaries",value:null },
     ]
@@ -360,9 +360,9 @@ export class MasterDataService {
   
     this.yData = [
       {label: '4 - Very likely (90-100%)', value: 4},
-      {label: '3 - Likely (66-90%)', value: 3},
-      {label: '2 - Possible (33-66%)', value: 2},
-      {label: '1 - Unlikely (10-33%)', value: 1},
+      {label: '3 - Likely (60-90%)', value: 3},
+      {label: '2 - Possible (30-60%)', value: 2},
+      {label: '1 - Unlikely (10-30%)', value: 1},
       {label: '0 - Very Unlikely (0-10%)', value: 0}
     ]
 
