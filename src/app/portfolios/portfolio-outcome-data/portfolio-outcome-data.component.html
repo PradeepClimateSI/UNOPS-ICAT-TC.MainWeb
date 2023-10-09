@@ -3,7 +3,7 @@
         <ng-template pTemplate="header">
             <tr>
                 <th colspan="4">{{data.comparison_type}}</th>
-                <th [attr.colspan]="4">{{data.comparison_type_2}}</th>
+                <th [attr.colspan]="data.col_set_2.length">{{data.comparison_type_2}}</th>
             </tr>
             <tr>
                 <ng-container *ngFor="let col of data.col_set_1">
@@ -19,8 +19,9 @@
         <ng-template pTemplate="body" let-intervention>
             <tr>
                 <ng-container *ngFor="let col of data.col_set_2">
-                    <td *ngIf="intervention[col.code]?.name">{{intervention[col.code].name}}</td>
-                    <td *ngIf="!intervention[col.code]?.name">{{intervention[col.code]}}</td>
+                    <td>{{getValue(intervention[col.code])}}</td>
+                    <!-- <td *ngIf="intervention[col.code]?.name">{{intervention[col.code].name}}</td>
+                    <td *ngIf="!intervention[col.code]?.name">{{intervention[col.code]}}</td> -->
                 </ng-container>
             </tr>
         </ng-template>
