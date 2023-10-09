@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { Assessment, CMAnswer, CMAssessmentQuestion, CMAssessmentQuestionControllerServiceProxy, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Criteria, Institution, SaveCMResultDto } from 'shared/service-proxies/service-proxies';
+import { Assessment, CMAnswer, CMAssessmentQuestionControllerServiceProxy, CMQuestionControllerServiceProxy, CMResultDto, Institution, SaveCMResultDto } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-cm-section',
@@ -43,7 +43,6 @@ export class CmSectionComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    // this.approach = 'INDIRECT' //TODO REMOVE ON COMMIT
     await this.getSections()
     this.onOpenTab({ index: 0 })
     this.shownQuestions[0] = []
@@ -244,8 +243,6 @@ export class CmSectionComponent implements OnInit {
             detail: 'Assessment created successfully',
             closable: true,
           })
-          // this.cMAssessmentQuestionControllerServiceProxy.saveTcValue(this.assessment.id).subscribe();
-
           if (result.assessment.assessment_approach === 'DIRECT') {
             this.router.navigate(['../carbon-market-tool-result'], { queryParams: { id: this.assessment.id }, relativeTo: this.activatedRoute });
           }

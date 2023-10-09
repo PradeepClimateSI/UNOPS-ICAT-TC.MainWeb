@@ -101,7 +101,6 @@ export class CmQuestionComponent implements OnInit {
   }
 
   onUpload(event:UploadEvent, type: string) {
-    console.log("onupload", event.originalEvent.body)
     if(event.originalEvent.body){
       let filePath = event.originalEvent.body.fileName
       this.prev_answer.emit({path: filePath, type: type})

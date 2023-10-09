@@ -11,7 +11,7 @@ import { Assessment, AssessmentCMDetail, ClimateAction, MethodologyAssessmentCon
   styleUrls: ['./carbon-market-assessment.component.css']
 })
 export class CarbonMarketAssessmentComponent implements OnInit {
-visible_ex_ante: any;
+  visible_ex_ante: any;
 
 
   policies: ClimateAction[]
@@ -53,17 +53,13 @@ visible_ex_ante: any;
     this.int_cm_approches = this.masterDataService.int_cm_approaches
 
     await this.getPolicies()
-    console.log(this.policies)
-    console.log(this.assessment)
   }
 
-  async getPolicies(){
+  async getPolicies() {
     this.policies = await this.projectControllerServiceProxy.findAllPolicies().toPromise()
   }
 
   save(form: NgForm) {
-   // this.showSections = true //TODO comment this line in commit
-    //save assessment
     this.assessment.tool = 'Carbon Market Tool'
     this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
     this.assessment.assessment_approach = 'DIRECT'
@@ -71,14 +67,12 @@ visible_ex_ante: any;
     if (form.valid) {
       this.methodologyAssessmentControllerServiceProxy.saveAssessment(this.assessment)
         .subscribe(res => {
-          console.log(res)
           if (res) {
             this.cm_detail.cmassessment = res
 
             this.serviceProxy.createOneBaseAssessmentCMDetailControllerAssessmentCMDetail(this.cm_detail)
               .subscribe(_res => {
                 if (_res) {
-                  console.log(_res)
                   this.messageService.add({
                     severity: 'success',
                     summary: 'Success',
@@ -88,10 +82,8 @@ visible_ex_ante: any;
                   this.isSavedAssessment = true
                   this.assessmentres = res
                   this.showSections = true
-                  console.log(this.assessmentres)
                 }
               }, error => {
-                console.log(error)
                 this.messageService.add({
                   severity: 'error',
                   summary: 'Error',
@@ -101,7 +93,6 @@ visible_ex_ante: any;
               })
           }
         }, error => {
-          console.log(error)
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
@@ -117,37 +108,32 @@ visible_ex_ante: any;
         closable: true,
       })
     }
-    console.log(this.assessment)
-    console.log(this.cm_detail)
-
-    //save cmDetail
-
   }
 
-  selectAssessmentType(e: any){
+  selectAssessmentType(e: any) {
     if (e.value === 'Ex-ante') {
       this.visible_ex_ante = true
     }
   }
 
-  selectAssessmentApproach(e: any){
+  selectAssessmentApproach(e: any) {
 
   }
 
-  onSelectType(e: any){
+  onSelectType(e: any) {
     this.impact_categories = []
     e.value.forEach((val: string) => {
       this.impact_categories.push(...this.masterDataService.impact_categories.filter(cat => cat.type === val))
     })
   }
 
-  onSelectCategory(e: any){
+  onSelectCategory(e: any) {
     this.impact_characteristics = []
     e.value.forEach((val: string) => {
       this.impact_characteristics.push(...this.masterDataService.impact_characteristics.filter(cat => cat.type.includes(val)))
     })
 
-    this.impact_characteristics = this.impact_characteristics.filter((v,i,a)=>a.findIndex(v2=>(v2.code===v.code))===i)
+    this.impact_characteristics = this.impact_characteristics.filter((v, i, a) => a.findIndex(v2 => (v2.code === v.code)) === i)
   }
 
   okay() {

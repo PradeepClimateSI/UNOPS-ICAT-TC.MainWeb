@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { PortfolioControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 import * as XLSX from 'xlsx';
@@ -20,9 +20,9 @@ export class PortfolioComparisonComponent implements OnInit {
   alignment_data: any;
   isLoaded: boolean = false;
   hasCMToolAssessments: boolean = false
+  isDownloading: boolean;
 
   constructor(
-    private router: Router,
     private route: ActivatedRoute,
     private portfolioServiceProxy: PortfolioControllerServiceProxy,
   ) { }
@@ -68,162 +68,11 @@ console.log(this.portfolio)
 
   async getDummyData() {
     let interventions = await this.portfolioServiceProxy.getPortfolioComparisonData(this.portfolioId).toPromise()
-    
-    //TODO sort process data by order before loop the table
-    // this.process_data = [
-    //   {
-    //     col_set_1: [
-    //       { label: 'INTERVENTION INFORMATION', colspan: 4 },
-    //       { label: 'Technology', colspan: 4 },
-    //     ],
-    //     col_set_2: [
-    //       { label: 'ID', code: 'id' },
-    //       { label: 'Intervention Name', code: 'name' },
-    //       { label: 'Intervention Type', code: 'type' },
-    //       { label: 'Status', code: 'status' },
-    //       { label: 'R&D', code: 'R_&_D' },
-    //       { label: 'Adoption', code: 'ADOPTION' },
-    //       { label: 'Category score', code: 'category_score' }
-    //     ],
-    //     interventions: [
-    //       {
-    //         id: '1',
-    //         name: 'Test 1',
-    //         type: 'Type 1',
-    //         status: 'Complete',
-    //         'R_&_D': '2',
-    //         ADOPTION: '3',
-    //         category_score: '4'
-    //       },
-    //       {
-    //         id: '2',
-    //         name: 'Test 2',
-    //         type: 'Type 2',
-    //         status: 'Complete',
-    //         'R_&_D': '2',
-    //         ADOPTION: '3',
-    //         category_score: '4'
-    //       }
-    //     ],
-    //     characteristic_count: 2,
-    //     order: 1
-    //   },
-    // ]
 
     this.process_data = interventions.process_data
     this.outcome_data = interventions.outcome_data
     this.alignment_data = interventions.alignment_data
 
-    //TODO sort outcome data by order before loop the table
-    // this.outcome_data = [
-    //   {
-    //     comparison_type: 'SCALE COMPARISON',
-    //     col_set_1: [
-    //       { label: 'INTERVENTION INFORMATION', colspan: 4 },
-    //       { label: 'GHG', colspan: 4 }
-    //     ],
-    //     col_set_2: [
-    //       { label: 'ID', code: 'id' },
-    //       { label: 'INTERVENTION NAME', code: 'name' },
-    //       { label: 'INTERVENTION TYPE', code: 'type' },
-    //       { label: 'STATUS', code: 'status' },
-    //       { label: 'INTERNATIONAL', code: 'international' },
-    //       { label: 'NATIONAL/SECTORIAL', code: 'national' },
-    //       { label: 'SUBNATIONAL/SUBSECTORIAL', code: 'subnational' },
-    //       { label: 'CATEGORY SCORE', code: 'category_score' },
-    //     ],
-    //     interventions: [
-    //       {
-    //         id: '1',
-    //         name: 'Test 1',
-    //         type: 'Type 1',
-    //         status: 'Complete',
-    //         international: '2',
-    //         national: '3',
-    //         subnational: '4',
-    //         category_score: '5'
-    //       },
-    //       {
-    //         id: '1',
-    //         name: 'Test 1',
-    //         type: 'Type 1',
-    //         status: 'Complete',
-    //         international: '2',
-    //         national: '3',
-    //         subnational: '4',
-    //         category_score: '5'
-    //       },
-    //     ],
-    //     order: 1
-    //   },
-    //   {
-    //     comaparison_type: 'SCALE COMPARISON',
-    //     col_set_1: [
-    //       { label: 'INTERVENTION INFORMATION', colspan: 4 },
-    //       { label: 'GHG', colspan: 1 },
-    //       { label: 'SDG-NO POVERTY', colspan: 1 },
-    //       { label: 'ADAPTATION', colspan: 1 },
-    //       { label: '', colspan: 1 }
-    //     ],
-    //     col_set_2: [
-    //       { label: 'ID', code: 'id' },
-    //       { label: 'INTERVENTION NAME', code: 'name' },
-    //       { label: 'INTERVENTION TYPE', code: 'type' },
-    //       { label: 'STATUS', code: 'status' },
-    //       { label: 'CATEGORY SCORE', code: 'ghg_score' },
-    //       { label: 'CATEGORY SCORE', code: 'sdg_no_poverty_score' },
-    //       { label: 'CATEGORY SCORE', code: 'adaption_score' },
-    //       { label: 'CATEGORY SCORE', code: 'category_score' },
-    //     ],
-    //     interventions: [
-    //       {
-    //         id: '1',
-    //         name: 'Test 1',
-    //         type: 'Type 1',
-    //         status: 'Complete',
-    //         ghg_score: '2',
-    //         sdg_no_poverty_score: '3',
-    //         adaption_score: '4',
-    //         category_score: '5'
-    //       },
-    //       {
-    //         id: '1',
-    //         name: 'Test 1',
-    //         type: 'Type 1',
-    //         status: 'Complete',
-    //         ghg_score: '2',
-    //         sdg_no_poverty_score: '3',
-    //         adaption_score: '4',
-    //         category_score: '5'
-    //       }
-    //     ],
-    //     order: 2
-    //   }
-    // ]
-
-    // this.aggregation_data = {
-    //   col_set_1: [
-    //     { label: 'INTERVENTION INFORMATION', colspan: 4 },
-    //     { label: '', colspan: 1 }
-    //   ],
-    //   col_set_2: [
-    //     { label: 'ID', code: 'id' },
-    //     { label: 'INTERVENTION NAME', code: 'name' },
-    //     { label: 'INTERVENTION TYPE', code: 'type' },
-    //     { label: 'STATUS', code: 'status' },
-    //     { label: 'GHG MITIGATION (MT CO2-EG)', code: 'mitigation' },
-    //   ],
-    //   interventions: [
-    //     {
-    //       id: '1',
-    //       name: 'Test 1',
-    //       type: 'Test 1',
-    //       status: 'Complete',
-    //       mitigation: 12234
-    //     }
-    //   ],
-    //   total: 23423423
-    // }
     this.aggregation_data = {
       col_set_1: [
         { label: 'INTERVENTION INFORMATION', colspan: 4 },
@@ -239,51 +88,22 @@ console.log(this.portfolio)
       interventions:interventions.aggregation_data.interventions,
       total: interventions.aggregation_data.total
     }
-
-    // this.alignment_data = {
-    //   col_set_1: [
-    //     { label: "INTERVENTION INFORMATION", colspan: 4 },
-    //     { label: '', colspan: 1 },
-    //     { label: '', colspan: 1 },
-    //     { label: '', colspan: 1 }
-    //   ],
-    //   col_set_2: [
-    //     { label: 'ID', code: 'id' },
-    //     { label: 'INTERVENTION NAME', code: 'name' },
-    //     { label: 'INTERVENTION TYPE', code: 'type' },
-    //     { label: 'STATUS', code: 'status' },
-    //     { label: 'SDG 1', code: 'SDG1' },
-    //     { label: 'SDG 2', code: 'SDG2' },
-    //     { label: 'SDG 3', code: 'SDG3' },
-    //   ],
-    //   interventions: [
-    //     {
-    //       id: '1',
-    //       name: 'Test 1',
-    //       type: 'Test 1',
-    //       status: 'Complete',
-    //       SDG1: 'Yes',
-    //       SDG2: 'Yes',
-    //       SDG3: 'Yes'
-    //     }
-    //   ],
-    //   sdg_count: 3
-    // }
   }
-  genarateExcel(){
-   
-    let tabledetail = document.getElementById('one')
-    let tableComparison = document.getElementById('two')
-    let workSheettabledetai=XLSX.utils.table_to_sheet(tabledetail,{})
-    let workSheettableComparison=XLSX.utils.table_to_sheet(tableComparison,{});
+  genarateExcel() {
+    this.isDownloading = true
 
-    // let workbook = XLSX.utils.table_to_book(table,{})
-    let workbook = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(workbook,workSheettabledetai,'Details')
-    XLSX.utils.book_append_sheet(workbook,workSheettableComparison,'Comparison')
-  
-    XLSX.writeFile(workbook, "Report.xlsx");
+    setTimeout(() => {
+      let tabledetail = document.getElementById('one')
+      let tableComparison = document.getElementById('two')
+      let workSheettabledetai = XLSX.utils.table_to_sheet(tabledetail, {})
+      let workSheettableComparison = XLSX.utils.table_to_sheet(tableComparison, {});
 
+      // let workbook = XLSX.utils.table_to_book(table,{})
+      let workbook = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(workbook, workSheettabledetai, 'Details')
+      XLSX.utils.book_append_sheet(workbook, workSheettableComparison, 'Comparison')
+      XLSX.writeFile(workbook, "Report.xlsx");
+    }, 1000);
   }
 
 }
