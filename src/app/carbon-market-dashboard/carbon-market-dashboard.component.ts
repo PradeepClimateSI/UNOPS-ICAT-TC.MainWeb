@@ -8,6 +8,7 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Paginator } from 'primeng/paginator';
 import { LazyLoadEvent } from 'primeng/api';
 import { OverlayPanel } from 'primeng/overlaypanel';
+import { HeatMapScore, TableData } from 'app/charts/heat-map/heat-map.component';
 @Component({
   selector: 'app-carbon-market-dashboard',
   templateUrl: './carbon-market-dashboard.component.html',
@@ -22,6 +23,9 @@ export class CarbonMarketDashboardComponent implements OnInit,AfterViewInit {
   canvascmRefSectorCountPieChart: ElementRef<HTMLCanvasElement>;
 
   @ViewChild('op') op: OverlayPanel;
+  heatMapScore: HeatMapScore[];
+  heatMapData: TableData[];
+
   constructor(
     // private projectProxy: ProjectControllerServiceProxy,
     private assessmentCMProxy:AssessmentCMDetailControllerServiceProxy,
@@ -133,6 +137,8 @@ CMPrerequiste: {
     this.rows = event.rows === undefined ? 10 : event.rows;
     this.cmAssessmentQuestionProxy.getDashboardData(pageNumber,this.rows).subscribe((res) => {
       this.tableData=res.items;
+      this.heatMapScore = this.tableData.map(item => {return {processScore: item.process_score, outcomeScore: item.outcome_score}})
+      this.heatMapData = this.tableData.map(item => {return {interventionId: item.intervention_id, interventionName: item.intervention, processScore: item.process_score, outcomeScore: item.outcome_score}}) 
       console.log("kkkkk : ", res)
       this.totalRecords= res.meta.totalItems
       this.loading = false;

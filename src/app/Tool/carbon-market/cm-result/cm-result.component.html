@@ -364,32 +364,8 @@
                     <tr class="table-header-left"> <p style="font-size: large;">Category Score - Outcome of change - {{score.outcome_score.outcome_score}}</p></tr>
                 </table>   
                 <br>
-            <table *ngIf="!isDownloading" id="heatmap" class="heatmap" style="border: 1px solid black; text-align: center;">
-                <tbody>
-                    <tr>
-                        <td></td>
-                        <td colspan="8">Outcome: Extent and sustained nature of the transformation</td>
-                    </tr>
-                    <!-- <tr>
-                        <td rowspan="7">Process: Transformational change supported</td>
-                    </tr> -->
-                    <tr>
-                        <td rowspan="6">Process: Transformational change supported</td>
-                        <td></td>
-                        <ng-container *ngFor="let x of xData">
-                            <td>{{x.label}}</td>
-                        </ng-container>
-                    </tr>
-                    <tr *ngFor="let y of yData">
-                        <td>{{y.label}}</td>
-                        <ng-container *ngFor="let x of xData">
-                            <td  [style.background-color]="getBackgroundColor(y.value+x.value)">
-                                <span [ngClass]="getIntervention(x.value, y.value)? 'intervention':''">{{y.value+x.value}}</span>
-                            </td>
-                        </ng-container>
-                    </tr>
-                </tbody>
-            </table>
+            <app-heat-map *ngIf="!isDownloading" id="heatmap" [xData]="xData" [yData]="yData" [score]="heatMapScore"></app-heat-map>
+         
         </div>
         <div class="p-grid p-fluid col-md-12 col-sm-12">
             <div class="row p-2">
