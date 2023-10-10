@@ -126,6 +126,7 @@ import { PortfolioOutcomeDataComponent } from './portfolios/portfolio-outcome-da
 import { PortfolioAggregationComponent } from './portfolios/portfolio-aggregation/portfolio-aggregation.component';
 import { PortfolioComparisonComponent } from './portfolios/portfolio-comparison/portfolio-comparison.component';
 import { HeatMapComponent } from './charts/heat-map/heat-map.component';
+import { AllTooDashbordComponent } from './dashboard/all-too-dashbord/all-too-dashbord.component';
 
 
 
@@ -209,6 +210,7 @@ export function getAuditRemoteServiceBaseUrl(): string {
     PortfolioAggregationComponent,
     PortfolioComparisonComponent,
     HeatMapComponent,
+    AllTooDashbordComponent,
 
   ],
 
