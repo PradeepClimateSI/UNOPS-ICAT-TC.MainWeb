@@ -484,7 +484,7 @@
                       name="level_of_implemetation" #level_of_implemetation="ngModel" [(ngModel)]="project.levelofImplemenation"
                       [options]="levelOfImplementation" optionLabel="name" optionValue="name"
                       [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false"  appendTo="body"
-                      [required]="false"></p-dropdown>
+                      [required]="true"></p-dropdown>
                     <p class="info-message text-danger" *ngIf="
                     !project.levelofImplemenation &&
                     (fData.submitted || level_of_implemetation.touched || level_of_implemetation.dirty)
@@ -518,19 +518,28 @@
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="description">Description of the intervention</label>
+                  <label for="description">Description of the intervention*</label>
                   <textarea [disabled]="editEntytyId > 0" name="description" placeholder="Description"
-                    #description="ngModel" [(ngModel)]="project.description" rows="5" cols="130" pInputText
+                    #description="ngModel" [(ngModel)]="project.description" rows="5" cols="130" pInputText [required]="true"
                     autoResize="autoResize" ></textarea>
+                    <p class="info-message text-danger" *ngIf="
+                    !project.description &&
+                    (fData.submitted || description.touched || description.dirty) ">
+                    This is a mandatory field
+                    </p>
                 </div>
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="objective">Objectives and intended impacts or benefits of the intervention</label>
+                  <label for="objective">Objectives and intended impacts or benefits of the intervention*</label>
                   <textarea [disabled]="editEntytyId > 0" name="objective" placeholder="Objective" #objective="ngModel"
-                    [(ngModel)]="project.objective" rows="5" cols="130" pInputText autoResize="autoResize"
-
-                    ></textarea>
+                    [(ngModel)]="project.objective" rows="5" cols="130" pInputText autoResize="autoResize" [required]="true"></textarea>
+                    
+                    <p class="info-message text-danger" *ngIf="
+                    !project.objective &&
+                    (fData.submitted || objective.touched || objective.dirty) ">
+                    This is a mandatory field
+                    </p>
                 </div>
               </div>
             </div>
@@ -613,10 +622,15 @@
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="impEntity">Implementing entity or entities</label>
+                  <label for="impEntity">Implementing entity or entities*</label>
                   <input [disabled]="editEntytyId > 0" type="text" placeholder="Name of the Implementing Entity"
-                    name="impEntity" #impEntity="ngModel" field="contatname" pInputText
+                    name="impEntity" #impEntity="ngModel" field="contatname" pInputText [required]="true"
                     [(ngModel)]="project.implementingEntity" />
+                    <p class="info-message text-danger" *ngIf="
+                    !project.implementingEntity &&
+                    (fData.submitted || impEntity.touched || impEntity.dirty) ">
+                    This is a mandatory field
+                    </p>
                 </div>
               </div>
 
@@ -746,9 +760,10 @@
             <div class="row p-2">
               <div class="  col-12">
                                                         
-                <label >What is the envisioned change in the system the intervention is 
+                <!-- <label >What is the envisioned change in the system the intervention is 
                   impacting in moving from where the system is currently to where it should be to achieve 
-                  the transformational shift desired?</label>
+                  the transformational shift desired?</label> -->
+                  <label >What is the vision for the desired change of the system over time towards zero-carbon and sustainable practices?</label>
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
@@ -761,7 +776,8 @@
             <div class="row p-2">
               <div class="  col-12">
                                                         
-                <p class="question">How does that change would look like …</p>
+                <!-- <p class="question">How does that change would look like …</p> -->
+                <p class="question">What would that change look like?</p>
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
@@ -795,12 +811,26 @@
             <div class="row p-2">
               <div class="  col-12">
                                                         
-                <label >In which phase of transformation is the system to be transformed?</label>
+                <!-- <label >In which phase of transformation is the system to be transformed?</label> -->
+                <label >In which phase of transformation is the system currently at?</label>
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <textarea [disabled]="editEntytyId > 0" name="phase_of_transformation" placeholder="Enter an answer" #vision_short="ngModel"
+                  <textarea [disabled]="editEntytyId > 0" name="phase_of_transformation" placeholder="Enter an answer" #phase_of_transformation="ngModel"
                     [(ngModel)]="project.phase_of_transformation" rows="1" cols="130" pInputText autoResize="autoResize"
+                    ></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="row p-2">
+              <div class="  col-12">
+                                                        
+                <label >How does the intervention seek to contribute to the change in the system to achieve the vision?</label>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="p-field">
+                  <textarea [disabled]="editEntytyId > 0" name="change_in_system" placeholder="Enter an answer" #change_in_system="ngModel"
+                    [(ngModel)]="project.change_in_system" rows="1" cols="130" pInputText autoResize="autoResize"
                     ></textarea>
                 </div>
               </div>

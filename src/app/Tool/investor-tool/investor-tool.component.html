@@ -257,8 +257,8 @@
     <!-- <div class="p-grid p-fluid col-sm-12" *ngIf="showSections">
         <app-cm-section [assessment]="assessmentres"></app-cm-section>
     </div> -->
-    <div class="card" *ngIf="isSavedAssessment && tabLoading">
-        <!-- <div class="card" > -->
+    <!-- <div class="card" *ngIf="isSavedAssessment && tabLoading"> -->
+        <div class="card" >
         <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)" >
         <p-tabView  (onChange)="onMainTabChange($event) " [(activeIndex)]="activeIndexMain ">
 
@@ -359,13 +359,16 @@
                                                              <div class="row" *ngIf="!question.question.isMain">
                                                                 <div class=" ml-25 col-6 mb-20">
 
-                                                                    <p class="justifiaction" class="question">Comment and justification</p>
+                                                                    <p class="justifiaction" class="question">Comment and justification*</p>
                                                                   </div>
                                                                   <div class="col-4 mb-20">
                                                                     <input type="text" pInputText
                                                                     [(ngModel)]="question.justification"
                                                                     placeholder="Enter Justification"
-                                                                    name="data.charData.likelihood_justification" />
+                                                                    #questionJustification="ngModel"
+                                                                    name="questionJustification" />
+                                                                    <p class="info-message text-danger" *ngIf="!question.justification  && (fData1.submitted || questionJustification.touched) ">
+                                                                      This is a mandatory field </p>
 
                                                                  </div>
                                                              </div>
@@ -405,7 +408,7 @@
 
                                                         <div class="col-12 col-lg-6" *ngIf="approach===1">
                                                             <div class="p-field">
-                                                                <label for="justification">Justification</label>
+                                                                <label for="justification">Justification*</label>
                                                                 <input type="text" pInputText
                                                                     [(ngModel)]="data.likelihood_justification" #just1="ngModel"
                                                                     placeholder="Enter Justification"
@@ -618,7 +621,7 @@
 
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
-                                        <label for="justification">Justification</label>
+                                        <label for="justification">Justification*</label>
                                         <input type="text" pInputText [(ngModel)]="data.justification" #just2="ngModel"
                                           placeholder="Enter Justification" name="justification" />
                                           <p class="info-message text-danger" *ngIf="!data.justification  && (fData1.submitted || just2.touched) ">
@@ -782,7 +785,7 @@
 
                                       <div class="col-12 col-lg-6">
                                         <div class="p-field">
-                                          <label for="justification">Justification</label>
+                                          <label for="justification">Justification*</label>
                                           <input (ngModelChange)="assignSDG(selectedSDGs[i], data)" type="text"
                                             pInputText [(ngModel)]="data.justification" #just3="ngModel"
                                             placeholder="Enter Justification" name="justification" />
@@ -912,7 +915,7 @@
 
                                       <div class="col-12 col-lg-6">
                                         <div class="p-field">
-                                          <label for="justification">Justification</label>
+                                          <label for="justification">Justification*</label>
                                           <input (ngModelChange)="assignSDG(selectedSDGs[i], data)" type="text"
                                             pInputText [(ngModel)]="data.justification" #just4="ngModel"
                                             placeholder="Enter Justification" name="justification" />
