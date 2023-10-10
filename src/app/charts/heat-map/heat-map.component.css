@@ -12,3 +12,9 @@ td {
     margin: auto;
     text-align: center
 }
+.vertical-text {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    text-align: center;
+    white-space: nowrap;
+}

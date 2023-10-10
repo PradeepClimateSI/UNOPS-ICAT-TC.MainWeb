@@ -2,22 +2,22 @@
     <tbody>
         <tr>
             <td></td>
-            <td colspan="8">Outcome: Extent and sustained nature of the transformation</td>
+            <td colspan="8">Outcome score</td>
         </tr>
         <tr>
-            <td rowspan="6">Process: Transformational change supported</td>
+            <td class="vertical-text" rowspan="6">Process score</td>
             <td></td>
             <ng-container *ngFor="let x of xData">
-                <td>{{x.label}}</td>
+                <td style="font-size: small;">{{x.label}}</td>
             </ng-container>
         </tr>
         <tr *ngFor="let y of yData">
-            <td>{{y.label}}</td>
+            <td style="font-size: small;">{{y.label}}</td>
             <ng-container *ngFor="let x of xData">
                 <td [style.background-color]="getBackgroundColor(y.value+x.value)">
                     <span (mouseenter)="enterHeatMapPoint(x.value, y.value,$event);"
                         (mouseleave)="leaveHeatMapPoint();op.hide()"
-                        [ngClass]="getIntervention(x.value, y.value)? 'intervention':''">{{y.value+x.value}}</span>
+                        [ngClass]="getIntervention(x.value, y.value)? 'intervention':''"></span>
                 </td>
             </ng-container>
         </tr>
