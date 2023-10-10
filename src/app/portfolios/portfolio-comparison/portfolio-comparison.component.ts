@@ -121,6 +121,7 @@ console.log(this.portfolio)
           console.log("has cell", typeof itm.cell, itm.color, workSheettableComparison[itm.cell])
           workSheettableComparison[itm.cell].s = {
             fill: { fgColor: { rgb: itm.color } },
+            font: { color: { rgb: itm.color } }
           };
         }
       }

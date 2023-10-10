@@ -79,7 +79,11 @@
     <ng-template pTemplate="body" let-intervention>
         <tr>
             <ng-container *ngFor="let col of alignment_data.col_set_2">
-                <td [style.background-color]="getBackgroundColor(intervention[col.code])">{{intervention[col.code]?.name ? '' : getValue(intervention[col.code])}}</td>
+                <td [style.background-color]="getBackgroundColor(intervention[col.code])"
+                [style.color]="intervention[col.code]?.name?getBackgroundColor(intervention[col.code]):''"
+                >
+                    {{intervention[col.code]?.name ? 1 : getValue(intervention[col.code])}}
+                </td>
             </ng-container>
         </tr>
     </ng-template>

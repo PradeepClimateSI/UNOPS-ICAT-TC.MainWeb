@@ -188,6 +188,7 @@ export class CmResultComponent implements OnInit {
           if (heatmap[itm.cell]) {
             heatmap[itm.cell].s = {
               fill: { fgColor: { rgb: itm.color } },
+              font: { color: { rgb: itm.color } }
             };
           }
         }

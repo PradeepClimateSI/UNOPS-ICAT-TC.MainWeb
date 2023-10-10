@@ -47,7 +47,7 @@ export class HeatMapComponent {
   }
 
   getIntervention(x: number, y: number) {
-    return this.score.some(item => item.processScore === y && item.outcomeScore === x);
+    return this.score?.some(item => item.processScore === y && item.outcomeScore === x);
   }
 
   enterHeatMapPoint(x: number, y: number, event: any) {
