@@ -52,7 +52,34 @@
     <ng-template pTemplate="body" let-intervention>
         <tr>
             <ng-container *ngFor="let col of alignment_data.col_set_2">
-                <td>{{intervention[col.code] ? intervention[col.code] : ' - '}}</td>
+                <td>{{getValue(intervention[col.code])}}</td>
+            </ng-container>
+        </tr>
+    </ng-template>
+</p-table>
+<table> <tr></tr></table> <!--for excel genarate purpose--> 
+<br>
+<p-table [value]="alignment_data?.interventions">
+    <ng-template pTemplate="header">
+        <tr>
+            <th colspan="4">ALIGNMENT</th>
+            <th [attr.colspan]="alignment_data.sdg_count">SUSTAINABLE DEVELOPMENT</th>
+        </tr>
+        <tr>
+            <ng-container *ngFor="let col of alignment_data.col_set_1">
+                <th  [attr.colspan]="col.colspan">{{col.label}}</th>
+            </ng-container>
+        </tr>
+        <tr>
+            <ng-container *ngFor="let col of alignment_data.col_set_2">
+                <th>{{col.label}}</th>
+            </ng-container>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-intervention>
+        <tr>
+            <ng-container *ngFor="let col of alignment_data.col_set_2">
+                <td [style.background-color]="getBackgroundColor(intervention[col.code])">{{intervention[col.code]?.name ? '' : getValue(intervention[col.code])}}</td>
             </ng-container>
         </tr>
     </ng-template>

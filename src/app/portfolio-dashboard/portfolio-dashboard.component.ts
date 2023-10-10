@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { HeatMapScore, TableData } from 'app/charts/heat-map/heat-map.component';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { Chart, ChartType } from 'chart.js';
 import { LazyLoadEvent } from 'primeng/api';
@@ -14,10 +15,12 @@ import { Assessment, InvestorToolControllerServiceProxy, MethodologyAssessmentCo
 export class PortfolioDashboardComponent implements OnInit {
   loading: boolean;
   totalRecords: number;
- 
+  heatMapScore: HeatMapScore[];
+  heatMapData: TableData[];
+
 
   constructor(
-    private methassess : MethodologyAssessmentControllerServiceProxy,
+    private methassess: MethodologyAssessmentControllerServiceProxy,
     private investorProxy: InvestorToolControllerServiceProxy,
     private portfolioServiceProxy : PortfolioControllerServiceProxy,
     public masterDataService: MasterDataService
@@ -152,7 +155,9 @@ this.selectPortfolio();
     this.rows = event.rows === undefined ? 10 : event.rows;
     this.portfolioServiceProxy.getDashboardData(this.selectedPortfolio?this.selectedPortfolio.id:0,pageNumber,this.rows).subscribe((res) => {
       this.tableData=res.items;
-      console.log("kkkkk : ", res)
+      this.heatMapScore = this.tableData.map(item => {return {processScore: item.process_score, outcomeScore: item.outcome_score}})
+      this.heatMapData = this.tableData.map(item => {return {interventionId: item.climateAction?.intervention_id, interventionName: item.climateAction?.policyName, processScore: item.process_score, outcomeScore: item.outcome_score}}) 
+      console.log("kkkkk : ", res, this.heatMapData)
       this.totalRecords= res.meta.totalItems
       this.loading = false;
     }, err => {
@@ -247,7 +252,7 @@ this.selectPortfolio();
 
 
   viewPortfolioSDGsPieChart(){
-    let labels = this.sdgDetailsList.map((item:any) => item.sdg);
+    let labels = this.sdgDetailsList.map((item:any) => 'SDG ' + item.number + ' - ' + item.sdg);
     let counts:number[] = this.sdgDetailsList.map((item:any) => item.count);
     let total = counts.reduce((acc, val) => acc + val, 0);
     let percentages = counts.map(count => ((count / total) * 100).toFixed(2));

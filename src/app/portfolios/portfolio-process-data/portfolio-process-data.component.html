@@ -19,7 +19,7 @@
         <ng-template pTemplate="body" let-intervention>
             <tr>
                 <ng-container *ngFor="let col of data.col_set_2">
-                    <td>{{intervention[col.code] ? intervention[col.code] : '-'}}</td>
+                    <td>{{(intervention[col.code] || intervention[col.code] === 0) ? intervention[col.code] : '-'}}</td>
                 </ng-container>
             </tr>
         </ng-template>

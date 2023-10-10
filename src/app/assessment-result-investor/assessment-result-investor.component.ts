@@ -8,6 +8,7 @@ import html2canvas from 'html2canvas';
 import * as XLSX from 'xlsx-js-style';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { ColorMap } from 'app/Tool/carbon-market/cm-result/cm-result.component';
+import { HeatMapScore } from 'app/charts/heat-map/heat-map.component';
 
 
 @Component({
@@ -76,10 +77,11 @@ export class AssessmentResultInvestorComponent implements OnInit {
   scale_GHGs: any;
   sustained_GHGs:any;
   sustained_SD:any;
-  scale_SD:any;
-  scale_adaptation:any;
-  sustained_adaptation:any;
-  loading: boolean=false;
+  scale_SD: any;
+  scale_adaptation: any;
+  sustained_adaptation: any;
+  loading: boolean = false;
+  heatMapScore: HeatMapScore[];
 
 
   constructor(private route: ActivatedRoute,
@@ -122,6 +124,7 @@ export class AssessmentResultInvestorComponent implements OnInit {
       // console.log("outcomeData: ", this.outcomeData)
       // console.log("processData: ", this.processData)
       // console.log("rr: ", this.sustained_GHGs.category_score.value==null)
+      this.heatMapScore = [{processScore: this.processScore, outcomeScore: this.outcomeScore}]
       this.loading=true 
     });
 

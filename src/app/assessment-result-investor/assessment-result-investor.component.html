@@ -692,17 +692,15 @@
       <br><br> -->
       
       </div>
-      <div id="heatmap">
-        <table id="heatmap" class="heatmap" style=" text-align: center;">
+      <div id="heatmap" class="card">
+        <app-heat-map id="heatmap" [xData]="xData" [yData]="yData" [score]="heatMapScore"></app-heat-map>
+        <!-- <table id="heatmap" class="heatmap" style=" text-align: center;">
           
           <tbody>
               <tr>
                   <td></td>
                   <td colspan="8">Outcome: Extent and sustained nature of the transformation</td>
               </tr>
-              <!-- <tr>
-                  <td rowspan="7">Process: Transformational change supported</td>
-              </tr> -->
               <tr>
                 <td rowspan="6">Process: Transformational change supported</td>
                   <td></td>
@@ -719,7 +717,7 @@
                   </ng-container>
               </tr>
           </tbody>
-      </table>
+      </table> -->
       </div>
     </div>
   </div>

@@ -8,6 +8,7 @@ import { MasterDataService } from 'app/shared/master-data.service';
 import { environment } from 'environments/environment';
 import { SDG } from '../cm-section-three/cm-section-three.component';
 import { SelectedScoreDto } from 'app/shared/score.dto';
+import { HeatMapScore } from 'app/charts/heat-map/heat-map.component';
 
 @Component({
   selector: 'app-cm-result',
@@ -40,6 +41,7 @@ export class CmResultComponent implements OnInit {
 
   xData: {label: string; value: number}[]
   yData: {label: string; value: number}[]
+  heatMapScore: HeatMapScore[]
 
   constructor(
     private route: ActivatedRoute,
@@ -141,6 +143,7 @@ export class CmResultComponent implements OnInit {
 
       let response = await this.cMAssessmentQuestionControllerServiceProxy.calculateResult(req).toPromise()
       this.score = response
+      this.heatMapScore = [{processScore: this.score.process_score, outcomeScore: this.score.outcome_score.outcome_score}]
     }
   }
 

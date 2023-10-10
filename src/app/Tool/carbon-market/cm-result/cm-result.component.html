@@ -98,7 +98,7 @@
                         </ng-container>
                     </tr>
                     <tr>
-                        <td [attr.rowspan]="processData.guidingQuestions.length + 2">Score</td>
+                        <td [attr.rowspan]="processData.guidingQuestions?.length + 2">Score</td>
                         <ng-container *ngFor="let cat of processData.data">
                             <ng-container *ngFor="let data of cat.characteristic">
                                 <td>Guiding Question</td>
@@ -239,7 +239,7 @@
                         <ng-container *ngFor="let scale_SDs of outcomeData.scale_SDs;let i=index">
                             <tr>
                                 <td *ngIf="i === 0" [attr.rowspan]="outcomeData.scale_SDs.length">Scale SDG</td>
-                                <td>{{getSDGName(scale_SDs?.SDG)}}</td>
+                                <td>{{scale_SDs?.SDG}}</td>
                                 <td>{{changeOutcomeCharacteristicsName(scale_SDs.characteristic)}}</td>
                                 <td *ngIf="isDownloading">{{scale_SDs.SDG_indicator}}</td>
                                 <td *ngIf="isDownloading">{{scale_SDs.starting_situation}}</td>
@@ -263,7 +263,7 @@
                         <ng-container *ngFor="let sustained_SDs of outcomeData.sustained_SDs; let i = index">
                             <tr>
                                 <td *ngIf="i === 0" [attr.rowspan]="outcomeData.sustained_SDs.length">Sustained SDG</td>
-                                <td>{{getSDGName(sustained_SDs?.SDG)}}</td>
+                                <td>{{sustained_SDs?.SDG}}</td>
                                 <td>{{changeOutcomeCharacteristicsName(sustained_SDs.characteristic)}}</td>
                                 <td *ngIf="isDownloading">-</td>
                                 <td *ngIf="isDownloading">-</td>
@@ -364,32 +364,8 @@
                     <tr class="table-header-left"> <p style="font-size: large;">Category Score - Outcome of change - {{score.outcome_score.outcome_score}}</p></tr>
                 </table>   
                 <br>
-            <table *ngIf="!isDownloading" id="heatmap" class="heatmap" style="border: 1px solid black; text-align: center;">
-                <tbody>
-                    <tr>
-                        <td></td>
-                        <td colspan="8">Outcome: Extent and sustained nature of the transformation</td>
-                    </tr>
-                    <!-- <tr>
-                        <td rowspan="7">Process: Transformational change supported</td>
-                    </tr> -->
-                    <tr>
-                        <td rowspan="6">Process: Transformational change supported</td>
-                        <td></td>
-                        <ng-container *ngFor="let x of xData">
-                            <td>{{x.label}}</td>
-                        </ng-container>
-                    </tr>
-                    <tr *ngFor="let y of yData">
-                        <td>{{y.label}}</td>
-                        <ng-container *ngFor="let x of xData">
-                            <td  [style.background-color]="getBackgroundColor(y.value+x.value)">
-                                <span [ngClass]="getIntervention(x.value, y.value)? 'intervention':''">{{y.value+x.value}}</span>
-                            </td>
-                        </ng-container>
-                    </tr>
-                </tbody>
-            </table>
+            <app-heat-map *ngIf="!isDownloading" id="heatmap" [xData]="xData" [yData]="yData" [score]="heatMapScore"></app-heat-map>
+         
         </div>
         <div class="p-grid p-fluid col-md-12 col-sm-12">
             <div class="row p-2">
