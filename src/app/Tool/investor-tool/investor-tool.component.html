@@ -277,6 +277,19 @@
                                         <div id="content" #content>
                                             <div class=" mt-2">
                                                 <div class="p-grid p-fluid col-12">
+                                                  
+                                                  <div class="row p-2">
+                                                  
+                                                    <div class="col-2">
+                                                      <label for="Description">Description</label>
+                                                    </div>
+                                                    <div class="col-10">
+                                                      <!-- <label for="Description">{{question.question.description}}</label> -->
+                                                      <p style="text-align: justify;">{{data.characteristics.investmentDescription}}</p>
+                                                    </div>
+                                                  </div>
+
+
                                                     <div class="row p-2">
 
 
@@ -294,70 +307,12 @@
                                                                     optionValue="value" [required]="true"></p-dropdown>
                                                                     <p class="info-message text-danger" *ngIf="data.relavance ==null  && (fData1.submitted || rel.touched) ">
                                                                       This is a mandatory field </p>
-
-                                                                    <!-- <p-dropdown  *ngIf="approach===2"
-                                                                    name="data.charData.relavance"
-                                                                    placeholder="Select Institution"
-                                                                    [(ngModel)]="data.relavance"
-                                                                    [options]="instiTutionList"
-                                                                    optionLabel="name"
-                                                                    appendTo="body"
-                                                                    optionValue="id"
-                                                                   [required]="true"></p-dropdown> -->
                                                                 </div>
 
-
-
-                                                        <!-- <div class="col-12 col-lg-6"   *ngIf="approach===1">
-                                                            <div class="p-field">
-                                                                <label for="justification">Justification</label>
-                                                                <input type="text" pInputText
-                                                                    [(ngModel)]="data.justification"
-                                                                    placeholder="Enter Justifiaction"
-                                                                    name="justification" />
-
-                                                            </div>
-                                                        </div> -->
                                                     </div>
 
-                                                    <div class="row p-2">
-                                                        <!-- <div class="col-12 col-lg-6">
-                                                            <div class="p-field">
-                                                                <label for="Description">Description</label>
-                                                                <textarea
-                                                                  name="{{data.characteristics.name}}_description"
-                                                                    placeholder="Description" rows="5" cols="60"
-                                                                    pInputTextarea
-                                                                    [(ngModel)]="data.description"
-                                                                    autoResize="autoResize"
-                                                                    class="p-inputtext"></textarea>
-                                                            </div>
-                                                        </div> -->
-
-                                                            <div class="col-2">
-                                                              <label for="Description">Description</label>
-                                                            </div>
-                                                            <div class="col-10">
-                                                              <!-- <label for="Description">{{question.question.description}}</label> -->
-                                                              <p style="text-align: justify;">{{data.characteristics.investmentDescription}}</p>
-                                                            </div>
-
-
-                                                        <!-- <div class="col-12 col-lg-6">
-                                                            <div class="p-field">
-                                                                <label for="StartingSituation">Starting
-                                                                    Situation</label>
-                                                                <textarea name="Starting Situation"
-                                                                    placeholder="Starting Situation" rows="5" cols="60"
-                                                                    pInputTextarea
-                                                                    [(ngModel)]="data.starting_situation"
-                                                                    autoResize="autoResize"
-                                                                    class="p-inputtext"></textarea>
-
-                                                            </div>
-                                                        </div> -->
-                                                    </div>
-
+                                                    
+                                                    <div *ngIf="data.relavance !=0">
 
                                                     <div class="row p-2">
                                                         <!-- <label for="Indicator"><u>Indicator</u></label> -->
@@ -483,46 +438,8 @@
                                                     </div>
                                                   </div>
 
-                                                    <!-- <div class="row p-2">
-                                                        <div class="col-12 col-lg-6">
-                                                            <div class="p-field">
-                                                                <label for="Relevance">Relevance Weight (%)</label>
-                                                                <p-inputNumber inputId="locale-us" mode="decimal"
-                                                                    [min]="0" [max]="100"
-                                                                    locale="en-US"
-                                                                    [minFractionDigits]="2"
-                                                                    [(ngModel)]="data.relevance_weight"
-                                                                    placeholder="Enter Relevance Weight"
-                                                                    name="data.charData.relevance_weight"
-                                                                    (ngModelChange)="onRelevanceWeightChange(category.CategoryName,data.characteristics.name, $event)">
-                                                                </p-inputNumber>
-                                                             <div *ngIf="!chaCategoryTotalEqualsTo1[category.CategoryName] && initialRelevance !==0" style="color: red;">
-                                                                  Relevance weights for characteristics of {{category.CategoryName}} category should sum up to 100%.
-                                                                  <br>
-                                                                </div>
-                                                            </div>
-                                                        </div>
 
-                                                        <div class="col-12 col-lg-6">
-                                                            <div class="p-field">
-                                                                <label for="Relevance">Likelihood Weight (%)</label>
-                                                                <p-inputNumber inputId="locale-us" mode="decimal"
-                                                                    [min]="0" [max]="100"
-                                                                    locale="en-US"
-                                                                    [minFractionDigits]="2"
-                                                                    [(ngModel)]="data.likelihood_weight"
-                                                                    placeholder="Enter Likelihood Weight"
-                                                                    name="data.charData.likelihood_weight"
-                                                                    (ngModelChange)="onLikelihoodWeightChange(category.CategoryName,data.characteristics.name, $event)">
-                                                                </p-inputNumber>
-
-                                                              <div *ngIf="!chaCategoryLikelihoodTotalEqualsTo1[category.CategoryName] && initialLikelihood !==0 " style="color: red;">
-                                                                  Likelihood weights for characteristics of {{category.CategoryName}} category should sum up to 100%.
-                                                                  <br>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div> -->
+                                                </div>
                                                 </div>
                                             </div>
 
@@ -560,11 +477,11 @@
 
                   <div *ngIf="category.CategoryName === 'SDG Scale of the Outcome' ">
                     <div class="row">
-                      <div class="col-2 ">
-                        <p>Select those SDGs impacted by the intervention : </p>
+                      <div class="col-5 "><br>
+                        <p style="color: black; font-weight: normal; font-size: 17px;">Select those SDGs impacted by the intervention : </p>
                       </div>
 
-                      <div class="col-4 ">
+                      <div class="col-2 ">
                         <p-multiSelect appendTo="body" name="sdgs" placeholder="Select SDGs" [(ngModel)]="selectedSDGs"
                           [options]="sdgList" (ngModelChange)="onItemSelectSDGs($event)" optionLabel="name"
                           ></p-multiSelect>
@@ -572,7 +489,7 @@
 
                       <div class="col-5 "></div>
                     </div>
-                  </div>
+                  </div><br>
 
 
                   <div
@@ -772,12 +689,12 @@
 
                   <div *ngIf="category.CategoryName === 'SDG Scale of the Outcome'">
                     <div *ngFor="let item of sdgDataSendArray2; index as i">
-                      <br>
-                      <h6>SDG {{ selectedSDGs[i].number }} - {{ selectedSDGs[i].name }}</h6>
+                      <div class="card" style="min-height: 300px;">
+                        <h6 style="color: black;">SDG {{ selectedSDGs[i].number }} - {{ selectedSDGs[i].name }}</h6> <br>
 
                       <div class="row">
                         <div class="col-8">
-                          <p>Could the intervention have an impact on this particular SDG?</p>
+                          <h6 style="color: black; font-weight: normal; font-size: 17px;">Could the intervention have an impact on this particular SDG?</h6>
                         </div>
                         <div class="col-4">
                           <p-dropdown appendTo="body" name="type" #type="ngModel" placeholder="Select Answer"
@@ -908,14 +825,15 @@
                       </div>
                     </div>
                   </div>
+                  </div>
 
 
 
                   <div *ngIf="category.CategoryName === 'SDG Time frame over which the outcome is sustained'  ">
 
                     <div *ngFor="let item of sdgDataSendArray4; index as i">
-                      <br>
-                      <h6>SDG {{ selectedSDGs[i].number }} - {{ selectedSDGs[i].name }}</h6>
+                      <div class="card" style="min-height: 300px;">
+                        <h6 style="color: black;">SDG {{ selectedSDGs[i].number }} - {{ selectedSDGs[i].name }}</h6> <br>
                       <div class="characteristic-Topic" *ngFor="let data of item.data; index as j">
                         <h6>{{ j+1 }}.{{ data.characteristics.name }}</h6>
                         <div>
@@ -1036,7 +954,7 @@
                         </div>
                       </div>
                     </div>
-
+                  </div>
                   </div>
 
 
