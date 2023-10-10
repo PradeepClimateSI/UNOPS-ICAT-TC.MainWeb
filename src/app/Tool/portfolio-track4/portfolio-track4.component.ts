@@ -148,6 +148,8 @@ export class PortfolioTrack4Component implements OnInit {
 
   async ngOnInit(): Promise<void> {
  this.load = false; //need to change as false
+ //this.isSavedAssessment = true //need to change as false
+
  this.selectedApproach = 'Direct';
  this.assessment.assessment_approach = 'Direct';
 
@@ -535,9 +537,11 @@ export class PortfolioTrack4Component implements OnInit {
 
   onsubmit(form: NgForm) {
 
+    console.log("processData ---", this.processData)
+      console.log("outcomeData ---", this.outcomeData)
     for(let item of this.processData){
       for(let item2 of item.data){
-        if(item2.likelihood == null || item2.relavance == null){
+        if((item2.likelihood == null || item2.relavance == null) && item2.relavance != 0){
           this.messageService.add({
             severity: 'error',
             summary: 'Warning',
@@ -552,7 +556,7 @@ export class PortfolioTrack4Component implements OnInit {
 
     for(let item of this.processData){
       for(let item2 of item.data){
-        if(item2.likelihood_justification == null || item2.likelihood_justification === ""){
+        if((item2.likelihood_justification == null || item2.likelihood_justification === "") &&  item2.relavance != 0){
           this.messageService.add({
             severity: 'error',
             summary: 'Warning',
