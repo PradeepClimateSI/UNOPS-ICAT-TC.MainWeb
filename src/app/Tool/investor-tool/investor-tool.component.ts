@@ -457,6 +457,69 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       }
     }
 
+    for(let item of this.processData){
+      for(let item2 of item.data){
+        if(item2.likelihood_justification == null || item2.likelihood_justification === ""){
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Warning',
+            detail: 'Fill all mandatory justification fields',
+            closable: true,
+          })
+
+          return
+        }
+      }
+    }
+
+    for(let item of this.outcomeData){
+      if(item.categoryID == 5 || item.categoryID ==7 || item.categoryID ==9 || item.categoryID ==10){
+
+        for(let item2 of item.data){
+          if(item2.justification == null || item2.justification === ""){
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Warning',
+              detail: 'Fill all mandatory justification fields',
+              closable: true,
+            })
+  
+            return
+          }
+        }
+      }
+    }
+    
+    for(let item of this.sdgDataSendArray2){
+      for(let item2 of item.data){
+        if(item2.justification == null || item2.justification === ""){
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Warning',
+            detail: 'Fill all mandatory justification fields',
+            closable: true,
+          })
+
+          return
+        }
+      }
+    }
+
+    for(let item of this.sdgDataSendArray4){
+      for(let item2 of item.data){
+        if(item2.justification == null || item2.justification === ""){
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Warning',
+            detail: 'Fill all mandatory justification fields',
+            closable: true,
+          })
+
+          return
+        }
+      }
+    }
+
     console.log("assesssssssss", this.assessment)
     console.log("finallsdgDataSendArray4", this.sdgDataSendArray4)
     console.log("finallsdgDataSendArray2", this.sdgDataSendArray2)
