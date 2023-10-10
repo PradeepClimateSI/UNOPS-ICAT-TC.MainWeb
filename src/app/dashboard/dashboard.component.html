@@ -82,6 +82,21 @@
                         label="Portfolio">
                     </button>
                 </div>
+
+                <div class="col-md-3" *ngIf="this.isAllTool ||  userRole ==loginRole.External">
+                  <button
+
+                      class="p-button-lg"
+                      [style.background-color]="(clickall) ? 'green' :'blue'"
+                      type="button"
+                      pButton
+                      pRipple
+                      label="All Option"
+                      [disabled]="!this.isAllTool &&  userRole !=loginRole.External"
+                      (click)="goToAllTool()">
+                  </button>
+
+              </div>
              </div>
         </div>
     </div>
@@ -98,6 +113,9 @@
 </div>
 <div *ngIf="SelectedTool === 3">
   <app-carbon-market-dashboard></app-carbon-market-dashboard>
+</div>
+<div *ngIf="SelectedTool === 4">
+  <app-all-too-dashbord></app-all-too-dashbord>
 </div>
 <!--<ngx-org-chart direction="horizontal" [nodes]="nodes" (itemClick)="test($event)"></ngx-org-chart>-->
 

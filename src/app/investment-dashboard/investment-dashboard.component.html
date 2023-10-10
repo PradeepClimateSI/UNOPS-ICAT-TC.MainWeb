@@ -48,13 +48,8 @@
 
 <div class="p-grid p-fluid card mt-20 m-3">
   <div class="row text-center">
-    <table class="heatmap" style="text-align: center">
-      <!-- <thead>
-              <tr>
-                <th>Process: Transformational Change supported</th>
-                <th>Outcomes: Extent and sustained nature of the transformation</th>
-              </tr>
-            </thead> -->
+    <app-heat-map  id="heatmap" [xData]="xData" [yData]="yData" [score]="heatMapScore" [showOp]="true" [tableData]="heatMapData"></app-heat-map>
+    <!-- <table class="heatmap" style="text-align: center">
       <tbody>
         <tr>
           <td></td>
@@ -88,7 +83,7 @@
           </ng-container>
         </tr>
       </tbody>
-    </table>
+    </table> -->
   </div>
 </div>
 <div class="row">

@@ -3,7 +3,8 @@ import { NgForm } from '@angular/forms';
 import { MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import { Assessment, AssessmentCMDetail, ClimateAction, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, ServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Assessment, AssessmentCMDetail, ClimateAction, InvestorSector, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, SectorsCoverdDto, ServiceProxy } from 'shared/service-proxies/service-proxies';
+import decode from 'jwt-decode';
 
 @Component({
   selector: 'app-carbon-market-assessment',
@@ -11,6 +12,10 @@ import { Assessment, AssessmentCMDetail, ClimateAction, MethodologyAssessmentCon
   styleUrls: ['./carbon-market-assessment.component.css']
 })
 export class CarbonMarketAssessmentComponent implements OnInit {
+  countryId: any;
+onItemSelectSectors($event: any) {
+throw new Error('Method not implemented.');
+}
   visible_ex_ante: any;
 
 
@@ -36,13 +41,18 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   date2: any
 
   assessmentres: Assessment
+  levelOfImplementation: any[] = [];
+  sectorArray: Sector[] = [];
+  sectorList: any[] = [];
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
     private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
     private masterDataService: MasterDataService,
     private serviceProxy: ServiceProxy,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private sectorProxy: SectorControllerServiceProxy,
+    private investorToolControllerServiceProxy: InvestorToolControllerServiceProxy
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -51,8 +61,19 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     this.sectorial_boundires = this.masterDataService.sectorial_boundries
     this.assessment_approaches = this.masterDataService.assessment_approach
     this.int_cm_approches = this.masterDataService.int_cm_approaches
+    this.levelOfImplementation = this.masterDataService.level_of_implemetation;
 
     await this.getPolicies()
+    await this.getSetors()
+  }
+
+  async getSetors() {
+    const token = localStorage.getItem('ACCESS_TOKEN')!;
+    const countryId = token ? decode<any>(token).countryId : 0;
+    this.countryId = countryId;
+    if (countryId > 0) {
+      this.sectorList = await this.sectorProxy.getCountrySector(countryId).toPromise()
+    } 
   }
 
   async getPolicies() {
@@ -71,17 +92,37 @@ export class CarbonMarketAssessmentComponent implements OnInit {
             this.cm_detail.cmassessment = res
 
             this.serviceProxy.createOneBaseAssessmentCMDetailControllerAssessmentCMDetail(this.cm_detail)
-              .subscribe(_res => {
+              .subscribe(async _res => {
                 if (_res) {
-                  this.messageService.add({
-                    severity: 'success',
-                    summary: 'Success',
-                    detail: 'Assessment created successfully',
-                    closable: true,
-                  })
-                  this.isSavedAssessment = true
-                  this.assessmentres = res
-                  this.showSections = true
+                  let sectorsCoveredDto = new SectorsCoverdDto()
+                  sectorsCoveredDto.sectors = []
+                  for (let sector of this.sectorArray) {
+                    let sec = new InvestorSector()
+                    sec.assessment = res
+                    sec.assessmentCMDetail = _res
+                    sec.sector = sector
+
+                    sectorsCoveredDto.sectors.push(sec)
+                  }
+                  let res_sec = await this.investorToolControllerServiceProxy.saveSectorsCovered(sectorsCoveredDto).toPromise()
+                  if (res_sec) {
+                    this.messageService.add({
+                      severity: 'success',
+                      summary: 'Success',
+                      detail: 'Assessment created successfully',
+                      closable: true,
+                    })
+                    this.isSavedAssessment = true
+                    this.assessmentres = res
+                    this.showSections = true
+                  } else {
+                    this.messageService.add({
+                      severity: 'error',
+                      summary: 'Error',
+                      detail: 'Secotrs covered saving failed.',
+                      closable: true,
+                    })
+                  }
                 }
               }, error => {
                 this.messageService.add({

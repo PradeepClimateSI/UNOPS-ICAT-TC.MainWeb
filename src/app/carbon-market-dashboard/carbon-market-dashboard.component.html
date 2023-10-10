@@ -211,13 +211,8 @@
               </ng-container>
               <ng-template #elseBlock4>
                 <div  class="col-12  mt-20 ml-10" >
-                  <table class="heatmap" style="text-align: center;">
-                    <!-- <thead>
-                      <tr>
-                        <th>Process: Transformational Change supported</th>
-                        <th>Outcomes: Extent and sustained nature of the transformation</th>
-                      </tr>
-                    </thead> -->
+                  <app-heat-map  id="heatmap" [xData]="xData" [yData]="yData" [score]="heatMapScore" [showOp]="true" [tableData]="heatMapData"></app-heat-map>
+                  <!-- <table class="heatmap" style="text-align: center;">
                     <tbody>
                         <tr>
                             <td></td>
@@ -242,7 +237,7 @@
                             </ng-container>
                         </tr>
                     </tbody>
-                  </table>
+                  </table> -->
 
                  </div>
               </ng-template>
@@ -309,7 +304,7 @@
     </div>
   </div>
 </div>
-<p-overlayPanel  [hidden]="pointTableDatas.length==0" #op>
+<!-- <p-overlayPanel  [hidden]="pointTableDatas.length==0" #op>
   <ng-template pTemplate="content">
     <div *ngFor="let pointTableData of pointTableDatas" style=" border-style: solid;" class="m-3 p-1" >
 
@@ -322,10 +317,6 @@
         <div class="col-4">Intervation Name :</div>
         <div class="col-8">{{pointTableData?.intervention}}</div>
       </div>
-      <!-- <div  class="row">
-        <div class="col-4">Assessment period :</div>
-        <div class="col-8"></div>
-      </div> -->
       <div  class="row">
         <div class="col-4">Process score :</div>
         <div class="col-8">{{pointTableData.process_score}}</div>
@@ -337,4 +328,4 @@
     </div>
     
 </ng-template>
-</p-overlayPanel>
+</p-overlayPanel> -->

@@ -1,0 +1,139 @@
+<div class="p-grid p-fluid card m-3">
+    <div class="row">
+        <h3>Recent Assessments Done</h3>
+        <div class="col-12 mt-20 ml-10" [hidden]="calResults?.length == 0">
+            <p-table [value]="tableData" [paginator]="true" [rows]="rows" [totalRecords]="totalRecords" [lazy]="true"
+                (onLazyLoad)="loadgridData($event)" [showCurrentPageReport]="true"
+                [tableStyle]="{ 'min-width': '5rem' }" paginatorDropdownAppendTo="body"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [rowsPerPageOptions]="[ 5, 10, 25,50]" [loading]="loading" [responsive]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="table-header-3">Intervention Name</th>
+                        <th class="table-header">Process of change Score</th>
+                        <th class="table-header">Outcome of Change Score</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-tableData>
+                    <tr>
+                        <td>{{ tableData.climateAction?.policyName }}</td>
+                        <td class="text-center">{{ tableData.process_score!=null && tableData.process_score!=undefined?
+                            tableData.process_score:'-' }}</td>
+                        <td class="text-center">{{ tableData.outcome_score!=null &&
+                            tableData.outcome_score!=undefined?tableData.outcome_score:'-' }}</td>
+                    </tr>
+                </ng-template>
+
+            </p-table>
+        </div>
+        <div class="col-12" [hidden]="calResults?.length != 0">
+            <p-messages severity="warn">
+                <ng-template pTemplate>
+                    <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
+                    <div class="ml-2">No data to show.</div>
+                </ng-template>
+            </p-messages>
+        </div>
+    </div>
+</div>
+
+<div class="p-grid p-fluid card mt-20 m-3">
+    <div class="row text-center">
+        <table class="heatmap" style="text-align: center">
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td colspan="7">
+                        Outcome: Extent and sustained nature of the transformation
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="7">Process: Transformational change supported</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <ng-container *ngFor="let x of xData">
+                        <td>{{ x.label }}</td>
+                    </ng-container>
+                </tr>
+                <tr *ngFor="let y of yData">
+                    <td>{{ y.label }}</td>
+                    <ng-container *ngFor="let x of xData">
+                        <td [style.background-color]="getBackgroundColor(y.value + x.value)">
+                            <span (mouseenter)="enterHeatMapPoint(x.value, y.value,$event)"
+                                (mouseleave)="leaveHeatMapPoint();op.hide()"
+                                [style.background-color]=" getIntervention(x.value, y.value) ?getDotColor(y.value + x.value):''"
+                                [ngClass]="
+                    getIntervention(x.value, y.value) ? 'intervention' : ''
+                  ">{{ y.value + x.value }}</span>
+                        </td>
+                    </ng-container>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 col-12 d-flex align-items-stretch">
+        <div class="p-grid p-fluid card m-3">
+            <div style="position: relative; height:100%;" class="row text-center">
+                <h3>SDGs impacted by the assessed interventions</h3>
+                <div *ngIf="sdgDetailsList" class="col-12 mt-20" [hidden]="sdgDetailsList.length == 0">
+                    <canvas #investmentSDGsPieChart>{{ pieChart1 }}</canvas>
+                </div>
+            </div>
+            <div *ngIf="sdgDetailsList" class="col-12" [hidden]="sdgDetailsList.length != 0">
+                <p-messages severity="warn">
+                    <ng-template pTemplate>
+                        <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
+                        <div class="ml-2">No data to show.</div>
+                    </ng-template>
+                </p-messages>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-12 d-flex align-items-stretch">
+        <div class="p-grid p-fluid card m-3">
+            <div class="row text-center">
+                <h3>Sectors represented</h3>
+                <div *ngIf="sectorCount" class="col-12 mt-20" [hidden]="sectorCount.length == 0">
+                    <canvas #investmentSectorCountPieChart>{{ pieChart2 }}</canvas>
+                </div>
+            </div>
+            <div *ngIf="sectorCount" class="col-12" [hidden]="sectorCount.length != 0">
+                <p-messages severity="warn">
+                    <ng-template pTemplate>
+                        <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
+                        <div class="ml-2">No data to show.</div>
+                    </ng-template>
+                </p-messages>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-overlayPanel [hidden]="pointTableDatas.length==0" #op>
+    <ng-template pTemplate="content">
+        <div *ngFor="let pointTableData of pointTableDatas" style=" border-style: solid;" class="m-3 p-1">
+
+            <div class="row">
+                <div class="col-4">Intervation ID :</div>
+                <div class="col-8">{{pointTableData.climateAction.intervention_id}}</div>
+
+            </div>
+            <div class="row">
+                <div class="col-4">Intervation Name :</div>
+                <div class="col-8">{{pointTableData.climateAction.policyName}}</div>
+            </div>
+            <div class="row">
+                <div class="col-4">Process score :</div>
+                <div class="col-8">{{pointTableData.process_score}}</div>
+            </div>
+            <div class="row">
+                <div class="col-4">outcome score :</div>
+                <div class="col-8">{{pointTableData.outcome_score}}</div>
+            </div>
+        </div>
+
+    </ng-template>
+</p-overlayPanel>
