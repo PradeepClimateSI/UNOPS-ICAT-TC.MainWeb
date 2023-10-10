@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   //baseUrlAPI: 'http://3.108.9.184/web-api',
  // esbaseUrlAPI: 'http://3.108.9.184:7090',
-  //authBaseUrlAPI: 'http://3.108.9.184/auth-api',
+  // authBaseUrlAPI: 'http://3.108.9.184/auth-api',
   //baseUrlAPI: 'http://3.108.9.184:7080',
   baseUrlAPI: 'http://localhost:7080',
    esbaseUrlAPI: 'http://localhost:7070', 
