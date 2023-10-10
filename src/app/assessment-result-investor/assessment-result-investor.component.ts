@@ -146,12 +146,14 @@ export class AssessmentResultInvestorComponent implements OnInit {
       if (this.tool === 'Portfolio Tool') {
         this.investerTool = false;
         this.loadTitle = true;
-        this.title2 = 'Result - Assess the Transformational Change due to a Portfolio of Interventions'
+        // this.title2 = 'Result - Assess the Transformational Change due to a Portfolio of Interventions'
+        this.title2 ='Assessment results'
       }
       else if (this.tool === 'Investment & Private Sector Tool') {
         this.investerTool = true;
         this.loadTitle = true;
-        this.title2 = 'Result - Invesment & Private Sector Tool '
+        // this.title2 = 'Result - Invesment & Private Sector Tool '
+        this.title2 ='Assessment results'
       }
 
     });
