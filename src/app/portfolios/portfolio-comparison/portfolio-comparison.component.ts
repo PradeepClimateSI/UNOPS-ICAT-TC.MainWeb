@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ColorMap } from 'app/Tool/carbon-market/cm-result/cm-result.component';
 import { PortfolioControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 @Component({
   selector: 'app-portfolio-comparison',
   templateUrl: './portfolio-comparison.component.html',
@@ -102,8 +103,96 @@ console.log(this.portfolio)
       let workbook = XLSX.utils.book_new()
       XLSX.utils.book_append_sheet(workbook, workSheettabledetai, 'Details')
       XLSX.utils.book_append_sheet(workbook, workSheettableComparison, 'Comparison')
-      XLSX.writeFile(workbook, "Report.xlsx");
+
+      let length = (XLSX.utils.sheet_to_json(workSheettableComparison, { raw: false, header: 1 })).length
+      let alignment_position = length - this.alignment_data.interventions.length + 1
+      let col_count = this.alignment_data.col_set_1.length - 2
+      let cols = this.getNextLetters('E', col_count)
+      let row_count = this.alignment_data.interventions.length 
+      let rows = []
+      for (let i = 0; i < row_count; i++) {
+        const nextInteger = alignment_position + i;
+        rows.push(nextInteger);
+      }
+      let colorMap = this.createColorMap(cols, rows)
+      console.log(colorMap)
+      for (const itm of colorMap) {
+        if (workSheettableComparison[itm.cell]) {
+          console.log("has cell", typeof itm.cell, itm.color, workSheettableComparison[itm.cell])
+          workSheettableComparison[itm.cell].s = {
+            fill: { fgColor: { rgb: itm.color } },
+          };
+        }
+      }
+      XLSX.writeFile(workbook, "Report.xlsx", {cellStyles: true});
     }, 1000);
   }
 
+  createColorMap(_cols: any, _rows: any){
+    let colorMap = []
+    let cols = _cols
+    let rows = _rows
+
+    console.log(cols, rows)
+    for (let [index,col] of this.alignment_data.col_set_2.entries()){
+      for (let [idx, intervention] of this.alignment_data.interventions.entries()){
+        if (intervention[col.code]?.name){
+          console.log(intervention[col.code].value, index, col.code, idx, intervention)
+          let obj = new ColorMap()
+          obj.cell = cols[index-4] + rows[idx]
+          obj.color = this.getBackgroundColor(+intervention[col.code].value).replace('#', '')
+          colorMap.push(obj)
+        }
+      }
+    }
+    return colorMap
+  }
+
+
+  getNextLetters(letter: string, num: number) {
+    if (typeof letter !== 'string' || letter.length !== 1 || !/^[A-Za-z]$/.test(letter)) {
+      // Check if the input is a single letter (A-Z or a-z)
+      return 'Invalid input';
+    }
+  
+    const startCharCode = letter.toUpperCase().charCodeAt(0); // Convert to uppercase and get char code
+    const nextLetters = [letter.toUpperCase()];
+  
+    for (let i = 1; i <= num; i++) {
+      const nextCharCode = startCharCode + i;
+      const nextLetter = String.fromCharCode(nextCharCode);
+      nextLetters.push(nextLetter);
+    }
+    return nextLetters.join("");
+  }
+
+  getBackgroundColor(value: any): string {
+    switch (value) {
+      case -3:
+        return '#ec6665';
+      case -2:
+        return '#ed816c';
+      case -1:
+        return '#f19f70';
+      case 0:
+        return '#f4b979';
+      case 1:
+        return '#f9d57f';
+      case 2:
+        return '#fcf084';
+      case 3:
+        return '#e0e885';
+      case 4:
+        return '#c1e083';
+      case 5:
+        return '#a3d481';
+      case 6:
+        return '#84cc80';
+      case 7:
+        return '#65c17e';
+      default:
+        return 'white';
+    }
+  }
+  
 }
