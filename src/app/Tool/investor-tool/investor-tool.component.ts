@@ -138,6 +138,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   }
   async ngOnInit(): Promise<void> {
    // this.isSavedAssessment = true; this.tabLoading= true; // Need to remove  
+  // this.isSavedAssessment = true // Need to remove  
     this.categoryTabIndex =0;
     this.approach=1
     this.assessment.assessment_approach = 'Direct'
@@ -444,7 +445,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   onsubmit(form: NgForm) {
     for(let item of this.processData){
       for(let item2 of item.data){
-        if(item2.likelihood == null || item2.relavance == null){
+        if((item2.likelihood == null || item2.relavance == null) && item2.relavance != 0){
           this.messageService.add({
             severity: 'error',
             summary: 'Warning',
@@ -459,7 +460,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
     for(let item of this.processData){
       for(let item2 of item.data){
-        if(item2.likelihood_justification == null || item2.likelihood_justification === ""){
+        if((item2.likelihood_justification == null || item2.likelihood_justification === "") &&  item2.relavance != 0){
           this.messageService.add({
             severity: 'error',
             summary: 'Warning',
