@@ -270,7 +270,8 @@
                     <p-tabPanel [header]="category.CategoryName" *ngFor="let category of processData" >
 
                         <div class="characteristic-Topic " *ngFor="let data of category.data; index as i">
-                            <h6>{{i+1}}.{{data.characteristics.name}}</h6>
+                            <h6 *ngIf="data.characteristics.name!= 'Research and Development'">{{i+1}}.{{data.characteristics.name}}</h6>
+                            <h6 *ngIf="data.characteristics.name === 'Research and Development'">{{i+1}}.{{data.characteristics.name}} (R&D)</h6>
                             <div>
 
                                     <div class="container pl-20 pr-20">
