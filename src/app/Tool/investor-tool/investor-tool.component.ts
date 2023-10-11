@@ -628,16 +628,23 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
        }, 2000);
 
   }
-  next(data:any[]){
-  // console.log("category",data)
+  next(data:any[],type:string){
+  console.log("category",data)
   // data?.filter(investorAssessment => console.log(investorAssessment.indicator_details.filter((indicator_details:IndicatorDetails)=>indicator_details.justification !== undefined)?.length == (investorAssessment.indicator_details?.length-1)))
-  if(data?.filter(investorAssessment => 
+  if((data?.filter(investorAssessment => 
       (investorAssessment.relavance !== undefined) && 
       (investorAssessment.likelihood !== undefined) && 
       (investorAssessment.likelihood_justification !== undefined) &&
       (investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
         (indicator_details.justification !== undefined))?.length === (investorAssessment.indicator_details?.length-1)
-      ))?.length === data?.length){
+      ))?.length === data?.length && type=='process')||
+      (data?.filter(investorAssessment => 
+        (investorAssessment.justification !== undefined) 
+       )?.length === data?.length && type=='outcome')||
+      (data?.filter(sdg => 
+        (sdg.data?.filter((data: { justification: undefined; } ) =>
+          (data.justification!== undefined))?.length === (sdg.data?.length)
+        ))?.length === data?.length && type=='sdg')) {
     
     if(this.activeIndexMain ===1 ){
 
