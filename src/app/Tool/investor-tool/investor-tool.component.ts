@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import { Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -60,6 +60,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   approach:number=0;
   instiTutionList : any = []
   investorQuestions:InvestorQuestions[]=[];
+  geographicalAreasCoveredArr: GeographicalAreasCoveredDto[] = []
 
   //Newww
   sdgList : any = []
@@ -332,6 +333,13 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
           if (res) {
 
+            this.geographicalAreasCoveredArr = this.geographicalAreasCoveredArr.map(a => {
+              let _a = new GeographicalAreasCoveredDto()
+              _a.id = a.id
+              _a.name = a.name
+              _a.code = a.code
+              return _a
+            })  
 
             this.investorAssessment.assessment = res;
             this.mainAssessment =res
@@ -339,6 +347,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
             this.createInvestorToolDto.impacts = this.impactArray;
             this.createInvestorToolDto.investortool = this.investorAssessment;
              this.createInvestorToolDto.investortool = this.investorAssessment;
+             this.createInvestorToolDto.geographicalAreas = this.geographicalAreasCoveredArr;
             console.log("investorassessmet",this.createInvestorToolDto)
             this.investorToolControllerproxy.createinvestorToolAssessment(this.createInvestorToolDto)
               .subscribe(_res => {

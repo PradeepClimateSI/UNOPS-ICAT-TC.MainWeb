@@ -35,14 +35,14 @@
                         </div>
                         <div class="p-field p-2">
                             <label for="Level of implementation">Geographical Areas Covered *</label>
-                            <p-dropdown appendTo="body" name="investorAssessment.geographical_areas_covered"
+                            <p-multiSelect appendTo="body" name="investorAssessment.geographical_areas_covered"
                                 #type="ngModel" placeholder="Select Geographical Areas Covered"
-                                [(ngModel)]="cm_detail.geographicalAreasCovered" [options]="levelOfImplementation"
-                                optionLabel="name" optionValue="name" [required]="true"></p-dropdown>
+                                [(ngModel)]="geographicalAreasCoveredArr" [options]="levelOfImplementation"
+                                optionLabel="name" [required]="true"></p-multiSelect>
                             <p class="info-message text-danger" *ngIf="
-                                              !cm_detail.geographicalAreasCovered &&
-                                              (fData.submitted || type.touched)
-                                            ">
+                                geographicalAreasCoveredArr.length===0 &&
+                                (fData.submitted || type.touched)
+                              ">
                                 This is a mandatory field
                             </p>
                         </div>

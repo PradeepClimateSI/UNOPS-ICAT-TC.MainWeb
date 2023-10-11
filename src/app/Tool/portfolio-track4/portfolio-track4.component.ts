@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import { Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, ImpactCovered, InstitutionControllerServiceProxy, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PortfolioQuestionDetails, PortfolioQuestions, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCovered, GeographicalAreasCoveredDto, ImpactCovered, InstitutionControllerServiceProxy, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PortfolioQuestionDetails, PortfolioQuestions, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { Dropdown } from 'primeng/dropdown';
@@ -114,6 +114,7 @@ export class PortfolioTrack4Component implements OnInit {
   tabLoading: boolean=false;
   characteristicsLoaded:boolean = false;
   categoriesLoaded:boolean = false;
+  geographicalAreasCoveredArr: GeographicalAreasCoveredDto[] = []
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -403,13 +404,19 @@ export class PortfolioTrack4Component implements OnInit {
           console.log("res", res)
           this.load = true
           if (res) {
-
-
+            this.geographicalAreasCoveredArr = this.geographicalAreasCoveredArr.map(a => {
+              let _a = new GeographicalAreasCoveredDto()
+              _a.id = a.id
+              _a.name = a.name
+              _a.code = a.code
+              return _a
+            })  
             this.investorAssessment.assessment = res;
             this.mainAssessment = res
             this.createInvestorToolDto.sectors = this.sectorArray;
             this.createInvestorToolDto.impacts = this.impactArray;
             this.createInvestorToolDto.investortool = this.investorAssessment;
+            this.createInvestorToolDto.geographicalAreas = this.geographicalAreasCoveredArr
 
             this.investorToolControllerproxy.createinvestorToolAssessment(this.createInvestorToolDto)
               .subscribe(_res => {
