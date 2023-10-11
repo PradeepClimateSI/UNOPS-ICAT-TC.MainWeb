@@ -147,7 +147,7 @@ export class PortfolioTrack4Component implements OnInit {
   sdgDataSendArray2: any = []
 
   async ngOnInit(): Promise<void> {
- //this.load = false; //need to change as false
+ this.load = false; //need to change as false
 // this.isSavedAssessment = true //need to change as false
 
  this.selectedApproach = 'Direct';
