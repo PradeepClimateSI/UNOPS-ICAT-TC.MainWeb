@@ -318,7 +318,7 @@
                                                     <div class="row p-2">
                                                         <!-- <label for="Indicator"><u>Indicator</u></label> -->
                                                         <div class="row" *ngFor="let question of data.indicator_details">
-                                                            <label *ngIf="question.question.isMain" for="Indicator" class="mt-10 mb-10"><u>{{question.question.name}}</u></label>
+                                                            <label style="font-size: 17px;" *ngIf="question.question.isMain" for="Indicator" class="mt-10 mb-10"><u>{{question.question.name}}</u></label>
 
                                                              <div class="row" *ngIf="!question.question.isMain">
                                                                 <div  class=" ml-25 col-6 mb-20">
@@ -548,7 +548,7 @@
 
                                   <div class="row p-2">
                                     <div class="row" *ngFor="let question of data.indicator_details">
-                                     <label for="question">{{question.question.name}} </label>
+                                     <label style="font-size: 17px;" for="question">{{question.question.name}} </label>
 
                                      <!--    <div class="tooltip-container">
                                           <div *ngIf="question.question.hint">
@@ -757,7 +757,7 @@
 
                                     <div class="row p-2">
                                       <div class="row" *ngFor="let question of data.indicator_details">
-                                       <label for="question">{{question.question.name}} </label>
+                                       <label style="font-size: 17px;" for="question">{{question.question.name}} </label>
 
                                          <!--  <div class="tooltip-container">
                                             <div *ngIf="question.question.hint">
@@ -887,7 +887,7 @@
 
                                     <div class="row p-2">
                                       <div class="row" *ngFor="let question of data.indicator_details">
-                                       <label for="question">{{question.question.name}} </label>
+                                       <label style="font-size: 17px;" for="question">{{question.question.name}} </label>
 
                                          <!--  <div class="tooltip-container">
                                             <div *ngIf="question.question.hint">
