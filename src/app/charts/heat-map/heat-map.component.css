@@ -1,7 +1,9 @@
-/* th,
-td {
-    border: 1px solid black;
-} */
+/* th, */
+.charttd {
+    /* border: 1px solid black; */
+    width: 130px;
+    height: 70px;
+}
 
 .intervention {
     background-color: blue;
