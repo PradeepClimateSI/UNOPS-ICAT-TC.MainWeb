@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import { Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Any, Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -628,8 +628,17 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
        }, 2000);
 
   }
-  next(){
-
+  next(data:any[]){
+  // console.log("category",data)
+  // data?.filter(investorAssessment => console.log(investorAssessment.indicator_details.filter((indicator_details:IndicatorDetails)=>indicator_details.justification !== undefined)?.length == (investorAssessment.indicator_details?.length-1)))
+  if(data?.filter(investorAssessment => 
+      (investorAssessment.relavance !== undefined) && 
+      (investorAssessment.likelihood !== undefined) && 
+      (investorAssessment.likelihood_justification !== undefined) &&
+      (investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
+        (indicator_details.justification !== undefined))?.length === (investorAssessment.indicator_details?.length-1)
+      ))?.length === data?.length){
+    
     if(this.activeIndexMain ===1 ){
 
       this.activeIndex2 =this.activeIndex2+1;
@@ -646,9 +655,15 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       console.log( this.activeIndex)
 
     }
-
-
-
+    // return true
+  }else{
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Please fill all mandotory fields',
+      closable: true,
+    });
+  }
     // if(!this.mainTabIndexArray.includes(this.activeIndex)){
     //   console.log("mainTabIndexArray",this.mainTabIndexArray)
     //   this.isLikelihoodDisabled=false;
@@ -659,13 +674,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     //   this.isLikelihoodDisabled=true;
     //   this.isRelavanceDisabled=true;
     // }
-
-
-
-
-
-
-
   }
 
   onLevelofImplementationChange(event:any){
