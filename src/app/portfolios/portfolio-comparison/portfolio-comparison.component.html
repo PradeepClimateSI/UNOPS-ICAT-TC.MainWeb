@@ -37,16 +37,25 @@
             <p *ngIf="hasCMToolAssessments"><i>Note: The Carbon Market tool does not have likelihood scores, as such,
                     characteristic scores and category scores of the carbon market tool have been mapped to align with
                     the other two tools to be compatible for comparison.</i></p>
-            <h4>Process of change</h4>
-            <app-portfolio-process-data [process_data]="process_data"></app-portfolio-process-data>
+            <p-tabView>
+                <p-tabPanel header="Process of change">
+                    <br>
+                    <app-portfolio-process-data [process_data]="process_data"></app-portfolio-process-data>
+                </p-tabPanel>
+                <p-tabPanel header="Outcome of change">
+                    <br>
+                    <app-portfolio-outcome-data [outcome_data]="outcome_data"></app-portfolio-outcome-data>
+                </p-tabPanel>
+                <p-tabPanel header="Aggregation">
+                    <br>
+                    <app-portfolio-aggregation [aggregation_data]="aggregation_data"></app-portfolio-aggregation>
+                </p-tabPanel>
+                <p-tabPanel header="Alignment">
+                    <br>
+                    <app-portfolio-alignment [alignment_data]="alignment_data"></app-portfolio-alignment>
+                </p-tabPanel>
+            </p-tabView>
 
-            <br>
-            <h4>Outcome of change</h4>
-            <app-portfolio-outcome-data [outcome_data]="outcome_data"></app-portfolio-outcome-data>
-
-            <br>
-            <app-portfolio-aggregation [aggregation_data]="aggregation_data"
-                [alignment_data]="alignment_data"></app-portfolio-aggregation>
             <div class="d-flex  mt-4 mb-2 mr-2">
                 <p-button (click)="genarateExcel()" label="Export"></p-button>
             </div>
@@ -132,8 +141,16 @@
         <table>
             <tr></tr>
         </table> <!--for excel genarate purpose-->
-        <app-portfolio-aggregation [aggregation_data]="aggregation_data"
-            [alignment_data]="alignment_data"></app-portfolio-aggregation>
+        <app-portfolio-aggregation [aggregation_data]="aggregation_data"></app-portfolio-aggregation>
+        <table>
+            <tr>
+                <h4>Alignment</h4>
+            </tr>
+        </table>
+        <table>
+            <tr></tr>
+        </table> <!--for excel genarate purpose-->
+        <app-portfolio-alignment [alignment_data]="alignment_data"></app-portfolio-alignment>
 
     </div>
 

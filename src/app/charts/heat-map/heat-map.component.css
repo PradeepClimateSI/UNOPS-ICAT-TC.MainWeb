@@ -1,7 +1,7 @@
 /* th, */
 .charttd {
     /* border: 1px solid black; */
-    width: 130px;
+    width: 125px;
     height: 70px;
 }
 
@@ -14,9 +14,15 @@
     margin: auto;
     text-align: center
 }
-.vertical-text {
+.vertical-text-chrome {
     writing-mode: vertical-rl;
     transform: rotate(180deg);
+    text-align: center;
+    white-space: nowrap;
+}
+.vertical-text-safari {
+    writing-mode: vertical-rl;
+    transform: rotate(270deg);
     text-align: center;
     white-space: nowrap;
 }

@@ -10,6 +10,10 @@ import * as XLSX from 'xlsx-js-style';
   styleUrls: ['./portfolio-comparison.component.css']
 })
 export class PortfolioComparisonComponent implements OnInit {
+activeIndexMain: number;
+onMainTabChange($event: any) {
+throw new Error('Method not implemented.');
+}
   portfolioId: number;
   assessmentList: any[];
   portfolio: any;

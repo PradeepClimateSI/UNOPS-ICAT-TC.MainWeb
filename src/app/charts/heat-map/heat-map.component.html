@@ -5,7 +5,7 @@
             <td colspan="8">Outcome score</td>
         </tr>
         <tr>
-            <td class="vertical-text" rowspan="6">Process score</td>
+            <td class="vertical-text" [ngClass]="isSafari ? 'vertical-text-safari' : 'vertical-text-chrome'" rowspan="6">Process score</td>
             <td></td>
             <ng-container *ngFor="let x of xData">
                 <td style="font-size: small;">{{x.label}}</td>
