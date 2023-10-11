@@ -202,7 +202,8 @@
 
 
                   <div class="characteristic-Topic" *ngFor="let data of category.data; index as i">
-                    <h6>{{i+1}}.{{data.characteristics.name}}</h6>
+                    <h6 *ngIf="data.characteristics.name!= 'Research and Development'">{{i+1}}.{{data.characteristics.name}}</h6>
+                    <h6 *ngIf="data.characteristics.name === 'Research and Development'">{{i+1}}.{{data.characteristics.name}} (R&D)</h6>
                     <div>
 
                       <div class="container pl-20 pr-20">
@@ -407,35 +408,35 @@
                                   <!-- Newwwwwww -->
                                   <div class="row p-2"
                                     *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'International/global level'">
-                                    <p>(Major) Is the emissions reduction > 0.1% of global emissions?</p>
-                                    <p>(Moderate) Is the emissions reduction > 0.05% of global emissions?</p>
-                                    <p>(Minor) Is the emissions reduction > 0.01% of global emissions?</p>
-                                    <p>(None) Is the emissions reduction < 0.01% of global emissions?</p>
-                                        <p>(Negative) is there an emissions increase?</p>
+                                    <p><b>Major:</b> Is the emissions reduction > 0.1% of global emissions?</p>
+                                    <p><b>Moderate:</b> Is the emissions reduction > 0.05% of global emissions?</p>
+                                    <p><b>Minor:</b> Is the emissions reduction > 0.01% of global emissions?</p>
+                                    <p><b>None:</b> Is the emissions reduction < 0.01% of global emissions?</p>
+                                        <p><b>Negative:</b> Is there an emissions increase?</p>
                                   </div>
 
                                   <div class="row p-2"
                                     *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'National/Sectorial level'">
-                                    <p>(Major) Is the emissions reduction > 1% of national/sectorial emissions?</p>
-                                    <p>(Moderate) Is the emissions reduction > 0.5-1% of national/sectorial emissions?
+                                    <p><b>Major:</b> Is the emissions reduction > 1% of national/sectorial emissions?</p>
+                                    <p><b>Moderate:</b> Is the emissions reduction > 0.5-1% of national/sectorial emissions?
                                     </p>
-                                    <p>(Minor) Is the emissions reduction > 0.1-0.5% of national/sectorial emissions?
+                                    <p><b>Minor:</b> Is the emissions reduction > 0.1-0.5% of national/sectorial emissions?
                                     </p>
-                                    <p>(None) Is the emissions reduction < 0.1% of national/sectorial emissions?</p>
-                                        <p>(Negative) is there an emissions increase?</p>
+                                    <p><b>None:</b> Is the emissions reduction < 0.1% of national/sectorial emissions?</p>
+                                        <p><b>Negative:</b> Is there an emissions increase?</p>
                                   </div>
 
                                   <div class="row p-2"
                                     *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level'">
-                                    <p>(Major) Is the emissions reduction > 5% of subnational/regional/municipal
+                                    <p><b>Major:</b> Is the emissions reduction > 5% of subnational/regional/municipal
                                       emissions?</p>
-                                    <p>(Moderate) Is the emissions reduction > 1-5% of subnational/regional/municipal
+                                    <p><b>Moderate:</b> Is the emissions reduction > 1-5% of subnational/regional/municipal
                                       emissions?</p>
-                                    <p>(Minor) Is the emissions reduction > 0.5-1% of subnational/regional/municipal
+                                    <p><b>Minor:</b> Is the emissions reduction > 0.5-1% of subnational/regional/municipal
                                       emissions?</p>
-                                    <p>(None) Is the emissions reduction < 0.5% of subnational/regional/municipal
+                                    <p><b>None:</b> Is the emissions reduction < 0.5% of subnational/regional/municipal
                                         emissions?</p>
-                                        <p>(Negative) is there an emissions increase?</p>
+                                        <p><b>Negative:</b> Is there an emissions increase?</p>
                                   </div>
                                   <!-- Newwwwwww - Endddd -->
 
