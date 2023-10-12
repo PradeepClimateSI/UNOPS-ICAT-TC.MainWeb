@@ -113,8 +113,9 @@
                             </p> -->
                         </div>
                         <div class="p-field p-2">
-                            <label for="policy">International Carbon Market Approach Used *</label>
-                            <p-dropdown name="type" #type="ngModel" placeholder="Select Assessment Type"
+                            <label for="policy">International Carbon Market Approach Used * <i class="pi pi-info-circle" pTooltip="{{international_tooltip}}" tooltipPosition="bottom"
+                                style="font-size: 1rem"></i></label>
+                            <p-dropdown name="int-approach" #type="ngModel" placeholder="Select Assessment Type"
                                 [(ngModel)]="cm_detail.intCMApproach" [options]="int_cm_approches" optionLabel="name"
                                 optionValue="code" [required]="true"></p-dropdown>
                             <p class="info-message text-danger" *ngIf="
