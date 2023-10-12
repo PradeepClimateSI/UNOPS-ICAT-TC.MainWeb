@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import { Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -101,6 +101,15 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   mainAssessment: Assessment;
   mainTabIndex: any;
   categoryTabIndex: any;
+
+  barrierBox:boolean=false;
+  barrierSelected:BarrierSelected= new BarrierSelected();
+  finalBarrierList :BarrierSelected[]=[];
+  barrierArray:PolicyBarriers[];
+  isDownloading: boolean = true;
+  isDownloadMode: number = 0;
+  sectorsJoined :string='';
+  finalSectors:Sector[]=[]
 
 
   isLikelihoodDisabled:boolean=false;
@@ -332,6 +341,29 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
           if (res) {
 
+            let allBarriersSelected = new AllBarriersSelected()
+            allBarriersSelected.allBarriers =this.finalBarrierList
+            allBarriersSelected.climateAction =res.climateAction
+            allBarriersSelected.assessment =res;
+
+          this.projectControllerServiceProxy.policyBar(allBarriersSelected).subscribe((res) => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Intervention  has been saved successfully',
+              closable: true,
+            },            
+            
+            );
+          },
+          (err) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error.',
+              detail: 'Internal server error in policy barriers',
+              sticky: true,
+            });
+          })
 
             this.investorAssessment.assessment = res;
             this.mainAssessment =res
@@ -806,6 +838,33 @@ onRelavanceChange(data:any,ins:any){
   // }
 
 }
+
+pushBarriers(barrier:any){
+  console.log("barrier",barrier)
+  this.finalBarrierList.push(barrier)
+
+}
+barriersNameArray(Characteristics:any[]){
+  if (Characteristics?.length>0){
+    let charArray = Characteristics.map(x=>{return x.name});
+    return charArray.join(", ")
+  }
+  else{
+    return "-"
+  }   
+
+}
+
+toDownload() {
+  this.isDownloadMode = 1;
+  
+}
+showDialog(){
+  this.barrierBox =true;
+  console.log(this.barrierBox)  
+}
+
+
 onUpload(event:UploadEvent, data : InvestorAssessment) {
   if(event.originalEvent.body){
     data.uploadedDocumentPath = event.originalEvent.body.fileName

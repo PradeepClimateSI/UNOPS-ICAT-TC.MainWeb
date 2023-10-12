@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import { Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, ImpactCovered, InstitutionControllerServiceProxy, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PortfolioQuestionDetails, PortfolioQuestions, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, ImpactCovered, InstitutionControllerServiceProxy, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, PortfolioQuestionDetails, PortfolioQuestions, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { Dropdown } from 'primeng/dropdown';
@@ -114,6 +114,15 @@ export class PortfolioTrack4Component implements OnInit {
   tabLoading: boolean=false;
   characteristicsLoaded:boolean = false;
   categoriesLoaded:boolean = false;
+
+  barrierBox:boolean=false;
+  barrierSelected:BarrierSelected= new BarrierSelected();
+  finalBarrierList :BarrierSelected[]=[];
+  barrierArray:PolicyBarriers[];
+  isDownloading: boolean = true;
+  isDownloadMode: number = 0;
+  sectorsJoined :string='';
+  finalSectors:Sector[]=[]
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -400,11 +409,32 @@ export class PortfolioTrack4Component implements OnInit {
     if (form.valid) {
       this.methodologyAssessmentControllerServiceProxy.saveAssessment(this.assessment)
         .subscribe(res => {
-          console.log("res", res)
           this.load = true
           if (res) {
 
+            let allBarriersSelected = new AllBarriersSelected()
+              allBarriersSelected.allBarriers =this.finalBarrierList
+              allBarriersSelected.climateAction =res.climateAction
+              allBarriersSelected.assessment =res;
 
+            this.projectControllerServiceProxy.policyBar(allBarriersSelected).subscribe((res) => {
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Intervention  has been saved successfully',
+                closable: true,
+              },            
+              
+              );
+            },
+            (err) => {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error.',
+                detail: 'Internal server error in policy barriers',
+                sticky: true,
+              });
+            })
             this.investorAssessment.assessment = res;
             this.mainAssessment = res
             this.createInvestorToolDto.sectors = this.sectorArray;
@@ -456,8 +486,30 @@ export class PortfolioTrack4Component implements OnInit {
     }
 
   }
+  pushBarriers(barrier:any){
+    console.log("barrier",barrier)
+    this.finalBarrierList.push(barrier)
+  
+  }
+  barriersNameArray(Characteristics:any[]){
+    if (Characteristics?.length>0){
+      let charArray = Characteristics.map(x=>{return x.name});
+      return charArray.join(", ")
+    }
+    else{
+      return "-"
+    }   
 
+  }
 
+  toDownload() {
+    this.isDownloadMode = 1;
+    
+  }
+  showDialog(){
+    this.barrierBox =true;
+    console.log(this.barrierBox)  
+  }
   selectedTrack: any
 
   onChangeTrack(event: any) {

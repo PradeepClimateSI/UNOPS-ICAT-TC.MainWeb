@@ -196,6 +196,7 @@ export class AllTooDashbordComponent implements OnInit {
     this.rows = event.rows === undefined ? 10 : event.rows;
     this.investorProxy.getDashboardAllData(pageNumber,this.rows).subscribe((res) => {
       this.tableData=res.items;
+      console.log(this.tableData)
       this.totalRecords= res.meta.totalItems
       this.loading = false;
     }, err => {
