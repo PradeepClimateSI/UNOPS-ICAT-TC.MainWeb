@@ -63,6 +63,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
 
     await this.getPolicies()
     await this.getSetors()
+    this.international_tooltip = 'Name of international or private carbon market standard under which the intervention is registered.'
   }
 
   async getSetors() {
