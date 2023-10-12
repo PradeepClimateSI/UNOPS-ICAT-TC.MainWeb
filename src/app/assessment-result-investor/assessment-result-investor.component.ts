@@ -83,6 +83,7 @@ export class AssessmentResultInvestorComponent implements OnInit {
   aggregated_score:any
   loading: boolean = false;
   heatMapScore: HeatMapScore[];
+  geographicalAreasList: any;
 
 
   constructor(private route: ActivatedRoute,
@@ -169,7 +170,7 @@ export class AssessmentResultInvestorComponent implements OnInit {
     this.investorToolControllerproxy.getResultByAssessment(this.assessmentId).subscribe((res: any) => {
       // console.log("getResultByAssessment: ", res)
       // this.levelofImplemetation = res.level_of_implemetation
-      this.geographicalAreasCovered = res.geographical_areas_covered
+      // this.geographicalAreasCovered = res.geographical_areas_covered
       this.tool = res.assessment.tool
 
     });
@@ -179,6 +180,11 @@ export class AssessmentResultInvestorComponent implements OnInit {
       for (let x of res) {
         this.sectorList.push(x.sector.name)
       }
+    });
+
+    this.investorToolControllerproxy.findAllGeographicalAreaData(this.assessmentId).subscribe((res: any) => {
+        this.geographicalAreasList = res
+        this.geographicalAreasCovered = this.geographicalAreasList.map((a: any) => a.name).join(',')
     });
 
     // this.investorToolControllerproxy.findAllImpactCoverData(this.assessmentId).subscribe((res: any) => {
@@ -396,7 +402,7 @@ export class AssessmentResultInvestorComponent implements OnInit {
     //   this.SDGsList = res
     // });
 
-
+console.log(this.geographicalAreasList)
 
     setTimeout(() => {
       this.card.push(
@@ -405,7 +411,7 @@ export class AssessmentResultInvestorComponent implements OnInit {
           { title: 'Intervention Type', data: (this.intervention.typeofAction)?(this.intervention.typeofAction):'-' },
           { title: 'Intervention Status', data: (this.intervention.projectStatus)?(this.intervention.projectStatus.name):'-' },
           { title: 'Assessment Type', data: this.assessmentType },
-          { title: 'Geographical Area Covered', data: this.geographicalAreasCovered },
+          { title: 'Geographical Area Covered', data: this.geographicalAreasList.map((a: any) => a.name) },
           { title: 'Sectors Covered', data: this.sectorList.join(', ') },
           { title: 'From', data: this.datePipe.transform(this.date1, 'yyyy-MM-dd') },
           { title: 'To', data: this.datePipe.transform(this.date2, 'yyyy-MM-dd') },
@@ -480,6 +486,7 @@ export class AssessmentResultInvestorComponent implements OnInit {
           if (heatmap[itm.cell]) {
             heatmap[itm.cell].s = {
               fill: { fgColor: { rgb: itm.color } },
+              font: { color: { rgb: itm.color } }
             };
           }
         }

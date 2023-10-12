@@ -5,6 +5,7 @@ import { LazyLoadEvent } from 'primeng/api';
 import { Assessment, InvestorToolControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { Chart, ChartType } from 'chart.js';
+import { HeatMapScore, TableData } from 'app/charts/heat-map/heat-map.component';
 
 @Component({
   selector: 'app-all-too-dashbord',
@@ -40,6 +41,8 @@ export class AllTooDashbordComponent implements OnInit {
   yData: { label: string; value: number }[]
   rows: number = 5;
   sdgDetailsList: any = [];
+  heatMapScore: HeatMapScore[];
+  heatMapData: TableData[];
 
   constructor(
     private investorProxy: InvestorToolControllerServiceProxy,
@@ -196,6 +199,8 @@ export class AllTooDashbordComponent implements OnInit {
     this.rows = event.rows === undefined ? 10 : event.rows;
     this.investorProxy.getDashboardAllData(pageNumber,this.rows).subscribe((res) => {
       this.tableData=res.items;
+      this.heatMapScore = this.tableData.map(item => {return {processScore: item.process_score, outcomeScore: item.outcome_score}})
+      this.heatMapData = this.tableData.map(item => {return {interventionId: item.climateAction?.intervention_id, interventionName: item.climateAction?.policyName, processScore: item.process_score, outcomeScore: item.outcome_score}}) 
       this.totalRecords= res.meta.totalItems
       this.loading = false;
     }, err => {

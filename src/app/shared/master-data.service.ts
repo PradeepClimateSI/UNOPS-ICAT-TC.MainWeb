@@ -29,7 +29,7 @@ export class MasterDataService {
   private _sectorial_boundries: {name: string, id: number, code: string}[] = []
   private _impact_categories: {name: string, id: number, code: string, type: string}[] = []
   private _impact_characteristics: {name: string, id: number, code: string, type: string[]}[] = []
-  private _level_of_implemetation: {name: string, id: number}[] = []
+  private _level_of_implemetation: {name: string, id: number, code: string}[] = []
   private _impact_covered: {name: string, id: number}[] = []
   private _assessment_method: {name: string, id: number}[] = []
   private _assessment_approach2: {name: string, id: number}[] = []
@@ -209,9 +209,9 @@ export class MasterDataService {
     ]
 
     this.level_of_implemetation = [
-      { id: 1, name: "International" },
-      { id: 2, name: "National/sectorial" },
-      { id: 3, name: "Sub-national/sub-sectorial" },
+      { id: 1, name: "International", code: "INTERNATIONAL" },
+      { id: 2, name: "National/sectorial", code: "NATIONAL" },
+      { id: 3, name: "Sub-national/sub-sectorial", code: "SUBNATIONAL" },
 
     ]
 
@@ -568,11 +568,11 @@ export class MasterDataService {
   get impact_characteristics(): { name: string; id: number, code: string, type: string[] }[] {
     return this._impact_characteristics;
   }
-  set level_of_implemetation (value: { name: string; id: number }[]) {
+  set level_of_implemetation (value: { name: string; id: number; code: string }[]) {
     this._level_of_implemetation = value;
   }
 
-  get level_of_implemetation (): { name: string; id: number }[] {
+  get level_of_implemetation (): { name: string; id: number; code: string }[] {
     return this._level_of_implemetation;
   }
 

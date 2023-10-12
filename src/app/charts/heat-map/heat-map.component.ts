@@ -1,3 +1,4 @@
+import { Platform } from '@angular/cdk/platform';
 import { Component, Input, ViewChild } from '@angular/core';
 import { OverlayPanel } from 'primeng/overlaypanel';
 
@@ -16,6 +17,13 @@ export class HeatMapComponent {
 
   @ViewChild('op') op: OverlayPanel;
   pointTableDatas: TableData[];
+  isSafari: boolean = false
+
+  constructor(
+    public platform: Platform
+  ){
+    this.isSafari = platform.SAFARI
+  }
 
   getBackgroundColor(value: number): string {
     switch (value) {
@@ -47,7 +55,7 @@ export class HeatMapComponent {
   }
 
   getIntervention(x: number, y: number) {
-    return this.score.some(item => item.processScore === y && item.outcomeScore === x);
+    return this.score?.some(item => item.processScore === y && item.outcomeScore === x);
   }
 
   enterHeatMapPoint(x: number, y: number, event: any) {

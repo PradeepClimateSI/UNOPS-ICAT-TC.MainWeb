@@ -10,13 +10,16 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th class="table-header-3">Intervention Name</th>
+                        <th class="table-header">Tool</th>
                         <th class="table-header">Process of change Score</th>
                         <th class="table-header">Outcome of Change Score</th>
+                        
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-tableData>
                     <tr>
                         <td>{{ tableData.climateAction?.policyName }}</td>
+                        <td>{{ tableData.tool }}</td>
                         <td class="text-center">{{ tableData.process_score!=null && tableData.process_score!=undefined?
                             tableData.process_score:'-' }}</td>
                         <td class="text-center">{{ tableData.outcome_score!=null &&
@@ -39,7 +42,8 @@
 
 <div class="p-grid p-fluid card mt-20 m-3">
     <div class="row text-center">
-        <table class="heatmap" style="text-align: center">
+        <app-heat-map  id="heatmap" [xData]="xData" [yData]="yData" [score]="heatMapScore" [showOp]="true" [tableData]="heatMapData"></app-heat-map>
+        <!-- <table class="heatmap" style="text-align: center">
             <tbody>
                 <tr>
                     <td></td>
@@ -70,7 +74,7 @@
                     </ng-container>
                 </tr>
             </tbody>
-        </table>
+        </table> -->
     </div>
 </div>
 <div class="row">
