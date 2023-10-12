@@ -198,7 +198,7 @@ export class MasterDataService {
       { id: 8, name: "Disincentives", code: "DISINCENTIVES", type:[ "INCENTIVES"] },
       { id: 9, name: "Institutional and regulatory", code: "INSTITUTIONAL_AND_REGULATORY", type: ["INCENTIVES"] },
       { id: 10, name: "Awareness", code: "AWARENESS", type: ["NORMS"] },
-      { id: 11, name: "Behaviour", code: "BEHAVIOUR", type: ["NORMS"] },
+      { id: 11, name: "Behavior", code: "BEHAVIOUR", type: ["NORMS"] },
       { id: 12, name: "Social norms", code: "SOCIAL_NORMS", type: ["NORMS"] },
       { id: 13, name: "Macro level", code: "MACRO_LEVEL", type: ["SCALE_OF_OUTCOME"] },
       { id: 14, name: "Medium level", code: "MEDIUM_LEVEL", type: ["SCALE_OF_OUTCOME"] },

@@ -10,13 +10,16 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th class="table-header-3">Intervention Name</th>
+                        <th class="table-header">Tool</th>
                         <th class="table-header">Process of change Score</th>
                         <th class="table-header">Outcome of Change Score</th>
+                        
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-tableData>
                     <tr>
                         <td>{{ tableData.climateAction?.policyName }}</td>
+                        <td>{{ tableData.tool }}</td>
                         <td class="text-center">{{ tableData.process_score!=null && tableData.process_score!=undefined?
                             tableData.process_score:'-' }}</td>
                         <td class="text-center">{{ tableData.outcome_score!=null &&

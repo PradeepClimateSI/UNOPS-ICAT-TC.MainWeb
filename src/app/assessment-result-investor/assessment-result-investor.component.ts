@@ -80,6 +80,7 @@ export class AssessmentResultInvestorComponent implements OnInit {
   scale_SD: any;
   scale_adaptation: any;
   sustained_adaptation: any;
+  aggregated_score:any
   loading: boolean = false;
   heatMapScore: HeatMapScore[];
   geographicalAreasList: any;
@@ -120,6 +121,8 @@ export class AssessmentResultInvestorComponent implements OnInit {
       this.sustained_SD = res?.outcomeData.find((item: { code: string; })=>item?.code=='SUSTAINED_SD')
       this.scale_adaptation = res?.outcomeData.find((item: { code: string; })=>item?.code=='SCALE_ADAPTATION')
       this.sustained_adaptation = res?.outcomeData.find((item: { code: string; })=>item?.code=='SUSTAINED_ADAPTATION')
+      this.aggregated_score =res?.aggregatedScore;
+      console.log("aggregated_score",this.aggregated_score)
       console.log("all: ",  this.scale_GHGs,this.scale_SD,this.sustained_GHGs ,this.sustained_SD,this.scale_adaptation,this.sustained_adaptation)
       // console.log("processData: ", this.processData)
       // console.log("outcomeData: ", this.outcomeData)
