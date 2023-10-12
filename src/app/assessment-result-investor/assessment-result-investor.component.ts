@@ -147,13 +147,13 @@ export class AssessmentResultInvestorComponent implements OnInit {
         
       }
       console.log("toool", this.tool)
-      if (this.tool === 'Portfolio Tool') {
+      if (this.tool === 'PORTFOLIO') {
         this.investerTool = false;
         this.loadTitle = true;
         // this.title2 = 'Result - Assess the Transformational Change due to a Portfolio of Interventions'
         this.title2 ='Assessment results'
       }
-      else if (this.tool === 'Investment & Private Sector Tool') {
+      else if (this.tool === 'INVESTOR') {
         this.investerTool = true;
         this.loadTitle = true;
         // this.title2 = 'Result - Invesment & Private Sector Tool '

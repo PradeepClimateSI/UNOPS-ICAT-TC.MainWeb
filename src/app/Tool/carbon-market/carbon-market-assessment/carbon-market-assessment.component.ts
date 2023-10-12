@@ -80,7 +80,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   }
 
   save(form: NgForm) {
-    this.assessment.tool = 'Carbon Market Tool'
+    this.assessment.tool = 'CARBON_MARKET'
     this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
     this.assessment.assessment_approach = 'DIRECT'
 

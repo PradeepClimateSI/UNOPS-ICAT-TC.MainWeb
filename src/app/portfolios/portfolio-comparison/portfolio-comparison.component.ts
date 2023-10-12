@@ -67,7 +67,7 @@ console.log(this.portfolio)
   }
 
   hasCMTool(){
-    if (this.assessmentList.find(o => o.assessment.tool === 'Carbon Market Tool')) this.hasCMToolAssessments = true
+    if (this.assessmentList.find(o => o.assessment.tool === 'CARBON_MARKET')) this.hasCMToolAssessments = true
     else this.hasCMToolAssessments = false
   }
 

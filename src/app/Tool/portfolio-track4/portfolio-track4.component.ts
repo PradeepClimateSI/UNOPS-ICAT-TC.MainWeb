@@ -395,7 +395,7 @@ export class PortfolioTrack4Component implements OnInit {
     // this.showSections = true
     //save assessment
 
-    this.assessment.tool = 'Portfolio Tool'
+    this.assessment.tool = 'PORTFOLIO'
     this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
 
     if (form.valid) {

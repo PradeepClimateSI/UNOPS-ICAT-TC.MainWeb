@@ -323,7 +323,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     console.log("form", form)
     // this.showSections = true
     //save assessment
-    this.assessment.tool = 'Investment & Private Sector Tool'
+    this.assessment.tool = 'INVESTOR'
     this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
 
     if (form.valid) {

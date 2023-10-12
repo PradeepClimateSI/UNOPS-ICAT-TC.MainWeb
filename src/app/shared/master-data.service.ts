@@ -50,6 +50,7 @@ export class MasterDataService {
   private _score: {name: string, value: number}[] = []
   private _xData: {label: string, value: number}[] = []
   private _yData: {label: string, value: number}[] = []
+  private _tools: {id: number, name: string, code: string}[] = []
 
 
   constructor() {
@@ -384,6 +385,12 @@ export class MasterDataService {
       {name: 'Life on land', number: 15, code: 'LIFE_ON_LAND', scaleResult: [], sustainResult: []},
       {name: 'Peace, justice and strong institutions', number: 16, code: 'PEACE_JUSTICE_AND_STRING_INSTITUTIONS', scaleResult: [], sustainResult: []},
       {name: 'Partnerships for the goals', number: 17, code: 'PARTNERSHIPS_FOR_THE_GOALS', scaleResult: [], sustainResult: []}
+    ]
+
+    this.tools = [
+      {id: 1, name: 'Other Interventions', code: 'PORTFOLIO'},
+      {id: 2, name: 'Carbon Market Tool', code: 'CARBON_MARKET'},
+      {id: 3, name: 'Investor & Private Sector Tool', code: 'INVESTOR'},
     ]
 
 
@@ -725,5 +732,22 @@ export class MasterDataService {
 
   get SDGs (): SDG[] {
     return this._SDGs;
+  }
+
+  set tools(value: {id: number; name: string; code: string}[]) {
+    this._tools = value;
+  }
+
+  get tools (): {id: number; name: string; code: string}[] {
+    return this._tools;
+  }
+
+  getToolName(code: string) {
+    let tool = this.tools.find(o => o.code === code)
+    if (tool) {
+      return tool.name
+    } else {
+      return ''
+    }
   }
 }

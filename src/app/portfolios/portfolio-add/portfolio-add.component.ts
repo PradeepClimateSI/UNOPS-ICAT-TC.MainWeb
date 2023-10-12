@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MasterDataService } from 'app/shared/master-data.service';
 import { MessageService } from 'primeng/api';
 import {  Assessment, GetAssessmentDetailsDto, MethodologyAssessmentControllerServiceProxy, Portfolio, PortfolioControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
@@ -16,6 +17,7 @@ export class PortfolioAddComponent implements OnInit {
     private messageService: MessageService,
     private router: Router,
     private route: ActivatedRoute,
+    public masterDataService: MasterDataService
   ) { }
 
   portfolio : Portfolio = new Portfolio();
@@ -41,8 +43,8 @@ export class PortfolioAddComponent implements OnInit {
   resultsList : any = []
   assessmentData :any =[]
   async ngOnInit(): Promise<void> {
-    this.tool = 'Portfolio Tool';
-    this.tools = ['Portfolio Tool', 'Carbon Market Tool', 'Investment & Private Sector Tool']
+    this.tool = 'PORTFOLIO';
+    this.tools = ['PORTFOLIO', 'CARBON_MARKET', 'INVESTOR']
     this.addLink=false;
    /*  this.methassess.assessmentDetails().subscribe(async (res: any) => {
        console.log("assessmentData : ", res)
