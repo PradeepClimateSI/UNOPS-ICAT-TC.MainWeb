@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import { AllBarriersSelected, Assessment, AssessmentCMDetail, BarrierSelected, Characteristics, ClimateAction, InvestorSector, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, SectorsCoverdDto, ServiceProxy } from 'shared/service-proxies/service-proxies';
+import { AllBarriersSelected, Assessment, AssessmentCMDetail, BarrierSelected, Characteristics, ClimateAction, GeographicalAreasCovered, InvestorSector, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy,  ServiceProxy, ToolsMultiselectDto } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 
 @Component({
@@ -13,9 +13,6 @@ import decode from 'jwt-decode';
 })
 export class CarbonMarketAssessmentComponent implements OnInit {
   countryId: any;
-onItemSelectSectors($event: any) {
-throw new Error('Method not implemented.');
-}
   visible_ex_ante: any;
 
 
@@ -43,6 +40,7 @@ throw new Error('Method not implemented.');
   assessmentres: Assessment
   levelOfImplementation: any[] = [];
   sectorArray: Sector[] = [];
+  geographicalAreasCoveredArr: any[] = []
   sectorList: any[] = [];
 
   
@@ -130,17 +128,26 @@ throw new Error('Method not implemented.');
             this.serviceProxy.createOneBaseAssessmentCMDetailControllerAssessmentCMDetail(this.cm_detail)
               .subscribe(async _res => {
                 if (_res) {
-                  let sectorsCoveredDto = new SectorsCoverdDto()
-                  sectorsCoveredDto.sectors = []
+                  let toolsMultiselectDto = new ToolsMultiselectDto()
+                  toolsMultiselectDto.sectors = []
+
                   for (let sector of this.sectorArray) {
                     let sec = new InvestorSector()
                     sec.assessment = res
                     sec.assessmentCMDetail = _res
                     sec.sector = sector
-
-                    sectorsCoveredDto.sectors.push(sec)
+                    toolsMultiselectDto.sectors.push(sec)
                   }
-                  let res_sec = await this.investorToolControllerServiceProxy.saveSectorsCovered(sectorsCoveredDto).toPromise()
+                  console.log(this.geographicalAreasCoveredArr)
+                  for (let geo of this.geographicalAreasCoveredArr){
+                    let area = new GeographicalAreasCovered()
+                    area.assessment= res
+                    area.assessmentCMDetail = _res
+                    area.name = geo.name
+                    area.code = geo.code
+                    toolsMultiselectDto.geographicalAreas.push(area)
+                  }
+                  let res_sec = await this.investorToolControllerServiceProxy.saveToolsMultiSelect(toolsMultiselectDto).toPromise()
                   if (res_sec) {
                     this.messageService.add({
                       severity: 'success',
@@ -240,6 +247,9 @@ throw new Error('Method not implemented.');
   showDialog(){
     this.barrierBox =true;
     console.log(this.barrierBox)  
+  }
+  onItemSelectSectors($event: any) {
+   
   }
 
 }

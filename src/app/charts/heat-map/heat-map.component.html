@@ -5,7 +5,7 @@
             <td colspan="8">Outcome score</td>
         </tr>
         <tr>
-            <td class="vertical-text" rowspan="6">Process score</td>
+            <td class="vertical-text" [ngClass]="isSafari ? 'vertical-text-safari' : 'vertical-text-chrome'" rowspan="6">Process score</td>
             <td></td>
             <ng-container *ngFor="let x of xData">
                 <td style="font-size: small;">{{x.label}}</td>
@@ -14,10 +14,10 @@
         <tr *ngFor="let y of yData">
             <td style="font-size: small;">{{y.label}}</td>
             <ng-container *ngFor="let x of xData">
-                <td [style.background-color]="getBackgroundColor(y.value+x.value)">
+                <td class="charttd" [style.background-color]="getBackgroundColor(y.value+x.value)" [style.color]="getIntervention(x.value, y.value)?'blue':getBackgroundColor(y.value+x.value)">
                     <span (mouseenter)="enterHeatMapPoint(x.value, y.value,$event);"
                         (mouseleave)="leaveHeatMapPoint();op.hide()"
-                        [ngClass]="getIntervention(x.value, y.value)? 'intervention':''"></span>
+                        [ngClass]="getIntervention(x.value, y.value)? 'intervention':''">1</span>
                 </td>
             </ng-container>
         </tr>

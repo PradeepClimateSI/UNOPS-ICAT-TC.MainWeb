@@ -37,20 +37,20 @@
                         </div>
                         <div class="p-field p-2">
                             <label for="gac">Geographical Areas Covered*</label>
-                            <p-dropdown name="investorAssessment.geographical_areas_covered" #gac="ngModel"
+                            <p-multiSelect name="investorAssessment.geographical_areas_covered" #gac="ngModel"
                                 placeholder="Select Geographical Areas Covered"
-                                [(ngModel)]="investorAssessment.geographical_areas_covered"
-                                [options]="levelOfImplementation" optionLabel="name" optionValue="name"
+                                [(ngModel)]="geographicalAreasCoveredArr"
+                                [options]="levelOfImplementation" optionLabel="name"
                                 [required]="true"
                                 [disabled]="isSavedAssessment"
                                 appendTo="body">
-                            </p-dropdown>
+                            </p-multiSelect>
                             <p class="info-message text-danger" *ngIf="
-                                !investorAssessment.geographical_areas_covered &&
-                                (fData.submitted || gac.touched)
-                              ">
-                                This is a mandatory field
-                            </p>
+                                  geographicalAreasCoveredArr.length===0 &&
+                                  (fData.submitted || sectors.touched)
+                                ">
+                                  This is a mandatory field
+                              </p>
                             </div>
                         <div class="p-field p-2">
                             <label for="Sectors Covered">Sectors Covered*</label>
