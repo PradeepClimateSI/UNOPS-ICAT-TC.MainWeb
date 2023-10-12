@@ -523,8 +523,8 @@
     <!-- <div class="p-grid p-fluid col-sm-12" *ngIf="showSections">
         <app-cm-section [assessment]="assessmentres"></app-cm-section>
     </div> -->
-    <!-- <div class="card" *ngIf="isSavedAssessment && tabLoading"> -->
-        <div class="card" >
+    <div class="card" *ngIf="isSavedAssessment && tabLoading">
+        <!-- <div class="card" > -->
         <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)" >
         <p-tabView  (onChange)="onMainTabChange($event) " [(activeIndex)]="activeIndexMain ">
 
@@ -552,7 +552,7 @@
                                                     </div>
                                                     <div class="col-10">
                                                       <!-- <label for="Description">{{question.question.description}}</label> -->
-                                                      <p style="text-align: justify;">{{data.characteristics.investmentDescription}}</p>
+                                                      <p style=" white-space: pre-wrap; text-align: justify;">{{data.characteristics.investmentDescription}}</p>
                                                     </div>
                                                   </div>
 
@@ -626,7 +626,8 @@
                                                              <div class="row" *ngIf="!question.question.isMain">
                                                                 <div class=" ml-25 col-6 mb-20">
 
-                                                                    <p class="justifiaction" class="question">Comment and justification*</p>
+                                                                    <!-- <p class="justifiaction" class="question">Comment and justification*</p> -->
+                                                                    <p class="justifiaction" class="question">Justification*</p>
                                                                   </div>
                                                                   <div class="col-4 mb-20">
                                                                     <input type="text" pInputText
@@ -721,8 +722,13 @@
                             </div>
                         </div>
 
-
-
+                        <div  class="row justify-content-end">
+                          <div class="d-flex flex-row-reverse mt-20 ">
+                               <div class="btn btn-primary text-uppercase"  (click)="next(category.data,'process')" >
+                                   Next
+                               </div>
+                          </div>
+                        </div>
 
                     </p-tabPanel>
 
@@ -955,6 +961,13 @@
 
                       </div>
                     </div>
+                    <div  class="row justify-content-end" *ngIf="activeIndex2!==5 || activeIndexMain!==1">
+                      <div class="d-flex flex-row-reverse mt-20 ">
+                           <div class="btn btn-primary text-uppercase"  (click)="next(category.data,'outcome')" >
+                               Next
+                           </div>
+                      </div>
+                    </div>
                   </div>
 
                   <div *ngIf="category.CategoryName === 'SDG Scale of the Outcome'">
@@ -1095,6 +1108,14 @@
                       </div>
                     </div>
                   </div>
+                  <div  class="row justify-content-end" >
+                    <div class="d-flex flex-row-reverse mt-20 ">
+                         <div class="btn btn-primary text-uppercase"  (click)="next(sdgDataSendArray2,'sdg')" >
+                             Next
+                         </div>
+                    </div>
+                  </div>
+                  
                   </div>
 
 
@@ -1225,7 +1246,15 @@
                       </div>
                     </div>
                   </div>
+                  <div  class="row justify-content-end" >
+                    <div class="d-flex flex-row-reverse mt-20 ">
+                         <div class="btn btn-primary text-uppercase"  (click)="next(sdgDataSendArray4,'sdg')" >
+                             Next
+                         </div>
+                    </div>
                   </div>
+                  </div>
+                  
 
 
 
@@ -1267,18 +1296,7 @@
             </div>
         </div>
 
-        <div    *ngIf="activeIndex2!==5 || activeIndexMain!==1" class="row justify-content-end">
-            <div>
-
-                <div
-                class="d-flex flex-row-reverse mt-20 ">
-                    <div class="btn btn-primary text-uppercase" (click)="next()" [class.disabled]="(!isLikelihoodDisabled || !isRelavanceDisabled)">
-
-                       Next
-                    </div>
-                </div>
-            </div>
-        </div>
+      
 
 
 
