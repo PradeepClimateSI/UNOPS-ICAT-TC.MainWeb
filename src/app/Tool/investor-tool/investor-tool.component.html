@@ -37,20 +37,20 @@
                         </div>
                         <div class="p-field p-2">
                             <label for="gac">Geographical Areas Covered*</label>
-                            <p-dropdown name="investorAssessment.geographical_areas_covered" #gac="ngModel"
+                            <p-multiSelect name="investorAssessment.geographical_areas_covered" #gac="ngModel"
                                 placeholder="Select Geographical Areas Covered"
-                                [(ngModel)]="investorAssessment.geographical_areas_covered"
-                                [options]="levelOfImplementation" optionLabel="name" optionValue="name"
+                                [(ngModel)]="geographicalAreasCoveredArr"
+                                [options]="levelOfImplementation" optionLabel="name"
                                 [required]="true"
                                 [disabled]="isSavedAssessment"
                                 appendTo="body">
-                            </p-dropdown>
+                            </p-multiSelect>
                             <p class="info-message text-danger" *ngIf="
-                                !investorAssessment.geographical_areas_covered &&
-                                (fData.submitted || gac.touched)
-                              ">
-                                This is a mandatory field
-                            </p>
+                                  geographicalAreasCoveredArr.length===0 &&
+                                  (fData.submitted || sectors.touched)
+                                ">
+                                  This is a mandatory field
+                              </p>
                             </div>
                         <div class="p-field p-2">
                             <label for="Sectors Covered">Sectors Covered*</label>
@@ -164,6 +164,272 @@
                         </div> -->
 
 
+                    </div>
+                    <div class="mt-2 overflow-visible" style="z-index: 1;">
+                      <div class="p-grid p-fluid col-sm-12">
+                        <div class="p-2">
+                          <h6>Transformational Vision & Stage</h6>
+                        </div>
+                        <div class="row p-2">
+                          <div class="  col-12">
+                                                                    
+                            <!-- <label >What is the envisioned change in the system the intervention is 
+                              impacting in moving from where the system is currently to where it should be to achieve 
+                              the transformational shift desired?</label> -->
+                              <label >What is the vision for the desired change of the system over time towards zero-carbon and sustainable practices?</label>
+                          </div>
+                          <div class="col-12 col-md-6">
+                            <div class="p-field">
+                              <textarea  name="envisioned_change" placeholder="Enter an answer" #envisioned_change="ngModel"
+                                [(ngModel)]="assessment.envisioned_change" rows="1" cols="130" pInputText autoResize="autoResize"
+                                ></textarea>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row p-2">
+                          <div class="  col-12">
+                                                                    
+                            <!-- <p class="question">How does that change would look like …</p> -->
+                            <p class="question">What would that change look like?</p>
+                          </div>
+                          <div class="col-12 col-md-6">
+                            <div class="p-field">
+                              <!-- <label for="vision_short">Short Term ({{"\u003C"}}5 years)</label> -->
+                              <label for="vision_short">Within 5 years?</label>
+                              <textarea  name="vision_short" placeholder="Short Term Vision" #vision_short="ngModel"
+                                [(ngModel)]="assessment.vision_short" rows="1" cols="130" pInputText autoResize="autoResize"
+                                ></textarea>
+                            </div>
+                          </div>
+                         
+                          <div class="col-12 col-md-6">
+                            <div class="p-field">
+                              <!-- <label for="vision_medium">Medium Term ({{"\u003E"}}5 years and   {{"\u003C"}}15 years)</label> -->
+                              <label for="vision_short">Between 5 and 15 years?</label>
+                              <textarea  name="vision_medium" placeholder="Medium Term Vision" #vision_medium="ngModel"
+                                [(ngModel)]="assessment.vision_medium" rows="1" cols="130" pInputText autoResize="autoResize"
+                                ></textarea>
+                            </div>
+                          </div>
+                          <div class="col-12 col-md-6">
+                            <div class="p-field">
+                              <!-- <label for="vision_long">Long Term ({{"\u003E"}}15 years)</label> -->
+                              <label for="vision_short">After 15 years?</label>
+                              <textarea name="vision_long" placeholder="Long Term Vision"
+                                #vision_long="ngModel" [(ngModel)]="assessment.vision_long" rows="1" cols="130" pInputText
+                                autoResize="autoResize"></textarea>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row p-2">
+                          <div class="  col-12">
+                                                                    
+                            <!-- <label >In which phase of transformation is the system to be transformed?</label> -->
+                            <label >In which phase of transformation is the system currently at?</label>
+                          </div>
+                          <div class="col-12 col-md-6">
+                            <div class="p-field">
+                              <textarea name="phase_of_transformation" placeholder="Enter an answer" #phase_of_transformation="ngModel"
+                                [(ngModel)]="assessment.phase_of_transformation" rows="1" cols="130" pInputText autoResize="autoResize"
+                                ></textarea>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row p-2">
+                          <div class="  col-12">
+                                                                    
+                            <label >How does the intervention seek to contribute to the change in the system to achieve the vision?</label>
+                          </div>
+                          <div class="col-12 col-md-6">
+                            <div class="p-field">
+                              <textarea  name="change_in_system" placeholder="Enter an answer" #change_in_system="ngModel"
+                                [(ngModel)]="assessment.change_in_system" rows="1" cols="130" pInputText autoResize="autoResize"
+                                ></textarea>
+                            </div>
+                          </div>
+                        </div>
+            
+            
+                      </div>
+                    </div>
+                    <div class=" mt-2">
+                      <div class="p-grid p-fluid col-sm-12">
+                        <div class="p-2">
+                          <h6>Barriers &nbsp; <p-button  icon="pi pi-plus "  styleClass="p-button-sm p-button-rounded"  (click)="showDialog()"></p-button></h6>
+                        </div>
+                        <p-dialog header="Add Barrier" [(visible)]="barrierBox"  [modal]="true" appendTo="body"  [style]="{width: '50vw'}"  >
+                          <ng-template pTemplate="p-dialog-content">
+                          <div class="row p-2">
+                            <div class="col-12 col-md-6">
+                              <div class="p-field">
+                                <label style="width:200px" for="impEntity">Barrier</label>
+                                <input type="text" placeholder="Please add barrier"  name="category"
+                                #cat="ngModel" [(ngModel)]="barrierSelected.barrier" maxlength="300" class="p-inputtext"
+                                pInputText />
+                                
+                              </div>
+                            </div>
+            
+                          </div>
+            
+                          <div class="row p-2">
+                            <div class="col-12 col-md-6">
+                              <div class="p-field">
+                                <label style="width:200px" for="impEntity">Explanation</label>
+                                <input type="text" placeholder="Please add explanation"  name="explanation" 
+                                #explanation="ngModel" [(ngModel)]="barrierSelected.explanation" maxlength="300" class="p-inputtext"
+                                pInputText />
+                              </div>
+                            </div>
+            
+                          </div>
+            
+                          <div class="row p-2">
+                            <div class="col-12 col-md-6">
+                              <div class="p-field">
+                                <label style="width:200px"  for="impEntity">Characteristic Affected</label>
+                                <ng-container *ngIf="isDownloadMode == 0; else elseBlockcharacteristics">
+                                  <p-multiSelect  placeholder="Please select characteristics" name="characteristics"
+                                    #characteristic="ngModel" [(ngModel)]="barrierSelected.characteristics" [options]="characteristicsList" appendTo="body"
+                                    optionLabel="name"  [required]="true"></p-multiSelect>
+                                  <p class="info-message text-danger" *ngIf="  !finalSectors &&                     
+                                  (fData.submitted || characteristic.touched || characteristic.dirty)
+                                ">
+                                    This is a mandatory field
+                                  </p>
+                                </ng-container>
+                                <ng-template #elseBlockcharacteristics>
+                                  <ng-container *ngIf="isDownloadMode == 1 ">
+                                    <p-multiSelect placeholder="Please select characteristics" name="characteristics"
+                                      #characteristic="ngModel" [(ngModel)]="barrierSelected.characteristics" [options]="characteristicsList" appendTo="body"
+                                      optionLabel="name"  [required]="true"></p-multiSelect>
+              
+                                  </ng-container>
+                                  <ng-container *ngIf="isDownloadMode == 0">
+                                    <input  type="text" maxlength="50" name="projsector"
+                                    #projsector="ngModel" class="p-inputtext" [(ngModel)]="sectorsJoined"
+                                    [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
+                                  </ng-container>
+              
+                                </ng-template>
+                              </div>
+                            </div>
+            
+                          </div>
+            
+            
+            
+                          <div class="row p-2">
+                            <div class="col-12 col-md-6">
+                              <div class="p-field">
+                                <p-checkbox  [binary]="true" [(ngModel)]="barrierSelected.affectedbyIntervention"  name="affectedbyIntervention" inputId="binary"></p-checkbox> &nbsp; &nbsp;
+                                <label for="ny">Is the barrier directly affected by the intervention?</label>
+            
+                              </div>
+                            </div>
+            
+                          </div>
+            
+                        </ng-template>
+            
+                          <ng-template pTemplate="footer">
+                            <p-button
+                            (click)="barrierBox=false; pushBarriers(barrierSelected)"
+            
+                                label="Save"
+            
+                            ></p-button>
+                        </ng-template>
+            
+            
+            
+            
+                      </p-dialog>
+                      <div class="row p-2" >
+                        <div class="col-12 col-md-2">
+                          <div class="p-field">
+                            <label class ="barrier-top" for="relatedPolicies">Barrier </label>
+                          </div>
+                        </div>
+                        <div class="col-12 col-md-3">
+                          <div class="p-field">
+                            <label class ="barrier-top" for="relatedPolicies">Explanation </label>
+                          </div>
+                        </div>
+                        <div class="col-12 col-md-3">
+                          <div class="p-field">
+                            <label class ="barrier-top" for="relatedPolicies">Characteristic Affected </label>
+                          </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                          <div class="p-field">
+                            <label class ="barrier-top" for="relatedPolicies">Is the barrier directly affected by the intervention?</label>
+                          </div>
+                        </div>
+            
+                      </div>
+                      <div *ngIf="finalBarrierList.length !==0" >
+                        <div class="row p-2" *ngFor="let barriers of finalBarrierList">
+            
+                          <div class="col-12 col-md-2">
+                            <div class="p-field">
+                             <div></div>
+                             <div>{{barriers.barrier}}</div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-md-3">
+                            <div class="p-field">
+                              <div>{{barriers.explanation}}</div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-md-3">
+                            <div class="p-field">
+                              <div>{{barriersNameArray(barriers.characteristics)}}</div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-md-4">
+                            <div class="p-field">
+                              <div>{{barriers.affectedbyIntervention==true?'Yes':'No'}} </div>
+            
+                            </div>
+                          </div>
+            
+                        </div>
+            
+                      </div>
+            
+                      <div  >
+                        <div class="row p-2" *ngFor="let barriers of barrierArray">
+            
+                          <div class="col-12 col-md-2">
+                            <div class="p-field">
+                             <div></div>
+                             <div>{{barriers.barrier}}</div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-md-3">
+                            <div class="p-field">
+                              <div>{{barriers.explanation}}</div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-md-3">
+                            <div class="p-field">
+                              <div>{{barriersNameArray(barriers['characteristics'])}}</div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-md-4">
+                            <div class="p-field">
+                              <div>{{barriers.is_affected==true?'Yes':'No'}} </div>
+            
+                            </div>
+                          </div>
+            
+                        </div>
+            
+                      </div>
+            
+            
+                      </div>
                     </div>
                 </div>
                 <!-- <div class="row p-2">

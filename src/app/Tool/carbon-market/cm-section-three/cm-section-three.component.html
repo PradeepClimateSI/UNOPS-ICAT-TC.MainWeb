@@ -7,7 +7,7 @@
                 <p style="font-size: large;">{{category.description}}</p>
                 <br>
                 <ng-container *ngFor="let char of category.characteristics; let idx = index">
-                    <h6>{{idx + 1}}. {{char.name}}</h6>
+                    <h6>{{idx + 1}}. {{char.name === 'Research and Development' ? char.name + ' (R&D)' : char.name}}</h6>
                     <p>{{char.description}}</p>
                     <div class="row">
                         <div class="col-2">
