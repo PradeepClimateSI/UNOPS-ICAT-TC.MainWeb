@@ -42,7 +42,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   sectorArray: Sector[] = [];
   geographicalAreasCoveredArr: any[] = []
   sectorList: any[] = [];
-
+  international_tooltip:string;
   
   barrierBox:boolean=false;
   barrierSelected:BarrierSelected= new BarrierSelected();
@@ -74,7 +74,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
 
     await this.getPolicies()
     await this.getSetors()
-    this.characteristicsList = await this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().toPromise();
+    this.international_tooltip = 'Name of international or private carbon market standard under which the intervention is registered.'
   }
 
   async getSetors() {
