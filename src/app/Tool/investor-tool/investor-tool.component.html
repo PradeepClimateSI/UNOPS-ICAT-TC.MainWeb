@@ -181,8 +181,13 @@
                           <div class="col-12 col-md-6">
                             <div class="p-field">
                               <textarea  name="envisioned_change" placeholder="Enter an answer" #envisioned_change="ngModel"
-                                [(ngModel)]="assessment.envisioned_change" rows="1" cols="130" pInputText autoResize="autoResize"
+                                [(ngModel)]="assessment.envisioned_change" rows="1" cols="130" pInputText autoResize="autoResize" required
                                 ></textarea>
+                                <p class="info-message text-danger" *ngIf="  !envisioned_change.value &&                     
+                                  (fData.submitted || envisioned_change.touched || envisioned_change.dirty)
+                                ">
+                                    This is a mandatory field
+                                  </p>
                             </div>
                           </div>
                         </div>
@@ -199,6 +204,11 @@
                               <textarea  name="vision_short" placeholder="Short Term Vision" #vision_short="ngModel"
                                 [(ngModel)]="assessment.vision_short" rows="1" cols="130" pInputText autoResize="autoResize"
                                 ></textarea>
+                                <p class="info-message text-danger" *ngIf="  !vision_short.value &&                     
+                                (fData.submitted || vision_short.touched || vision_short.dirty)
+                              ">
+                                  This is a mandatory field
+                                </p>
                             </div>
                           </div>
                          
@@ -209,6 +219,11 @@
                               <textarea  name="vision_medium" placeholder="Medium Term Vision" #vision_medium="ngModel"
                                 [(ngModel)]="assessment.vision_medium" rows="1" cols="130" pInputText autoResize="autoResize"
                                 ></textarea>
+                                <p class="info-message text-danger" *ngIf="  !vision_medium.value &&                     
+                                (fData.submitted || vision_medium.touched || vision_medium.dirty)
+                              ">
+                                  This is a mandatory field
+                                </p>
                             </div>
                           </div>
                           <div class="col-12 col-md-6">
@@ -218,6 +233,11 @@
                               <textarea name="vision_long" placeholder="Long Term Vision"
                                 #vision_long="ngModel" [(ngModel)]="assessment.vision_long" rows="1" cols="130" pInputText
                                 autoResize="autoResize"></textarea>
+                                <p class="info-message text-danger" *ngIf="  !vision_long.value &&                     
+                                (fData.submitted || vision_long.touched || vision_long.dirty)
+                              ">
+                                  This is a mandatory field
+                                </p>
                             </div>
                           </div>
                         </div>
@@ -232,6 +252,11 @@
                               <textarea name="phase_of_transformation" placeholder="Enter an answer" #phase_of_transformation="ngModel"
                                 [(ngModel)]="assessment.phase_of_transformation" rows="1" cols="130" pInputText autoResize="autoResize"
                                 ></textarea>
+                                <p class="info-message text-danger" *ngIf="  !phase_of_transformation.value &&                     
+                                (fData.submitted || phase_of_transformation.touched || phase_of_transformation.dirty)
+                              ">
+                                  This is a mandatory field
+                                </p>
                             </div>
                           </div>
                         </div>
@@ -245,6 +270,10 @@
                               <textarea  name="change_in_system" placeholder="Enter an answer" #change_in_system="ngModel"
                                 [(ngModel)]="assessment.change_in_system" rows="1" cols="130" pInputText autoResize="autoResize"
                                 ></textarea>
+                                <p class="info-message text-danger" *ngIf="  !change_in_system.value &&                     
+                                (fData.submitted || change_in_system.touched || change_in_system.dirty)
+                              ">This is a mandatory field
+                            </p>
                             </div>
                           </div>
                         </div>
