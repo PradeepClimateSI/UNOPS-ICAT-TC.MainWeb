@@ -190,22 +190,23 @@
 
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="interventionID">Intervention ID*</label> <div type="button" class="pi pi-info-circle ml-10"
+                  <label for="interventionID">Intervention ID</label> 
+                  <!-- <div type="button" class="pi pi-info-circle ml-10"
                   pTooltip="Unique project ID/number identifying
-                  the policy/action/investment"></div>
-                  <input [disabled]="editEntytyId > 0" type="text" maxlength="50" placeholder="ID of the intervention"
+                  the policy/action/investment"></div> -->
+                  <input disabled="true" type="text" maxlength="50" placeholder="{{project.intervention_id}}"
                     #interventionID="ngModel" name="interventionID" pInputText
                     [(ngModel)]="project.intervention_id" [ngModelOptions]="{ standalone: false }"
-                    pInputText required />
+                    pInputText  />
 
 
 
-                  <p class="info-message text-danger" *ngIf="
+                  <!-- <p class="info-message text-danger" *ngIf="
                     !project.intervention_id &&
                     (fData.submitted || interventionID.touched || interventionID.dirty)
                   ">
                     This is a mandatory field
-                  </p>
+                  </p> -->
                 </div>
               </div>
 
@@ -589,6 +590,7 @@
                       name="impleDate"
                       #impleDate="ngModel"
                       [(ngModel)]="dateOfImplementation"  appendTo="body"
+                      (onSelect)="onImplementatonYearChange(dateOfImplementation)"
                       [required]="true"></p-calendar>
                   </div>
                   <p class="info-message text-danger" *ngIf="
