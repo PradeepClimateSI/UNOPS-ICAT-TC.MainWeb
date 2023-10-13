@@ -672,8 +672,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   }
   next(data:any[],type:string){
-  console.log("category",data)
-  data?.filter(investorAssessment => console.log(investorAssessment.relavance,investorAssessment.relavance == 0))
+  // console.log("category",data)
+  // data?.filter(investorAssessment => console.log(investorAssessment.relavance,investorAssessment.relavance == 0))
   if((data?.filter(investorAssessment => 
       (investorAssessment.relavance !== undefined) && 
       (investorAssessment.likelihood !== undefined) && 

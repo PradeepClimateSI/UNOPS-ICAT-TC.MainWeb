@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import { AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, InstitutionControllerServiceProxy, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, PortfolioQuestionDetails, PortfolioQuestions, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, PortfolioQuestionDetails, PortfolioQuestions, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { Dropdown } from 'primeng/dropdown';
@@ -791,12 +791,46 @@ this.tableData =  this.getProductsData();
     }, 2000);
   }
 
-  next() {
+  // next() {
 
-    if (this.activeIndexMain === 1) {
+  //   if (this.activeIndexMain === 1) {
 
-      this.activeIndex2 = this.activeIndex2 + 1;
-      console.log("activeIndex2", this.activeIndex2)
+  //     this.activeIndex2 = this.activeIndex2 + 1;
+  //     console.log("activeIndex2", this.activeIndex2)
+
+  //   }
+  //   if (this.activeIndex === 3 && this.activeIndexMain !== 1) {
+  //     this.activeIndexMain = 1;
+  //     this.activeIndex2=0;
+
+  //   }
+  //   if (this.activeIndex <= 2 && this.activeIndex >= 0 && this.activeIndexMain === 0) {
+  //     this.activeIndex = this.activeIndex + 1;
+  //     console.log(this.activeIndex)
+
+  //   }
+
+  // }
+   next(data:any[],type:string){
+  // console.log("category",data)
+  // data?.filter(investorAssessment => console.log(investorAssessment.relavance,investorAssessment.relavance == 0))
+  if((data?.filter(investorAssessment => 
+      (investorAssessment.relavance !== undefined) && 
+      (investorAssessment.likelihood !== undefined) && 
+      (investorAssessment.likelihood_justification !== undefined) || 
+      (investorAssessment.relavance == 0))?.length === data?.length && type=='process')||
+      (data?.filter(investorAssessment => 
+        (investorAssessment.justification !== undefined) 
+       )?.length === data?.length && type=='outcome')||
+      (data?.filter(sdg => 
+        (sdg.data?.filter((data: { justification: undefined; } ) =>
+          (data.justification!== undefined))?.length === (sdg.data?.length)
+        ))?.length === data?.length && type=='sdg')) {
+    
+    if(this.activeIndexMain ===1 ){
+
+      this.activeIndex2 =this.activeIndex2+1;
+      console.log( "activeIndex2",this.activeIndex2)
 
     }
     if (this.activeIndex === 3 && this.activeIndexMain !== 1) {
@@ -804,12 +838,21 @@ this.tableData =  this.getProductsData();
       this.activeIndex2=0;
 
     }
-    if (this.activeIndex <= 2 && this.activeIndex >= 0 && this.activeIndexMain === 0) {
-      this.activeIndex = this.activeIndex + 1;
-      console.log(this.activeIndex)
+    if (this.activeIndex<=2 && this.activeIndex>=0 && this.activeIndexMain===0){
+      this.activeIndex =this.activeIndex +1;
+      console.log( this.activeIndex)
 
     }
-
+    // return true
+  }else{
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Please fill all mandotory fields',
+      closable: true,
+    });
+  }
+   
   }
 
   getCategory(characteristics: any, category: any) {
