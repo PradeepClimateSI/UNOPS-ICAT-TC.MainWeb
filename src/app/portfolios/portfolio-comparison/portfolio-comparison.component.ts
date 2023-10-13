@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { PortfolioControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { MasterDataService } from 'app/shared/master-data.service';
+import { MessageService } from 'primeng/api';
+import { CreateComparisonReportDto, PortfolioControllerServiceProxy, ReportControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 import * as XLSX from 'xlsx';
 @Component({
@@ -25,6 +27,9 @@ export class PortfolioComparisonComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private portfolioServiceProxy: PortfolioControllerServiceProxy,
+    private reportControllerServiceProxy: ReportControllerServiceProxy,
+    private masterDataService: MasterDataService,
+    private messageService: MessageService
   ) { }
 
   ngOnInit(): void {
@@ -104,6 +109,32 @@ console.log(this.portfolio)
       XLSX.utils.book_append_sheet(workbook, workSheettableComparison, 'Comparison')
       XLSX.writeFile(workbook, "Report.xlsx");
     }, 1000);
+  }
+  genarateReport() {
+    
+    let body = new CreateComparisonReportDto()
+    body.portfolioId = this.portfolioId
+    // body.climateAction = this.selectedClimateAction
+    body.reportName = 'report'
+    this.reportControllerServiceProxy.generateComparisonReport(body).subscribe(res => {
+      console.log("generated repotr", res)
+      if (res) {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Report generated successfully',
+          closable: true,
+        })
+        
+      }
+    }, error => {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to generate report',
+        closable: true,
+      })
+    })
   }
 
 }
