@@ -87,7 +87,7 @@ export class PortfolioDashboardComponent implements OnInit {
     this.loadSelectedTable = false;
     this.loadSelectedTable =false;
     this.averageTCValue =63.78
-    this.tool = 'Portfolio Tool'
+    this.tool = 'PORTFOLIO'
   
 
   

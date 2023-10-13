@@ -66,6 +66,7 @@ import { EnterDataPathComponent } from 'app/data-request-flow/enter-data-path/en
 import { ReviewDataPathComponent } from 'app/data-request-flow/review-data-path/review-data-path/review-data-path.component';
 import { PortfolioTrack4Component } from 'app/Tool/portfolio-track4/portfolio-track4.component';
 import { PortfolioComparisonComponent } from 'app/portfolios/portfolio-comparison/portfolio-comparison.component';
+import { SdgPriorityComponent } from 'app/sdg-priority/sdg-priority.component';
 
 
 const routes: Routes = [
@@ -340,6 +341,13 @@ const routes: Routes = [
   {
     path: 'portfolio-view',
     component: PortfolioComparisonComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'manage-sdgs',
+    component: SdgPriorityComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}

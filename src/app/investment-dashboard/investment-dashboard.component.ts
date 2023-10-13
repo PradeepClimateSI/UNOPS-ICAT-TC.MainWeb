@@ -89,7 +89,7 @@ export class InvestmentDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.averageTCValue =75
-    let tool ='Investment & Private Sector Tool'
+    let tool ='INVESTOR'
 
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
@@ -147,7 +147,7 @@ export class InvestmentDashboardComponent implements OnInit {
   };
   sdgResults(){
     this.sdgDetailsList=[]
-    this.investorProxy.sdgSumCalculate('Investment & Private Sector Tool').subscribe(async (res: any) => {
+    this.investorProxy.sdgSumCalculate('INVESTOR').subscribe(async (res: any) => {
       console.log("sdgDetailsList : ", res)
       this.sdgDetailsList = res;
      this.viewFrequencyofSDGsChart();

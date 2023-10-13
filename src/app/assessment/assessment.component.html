@@ -49,7 +49,7 @@
        <!--  <td>{{results.method}}</td> -->
        <td>{{ results.approach.charAt(0).toUpperCase() + results.approach.slice(1).toLowerCase() }}</td>
         <td>{{results.assessmentType}}</td>
-        <td>{{results.tool}}</td>
+        <td>{{masterDataService.getToolName(results.tool)}}</td>
         <td >
           <button pButton pRipple class="btn btn-primary btn-block text-uppercase" type='submit' (click)="myFunction(results.assessId, results.averageProcess, results.averageOutcome, results.tool,results.method )"> View</button>
         </td>
