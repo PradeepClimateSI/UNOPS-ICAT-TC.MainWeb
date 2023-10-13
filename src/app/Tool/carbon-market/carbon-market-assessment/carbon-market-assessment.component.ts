@@ -76,6 +76,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     await this.getPolicies()
     await this.getSetors()
     this.international_tooltip = 'Name of international or private carbon market standard under which the intervention is registered.'
+    await this.getCharacteristics();
   }
 
   async getSetors() {
@@ -89,6 +90,12 @@ export class CarbonMarketAssessmentComponent implements OnInit {
 
   async getPolicies() {
     this.policies = await this.projectControllerServiceProxy.findAllPolicies().toPromise()
+  }
+  async getCharacteristics() {
+   
+    this.characteristicsList = await this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().toPromise();
+
+   
   }
 
   save(form: NgForm) {
