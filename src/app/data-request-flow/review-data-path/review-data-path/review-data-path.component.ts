@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MasterDataService } from 'app/shared/master-data.service';
 
 @Component({
   selector: 'app-review-data-path',
@@ -7,7 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ReviewDataPathComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    public masterDataService: MasterDataService
+  ) { }
 
   ngOnInit(): void {
   }

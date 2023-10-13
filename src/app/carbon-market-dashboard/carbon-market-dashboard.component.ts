@@ -100,7 +100,7 @@ CMPrerequiste: {
     const tokenPayload = decode<any>(token);
     this.userRole = tokenPayload.role.code;
 
-    this.tool = 'Carbon Market Tool';
+    this.tool = 'CARBON_MARKET';
     let event: any = {};
     event.rows = this.rows;
     event.first = 0;
@@ -154,7 +154,7 @@ CMPrerequiste: {
 
   sdgResults(){
     this.sdgDetailsList=[]
-    this.investorProxy.sdgSumCalculate('Carbon Market Tool').subscribe(async (res: any) => {
+    this.investorProxy.sdgSumCalculate('CARBON_MARKET').subscribe(async (res: any) => {
       console.log("sdgDetailsList : ", res)
       this.sdgDetailsList = res;
       setTimeout(() => {

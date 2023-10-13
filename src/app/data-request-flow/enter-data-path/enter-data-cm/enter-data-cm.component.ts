@@ -148,7 +148,7 @@ export class EnterDataCmComponent implements OnInit {
           climateActionId,
           year,
           this.userName,
-          'Carbon Market Tool',
+          'CARBON_MARKET',
           '1234'
         )
         .subscribe((a) => {

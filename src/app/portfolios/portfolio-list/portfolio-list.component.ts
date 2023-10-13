@@ -19,7 +19,6 @@ export class PortfolioListComponent implements OnInit {
   ngOnInit(): void {
 
     this.portfolioServiceProxy.getAll().subscribe(async (res: any) => {
-      console.log("assesss : ", res)
       this.portfolioList = res;
      });
 
@@ -36,10 +35,7 @@ export class PortfolioListComponent implements OnInit {
 
 
   viewPortfolio(portfolio : any){
-    console.log("mmm : ", portfolio)
-
       this.router.navigate(['app/portfolio-view'], { queryParams: { id: portfolio.id } });
-      console.log('hit', portfolio.id);
 
   }
 }

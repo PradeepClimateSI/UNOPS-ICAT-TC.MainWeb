@@ -35,7 +35,7 @@
                         </div>
                         <div class="p-field p-2">
                             <label for="Level of implementation">Geographical Areas Covered *</label>
-                            <p-multiSelect appendTo="body" name="investorAssessment.geographical_areas_covered"
+                            <p-multiSelect appendTo="body" name="geographical_areas_covered"
                                 #type="ngModel" placeholder="Select Geographical Areas Covered"
                                 [(ngModel)]="geographicalAreasCoveredArr" [options]="levelOfImplementation"
                                 optionLabel="name" [required]="true"></p-multiSelect>
@@ -325,6 +325,34 @@
                             <h6>Barriers &nbsp; <p-button  icon="pi pi-plus "  styleClass="p-button-sm p-button-rounded"  (click)="showDialog()"></p-button></h6>
                           </div>
                           <p-dialog header="Add Barrier" [(visible)]="barrierBox"  [modal]="true" appendTo="body"  [style]="{width: '50vw'}"  >
+
+                            <div class="tooltip2-container">
+                              <div>
+                                <div class="tooltip2-icon">i</div>
+                                <div class="tooltip2-text">
+                                  <p-table [value]="tableData" [tableStyle]="{ 'min-width': '60rem' }">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Barrier</th>
+                                            <th>Explanation</th>
+                                            <th>Characteristics Affected</th>
+                                            <th>Is the barrier directly affected by the intervention?</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-tableData>
+                                        <tr>
+                                            <td>{{tableData.barrier}}</td>
+                                            <td>{{tableData.explanation}}</td>
+                                            <td>{{tableData.cha}}</td>
+                                            <td>{{tableData.ans}}</td>
+                                        </tr>
+                                    </ng-template>
+                                  </p-table>
+                                </div>
+            
+                              </div>
+                            </div>
+
                             <ng-template pTemplate="p-dialog-content">
                             <div class="row p-2">
                               <div class="col-12 col-md-6">

@@ -24,28 +24,20 @@ export class PortfolioAlignmentComponent {
     if (data){
       if (data.name){
         switch (data.value) {
-          case -3:
-            return '#ec6665';
           case -2:
-            return '#ed816c';
+            return '#f8696b';
           case -1:
-            return '#f19f70';
+            return '#fa9473';
           case 0:
-            return '#f4b979';
+            return '#fdbf7b';
           case 1:
-            return '#f9d57f';
+            return '#ffeb84';
           case 2:
-            return '#fcf084';
+            return '#ccde82';
           case 3:
-            return '#e0e885';
+            return '#98ce7f';
           case 4:
-            return '#c1e083';
-          case 5:
-            return '#a3d481';
-          case 6:
-            return '#84cc80';
-          case 7:
-            return '#65c17e';
+            return '#63be7b';
           default:
             return 'white';
         }

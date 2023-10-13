@@ -907,7 +907,7 @@ console.log("methiddd,", this.methId)
     methodology : this.methId,
     categoryData :categoryDataArray,
     policyId : this.policyId,
-    tool : 'Portfolio Tool',
+    tool : 'PORTFOLIO',
     assessment_type : data.assessment_type,
     date1 : data.date1,
     date2 : data.date2,

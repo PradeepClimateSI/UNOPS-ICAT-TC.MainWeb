@@ -54,6 +54,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   finalSectors:Sector[]=[]
   characteristicsList: Characteristics[] = [];
   isStageDisble:boolean=false;
+  tableData : any;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -66,6 +67,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
+    this.tableData =  this.getProductsData();
     this.assessment_types = this.masterDataService.assessment_type
     this.impact_types = this.masterDataService.impact_types
     this.sectorial_boundires = this.masterDataService.sectorial_boundries
@@ -99,7 +101,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   }
 
   save(form: NgForm) {
-    this.assessment.tool = 'Carbon Market Tool'
+    this.assessment.tool = 'CARBON_MARKET'
     this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
     this.assessment.assessment_approach = 'DIRECT'
     this.isStageDisble =true;
@@ -147,7 +149,6 @@ export class CarbonMarketAssessmentComponent implements OnInit {
                     sec.sector = sector
                     toolsMultiselectDto.sectors.push(sec)
                   }
-                  console.log(this.geographicalAreasCoveredArr)
                   for (let geo of this.geographicalAreasCoveredArr){
                     let area = new GeographicalAreasCovered()
                     area.assessment= res
@@ -234,7 +235,6 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   }
 
   pushBarriers(barrier:any){
-    console.log("barrier",barrier)
     this.finalBarrierList.push(barrier)
   
   }
@@ -254,11 +254,33 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     
   }
   showDialog(){
-    this.barrierBox =true;
-    console.log(this.barrierBox)  
+    this.barrierBox =true; 
   }
   onItemSelectSectors($event: any) {
    
+  }
+
+  getProductsData() {
+    return [
+        {
+            barrier: 'Lack of financial capacity',
+            explanation: 'Some plant operators simply do not have the financial capacity to introduce the technology or to train staff adequately',
+            cha: 'Scale up, Beneficiaries',
+            ans: 'No',
+        },
+        {
+          barrier: 'Lack of public awareness of environmental and private economy benefits of EE measures and conservation',
+          explanation: 'Lack of awareness may also lead to reluctance to introduce low-carbon technologies, such as EV or HEV, which may disrupt conventional technologies',
+          cha: 'Awareness, Behaviour',
+          ans: 'Yes',
+      },
+      {
+        barrier: 'Lack of institutional support',
+        explanation: 'Insufficient support from municipal government authorities hinder the adoption and proper implementation of the initiative',
+        cha: 'Institutional and regulatory',
+        ans: 'No',
+    },
+    ]
   }
 
 }

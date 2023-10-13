@@ -1,4 +1,4 @@
-import { AfterContentChecked, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, ElementRef, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Location } from '@angular/common';
 import { } from 'googlemaps';
@@ -57,7 +57,7 @@ import { GlobalArrayService } from 'app/shared/global-documents/global-documents
   templateUrl: './climate-action.component.html',
   styleUrls: ['./climate-action.component.css']
 })
-export class ClimateActionComponent implements OnInit {
+export class ClimateActionComponent implements OnInit  {
   isSaving: boolean = false;
   project: Project = new Project();
   policyBar: PolicyBarriers[] = [];
@@ -167,7 +167,10 @@ export class ClimateActionComponent implements OnInit {
   getUserEnterdCountry: any = '';
   disbaleNdcmappedFromDB: number;
   @ViewChild('pdfTable') pdfTable: ElementRef;
-
+  lastId: any;
+  int_id_sectors='Sector';
+  int_id_year='YYYY';
+  int_id_country='Country';
   constructor(
     private serviceProxy: ServiceProxy,
     private countryProxy: CountryControllerServiceProxy,
@@ -194,7 +197,7 @@ export class ClimateActionComponent implements OnInit {
     this.cdref.detectChanges();
  }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
 
     // this.project=new Project()
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;
@@ -252,7 +255,11 @@ export class ClimateActionComponent implements OnInit {
 
     });
 
-
+     await this.projectProxy.getLastID().subscribe(async (res: any) => {
+      // console.log("iddd : ", res)
+      this.lastId = (res[0].id +1).toString().padStart(5, '0');
+       console.log("iddd : ", this.lastId)
+     });
     // this.countryProxy.getCountry(this.counID).subscribe((res:any)=>{
     //   console.log('++++++++++++++++',res)
     //   this.countryList.push(res);
@@ -355,12 +362,16 @@ export class ClimateActionComponent implements OnInit {
           if(this.userRole=='External'){
             this.isExternalUser=true
             console.log("external user")
+            this.int_id_country='External'
+            this.makeInterventionID();
           }else{
             console.log("sss",res)
           this.countryList.push(res)
           console.log("this.countryList",this.countryList)
           this.project.country =res;
           this.isSector = true;
+          this.int_id_country =res.code;
+          this.makeInterventionID();
           }
           
           // console.log('tokenPayloadmasssge',res);
@@ -823,6 +834,38 @@ export class ClimateActionComponent implements OnInit {
         });
     }
   }
+  onImplementatonYearChange(date:Date){
+    console.log("////////////")
+    this.int_id_year=date.getFullYear().toString()
+    this.makeInterventionID()
+  }
+   makeInterventionID(){
+    if(!this.editEntytyId){
+      console.log("changes",this.finalSectors.length)
+      this.int_id_country=this.project.country.code;
+      if(this.finalSectors.length==1){
+        this.int_id_sectors=this.finalSectors[0].name
+        // console.log("changes",this.sectorList[0].name)
+      }
+      else if(this.finalSectors.length>1){
+        this.int_id_sectors='Multi'
+        console.log("changes",'Multi')
+      }
+      else if(this.finalSectors.length==0){
+        this.int_id_sectors='Sector'
+        console.log("changes",'Multi')
+      }
+      // Do something when selectedVariable1 changes
+      if(this.isExternalUser){
+        this.int_id_country='External'
+      }
+      this.project.intervention_id=this.int_id_country+'-'+ this.int_id_sectors+'-'+this.int_id_year+'-'+this.lastId
+  
+    }
+   
+      
+    
+  }
   changInstitute(event: any) {
     console.log(this.project.mappedInstitution);
   }
@@ -1003,6 +1046,20 @@ export class ClimateActionComponent implements OnInit {
       }
     }
   }
+  getNext(){
+    // const lastNumber = parseInt(this.lastId.substr(6), 10);
+
+    // Generate the next number by incrementing the last number
+    const nextNumber = this.lastId + 1;
+
+    // Pad the next number with zeros to ensure it has three digits
+    const paddedNumber = nextNumber.toString().padStart(4, '0');
+
+    // Construct the nextId in the format "2023PTxxx"
+    const nextId = this.project.country?.code +this.dateOfImplementation+ paddedNumber;
+
+    return nextId
+  }
 
   onnameKeyDown(event: any) {
     console.log('============= Event ===============');
@@ -1074,7 +1131,7 @@ export class ClimateActionComponent implements OnInit {
       this.setMarkerOnUpdateInit();
     }, 3000);
   }
-
+ 
   onCountryChnage() {
     this.getUserEnterdCountry = this.project.country;
 
@@ -1096,6 +1153,7 @@ export class ClimateActionComponent implements OnInit {
 
   onSectorChange(event: any) {
     console.log("event", event, "sector",this.project.sector, "country",this.project.country)
+    this.makeInterventionID()
     // if (this.project.sector && this.project.country) {
     //   this.serviceProxy
     //     .getManyBaseNdcControllerAggregatedAction(
