@@ -123,7 +123,8 @@ export class PortfolioTrack4Component implements OnInit {
   isDownloading: boolean = true;
   isDownloadMode: number = 0;
   sectorsJoined :string='';
-  finalSectors:Sector[]=[]
+  finalSectors:Sector[]=[];
+  isStageDisble:boolean=false;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -405,6 +406,7 @@ this.tableData =  this.getProductsData();
 
   save(form: NgForm) {
     console.log("form", form)
+    this.isStageDisble =true;
     // this.showSections = true
     //save assessment
 
@@ -426,7 +428,7 @@ this.tableData =  this.getProductsData();
               this.messageService.add({
                 severity: 'success',
                 summary: 'Success',
-                detail: 'Intervention  has been saved successfully',
+                detail: 'Assessment has been created successfully',
                 closable: true,
               },            
               
@@ -500,8 +502,8 @@ this.tableData =  this.getProductsData();
 
   }
   pushBarriers(barrier:any){
-    console.log("barrier",barrier)
     this.finalBarrierList.push(barrier)
+    this.barrierSelected = new BarrierSelected()
   
   }
   barriersNameArray(Characteristics:any[]){
@@ -731,7 +733,7 @@ console.log("wwwwww", this.outcomeData)
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Assessment created successfully',
+            detail: 'Assessment has been created successfully',
             closable: true,
           })
          this.showResults();
@@ -771,7 +773,7 @@ console.log("wwwwww", this.outcomeData)
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Assessment created successfully',
+            detail: 'Assessment has been created successfully',
             closable: true,
           })
           this.showResults();

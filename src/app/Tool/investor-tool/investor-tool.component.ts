@@ -127,6 +127,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   tabLoading: boolean=false;
   characteristicsLoaded:boolean = false;
   categoriesLoaded:boolean = false;
+  isStageDisble:boolean=false;
   tableData : any;
 
   constructor(
@@ -332,6 +333,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   save(form: NgForm) {
     console.log("form", form)
+    this.isStageDisble =true;
     // this.showSections = true
     //save assessment
     this.assessment.tool = 'INVESTOR'
@@ -353,7 +355,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
             this.messageService.add({
               severity: 'success',
               summary: 'Success',
-              detail: 'Intervention  has been saved successfully',
+              detail: 'Assessment has been created successfully',
               closable: true,
             },            
             
@@ -605,7 +607,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Assessment created successfully',
+            detail: 'Assessment has been created successfully',
             closable: true,
           })
           this.showResults();
