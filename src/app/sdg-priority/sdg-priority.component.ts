@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MasterDataService } from 'app/shared/master-data.service';
-import { InvestorToolControllerServiceProxy, PortfolioSdg, SdgPriority, SdgPriorityDto, ServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Country, InvestorToolControllerServiceProxy, PortfolioSdg, SdgPriority, SdgPriorityDto, ServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { MessageService } from 'primeng/api';
 
@@ -15,7 +15,7 @@ export class SdgPriorityComponent implements OnInit{
   priorities: any[]
   sdgPriorities: SdgPriority[] = []
   countryId: any;
-  country: import("/Users/sanduni/Documents/ClimateSI/TC_Tools/tc-web/src/shared/service-proxies/service-proxies").Country;
+  country: Country;
   savedPriorities: any;
 
   constructor(
