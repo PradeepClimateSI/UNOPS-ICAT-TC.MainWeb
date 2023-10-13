@@ -498,8 +498,8 @@ export class PortfolioTrack4Component implements OnInit {
 
   }
   pushBarriers(barrier:any){
-    console.log("barrier",barrier)
     this.finalBarrierList.push(barrier)
+    this.barrierSelected = new BarrierSelected()
   
   }
   barriersNameArray(Characteristics:any[]){
