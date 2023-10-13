@@ -19,10 +19,12 @@ export class DashboardComponent implements OnInit {
   clickcarbon: boolean = false;
   clickInvest: boolean = false;
   clickpor: boolean = false;
+  clickall: boolean = false;
 
   isInvesmentTool : boolean = false;
   isCarbonMarketTool : boolean = false;
   isPortfolioTool : boolean = false;
+  isAllTool : boolean = false;
 
   indtituteadmin: boolean = false;
   userType: string = "countryAdmin";
@@ -86,7 +88,10 @@ export class DashboardComponent implements OnInit {
       console.log('Countryy',res) 
       this.isCarbonMarketTool = res.carboneMarketTool;
       this.isInvesmentTool = res.investmentTool;
-      this.isPortfolioTool = res.portfoloaTool;    
+      this.isPortfolioTool = res.portfoloaTool;   
+      if(this.isCarbonMarketTool || this.isInvesmentTool || this.isPortfolioTool ){
+        this.isAllTool =true;
+      } 
       
       console.log('tooll22',this.isCarbonMarketTool,this.isInvesmentTool,this.isPortfolioTool)
 
@@ -97,6 +102,8 @@ export class DashboardComponent implements OnInit {
            this.goToInvestment();
          } else if (this.isPortfolioTool){
            this.goToPortfolio();
+         } else if(this.isAllTool){
+          this.goToAllTool
          }
       }else{
         this.clickcarbon = true;
@@ -130,6 +137,7 @@ export class DashboardComponent implements OnInit {
     this.clickcarbon = false;
     this.clickInvest = true;
     this.clickpor= false;
+    this.clickall=false;
    // this.router.navigate(['/app/investment-dashboard'],);
 
    this.SelectedTool =1;
@@ -139,6 +147,7 @@ export class DashboardComponent implements OnInit {
     this.clickcarbon = false;
     this.clickInvest = false;
     this.clickpor= true;
+    this.clickall=false;
     //this.router.navigate(['/app/portfolio-dashboard'],);
     this.SelectedTool = 2
   }
@@ -147,8 +156,16 @@ export class DashboardComponent implements OnInit {
     this.clickcarbon = true;
     this.clickInvest = false;
     this.clickpor= false;
+    this.clickall=false;
     //this.router.navigate(['/app/carbon-dashboard'],);
     this.SelectedTool = 3
+  }
+  goToAllTool(){
+    this.clickcarbon = false;
+    this.clickInvest = false;
+    this.clickpor= false;
+    this.clickall=true;
+    this.SelectedTool = 4;
   }
 
 

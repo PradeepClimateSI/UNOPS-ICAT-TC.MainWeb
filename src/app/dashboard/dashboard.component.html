@@ -38,7 +38,7 @@
           </div>
         </div>
 
-<div style="padding-top: 30px; padding-bottom: 30px;"> <h3>Select a tool below to view an overview of the interventions</h3></div>
+<div style="padding-top: 30px; padding-bottom: 30px;"> <h3>Select an intervention type to get an overview of the assessed interventions</h3></div>
 
         <div class="p-grid p-fluid ">
             <div class="row">
@@ -82,6 +82,21 @@
                         label="Portfolio">
                     </button>
                 </div>
+
+                <div class="col-md-3" *ngIf="this.isAllTool ||  userRole ==loginRole.External">
+                  <button
+
+                      class="p-button-lg"
+                      [style.background-color]="(clickall) ? 'green' :'blue'"
+                      type="button"
+                      pButton
+                      pRipple
+                      label="All Option"
+                      [disabled]="!this.isAllTool &&  userRole !=loginRole.External"
+                      (click)="goToAllTool()">
+                  </button>
+
+              </div>
              </div>
         </div>
     </div>
@@ -98,6 +113,9 @@
 </div>
 <div *ngIf="SelectedTool === 3">
   <app-carbon-market-dashboard></app-carbon-market-dashboard>
+</div>
+<div *ngIf="SelectedTool === 4">
+  <app-all-too-dashbord></app-all-too-dashbord>
 </div>
 <!--<ngx-org-chart direction="horizontal" [nodes]="nodes" (itemClick)="test($event)"></ngx-org-chart>-->
 

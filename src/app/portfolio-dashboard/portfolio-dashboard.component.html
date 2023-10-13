@@ -79,7 +79,8 @@
 
 <div class="p-grid p-fluid card m-3">
   <div class="row text-center">
-    <table class="heatmap" style=" text-align: center">
+    <app-heat-map  id="heatmap" [xData]="xData" [yData]="yData" [score]="heatMapScore" [showOp]="true" [tableData]="heatMapData"></app-heat-map>
+    <!-- <table class="heatmap" style=" text-align: center">
     
       <tbody>
         <tr>
@@ -114,7 +115,7 @@
           </ng-container>
         </tr>
       </tbody>
-    </table>
+    </table> -->
   </div>
 </div>
 
@@ -161,7 +162,8 @@
   <div class="col-md-6 col-12 d-flex align-items-stretch">
     <div class="p-grid p-fluid card m-3" >
       <div class="row text-center" style="min-height: 350px;">
-        <h3>Frequency of SDGs</h3>
+        <!-- <h3>Frequency of SDGs</h3> -->
+        <h3>SDGs impacted by the assessed interventions</h3>
         <div
           *ngIf="sdgDetailsList"
           class="col-12 mt-20"
@@ -188,7 +190,8 @@
   <div *ngIf="!selectedPortfolio" class="col-md-6 col-12 d-flex align-items-stretch">
     <div class="p-grid p-fluid card m-3">
       <div class="row text-center">
-        <h3>Sectors Targeted</h3>
+        <!-- <h3>Sectors Targeted</h3> -->
+        <h3>Sectors represented</h3>
         <div
           *ngIf="sectorCount"
           class="col-12 mt-20"
@@ -214,7 +217,7 @@
   </div>
 </div>
 
-<p-overlayPanel [hidden]="pointTableDatas.length==0" #op>
+<!-- <p-overlayPanel [hidden]="pointTableDatas.length==0" #op>
   <ng-template pTemplate="content">
     <div *ngFor="let pointTableData of pointTableDatas" style=" border-style: solid;" class="m-3 p-1" >
 
@@ -227,10 +230,6 @@
         <div class="col-4">Intervation Name :</div>
         <div class="col-8">{{pointTableData.climateAction?.policyName}}</div>
       </div>
-      <!-- <div  class="row">
-        <div class="col-4">Assessment period :</div>
-        <div class="col-8"></div>
-      </div> -->
       <div  class="row">
         <div class="col-4">Process score :</div>
         <div class="col-8">{{pointTableData.process_score}}</div>
@@ -242,4 +241,4 @@
     </div>
     
 </ng-template>
-</p-overlayPanel>
+</p-overlayPanel> -->

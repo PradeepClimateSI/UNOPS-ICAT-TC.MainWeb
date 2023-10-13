@@ -125,6 +125,9 @@ import { PortfolioProcessDataComponent } from "./portfolios/portfolio-process-da
 import { PortfolioOutcomeDataComponent } from './portfolios/portfolio-outcome-data/portfolio-outcome-data.component';
 import { PortfolioAggregationComponent } from './portfolios/portfolio-aggregation/portfolio-aggregation.component';
 import { PortfolioComparisonComponent } from './portfolios/portfolio-comparison/portfolio-comparison.component';
+import { HeatMapComponent } from './charts/heat-map/heat-map.component';
+import { AllTooDashbordComponent } from './dashboard/all-too-dashbord/all-too-dashbord.component';
+import { PortfolioAlignmentComponent } from './portfolios/portfolio-alignment/portfolio-alignment.component';
 
 
 
@@ -207,6 +210,9 @@ export function getAuditRemoteServiceBaseUrl(): string {
     PortfolioOutcomeDataComponent,
     PortfolioAggregationComponent,
     PortfolioComparisonComponent,
+    HeatMapComponent,
+    AllTooDashbordComponent,
+    PortfolioAlignmentComponent,
 
   ],
 

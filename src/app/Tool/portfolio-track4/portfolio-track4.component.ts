@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import { Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, ImpactCovered, InstitutionControllerServiceProxy, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PortfolioQuestionDetails, PortfolioQuestions, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, InstitutionControllerServiceProxy, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, PortfolioQuestionDetails, PortfolioQuestions, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { Dropdown } from 'primeng/dropdown';
@@ -114,6 +114,16 @@ export class PortfolioTrack4Component implements OnInit {
   tabLoading: boolean=false;
   characteristicsLoaded:boolean = false;
   categoriesLoaded:boolean = false;
+  geographicalAreasCoveredArr: GeographicalAreasCoveredDto[] = []
+
+  barrierBox:boolean=false;
+  barrierSelected:BarrierSelected= new BarrierSelected();
+  finalBarrierList :BarrierSelected[]=[];
+  barrierArray:PolicyBarriers[];
+  isDownloading: boolean = true;
+  isDownloadMode: number = 0;
+  sectorsJoined :string='';
+  finalSectors:Sector[]=[]
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -148,6 +158,8 @@ export class PortfolioTrack4Component implements OnInit {
 
   async ngOnInit(): Promise<void> {
  this.load = false; //need to change as false
+// this.isSavedAssessment = true //need to change as false
+
  this.selectedApproach = 'Direct';
  this.assessment.assessment_approach = 'Direct';
 
@@ -398,16 +410,45 @@ export class PortfolioTrack4Component implements OnInit {
     if (form.valid) {
       this.methodologyAssessmentControllerServiceProxy.saveAssessment(this.assessment)
         .subscribe(res => {
-          console.log("res", res)
           this.load = true
           if (res) {
 
+            let allBarriersSelected = new AllBarriersSelected()
+              allBarriersSelected.allBarriers =this.finalBarrierList
+              allBarriersSelected.climateAction =res.climateAction
+              allBarriersSelected.assessment =res;
 
+            this.projectControllerServiceProxy.policyBar(allBarriersSelected).subscribe((res) => {
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Intervention  has been saved successfully',
+                closable: true,
+              },            
+              
+              );
+            },
+            (err) => {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error.',
+                detail: 'Internal server error in policy barriers',
+                sticky: true,
+              });
+            })
+            this.geographicalAreasCoveredArr = this.geographicalAreasCoveredArr.map(a => {
+              let _a = new GeographicalAreasCoveredDto()
+              _a.id = a.id
+              _a.name = a.name
+              _a.code = a.code
+              return _a
+            })  
             this.investorAssessment.assessment = res;
             this.mainAssessment = res
             this.createInvestorToolDto.sectors = this.sectorArray;
             this.createInvestorToolDto.impacts = this.impactArray;
             this.createInvestorToolDto.investortool = this.investorAssessment;
+            this.createInvestorToolDto.geographicalAreas = this.geographicalAreasCoveredArr
 
             this.investorToolControllerproxy.createinvestorToolAssessment(this.createInvestorToolDto)
               .subscribe(_res => {
@@ -454,8 +495,30 @@ export class PortfolioTrack4Component implements OnInit {
     }
 
   }
+  pushBarriers(barrier:any){
+    console.log("barrier",barrier)
+    this.finalBarrierList.push(barrier)
+  
+  }
+  barriersNameArray(Characteristics:any[]){
+    if (Characteristics?.length>0){
+      let charArray = Characteristics.map(x=>{return x.name});
+      return charArray.join(", ")
+    }
+    else{
+      return "-"
+    }   
 
+  }
 
+  toDownload() {
+    this.isDownloadMode = 1;
+    
+  }
+  showDialog(){
+    this.barrierBox =true;
+    console.log(this.barrierBox)  
+  }
   selectedTrack: any
 
   onChangeTrack(event: any) {
@@ -535,9 +598,11 @@ export class PortfolioTrack4Component implements OnInit {
 
   onsubmit(form: NgForm) {
 
-     for(let item of this.processData){
+    console.log("processData ---", this.processData)
+      console.log("outcomeData ---", this.outcomeData)
+    for(let item of this.processData){
       for(let item2 of item.data){
-        if(item2.likelihood == null || item2.relavance == null){
+        if((item2.likelihood == null || item2.relavance == null) && item2.relavance != 0){
           this.messageService.add({
             severity: 'error',
             summary: 'Warning',
@@ -550,6 +615,68 @@ export class PortfolioTrack4Component implements OnInit {
       }
     }
 
+    for(let item of this.processData){
+      for(let item2 of item.data){
+        if((item2.likelihood_justification == null || item2.likelihood_justification === "") &&  item2.relavance != 0){
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Warning',
+            detail: 'Fill all mandatory justification fields',
+            closable: true,
+          })
+
+          return
+        }
+      }
+    }
+
+    for(let item of this.outcomeData){
+      if(item.categoryID == 5 || item.categoryID ==7 || item.categoryID ==9 || item.categoryID ==10){
+
+        for(let item2 of item.data){
+          if(item2.justification == null || item2.justification === ""){
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Warning',
+              detail: 'Fill all mandatory justification fields',
+              closable: true,
+            })
+  
+            return
+          }
+        }
+      }
+    }
+    
+    for(let item of this.sdgDataSendArray2){
+      for(let item2 of item.data){
+        if(item2.justification == null || item2.justification === ""){
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Warning',
+            detail: 'Fill all mandatory justification fields',
+            closable: true,
+          })
+
+          return
+        }
+      }
+    }
+
+    for(let item of this.sdgDataSendArray4){
+      for(let item2 of item.data){
+        if(item2.justification == null || item2.justification === ""){
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Warning',
+            detail: 'Fill all mandatory justification fields',
+            closable: true,
+          })
+
+          return
+        }
+      }
+    }
 
     console.log("formDataa", form.value)
     console.log("assesssssssss", this.assessment)

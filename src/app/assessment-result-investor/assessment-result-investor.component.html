@@ -52,7 +52,7 @@
               <p>{{levelofImplemetation}}</p>
             </div> -->
 
-            <p>{{geographicalAreasCovered}}</p>
+            <p>{{geographicalAreasCovered ? geographicalAreasCovered : '-'}}</p>
 
             <p>{{sectorList.join(', ')}}</p>
 
@@ -452,7 +452,7 @@
             <ng-template pTemplate="header">
               <tr>
                 <th class="table-header-main" colspan="4">Scale</th>
-                <th class="table-header-main" colspan="7">Outcomes</th>
+                <th class="table-header-main" colspan="6">Outcomes</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData>
@@ -460,7 +460,7 @@
                   <td colspan="4" class="table-header-left">Intervention Information</td>
                   <td  class="table-header">SDG</td>
                   <td colspan="5" class="table-header">Sustainable Development</td>
-                  <td  class="table-header">Weights</td>
+                  <!-- <td  class="table-header">Weights</td> -->
                 </tr>
                 <tr>
                   <td class="table-header">ID</td>
@@ -473,7 +473,7 @@
                   <td class="table-header">Subnational/regional/municipal or sub sectorial level</td>
                   <td class="table-header">SDG Score</td>
                   <td class="table-header"></td>
-                  <td class="table-header"></td>
+                  <!-- <td class="table-header"></td> -->
                 </tr>
                
                   <ng-container *ngFor="let char of scale_SD.characteristicData">
@@ -488,7 +488,6 @@
                       </ng-container>
                       <td class="table-data">{{char.sdg_score!=null?(char.sdg_score):'Empty'}}</td>
                       <td class="table-data"></td>
-                      <td class="table-data"></td>
                   </ng-container>
                   <tr *ngIf="scale_SD.characteristicData.length==0">
                     <td  class="table-data">{{(intervention.intervention_id)?(intervention.intervention_id):'-'}}</td>
@@ -501,13 +500,14 @@
                     <td  class="table-data">Empty</td>
                     <td  class="table-data">Empty</td>
                     <td class="table-data"></td>
-                    <td class="table-data"></td>
+                    <!-- <td class="table-data"></td> -->
                   </tr>
                 <tr>
                   <td  class="table-header" colspan="8">Category Score</td>
                   <td class="table-data">{{(scale_SD.category_score.value!=null)?(scale_SD.category_score.value):'Empty'}}</td>
                   <td class="table-data">{{(scale_SD.category_score.value!=null)?(scale_SD.category_score.value + "-" + scale_SD.category_score.name):'Empty'}}</td>
-                  <td class="table-data">{{scale_SD.category_weight?scale_SD.category_weight+'%':'-'}}</td>
+                  <!-- <td class="table-data">{{scale_SD.category_weight?scale_SD.category_weight+'%':'-'}}</td> -->
+                  <!-- <td class="table-data"></td> -->
                 </tr>
                   
             </ng-template>
@@ -576,7 +576,15 @@
                 <td  class="table-header" colspan="8">Category Score</td>
                 <td class="table-data">{{(sustained_SD.category_score.value!=null)?(sustained_SD.category_score.value):'Empty'}}</td>
                 <td class="table-data">{{(sustained_SD.category_score.value!=null)?(sustained_SD.category_score.value + "-" + sustained_SD.category_score.name):'Empty'}}</td>
-                <td class="table-data">{{sustained_SD.category_weight?sustained_SD.category_weight+'%':'-'}}</td>
+                <!-- <td class="table-data">{{sustained_SD.category_weight?sustained_SD.category_weight+'%':'-'}}</td> -->
+                <td class="table-data"></td>
+              </tr>
+              <tr>
+                <td  class="table-header" colspan="8">Aggregated SDG Outcome Score</td>
+                <td class="table-data">{{(aggregated_score.value!=null)?(aggregated_score.value):'Empty'}}</td>
+                <td class="table-data">{{(aggregated_score.value!=null)?(aggregated_score.value + "-" + aggregated_score.name):'Empty'}}</td>
+                <td class="table-data">50%</td>
+                <!-- <td class="table-data">{{sustained_SD.category_weight?sustained_SD.category_weight+'%':'-'}}</td> -->
               </tr>
                 
           </ng-template>
@@ -692,17 +700,15 @@
       <br><br> -->
       
       </div>
-      <div id="heatmap">
-        <table id="heatmap" class="heatmap" style=" text-align: center;">
+      <div id="heatmap" class="card">
+        <app-heat-map id="heatmap" [xData]="xData" [yData]="yData" [score]="heatMapScore"></app-heat-map>
+        <!-- <table id="heatmap" class="heatmap" style=" text-align: center;">
           
           <tbody>
               <tr>
                   <td></td>
                   <td colspan="8">Outcome: Extent and sustained nature of the transformation</td>
               </tr>
-              <!-- <tr>
-                  <td rowspan="7">Process: Transformational change supported</td>
-              </tr> -->
               <tr>
                 <td rowspan="6">Process: Transformational change supported</td>
                   <td></td>
@@ -719,7 +725,7 @@
                   </ng-container>
               </tr>
           </tbody>
-      </table>
+      </table> -->
       </div>
     </div>
   </div>

@@ -29,7 +29,7 @@ export class MasterDataService {
   private _sectorial_boundries: {name: string, id: number, code: string}[] = []
   private _impact_categories: {name: string, id: number, code: string, type: string}[] = []
   private _impact_characteristics: {name: string, id: number, code: string, type: string[]}[] = []
-  private _level_of_implemetation: {name: string, id: number}[] = []
+  private _level_of_implemetation: {name: string, id: number, code: string}[] = []
   private _impact_covered: {name: string, id: number}[] = []
   private _assessment_method: {name: string, id: number}[] = []
   private _assessment_approach2: {name: string, id: number}[] = []
@@ -197,7 +197,7 @@ export class MasterDataService {
       { id: 8, name: "Disincentives", code: "DISINCENTIVES", type:[ "INCENTIVES"] },
       { id: 9, name: "Institutional and regulatory", code: "INSTITUTIONAL_AND_REGULATORY", type: ["INCENTIVES"] },
       { id: 10, name: "Awareness", code: "AWARENESS", type: ["NORMS"] },
-      { id: 11, name: "Behaviour", code: "BEHAVIOUR", type: ["NORMS"] },
+      { id: 11, name: "Behavior", code: "BEHAVIOUR", type: ["NORMS"] },
       { id: 12, name: "Social norms", code: "SOCIAL_NORMS", type: ["NORMS"] },
       { id: 13, name: "Macro level", code: "MACRO_LEVEL", type: ["SCALE_OF_OUTCOME"] },
       { id: 14, name: "Medium level", code: "MEDIUM_LEVEL", type: ["SCALE_OF_OUTCOME"] },
@@ -209,9 +209,9 @@ export class MasterDataService {
     ]
 
     this.level_of_implemetation = [
-      { id: 1, name: "International" },
-      { id: 2, name: "National/sectorial" },
-      { id: 3, name: "Sub-national/sub-sectorial" },
+      { id: 1, name: "International", code: "INTERNATIONAL" },
+      { id: 2, name: "National/sectorial", code: "NATIONAL" },
+      { id: 3, name: "Sub-national/sub-sectorial", code: "SUBNATIONAL" },
 
     ]
 
@@ -250,9 +250,9 @@ export class MasterDataService {
 
     this.likelihood = [
       {  id: "Very unlikely (0-10%)",value:0 },
-      {  id: "Unlikely (10-33%)",value:1  },
-      {  id: "Possible (33-66%)",value:2 },
-      {  id: "Likely (66-90%)",value:3 },
+      {  id: "Unlikely (10-30%)",value:1  },
+      {  id: "Possible (30-60%)",value:2 },
+      {  id: "Likely (60-90%)",value:3 },
       {  id: "Very likely (90-100%)",value:4 },
 
     ]
@@ -265,17 +265,17 @@ export class MasterDataService {
       {  id: "-1 - Minor Negative",value:-1 },
       {  id: "-2 - Moderate Negative",value:-2 },
       {  id: "-3 - Major Negative",value:-3 },
-      {  id: "Empty",value:null },
+      {  id: "Outside assessment boundaries",value:null },
 
     ]
 
     this.outcomeSustainedScore = [
       {  id: "3 - Very likely (90-100%)",value:3 },
-      {  id: "2 - Likely (66-90%)",value:2  },
-      {  id: "1 - Possible (33-66%)",value:1 },
-      {  id: "0 - Less likely (10-33%)",value:0 },
+      {  id: "2 - Likely (60-90%)",value:2  },
+      {  id: "1 - Possible (30-60%)",value:1 },
+      {  id: "0 - Less likely (10-30%)",value:0 },
       {  id: "-1 - Unlikely (0-10%)",value:-1 },
-      {  id: "Empty",value:null },
+      {  id: "Outside assessment boundaries",value:null },
     ]
 
     this.assessment_approach2 = [
@@ -360,30 +360,30 @@ export class MasterDataService {
   
     this.yData = [
       {label: '4 - Very likely (90-100%)', value: 4},
-      {label: '3 - Likely (66-90%)', value: 3},
-      {label: '2 - Possible (33-66%)', value: 2},
-      {label: '1 - Unlikely (10-33%)', value: 1},
+      {label: '3 - Likely (60-90%)', value: 3},
+      {label: '2 - Possible (30-60%)', value: 2},
+      {label: '1 - Unlikely (10-30%)', value: 1},
       {label: '0 - Very Unlikely (0-10%)', value: 0}
     ]
 
     this.SDGs= [
-      {name: 'No poverty', code: 'NO_POVERTY', scaleResult: [], sustainResult: []},
-      {name: 'Zero hunger', code: 'ZERO_HUNGER', scaleResult: [], sustainResult: []},
-      {name: 'Good health and well-being', code: 'GOOD_HEALTH_AND_WELL_BEING', scaleResult: [], sustainResult: []},
-      {name: 'Quality education', code: 'QULITY_EDUCATION', scaleResult: [], sustainResult: []},
-      {name: 'Gender equality', code: 'GENDER_EQUALITY', scaleResult: [], sustainResult: []},
-      {name: 'Clean water and sanitation', code: 'CLEAN_WATER_AND_SANITATION', scaleResult: [], sustainResult: []},
-      {name: 'Affordable and clean energy', code: 'AFFORDABLE_AND_CLEAN_ENERGY', scaleResult: [], sustainResult: []},
-      {name: 'Decent work and economic growth', code: 'DECENT_WORK_AND_ECONOMIC_GROWTH', scaleResult: [], sustainResult: []},
-      {name: 'Industry innovation and infrastructure', code: 'INDUSTRY_INNOVATION_AND_INFRASTRUCTURE', scaleResult: [], sustainResult: []},
-      {name: 'Reduced inequalities', code: 'REDUCED_INEQUALITIES', scaleResult: [], sustainResult: []},
-      {name: 'Sustainable cities and communities', code: 'SUSTAINABLE_CITIES_AND_COMMUNIIES', scaleResult: [], sustainResult: []},
-      {name: 'Responsible consumption and production', code: 'RESPONSIBLE_CONSUMPTION_AND_PRODUCTION', scaleResult: [], sustainResult: []},
-      {name: 'Climate action', code: 'CLIMATE_ACTION', scaleResult: [], sustainResult: []},
-      {name: 'Life below water', code: 'LIFE_BELOW_WATER', scaleResult: [], sustainResult: []},
-      {name: 'Life on land', code: 'LIFE_ON_LAND', scaleResult: [], sustainResult: []},
-      {name: 'Peace, justice and strong institutions', code: 'PEACE_JUSTICE_AND_STRING_INSTITUTIONS', scaleResult: [], sustainResult: []},
-      {name: 'Partnerships for the goals', code: 'PARTNERSHIPS_FOR_THE_GOALS', scaleResult: [], sustainResult: []}
+      {name: 'No poverty', number: 1, code: 'NO_POVERTY', scaleResult: [], sustainResult: []},
+      {name: 'Zero hunger', number: 2, code: 'ZERO_HUNGER', scaleResult: [], sustainResult: []},
+      {name: 'Good health and well-being', number: 3, code: 'GOOD_HEALTH_AND_WELL_BEING', scaleResult: [], sustainResult: []},
+      {name: 'Quality education', number: 4, code: 'QULITY_EDUCATION', scaleResult: [], sustainResult: []},
+      {name: 'Gender equality', number: 5, code: 'GENDER_EQUALITY', scaleResult: [], sustainResult: []},
+      {name: 'Clean water and sanitation', number: 6, code: 'CLEAN_WATER_AND_SANITATION', scaleResult: [], sustainResult: []},
+      {name: 'Affordable and clean energy', number: 7, code: 'AFFORDABLE_AND_CLEAN_ENERGY', scaleResult: [], sustainResult: []},
+      {name: 'Decent work and economic growth', number: 8, code: 'DECENT_WORK_AND_ECONOMIC_GROWTH', scaleResult: [], sustainResult: []},
+      {name: 'Industry innovation and infrastructure', number: 9, code: 'INDUSTRY_INNOVATION_AND_INFRASTRUCTURE', scaleResult: [], sustainResult: []},
+      {name: 'Reduced inequalities', number: 10, code: 'REDUCED_INEQUALITIES', scaleResult: [], sustainResult: []},
+      {name: 'Sustainable cities and communities', number: 11, code: 'SUSTAINABLE_CITIES_AND_COMMUNIIES', scaleResult: [], sustainResult: []},
+      {name: 'Responsible consumption and production', number: 12, code: 'RESPONSIBLE_CONSUMPTION_AND_PRODUCTION', scaleResult: [], sustainResult: []},
+      {name: 'Climate action', number: 13, code: 'CLIMATE_ACTION', scaleResult: [], sustainResult: []},
+      {name: 'Life below water', number: 14, code: 'LIFE_BELOW_WATER', scaleResult: [], sustainResult: []},
+      {name: 'Life on land', number: 15, code: 'LIFE_ON_LAND', scaleResult: [], sustainResult: []},
+      {name: 'Peace, justice and strong institutions', number: 16, code: 'PEACE_JUSTICE_AND_STRING_INSTITUTIONS', scaleResult: [], sustainResult: []},
+      {name: 'Partnerships for the goals', number: 17, code: 'PARTNERSHIPS_FOR_THE_GOALS', scaleResult: [], sustainResult: []}
     ]
 
 
@@ -568,11 +568,11 @@ export class MasterDataService {
   get impact_characteristics(): { name: string; id: number, code: string, type: string[] }[] {
     return this._impact_characteristics;
   }
-  set level_of_implemetation (value: { name: string; id: number }[]) {
+  set level_of_implemetation (value: { name: string; id: number; code: string }[]) {
     this._level_of_implemetation = value;
   }
 
-  get level_of_implemetation (): { name: string; id: number }[] {
+  get level_of_implemetation (): { name: string; id: number; code: string }[] {
     return this._level_of_implemetation;
   }
 

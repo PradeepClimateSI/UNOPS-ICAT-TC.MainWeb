@@ -1,0 +1,28 @@
+/* th, */
+.charttd {
+    /* border: 1px solid black; */
+    width: 125px;
+    height: 70px;
+}
+
+.intervention {
+    background-color: blue;
+    display: block;
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    margin: auto;
+    text-align: center
+}
+.vertical-text-chrome {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    text-align: center;
+    white-space: nowrap;
+}
+.vertical-text-safari {
+    writing-mode: vertical-rl;
+    transform: rotate(270deg);
+    text-align: center;
+    white-space: nowrap;
+}

@@ -7,6 +7,5 @@ import { Component, Input } from '@angular/core';
 })
 export class PortfolioAggregationComponent {
   @Input() aggregation_data: any = {};
-  @Input() alignment_data: any = {};
 
 }

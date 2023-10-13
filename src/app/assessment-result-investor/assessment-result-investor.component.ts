@@ -8,6 +8,7 @@ import html2canvas from 'html2canvas';
 import * as XLSX from 'xlsx-js-style';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { ColorMap } from 'app/Tool/carbon-market/cm-result/cm-result.component';
+import { HeatMapScore } from 'app/charts/heat-map/heat-map.component';
 
 
 @Component({
@@ -76,10 +77,13 @@ export class AssessmentResultInvestorComponent implements OnInit {
   scale_GHGs: any;
   sustained_GHGs:any;
   sustained_SD:any;
-  scale_SD:any;
-  scale_adaptation:any;
-  sustained_adaptation:any;
-  loading: boolean=false;
+  scale_SD: any;
+  scale_adaptation: any;
+  sustained_adaptation: any;
+  aggregated_score:any
+  loading: boolean = false;
+  heatMapScore: HeatMapScore[];
+  geographicalAreasList: any;
 
 
   constructor(private route: ActivatedRoute,
@@ -117,11 +121,14 @@ export class AssessmentResultInvestorComponent implements OnInit {
       this.sustained_SD = res?.outcomeData.find((item: { code: string; })=>item?.code=='SUSTAINED_SD')
       this.scale_adaptation = res?.outcomeData.find((item: { code: string; })=>item?.code=='SCALE_ADAPTATION')
       this.sustained_adaptation = res?.outcomeData.find((item: { code: string; })=>item?.code=='SUSTAINED_ADAPTATION')
+      this.aggregated_score =res?.aggregatedScore;
+      console.log("aggregated_score",this.aggregated_score)
       console.log("all: ",  this.scale_GHGs,this.scale_SD,this.sustained_GHGs ,this.sustained_SD,this.scale_adaptation,this.sustained_adaptation)
       // console.log("processData: ", this.processData)
       // console.log("outcomeData: ", this.outcomeData)
       // console.log("processData: ", this.processData)
       // console.log("rr: ", this.sustained_GHGs.category_score.value==null)
+      this.heatMapScore = [{processScore: this.processScore, outcomeScore: this.outcomeScore}]
       this.loading=true 
     });
 
@@ -146,12 +153,14 @@ export class AssessmentResultInvestorComponent implements OnInit {
       if (this.tool === 'Portfolio Tool') {
         this.investerTool = false;
         this.loadTitle = true;
-        this.title2 = 'Result - Assess the Transformational Change due to a Portfolio of Interventions'
+        // this.title2 = 'Result - Assess the Transformational Change due to a Portfolio of Interventions'
+        this.title2 ='Assessment results'
       }
       else if (this.tool === 'Investment & Private Sector Tool') {
         this.investerTool = true;
         this.loadTitle = true;
-        this.title2 = 'Result - Invesment & Private Sector Tool '
+        // this.title2 = 'Result - Invesment & Private Sector Tool '
+        this.title2 ='Assessment results'
       }
 
     });
@@ -161,7 +170,7 @@ export class AssessmentResultInvestorComponent implements OnInit {
     this.investorToolControllerproxy.getResultByAssessment(this.assessmentId).subscribe((res: any) => {
       // console.log("getResultByAssessment: ", res)
       // this.levelofImplemetation = res.level_of_implemetation
-      this.geographicalAreasCovered = res.geographical_areas_covered
+      // this.geographicalAreasCovered = res.geographical_areas_covered
       this.tool = res.assessment.tool
 
     });
@@ -171,6 +180,11 @@ export class AssessmentResultInvestorComponent implements OnInit {
       for (let x of res) {
         this.sectorList.push(x.sector.name)
       }
+    });
+
+    this.investorToolControllerproxy.findAllGeographicalAreaData(this.assessmentId).subscribe((res: any) => {
+        this.geographicalAreasList = res
+        this.geographicalAreasCovered = this.geographicalAreasList.map((a: any) => a.name).join(',')
     });
 
     // this.investorToolControllerproxy.findAllImpactCoverData(this.assessmentId).subscribe((res: any) => {
@@ -388,7 +402,7 @@ export class AssessmentResultInvestorComponent implements OnInit {
     //   this.SDGsList = res
     // });
 
-
+console.log(this.geographicalAreasList)
 
     setTimeout(() => {
       this.card.push(
@@ -397,7 +411,7 @@ export class AssessmentResultInvestorComponent implements OnInit {
           { title: 'Intervention Type', data: (this.intervention.typeofAction)?(this.intervention.typeofAction):'-' },
           { title: 'Intervention Status', data: (this.intervention.projectStatus)?(this.intervention.projectStatus.name):'-' },
           { title: 'Assessment Type', data: this.assessmentType },
-          { title: 'Geographical Area Covered', data: this.geographicalAreasCovered },
+          { title: 'Geographical Area Covered', data: this.geographicalAreasList.map((a: any) => a.name) },
           { title: 'Sectors Covered', data: this.sectorList.join(', ') },
           { title: 'From', data: this.datePipe.transform(this.date1, 'yyyy-MM-dd') },
           { title: 'To', data: this.datePipe.transform(this.date2, 'yyyy-MM-dd') },
@@ -472,6 +486,7 @@ export class AssessmentResultInvestorComponent implements OnInit {
           if (heatmap[itm.cell]) {
             heatmap[itm.cell].s = {
               fill: { fgColor: { rgb: itm.color } },
+              font: { color: { rgb: itm.color } }
             };
           }
         }

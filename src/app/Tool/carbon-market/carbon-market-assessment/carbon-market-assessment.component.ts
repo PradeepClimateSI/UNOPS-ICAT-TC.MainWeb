@@ -3,7 +3,8 @@ import { NgForm } from '@angular/forms';
 import { MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import { Assessment, AssessmentCMDetail, ClimateAction, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, ServiceProxy } from 'shared/service-proxies/service-proxies';
+import { AllBarriersSelected, Assessment, AssessmentCMDetail, BarrierSelected, Characteristics, ClimateAction, GeographicalAreasCovered, InvestorSector, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy,  ServiceProxy, ToolsMultiselectDto } from 'shared/service-proxies/service-proxies';
+import decode from 'jwt-decode';
 
 @Component({
   selector: 'app-carbon-market-assessment',
@@ -11,6 +12,7 @@ import { Assessment, AssessmentCMDetail, ClimateAction, MethodologyAssessmentCon
   styleUrls: ['./carbon-market-assessment.component.css']
 })
 export class CarbonMarketAssessmentComponent implements OnInit {
+  countryId: any;
   visible_ex_ante: any;
 
 
@@ -36,13 +38,30 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   date2: any
 
   assessmentres: Assessment
+  levelOfImplementation: any[] = [];
+  sectorArray: Sector[] = [];
+  geographicalAreasCoveredArr: any[] = []
+  sectorList: any[] = [];
+  international_tooltip:string;
+  
+  barrierBox:boolean=false;
+  barrierSelected:BarrierSelected= new BarrierSelected();
+  finalBarrierList :BarrierSelected[]=[];
+  barrierArray:PolicyBarriers[];
+  isDownloading: boolean = true;
+  isDownloadMode: number = 0;
+  sectorsJoined :string='';
+  finalSectors:Sector[]=[]
+  characteristicsList: Characteristics[] = [];
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
     private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
     private masterDataService: MasterDataService,
     private serviceProxy: ServiceProxy,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private sectorProxy: SectorControllerServiceProxy,
+    private investorToolControllerServiceProxy: InvestorToolControllerServiceProxy
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -51,8 +70,20 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     this.sectorial_boundires = this.masterDataService.sectorial_boundries
     this.assessment_approaches = this.masterDataService.assessment_approach
     this.int_cm_approches = this.masterDataService.int_cm_approaches
+    this.levelOfImplementation = this.masterDataService.level_of_implemetation;
 
     await this.getPolicies()
+    await this.getSetors()
+    this.international_tooltip = 'Name of international or private carbon market standard under which the intervention is registered.'
+  }
+
+  async getSetors() {
+    const token = localStorage.getItem('ACCESS_TOKEN')!;
+    const countryId = token ? decode<any>(token).countryId : 0;
+    this.countryId = countryId;
+    if (countryId > 0) {
+      this.sectorList = await this.sectorProxy.getCountrySector(countryId).toPromise()
+    } 
   }
 
   async getPolicies() {
@@ -68,20 +99,73 @@ export class CarbonMarketAssessmentComponent implements OnInit {
       this.methodologyAssessmentControllerServiceProxy.saveAssessment(this.assessment)
         .subscribe(res => {
           if (res) {
-            this.cm_detail.cmassessment = res
+            this.cm_detail.cmassessment = res;
+
+            let allBarriersSelected = new AllBarriersSelected()
+              allBarriersSelected.allBarriers =this.finalBarrierList
+              allBarriersSelected.climateAction =res.climateAction
+              allBarriersSelected.assessment =res;
+
+            this.projectControllerServiceProxy.policyBar(allBarriersSelected).subscribe((res) => {
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Intervention  has been saved successfully',
+                closable: true,
+              },            
+              
+              );
+            },
+            (err) => {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error.',
+                detail: 'Internal server error in policy barriers',
+                sticky: true,
+              });
+            })
 
             this.serviceProxy.createOneBaseAssessmentCMDetailControllerAssessmentCMDetail(this.cm_detail)
-              .subscribe(_res => {
+              .subscribe(async _res => {
                 if (_res) {
-                  this.messageService.add({
-                    severity: 'success',
-                    summary: 'Success',
-                    detail: 'Assessment created successfully',
-                    closable: true,
-                  })
-                  this.isSavedAssessment = true
-                  this.assessmentres = res
-                  this.showSections = true
+                  let toolsMultiselectDto = new ToolsMultiselectDto()
+                  toolsMultiselectDto.sectors = []
+
+                  for (let sector of this.sectorArray) {
+                    let sec = new InvestorSector()
+                    sec.assessment = res
+                    sec.assessmentCMDetail = _res
+                    sec.sector = sector
+                    toolsMultiselectDto.sectors.push(sec)
+                  }
+                  console.log(this.geographicalAreasCoveredArr)
+                  for (let geo of this.geographicalAreasCoveredArr){
+                    let area = new GeographicalAreasCovered()
+                    area.assessment= res
+                    area.assessmentCMDetail = _res
+                    area.name = geo.name
+                    area.code = geo.code
+                    toolsMultiselectDto.geographicalAreas.push(area)
+                  }
+                  let res_sec = await this.investorToolControllerServiceProxy.saveToolsMultiSelect(toolsMultiselectDto).toPromise()
+                  if (res_sec) {
+                    this.messageService.add({
+                      severity: 'success',
+                      summary: 'Success',
+                      detail: 'Assessment created successfully',
+                      closable: true,
+                    })
+                    this.isSavedAssessment = true
+                    this.assessmentres = res
+                    this.showSections = true
+                  } else {
+                    this.messageService.add({
+                      severity: 'error',
+                      summary: 'Error',
+                      detail: 'Secotrs covered saving failed.',
+                      closable: true,
+                    })
+                  }
                 }
               }, error => {
                 this.messageService.add({
@@ -138,6 +222,34 @@ export class CarbonMarketAssessmentComponent implements OnInit {
 
   okay() {
     this.visible_ex_ante = false
+  }
+
+  pushBarriers(barrier:any){
+    console.log("barrier",barrier)
+    this.finalBarrierList.push(barrier)
+  
+  }
+  barriersNameArray(Characteristics:any[]){
+    if (Characteristics?.length>0){
+      let charArray = Characteristics.map(x=>{return x.name});
+      return charArray.join(", ")
+    }
+    else{
+      return "-"
+    }   
+
+  }
+
+  toDownload() {
+    this.isDownloadMode = 1;
+    
+  }
+  showDialog(){
+    this.barrierBox =true;
+    console.log(this.barrierBox)  
+  }
+  onItemSelectSectors($event: any) {
+   
   }
 
 }

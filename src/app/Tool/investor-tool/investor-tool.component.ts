@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import { Assessment, Characteristics, ClimateAction, CreateInvestorToolDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import {Any, AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -60,6 +60,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   approach:number=0;
   instiTutionList : any = []
   investorQuestions:InvestorQuestions[]=[];
+  geographicalAreasCoveredArr: GeographicalAreasCoveredDto[] = []
 
   //Newww
   sdgList : any = []
@@ -102,6 +103,15 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   mainTabIndex: any;
   categoryTabIndex: any;
 
+  barrierBox:boolean=false;
+  barrierSelected:BarrierSelected= new BarrierSelected();
+  finalBarrierList :BarrierSelected[]=[];
+  barrierArray:PolicyBarriers[];
+  isDownloading: boolean = true;
+  isDownloadMode: number = 0;
+  sectorsJoined :string='';
+  finalSectors:Sector[]=[]
+
 
   isLikelihoodDisabled:boolean=false;
   isRelavanceDisabled:boolean=false;
@@ -137,7 +147,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   }
   async ngOnInit(): Promise<void> {
-   // this.isSavedAssessment = true; this.tabLoading= true; // Need to remove  
+   //this.isSavedAssessment = true; this.tabLoading= true; // Need to remove  
+  // this.isSavedAssessment = true // Need to remove  
     this.categoryTabIndex =0;
     this.approach=1
     this.assessment.assessment_approach = 'Direct'
@@ -331,6 +342,36 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
           if (res) {
 
+            let allBarriersSelected = new AllBarriersSelected()
+            allBarriersSelected.allBarriers =this.finalBarrierList
+            allBarriersSelected.climateAction =res.climateAction
+            allBarriersSelected.assessment =res;
+
+          this.projectControllerServiceProxy.policyBar(allBarriersSelected).subscribe((res) => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Intervention  has been saved successfully',
+              closable: true,
+            },            
+            
+            );
+          },
+          (err) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error.',
+              detail: 'Internal server error in policy barriers',
+              sticky: true,
+            });
+          })
+            this.geographicalAreasCoveredArr = this.geographicalAreasCoveredArr.map(a => {
+              let _a = new GeographicalAreasCoveredDto()
+              _a.id = a.id
+              _a.name = a.name
+              _a.code = a.code
+              return _a
+            })  
 
             this.investorAssessment.assessment = res;
             this.mainAssessment =res
@@ -338,6 +379,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
             this.createInvestorToolDto.impacts = this.impactArray;
             this.createInvestorToolDto.investortool = this.investorAssessment;
              this.createInvestorToolDto.investortool = this.investorAssessment;
+             this.createInvestorToolDto.geographicalAreas = this.geographicalAreasCoveredArr;
             console.log("investorassessmet",this.createInvestorToolDto)
             this.investorToolControllerproxy.createinvestorToolAssessment(this.createInvestorToolDto)
               .subscribe(_res => {
@@ -444,11 +486,74 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   onsubmit(form: NgForm) {
     for(let item of this.processData){
       for(let item2 of item.data){
-        if(item2.likelihood == null || item2.relavance == null){
+        if((item2.likelihood == null || item2.relavance == null) && item2.relavance != 0){
           this.messageService.add({
             severity: 'error',
             summary: 'Warning',
             detail: 'Fill all mandatory fields',
+            closable: true,
+          })
+
+          return
+        }
+      }
+    }
+
+    for(let item of this.processData){
+      for(let item2 of item.data){
+        if((item2.likelihood_justification == null || item2.likelihood_justification === "") &&  item2.relavance != 0){
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Warning',
+            detail: 'Fill all mandatory justification fields',
+            closable: true,
+          })
+
+          return
+        }
+      }
+    }
+
+    for(let item of this.outcomeData){
+      if(item.categoryID == 5 || item.categoryID ==7 || item.categoryID ==9 || item.categoryID ==10){
+
+        for(let item2 of item.data){
+          if(item2.justification == null || item2.justification === ""){
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Warning',
+              detail: 'Fill all mandatory justification fields',
+              closable: true,
+            })
+  
+            return
+          }
+        }
+      }
+    }
+    
+    for(let item of this.sdgDataSendArray2){
+      for(let item2 of item.data){
+        if(item2.justification == null || item2.justification === ""){
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Warning',
+            detail: 'Fill all mandatory justification fields',
+            closable: true,
+          })
+
+          return
+        }
+      }
+    }
+
+    for(let item of this.sdgDataSendArray4){
+      for(let item2 of item.data){
+        if(item2.justification == null || item2.justification === ""){
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Warning',
+            detail: 'Fill all mandatory justification fields',
             closable: true,
           })
 
@@ -564,8 +669,24 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
        }, 2000);
 
   }
-  next(){
-
+  next(data:any[],type:string){
+  console.log("category",data)
+  // data?.filter(investorAssessment => console.log(investorAssessment.indicator_details.filter((indicator_details:IndicatorDetails)=>indicator_details.justification !== undefined)?.length == (investorAssessment.indicator_details?.length-1)))
+  if((data?.filter(investorAssessment => 
+      (investorAssessment.relavance !== undefined) && 
+      (investorAssessment.likelihood !== undefined) && 
+      (investorAssessment.likelihood_justification !== undefined) &&
+      (investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
+        (indicator_details.justification !== undefined))?.length === (investorAssessment.indicator_details?.length-1)
+      ))?.length === data?.length && type=='process')||
+      (data?.filter(investorAssessment => 
+        (investorAssessment.justification !== undefined) 
+       )?.length === data?.length && type=='outcome')||
+      (data?.filter(sdg => 
+        (sdg.data?.filter((data: { justification: undefined; } ) =>
+          (data.justification!== undefined))?.length === (sdg.data?.length)
+        ))?.length === data?.length && type=='sdg')) {
+    
     if(this.activeIndexMain ===1 ){
 
       this.activeIndex2 =this.activeIndex2+1;
@@ -582,9 +703,15 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       console.log( this.activeIndex)
 
     }
-
-
-
+    // return true
+  }else{
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Please fill all mandotory fields',
+      closable: true,
+    });
+  }
     // if(!this.mainTabIndexArray.includes(this.activeIndex)){
     //   console.log("mainTabIndexArray",this.mainTabIndexArray)
     //   this.isLikelihoodDisabled=false;
@@ -595,13 +722,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     //   this.isLikelihoodDisabled=true;
     //   this.isRelavanceDisabled=true;
     // }
-
-
-
-
-
-
-
   }
 
   onLevelofImplementationChange(event:any){
@@ -742,6 +862,33 @@ onRelavanceChange(data:any,ins:any){
   // }
 
 }
+
+pushBarriers(barrier:any){
+  console.log("barrier",barrier)
+  this.finalBarrierList.push(barrier)
+
+}
+barriersNameArray(Characteristics:any[]){
+  if (Characteristics?.length>0){
+    let charArray = Characteristics.map(x=>{return x.name});
+    return charArray.join(", ")
+  }
+  else{
+    return "-"
+  }   
+
+}
+
+toDownload() {
+  this.isDownloadMode = 1;
+  
+}
+showDialog(){
+  this.barrierBox =true;
+  console.log(this.barrierBox)  
+}
+
+
 onUpload(event:UploadEvent, data : InvestorAssessment) {
   if(event.originalEvent.body){
     data.uploadedDocumentPath = event.originalEvent.body.fileName

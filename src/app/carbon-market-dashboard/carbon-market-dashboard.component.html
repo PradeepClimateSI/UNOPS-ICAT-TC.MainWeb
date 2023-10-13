@@ -173,8 +173,8 @@
 
     <div class="p-grid p-fluid card m-3 ">
       <div class="row text-center ">
-          <h3>Meeting Preconditions</h3>
-          
+          <!-- <h3>Meeting Preconditions</h3> -->
+          <h3>Meeting Environmental Integrity Criteria</h3>
           <div *ngIf="CMPrerequiste" [hidden]="CMPrerequiste[0].count==0 && CMPrerequiste[1].count==0" class="col-12  mt-20 ml-10 chart-container"  >
               <canvas  id="pieChartCM" >{{pieChartCM}}</canvas>
           </div>
@@ -211,38 +211,45 @@
               </ng-container>
               <ng-template #elseBlock4>
                 <div  class="col-12  mt-20 ml-10" >
-                  <table class="heatmap" style="text-align: center;">
-                    <!-- <thead>
-                      <tr>
-                        <th>Process: Transformational Change supported</th>
-                        <th>Outcomes: Extent and sustained nature of the transformation</th>
-                      </tr>
-                    </thead> -->
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td colspan="7">Outcome: Extent and sustained nature of the transformation</td>
-                        </tr>
-                        <tr>
-                            <td rowspan="7">Process: Transformational change supported</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <ng-container *ngFor="let x of xData">
-                                <td>{{x.label}}</td>
-                            </ng-container>
-                        </tr>
-                        <tr *ngFor="let y of yData">
-                            <td>{{y.label}}</td>
-                            <ng-container *ngFor="let x of xData">
-                                <td  [style.background-color]="getBackgroundColor(y.value+x.value)">
-                                    <span (mouseenter)="enterHeatMapPoint(x.value, y.value,$event);" (mouseleave)="leaveHeatMapPoint();op.hide()"
-                                    [style.background-color]=" getIntervention(x.value, y.value) ?getDotColor(y.value + x.value):''" [ngClass]="getIntervention(x.value, y.value)? 'intervention':''" >{{y.value+x.value}}</span>
-                                </td>
-                            </ng-container>
-                        </tr>
-                    </tbody>
-                  </table>
+                  <ng-container *ngIf="tableData.length==0; else elseBlock4">
+                    <div  class="col-12 " >
+                      <p-messages severity="warn" >
+                        <ng-template pTemplate>
+                            <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
+                            <div class="ml-2">No data to show.</div>
+                        </ng-template>
+                    </p-messages>
+                     </div>
+                  </ng-container>
+                  <ng-template #elseBlock4>
+                    <app-heat-map  id="heatmap" [xData]="xData" [yData]="yData" [score]="heatMapScore" [showOp]="true" [tableData]="heatMapData"></app-heat-map>
+                    <!-- <table class="heatmap" style="text-align: center;">
+                      <tbody>
+                          <tr>
+                              <td></td>
+                              <td colspan="7">Outcome: Extent and sustained nature of the transformation</td>
+                          </tr>
+                          <tr>
+                              <td rowspan="7">Process: Transformational change supported</td>
+                          </tr>
+                          <tr>
+                              <td></td>
+                              <ng-container *ngFor="let x of xData">
+                                  <td>{{x.label}}</td>
+                              </ng-container>
+                          </tr>
+                          <tr *ngFor="let y of yData">
+                              <td>{{y.label}}</td>
+                              <ng-container *ngFor="let x of xData">
+                                  <td  [style.background-color]="getBackgroundColor(y.value+x.value)">
+                                      <span (mouseenter)="enterHeatMapPoint(x.value, y.value,$event);" (mouseleave)="leaveHeatMapPoint();op.hide()"
+                                      [style.background-color]=" getIntervention(x.value, y.value) ?getDotColor(y.value + x.value):''" [ngClass]="getIntervention(x.value, y.value)? 'intervention':''" >{{y.value+x.value}}</span>
+                                  </td>
+                              </ng-container>
+                          </tr>
+                      </tbody>
+                    </table> -->
+                  </ng-template>
 
                  </div>
               </ng-template>
@@ -255,7 +262,8 @@
   <div class="col-md-6 col-12 d-flex align-items-stretch">
     <div  class="p-grid p-fluid card m-3">
       <div style="position: relative; height:100%;" class="row text-center">
-        <h3>Frequency of SDGs</h3>
+        <!-- <h3>Frequency of SDGs</h3> -->
+        <h3>SDGs impacted by the assessed interventions</h3>
         <div
           *ngIf="sdgDetailsList.length != 0"
           class="col-12 mt-20"
@@ -282,7 +290,8 @@
   <div class="col-md-6 col-12 d-flex align-items-stretch">
     <div class="p-grid p-fluid card m-3">
       <div class="row text-center">
-        <h3>Sectors Targeted</h3>
+        <!-- <h3>Sectors Targeted</h3> -->
+        <h3>Sectors represented</h3>
         <div
           *ngIf="sectorCount.length != 0"
           class="col-12 mt-20"
@@ -307,7 +316,7 @@
     </div>
   </div>
 </div>
-<p-overlayPanel  [hidden]="pointTableDatas.length==0" #op>
+<!-- <p-overlayPanel  [hidden]="pointTableDatas.length==0" #op>
   <ng-template pTemplate="content">
     <div *ngFor="let pointTableData of pointTableDatas" style=" border-style: solid;" class="m-3 p-1" >
 
@@ -320,10 +329,6 @@
         <div class="col-4">Intervation Name :</div>
         <div class="col-8">{{pointTableData?.intervention}}</div>
       </div>
-      <!-- <div  class="row">
-        <div class="col-4">Assessment period :</div>
-        <div class="col-8"></div>
-      </div> -->
       <div  class="row">
         <div class="col-4">Process score :</div>
         <div class="col-8">{{pointTableData.process_score}}</div>
@@ -335,4 +340,4 @@
     </div>
     
 </ng-template>
-</p-overlayPanel>
+</p-overlayPanel> -->

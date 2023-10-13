@@ -8,6 +8,7 @@ import { MasterDataService } from 'app/shared/master-data.service';
 import { Paginator } from 'primeng/paginator';
 import { LazyLoadEvent } from 'primeng/api';
 import { OverlayPanel } from 'primeng/overlaypanel';
+import { HeatMapScore, TableData } from 'app/charts/heat-map/heat-map.component';
 
 @Component({
   selector: 'app-investment-dashboard',
@@ -74,6 +75,8 @@ export class InvestmentDashboardComponent implements OnInit {
     process_score: [], outcome_score: [] 
   }
   sdgDetailsList:any=[];
+  heatMapScore: HeatMapScore[];
+  heatMapData: TableData[];
   constructor(
     private projectProxy: ProjectControllerServiceProxy,
     private investorProxy: InvestorToolControllerServiceProxy,
@@ -132,6 +135,8 @@ export class InvestmentDashboardComponent implements OnInit {
     this.rows = event.rows === undefined ? 10 : event.rows;
     this.investorProxy.getDashboardData(pageNumber,this.rows).subscribe((res) => {
       this.tableData=res.items;
+      this.heatMapScore = this.tableData.map(item => {return {processScore: item.process_score, outcomeScore: item.outcome_score}})
+      this.heatMapData = this.tableData.map(item => {return {interventionId: item.climateAction?.intervention_id, interventionName: item.climateAction?.policyName, processScore: item.process_score, outcomeScore: item.outcome_score}}) 
       console.log("kkkkk : ", res)
       this.totalRecords= res.meta.totalItems
       this.loading = false;
@@ -142,7 +147,7 @@ export class InvestmentDashboardComponent implements OnInit {
   };
   sdgResults(){
     this.sdgDetailsList=[]
-    this.investorProxy.sdgSumCalculate().subscribe(async (res: any) => {
+    this.investorProxy.sdgSumCalculate('Investment & Private Sector Tool').subscribe(async (res: any) => {
       console.log("sdgDetailsList : ", res)
       this.sdgDetailsList = res;
      this.viewFrequencyofSDGsChart();
@@ -150,7 +155,7 @@ export class InvestmentDashboardComponent implements OnInit {
   }
 
   viewFrequencyofSDGsChart(){
-    let labels = this.sdgDetailsList.map((item:any) => item.sdg);
+    let labels = this.sdgDetailsList.map((item:any) => 'SDG ' + item.number + ' - ' + item.sdg);
     let counts:number[] = this.sdgDetailsList.map((item:any) => item.count);
     let total = counts.reduce((acc, val) => acc + val, 0);
     let percentages = counts.map(count => ((count / total) * 100).toFixed(2));
