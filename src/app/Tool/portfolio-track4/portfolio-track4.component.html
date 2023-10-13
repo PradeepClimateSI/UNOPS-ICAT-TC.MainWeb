@@ -558,7 +558,7 @@
                               <div class="row p-2">
                                 <div class="col-12 col-lg-6">
                                   <div class="p-field">
-                                    <label for="Description">Relevance</label>
+                                    <label for="Description">Relevance*</label>
                                     <p-dropdown appendTo="body" name="data.charData.relavance" #rel="ngModel" placeholder="Select Relevance"
                                       [(ngModel)]="data.relavance" [options]="relevance" optionLabel="name" optionValue="value"
                                       [required]="true"></p-dropdown>
@@ -587,7 +587,7 @@
                               <div class="row p-2">
                                 <div class="col-12 col-lg-6">
                                   <div class="p-field">
-                                    <label for="Relevance">Likelihood</label>
+                                    <label for="Relevance">Likelihood*</label>
                                     <p-dropdown appendTo="body" name="data.charData.likelihood" #likelihood2="ngModel"
                                       placeholder="Select Likelihood" [(ngModel)]="data.likelihood"
                                       [options]="likelihood" optionLabel="id" optionValue="value"
@@ -599,7 +599,7 @@
 
                                 <div class="col-12 col-lg-6">
                                   <div class="p-field">
-                                    <label for="justification">Justification</label>
+                                    <label for="justification">Justification*</label>
                                     <input type="text" pInputText [(ngModel)]="data.likelihood_justification" #just1="ngModel"
                                       placeholder="Enter Justification" name="data.charData.likelihood_justification" />
                                       <p class="info-message text-danger" *ngIf="!data.likelihood_justification  && (fData1.submitted || just1.touched) ">
@@ -811,7 +811,7 @@
 
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
-                                        <label for="justification">Justification</label>
+                                        <label for="justification">Justification*</label>
                                         <input type="text" pInputText [(ngModel)]="data.justification" #just2="ngModel"
                                           placeholder="Enter Justification" name="justification" />
                                           <p class="info-message text-danger" *ngIf="!data.justification  && (fData1.submitted || just2.touched) ">
@@ -987,7 +987,7 @@
 
                                       <div class="col-12 col-lg-6">
                                         <div class="p-field">
-                                          <label for="justification">Justification</label>
+                                          <label for="justification">Justification*</label>
                                           <input (ngModelChange)="assignSDG(selectedSDGs[i], data)" type="text"
                                             pInputText [(ngModel)]="data.justification" #just3="ngModel"
                                             placeholder="Enter Justification" name="justification" />
@@ -1128,7 +1128,7 @@
 
                                       <div class="col-12 col-lg-6">
                                         <div class="p-field">
-                                          <label for="justification">Justification</label>
+                                          <label for="justification">Justification*</label>
                                           <input (ngModelChange)="assignSDG(selectedSDGs[i], data)" type="text"
                                             pInputText [(ngModel)]="data.justification" #just4="ngModel"
                                             placeholder="Enter Justification" name="justification" />
@@ -1299,7 +1299,7 @@
                                 <div class="row p-2">
                                   <div class="col-12 col-lg-6">
                                     <div class="p-field">
-                                      <label for="relavance">Relevance</label>
+                                      <label for="relavance">Relevance*</label>
                                       <p-dropdown appendTo="body" name="relavance" placeholder="Select Institution"
                                         [(ngModel)]="data.relavance" [options]="instiTutionList" optionLabel="name"
                                         optionValue="id" [required]="true"></p-dropdown>
@@ -1350,7 +1350,7 @@
                                 <div class="row p-2">
                                   <div class="col-12 col-lg-6">
                                     <div class="p-field">
-                                      <label for="likelihood">Likelihood</label>
+                                      <label for="likelihood">Likelihood*</label>
                                       <p-dropdown appendTo="body" name="likelihood" placeholder="Select Institution"
                                         [(ngModel)]="data.likelihood" [options]="instiTutionList" optionLabel="name"
                                         optionValue="id" [required]="true"></p-dropdown>
@@ -1359,7 +1359,7 @@
   
                                   <div class="col-12 col-lg-6">
                                     <div class="p-field">
-                                      <label for="justification">Justification</label>
+                                      <label for="justification">Justification*</label>
                                       <input type="text" pInputText [(ngModel)]="data.likelihood_justification"
                                         placeholder="Enter Justification" name="data.charData.likelihood_justification" />
   
@@ -1492,7 +1492,7 @@
   
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
-                                        <label for="justification">Justification</label>
+                                        <label for="justification">Justification*</label>
                                         <input type="text" pInputText [(ngModel)]="data.justification"
                                           placeholder="Enter Justification" name="justification" />
   
