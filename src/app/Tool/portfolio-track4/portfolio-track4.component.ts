@@ -155,10 +155,13 @@ export class PortfolioTrack4Component implements OnInit {
   sdgDataSendArray4: any = [];
 
   sdgDataSendArray2: any = []
+  tableData : any;
 
   async ngOnInit(): Promise<void> {
  this.load = false; //need to change as false
 // this.isSavedAssessment = true //need to change as false
+
+this.tableData =  this.getProductsData();
 
  this.selectedApproach = 'Direct';
  this.assessment.assessment_approach = 'Direct';
@@ -997,6 +1000,41 @@ export class PortfolioTrack4Component implements OnInit {
     }
     console.log("ppppp", this.processData)
   } */
+
+  getProductsData() {
+    return [
+        {
+            barrier: 'Lack of financial capacity',
+            explanation: 'Some plant operators simply do not have the financial capacity to introduce the technology or to train staff adequately',
+            cha: 'Scale up, Beneficiaries',
+            ans: 'No',
+        },
+        {
+          barrier: 'Lack of public awareness of environmental and private economy benefits of EE measures and conservation',
+          explanation: 'Lack of awareness may also lead to reluctance to introduce low-carbon technologies, such as EV or HEV, which may disrupt conventional technologies',
+          cha: 'Awareness, Behaviour',
+          ans: 'Yes',
+      },
+      {
+        barrier: 'Lack of institutional support',
+        explanation: 'Insufficient support from municipal government authorities hinder the adoption and proper implementation of the initiative',
+        cha: 'Institutional and regulatory',
+        ans: 'No',
+    },
+    ]
+  }
+
+  barrierBox2: boolean = false; // Variable to control the dialog visibility
+
+showBarrierDialog() {
+  this.barrierBox2 = true;
+  // You can initialize or reset the barrierSelected object here
+}
+
+hideBarrierDialog() {
+  this.barrierBox2 = false;
+  // You can perform any cleanup or reset actions here
+}
 
 
 }
