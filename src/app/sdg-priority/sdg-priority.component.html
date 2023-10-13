@@ -1,0 +1,35 @@
+<div class="container">
+    <h4 class="mt-4">Add SDG Priorities</h4>
+    <div class="p-grid p-fluid card">
+        <div class="row p-2">
+            <div class="col-1"></div>
+            <div class="col-10 col-md-10">
+                <p-table [value]="sdgPriorities" [tableStyle]="{'align': 'center'}">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width: 70%;">SDGs</th>
+                            <th >Select Priority</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-priority>
+                        <tr>
+                            <td>{{priority.sdg.name}}</td>
+                            <td>
+                                <p-dropdown [options]="priorities" optionLabel="name" optionValue="code"
+                                    placeholder="Select Priority" appendTo="body" [(ngModel)]="priority.priority" (onChange)="updateValue($event, priority)"></p-dropdown>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+            <div class="row mb-2">
+                <div class="col-9"></div>
+                <div class="col-2">
+                  <button type="button" pButton pRipple style="margin-top: 10px" label="Save" (click)="save()"></button>
+                </div>
+                <!-- <div class="col-3"></div> -->
+              </div>
+        </div>
+    </div>
+
+</div>

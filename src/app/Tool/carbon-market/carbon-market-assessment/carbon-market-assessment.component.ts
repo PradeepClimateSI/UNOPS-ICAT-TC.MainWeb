@@ -138,7 +138,6 @@ export class CarbonMarketAssessmentComponent implements OnInit {
                     sec.sector = sector
                     toolsMultiselectDto.sectors.push(sec)
                   }
-                  console.log(this.geographicalAreasCoveredArr)
                   for (let geo of this.geographicalAreasCoveredArr){
                     let area = new GeographicalAreasCovered()
                     area.assessment= res
@@ -225,7 +224,6 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   }
 
   pushBarriers(barrier:any){
-    console.log("barrier",barrier)
     this.finalBarrierList.push(barrier)
   
   }
@@ -245,8 +243,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     
   }
   showDialog(){
-    this.barrierBox =true;
-    console.log(this.barrierBox)  
+    this.barrierBox =true; 
   }
   onItemSelectSectors($event: any) {
    

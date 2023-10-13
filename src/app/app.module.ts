@@ -128,6 +128,7 @@ import { PortfolioComparisonComponent } from './portfolios/portfolio-comparison/
 import { HeatMapComponent } from './charts/heat-map/heat-map.component';
 import { AllTooDashbordComponent } from './dashboard/all-too-dashbord/all-too-dashbord.component';
 import { PortfolioAlignmentComponent } from './portfolios/portfolio-alignment/portfolio-alignment.component';
+import { SdgPriorityComponent } from './sdg-priority/sdg-priority.component';
 
 
 
@@ -213,6 +214,7 @@ export function getAuditRemoteServiceBaseUrl(): string {
     HeatMapComponent,
     AllTooDashbordComponent,
     PortfolioAlignmentComponent,
+    SdgPriorityComponent,
 
   ],
 

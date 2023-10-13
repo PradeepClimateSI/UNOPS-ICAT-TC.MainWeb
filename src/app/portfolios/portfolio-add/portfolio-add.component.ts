@@ -46,12 +46,8 @@ export class PortfolioAddComponent implements OnInit {
     this.tool = 'PORTFOLIO';
     this.tools = ['PORTFOLIO', 'CARBON_MARKET', 'INVESTOR']
     this.addLink=false;
-   /*  this.methassess.assessmentDetails().subscribe(async (res: any) => {
-       console.log("assessmentData : ", res)
-      }); */
       this.resultsList = await this.methassess.results().toPromise()
       this.methassess.assessmentDetails().subscribe(async (res: any) => {
-        //  console.log("assessmentData : ", res)
           this.assessmentData = res
     
     
@@ -69,21 +65,16 @@ export class PortfolioAddComponent implements OnInit {
           const uniqueNamesSet = new Set<string>(this.assessList.map((item: { climateAction: { typeofAction: any; }; })=> item.climateAction.typeofAction));
           this.interventionsList = Array.from(uniqueNamesSet, value => ({ value, label: value }));
           this.assessList.sort(function(a:Assessment, b:Assessment) {
-            console.log(a.id)
             // Convert 'id' properties to numbers and compare them
             return b.id - a.id;
         });
-        console.log("resultdataa",this.assessList)
     
         });
     
       this.portfolioServiceProxy.getLastID().subscribe(async (res: any) => {
-        console.log("iddd : ", res)
         this.lastId = res[0].portfolioId;
 
         this.portfolio.portfolioId = this.getNext();
-
-        console.log("nexttt : ",  this.portfolio.portfolioId)
        });
 
       let req = new GetAssessmentDetailsDto()
@@ -128,17 +119,11 @@ export class PortfolioAddComponent implements OnInit {
   }
 
   sendData(){
-    console.log("werr", this.selectedValues)
   }
 
   save( data : any){
-    console.log("aa", data)
-    console.log("werr", this.selectedValues)
-    console.log("kkkkkk", this.portfolio.portfolioId)
 
     data.portfolioId = this.portfolio.portfolioId
-
-    console.log("aa22", data)
 
     if(this.selectedValues.length < 1){
       this.messageService.add({
@@ -154,10 +139,8 @@ export class PortfolioAddComponent implements OnInit {
       formData : data,
       tableData : this.selectedValues
     }
-    console.log("uuu", this.dataObj)
 
     this.portfolioServiceProxy.create(this.dataObj).subscribe(async (res: any) => {
-      console.log("assessmentData : ", res)
 
         this.messageService.add({
           severity: 'success',
@@ -188,8 +171,6 @@ export class PortfolioAddComponent implements OnInit {
   }
 
   onCheckboxChange(event: any, assessList: any) {
-    console.log("event", event)
-    console.log("assessList", assessList)
      if (event) {
       this.selectedValues.push(assessList);
     } else {
@@ -198,14 +179,9 @@ export class PortfolioAddComponent implements OnInit {
         this.selectedValues.splice(index, 1);
       }
     }
-
-
-    console.log("aaaa", this.selectedValues)
   }
 
   onChangePreviousAssessment(option:any){
-
-    console.log("optionnn", option)
     if(option === "Yes"){
       this.addLink = true;
     }

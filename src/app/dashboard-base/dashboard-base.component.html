@@ -62,6 +62,12 @@
                 </p-accordionTab>
               </p-accordion>
             </div>
+            <div
+              *ngIf="userRole==loginRole.Country_Admin"
+              class="sidebar-items--link align-items-start" [routerLink]="['/app/manage-sdgs']"
+              routerLinkActive="selected">
+              Manage SDGs
+            </div>
 
             <!--  <div class="sidebar-items--link align-items-start" [routerLink]="['/app/register/list']"
               routerLinkActive="selected">
