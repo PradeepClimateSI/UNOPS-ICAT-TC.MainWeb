@@ -159,7 +159,7 @@ export class PortfolioTrack4Component implements OnInit {
 
   async ngOnInit(): Promise<void> {
  this.load = false; //need to change as false
-// this.isSavedAssessment = true //need to change as false
+ //this.isSavedAssessment = true //need to change as false
 
 this.tableData =  this.getProductsData();
 
@@ -234,6 +234,7 @@ this.tableData =  this.getProductsData();
      console.log("ressssSDGs", res)
      this.sdgList = res
     });
+
 
   }
 
@@ -563,6 +564,12 @@ this.tableData =  this.getProductsData();
   }
 
   onCategoryTabChange(event: any, tabview: TabView) {
+   // this.outcomeData[0].CategoryName = "tttttt";
+   // this.outcomeData[0].data[0].justification = "heloooo";
+   // this.outcomeData[0].data[0].score = 3;
+
+console.log("wwwwww", this.outcomeData)
+    
     this.categoryTabIndex = event.index;
     console.log("category index", this.categoryTabIndex)
     if(!this.failedLikelihoodArray.some(
