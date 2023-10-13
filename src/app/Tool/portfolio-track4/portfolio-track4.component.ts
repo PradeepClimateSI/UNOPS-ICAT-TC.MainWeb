@@ -123,7 +123,8 @@ export class PortfolioTrack4Component implements OnInit {
   isDownloading: boolean = true;
   isDownloadMode: number = 0;
   sectorsJoined :string='';
-  finalSectors:Sector[]=[]
+  finalSectors:Sector[]=[];
+  isStageDisble:boolean=false;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -401,6 +402,7 @@ export class PortfolioTrack4Component implements OnInit {
 
   save(form: NgForm) {
     console.log("form", form)
+    this.isStageDisble =true;
     // this.showSections = true
     //save assessment
 
@@ -422,7 +424,7 @@ export class PortfolioTrack4Component implements OnInit {
               this.messageService.add({
                 severity: 'success',
                 summary: 'Success',
-                detail: 'Intervention  has been saved successfully',
+                detail: 'Assessment has been created successfully',
                 closable: true,
               },            
               
@@ -721,7 +723,7 @@ export class PortfolioTrack4Component implements OnInit {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Assessment created successfully',
+            detail: 'Assessment has been created successfully',
             closable: true,
           })
          this.showResults();
@@ -761,7 +763,7 @@ export class PortfolioTrack4Component implements OnInit {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Assessment created successfully',
+            detail: 'Assessment has been created successfully',
             closable: true,
           })
           this.showResults();

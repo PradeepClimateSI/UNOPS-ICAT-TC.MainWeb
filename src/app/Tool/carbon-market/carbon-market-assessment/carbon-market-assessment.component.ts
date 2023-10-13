@@ -53,6 +53,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   sectorsJoined :string='';
   finalSectors:Sector[]=[]
   characteristicsList: Characteristics[] = [];
+  isStageDisble:boolean=false;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -94,6 +95,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     this.assessment.tool = 'Carbon Market Tool'
     this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
     this.assessment.assessment_approach = 'DIRECT'
+    this.isStageDisble =true;
 
     if (form.valid) {
       this.methodologyAssessmentControllerServiceProxy.saveAssessment(this.assessment)
@@ -110,7 +112,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
               this.messageService.add({
                 severity: 'success',
                 summary: 'Success',
-                detail: 'Intervention  has been saved successfully',
+                detail: 'Assessment has been created successfully',
                 closable: true,
               },            
               
@@ -152,7 +154,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
                     this.messageService.add({
                       severity: 'success',
                       summary: 'Success',
-                      detail: 'Assessment created successfully',
+                      detail: 'Assessment has been created successfully',
                       closable: true,
                     })
                     this.isSavedAssessment = true
