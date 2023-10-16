@@ -123,7 +123,8 @@ export class PortfolioTrack4Component implements OnInit {
   isDownloading: boolean = true;
   isDownloadMode: number = 0;
   sectorsJoined :string='';
-  finalSectors:Sector[]=[]
+  finalSectors:Sector[]=[];
+  isStageDisble:boolean=false;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -159,7 +160,7 @@ export class PortfolioTrack4Component implements OnInit {
 
   async ngOnInit(): Promise<void> {
  this.load = false; //need to change as false
-// this.isSavedAssessment = true //need to change as false
+ //this.isSavedAssessment = true //need to change as false
 
 this.tableData =  this.getProductsData();
 
@@ -234,6 +235,7 @@ this.tableData =  this.getProductsData();
      console.log("ressssSDGs", res)
      this.sdgList = res
     });
+
 
   }
 
@@ -404,10 +406,11 @@ this.tableData =  this.getProductsData();
 
   save(form: NgForm) {
     console.log("form", form)
+    this.isStageDisble =true;
     // this.showSections = true
     //save assessment
 
-    this.assessment.tool = 'Portfolio Tool'
+    this.assessment.tool = 'PORTFOLIO'
     this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
 
     if (form.valid) {
@@ -425,7 +428,7 @@ this.tableData =  this.getProductsData();
               this.messageService.add({
                 severity: 'success',
                 summary: 'Success',
-                detail: 'Intervention  has been saved successfully',
+                detail: 'Assessment has been created successfully',
                 closable: true,
               },            
               
@@ -499,8 +502,8 @@ this.tableData =  this.getProductsData();
 
   }
   pushBarriers(barrier:any){
-    console.log("barrier",barrier)
     this.finalBarrierList.push(barrier)
+    this.barrierSelected = new BarrierSelected()
   
   }
   barriersNameArray(Characteristics:any[]){
@@ -563,6 +566,12 @@ this.tableData =  this.getProductsData();
   }
 
   onCategoryTabChange(event: any, tabview: TabView) {
+   // this.outcomeData[0].CategoryName = "tttttt";
+   // this.outcomeData[0].data[0].justification = "heloooo";
+   // this.outcomeData[0].data[0].score = 3;
+
+console.log("wwwwww", this.outcomeData)
+    
     this.categoryTabIndex = event.index;
     console.log("category index", this.categoryTabIndex)
     if(!this.failedLikelihoodArray.some(
@@ -724,7 +733,7 @@ this.tableData =  this.getProductsData();
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Assessment created successfully',
+            detail: 'Assessment has been created successfully',
             closable: true,
           })
          this.showResults();
@@ -764,7 +773,7 @@ this.tableData =  this.getProductsData();
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Assessment created successfully',
+            detail: 'Assessment has been created successfully',
             closable: true,
           })
           this.showResults();

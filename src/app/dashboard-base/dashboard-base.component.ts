@@ -5,6 +5,7 @@ import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
 import { UserType, ServiceProxy } from 'shared/service-proxies/auth-service-proxies';
 import { NotificationControllerServiceProxy, User, UsersControllerServiceProxy,Notification, CountryControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
+import { MasterDataService } from 'app/shared/master-data.service';
 
 @Component({
   selector: 'app-dashboard-base',
@@ -36,6 +37,7 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
     private cdr: ChangeDetectorRef,
     private notificationServiceProxy: NotificationControllerServiceProxy,
     private countryProxy: CountryControllerServiceProxy,
+    public masterDataService: MasterDataService
   ) { }
   ngAfterViewInit(): void {
     this.cdr.detectChanges();

@@ -79,7 +79,7 @@
                         pRipple
                         [disabled]="!this.isPortfolioTool &&  userRole !=loginRole.External"
                         (click)="goToPortfolio()"
-                        label="Portfolio">
+                        [label]="masterDataService.getToolName('PORTFOLIO')">
                     </button>
                 </div>
 

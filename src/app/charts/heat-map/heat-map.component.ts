@@ -59,7 +59,6 @@ export class HeatMapComponent {
   }
 
   enterHeatMapPoint(x: number, y: number, event: any) {
-    console.log(this.tableData)
     if (this.tableData){
       this.pointTableDatas = this.tableData.filter(item => item.outcomeScore === x && item.processScore === y)
       if (this.pointTableDatas.length > 0) {

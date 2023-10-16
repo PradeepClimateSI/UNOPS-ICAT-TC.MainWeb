@@ -53,6 +53,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   sectorsJoined :string='';
   finalSectors:Sector[]=[]
   characteristicsList: Characteristics[] = [];
+  isStageDisble:boolean=false;
   tableData : any;
 
   constructor(
@@ -77,6 +78,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     await this.getPolicies()
     await this.getSetors()
     this.international_tooltip = 'Name of international or private carbon market standard under which the intervention is registered.'
+    await this.getCharacteristics();
   }
 
   async getSetors() {
@@ -91,11 +93,18 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   async getPolicies() {
     this.policies = await this.projectControllerServiceProxy.findAllPolicies().toPromise()
   }
+  async getCharacteristics() {
+   
+    this.characteristicsList = await this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().toPromise();
+
+   
+  }
 
   save(form: NgForm) {
-    this.assessment.tool = 'Carbon Market Tool'
+    this.assessment.tool = 'CARBON_MARKET'
     this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
     this.assessment.assessment_approach = 'DIRECT'
+    this.isStageDisble =true;
 
     if (form.valid) {
       this.methodologyAssessmentControllerServiceProxy.saveAssessment(this.assessment)
@@ -112,7 +121,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
               this.messageService.add({
                 severity: 'success',
                 summary: 'Success',
-                detail: 'Intervention  has been saved successfully',
+                detail: 'Assessment has been created successfully',
                 closable: true,
               },            
               
@@ -140,7 +149,6 @@ export class CarbonMarketAssessmentComponent implements OnInit {
                     sec.sector = sector
                     toolsMultiselectDto.sectors.push(sec)
                   }
-                  console.log(this.geographicalAreasCoveredArr)
                   for (let geo of this.geographicalAreasCoveredArr){
                     let area = new GeographicalAreasCovered()
                     area.assessment= res
@@ -154,7 +162,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
                     this.messageService.add({
                       severity: 'success',
                       summary: 'Success',
-                      detail: 'Assessment created successfully',
+                      detail: 'Assessment has been created successfully',
                       closable: true,
                     })
                     this.isSavedAssessment = true
@@ -227,7 +235,6 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   }
 
   pushBarriers(barrier:any){
-    console.log("barrier",barrier)
     this.finalBarrierList.push(barrier)
   
   }
@@ -247,8 +254,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     
   }
   showDialog(){
-    this.barrierBox =true;
-    console.log(this.barrierBox)  
+    this.barrierBox =true; 
   }
   onItemSelectSectors($event: any) {
    

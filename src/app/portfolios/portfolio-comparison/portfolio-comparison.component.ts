@@ -10,10 +10,10 @@ import * as XLSX from 'xlsx-js-style';
   styleUrls: ['./portfolio-comparison.component.css']
 })
 export class PortfolioComparisonComponent implements OnInit {
-activeIndexMain: number;
-onMainTabChange($event: any) {
-throw new Error('Method not implemented.');
-}
+  activeIndexMain: number;
+  onMainTabChange($event: any) {
+    throw new Error('Method not implemented.');
+  }
   portfolioId: number;
   assessmentList: any[];
   portfolio: any;
@@ -50,7 +50,7 @@ throw new Error('Method not implemented.');
   async getPortfolioData() {
     this.portfolio = (await this.portfolioServiceProxy.getPortfolioById(this.portfolioId).toPromise())[0]
     this.noOfAssessments = (await this.portfolioServiceProxy.assessmentsDataByAssessmentId(this.portfolioId).toPromise()).length
-console.log(this.portfolio)
+
     this.card.push(
       ...[
         { title: 'Portfolio ID', data: this.portfolio.portfolioId },
@@ -66,8 +66,8 @@ console.log(this.portfolio)
       ])
   }
 
-  hasCMTool(){
-    if (this.assessmentList.find(o => o.assessment.tool === 'Carbon Market Tool')) this.hasCMToolAssessments = true
+  hasCMTool() {
+    if (this.assessmentList.find(o => o.assessment.tool === 'CARBON_MARKET')) this.hasCMToolAssessments = true
     else this.hasCMToolAssessments = false
   }
 
@@ -90,7 +90,7 @@ console.log(this.portfolio)
         { label: 'STATUS', code: 'status' },
         { label: 'GHG MITIGATION (MT CO2-EG)', code: 'mitigation' },
       ],
-      interventions:interventions.aggregation_data.interventions,
+      interventions: interventions.aggregation_data.interventions,
       total: interventions.aggregation_data.total
     }
   }
@@ -112,39 +112,35 @@ console.log(this.portfolio)
       let alignment_position = length - this.alignment_data.interventions.length + 1
       let col_count = this.alignment_data.col_set_1.length - 2
       let cols = this.getNextLetters('E', col_count)
-      let row_count = this.alignment_data.interventions.length 
+      let row_count = this.alignment_data.interventions.length
       let rows = []
       for (let i = 0; i < row_count; i++) {
         const nextInteger = alignment_position + i;
         rows.push(nextInteger);
       }
       let colorMap = this.createColorMap(cols, rows)
-      console.log(colorMap)
       for (const itm of colorMap) {
         if (workSheettableComparison[itm.cell]) {
-          console.log("has cell", typeof itm.cell, itm.color, workSheettableComparison[itm.cell])
           workSheettableComparison[itm.cell].s = {
             fill: { fgColor: { rgb: itm.color } },
             font: { color: { rgb: itm.color } }
           };
         }
       }
-      XLSX.writeFile(workbook, "Report.xlsx", {cellStyles: true});
+      XLSX.writeFile(workbook, "Report.xlsx", { cellStyles: true });
     }, 1000);
   }
 
-  createColorMap(_cols: any, _rows: any){
+  createColorMap(_cols: any, _rows: any) {
     let colorMap = []
     let cols = _cols
     let rows = _rows
 
-    console.log(cols, rows)
-    for (let [index,col] of this.alignment_data.col_set_2.entries()){
-      for (let [idx, intervention] of this.alignment_data.interventions.entries()){
-        if (intervention[col.code]?.name){
-          console.log(intervention[col.code].value, index, col.code, idx, intervention)
+    for (let [index, col] of this.alignment_data.col_set_2.entries()) {
+      for (let [idx, intervention] of this.alignment_data.interventions.entries()) {
+        if (intervention[col.code]?.name) {
           let obj = new ColorMap()
-          obj.cell = cols[index-4] + rows[idx]
+          obj.cell = cols[index - 4] + rows[idx]
           obj.color = this.getBackgroundColor(+intervention[col.code].value).replace('#', '')
           colorMap.push(obj)
         }
@@ -159,10 +155,10 @@ console.log(this.portfolio)
       // Check if the input is a single letter (A-Z or a-z)
       return 'Invalid input';
     }
-  
+
     const startCharCode = letter.toUpperCase().charCodeAt(0); // Convert to uppercase and get char code
     const nextLetters = [letter.toUpperCase()];
-  
+
     for (let i = 1; i <= num; i++) {
       const nextCharCode = startCharCode + i;
       const nextLetter = String.fromCharCode(nextCharCode);
@@ -199,5 +195,5 @@ console.log(this.portfolio)
         return 'white';
     }
   }
-  
+
 }

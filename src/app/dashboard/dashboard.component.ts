@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { CountryControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
+import { MasterDataService } from 'app/shared/master-data.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -73,6 +74,7 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private projectProxy: ProjectControllerServiceProxy,
     private countryProxy: CountryControllerServiceProxy,
+    public masterDataService: MasterDataService
   ) {}
 
   ngOnInit(): void {

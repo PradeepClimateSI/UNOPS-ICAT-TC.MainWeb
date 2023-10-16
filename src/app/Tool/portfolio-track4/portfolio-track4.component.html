@@ -187,7 +187,7 @@
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <textarea  name="envisioned_change" placeholder="Enter an answer" #envisioned_change="ngModel"
+                  <textarea [disabled]="isStageDisble" name="envisioned_change" placeholder="Enter an answer" #envisioned_change="ngModel"
                     [(ngModel)]="assessment.envisioned_change" rows="1" cols="130" pInputText autoResize="autoResize" required
                     ></textarea>
                     <p class="info-message text-danger" *ngIf="  !envisioned_change.value &&                     
@@ -208,7 +208,7 @@
                 <div class="p-field">
                   <!-- <label for="vision_short">Short Term ({{"\u003C"}}5 years)</label> -->
                   <label for="vision_short">Within 5 years?</label>
-                  <textarea  name="vision_short" placeholder="Short Term Vision" #vision_short="ngModel"
+                  <textarea [disabled]="isStageDisble"  name="vision_short" placeholder="Short Term Vision" #vision_short="ngModel"
                     [(ngModel)]="assessment.vision_short" rows="1" cols="130" pInputText autoResize="autoResize"
                     ></textarea>
                     <p class="info-message text-danger" *ngIf="  !vision_short.value &&                     
@@ -223,7 +223,7 @@
                 <div class="p-field">
                   <!-- <label for="vision_medium">Medium Term ({{"\u003E"}}5 years and   {{"\u003C"}}15 years)</label> -->
                   <label for="vision_short">Between 5 and 15 years?</label>
-                  <textarea  name="vision_medium" placeholder="Medium Term Vision" #vision_medium="ngModel"
+                  <textarea [disabled]="isStageDisble"  name="vision_medium" placeholder="Medium Term Vision" #vision_medium="ngModel"
                     [(ngModel)]="assessment.vision_medium" rows="1" cols="130" pInputText autoResize="autoResize"
                     ></textarea>
                     <p class="info-message text-danger" *ngIf="  !vision_medium.value &&                     
@@ -237,7 +237,7 @@
                 <div class="p-field">
                   <!-- <label for="vision_long">Long Term ({{"\u003E"}}15 years)</label> -->
                   <label for="vision_short">After 15 years?</label>
-                  <textarea name="vision_long" placeholder="Long Term Vision"
+                  <textarea [disabled]="isStageDisble" name="vision_long" placeholder="Long Term Vision"
                     #vision_long="ngModel" [(ngModel)]="assessment.vision_long" rows="1" cols="130" pInputText
                     autoResize="autoResize"></textarea>
                     <p class="info-message text-danger" *ngIf="  !vision_long.value &&                     
@@ -256,7 +256,7 @@
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <textarea name="phase_of_transformation" placeholder="Enter an answer" #phase_of_transformation="ngModel"
+                  <textarea [disabled]="isStageDisble" name="phase_of_transformation" placeholder="Enter an answer" #phase_of_transformation="ngModel"
                     [(ngModel)]="assessment.phase_of_transformation" rows="1" cols="130" pInputText autoResize="autoResize"
                     ></textarea>
                     <p class="info-message text-danger" *ngIf="  !phase_of_transformation.value &&                     
@@ -274,7 +274,7 @@
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <textarea  name="change_in_system" placeholder="Enter an answer" #change_in_system="ngModel"
+                  <textarea [disabled]="isStageDisble" name="change_in_system" placeholder="Enter an answer" #change_in_system="ngModel"
                     [(ngModel)]="assessment.change_in_system" rows="1" cols="130" pInputText autoResize="autoResize"
                     ></textarea>
                     <p class="info-message text-danger" *ngIf="  !change_in_system.value &&                     

@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataRequestComponent } from 'app/data-request-flow/data-request/data-request.component';
+import * as moment from 'moment';
 import {
   MethodologyAssessmentControllerServiceProxy,
   ParameterHistoryControllerServiceProxy,
@@ -45,8 +46,8 @@ export class QualityCheckDetailComponent implements OnInit {
         this.param = res;
         this.headerlcimateActionName = res[0].assessment.climateAction.policyName;
         this.headerAssessmentType = res[0].assessment.assessmentType;
-        this.from = res[0].assessment.from;
-        this.fromTo = res[0].assessment.to;
+        this.from =  moment(res[0].assessment.from).format('YYYY-MM-DD');
+        this.fromTo = moment(res[0].assessment.to).format('YYYY-MM-DD');
         console.log("param ", this.param)
 
       })

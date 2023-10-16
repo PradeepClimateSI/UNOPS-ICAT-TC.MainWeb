@@ -222,7 +222,7 @@
               {{ assessList.assessmentType }}
             </td>
             <td>
-              {{ assessList.tool }}
+              {{ masterDataService.getToolName(assessList.tool) }}
             </td>
             <td>
               {{ assessList.from | date:'yyyy-MM-dd' }} - {{ assessList.to | date:'yyyy-MM-dd'}}
