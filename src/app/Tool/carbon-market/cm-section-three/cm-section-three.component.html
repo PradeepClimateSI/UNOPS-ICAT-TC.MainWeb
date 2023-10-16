@@ -1,8 +1,8 @@
 <p-tabView (onChange)="onMainTabChange($event) " [(activeIndex)]="activeIndexMain ">
-    <p-tabPanel *ngFor="let type of types" header="{{type.name}}">
+    <p-tabPanel [disabled]="true" *ngFor="let type of types" header="{{type.name}}">
         <p-tabView #tabView (onChange)="onCategoryTabChange($event)" [(activeIndex)]="activeIndex"
             *ngIf="type.code === 'process'">
-            <p-tabPanel *ngFor="let category of categories[type.code]" [header]="category.name">
+            <p-tabPanel [disabled]="true" *ngFor="let category of categories[type.code]" [header]="category.name">
                 <br>
                 <p style="font-size: large;">{{category.description}}</p>
                 <br>
@@ -41,7 +41,7 @@
         </p-tabView>
         <p-tabView #tabView (onChange)="onCategoryTabChange2($event)" [(activeIndex)]="activeIndex2"
             *ngIf="type.code === 'outcome'">
-            <p-tabPanel *ngFor="let category of outcome" >
+            <p-tabPanel [disabled]="true" *ngFor="let category of outcome" >
                 <ng-template pTemplate="header">
                     <span [innerHTML]="category.name"></span>
                 </ng-template>

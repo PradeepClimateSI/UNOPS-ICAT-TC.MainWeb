@@ -522,12 +522,12 @@
         <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)">
           <p-tabView (onChange)="onMainTabChange($event)" [(activeIndex)]="activeIndexMain ">
 
-            <p-tabPanel header="Process of Change">
+            <p-tabPanel [disabled]="true" header="Process of Change">
               <!-- <div *ngFor="let characteristic of meth1Process"> -->
 
               <p-tabView #tabView (onChange)="onCategoryTabChange($event, tabView)" [(activeIndex)]="activeIndex ">
 
-                <p-tabPanel [header]="category.CategoryName" *ngFor="let category of processData">
+                <p-tabPanel [disabled]="true" [header]="category.CategoryName" *ngFor="let category of processData">
 
 
                   <div class="characteristic-Topic" *ngFor="let data of category.data; index as i">
@@ -655,10 +655,10 @@
             </p-tabPanel>
 
 
-            <p-tabPanel header="Outcome of Change">
+            <p-tabPanel [disabled]="true" header="Outcome of Change">
               <p-tabView #tabView2 (onChange)="onCategoryTabChange($event, tabView2) " [(activeIndex)]="activeIndex2">
 
-                <p-tabPanel *ngFor="let category of outcomeData">
+                <p-tabPanel [disabled]="true" *ngFor="let category of outcomeData">
 
                   <ng-template pTemplate="header">
                     <!-- Use a container div for the header -->
