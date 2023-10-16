@@ -85,9 +85,10 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const countryId = token ? decode<any>(token).countryId : 0;
     this.countryId = countryId;
-    if (countryId > 0) {
-      this.sectorList = await this.sectorProxy.getCountrySector(countryId).toPromise()
-    } 
+    // if (countryId > 0) {
+    //   this.sectorList = await this.sectorProxy.getCountrySector(countryId).toPromise()
+    // } 
+    this.sectorList = await this.sectorProxy.findAllSector().toPromise()
   }
 
   async getPolicies() {
