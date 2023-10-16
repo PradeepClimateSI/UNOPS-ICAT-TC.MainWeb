@@ -19,7 +19,7 @@
                 <ng-template pTemplate="body" let-tableData>
                     <tr>
                         <td>{{ tableData.climateAction?.policyName }}</td>
-                        <td>{{ tableData.tool }}</td>
+                        <td>{{ masterDataService.getToolName(tableData.tool) }}</td>
                         <td class="text-center">{{ tableData.process_score!=null && tableData.process_score!=undefined?
                             tableData.process_score:'-' }}</td>
                         <td class="text-center">{{ tableData.outcome_score!=null &&
