@@ -187,7 +187,7 @@
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <textarea  name="envisioned_change" placeholder="Enter an answer" #envisioned_change="ngModel"
+                  <textarea [disabled]="isStageDisble" name="envisioned_change" placeholder="Enter an answer" #envisioned_change="ngModel"
                     [(ngModel)]="assessment.envisioned_change" rows="1" cols="130" pInputText autoResize="autoResize" required
                     ></textarea>
                     <p class="info-message text-danger" *ngIf="  !envisioned_change.value &&                     
@@ -208,7 +208,7 @@
                 <div class="p-field">
                   <!-- <label for="vision_short">Short Term ({{"\u003C"}}5 years)</label> -->
                   <label for="vision_short">Within 5 years?</label>
-                  <textarea  name="vision_short" placeholder="Short Term Vision" #vision_short="ngModel"
+                  <textarea [disabled]="isStageDisble"  name="vision_short" placeholder="Short Term Vision" #vision_short="ngModel"
                     [(ngModel)]="assessment.vision_short" rows="1" cols="130" pInputText autoResize="autoResize"
                     ></textarea>
                     <p class="info-message text-danger" *ngIf="  !vision_short.value &&                     
@@ -223,7 +223,7 @@
                 <div class="p-field">
                   <!-- <label for="vision_medium">Medium Term ({{"\u003E"}}5 years and   {{"\u003C"}}15 years)</label> -->
                   <label for="vision_short">Between 5 and 15 years?</label>
-                  <textarea  name="vision_medium" placeholder="Medium Term Vision" #vision_medium="ngModel"
+                  <textarea [disabled]="isStageDisble"  name="vision_medium" placeholder="Medium Term Vision" #vision_medium="ngModel"
                     [(ngModel)]="assessment.vision_medium" rows="1" cols="130" pInputText autoResize="autoResize"
                     ></textarea>
                     <p class="info-message text-danger" *ngIf="  !vision_medium.value &&                     
@@ -237,7 +237,7 @@
                 <div class="p-field">
                   <!-- <label for="vision_long">Long Term ({{"\u003E"}}15 years)</label> -->
                   <label for="vision_short">After 15 years?</label>
-                  <textarea name="vision_long" placeholder="Long Term Vision"
+                  <textarea [disabled]="isStageDisble" name="vision_long" placeholder="Long Term Vision"
                     #vision_long="ngModel" [(ngModel)]="assessment.vision_long" rows="1" cols="130" pInputText
                     autoResize="autoResize"></textarea>
                     <p class="info-message text-danger" *ngIf="  !vision_long.value &&                     
@@ -256,7 +256,7 @@
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <textarea name="phase_of_transformation" placeholder="Enter an answer" #phase_of_transformation="ngModel"
+                  <textarea [disabled]="isStageDisble" name="phase_of_transformation" placeholder="Enter an answer" #phase_of_transformation="ngModel"
                     [(ngModel)]="assessment.phase_of_transformation" rows="1" cols="130" pInputText autoResize="autoResize"
                     ></textarea>
                     <p class="info-message text-danger" *ngIf="  !phase_of_transformation.value &&                     
@@ -274,7 +274,7 @@
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <textarea  name="change_in_system" placeholder="Enter an answer" #change_in_system="ngModel"
+                  <textarea [disabled]="isStageDisble" name="change_in_system" placeholder="Enter an answer" #change_in_system="ngModel"
                     [(ngModel)]="assessment.change_in_system" rows="1" cols="130" pInputText autoResize="autoResize"
                     ></textarea>
                     <p class="info-message text-danger" *ngIf="  !change_in_system.value &&                     
@@ -517,6 +517,7 @@
   </div> -->
     <div *ngIf=" load && selectedApproach === 'Direct'">
       <!-- <div > -->
+        <!-- <div> -->
       <div class="card" *ngIf="isSavedAssessment && tabLoading">
         <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)">
           <p-tabView (onChange)="onMainTabChange($event)" [(activeIndex)]="activeIndexMain ">
@@ -557,7 +558,7 @@
                               <div class="row p-2">
                                 <div class="col-12 col-lg-6">
                                   <div class="p-field">
-                                    <label for="Description">Relevance</label>
+                                    <label for="Description">Relevance*</label>
                                     <p-dropdown appendTo="body" name="data.charData.relavance" #rel="ngModel" placeholder="Select Relevance"
                                       [(ngModel)]="data.relavance" [options]="relevance" optionLabel="name" optionValue="value"
                                       [required]="true"></p-dropdown>
@@ -586,7 +587,7 @@
                               <div class="row p-2">
                                 <div class="col-12 col-lg-6">
                                   <div class="p-field">
-                                    <label for="Relevance">Likelihood</label>
+                                    <label for="Relevance">Likelihood*</label>
                                     <p-dropdown appendTo="body" name="data.charData.likelihood" #likelihood2="ngModel"
                                       placeholder="Select Likelihood" [(ngModel)]="data.likelihood"
                                       [options]="likelihood" optionLabel="id" optionValue="value"
@@ -598,7 +599,7 @@
 
                                 <div class="col-12 col-lg-6">
                                   <div class="p-field">
-                                    <label for="justification">Justification</label>
+                                    <label for="justification">Justification*</label>
                                     <input type="text" pInputText [(ngModel)]="data.likelihood_justification" #just1="ngModel"
                                       placeholder="Enter Justification" name="data.charData.likelihood_justification" />
                                       <p class="info-message text-danger" *ngIf="!data.likelihood_justification  && (fData1.submitted || just1.touched) ">
@@ -638,6 +639,13 @@
                         </div>
                       </div>
 
+                    </div>
+                  </div>
+                  <div  class="row justify-content-end">
+                    <div class="d-flex flex-row-reverse mt-20 ">
+                         <div class="btn btn-primary text-uppercase"  (click)="next(category.data,'process')" >
+                             Next
+                         </div>
                     </div>
                   </div>
 
@@ -803,7 +811,7 @@
 
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
-                                        <label for="justification">Justification</label>
+                                        <label for="justification">Justification*</label>
                                         <input type="text" pInputText [(ngModel)]="data.justification" #just2="ngModel"
                                           placeholder="Enter Justification" name="justification" />
                                           <p class="info-message text-danger" *ngIf="!data.justification  && (fData1.submitted || just2.touched) ">
@@ -870,6 +878,13 @@
                           </div>
                         </form>
 
+                      </div>
+                    </div>
+                    <div  class="row justify-content-end" *ngIf="activeIndex2!==5 || activeIndexMain!==1">
+                      <div class="d-flex flex-row-reverse mt-20 ">
+                           <div class="btn btn-primary text-uppercase"  (click)="next(category.data,'outcome')" >
+                               Next
+                           </div>
                       </div>
                     </div>
                   </div>
@@ -972,7 +987,7 @@
 
                                       <div class="col-12 col-lg-6">
                                         <div class="p-field">
-                                          <label for="justification">Justification</label>
+                                          <label for="justification">Justification*</label>
                                           <input (ngModelChange)="assignSDG(selectedSDGs[i], data)" type="text"
                                             pInputText [(ngModel)]="data.justification" #just3="ngModel"
                                             placeholder="Enter Justification" name="justification" />
@@ -1014,6 +1029,13 @@
                         </div>
                       </div>
                     </div> <br><br>
+                    </div>
+                    <div  class="row justify-content-end" >
+                      <div class="d-flex flex-row-reverse mt-20 ">
+                           <div class="btn btn-primary text-uppercase"  (click)="next(sdgDataSendArray2,'sdg')" >
+                               Next
+                           </div>
+                      </div>
                     </div>
                    
                   </div>
@@ -1106,7 +1128,7 @@
 
                                       <div class="col-12 col-lg-6">
                                         <div class="p-field">
-                                          <label for="justification">Justification</label>
+                                          <label for="justification">Justification*</label>
                                           <input (ngModelChange)="assignSDG(selectedSDGs[i], data)" type="text"
                                             pInputText [(ngModel)]="data.justification" #just4="ngModel"
                                             placeholder="Enter Justification" name="justification" />
@@ -1149,7 +1171,13 @@
                       </div>
                     </div>
                     </div>
-
+                    <div  class="row justify-content-end" >
+                      <div class="d-flex flex-row-reverse mt-20 ">
+                           <div class="btn btn-primary text-uppercase"  (click)="next(sdgDataSendArray4,'sdg')" >
+                               Next
+                           </div>
+                      </div>
+                    </div>
                   </div>
 
 
@@ -1189,7 +1217,7 @@
             </div>
 
           </div>
-          <div *ngIf="activeIndex2!==5 || activeIndexMain!==1" class="row justify-content-end">
+          <!-- <div *ngIf="activeIndex2!==5 || activeIndexMain!==1" class="row justify-content-end">
             <div>
 
               <div class="d-flex flex-row-reverse mt-20 ">
@@ -1200,7 +1228,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         </form>
       </div>
     </div>
@@ -1271,7 +1299,7 @@
                                 <div class="row p-2">
                                   <div class="col-12 col-lg-6">
                                     <div class="p-field">
-                                      <label for="relavance">Relevance</label>
+                                      <label for="relavance">Relevance*</label>
                                       <p-dropdown appendTo="body" name="relavance" placeholder="Select Institution"
                                         [(ngModel)]="data.relavance" [options]="instiTutionList" optionLabel="name"
                                         optionValue="id" [required]="true"></p-dropdown>
@@ -1322,7 +1350,7 @@
                                 <div class="row p-2">
                                   <div class="col-12 col-lg-6">
                                     <div class="p-field">
-                                      <label for="likelihood">Likelihood</label>
+                                      <label for="likelihood">Likelihood*</label>
                                       <p-dropdown appendTo="body" name="likelihood" placeholder="Select Institution"
                                         [(ngModel)]="data.likelihood" [options]="instiTutionList" optionLabel="name"
                                         optionValue="id" [required]="true"></p-dropdown>
@@ -1331,7 +1359,7 @@
   
                                   <div class="col-12 col-lg-6">
                                     <div class="p-field">
-                                      <label for="justification">Justification</label>
+                                      <label for="justification">Justification*</label>
                                       <input type="text" pInputText [(ngModel)]="data.likelihood_justification"
                                         placeholder="Enter Justification" name="data.charData.likelihood_justification" />
   
@@ -1464,7 +1492,7 @@
   
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
-                                        <label for="justification">Justification</label>
+                                        <label for="justification">Justification*</label>
                                         <input type="text" pInputText [(ngModel)]="data.justification"
                                           placeholder="Enter Justification" name="justification" />
   
@@ -1538,7 +1566,7 @@
               </div>
   
             </div>
-            <div *ngIf="activeIndex2!==3 || activeIndexMain!==1" class="row justify-content-end">
+            <!-- <div *ngIf="activeIndex2!==3 || activeIndexMain!==1" class="row justify-content-end">
               <div>
   
                 <div class="d-flex flex-row-reverse mt-20 ">
@@ -1548,7 +1576,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
           </form>
         </div>
       </div>

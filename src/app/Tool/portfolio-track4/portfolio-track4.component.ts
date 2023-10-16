@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import { AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, InstitutionControllerServiceProxy, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, PortfolioQuestionDetails, PortfolioQuestions, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, PortfolioQuestionDetails, PortfolioQuestions, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { Dropdown } from 'primeng/dropdown';
@@ -123,7 +123,8 @@ export class PortfolioTrack4Component implements OnInit {
   isDownloading: boolean = true;
   isDownloadMode: number = 0;
   sectorsJoined :string='';
-  finalSectors:Sector[]=[]
+  finalSectors:Sector[]=[];
+  isStageDisble:boolean=false;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -159,7 +160,7 @@ export class PortfolioTrack4Component implements OnInit {
 
   async ngOnInit(): Promise<void> {
  this.load = false; //need to change as false
-// this.isSavedAssessment = true //need to change as false
+ //this.isSavedAssessment = true //need to change as false
 
 this.tableData =  this.getProductsData();
 
@@ -234,6 +235,7 @@ this.tableData =  this.getProductsData();
      console.log("ressssSDGs", res)
      this.sdgList = res
     });
+
 
   }
 
@@ -404,6 +406,7 @@ this.tableData =  this.getProductsData();
 
   save(form: NgForm) {
     console.log("form", form)
+    this.isStageDisble =true;
     // this.showSections = true
     //save assessment
 
@@ -425,7 +428,7 @@ this.tableData =  this.getProductsData();
               this.messageService.add({
                 severity: 'success',
                 summary: 'Success',
-                detail: 'Intervention  has been saved successfully',
+                detail: 'Assessment has been created successfully',
                 closable: true,
               },            
               
@@ -499,8 +502,8 @@ this.tableData =  this.getProductsData();
 
   }
   pushBarriers(barrier:any){
-    console.log("barrier",barrier)
     this.finalBarrierList.push(barrier)
+    this.barrierSelected = new BarrierSelected()
   
   }
   barriersNameArray(Characteristics:any[]){
@@ -563,6 +566,12 @@ this.tableData =  this.getProductsData();
   }
 
   onCategoryTabChange(event: any, tabview: TabView) {
+   // this.outcomeData[0].CategoryName = "tttttt";
+   // this.outcomeData[0].data[0].justification = "heloooo";
+   // this.outcomeData[0].data[0].score = 3;
+
+console.log("wwwwww", this.outcomeData)
+    
     this.categoryTabIndex = event.index;
     console.log("category index", this.categoryTabIndex)
     if(!this.failedLikelihoodArray.some(
@@ -724,7 +733,7 @@ this.tableData =  this.getProductsData();
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Assessment created successfully',
+            detail: 'Assessment has been created successfully',
             closable: true,
           })
          this.showResults();
@@ -764,7 +773,7 @@ this.tableData =  this.getProductsData();
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Assessment created successfully',
+            detail: 'Assessment has been created successfully',
             closable: true,
           })
           this.showResults();
@@ -791,12 +800,46 @@ this.tableData =  this.getProductsData();
     }, 2000);
   }
 
-  next() {
+  // next() {
 
-    if (this.activeIndexMain === 1) {
+  //   if (this.activeIndexMain === 1) {
 
-      this.activeIndex2 = this.activeIndex2 + 1;
-      console.log("activeIndex2", this.activeIndex2)
+  //     this.activeIndex2 = this.activeIndex2 + 1;
+  //     console.log("activeIndex2", this.activeIndex2)
+
+  //   }
+  //   if (this.activeIndex === 3 && this.activeIndexMain !== 1) {
+  //     this.activeIndexMain = 1;
+  //     this.activeIndex2=0;
+
+  //   }
+  //   if (this.activeIndex <= 2 && this.activeIndex >= 0 && this.activeIndexMain === 0) {
+  //     this.activeIndex = this.activeIndex + 1;
+  //     console.log(this.activeIndex)
+
+  //   }
+
+  // }
+   next(data:any[],type:string){
+  // console.log("category",data)
+  // data?.filter(investorAssessment => console.log(investorAssessment.relavance,investorAssessment.relavance == 0))
+  if((data?.filter(investorAssessment => 
+      (investorAssessment.relavance !== undefined) && 
+      (investorAssessment.likelihood !== undefined) && 
+      (investorAssessment.likelihood_justification !== undefined) || 
+      (investorAssessment.relavance == 0))?.length === data?.length && type=='process')||
+      (data?.filter(investorAssessment => 
+        (investorAssessment.justification !== undefined) 
+       )?.length === data?.length && type=='outcome')||
+      (data?.filter(sdg => 
+        (sdg.data?.filter((data: { justification: undefined; } ) =>
+          (data.justification!== undefined))?.length === (sdg.data?.length)
+        ))?.length === data?.length && type=='sdg')) {
+    
+    if(this.activeIndexMain ===1 ){
+
+      this.activeIndex2 =this.activeIndex2+1;
+      console.log( "activeIndex2",this.activeIndex2)
 
     }
     if (this.activeIndex === 3 && this.activeIndexMain !== 1) {
@@ -804,12 +847,21 @@ this.tableData =  this.getProductsData();
       this.activeIndex2=0;
 
     }
-    if (this.activeIndex <= 2 && this.activeIndex >= 0 && this.activeIndexMain === 0) {
-      this.activeIndex = this.activeIndex + 1;
-      console.log(this.activeIndex)
+    if (this.activeIndex<=2 && this.activeIndex>=0 && this.activeIndexMain===0){
+      this.activeIndex =this.activeIndex +1;
+      console.log( this.activeIndex)
 
     }
-
+    // return true
+  }else{
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Please fill all mandotory fields',
+      closable: true,
+    });
+  }
+   
   }
 
   getCategory(characteristics: any, category: any) {
