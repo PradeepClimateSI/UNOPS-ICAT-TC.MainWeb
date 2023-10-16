@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { Assessment, CMAnswer, CMAssessmentQuestionControllerServiceProxy, CMQuestionControllerServiceProxy, CMResultDto, Institution, SaveCMResultDto } from 'shared/service-proxies/service-proxies';
+import { Assessment, CMAnswer, CMAssessmentQuestion, CMAssessmentQuestionControllerServiceProxy, CMQuestionControllerServiceProxy, CMResultDto, Institution, SaveCMResultDto, ServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-cm-section',
@@ -12,6 +12,7 @@ export class CmSectionComponent implements OnInit {
 
   @Input() assessment: Assessment
   @Input() approach: string
+  @Input() isEditMode: boolean;
 
   openAccordion = 0
 
@@ -33,6 +34,7 @@ export class CmSectionComponent implements OnInit {
 
   message: string
   defaultMessage = 'The preconditions for transformational change have not been met. <br> Transformational change = 0'
+  assessmentQuestions: CMAssessmentQuestion[]
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -40,6 +42,7 @@ export class CmSectionComponent implements OnInit {
     private messageService: MessageService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
+    private serviceProxy: ServiceProxy
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -72,6 +75,14 @@ export class CmSectionComponent implements OnInit {
       ]
     }
 
+    await this.setInitialState()
+
+  }
+
+  async setInitialState() {
+    if (this.isEditMode) {
+      this.assessmentQuestions = await this.cMAssessmentQuestionControllerServiceProxy.getAssessmentQuestionsByAssessmentId(this.assessment.id).toPromise()
+    }
   }
 
   async getSections() {
@@ -114,6 +125,10 @@ export class CmSectionComponent implements OnInit {
         this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['answer'] = e.answer
       }
       this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['question'] = question
+      if (this.isEditMode) {
+        let q = this.assessmentQuestions.find(o => o.question.id === question.id)
+        if (q) this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['assessmentQuestionId'] = q.id
+      }
       this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['type'] = e.type
 
       if (criteria.questions.length === idx + 1 && !this.recievedQuestions.includes(idx)) {
@@ -229,6 +244,7 @@ export class CmSectionComponent implements OnInit {
           item.question = q.question
           item.type = q.type
           item.filePath = q.file
+          if (this.isEditMode) item.assessmentQuestionId = q.assessmentQuestionId
           result.result.push(item)
         })
       })

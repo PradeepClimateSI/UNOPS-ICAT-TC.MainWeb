@@ -24,7 +24,7 @@
                     <br>
                     <p><strong><u>Guiding Question(s)</u></strong></p>
                     <div *ngFor="let question of char.questions">
-                        <app-cm-question [question]="question" [approach]="approach"
+                        <app-cm-question [question]="question" [approach]="approach" [assessmentquestions]="assessmentquestions" [isEditMode]="isEditMode"
                             (prev_answer)="onAnswer($event, question, char)"></app-cm-question>
                     </div>
                 </ng-container>

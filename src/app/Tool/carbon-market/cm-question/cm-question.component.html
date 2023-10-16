@@ -6,7 +6,7 @@
         <label for="ans">Answer</label>
     </div>
     <div class="col-6" *ngIf="question.answer_type === 'SINGLE' && showAnswer()">
-        <p-dropdown *ngIf="answers[0].label.length <= 80"  placeholder="Select answer" [options]="answers" optionLabel="label"  [style]="{'width': '100%'}"
+        <p-dropdown *ngIf="answers[0]?.label && answers[0].label.length <= 80"  placeholder="Select answer" [options]="answers"  [(ngModel)]="selectedAnswer" [style]="{'width': '100%'}"
             (onChange)="onSelectAnswer($event, question.answer_type)"> 
             <ng-template let-option pTemplate="item" >
                 <div class="custom-option">
@@ -14,7 +14,7 @@
                 </div>
              </ng-template>
         </p-dropdown>
-        <p-dropdown *ngIf="answers[0].label.length > 80" placeholder="Select answer" [options]="answers" optionLabel="label" [virtualScroll]="true" [virtualScrollItemSize]="5" [style]="{'width': '100%'}" 
+        <p-dropdown *ngIf="answers[0]?.label && answers[0].label.length > 80" placeholder="Select answer" [options]="answers" optionLabel="label" [virtualScroll]="true" [virtualScrollItemSize]="5" [style]="{'width': '100%'}" 
             (onChange)="onSelectAnswer($event, question.answer_type)"> 
             <ng-template let-option pTemplate="item" >
                 <div class="custom-option">

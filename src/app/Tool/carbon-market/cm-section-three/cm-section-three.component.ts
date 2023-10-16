@@ -4,7 +4,7 @@ import { MasterDataService } from 'app/shared/master-data.service';
 import { SelectedScoreDto } from 'app/shared/score.dto';
 import { environment } from 'environments/environment';
 import { MessageService } from 'primeng/api';
-import { CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, ScoreDto } from 'shared/service-proxies/service-proxies';
+import { CMAssessmentQuestion, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, ScoreDto } from 'shared/service-proxies/service-proxies';
 
 
 interface UploadEvent {
@@ -24,6 +24,8 @@ export class CmSectionThreeComponent implements OnInit {
 
 
   @Input() approach: string
+  @Input() assessmentquestions: CMAssessmentQuestion[]
+  @Input() isEditMode: boolean
   @Output() onSubmit = new EventEmitter()
 
   comment: any;
@@ -116,8 +118,109 @@ export class CmSectionThreeComponent implements OnInit {
       this.institutions = res;
     });
     this.relevance = this.masterDataService.relevance;
-
     await this.getSDGList()
+    await this.setInitialState()
+  }
+
+  async setInitialState() {
+    if (this.isEditMode) {
+      let sdgs: PortfolioSdg[] = []
+      this.assessmentquestions.forEach(o => {
+        if (o.selectedSdg.id !== undefined) {
+          sdgs.push(o.selectedSdg)
+        }
+      })
+      this.selectedSDGsList = [...new Map(sdgs.map(item =>
+        [item['name'], item])).values()];
+      this.onSelectSDG({})
+
+      await Promise.all(
+        this.types.map((type: any) => {
+          if (type.code === 'process') {
+            this.categories[type.code].map((cat: any) => {
+              cat.characteristics.map((char: any) => {
+                let assQ = this.assessmentquestions.find(o => o.characteristic.id === char.id)
+                if (assQ) {
+                  let rel = this.relevance.find(o => o.value.toString() === assQ?.relevance)
+                  char.relevance = rel.value
+                  char.assessmentQuestionId = assQ.id
+                }
+                return char
+              })
+            })
+          } else {
+            this.outcome.map((cat: any) => {
+              cat.results.map((res: any, idx: number) => {
+                let assQ = this.assessmentquestions.find(o => o.characteristic.id === res.characteristic.id)
+                if (assQ) {
+                  res.startingSituation = assQ.startingSituation
+                  res.expectedImpact = assQ.expectedImpact
+                  res.comment = assQ.comment
+                  res.sdgIndicator = assQ.sdgIndicator
+                  res.adaptationCoBenifit = assQ.adaptationCoBenifit
+                  res.assessmentQuestionId = assQ.id
+                  let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, res.characteristic)
+                  if (score) {
+                    res.selectedScore = score
+                    this.onSelectScore({}, res, idx)
+                  }
+                }
+              })
+            })
+          }
+        })
+      )
+      await Promise.all(
+        this.selectedSDGs.map((sdl: any) => {
+          sdl.scaleResult.map((sc: any) => {
+            let assQ = this.assessmentquestions.find(o => (o.characteristic.id === sc.characteristic.id) && (o.selectedSdg.id === sc.selectedSdg.id) )
+            if (assQ) {
+              sc.sdgIndicator = assQ.sdgIndicator
+              sc.startingSituation = assQ.startingSituation
+              sc.expectedImpact = assQ.expectedImpact
+              sc.comment = assQ.comment
+              sc.assessmentQuestionId = assQ.id
+              let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, sc.characteristic)
+              if (score) sc.selectedScore = score
+            }
+          })
+          sdl.sustainResult.map((sc: any) => {
+            let assQ = this.assessmentquestions.find(o => (o.characteristic.id === sc.characteristic.id) && (o.selectedSdg.id === sc.selectedSdg.id))
+            if (assQ) {
+              sc.comment = assQ.comment
+              sc.assessmentQuestionId = assQ.id
+              let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, sc.characteristic)
+              if (score) {
+                sc.selectedScore = score
+                this.onSelectScore({}, sc, 2)
+              }
+            }
+          })
+        })
+      )
+    }
+  }
+
+  getSelectedScoreFromOptions (selectedScore: string, characteristic: Characteristics) {
+    let score
+    if (characteristic.code === "INTERNATIONAL" && characteristic.category.code === "SCALE_GHG") {
+      score = this.GHG_scale_score_macro.find (o => o.value.toString() === selectedScore)
+    } else if (characteristic.code === "NATIONAL" && characteristic.category.code === "SCALE_GHG") {
+      score = this.GHG_scale_score_medium.find(o => o.value.toString() === selectedScore)
+    } else if (characteristic.code === "SUBNATIONAL" && characteristic.category.code === "SCALE_GHG") {
+      score = this.GHG_scale_score_micro.find(o => o.value.toString() === selectedScore)
+    } else if (characteristic.category.code === "SUSTAINED_GHG") {
+      score = this.GHG_sustained_score.find(o => o.value.toString() === selectedScore)
+    } else if (characteristic.category.code === "SCALE_SD") {
+      score = this.SDG_scale_score.find(o => o.value.toString() === selectedScore)
+    } else if (characteristic.category.code === "SUSTAINED_SD") {
+      score = this.SDG_sustained_score.find(o => o.value.toString() === selectedScore)
+    } else if (characteristic.category.code === "SCALE_ADAPTATION") {
+      score = this.adaptation_scale_score.find(o => o.value.toString() === selectedScore)
+    } else if (characteristic.category.code === "SUSTAINED_ADAPTATION") {
+      score = this.adaptation_sustained_score.find(o => o.value.toString() === selectedScore)
+    }
+    return score
   }
 
   async getSDGList(){
@@ -211,7 +314,7 @@ export class CmSectionThreeComponent implements OnInit {
 
   }
 
-  onSelectScore(event: any, char: CMResultDto, index: number, type: string) {
+  onSelectScore(event: any, char: CMResultDto, index: number, type?: string) {
     let score = new ScoreDto()
 
     if (index === 2) {
@@ -246,7 +349,7 @@ export class CmSectionThreeComponent implements OnInit {
     }
   }
 
-  onAnswer(event: any, question: any, characteristic: Characteristics) {
+  onAnswer(event: any, question: any, characteristic?: Characteristics) {
     let q = new CMQuestion()
     q.id = question.id
 
@@ -286,6 +389,7 @@ export class CmSectionThreeComponent implements OnInit {
             res.institution = inst
           }
           res.type = this.approach
+          if (char.assessmentQuestionId) res.assessmentQuestionId = char.assessmentQuestionId
           res.selectedSdg = new PortfolioSdg()
           this.results.push(res)
         }
