@@ -12,7 +12,7 @@
                             <p-dropdown name="policy" #policy="ngModel" placeholder="Select Intervetion"
                                 [(ngModel)]="assessment.climateAction" appendTo="body" [options]="policies"
                                 optionLabel="policyName" [required]="true"
-                                [disabled]="isSavedAssessment"></p-dropdown>
+                                [disabled]="isSavedAssessment || isEditMode"></p-dropdown>
                             <p class="info-message text-danger" *ngIf="
                                 !assessment.climateAction &&
                                 (fData.submitted || policy.touched)
@@ -582,8 +582,8 @@
     <!-- <div class="p-grid p-fluid col-sm-12" *ngIf="showSections">
         <app-cm-section [assessment]="assessmentres"></app-cm-section>
     </div> -->
-    <!-- <div class="card" *ngIf="isSavedAssessment && tabLoading"> -->
-        <div class="card" >
+    <div class="card" *ngIf="isSavedAssessment && tabLoading">
+        <!-- <div class="card" > -->
         <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)" >
         <p-tabView  (onChange)="onMainTabChange($event) " [(activeIndex)]="activeIndexMain ">
 

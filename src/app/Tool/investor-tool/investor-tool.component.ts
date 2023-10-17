@@ -130,7 +130,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   isStageDisble:boolean=false;
   tableData : any;
   assessmentId:number;
-  isEditMode:boolean=true;
+  isEditMode:boolean=false;
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
     private masterDataService: MasterDataService,
@@ -152,15 +152,15 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   }
   async ngOnInit(): Promise<void> {
     
-    this.activatedRoute.queryParams.subscribe(async params => {
+    // this.activatedRoute.queryParams.subscribe(async params => {
 
-      this.assessmentId = params['id']
+    //   this.assessmentId = params['id']
 
-      this.isEditMode = params['isEdit']
-      this.isEditMode=true
-      this.assessmentId=415
+    //   this.isEditMode = params['isEdit']
+    //   // this.isEditMode = true
+    //   // this.assessmentId = 415
 
-    })
+    // })
     if(this.isEditMode==false){
       await this.getPolicies();
       await this.getAllImpactsCovered();
@@ -170,8 +170,11 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       try{
         console.log(this.isEditMode,this.assessmentId)
         this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
-        this.processData=await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
-        console.log("this.processData",this.processData)
+        this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
+        console.log("this.processData",this.processData,this.assessment)
+        this.setFrom()
+        this.setTo()
+        
       }
       catch (error) {
         console.log(error)
@@ -255,6 +258,27 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.impactCovered = await this.investorToolControllerproxy.findAllImpactCovered().toPromise()
   }
 
+  setFrom(){
+    if(this.assessment.from){  
+      let convertTime = moment(this.assessment.from).format("YYYY-MM-DD HH:mm:ss");
+      let convertTimeObject = new Date(convertTime);
+      //@ts-ignore
+      this.assessment.from = convertTimeObject;
+    }
+
+  }
+
+ 
+
+  setTo(){
+    if(this.assessment.to){
+      let convertTime = moment(this.assessment.to).format("YYYY-MM-DD HH:mm:ss");
+      let convertTimeObject = new Date(convertTime);
+      //@ts-ignore
+      this.assessment.to = convertTimeObject;
+    }
+
+  }
 
   async getCharacteristics() {
    
