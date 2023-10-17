@@ -7,6 +7,7 @@ import { ColorMap } from 'app/Tool/carbon-market/cm-result/cm-result.component';
 
 
 import * as XLSX from 'xlsx-js-style';
+import { environment } from 'environments/environment';
 @Component({
   selector: 'app-portfolio-comparison',
   templateUrl: './portfolio-comparison.component.html',
@@ -29,7 +30,7 @@ export class PortfolioComparisonComponent implements OnInit {
   isLoaded: boolean = false;
   hasCMToolAssessments: boolean = false
   isDownloading: boolean;
-
+  SERVER_URL = environment.baseUrlAPI;
   constructor(
     private route: ActivatedRoute,
     private portfolioServiceProxy: PortfolioControllerServiceProxy,
@@ -144,6 +145,7 @@ export class PortfolioComparisonComponent implements OnInit {
     body.reportName = 'report'
     this.reportControllerServiceProxy.generateComparisonReport(body).subscribe(res => {
       console.log("generated repotr", res)
+      window.open(this.SERVER_URL +"/report.pdf", "_blank");
       if (res) {
         this.messageService.add({
           severity: 'success',
