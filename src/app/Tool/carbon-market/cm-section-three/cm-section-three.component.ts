@@ -130,8 +130,7 @@ export class CmSectionThreeComponent implements OnInit {
           sdgs.push(o.selectedSdg)
         }
       })
-      this.selectedSDGsList = [...new Map(sdgs.map(item =>
-        [item['name'], item])).values()];
+      this.selectedSDGsList = [...new Map(sdgs.map(item =>[item['name'], item])).values()];
       this.onSelectSDG({})
 
       await Promise.all(
@@ -143,7 +142,6 @@ export class CmSectionThreeComponent implements OnInit {
                 if (assQ) {
                   let rel = this.relevance.find(o => o.value.toString() === assQ?.relevance)
                   char.relevance = rel.value
-                  char.assessmentQuestionId = assQ.id
                 }
                 return char
               })
@@ -389,7 +387,13 @@ export class CmSectionThreeComponent implements OnInit {
             res.institution = inst
           }
           res.type = this.approach
-          if (char.assessmentQuestionId) res.assessmentQuestionId = char.assessmentQuestionId
+          if (this.isEditMode){
+            let assQ = this.assessmentquestions.find(o => (o.characteristic.id === char.id) && (o.question.id === q.id))
+            if (assQ) {
+              res.assessmentQuestionId = assQ.id
+              res.assessmentAnswerId = assQ.assessmentAnswers[0].id
+            }
+          }
           res.selectedSdg = new PortfolioSdg()
           this.results.push(res)
         }
