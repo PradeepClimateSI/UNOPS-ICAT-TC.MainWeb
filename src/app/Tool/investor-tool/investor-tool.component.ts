@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import {Any, AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import {Any, AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, AssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -129,7 +129,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   categoriesLoaded:boolean = false;
   isStageDisble:boolean=false;
   tableData : any;
-
+  assessmentId:number;
+  isEditMode:boolean=true;
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
     private masterDataService: MasterDataService,
@@ -140,7 +141,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     private router: Router,
     private instituionProxy: InstitutionControllerServiceProxy,
     private changeDetector: ChangeDetectorRef,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
 
 
   ) {
@@ -149,6 +151,34 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   }
   async ngOnInit(): Promise<void> {
+    
+    this.activatedRoute.queryParams.subscribe(async params => {
+
+      this.assessmentId = params['id']
+
+      this.isEditMode = params['isEdit']
+      this.isEditMode=true
+      this.assessmentId=415
+
+    })
+    if(this.isEditMode==false){
+      await this.getPolicies();
+      await this.getAllImpactsCovered();
+      await this.getCharacteristics();
+    }
+    else{
+      try{
+        console.log(this.isEditMode,this.assessmentId)
+        this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+        this.processData=await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
+        console.log("this.processData",this.processData)
+      }
+      catch (error) {
+        console.log(error)
+      }
+      
+
+    }
    //this.isSavedAssessment = true; this.tabLoading= true; // Need to remove  
   // this.isSavedAssessment = true // Need to remove  
   this.tableData =  this.getProductsData();
@@ -206,12 +236,10 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
     } // countryid = 0
 
-    await this.getPolicies();
-    await this.getAllImpactsCovered();
-    await this.getCharacteristics();
+   
     // await this.getInvestorQuestions();
-    console.log(this.policies)
-    console.log(this.assessment)
+    // console.log(this.policies)
+    // console.log(this.assessment)
 
 
 

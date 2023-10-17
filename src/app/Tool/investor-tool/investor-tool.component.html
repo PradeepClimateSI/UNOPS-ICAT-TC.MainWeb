@@ -582,8 +582,8 @@
     <!-- <div class="p-grid p-fluid col-sm-12" *ngIf="showSections">
         <app-cm-section [assessment]="assessmentres"></app-cm-section>
     </div> -->
-    <div class="card" *ngIf="isSavedAssessment && tabLoading">
-        <!-- <div class="card" > -->
+    <!-- <div class="card" *ngIf="isSavedAssessment && tabLoading"> -->
+        <div class="card" >
         <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)" >
         <p-tabView  (onChange)="onMainTabChange($event) " [(activeIndex)]="activeIndexMain ">
 
