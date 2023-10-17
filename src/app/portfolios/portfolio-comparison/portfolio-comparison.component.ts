@@ -142,9 +142,10 @@ export class PortfolioComparisonComponent implements OnInit {
     let body = new CreateComparisonReportDto()
     body.portfolioId = this.portfolioId
     // body.climateAction = this.selectedClimateAction
-    body.reportName = 'report'
+    // body.reportName = 'report'
+    body.reportName = this.portfolio.portfolioName
     this.reportControllerServiceProxy.generateComparisonReport(body).subscribe(res => {
-      console.log("generated repotr", res)
+      console.log("generated repotr", body)
       window.open(this.SERVER_URL +"/report.pdf", "_blank");
       if (res) {
         this.messageService.add({
