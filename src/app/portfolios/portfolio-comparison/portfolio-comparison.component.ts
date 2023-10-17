@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MasterDataService } from 'app/shared/master-data.service';
+import { MessageService } from 'primeng/api';
+import { CreateComparisonReportDto, PortfolioControllerServiceProxy, ReportControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import { ColorMap } from 'app/Tool/carbon-market/cm-result/cm-result.component';
-import { PortfolioControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+
 
 import * as XLSX from 'xlsx-js-style';
+import { environment } from 'environments/environment';
 @Component({
   selector: 'app-portfolio-comparison',
   templateUrl: './portfolio-comparison.component.html',
@@ -26,10 +30,13 @@ export class PortfolioComparisonComponent implements OnInit {
   isLoaded: boolean = false;
   hasCMToolAssessments: boolean = false
   isDownloading: boolean;
-
+  SERVER_URL = environment.baseUrlAPI;
   constructor(
     private route: ActivatedRoute,
     private portfolioServiceProxy: PortfolioControllerServiceProxy,
+    private reportControllerServiceProxy: ReportControllerServiceProxy,
+    private masterDataService: MasterDataService,
+    private messageService: MessageService
   ) { }
 
   ngOnInit(): void {
@@ -129,6 +136,33 @@ export class PortfolioComparisonComponent implements OnInit {
       }
       XLSX.writeFile(workbook, "Report.xlsx", { cellStyles: true });
     }, 1000);
+  }
+  genarateReport() {
+    
+    let body = new CreateComparisonReportDto()
+    body.portfolioId = this.portfolioId
+    // body.climateAction = this.selectedClimateAction
+    body.reportName = 'report'
+    this.reportControllerServiceProxy.generateComparisonReport(body).subscribe(res => {
+      console.log("generated repotr", res)
+      window.open(this.SERVER_URL +"/report.pdf", "_blank");
+      if (res) {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Report generated successfully',
+          closable: true,
+        })
+        
+      }
+    }, error => {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to generate report',
+        closable: true,
+      })
+    })
   }
 
   createColorMap(_cols: any, _rows: any) {
