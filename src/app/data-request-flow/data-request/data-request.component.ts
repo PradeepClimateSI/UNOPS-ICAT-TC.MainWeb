@@ -111,8 +111,8 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
     private messageService: MessageService,
     private prHistoryProxy: ParameterHistoryControllerServiceProxy,
     private institutionProxy: InstitutionControllerServiceProxy,
-    private masterDataService: MasterDataService,
-    public dataRequestPathService: DataRequestPathService
+    public masterDataService: MasterDataService,
+    public dataRequestPathService: DataRequestPathService,
   ) { }
   ngAfterViewInit(): void {
     this.cdr.detectChanges();

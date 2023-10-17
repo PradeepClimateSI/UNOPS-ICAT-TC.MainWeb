@@ -151,7 +151,6 @@ export class CmSectionThreeComponent implements OnInit {
       let pSdg = new PortfolioSdg()
       pSdg.id = sdg.id
       pSdg.name = sdg.name
-      console.log("portfolio sdg", pSdg)
       let res: CMResultDto[] = scaleResults.map((o: any) => {
         let _r = new CMResultDto()
         Object.keys(_r).forEach(e => {
@@ -178,9 +177,6 @@ export class CmSectionThreeComponent implements OnInit {
         scaleResult: res,
         sustainResult: res2
       }
-
-      console.log(_sdg)
-      
       return _sdg
     })
   }
@@ -312,7 +308,6 @@ export class CmSectionThreeComponent implements OnInit {
             res.selectedScore = score
             res.type = this.approach
 
-          console.log("scale result SDG", res)
             this.results.push(res)
           }
         })

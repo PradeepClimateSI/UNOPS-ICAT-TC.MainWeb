@@ -53,6 +53,8 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   sectorsJoined :string='';
   finalSectors:Sector[]=[]
   characteristicsList: Characteristics[] = [];
+  isStageDisble:boolean=false;
+  tableData : any;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -65,6 +67,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
+    this.tableData =  this.getProductsData();
     this.assessment_types = this.masterDataService.assessment_type
     this.impact_types = this.masterDataService.impact_types
     this.sectorial_boundires = this.masterDataService.sectorial_boundries
@@ -75,25 +78,34 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     await this.getPolicies()
     await this.getSetors()
     this.international_tooltip = 'Name of international or private carbon market standard under which the intervention is registered.'
+    await this.getCharacteristics();
   }
 
   async getSetors() {
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const countryId = token ? decode<any>(token).countryId : 0;
     this.countryId = countryId;
-    if (countryId > 0) {
-      this.sectorList = await this.sectorProxy.getCountrySector(countryId).toPromise()
-    } 
+    // if (countryId > 0) {
+    //   this.sectorList = await this.sectorProxy.getCountrySector(countryId).toPromise()
+    // } 
+    this.sectorList = await this.sectorProxy.findAllSector().toPromise()
   }
 
   async getPolicies() {
     this.policies = await this.projectControllerServiceProxy.findAllPolicies().toPromise()
   }
+  async getCharacteristics() {
+   
+    this.characteristicsList = await this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().toPromise();
+
+   
+  }
 
   save(form: NgForm) {
-    this.assessment.tool = 'Carbon Market Tool'
+    this.assessment.tool = 'CARBON_MARKET'
     this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
     this.assessment.assessment_approach = 'DIRECT'
+    this.isStageDisble =true;
 
     if (form.valid) {
       this.methodologyAssessmentControllerServiceProxy.saveAssessment(this.assessment)
@@ -107,20 +119,12 @@ export class CarbonMarketAssessmentComponent implements OnInit {
               allBarriersSelected.assessment =res;
 
             this.projectControllerServiceProxy.policyBar(allBarriersSelected).subscribe((res) => {
-              this.messageService.add({
-                severity: 'success',
-                summary: 'Success',
-                detail: 'Intervention  has been saved successfully',
-                closable: true,
-              },            
-              
-              );
             },
             (err) => {
               this.messageService.add({
                 severity: 'error',
                 summary: 'Error.',
-                detail: 'Internal server error in policy barriers',
+                detail: 'Policy barriers saving failed',
                 sticky: true,
               });
             })
@@ -138,7 +142,6 @@ export class CarbonMarketAssessmentComponent implements OnInit {
                     sec.sector = sector
                     toolsMultiselectDto.sectors.push(sec)
                   }
-                  console.log(this.geographicalAreasCoveredArr)
                   for (let geo of this.geographicalAreasCoveredArr){
                     let area = new GeographicalAreasCovered()
                     area.assessment= res
@@ -148,21 +151,28 @@ export class CarbonMarketAssessmentComponent implements OnInit {
                     toolsMultiselectDto.geographicalAreas.push(area)
                   }
                   let res_sec = await this.investorToolControllerServiceProxy.saveToolsMultiSelect(toolsMultiselectDto).toPromise()
-                  if (res_sec) {
+                  if (res_sec['sector'] && res_sec['area']) {
                     this.messageService.add({
                       severity: 'success',
                       summary: 'Success',
-                      detail: 'Assessment created successfully',
+                      detail: 'Assessment has been created successfully',
                       closable: true,
                     })
                     this.isSavedAssessment = true
                     this.assessmentres = res
                     this.showSections = true
-                  } else {
+                  } else if (!res_sec['sector']) {
                     this.messageService.add({
                       severity: 'error',
                       summary: 'Error',
                       detail: 'Secotrs covered saving failed.',
+                      closable: true,
+                    })
+                  } else if (!res_sec['area']){
+                    this.messageService.add({
+                      severity: 'error',
+                      summary: 'Error',
+                      detail: 'Geographical area covered saving failed.',
                       closable: true,
                     })
                   }
@@ -225,7 +235,6 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   }
 
   pushBarriers(barrier:any){
-    console.log("barrier",barrier)
     this.finalBarrierList.push(barrier)
   
   }
@@ -245,11 +254,33 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     
   }
   showDialog(){
-    this.barrierBox =true;
-    console.log(this.barrierBox)  
+    this.barrierBox =true; 
   }
   onItemSelectSectors($event: any) {
    
+  }
+
+  getProductsData() {
+    return [
+        {
+            barrier: 'Lack of financial capacity',
+            explanation: 'Some plant operators simply do not have the financial capacity to introduce the technology or to train staff adequately',
+            cha: 'Scale up, Beneficiaries',
+            ans: 'No',
+        },
+        {
+          barrier: 'Lack of public awareness of environmental and private economy benefits of EE measures and conservation',
+          explanation: 'Lack of awareness may also lead to reluctance to introduce low-carbon technologies, such as EV or HEV, which may disrupt conventional technologies',
+          cha: 'Awareness, Behaviour',
+          ans: 'Yes',
+      },
+      {
+        barrier: 'Lack of institutional support',
+        explanation: 'Insufficient support from municipal government authorities hinder the adoption and proper implementation of the initiative',
+        cha: 'Institutional and regulatory',
+        ans: 'No',
+    },
+    ]
   }
 
 }

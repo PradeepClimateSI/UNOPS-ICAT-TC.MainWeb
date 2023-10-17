@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import { AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, InstitutionControllerServiceProxy, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, PortfolioQuestionDetails, PortfolioQuestions, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, PortfolioQuestionDetails, PortfolioQuestions, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { Dropdown } from 'primeng/dropdown';
@@ -123,7 +123,8 @@ export class PortfolioTrack4Component implements OnInit {
   isDownloading: boolean = true;
   isDownloadMode: number = 0;
   sectorsJoined :string='';
-  finalSectors:Sector[]=[]
+  finalSectors:Sector[]=[];
+  isStageDisble:boolean=false;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -155,10 +156,13 @@ export class PortfolioTrack4Component implements OnInit {
   sdgDataSendArray4: any = [];
 
   sdgDataSendArray2: any = []
+  tableData : any;
 
   async ngOnInit(): Promise<void> {
  this.load = false; //need to change as false
-// this.isSavedAssessment = true //need to change as false
+ //this.isSavedAssessment = true //need to change as false
+
+this.tableData =  this.getProductsData();
 
  this.selectedApproach = 'Direct';
  this.assessment.assessment_approach = 'Direct';
@@ -205,9 +209,10 @@ export class PortfolioTrack4Component implements OnInit {
     console.log("tabName", this.tabName)
     // this.getSelectedHeader();
 
-
+    this.sectorList = await this.sectorProxy.findAllSector().toPromise()
     if (countryId > 0) {
-      this.sectorList = await this.sectorProxy.getCountrySector(countryId).toPromise()
+      // this.sectorList = await this.sectorProxy.getCountrySector(countryId).toPromise()
+      
       // this.sectorProxy.getSectorDetails(1,100,'').subscribe((res:any) =>{
       //   res.items.forEach((re:any)=>{
       //     if(re.id !=6){
@@ -231,6 +236,7 @@ export class PortfolioTrack4Component implements OnInit {
      console.log("ressssSDGs", res)
      this.sdgList = res
     });
+
 
   }
 
@@ -401,10 +407,11 @@ export class PortfolioTrack4Component implements OnInit {
 
   save(form: NgForm) {
     console.log("form", form)
+    this.isStageDisble =true;
     // this.showSections = true
     //save assessment
 
-    this.assessment.tool = 'Portfolio Tool'
+    this.assessment.tool = 'PORTFOLIO'
     this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
 
     if (form.valid) {
@@ -422,7 +429,7 @@ export class PortfolioTrack4Component implements OnInit {
               this.messageService.add({
                 severity: 'success',
                 summary: 'Success',
-                detail: 'Intervention  has been saved successfully',
+                detail: 'Assessment has been created successfully',
                 closable: true,
               },            
               
@@ -496,8 +503,8 @@ export class PortfolioTrack4Component implements OnInit {
 
   }
   pushBarriers(barrier:any){
-    console.log("barrier",barrier)
     this.finalBarrierList.push(barrier)
+    this.barrierSelected = new BarrierSelected()
   
   }
   barriersNameArray(Characteristics:any[]){
@@ -560,6 +567,12 @@ export class PortfolioTrack4Component implements OnInit {
   }
 
   onCategoryTabChange(event: any, tabview: TabView) {
+   // this.outcomeData[0].CategoryName = "tttttt";
+   // this.outcomeData[0].data[0].justification = "heloooo";
+   // this.outcomeData[0].data[0].score = 3;
+
+console.log("wwwwww", this.outcomeData)
+    
     this.categoryTabIndex = event.index;
     console.log("category index", this.categoryTabIndex)
     if(!this.failedLikelihoodArray.some(
@@ -721,7 +734,7 @@ export class PortfolioTrack4Component implements OnInit {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Assessment created successfully',
+            detail: 'Assessment has been created successfully',
             closable: true,
           })
          this.showResults();
@@ -761,7 +774,7 @@ export class PortfolioTrack4Component implements OnInit {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Assessment created successfully',
+            detail: 'Assessment has been created successfully',
             closable: true,
           })
           this.showResults();
@@ -788,12 +801,46 @@ export class PortfolioTrack4Component implements OnInit {
     }, 2000);
   }
 
-  next() {
+  // next() {
 
-    if (this.activeIndexMain === 1) {
+  //   if (this.activeIndexMain === 1) {
 
-      this.activeIndex2 = this.activeIndex2 + 1;
-      console.log("activeIndex2", this.activeIndex2)
+  //     this.activeIndex2 = this.activeIndex2 + 1;
+  //     console.log("activeIndex2", this.activeIndex2)
+
+  //   }
+  //   if (this.activeIndex === 3 && this.activeIndexMain !== 1) {
+  //     this.activeIndexMain = 1;
+  //     this.activeIndex2=0;
+
+  //   }
+  //   if (this.activeIndex <= 2 && this.activeIndex >= 0 && this.activeIndexMain === 0) {
+  //     this.activeIndex = this.activeIndex + 1;
+  //     console.log(this.activeIndex)
+
+  //   }
+
+  // }
+   next(data:any[],type:string){
+  // console.log("category",data)
+  // data?.filter(investorAssessment => console.log(investorAssessment.relavance,investorAssessment.relavance == 0))
+  if((data?.filter(investorAssessment => 
+      (investorAssessment.relavance !== undefined) && 
+      (investorAssessment.likelihood !== undefined) && 
+      (investorAssessment.likelihood_justification !== undefined) || 
+      (investorAssessment.relavance == 0))?.length === data?.length && type=='process')||
+      (data?.filter(investorAssessment => 
+        (investorAssessment.justification !== undefined) 
+       )?.length === data?.length && type=='outcome')||
+      (data?.filter(sdg => 
+        (sdg.data?.filter((data: { justification: undefined; } ) =>
+          (data.justification!== undefined))?.length === (sdg.data?.length)
+        ))?.length === data?.length && type=='sdg')) {
+    
+    if(this.activeIndexMain ===1 ){
+
+      this.activeIndex2 =this.activeIndex2+1;
+      console.log( "activeIndex2",this.activeIndex2)
 
     }
     if (this.activeIndex === 3 && this.activeIndexMain !== 1) {
@@ -801,12 +848,21 @@ export class PortfolioTrack4Component implements OnInit {
       this.activeIndex2=0;
 
     }
-    if (this.activeIndex <= 2 && this.activeIndex >= 0 && this.activeIndexMain === 0) {
-      this.activeIndex = this.activeIndex + 1;
-      console.log(this.activeIndex)
+    if (this.activeIndex<=2 && this.activeIndex>=0 && this.activeIndexMain===0){
+      this.activeIndex =this.activeIndex +1;
+      console.log( this.activeIndex)
 
     }
-
+    // return true
+  }else{
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Please fill all mandotory fields',
+      closable: true,
+    });
+  }
+   
   }
 
   getCategory(characteristics: any, category: any) {
@@ -997,6 +1053,41 @@ export class PortfolioTrack4Component implements OnInit {
     }
     console.log("ppppp", this.processData)
   } */
+
+  getProductsData() {
+    return [
+        {
+            barrier: 'Lack of financial capacity',
+            explanation: 'Some plant operators simply do not have the financial capacity to introduce the technology or to train staff adequately',
+            cha: 'Scale up, Beneficiaries',
+            ans: 'No',
+        },
+        {
+          barrier: 'Lack of public awareness of environmental and private economy benefits of EE measures and conservation',
+          explanation: 'Lack of awareness may also lead to reluctance to introduce low-carbon technologies, such as EV or HEV, which may disrupt conventional technologies',
+          cha: 'Awareness, Behaviour',
+          ans: 'Yes',
+      },
+      {
+        barrier: 'Lack of institutional support',
+        explanation: 'Insufficient support from municipal government authorities hinder the adoption and proper implementation of the initiative',
+        cha: 'Institutional and regulatory',
+        ans: 'No',
+    },
+    ]
+  }
+
+  barrierBox2: boolean = false; // Variable to control the dialog visibility
+
+showBarrierDialog() {
+  this.barrierBox2 = true;
+  // You can initialize or reset the barrierSelected object here
+}
+
+hideBarrierDialog() {
+  this.barrierBox2 = false;
+  // You can perform any cleanup or reset actions here
+}
 
 
 }

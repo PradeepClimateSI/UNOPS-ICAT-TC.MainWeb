@@ -2,14 +2,14 @@
     <h4 class="mt-4">Review Data</h4>
     <div class="p-grid p-fluid card">
         <p-tabView>
-            <p-tabPanel header="Carbon market">
+            <p-tabPanel [header]="masterDataService.getToolName('CARBON_MARKET')">
                 <app-review-data-cm></app-review-data-cm>
             </p-tabPanel>
-            <p-tabPanel header="Investment & Private Sector Tool">
-                <app-review-data-investment [tool]="'Investment & Private Sector Tool'"></app-review-data-investment>
+            <p-tabPanel [header]="masterDataService.getToolName('INVESTOR')">
+                <app-review-data-investment [tool]="'INVESTOR'"></app-review-data-investment>
             </p-tabPanel>
-            <p-tabPanel header="Portfolio">
-                <app-review-data-investment [tool]="'Portfolio Tool'"></app-review-data-investment>
+            <p-tabPanel [header]="masterDataService.getToolName('PORTFOLIO')">
+                <app-review-data-investment [tool]="'PORTFOLIO'"></app-review-data-investment>
             </p-tabPanel>
         </p-tabView>
     </div>

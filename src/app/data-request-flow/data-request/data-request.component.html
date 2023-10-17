@@ -3,13 +3,13 @@
     <div class="p-grid p-fluid card">
       <div class="row mb-3">
         <p-tabView  (onChange)="onMainTabChange($event) " [(activeIndex)]="activeIndexMain ">
-          <p-tabPanel  header="Carbon Market Tool">
+          <p-tabPanel  [header]="masterDataService.getToolName('CARBON_MARKET')">
             
           </p-tabPanel>
-          <p-tabPanel  header="Investment & Private Sector Tool">
+          <p-tabPanel  [header]="masterDataService.getToolName('PORTFOLIO')">
             
           </p-tabPanel>
-          <p-tabPanel  header="Portfolio Tool">
+          <p-tabPanel  [header]="masterDataService.getToolName('INVESTOR')">
             
           </p-tabPanel>
         </p-tabView>

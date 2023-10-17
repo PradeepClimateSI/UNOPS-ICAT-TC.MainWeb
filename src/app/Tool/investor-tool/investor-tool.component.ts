@@ -127,6 +127,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   tabLoading: boolean=false;
   characteristicsLoaded:boolean = false;
   categoriesLoaded:boolean = false;
+  isStageDisble:boolean=false;
+  tableData : any;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -149,6 +151,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   async ngOnInit(): Promise<void> {
    //this.isSavedAssessment = true; this.tabLoading= true; // Need to remove  
   // this.isSavedAssessment = true // Need to remove  
+  this.tableData =  this.getProductsData();
     this.categoryTabIndex =0;
     this.approach=1
     this.assessment.assessment_approach = 'Direct'
@@ -187,9 +190,10 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       console.log("ressssSDGs", res)
       this.sdgList = res
      });
-
+     
+    this.sectorList = await this.sectorProxy.findAllSector().toPromise()
     if (countryId > 0) {
-      this.sectorList = await this.sectorProxy.getCountrySector(countryId).toPromise()
+      // this.sectorList = await this.sectorProxy.getCountrySector(countryId).toPromise()
       // this.sectorProxy.getSectorDetails(1,100,'').subscribe((res:any) =>{
       //   res.items.forEach((re:any)=>{
       //     if(re.id !=6){
@@ -330,9 +334,10 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   save(form: NgForm) {
     console.log("form", form)
+    this.isStageDisble =true;
     // this.showSections = true
     //save assessment
-    this.assessment.tool = 'Investment & Private Sector Tool'
+    this.assessment.tool = 'INVESTOR'
     this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
 
     if (form.valid) {
@@ -351,7 +356,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
             this.messageService.add({
               severity: 'success',
               summary: 'Success',
-              detail: 'Intervention  has been saved successfully',
+              detail: 'Assessment has been created successfully',
               closable: true,
             },            
             
@@ -603,7 +608,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Assessment created successfully',
+            detail: 'Assessment has been created successfully',
             closable: true,
           })
           this.showResults();
@@ -670,15 +675,15 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   }
   next(data:any[],type:string){
-  console.log("category",data)
-  // data?.filter(investorAssessment => console.log(investorAssessment.indicator_details.filter((indicator_details:IndicatorDetails)=>indicator_details.justification !== undefined)?.length == (investorAssessment.indicator_details?.length-1)))
+  // console.log("category",data)
+  // data?.filter(investorAssessment => console.log(investorAssessment.relavance,investorAssessment.relavance == 0))
   if((data?.filter(investorAssessment => 
       (investorAssessment.relavance !== undefined) && 
       (investorAssessment.likelihood !== undefined) && 
       (investorAssessment.likelihood_justification !== undefined) &&
       (investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
         (indicator_details.justification !== undefined))?.length === (investorAssessment.indicator_details?.length-1)
-      ))?.length === data?.length && type=='process')||
+      )|| (investorAssessment.relavance == 0))?.length === data?.length && type=='process')||
       (data?.filter(investorAssessment => 
         (investorAssessment.justification !== undefined) 
        )?.length === data?.length && type=='outcome')||
@@ -958,6 +963,29 @@ assignSDG(sdg : any , data : any){
     }
 
 
+    getProductsData() {
+      return [
+          {
+              barrier: 'Lack of financial capacity',
+              explanation: 'Some plant operators simply do not have the financial capacity to introduce the technology or to train staff adequately',
+              cha: 'Scale up, Beneficiaries',
+              ans: 'No',
+          },
+          {
+            barrier: 'Lack of public awareness of environmental and private economy benefits of EE measures and conservation',
+            explanation: 'Lack of awareness may also lead to reluctance to introduce low-carbon technologies, such as EV or HEV, which may disrupt conventional technologies',
+            cha: 'Awareness, Behaviour',
+            ans: 'Yes',
+        },
+        {
+          barrier: 'Lack of institutional support',
+          explanation: 'Insufficient support from municipal government authorities hinder the adoption and proper implementation of the initiative',
+          cha: 'Institutional and regulatory',
+          ans: 'No',
+      },
+      ]
+    }
+  
 }
 interface UploadEvent {
   originalEvent: HttpResponse<FileDocument>;

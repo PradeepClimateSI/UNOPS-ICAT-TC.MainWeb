@@ -2,14 +2,14 @@
     <h4 class="mt-4">Enter Data</h4>
     <div class="p-grid p-fluid card">
         <p-tabView>
-            <p-tabPanel header="Carbon market">
+            <p-tabPanel [header]="masterDataService.getToolName('CARBON_MARKET')">
                 <app-enter-data-cm></app-enter-data-cm>
             </p-tabPanel>
-            <p-tabPanel header="Investment & Private Sector Tool">
-                <app-enter-data-investment [tool]="'Investment & Private Sector Tool'"></app-enter-data-investment>
+            <p-tabPanel [header]="masterDataService.getToolName('PORTFOLIO')">
+                <app-enter-data-investment [tool]="'INVESTOR'"></app-enter-data-investment>
             </p-tabPanel>
-            <p-tabPanel header="Portfolio">
-                <app-enter-data-investment [tool]="'Portfolio Tool'"></app-enter-data-investment>
+            <p-tabPanel [header]="masterDataService.getToolName('INVESTOR')">
+                <app-enter-data-investment [tool]="'PORTFOLIO'"></app-enter-data-investment>
             </p-tabPanel>
         </p-tabView>
     </div>

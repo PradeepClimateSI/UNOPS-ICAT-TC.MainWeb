@@ -73,7 +73,7 @@
             </div>
             <div class="col-12 col-md-6">
               <div class="p-field">
-                <label for="designation">Contact Person's Designation*</label>
+                <label for="designation">Contact Person's Job Title*</label>
                 <input [disabled]="editEntytyId > 0" type="text" maxlength="30" placeholder="Designation"
                   #designation="ngModel" name="designation" class="p-inputtext"
                   [(ngModel)]="project.contactPersonDesignation" [ngModelOptions]="{ standalone: false }"
@@ -90,7 +90,7 @@
 
           </div>
 
-          <div class="row p-2">
+          <!-- <div class="row p-2">
 
             <div class="col-12 col-md-6">
               <div class="p-field">
@@ -132,7 +132,7 @@
                </p>
               </div>
             </div>
-          </div>
+          </div> -->
 
         </div>
         <div class=" mt-10">
@@ -190,22 +190,23 @@
 
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="interventionID">Intervention ID*</label> <div type="button" class="pi pi-info-circle ml-10"
+                  <label for="interventionID">Intervention ID</label> 
+                  <!-- <div type="button" class="pi pi-info-circle ml-10"
                   pTooltip="Unique project ID/number identifying
-                  the policy/action/investment"></div>
-                  <input [disabled]="editEntytyId > 0" type="text" maxlength="50" placeholder="ID of the intervention"
+                  the policy/action/investment"></div> -->
+                  <input disabled="true" type="text" maxlength="50" placeholder="{{project.intervention_id}}"
                     #interventionID="ngModel" name="interventionID" pInputText
                     [(ngModel)]="project.intervention_id" [ngModelOptions]="{ standalone: false }"
-                    pInputText required />
+                    pInputText  />
 
 
 
-                  <p class="info-message text-danger" *ngIf="
+                  <!-- <p class="info-message text-danger" *ngIf="
                     !project.intervention_id &&
                     (fData.submitted || interventionID.touched || interventionID.dirty)
                   ">
                     This is a mandatory field
-                  </p>
+                  </p> -->
                 </div>
               </div>
 
@@ -589,6 +590,7 @@
                       name="impleDate"
                       #impleDate="ngModel"
                       [(ngModel)]="dateOfImplementation"  appendTo="body"
+                      (onSelect)="onImplementatonYearChange(dateOfImplementation)"
                       [required]="true"></p-calendar>
                   </div>
                   <p class="info-message text-danger" *ngIf="
@@ -892,7 +894,7 @@
                     </div>
                   </div>
 
-                  <div class="col-12 col-md-4" [hidden]="isCity==2">
+                  <!-- <div class="col-12 col-md-4" [hidden]="isCity==2">
                     <div class="p-field">
                       <label for="long">Longitude</label>
                       <p-inputNumber [disabled]="editEntytyId > 0" name="long" #long="ngModel"
@@ -900,7 +902,7 @@
                         [min]="-180" [max]="180" mode="decimal" [minFractionDigits]="1" [maxFractionDigits]="6"
                         [showButtons]="true" (onInput)="onLongitudeChange($event)"></p-inputNumber>
                     </div>
-                  </div>
+                  </div> -->
 
 
                   <div class="col-12 col-md-4" [hidden]="isCity==0 || isCity==2">
@@ -919,7 +921,7 @@
                     </div>
                   </div>
 
-                  <div class="col-12 col-md-4" [hidden]="isCity==2">
+                  <!-- <div class="col-12 col-md-4" [hidden]="isCity==2">
                     <div class="p-field">
                       <label for="lati">Latitude</label>
                       <p-inputNumber [disabled]="editEntytyId > 0" name="lati" #long="ngModel"
@@ -928,7 +930,7 @@
                         [showButtons]="true">
                       </p-inputNumber>
                     </div>
-                  </div>
+                  </div> -->
                   <div class="col-12 col-md-8">
                     <div class="p-field">
                       <label for="geographicCoverage">Geographic Coverage</label>

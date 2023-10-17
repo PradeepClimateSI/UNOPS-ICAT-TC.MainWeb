@@ -28,6 +28,7 @@ import {
 } from 'shared/service-proxies/service-proxies';
 import { Tool } from '../enum/tool.enum';
 import { DataRequestPathService } from 'app/shared/data-request-path.service';
+import { MasterDataService } from 'app/shared/master-data.service';
 
 @Component({
   selector: 'app-assign-data-request',
@@ -95,7 +96,8 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
     private messageService: MessageService,
     private prHistoryProxy: ParameterHistoryControllerServiceProxy,
     private climateProxy: ProjectControllerServiceProxy,
-    public dataRequestPathService: DataRequestPathService
+    public dataRequestPathService: DataRequestPathService,
+    public masterDataService: MasterDataService
 
   ) { }
   ngAfterViewInit(): void {
