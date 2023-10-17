@@ -228,10 +228,10 @@ export class CmSectionComponent implements OnInit {
   }
 
 
-  save(event: CMResultDto[]) {
+  save(event: SaveDto) {
     let result: SaveCMResultDto = new SaveCMResultDto()
     result.result = []
-    result.result = [...event]
+    result.result = [...event.result]
     this.result.sections.forEach((section: any) => {
       section.criteria.forEach((cr: any) => {
         cr.questions.forEach((q: any) => {
@@ -250,6 +250,7 @@ export class CmSectionComponent implements OnInit {
       })
     })
     result.assessment = this.assessment
+    result.isDraft = event.isDraft
     this.cMAssessmentQuestionControllerServiceProxy.saveResult(result)
       .subscribe(res => {
         if (res) {
@@ -259,7 +260,7 @@ export class CmSectionComponent implements OnInit {
             detail: 'Assessment created successfully',
             closable: true,
           })
-          if (result.assessment.assessment_approach === 'DIRECT') {
+          if (result.assessment.assessment_approach === 'DIRECT' && !event.isDraft) {
             this.router.navigate(['../carbon-market-tool-result'], { queryParams: { id: this.assessment.id }, relativeTo: this.activatedRoute });
           }
 
@@ -281,4 +282,9 @@ export class CmSectionComponent implements OnInit {
     throw new Error('Method not implemented.');
   }
 
+}
+
+export class SaveDto {
+  result: CMResultDto[]
+  isDraft: boolean = false
 }

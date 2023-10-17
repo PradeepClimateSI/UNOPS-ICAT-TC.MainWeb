@@ -369,100 +369,124 @@ export class CmSectionThreeComponent implements OnInit {
 
   }
 
-  async submit() {
+  async submit(draftCategory: string, isDraft: boolean = false) {
+    let save_process: boolean = false
+    let save_sd_sc: boolean = false
+    let save_sd_sus: boolean = false
+    let save_sc: boolean = false
+    let save_sus: boolean = false
     for await (let category of this.categories['process']) {
-      for await (let char of category.characteristics) {
-        for await (let q of char.questions) {
-          let res = new CMResultDto()
-          Object.keys(q.result).forEach(e => {
-            res[e] = q.result[e]
-          })
-          let ch = new Characteristics()
-          ch.id = q.characteristic.id
-          res.characteristic = ch
-          res.relevance = char.relevance
-          if (res.institution?.id) {
-            let inst = new Institution()
-            inst.id = res.institution.id
-            res.institution = inst
-          }
-          res.type = this.approach
-          if (this.isEditMode){
-            let assQ = this.assessmentquestions.find(o => (o.characteristic.id === char.id) && (o.question.id === q.id))
-            if (assQ) {
-              res.assessmentQuestionId = assQ.id
-              res.assessmentAnswerId = assQ.assessmentAnswers[0].id
+      if (isDraft) {
+        if (draftCategory === category.code) save_process = true
+      } else save_process = true
+      if (save_process) {
+        for await (let char of category.characteristics) {
+          for await (let q of char.questions) {
+            let res = new CMResultDto()
+            Object.keys(q.result).forEach(e => {
+              res[e] = q.result[e]
+            })
+            let ch = new Characteristics()
+            ch.id = q.characteristic.id
+            res.characteristic = ch
+            res.relevance = char.relevance
+            if (res.institution?.id) {
+              let inst = new Institution()
+              inst.id = res.institution.id
+              res.institution = inst
             }
+            res.type = this.approach
+            if (this.isEditMode){
+              let assQ = this.assessmentquestions.find(o => (o.characteristic.id === char.id) && (o.question.id === q.id))
+              if (assQ) {
+                res.assessmentQuestionId = assQ.id
+                res.assessmentAnswerId = assQ.assessmentAnswers[0].id
+              }
+            }
+            res.selectedSdg = new PortfolioSdg()
+            this.results.push(res)
           }
-          res.selectedSdg = new PortfolioSdg()
-          this.results.push(res)
         }
       }
     }
 
     if (this.selectedSDGs?.length > 0) {
+      if (isDraft) {
+        if (draftCategory === 'SCALE_SD') save_sd_sc = true
+        if (draftCategory === 'SUSTAINED_SD') save_sd_sus = true
+      } else save_sd_sc = true, save_sd_sus = true
       for await (let sd of this.selectedSDGs) {
-        sd.scaleResult.forEach(res => {
-          if (res.selectedScore) {
-            if (res.institution?.id) {
-              let inst = new Institution()
-              inst.id = res.institution.id
-              res.institution = inst
-            }
-            let score = new ScoreDto()
-            score.name = res.selectedScore.name
-            score.code = res.selectedScore.code
-            score.value = res.selectedScore.value
-            res.selectedScore = score
-            res.type = this.approach
-
-            this.results.push(res)
-          }
-        })
-        sd.sustainResult.forEach(res => {
-          if (res.selectedScore) {
-            if (res.institution?.id) {
-              let inst = new Institution()
-              inst.id = res.institution.id
-              res.institution = inst
-            }
-            let susScore = new ScoreDto()
-            susScore.name = res.selectedScore.name
-            susScore.code = res.selectedScore.code
-            susScore.value = res.selectedScore.value
-            res.selectedScore = susScore
-            res.type = this.approach
-            this.results.push(res)
-          }
-        })
-      }
-    }
-
-    if (this.outcome?.length > 0) {
-      for await (let item of this.outcome) {
-        if (item.type === 'GHG' || item.type === 'ADAPTATION') {
-          item.results.forEach((res: any) => {
-            res.type = this.approach
-            if (res.institution?.id) {
-              let inst = new Institution()
-              inst.id = res.institution.id
-              res.institution = inst
-            }
+        if (save_sd_sc) {
+          sd.scaleResult.forEach(res => {
             if (res.selectedScore) {
+              if (res.institution?.id) {
+                let inst = new Institution()
+                inst.id = res.institution.id
+                res.institution = inst
+              }
               let score = new ScoreDto()
               score.name = res.selectedScore.name
               score.code = res.selectedScore.code
               score.value = res.selectedScore.value
               res.selectedScore = score
               res.type = this.approach
-              res.selectedSdg = new PortfolioSdg()
+  
+              this.results.push(res)
+            }
+          })
+        }
+        if (save_sd_sus) {
+          sd.sustainResult.forEach(res => {
+            if (res.selectedScore) {
+              if (res.institution?.id) {
+                let inst = new Institution()
+                inst.id = res.institution.id
+                res.institution = inst
+              }
+              let susScore = new ScoreDto()
+              susScore.name = res.selectedScore.name
+              susScore.code = res.selectedScore.code
+              susScore.value = res.selectedScore.value
+              res.selectedScore = susScore
+              res.type = this.approach
               this.results.push(res)
             }
           })
         }
       }
     }
-    this.onSubmit.emit(this.results)
+
+    if (this.outcome?.length > 0) {
+      for await (let item of this.outcome) {
+        if (isDraft) {
+          if (draftCategory === 'SCALE_' + item.type || draftCategory === 'SCALE_' + item.type) save_sc = true
+          if (draftCategory === 'SUSTAINED_' + item.type || draftCategory === 'SUSTAINED_' + item.type) save_sus = true
+        } else save_sc = true, save_sus = true
+        if (save_sc || save_sus) {
+          if (item.type === 'GHG' || item.type === 'ADAPTATION') {
+            item.results.forEach((res: any) => {
+              res.type = this.approach
+              if (res.institution?.id) {
+                let inst = new Institution()
+                inst.id = res.institution.id
+                res.institution = inst
+              }
+              if (res.selectedScore) {
+                let score = new ScoreDto()
+                score.name = res.selectedScore.name
+                score.code = res.selectedScore.code
+                score.value = res.selectedScore.value
+                res.selectedScore = score
+                res.type = this.approach
+                res.selectedSdg = new PortfolioSdg()
+                this.results.push(res)
+              }
+            })
+          }
+        }
+      }
+    }
+    this.onSubmit.emit({result: this.results, isDraft: isDraft})
   }
 
   onUpload(event: UploadEvent, res: CMResultDto) {
