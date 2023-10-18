@@ -214,7 +214,7 @@ export class ClimateActionComponent implements OnInit  {
     // let initialCountry= new Country()
     // initialCountry.name=''
     // this.project.country= initialCountry;
-
+    this.sectorList = await this.sectorProxy.findAllSector().toPromise()
     if (countryId > 0) {
       // this.sectorProxy.getSectorDetails(1,100,'').subscribe((res:any) =>{
       //   console.log("++++", res)
@@ -225,10 +225,10 @@ export class ClimateActionComponent implements OnInit  {
       //     }
       //   })
       // })
-      this.sectorProxy.getCountrySector(countryId).subscribe((res: any) => {
-        this.sectorList = res;
+      // this.sectorProxy.getCountrySector(countryId).subscribe((res: any) => {
+      //   this.sectorList = res;
    
-      });
+      // });
     } // countryid = 0
     this.asses.findAllBarriers().subscribe((res: any) => {
       this.barriers = res;

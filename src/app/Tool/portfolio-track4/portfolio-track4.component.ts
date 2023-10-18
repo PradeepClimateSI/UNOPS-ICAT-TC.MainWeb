@@ -209,9 +209,10 @@ this.tableData =  this.getProductsData();
     console.log("tabName", this.tabName)
     // this.getSelectedHeader();
 
-
+    this.sectorList = await this.sectorProxy.findAllSector().toPromise()
     if (countryId > 0) {
-      this.sectorList = await this.sectorProxy.getCountrySector(countryId).toPromise()
+      // this.sectorList = await this.sectorProxy.getCountrySector(countryId).toPromise()
+      
       // this.sectorProxy.getSectorDetails(1,100,'').subscribe((res:any) =>{
       //   res.items.forEach((re:any)=>{
       //     if(re.id !=6){

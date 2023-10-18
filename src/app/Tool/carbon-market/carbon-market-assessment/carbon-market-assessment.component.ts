@@ -85,9 +85,10 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const countryId = token ? decode<any>(token).countryId : 0;
     this.countryId = countryId;
-    if (countryId > 0) {
-      this.sectorList = await this.sectorProxy.getCountrySector(countryId).toPromise()
-    } 
+    // if (countryId > 0) {
+    //   this.sectorList = await this.sectorProxy.getCountrySector(countryId).toPromise()
+    // } 
+    this.sectorList = await this.sectorProxy.findAllSector().toPromise()
   }
 
   async getPolicies() {
@@ -118,20 +119,12 @@ export class CarbonMarketAssessmentComponent implements OnInit {
               allBarriersSelected.assessment =res;
 
             this.projectControllerServiceProxy.policyBar(allBarriersSelected).subscribe((res) => {
-              this.messageService.add({
-                severity: 'success',
-                summary: 'Success',
-                detail: 'Assessment has been created successfully',
-                closable: true,
-              },            
-              
-              );
             },
             (err) => {
               this.messageService.add({
                 severity: 'error',
                 summary: 'Error.',
-                detail: 'Internal server error in policy barriers',
+                detail: 'Policy barriers saving failed',
                 sticky: true,
               });
             })
@@ -158,7 +151,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
                     toolsMultiselectDto.geographicalAreas.push(area)
                   }
                   let res_sec = await this.investorToolControllerServiceProxy.saveToolsMultiSelect(toolsMultiselectDto).toPromise()
-                  if (res_sec) {
+                  if (res_sec['sector'] && res_sec['area']) {
                     this.messageService.add({
                       severity: 'success',
                       summary: 'Success',
@@ -168,11 +161,18 @@ export class CarbonMarketAssessmentComponent implements OnInit {
                     this.isSavedAssessment = true
                     this.assessmentres = res
                     this.showSections = true
-                  } else {
+                  } else if (!res_sec['sector']) {
                     this.messageService.add({
                       severity: 'error',
                       summary: 'Error',
                       detail: 'Secotrs covered saving failed.',
+                      closable: true,
+                    })
+                  } else if (!res_sec['area']){
+                    this.messageService.add({
+                      severity: 'error',
+                      summary: 'Error',
+                      detail: 'Geographical area covered saving failed.',
                       closable: true,
                     })
                   }

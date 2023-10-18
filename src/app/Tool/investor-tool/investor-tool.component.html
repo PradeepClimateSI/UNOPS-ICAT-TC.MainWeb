@@ -592,7 +592,7 @@
 
                 <p-tabView #tabView (onChange)="onCategoryTabChange($event, tabView)" [(activeIndex)]="activeIndex "    >
 
-                    <p-tabPanel [header]="category.CategoryName" *ngFor="let category of processData" >
+                    <p-tabPanel  [header]="category.CategoryName" *ngFor="let category of processData" >
 
                         <div class="characteristic-Topic " *ngFor="let data of category.data; index as i">
                             <h6 *ngIf="data.characteristics.name!= 'Research and Development'">{{i+1}}.{{data.characteristics.name}}</h6>
@@ -800,7 +800,7 @@
                 <!-- </div> -->
             </p-tabPanel>
 
-            <p-tabPanel header="Outcome of Change">
+            <p-tabPanel  header="Outcome of Change">
               <p-tabView #tabView2 (onChange)="onCategoryTabChange($event, tabView2) " [(activeIndex)]="activeIndex2">
 
                 <p-tabPanel *ngFor="let category of outcomeData">
