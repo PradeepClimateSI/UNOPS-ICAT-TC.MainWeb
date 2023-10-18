@@ -141,7 +141,7 @@ export class CmSectionThreeComponent implements OnInit {
                 let assQ = this.assessmentquestions.find(o => o.characteristic.id === char.id)
                 if (assQ) {
                   let rel = this.relevance.find(o => o.value.toString() === assQ?.relevance)
-                  char.relevance = rel.value
+                  char.relevance = rel?.value
                 }
                 return char
               })
@@ -370,14 +370,18 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   async submit(draftCategory: string, isDraft: boolean = false) {
+    this.results = []
     let save_process: boolean = false
     let save_sd_sc: boolean = false
     let save_sd_sus: boolean = false
-    let save_sc: boolean = false
-    let save_sus: boolean = false
+    let save_ghg_sc: boolean = false
+    let save_ghg_sus: boolean = false
+    let save_ad_sc: boolean = false
+    let save_ad_sus: boolean = false
     for await (let category of this.categories['process']) {
       if (isDraft) {
         if (draftCategory === category.code) save_process = true
+        else save_process = false
       } else save_process = true
       if (save_process) {
         for await (let char of category.characteristics) {
@@ -412,11 +416,15 @@ export class CmSectionThreeComponent implements OnInit {
 
     if (this.selectedSDGs?.length > 0) {
       if (isDraft) {
-        if (draftCategory === 'SCALE_SD') save_sd_sc = true
-        if (draftCategory === 'SUSTAINED_SD') save_sd_sus = true
+        if (draftCategory === 'SD_SCALE') save_sd_sc = true
+        else save_sd_sc = false
+        if (draftCategory === 'SD_SUSTAINED') save_sd_sus = true
+        else save_sd_sus = false
       } else save_sd_sc = true, save_sd_sus = true
+      console.log(draftCategory, "save_sd_sc", save_sd_sc, "save_sd_sus", save_sd_sus)
       for await (let sd of this.selectedSDGs) {
         if (save_sd_sc) {
+          console.log("save_sd_sc")
           sd.scaleResult.forEach(res => {
             if (res.selectedScore) {
               if (res.institution?.id) {
@@ -436,6 +444,7 @@ export class CmSectionThreeComponent implements OnInit {
           })
         }
         if (save_sd_sus) {
+          console.log("save_sd_sus")
           sd.sustainResult.forEach(res => {
             if (res.selectedScore) {
               if (res.institution?.id) {
@@ -459,11 +468,18 @@ export class CmSectionThreeComponent implements OnInit {
     if (this.outcome?.length > 0) {
       for await (let item of this.outcome) {
         if (isDraft) {
-          if (draftCategory === 'SCALE_' + item.type || draftCategory === 'SCALE_' + item.type) save_sc = true
-          if (draftCategory === 'SUSTAINED_' + item.type || draftCategory === 'SUSTAINED_' + item.type) save_sus = true
-        } else save_sc = true, save_sus = true
-        if (save_sc || save_sus) {
-          if (item.type === 'GHG' || item.type === 'ADAPTATION') {
+          if (item.type === 'GHG') {
+            if (draftCategory === 'GHG_SCALE' && item.method === 'SCALE') { save_ghg_sc = true }
+            if (draftCategory === 'GHG_SUSTAINED' && item.method === 'SUSTAINED') { save_ghg_sus = true }
+          } else if (item.type === 'ADAPTATION') {
+            if (draftCategory === 'ADAPTATION_SCALE' && item.method === 'SCALE') { save_ad_sc = true }
+            if (draftCategory === 'ADAPTATION_SUSTAINED' && item.method === 'SUSTAINED') { save_ad_sus = true }
+          }
+        } else { save_ghg_sc = true; save_ghg_sus = true; save_ad_sc = true; save_ad_sus = true; }
+        console.log(draftCategory, item.type, save_ghg_sc, save_ghg_sus, save_ad_sc, save_ad_sus)
+        if (item.type === 'GHG') {
+          if (save_ghg_sc || save_ghg_sus) {
+            console.log("save_sc")
             item.results.forEach((res: any) => {
               res.type = this.approach
               if (res.institution?.id) {
@@ -484,6 +500,29 @@ export class CmSectionThreeComponent implements OnInit {
             })
           }
         }
+        if (item.type === 'ADAPTATION') {
+          if (save_ad_sc || save_ad_sus) {
+            item.results.forEach((res: any) => {
+              res.type = this.approach
+              if (res.institution?.id) {
+                let inst = new Institution()
+                inst.id = res.institution.id
+                res.institution = inst
+              }
+              if (res.selectedScore) {
+                let score = new ScoreDto()
+                score.name = res.selectedScore.name
+                score.code = res.selectedScore.code
+                score.value = res.selectedScore.value
+                res.selectedScore = score
+                res.type = this.approach
+                res.selectedSdg = new PortfolioSdg()
+                this.results.push(res)
+              }
+            })
+          }
+        }
+        save_ghg_sc = false; save_ghg_sus = false; save_ad_sc = false; save_ad_sus = false;
       }
     }
     this.onSubmit.emit({result: this.results, isDraft: isDraft})

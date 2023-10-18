@@ -260,9 +260,14 @@ export class CmSectionComponent implements OnInit {
             detail: 'Assessment created successfully',
             closable: true,
           })
+          if (event.isDraft) {
+            console.log("re-routed")
+            this.router.navigate(['../carbon-market-tool'], { queryParams: { id: this.assessment.id, isEdit: true }, relativeTo: this.activatedRoute });
+            // window.location.reload()
+          }
           if (result.assessment.assessment_approach === 'DIRECT' && !event.isDraft) {
             this.router.navigate(['../carbon-market-tool-result'], { queryParams: { id: this.assessment.id }, relativeTo: this.activatedRoute });
-          }
+          } 
 
         }
       }, error => {
