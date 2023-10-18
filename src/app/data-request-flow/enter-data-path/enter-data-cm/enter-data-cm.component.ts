@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
-import { CMAnswer, CMAssessmentAnswer, CMAssessmentQuestion, CMQuestionControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequest, ParameterRequestControllerServiceProxy, ParameterRequestTool, ServiceProxy, UpdateDeadlineDto, UpdateDeadlineDtoTool, UpdateValueEnterData } from 'shared/service-proxies/service-proxies';
+import { CMAnswer, CMAssessmentAnswer, CMAssessmentQuestion, CMQuestionControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequest, ParameterRequestControllerServiceProxy, ParameterRequestTool, ScoreDto, ServiceProxy, UpdateDeadlineDto, UpdateDeadlineDtoTool, UpdateValueEnterData } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { DataRequestStatus } from 'app/Model/DataRequestStatus.enum';
 import * as XLSX from 'xlsx';
@@ -45,7 +45,7 @@ export class EnterDataCmComponent implements OnInit {
   requestHistoryList: any[] = [];
   selectedValue: any;
   selectedAssumption: string;
-  answers: CMAnswer[] | SelectedScoreDto[] = []
+  answers: CMAnswer[] | ScoreDto[] = []
   selectedParameter: any;
   selectedId: number;
   parameterListFilterData: any[];

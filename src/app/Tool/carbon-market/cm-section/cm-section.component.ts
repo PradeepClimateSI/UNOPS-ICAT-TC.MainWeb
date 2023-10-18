@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { Assessment, CMAnswer, CMAssessmentQuestion, CMAssessmentQuestionControllerServiceProxy, CMQuestionControllerServiceProxy, CMResultDto, Institution, SaveCMResultDto, ServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Assessment, CMAnswer, CMAssessmentQuestion, CMAssessmentQuestionControllerServiceProxy, CMQuestionControllerServiceProxy, CMResultDto, Institution, SaveCMResultDto, ScoreDto, ServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-cm-section',
@@ -13,7 +13,7 @@ export class CmSectionComponent implements OnInit {
   @Input() assessment: Assessment
   @Input() approach: string
   @Input() isEditMode: boolean;
-
+ 
   openAccordion = 0
 
   sections: any[] = []
@@ -245,10 +245,11 @@ export class CmSectionComponent implements OnInit {
           item.type = q.type
           item.filePath = q.file
           if (this.isEditMode) item.assessmentQuestionId = q.assessmentQuestionId
-          result.result.push(item)
+          if (item.question) result.result.push(item)
         })
       })
     })
+    console.log('section result', result.result)
     result.assessment = this.assessment
     result.isDraft = event.isDraft
     this.cMAssessmentQuestionControllerServiceProxy.saveResult(result)
@@ -262,6 +263,8 @@ export class CmSectionComponent implements OnInit {
           })
           if (event.isDraft) {
             console.log("re-routed")
+            this.isEditMode = true
+            this.setInitialState()
             this.router.navigate(['../carbon-market-tool'], { queryParams: { id: this.assessment.id, isEdit: true }, relativeTo: this.activatedRoute });
             // window.location.reload()
           }

@@ -48,14 +48,14 @@ export class CmSectionThreeComponent implements OnInit {
   sdgsToLoop: SDG[]
   uploadedFiles: any = [];
   uploadUrl: string;
-  GHG_scale_score_macro: SelectedScoreDto[]
-  GHG_scale_score_medium: SelectedScoreDto[]
-  GHG_scale_score_micro: SelectedScoreDto[]
-  GHG_sustained_score: SelectedScoreDto[]
-  SDG_scale_score: SelectedScoreDto[]
-  SDG_sustained_score: SelectedScoreDto[]
-  adaptation_scale_score: SelectedScoreDto[]
-  adaptation_sustained_score: SelectedScoreDto[]
+  GHG_scale_score_macro: ScoreDto[]
+  GHG_scale_score_medium: ScoreDto[]
+  GHG_scale_score_micro: ScoreDto[]
+  GHG_sustained_score: ScoreDto[]
+  SDG_scale_score: ScoreDto[]
+  SDG_sustained_score: ScoreDto[]
+  adaptation_scale_score: ScoreDto[]
+  adaptation_sustained_score: ScoreDto[]
   SDGScore: any = 0;
   adaptationScore: any = 0;
   SDGWeight: any = '10%';
@@ -69,6 +69,8 @@ export class CmSectionThreeComponent implements OnInit {
   expected_impact_tooltip: string
   sdgList: any;
   selectedSDGsList: PortfolioSdg[];
+  categoriesToSave: string[] = []
+  isDraftSaved: boolean = false
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -132,6 +134,7 @@ export class CmSectionThreeComponent implements OnInit {
       })
       this.selectedSDGsList = [...new Map(sdgs.map(item =>[item['name'], item])).values()];
       this.onSelectSDG({})
+      console.log(this.selectedSDGs)
 
       await Promise.all(
         this.types.map((type: any) => {
@@ -157,7 +160,7 @@ export class CmSectionThreeComponent implements OnInit {
                   res.sdgIndicator = assQ.sdgIndicator
                   res.adaptationCoBenifit = assQ.adaptationCoBenifit
                   res.assessmentQuestionId = assQ.id
-                  let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, res.characteristic)
+                  let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0]?.selectedScore, res.characteristic)
                   if (score) {
                     res.selectedScore = score
                     this.onSelectScore({}, res, idx)
@@ -248,6 +251,7 @@ export class CmSectionThreeComponent implements OnInit {
         })
       }
     })
+    console.log(scaleResults, sustainResults)
     this.selectedSDGs = this.selectedSDGsList.map(sdg => {
       let pSdg = new PortfolioSdg()
       pSdg.id = sdg.id
@@ -286,8 +290,10 @@ export class CmSectionThreeComponent implements OnInit {
     throw new Error('Method not implemented.');
   }
 
-  next(characteristics?: any[]) {
-
+  next(category: string, characteristics?: any[]) {
+    if (!this.isDraftSaved) {
+      this.categoriesToSave.push(category)
+    } else this.isDraftSaved = !this.isDraftSaved
     if (characteristics?.filter(o => o.relevance !== undefined)?.length === characteristics?.length) {
       if (this.activeIndexMain === 1) {
         this.activeIndex2 = this.activeIndex2 + 1;
@@ -371,6 +377,7 @@ export class CmSectionThreeComponent implements OnInit {
 
   async submit(draftCategory: string, isDraft: boolean = false) {
     this.results = []
+    this.categoriesToSave.push(draftCategory)
     let save_process: boolean = false
     let save_sd_sc: boolean = false
     let save_sd_sus: boolean = false
@@ -380,7 +387,7 @@ export class CmSectionThreeComponent implements OnInit {
     let save_ad_sus: boolean = false
     for await (let category of this.categories['process']) {
       if (isDraft) {
-        if (draftCategory === category.code) save_process = true
+        if (this.categoriesToSave.includes(category.code)) save_process = true
         else save_process = false
       } else save_process = true
       if (save_process) {
@@ -416,12 +423,13 @@ export class CmSectionThreeComponent implements OnInit {
 
     if (this.selectedSDGs?.length > 0) {
       if (isDraft) {
-        if (draftCategory === 'SD_SCALE') save_sd_sc = true
+        if (this.categoriesToSave.includes('SD_SCALE')) save_sd_sc = true
         else save_sd_sc = false
-        if (draftCategory === 'SD_SUSTAINED') save_sd_sus = true
+        if (this.categoriesToSave.includes('SD_SUSTAINED')) save_sd_sus = true
         else save_sd_sus = false
       } else save_sd_sc = true, save_sd_sus = true
       console.log(draftCategory, "save_sd_sc", save_sd_sc, "save_sd_sus", save_sd_sus)
+      console.log(this.selectedSDGs)
       for await (let sd of this.selectedSDGs) {
         if (save_sd_sc) {
           console.log("save_sd_sc")
@@ -438,7 +446,13 @@ export class CmSectionThreeComponent implements OnInit {
               score.value = res.selectedScore.value
               res.selectedScore = score
               res.type = this.approach
-  
+              if (this.isEditMode){
+                let assQ = this.assessmentquestions.find(o => (o.characteristic.id === res.characteristic.id) && (o.selectedSdg.id === res.selectedSdg.id))
+                if (assQ) {
+                  res.assessmentQuestionId = assQ.id
+                  res.assessmentAnswerId = assQ.assessmentAnswers[0].id
+                }
+              }
               this.results.push(res)
             }
           })
@@ -458,6 +472,13 @@ export class CmSectionThreeComponent implements OnInit {
               susScore.value = res.selectedScore.value
               res.selectedScore = susScore
               res.type = this.approach
+              if (this.isEditMode){
+                let assQ = this.assessmentquestions.find(o => (o.characteristic.id === res.characteristic.id) && (o.selectedSdg.id === res.selectedSdg.id))
+                if (assQ) {
+                  res.assessmentQuestionId = assQ.id
+                  res.assessmentAnswerId = assQ.assessmentAnswers[0].id
+                }
+              }
               this.results.push(res)
             }
           })
@@ -469,11 +490,11 @@ export class CmSectionThreeComponent implements OnInit {
       for await (let item of this.outcome) {
         if (isDraft) {
           if (item.type === 'GHG') {
-            if (draftCategory === 'GHG_SCALE' && item.method === 'SCALE') { save_ghg_sc = true }
-            if (draftCategory === 'GHG_SUSTAINED' && item.method === 'SUSTAINED') { save_ghg_sus = true }
+            if (this.categoriesToSave.includes('GHG_SCALE') && item.method === 'SCALE') { save_ghg_sc = true }
+            if (this.categoriesToSave.includes('GHG_SUSTAINED') && item.method === 'SUSTAINED') { save_ghg_sus = true }
           } else if (item.type === 'ADAPTATION') {
-            if (draftCategory === 'ADAPTATION_SCALE' && item.method === 'SCALE') { save_ad_sc = true }
-            if (draftCategory === 'ADAPTATION_SUSTAINED' && item.method === 'SUSTAINED') { save_ad_sus = true }
+            if (this.categoriesToSave.includes('ADAPTATION_SCALE') && item.method === 'SCALE') { save_ad_sc = true }
+            if (this.categoriesToSave.includes('ADAPTATION_SUSTAINED') && item.method === 'SUSTAINED') { save_ad_sus = true }
           }
         } else { save_ghg_sc = true; save_ghg_sus = true; save_ad_sc = true; save_ad_sus = true; }
         console.log(draftCategory, item.type, save_ghg_sc, save_ghg_sus, save_ad_sc, save_ad_sus)
@@ -487,6 +508,7 @@ export class CmSectionThreeComponent implements OnInit {
                 inst.id = res.institution.id
                 res.institution = inst
               }
+              console.log(res.selectedScore)
               if (res.selectedScore) {
                 let score = new ScoreDto()
                 score.name = res.selectedScore.name
@@ -525,7 +547,13 @@ export class CmSectionThreeComponent implements OnInit {
         save_ghg_sc = false; save_ghg_sus = false; save_ad_sc = false; save_ad_sus = false;
       }
     }
+    console.log("results", this.results)
+    console.log("outcome", this.outcome)
+    this.categoriesToSave = []
+    this.isDraftSaved = true
     this.onSubmit.emit({result: this.results, isDraft: isDraft})
+    // this.isEditMode = true
+    // this.setInitialState() //TODO this occurres faulty data load. data get from the database before saving. This should be called after saving data.
   }
 
   onUpload(event: UploadEvent, res: CMResultDto) {
