@@ -217,7 +217,7 @@
                           </div>
                           <div class="col-12 col-md-6">
                             <div class="p-field">
-                              <textarea  [disabled]="isStageDisble" name="envisioned_change" placeholder="Enter an answer" #envisioned_change="ngModel"
+                              <textarea  name="envisioned_change" placeholder="Enter an answer" #envisioned_change="ngModel" [disabled]="isSavedAssessment"
                                 [(ngModel)]="assessment.envisioned_change" rows="1" cols="130" pInputText autoResize="autoResize" required
                                 ></textarea>
                                 <p class="info-message text-danger" *ngIf="  !envisioned_change.value &&                     
@@ -238,8 +238,8 @@
                             <div class="p-field">
                               <!-- <label for="vision_short">Short Term ({{"\u003C"}}5 years)</label> -->
                               <label for="vision_short">Within 5 years?</label>
-                              <textarea  [disabled]="isStageDisble" name="vision_short" placeholder="Short Term Vision" #vision_short="ngModel"
-                                [(ngModel)]="assessment.vision_short" rows="1" cols="130" pInputText autoResize="autoResize"
+                              <textarea name="vision_short" placeholder="Short Term Vision" #vision_short="ngModel" [disabled]="isSavedAssessment"
+                                [(ngModel)]="assessment.vision_short" rows="1" cols="130" pInputText autoResize="autoResize" required
                                 ></textarea>
                                 <p class="info-message text-danger" *ngIf="  !vision_short.value &&                     
                                 (fData.submitted || vision_short.touched || vision_short.dirty)
@@ -253,8 +253,8 @@
                             <div class="p-field">
                               <!-- <label for="vision_medium">Medium Term ({{"\u003E"}}5 years and   {{"\u003C"}}15 years)</label> -->
                               <label for="vision_short">Between 5 and 15 years?</label>
-                              <textarea [disabled]="isStageDisble" name="vision_medium" placeholder="Medium Term Vision" #vision_medium="ngModel"
-                                [(ngModel)]="assessment.vision_medium" rows="1" cols="130" pInputText autoResize="autoResize"
+                              <textarea name="vision_medium" placeholder="Medium Term Vision" #vision_medium="ngModel" [disabled]="isSavedAssessment"
+                                [(ngModel)]="assessment.vision_medium" rows="1" cols="130" pInputText autoResize="autoResize" required
                                 ></textarea>
                                 <p class="info-message text-danger" *ngIf="  !vision_medium.value &&                     
                                 (fData.submitted || vision_medium.touched || vision_medium.dirty)
@@ -267,9 +267,9 @@
                             <div class="p-field">
                               <!-- <label for="vision_long">Long Term ({{"\u003E"}}15 years)</label> -->
                               <label for="vision_short">After 15 years?</label>
-                              <textarea [disabled]="isStageDisble" name="vision_long" placeholder="Long Term Vision"
+                              <textarea name="vision_long" placeholder="Long Term Vision" [disabled]="isSavedAssessment"
                                 #vision_long="ngModel" [(ngModel)]="assessment.vision_long" rows="1" cols="130" pInputText
-                                autoResize="autoResize"></textarea>
+                                autoResize="autoResize" required></textarea>
                                 <p class="info-message text-danger" *ngIf="  !vision_long.value &&                     
                                 (fData.submitted || vision_long.touched || vision_long.dirty)
                               ">
@@ -286,8 +286,8 @@
                           </div>
                           <div class="col-12 col-md-6">
                             <div class="p-field">
-                              <textarea [disabled]="isStageDisble" name="phase_of_transformation" placeholder="Enter an answer" #phase_of_transformation="ngModel"
-                                [(ngModel)]="assessment.phase_of_transformation" rows="1" cols="130" pInputText autoResize="autoResize"
+                              <textarea name="phase_of_transformation" placeholder="Enter an answer" #phase_of_transformation="ngModel" [disabled]="isSavedAssessment"
+                                [(ngModel)]="assessment.phase_of_transformation" rows="1" cols="130" pInputText autoResize="autoResize" required
                                 ></textarea>
                                 <p class="info-message text-danger" *ngIf="  !phase_of_transformation.value &&                     
                                 (fData.submitted || phase_of_transformation.touched || phase_of_transformation.dirty)
@@ -304,8 +304,8 @@
                           </div>
                           <div class="col-12 col-md-6">
                             <div class="p-field">
-                              <textarea [disabled]="isStageDisble" name="change_in_system" placeholder="Enter an answer" #change_in_system="ngModel"
-                                [(ngModel)]="assessment.change_in_system" rows="1" cols="130" pInputText autoResize="autoResize"
+                              <textarea name="change_in_system" placeholder="Enter an answer" #change_in_system="ngModel" [disabled]="isSavedAssessment"
+                                [(ngModel)]="assessment.change_in_system" rows="1" cols="130" pInputText autoResize="autoResize" required
                                 ></textarea>
                                 <p class="info-message text-danger" *ngIf="  !change_in_system.value &&                     
                                 (fData.submitted || change_in_system.touched || change_in_system.dirty)
