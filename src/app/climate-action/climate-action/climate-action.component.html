@@ -581,7 +581,12 @@
 
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="impleDate"> Date of Implementation*</label>
+                  <label for="impleDate"> Start date*</label>
+                  <div class="tooltip-container">
+                      <span class="tooltip-icon">i</span>
+                      <div class="tooltip-text" style="width: 800px;">State the date that the intervention comes into effect.
+                         Not to be confused with the date new legislation is passed in the case of policies.</div>
+                  </div>
                   <div>
 
                     <p-calendar [disabled]="editEntytyId > 0"
