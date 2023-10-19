@@ -8,7 +8,8 @@
           <i class="pi pi-arrow-left" *ngIf="togglemenu"></i>
         </div>
         <div class="sidebar--header">
-          <img style="height: 130px;padding-left: 20px" src="../../../country/assets/images/logo-new.png" />
+          <!-- <img style="height: 130px;padding-left: 20px" src="../../../country/assets/images/logo-new.png" /> -->
+          <img style="height: 130px;padding-right:20px; width:250px" src="../../../country/assets/images/logo-new.png" />
         </div>
         <div class="sidebar-items flex-grow-1">
           <div data-ccs-admin-menu>
@@ -180,7 +181,12 @@
               routerLinkActive="selected">
               Portfolios
             </div>
-
+            <div
+            *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin || userRole==loginRole.Country_User ||  userRole==loginRole.External || userRole==loginRole.MRV_Admin||  userRole==loginRole.Data_Collection_Team ||  userRole==loginRole.Country_Admin"
+            class="sidebar-items--link align-items-start" [routerLink]="['/app/assessment-inprogress']"
+            routerLinkActive="selected">
+            Assessments Inprogress
+          </div>
             <div
               *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin || userRole==loginRole.Country_User ||  userRole==loginRole.External || userRole==loginRole.MRV_Admin||  userRole==loginRole.Data_Collection_Team ||  userRole==loginRole.Country_Admin"
               class="sidebar-items--link align-items-start" [routerLink]="['/app/assessment-results']"

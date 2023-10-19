@@ -67,6 +67,7 @@ import { ReviewDataPathComponent } from 'app/data-request-flow/review-data-path/
 import { PortfolioTrack4Component } from 'app/Tool/portfolio-track4/portfolio-track4.component';
 import { PortfolioComparisonComponent } from 'app/portfolios/portfolio-comparison/portfolio-comparison.component';
 import { SdgPriorityComponent } from 'app/sdg-priority/sdg-priority.component';
+import { AssessmentInprogressComponent } from 'app/assessment-inprogress/assessment-inprogress.component';
 
 
 const routes: Routes = [
@@ -172,6 +173,13 @@ const routes: Routes = [
   {
     path: 'view-polocies',
     component: ViewComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'assessment-inprogress',
+    component: AssessmentInprogressComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}
