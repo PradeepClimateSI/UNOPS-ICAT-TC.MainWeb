@@ -35,25 +35,25 @@
                     <th>Action</th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-climateactions>
+            <ng-template pTemplate="body" let-assessment>
                 <tr>
                     <td>
-                        {{ climateactions?.climateAction?.policyName }}</td>
+                        {{ assessment?.climateAction?.policyName }}</td>
                     <td>
-                        {{climateactions?.assessmentType}}
+                        {{assessment?.assessmentType}}
                     </td>
                     <td>
-                        {{climateactions?.tool}}
+                        {{assessment?.tool}}
                     </td>
                     <td>
-                        {{climateactions?.climateAction?.typeofAction}}
+                        {{assessment?.climateAction?.typeofAction}}
                     </td>
                     <td>
-                        {{climateactions?.editedOn | date: "dd-MM-yyyy "}}
+                        {{assessment?.editedOn | date: "dd-MM-yyyy "}}
                     </td>
                     <td>
                         <button type="button" pButton pRipple label="Continue"
-                            (click)="detail(climateactions)"></button>
+                            (click)="detail(assessment)"></button>
                     </td>
 
                 </tr>

@@ -67,12 +67,23 @@ export class AssessmentInprogressComponent implements OnInit {
 
   detail(assessment: Assessment) {
     console.log("climateactions", assessment)
-    // this.router.navigate(['app/add-polocies'], {
+    if (assessment.tool =="Carbon Market Tool"){
+      this.router.navigate(['app/carbon-market-tool'], {  
+      queryParams: { id: assessment.id,isEdit:assessment.isDraft},  
+      });
+    }
+    if (assessment.tool =="Portfolio Tool"){
+      this.router.navigate(['app/portfolio-tool'], {  
+      queryParams: { id: assessment.id,isEdit:assessment.isDraft},  
+      });
+    }
 
-    // queryParams: { id: climateactions.id ,flag:this.flag},
-
-
-    // });
+    if (assessment.tool =="Investor & Private Sector Tool"){
+      this.router.navigate(['app/investor-tool-new'], {  
+      queryParams: { id: assessment.id,isEdit:assessment.isDraft},  
+      });
+    }
+    
 
   }
 
