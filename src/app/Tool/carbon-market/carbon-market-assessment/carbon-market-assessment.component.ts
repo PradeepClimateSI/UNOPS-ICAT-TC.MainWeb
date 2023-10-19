@@ -96,6 +96,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   async setInitialStates() {
     if (this.isEditMode) {
       this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+      this.finalBarrierList = this.assessment['policy_barrier']
       let policy = this.policies.find(o => o.id === this.assessment.climateAction.id)
       if (policy) this.assessment.climateAction = policy
       this.cm_detail = await this.assessmentCMDetailControllerServiceProxy.getAssessmentCMDetailByAssessmentId(this.assessmentId).toPromise()
@@ -109,6 +110,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
       this.setTo()
       this.assessmentres = this.assessment
       this.showSections = true
+      this.isSavedAssessment = true
     }
   }
 
@@ -303,7 +305,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     
   }
   showDialog(){
-    this.barrierBox =true; 
+    if (!this.isEditMode) this.barrierBox =true; 
   }
   onItemSelectSectors($event: any) {
    

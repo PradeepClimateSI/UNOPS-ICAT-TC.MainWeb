@@ -31,6 +31,9 @@
                     <button class="btn btn-primary text-uppercase" type="submit" (click)="save({result: [], isDraft: false})">
                       {{ (assessment && assessment.assessment_approach=== 'INDIRECT') ? 'Send to Data Collection Team' : 'Calculate & Check Results' }}
                     </button>
+                    <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="save({result: [], isDraft: true})">
+                        Save
+                    </div>
                 </div>
             </div>
         </div>

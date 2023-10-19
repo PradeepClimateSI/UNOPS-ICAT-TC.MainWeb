@@ -82,6 +82,7 @@ export class CmSectionComponent implements OnInit {
   async setInitialState() {
     if (this.isEditMode) {
       this.assessmentQuestions = await this.cMAssessmentQuestionControllerServiceProxy.getAssessmentQuestionsByAssessmentId(this.assessment.id).toPromise()
+      console.log("assessmentQs", this.assessmentQuestions)
     }
   }
 
@@ -127,7 +128,10 @@ export class CmSectionComponent implements OnInit {
       this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['question'] = question
       if (this.isEditMode) {
         let q = this.assessmentQuestions.find(o => o.question.id === question.id)
-        if (q) this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['assessmentQuestionId'] = q.id
+        if (q) {
+          this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['assessmentQuestionId'] = q.id
+          this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['assessmentAnswerId'] = q.assessmentAnswers[0].id
+        }
       }
       this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['type'] = e.type
 
@@ -244,7 +248,15 @@ export class CmSectionComponent implements OnInit {
           item.question = q.question
           item.type = q.type
           item.filePath = q.file
-          if (this.isEditMode) item.assessmentQuestionId = q.assessmentQuestionId
+          console.log(q)
+          if (this.isEditMode){
+            let assQ = this.assessmentQuestions.find(o => (o.question.id === q.question?.id))
+            console.log(assQ)
+            if (assQ) {
+              item.assessmentQuestionId = assQ.id
+              item.assessmentAnswerId = assQ.assessmentAnswers[0].id
+            }
+          }
           if (item.question) result.result.push(item)
         })
       })
