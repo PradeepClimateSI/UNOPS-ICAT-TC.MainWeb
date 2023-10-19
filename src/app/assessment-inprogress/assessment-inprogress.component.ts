@@ -78,7 +78,7 @@ export class AssessmentInprogressComponent implements OnInit {
       });
     }
 
-    if (assessment.tool =="Investor & Private Sector Tool"){
+    if (assessment.tool =="INVESTOR"){
       this.router.navigate(['app/investor-tool-new'], {  
       queryParams: { id: assessment.id,isEdit:assessment.isDraft},  
       });

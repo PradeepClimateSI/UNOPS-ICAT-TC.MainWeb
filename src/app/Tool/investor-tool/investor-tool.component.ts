@@ -152,15 +152,15 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   }
   async ngOnInit(): Promise<void> {
     
-    // this.activatedRoute.queryParams.subscribe(async params => {
+    this.activatedRoute.queryParams.subscribe( params => {
+      params['isEdit']=='true'?(this.isEditMode =true ):false
+      this.assessmentId = params['id']
+      
+      //  console.log("params",params['id'],typeof(params['id']), params['isEdit'],typeof(params['isEdit']))
+      // this.isEditMode = true
+      // this.assessmentId = 415
 
-    //   // this.assessmentId = params['id']
-
-    //   // this.isEditMode = params['isEdit']
-    //   this.isEditMode = true
-    //   this.assessmentId = 415
-
-    // })
+    })
     if(this.isEditMode==false){
       await this.getPolicies();
       await this.getAllImpactsCovered();
@@ -728,15 +728,18 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   }
   next(data:any[],type:string){
-  // console.log("category",data)
+  console.log("category",data)
   // data?.filter(investorAssessment => console.log(investorAssessment.likelihood_justification, investorAssessment.likelihood_justification !== undefined , investorAssessment.likelihood_justification !== ""))
-  // data?.filter(investorAssessment => console.log(investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
-  // (indicator_details.justification !==""))?.length === (investorAssessment.indicator_details?.length) && this.isEditMode == true
-  // ))
+  data?.filter(investorAssessment => console.log(investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
+  (indicator_details.justification !==""))?.length === (investorAssessment.indicator_details?.length) && this.isEditMode == true
+  ))
+  data?.filter(investorAssessment => console.log(investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
+  (indicator_details.justification !=="")),(investorAssessment.indicator_details?.length) , this.isEditMode 
+  ))
   if((data?.filter(investorAssessment => 
       (investorAssessment.relavance !== undefined) && 
       (investorAssessment.likelihood !== undefined) && 
-      (investorAssessment.likelihood_justification !==undefined &&investorAssessment.likelihood_justification !== "") &&
+      (investorAssessment.likelihood_justification !==undefined && investorAssessment.likelihood_justification !== "") &&
       ((investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
         (indicator_details.justification !== undefined))?.length === (investorAssessment.indicator_details?.length-1) && this.isEditMode == false
       )||
