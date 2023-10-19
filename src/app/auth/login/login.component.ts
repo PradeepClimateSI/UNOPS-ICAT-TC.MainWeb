@@ -40,6 +40,10 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  toLanding() {
+    this.router.navigate(['/landing-page']);
+  }
+
   showPasswordResetForm() {
     this.router.navigate(['../forgot'], {relativeTo:this.activatedRoute});
   }
