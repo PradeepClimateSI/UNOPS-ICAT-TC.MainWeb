@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { MasterDataService } from 'app/shared/master-data.service';
+import { MasterDataDto, MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
 import { AllBarriersSelected, Assessment, AssessmentCMDetail, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, BarrierSelected, Characteristics, ClimateAction, GeographicalAreasCovered, InvestorSector, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, ServiceProxy, ToolsMultiselectDto } from 'shared/service-proxies/service-proxies';
@@ -39,9 +39,9 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   date2: any
 
   assessmentres: Assessment
-  levelOfImplementation: any[] = [];
-  sectorArray: Sector[] = [];
-  geographicalAreasCoveredArr: any[] = []
+  levelOfImplementation: MasterDataDto[];
+  sectorArray: Sector[];
+  geographicalAreasCoveredArr: MasterDataDto[];
   sectorList: any[] = [];
   international_tooltip:string;
   
@@ -100,12 +100,19 @@ export class CarbonMarketAssessmentComponent implements OnInit {
       let policy = this.policies.find(o => o.id === this.assessment.climateAction.id)
       if (policy) this.assessment.climateAction = policy
       this.cm_detail = await this.assessmentCMDetailControllerServiceProxy.getAssessmentCMDetailByAssessmentId(this.assessmentId).toPromise()
+      let areas: MasterDataDto[] = []
       this.cm_detail.geographicalAreasCovered.map(area => {
-        this.geographicalAreasCoveredArr.push(this.levelOfImplementation.find(o => o.code === area.code))
+        let level = this.levelOfImplementation.find(o => o.code === area.code)
+        if (level) {
+          areas.push(level)
+        }
       })
+      this.geographicalAreasCoveredArr = areas
+      let sectors: any[] = []
       this.cm_detail.sectorsCovered.map(sector => {
-        this.sectorArray.push(this.sectorList.find(o => o.name === sector.sector.name))
+        sectors.push(this.sectorList.find(o => o.name === sector.sector.name))
       })
+      this.sectorArray = sectors
       this.setFrom()
       this.setTo()
       this.assessmentres = this.assessment

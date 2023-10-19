@@ -82,7 +82,6 @@ export class CmSectionComponent implements OnInit {
   async setInitialState() {
     if (this.isEditMode) {
       this.assessmentQuestions = await this.cMAssessmentQuestionControllerServiceProxy.getAssessmentQuestionsByAssessmentId(this.assessment.id).toPromise()
-      console.log("assessmentQs", this.assessmentQuestions)
     }
   }
 
@@ -248,10 +247,8 @@ export class CmSectionComponent implements OnInit {
           item.question = q.question
           item.type = q.type
           item.filePath = q.file
-          console.log(q)
           if (this.isEditMode){
             let assQ = this.assessmentQuestions.find(o => (o.question.id === q.question?.id))
-            console.log(assQ)
             if (assQ) {
               item.assessmentQuestionId = assQ.id
               item.assessmentAnswerId = assQ.assessmentAnswers[0].id

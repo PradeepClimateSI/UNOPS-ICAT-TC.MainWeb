@@ -30,7 +30,7 @@ export class MasterDataService {
   private _sectorial_boundries: {name: string, id: number, code: string}[] = []
   private _impact_categories: {name: string, id: number, code: string, type: string}[] = []
   private _impact_characteristics: {name: string, id: number, code: string, type: string[]}[] = []
-  private _level_of_implemetation: {name: string, id: number, code: string}[] = []
+  private _level_of_implemetation: MasterDataDto[] = []
   private _impact_covered: {name: string, id: number}[] = []
   private _assessment_method: {name: string, id: number}[] = []
   private _assessment_approach2: {name: string, id: number}[] = []
@@ -578,11 +578,11 @@ export class MasterDataService {
   get impact_characteristics(): { name: string; id: number, code: string, type: string[] }[] {
     return this._impact_characteristics;
   }
-  set level_of_implemetation (value: { name: string; id: number; code: string }[]) {
+  set level_of_implemetation(value: MasterDataDto[]) {
     this._level_of_implemetation = value;
   }
 
-  get level_of_implemetation (): { name: string; id: number; code: string }[] {
+  get level_of_implemetation (): MasterDataDto[] {
     return this._level_of_implemetation;
   }
 
@@ -761,4 +761,10 @@ export class MasterDataService {
       return ''
     }
   }
+}
+
+export class MasterDataDto{
+  id: number
+  name: string
+  code: string
 }

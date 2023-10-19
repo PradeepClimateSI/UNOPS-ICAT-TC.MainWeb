@@ -35,12 +35,12 @@
                         </div>
                         <div class="p-field p-2">
                             <label for="Level of implementation">Geographical Areas Covered *</label>
-                            <p-multiSelect appendTo="body" name="geographical_areas_covered"
-                                #type="ngModel" placeholder="Select Geographical Areas Covered"
-                                [(ngModel)]="geographicalAreasCoveredArr" [options]="levelOfImplementation"
-                                optionLabel="name" [required]="true" [disabled]="isEditMode"></p-multiSelect>
+                              <p-multiSelect name="geographical_areas_covered" placeholder="Select Geographical Areas Covered" appendTo="body"
+                              [options]="levelOfImplementation" [(ngModel)]="geographicalAreasCoveredArr" optionLabel="name"
+                              [disabled]="isEditMode" >
+                            </p-multiSelect>
                             <p class="info-message text-danger" *ngIf="
-                                geographicalAreasCoveredArr.length===0 &&
+                                geographicalAreasCoveredArr?.length===0 &&
                                 (fData.submitted || type.touched)
                               ">
                                 This is a mandatory field
@@ -53,7 +53,7 @@
                                 (ngModelChange)="onItemSelectSectors($event)" [disabled]="isSavedAssessment"
                                 optionLabel="name" [required]="true" [disabled]="isEditMode"></p-multiSelect>
                             <p class="info-message text-danger" *ngIf="
-                                              sectorArray.length===0 &&
+                                              sectorArray?.length===0 &&
                                               (fData.submitted || type.touched)
                                             ">
                                 This is a mandatory field
