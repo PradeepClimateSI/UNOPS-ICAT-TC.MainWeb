@@ -130,6 +130,7 @@ import { AllTooDashbordComponent } from './dashboard/all-too-dashbord/all-too-da
 import { PortfolioAlignmentComponent } from './portfolios/portfolio-alignment/portfolio-alignment.component';
 import { SdgPriorityComponent } from './sdg-priority/sdg-priority.component';
 import { AssessmentInprogressComponent } from './assessment-inprogress/assessment-inprogress.component';
+import { LandingPageComponent } from "./landing-page/landing-page.component";
 
 
 
@@ -217,7 +218,7 @@ export function getAuditRemoteServiceBaseUrl(): string {
     PortfolioAlignmentComponent,
     SdgPriorityComponent,
     AssessmentInprogressComponent,
-
+    LandingPageComponent
   ],
 
 
