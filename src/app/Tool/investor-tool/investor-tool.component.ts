@@ -154,17 +154,18 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     
     // this.activatedRoute.queryParams.subscribe(async params => {
 
-    //   this.assessmentId = params['id']
+    //   // this.assessmentId = params['id']
 
-    //   this.isEditMode = params['isEdit']
-    //   // this.isEditMode = true
-    //   // this.assessmentId = 415
+    //   // this.isEditMode = params['isEdit']
+    //   this.isEditMode = true
+    //   this.assessmentId = 415
 
     // })
     if(this.isEditMode==false){
       await this.getPolicies();
       await this.getAllImpactsCovered();
       await this.getCharacteristics();
+      this.sectorList = await this.sectorProxy.findAllSector().toPromise()
     }
     else{
       try{
@@ -213,10 +214,10 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
     intTypeFilter.push('type.id||$eq||' + 3);
 
-    this.instituionProxy.getInstituion(3,countryId,1000,0).subscribe((res: any) => {
-      this.instiTutionList = res;
-      console.log( "listtt",this.instiTutionList)
-    });
+    // this.instituionProxy.getInstituion(3,countryId,1000,0).subscribe((res: any) => {
+    //   this.instiTutionList = res;
+    //   console.log( "listtt",this.instiTutionList)
+    // });
     // this.getSelectedHeader();
 
     this.investorToolControllerproxy.findAllSDGs().subscribe((res: any) => {
@@ -224,7 +225,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       this.sdgList = res
      });
      
-    this.sectorList = await this.sectorProxy.findAllSector().toPromise()
+    
     if (countryId > 0) {
       // this.sectorList = await this.sectorProxy.getCountrySector(countryId).toPromise()
       // this.sectorProxy.getSectorDetails(1,100,'').subscribe((res:any) =>{
@@ -728,14 +729,21 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   }
   next(data:any[],type:string){
   // console.log("category",data)
-  // data?.filter(investorAssessment => console.log(investorAssessment.relavance,investorAssessment.relavance == 0))
+  // data?.filter(investorAssessment => console.log(investorAssessment.likelihood_justification, investorAssessment.likelihood_justification !== undefined , investorAssessment.likelihood_justification !== ""))
+  // data?.filter(investorAssessment => console.log(investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
+  // (indicator_details.justification !==""))?.length === (investorAssessment.indicator_details?.length) && this.isEditMode == true
+  // ))
   if((data?.filter(investorAssessment => 
       (investorAssessment.relavance !== undefined) && 
       (investorAssessment.likelihood !== undefined) && 
-      (investorAssessment.likelihood_justification !== undefined) &&
+      (investorAssessment.likelihood_justification !==undefined &&investorAssessment.likelihood_justification !== "") &&
+      ((investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
+        (indicator_details.justification !== undefined))?.length === (investorAssessment.indicator_details?.length-1) && this.isEditMode == false
+      )||
       (investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
-        (indicator_details.justification !== undefined))?.length === (investorAssessment.indicator_details?.length-1)
-      )|| (investorAssessment.relavance == 0))?.length === data?.length && type=='process')||
+        (indicator_details.justification !== undefined && indicator_details.justification !== ""))?.length === (investorAssessment.indicator_details?.length) && this.isEditMode == true
+      ))||  
+      (investorAssessment.relavance == 0))?.length === data?.length && type=='process')||
       (data?.filter(investorAssessment => 
         (investorAssessment.justification !== undefined) 
        )?.length === data?.length && type=='outcome')||
@@ -765,7 +773,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.messageService.add({
       severity: 'error',
       summary: 'Error',
-      detail: 'Please fill all mandotory fields',
+      detail: 'Please fill all mandatory fields',
       closable: true,
     });
   }

@@ -582,8 +582,8 @@
     <!-- <div class="p-grid p-fluid col-sm-12" *ngIf="showSections">
         <app-cm-section [assessment]="assessmentres"></app-cm-section>
     </div> -->
-    <div class="card" *ngIf="isSavedAssessment && tabLoading">
-        <!-- <div class="card" > -->
+    <!-- <div class="card" *ngIf="isSavedAssessment && tabLoading"> -->
+        <div class="card" >
         <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)" >
         <p-tabView  (onChange)="onMainTabChange($event) " [(activeIndex)]="activeIndexMain ">
 
@@ -592,7 +592,7 @@
 
                 <p-tabView #tabView (onChange)="onCategoryTabChange($event, tabView)" [(activeIndex)]="activeIndex "    >
 
-                    <p-tabPanel  [header]="category.CategoryName" *ngFor="let category of processData" >
+                    <p-tabPanel  [header]="category.CategoryName" *ngFor="let category of processData; index as cat" >
 
                         <div class="characteristic-Topic " *ngFor="let data of category.data; index as i">
                             <h6 *ngIf="data.characteristics.name!= 'Research and Development'">{{i+1}}.{{data.characteristics.name}}</h6>
@@ -624,7 +624,7 @@
                                                                 </div>
                                                                 <div class="col-4">
                                                                     <p-dropdown  
-                                                                    name="data.charData.relavance"
+                                                                    name="cat-{{cat}}-data.charData.relavance-{{i}}"
                                                                     #rel="ngModel"
                                                                     placeholder="Select Relevance"
                                                                     [(ngModel)]="data.relavance"
@@ -642,7 +642,7 @@
 
                                                     <div class="row p-2">
                                                         <!-- <label for="Indicator"><u>Indicator</u></label> -->
-                                                        <div class="row" *ngFor="let question of data.indicator_details">
+                                                        <div class="row" *ngFor="let question of data.indicator_details ; let j = index">
                                                             <label style="font-size: 17px;" *ngIf="question.question.isMain" for="Indicator" class="mt-10 mb-10"><u>{{question.question.name}}</u></label>
 
                                                              <div class="row" *ngIf="!question.question.isMain">
@@ -661,7 +661,7 @@
                                                                  <div class="col-4 mb-20">
 
                                                                     <p-dropdown *ngIf="approach===1"
-                                                                        name="data.charData.question01" #type="ngModel"
+                                                                        name="cat-{{cat}}-data.charData.question-{{i}}-{{j}}" #type="ngModel"
                                                                         placeholder="Select Answer"
                                                                         [(ngModel)]="question.value"
                                                                         [options]="yesNoAnswer" optionLabel="name"
@@ -693,7 +693,7 @@
                                                                     [(ngModel)]="question.justification"
                                                                     placeholder="Enter Justification"
                                                                     #questionJustification="ngModel"
-                                                                    name="questionJustification" />
+                                                                    name="cat-{{cat}}-questionJustification-{{i}}-{{j}}" />
                                                                     <p class="info-message text-danger" *ngIf="!question.justification  && (fData1.submitted || questionJustification.touched) ">
                                                                       This is a mandatory field </p>
 
@@ -712,7 +712,7 @@
                                                                 <label for="likelihood" >Likelihood*</label>
                                                                 <p-dropdown 
                                                                     appendTo="body"
-                                                                    name="data.charData.likelihood"
+                                                                    name="cat-{{cat}}-data.charData.likelihood-{{i}}"
                                                                     #likelihood2="ngModel" 
                                                                     placeholder="Select Likelihood"
                                                                     [(ngModel)]="data.likelihood"
@@ -739,7 +739,7 @@
                                                                 <input type="text" pInputText
                                                                     [(ngModel)]="data.likelihood_justification" #just1="ngModel"
                                                                     placeholder="Enter Justification"
-                                                                    name="data.charData.likelihood_justification" />
+                                                                    name="cat-{{cat}}-data.charData.likelihood_justification-{{i}}" />
                                                                     <p class="info-message text-danger" *ngIf="!data.likelihood_justification  && (fData1.submitted || just1.touched) ">
                                                                       This is a mandatory field </p>
 
