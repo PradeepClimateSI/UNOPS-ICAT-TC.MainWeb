@@ -134,7 +134,6 @@ export class CmSectionThreeComponent implements OnInit {
       })
       this.selectedSDGsList = [...new Map(sdgs.map(item =>[item['name'], item])).values()];
       this.onSelectSDG({})
-      console.log(this.selectedSDGs)
 
       await Promise.all(
         this.types.map((type: any) => {
@@ -251,7 +250,6 @@ export class CmSectionThreeComponent implements OnInit {
         })
       }
     })
-    console.log(scaleResults, sustainResults)
     this.selectedSDGs = this.selectedSDGsList.map(sdg => {
       let pSdg = new PortfolioSdg()
       pSdg.id = sdg.id
@@ -287,7 +285,7 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   onCategoryTabChange2($event: any) {
-    throw new Error('Method not implemented.');
+    // throw new Error('Method not implemented.');
   }
 
   next(category: string, characteristics?: any[]) {
@@ -428,11 +426,8 @@ export class CmSectionThreeComponent implements OnInit {
         if (this.categoriesToSave.includes('SD_SUSTAINED')) save_sd_sus = true
         else save_sd_sus = false
       } else save_sd_sc = true, save_sd_sus = true
-      console.log(draftCategory, "save_sd_sc", save_sd_sc, "save_sd_sus", save_sd_sus)
-      console.log(this.selectedSDGs)
       for await (let sd of this.selectedSDGs) {
         if (save_sd_sc) {
-          console.log("save_sd_sc")
           sd.scaleResult.forEach(res => {
             if (res.selectedScore) {
               if (res.institution?.id) {
@@ -458,7 +453,6 @@ export class CmSectionThreeComponent implements OnInit {
           })
         }
         if (save_sd_sus) {
-          console.log("save_sd_sus")
           sd.sustainResult.forEach(res => {
             if (res.selectedScore) {
               if (res.institution?.id) {
@@ -497,10 +491,8 @@ export class CmSectionThreeComponent implements OnInit {
             if (this.categoriesToSave.includes('ADAPTATION_SUSTAINED') && item.method === 'SUSTAINED') { save_ad_sus = true }
           }
         } else { save_ghg_sc = true; save_ghg_sus = true; save_ad_sc = true; save_ad_sus = true; }
-        console.log(draftCategory, item.type, save_ghg_sc, save_ghg_sus, save_ad_sc, save_ad_sus)
         if (item.type === 'GHG') {
           if (save_ghg_sc || save_ghg_sus) {
-            console.log("save_sc")
             item.results.forEach((res: any) => {
               res.type = this.approach
               if (res.institution?.id) {
@@ -508,7 +500,6 @@ export class CmSectionThreeComponent implements OnInit {
                 inst.id = res.institution.id
                 res.institution = inst
               }
-              console.log(res.selectedScore)
               if (res.selectedScore) {
                 let score = new ScoreDto()
                 score.name = res.selectedScore.name
@@ -517,6 +508,16 @@ export class CmSectionThreeComponent implements OnInit {
                 res.selectedScore = score
                 res.type = this.approach
                 res.selectedSdg = new PortfolioSdg()
+                if (this.isEditMode){
+                  let assQ = this.assessmentquestions.find(o => (o.characteristic.id === res.characteristic.id) )
+                  if (assQ) {
+                    res.assessmentQuestionId = assQ.id
+                    res.assessmentAnswerId = assQ.assessmentAnswers[0].id
+                  }
+                }
+                res.isSDG = false
+                res.isAdaptation = false
+                res.isGHG = true
                 this.results.push(res)
               }
             })
@@ -539,6 +540,16 @@ export class CmSectionThreeComponent implements OnInit {
                 res.selectedScore = score
                 res.type = this.approach
                 res.selectedSdg = new PortfolioSdg()
+                if (this.isEditMode){
+                  let assQ = this.assessmentquestions.find(o => (o.characteristic.id === res.characteristic.id) )
+                  if (assQ) {
+                    res.assessmentQuestionId = assQ.id
+                    res.assessmentAnswerId = assQ.assessmentAnswers[0].id
+                  }
+                }
+                res.isSDG = false
+                res.isAdaptation = true
+                res.isGHG = false
                 this.results.push(res)
               }
             })
@@ -547,8 +558,7 @@ export class CmSectionThreeComponent implements OnInit {
         save_ghg_sc = false; save_ghg_sus = false; save_ad_sc = false; save_ad_sus = false;
       }
     }
-    console.log("results", this.results)
-    console.log("outcome", this.outcome)
+
     this.categoriesToSave = []
     this.isDraftSaved = true
     this.onSubmit.emit({result: this.results, isDraft: isDraft})

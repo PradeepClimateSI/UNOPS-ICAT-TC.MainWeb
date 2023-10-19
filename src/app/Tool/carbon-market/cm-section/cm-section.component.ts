@@ -249,7 +249,6 @@ export class CmSectionComponent implements OnInit {
         })
       })
     })
-    console.log('section result', result.result)
     result.assessment = this.assessment
     result.isDraft = event.isDraft
     this.cMAssessmentQuestionControllerServiceProxy.saveResult(result)
@@ -262,7 +261,6 @@ export class CmSectionComponent implements OnInit {
             closable: true,
           })
           if (event.isDraft) {
-            console.log("re-routed")
             this.isEditMode = true
             this.setInitialState()
             this.router.navigate(['../carbon-market-tool'], { queryParams: { id: this.assessment.id, isEdit: true }, relativeTo: this.activatedRoute });
