@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MasterDataService } from 'app/shared/master-data.service';
 import { LazyLoadEvent } from 'primeng/api';
 import { Assessment, AssessmentControllerServiceProxy, ServiceProxy } from 'shared/service-proxies/service-proxies';
 
@@ -25,12 +26,12 @@ export class AssessmentInprogressComponent implements OnInit {
 
   assesments: Assessment[];
 
+
   constructor(
     private router: Router,
     private serviceProxy: ServiceProxy,
     private assessmentProxy: AssessmentControllerServiceProxy,
-    // private sectorProxy: CountryControllerServiceProxy,
-    // private cdr: ChangeDetectorRef
+    private masterDataService: MasterDataService,
   ) { }
 
 
@@ -42,7 +43,9 @@ export class AssessmentInprogressComponent implements OnInit {
     this.loadgridData(event);
   }
 
-
+getTool(code:string){
+  this.masterDataService.getToolName(code)
+}
   loadgridData = (event: LazyLoadEvent) => {
     let filterText = this.searchBy.text ? this.searchBy.text : '';
     let pageNumber = event.first === 0 || event.first === undefined ? 1 : (event.first / (event.rows === undefined ? 10 : event.rows)) + 1;
@@ -67,18 +70,18 @@ export class AssessmentInprogressComponent implements OnInit {
 
   detail(assessment: Assessment) {
     console.log("climateactions", assessment)
-    if (assessment.tool =="Carbon Market Tool"){
+    if (assessment.tool =="CARBON_MARKET"){
       this.router.navigate(['app/carbon-market-tool'], {  
       queryParams: { id: assessment.id,isEdit:assessment.isDraft},  
       });
     }
-    if (assessment.tool =="Portfolio Tool"){
+    if (assessment.tool =="PORTFOLIO"){
       this.router.navigate(['app/portfolio-tool'], {  
       queryParams: { id: assessment.id,isEdit:assessment.isDraft},  
       });
     }
 
-    if (assessment.tool =="Investor & Private Sector Tool"){
+    if (assessment.tool =="INVESTOR"){
       this.router.navigate(['app/investor-tool-new'], {  
       queryParams: { id: assessment.id,isEdit:assessment.isDraft},  
       });
