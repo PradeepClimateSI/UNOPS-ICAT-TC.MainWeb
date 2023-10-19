@@ -1,0 +1,63 @@
+<div class="container pl-20 pr-20">
+
+    <div class="card" style="min-height: 600px;">
+        <p-toast></p-toast>
+
+        <div class="mb-12">
+            <h4 class="mt-4">Assessments Inprogress</h4>
+        </div>
+
+
+        <p-table #dt2 [value]="assesments" [paginator]="true" [rows]="rows" [totalRecords]="totalRecords"
+            [sortField]="'id'" [sortOrder]="-1" [lazy]="true" (onLazyLoad)="loadgridData($event)"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Entries"
+            [rowsPerPageOptions]="[1, 10, 25, 50]" [loading]="loading" [responsive]="true"
+            [globalFilterFields]="['id', 'policyName', 'contactPersoFullName']">
+            <ng-template pTemplate="caption">
+                <div class="d-flex justify-content-end">
+                    <div class="col-md-4">
+                        <div class="p-inputgroup pt-4">
+                            <input placeholder="Type Your Keyword" [(ngModel)]="searchBy.text" #nameClimate="ngModel"
+                                type="text" name="nameClimate" class="p-inputtext" pInputText />
+                            <button type="button" pButton pRipple label="Search" (click)="onSearch()"></button>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Intervention</th>
+                    <th>Assessment Approach</th>
+                    <th>Tool</th>
+                    <th>Intervention Type</th>
+                    <th>Last Update Date</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-assessment>
+                <tr>
+                    <td>
+                        {{ assessment?.climateAction?.policyName }}</td>
+                    <td>
+                        {{assessment?.assessmentType}}
+                    </td>
+                    <td>
+                        {{assessment?.tool}}
+                    </td>
+                    <td>
+                        {{assessment?.climateAction?.typeofAction}}
+                    </td>
+                    <td>
+                        {{assessment?.editedOn | date: "dd-MM-yyyy "}}
+                    </td>
+                    <td>
+                        <button type="button" pButton pRipple label="Continue"
+                            (click)="detail(assessment)"></button>
+                    </td>
+
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

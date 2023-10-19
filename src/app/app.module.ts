@@ -129,6 +129,7 @@ import { HeatMapComponent } from './charts/heat-map/heat-map.component';
 import { AllTooDashbordComponent } from './dashboard/all-too-dashbord/all-too-dashbord.component';
 import { PortfolioAlignmentComponent } from './portfolios/portfolio-alignment/portfolio-alignment.component';
 import { SdgPriorityComponent } from './sdg-priority/sdg-priority.component';
+import { AssessmentInprogressComponent } from './assessment-inprogress/assessment-inprogress.component';
 
 
 
@@ -215,6 +216,7 @@ export function getAuditRemoteServiceBaseUrl(): string {
     AllTooDashbordComponent,
     PortfolioAlignmentComponent,
     SdgPriorityComponent,
+    AssessmentInprogressComponent,
 
   ],
 
