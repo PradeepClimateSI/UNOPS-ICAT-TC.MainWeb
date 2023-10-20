@@ -259,7 +259,6 @@ export class CmSectionComponent implements OnInit {
           item.filePath = q.file
           if (this.isEditMode){
             let assQ = this.assessmentQuestions.find(o => (o.question.id === q.question?.id))
-            console.log(assQ)
             if (assQ) {
               item.assessmentQuestionId = assQ.id
               item.assessmentAnswerId = assQ.assessmentAnswers[0]?.id
@@ -289,7 +288,7 @@ export class CmSectionComponent implements OnInit {
           if (event.isDraft) {
             this.isEditMode = true
             this.setInitialState()
-            this.router.navigate(['../edit'], { queryParams: { id: this.assessment.id, isEdit: true }, relativeTo: this.activatedRoute });
+            this.router.navigate(['../carbon-market-tool/edit'], { queryParams: { id: this.assessment.id, isEdit: true }, relativeTo: this.activatedRoute });
             // window.location.reload()
           }
           if (result.assessment.assessment_approach === 'DIRECT' && !event.isDraft) {
