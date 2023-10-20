@@ -172,8 +172,8 @@ export class CmSectionThreeComponent implements OnInit {
         })
       )
       await Promise.all(
-        this.selectedSDGs.map((sdl: any) => {
-          sdl.scaleResult.map((sc: any) => {
+        this.selectedSDGs = this.selectedSDGs.map((sdl: any) => {
+          sdl.scaleResult = sdl.scaleResult.map((sc: any) => {
             let assQ = this.assessmentquestions.find(o => (o.characteristic.id === sc.characteristic.id) && (o.selectedSdg.id === sc.selectedSdg.id) )
             if (assQ) {
               sc.sdgIndicator = assQ.sdgIndicator
@@ -182,23 +182,28 @@ export class CmSectionThreeComponent implements OnInit {
               sc.comment = assQ.comment
               sc.assessmentQuestionId = assQ.id
               sc.filePath = assQ.uploadedDocumentPath
+              sc.selectedSdg = assQ.selectedSdg
               let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, sc.characteristic)
               if (score) sc.selectedScore = score
             }
+            return sc
           })
-          sdl.sustainResult.map((sc: any) => {
+          sdl.sustainResult = sdl.sustainResult.map((sc: any) => {
             let assQ = this.assessmentquestions.find(o => (o.characteristic.id === sc.characteristic.id) && (o.selectedSdg.id === sc.selectedSdg.id))
             if (assQ) {
               sc.comment = assQ.comment
               sc.assessmentQuestionId = assQ.id
               sc.filePath = assQ.uploadedDocumentPath
+              sc.selectedSdg = assQ.selectedSdg
               let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, sc.characteristic)
               if (score) {
                 sc.selectedScore = score
                 this.onSelectScore({}, sc, 2)
               }
             }
+            return sc
           })
+          return sdl
         })
       )
     }
@@ -342,14 +347,14 @@ export class CmSectionThreeComponent implements OnInit {
           })
         })
         this.SDGScore = Math.round(score / 6 / this.selectedSDGs.length)
-      } else if (char.characteristic.category.code === 'ADAPTATION') {
+      } else if (char.characteristic.category.code === 'SUSTAINED_ADAPTATION') {
         let score = 0
         this.outcome.forEach((category: OutcomeCategory) => {
           category.results.forEach((result) => {
             if (result.selectedScore.value) score = score + result.selectedScore.value
           })
         })
-        this.GHGScore = Math.round(score / 6)
+        this.adaptationScore = Math.round(score / 6)
       }
     }
   }
@@ -409,14 +414,18 @@ export class CmSectionThreeComponent implements OnInit {
             }
             res.type = this.approach
             if (this.isEditMode){
-              let assQ = this.assessmentquestions.find(o => (o.characteristic.id === char.id) && (o.question.id === q.id))
+              let assQ = this.assessmentquestions.find(o => (o.characteristic.id === char.id) && (o.question.id === q.id || o.relevance === 0))
               if (assQ) {
                 res.assessmentQuestionId = assQ.id
                 res.assessmentAnswerId = assQ.assessmentAnswers[0]?.id
               }
             }
             res.selectedSdg = new PortfolioSdg()
-            this.results.push(res)
+            if (res.question.id) {
+              this.results.push(res)
+            } else if (res.relevance === 0 && !res.assessmentQuestionId) {
+              this.results.push(res)
+            }
           }
         }
       }
@@ -451,7 +460,9 @@ export class CmSectionThreeComponent implements OnInit {
                   res.assessmentAnswerId = assQ.assessmentAnswers[0].id
                 }
               }
-              this.results.push(res)
+              if (res.selectedScore.name) {
+                this.results.push(res)
+              }
             }
           })
         }
@@ -476,7 +487,9 @@ export class CmSectionThreeComponent implements OnInit {
                   res.assessmentAnswerId = assQ.assessmentAnswers[0].id
                 }
               }
-              this.results.push(res)
+              if (res.selectedScore.name) {
+                this.results.push(res)
+              }
             }
           })
         }
@@ -521,7 +534,9 @@ export class CmSectionThreeComponent implements OnInit {
                 res.isSDG = false
                 res.isAdaptation = false
                 res.isGHG = true
-                this.results.push(res)
+                if (res.selectedScore.name) {
+                  this.results.push(res)
+                }
               }
             })
           }
@@ -553,7 +568,9 @@ export class CmSectionThreeComponent implements OnInit {
                 res.isSDG = false
                 res.isAdaptation = true
                 res.isGHG = false
-                this.results.push(res)
+                if (res.selectedScore.name) {
+                  this.results.push(res)
+                }
               }
             })
           }
@@ -591,7 +608,6 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   onRelevanceChange(event: any, characteristic: any) {
-    console.log(event, characteristic)
   }
 }
 
