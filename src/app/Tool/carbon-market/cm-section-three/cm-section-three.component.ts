@@ -586,6 +586,10 @@ export class CmSectionThreeComponent implements OnInit {
       return false
     }
   }
+
+  onRelevanceChange(event: any, characteristic: any) {
+    console.log(event, characteristic)
+  }
 }
 
 
