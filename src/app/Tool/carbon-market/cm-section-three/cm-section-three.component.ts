@@ -132,7 +132,7 @@ export class CmSectionThreeComponent implements OnInit {
           sdgs.push(o.selectedSdg)
         }
       })
-      this.selectedSDGsList = [...new Map(sdgs.map(item =>[item['name'], item])).values()];
+      this.selectedSDGsList = [...new Map(sdgs?.map(item =>[item['name'], item])).values()];
       this.onSelectSDG({})
 
       await Promise.all(
@@ -245,6 +245,7 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   onSelectSDG(event: any) {
+    console.log(event)
     let scaleResults: CMResultDto[] = []
     let sustainResults: CMResultDto[] = []
     this.outcome.forEach((category: { type: string; results: any[]; method: string; }) => {
@@ -258,38 +259,50 @@ export class CmSectionThreeComponent implements OnInit {
         })
       }
     })
-    this.selectedSDGs = this.selectedSDGsList.map(sdg => {
-      let pSdg = new PortfolioSdg()
-      pSdg.id = sdg.id
-      pSdg.name = sdg.name
-      let res: CMResultDto[] = scaleResults.map((o: any) => {
-        let _r = new CMResultDto()
-        Object.keys(_r).forEach(e => {
-          _r[e] = o[e]
-        })
-        _r.selectedSdg = pSdg
-        _r.isSDG = true
-        return _r
-      })
-      let res2: CMResultDto[] = sustainResults.map((o: any) => {
-        let _r = new CMResultDto()
-        Object.keys(_r).forEach(e => {
-          _r[e] = o[e]
-        })
-        _r.selectedSdg = pSdg
-        _r.isSDG = true
-        return _r
-      })
 
-      let _sdg: SDG = {
-        name: sdg.name,
-        code: (sdg.name.replace(/ /g, '')).toUpperCase(),
-        number: sdg.number,
-        scaleResult: res,
-        sustainResult: res2
-      }
-      return _sdg
-    })
+    console.log(this.selectedSDGsList)
+    console.log(this.selectedSDGs)
+    let newSdgs = this.selectedSDGsList.filter(sd => !this.selectedSDGs?.find(o => o.id === sd.id))
+    console.log(newSdgs)
+
+    if (newSdgs && newSdgs.length > 0) {
+      let mappedSdgs = newSdgs.map(sdg => {
+        let pSdg = new PortfolioSdg()
+        pSdg.id = sdg.id
+        pSdg.name = sdg.name
+        let res: CMResultDto[] = scaleResults.map((o: any) => {
+          let _r = new CMResultDto()
+          Object.keys(_r).forEach(e => {
+            _r[e] = o[e]
+          })
+          _r.selectedSdg = pSdg
+          _r.isSDG = true
+          return _r
+        })
+        let res2: CMResultDto[] = sustainResults.map((o: any) => {
+          let _r = new CMResultDto()
+          Object.keys(_r).forEach(e => {
+            _r[e] = o[e]
+          })
+          _r.selectedSdg = pSdg
+          _r.isSDG = true
+          return _r
+        })
+  
+        let _sdg: SDG = {
+          name: sdg.name,
+          code: (sdg.name.replace(/ /g, '')).toUpperCase(),
+          id: sdg.id,
+          number: sdg.number,
+          scaleResult: res,
+          sustainResult: res2
+        }
+        return _sdg
+      })
+      console.log(this.selectedSDGs, mappedSdgs)
+      if (this.selectedSDGs) this.selectedSDGs.push(...mappedSdgs) 
+      else this.selectedSDGs = mappedSdgs
+    }
   }
 
   onCategoryTabChange2($event: any) {
@@ -622,6 +635,7 @@ export interface SDG {
   name: string
   code: string
   number: number
+  id: number
   scaleResult: CMResultDto[]
   sustainResult: CMResultDto[]
 }
