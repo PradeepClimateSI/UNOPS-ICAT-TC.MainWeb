@@ -4,7 +4,7 @@ import { MasterDataService } from 'app/shared/master-data.service';
 import { SelectedScoreDto } from 'app/shared/score.dto';
 import { environment } from 'environments/environment';
 import { MessageService } from 'primeng/api';
-import { CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, ScoreDto } from 'shared/service-proxies/service-proxies';
+import { CMAssessmentQuestion, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, ScoreDto } from 'shared/service-proxies/service-proxies';
 
 
 interface UploadEvent {
@@ -24,6 +24,8 @@ export class CmSectionThreeComponent implements OnInit {
 
 
   @Input() approach: string
+  @Input() assessmentquestions: CMAssessmentQuestion[]
+  @Input() isEditMode: boolean
   @Output() onSubmit = new EventEmitter()
 
   comment: any;
@@ -46,14 +48,14 @@ export class CmSectionThreeComponent implements OnInit {
   sdgsToLoop: SDG[]
   uploadedFiles: any = [];
   uploadUrl: string;
-  GHG_scale_score_macro: SelectedScoreDto[]
-  GHG_scale_score_medium: SelectedScoreDto[]
-  GHG_scale_score_micro: SelectedScoreDto[]
-  GHG_sustained_score: SelectedScoreDto[]
-  SDG_scale_score: SelectedScoreDto[]
-  SDG_sustained_score: SelectedScoreDto[]
-  adaptation_scale_score: SelectedScoreDto[]
-  adaptation_sustained_score: SelectedScoreDto[]
+  GHG_scale_score_macro: ScoreDto[]
+  GHG_scale_score_medium: ScoreDto[]
+  GHG_scale_score_micro: ScoreDto[]
+  GHG_sustained_score: ScoreDto[]
+  SDG_scale_score: ScoreDto[]
+  SDG_sustained_score: ScoreDto[]
+  adaptation_scale_score: ScoreDto[]
+  adaptation_sustained_score: ScoreDto[]
   SDGScore: any = 0;
   adaptationScore: any = 0;
   SDGWeight: any = '10%';
@@ -67,6 +69,8 @@ export class CmSectionThreeComponent implements OnInit {
   expected_impact_tooltip: string
   sdgList: any;
   selectedSDGsList: PortfolioSdg[];
+  categoriesToSave: string[] = []
+  isDraftSaved: boolean = false
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -116,8 +120,107 @@ export class CmSectionThreeComponent implements OnInit {
       this.institutions = res;
     });
     this.relevance = this.masterDataService.relevance;
-
     await this.getSDGList()
+    await this.setInitialState()
+  }
+
+  async setInitialState() {
+    if (this.isEditMode) {
+      let sdgs: PortfolioSdg[] = []
+      this.assessmentquestions.forEach(o => {
+        if (o.selectedSdg.id !== undefined) {
+          sdgs.push(o.selectedSdg)
+        }
+      })
+      this.selectedSDGsList = [...new Map(sdgs.map(item =>[item['name'], item])).values()];
+      this.onSelectSDG({})
+
+      await Promise.all(
+        this.types.map((type: any) => {
+          if (type.code === 'process') {
+            this.categories[type.code].map((cat: any) => {
+              cat.characteristics.map((char: any) => {
+                let assQ = this.assessmentquestions.find(o => o.characteristic.id === char.id)
+                if (assQ) {
+                  let rel = this.relevance.find(o => o.value.toString() === assQ?.relevance)
+                  char.relevance = rel?.value
+                }
+                return char
+              })
+            })
+          } else {
+            this.outcome.map((cat: any) => {
+              cat.results.map((res: any, idx: number) => {
+                let assQ = this.assessmentquestions.find(o => o.characteristic.id === res.characteristic.id)
+                if (assQ) {
+                  res.startingSituation = assQ.startingSituation
+                  res.expectedImpact = assQ.expectedImpact
+                  res.comment = assQ.comment
+                  res.sdgIndicator = assQ.sdgIndicator
+                  res.adaptationCoBenifit = assQ.adaptationCoBenifit
+                  res.assessmentQuestionId = assQ.id
+                  let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0]?.selectedScore, res.characteristic)
+                  if (score) {
+                    res.selectedScore = score
+                    this.onSelectScore({}, res, idx)
+                  }
+                }
+              })
+            })
+          }
+        })
+      )
+      await Promise.all(
+        this.selectedSDGs.map((sdl: any) => {
+          sdl.scaleResult.map((sc: any) => {
+            let assQ = this.assessmentquestions.find(o => (o.characteristic.id === sc.characteristic.id) && (o.selectedSdg.id === sc.selectedSdg.id) )
+            if (assQ) {
+              sc.sdgIndicator = assQ.sdgIndicator
+              sc.startingSituation = assQ.startingSituation
+              sc.expectedImpact = assQ.expectedImpact
+              sc.comment = assQ.comment
+              sc.assessmentQuestionId = assQ.id
+              let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, sc.characteristic)
+              if (score) sc.selectedScore = score
+            }
+          })
+          sdl.sustainResult.map((sc: any) => {
+            let assQ = this.assessmentquestions.find(o => (o.characteristic.id === sc.characteristic.id) && (o.selectedSdg.id === sc.selectedSdg.id))
+            if (assQ) {
+              sc.comment = assQ.comment
+              sc.assessmentQuestionId = assQ.id
+              let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, sc.characteristic)
+              if (score) {
+                sc.selectedScore = score
+                this.onSelectScore({}, sc, 2)
+              }
+            }
+          })
+        })
+      )
+    }
+  }
+
+  getSelectedScoreFromOptions (selectedScore: string, characteristic: Characteristics) {
+    let score
+    if (characteristic.code === "INTERNATIONAL" && characteristic.category.code === "SCALE_GHG") {
+      score = this.GHG_scale_score_macro.find (o => o.value.toString() === selectedScore)
+    } else if (characteristic.code === "NATIONAL" && characteristic.category.code === "SCALE_GHG") {
+      score = this.GHG_scale_score_medium.find(o => o.value.toString() === selectedScore)
+    } else if (characteristic.code === "SUBNATIONAL" && characteristic.category.code === "SCALE_GHG") {
+      score = this.GHG_scale_score_micro.find(o => o.value.toString() === selectedScore)
+    } else if (characteristic.category.code === "SUSTAINED_GHG") {
+      score = this.GHG_sustained_score.find(o => o.value.toString() === selectedScore)
+    } else if (characteristic.category.code === "SCALE_SD") {
+      score = this.SDG_scale_score.find(o => o.value.toString() === selectedScore)
+    } else if (characteristic.category.code === "SUSTAINED_SD") {
+      score = this.SDG_sustained_score.find(o => o.value.toString() === selectedScore)
+    } else if (characteristic.category.code === "SCALE_ADAPTATION") {
+      score = this.adaptation_scale_score.find(o => o.value.toString() === selectedScore)
+    } else if (characteristic.category.code === "SUSTAINED_ADAPTATION") {
+      score = this.adaptation_sustained_score.find(o => o.value.toString() === selectedScore)
+    }
+    return score
   }
 
   async getSDGList(){
@@ -182,11 +285,13 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   onCategoryTabChange2($event: any) {
-    throw new Error('Method not implemented.');
+    // throw new Error('Method not implemented.');
   }
 
-  next(characteristics?: any[]) {
-
+  next(category: string, characteristics?: any[]) {
+    if (!this.isDraftSaved) {
+      this.categoriesToSave.push(category)
+    } else this.isDraftSaved = !this.isDraftSaved
     if (characteristics?.filter(o => o.relevance !== undefined)?.length === characteristics?.length) {
       if (this.activeIndexMain === 1) {
         this.activeIndex2 = this.activeIndex2 + 1;
@@ -211,7 +316,7 @@ export class CmSectionThreeComponent implements OnInit {
 
   }
 
-  onSelectScore(event: any, char: CMResultDto, index: number, type: string) {
+  onSelectScore(event: any, char: CMResultDto, index: number, type?: string) {
     let score = new ScoreDto()
 
     if (index === 2) {
@@ -246,7 +351,7 @@ export class CmSectionThreeComponent implements OnInit {
     }
   }
 
-  onAnswer(event: any, question: any, characteristic: Characteristics) {
+  onAnswer(event: any, question: any, characteristic?: Characteristics) {
     let q = new CMQuestion()
     q.id = question.id
 
@@ -268,93 +373,197 @@ export class CmSectionThreeComponent implements OnInit {
 
   }
 
-  async submit() {
+  async submit(draftCategory: string, isDraft: boolean = false) {
+    this.results = []
+    this.categoriesToSave.push(draftCategory)
+    let save_process: boolean = false
+    let save_sd_sc: boolean = false
+    let save_sd_sus: boolean = false
+    let save_ghg_sc: boolean = false
+    let save_ghg_sus: boolean = false
+    let save_ad_sc: boolean = false
+    let save_ad_sus: boolean = false
     for await (let category of this.categories['process']) {
-      for await (let char of category.characteristics) {
-        for await (let q of char.questions) {
-          let res = new CMResultDto()
-          Object.keys(q.result).forEach(e => {
-            res[e] = q.result[e]
-          })
-          let ch = new Characteristics()
-          ch.id = q.characteristic.id
-          res.characteristic = ch
-          res.relevance = char.relevance
-          if (res.institution?.id) {
-            let inst = new Institution()
-            inst.id = res.institution.id
-            res.institution = inst
+      if (isDraft) {
+        if (this.categoriesToSave.includes(category.code)) save_process = true
+        else save_process = false
+      } else save_process = true
+      if (save_process) {
+        for await (let char of category.characteristics) {
+          for await (let q of char.questions) {
+            let res = new CMResultDto()
+            Object.keys(q.result).forEach(e => {
+              res[e] = q.result[e]
+            })
+            let ch = new Characteristics()
+            ch.id = q.characteristic.id
+            res.characteristic = ch
+            res.relevance = char.relevance
+            if (res.institution?.id) {
+              let inst = new Institution()
+              inst.id = res.institution.id
+              res.institution = inst
+            }
+            res.type = this.approach
+            if (this.isEditMode){
+              let assQ = this.assessmentquestions.find(o => (o.characteristic.id === char.id) && (o.question.id === q.id))
+              if (assQ) {
+                res.assessmentQuestionId = assQ.id
+                res.assessmentAnswerId = assQ.assessmentAnswers[0].id
+              }
+            }
+            res.selectedSdg = new PortfolioSdg()
+            this.results.push(res)
           }
-          res.type = this.approach
-          res.selectedSdg = new PortfolioSdg()
-          this.results.push(res)
         }
       }
     }
 
     if (this.selectedSDGs?.length > 0) {
+      if (isDraft) {
+        if (this.categoriesToSave.includes('SD_SCALE')) save_sd_sc = true
+        else save_sd_sc = false
+        if (this.categoriesToSave.includes('SD_SUSTAINED')) save_sd_sus = true
+        else save_sd_sus = false
+      } else save_sd_sc = true, save_sd_sus = true
       for await (let sd of this.selectedSDGs) {
-        sd.scaleResult.forEach(res => {
-          if (res.selectedScore) {
-            if (res.institution?.id) {
-              let inst = new Institution()
-              inst.id = res.institution.id
-              res.institution = inst
-            }
-            let score = new ScoreDto()
-            score.name = res.selectedScore.name
-            score.code = res.selectedScore.code
-            score.value = res.selectedScore.value
-            res.selectedScore = score
-            res.type = this.approach
-
-            this.results.push(res)
-          }
-        })
-        sd.sustainResult.forEach(res => {
-          if (res.selectedScore) {
-            if (res.institution?.id) {
-              let inst = new Institution()
-              inst.id = res.institution.id
-              res.institution = inst
-            }
-            let susScore = new ScoreDto()
-            susScore.name = res.selectedScore.name
-            susScore.code = res.selectedScore.code
-            susScore.value = res.selectedScore.value
-            res.selectedScore = susScore
-            res.type = this.approach
-            this.results.push(res)
-          }
-        })
-      }
-    }
-
-    if (this.outcome?.length > 0) {
-      for await (let item of this.outcome) {
-        if (item.type === 'GHG' || item.type === 'ADAPTATION') {
-          item.results.forEach((res: any) => {
-            res.type = this.approach
-            if (res.institution?.id) {
-              let inst = new Institution()
-              inst.id = res.institution.id
-              res.institution = inst
-            }
+        if (save_sd_sc) {
+          sd.scaleResult.forEach(res => {
             if (res.selectedScore) {
+              if (res.institution?.id) {
+                let inst = new Institution()
+                inst.id = res.institution.id
+                res.institution = inst
+              }
               let score = new ScoreDto()
               score.name = res.selectedScore.name
               score.code = res.selectedScore.code
               score.value = res.selectedScore.value
               res.selectedScore = score
               res.type = this.approach
-              res.selectedSdg = new PortfolioSdg()
+              if (this.isEditMode){
+                let assQ = this.assessmentquestions.find(o => (o.characteristic.id === res.characteristic.id) && (o.selectedSdg.id === res.selectedSdg.id))
+                if (assQ) {
+                  res.assessmentQuestionId = assQ.id
+                  res.assessmentAnswerId = assQ.assessmentAnswers[0].id
+                }
+              }
+              this.results.push(res)
+            }
+          })
+        }
+        if (save_sd_sus) {
+          sd.sustainResult.forEach(res => {
+            if (res.selectedScore) {
+              if (res.institution?.id) {
+                let inst = new Institution()
+                inst.id = res.institution.id
+                res.institution = inst
+              }
+              let susScore = new ScoreDto()
+              susScore.name = res.selectedScore.name
+              susScore.code = res.selectedScore.code
+              susScore.value = res.selectedScore.value
+              res.selectedScore = susScore
+              res.type = this.approach
+              if (this.isEditMode){
+                let assQ = this.assessmentquestions.find(o => (o.characteristic.id === res.characteristic.id) && (o.selectedSdg.id === res.selectedSdg.id))
+                if (assQ) {
+                  res.assessmentQuestionId = assQ.id
+                  res.assessmentAnswerId = assQ.assessmentAnswers[0].id
+                }
+              }
               this.results.push(res)
             }
           })
         }
       }
     }
-    this.onSubmit.emit(this.results)
+
+    if (this.outcome?.length > 0) {
+      for await (let item of this.outcome) {
+        if (isDraft) {
+          if (item.type === 'GHG') {
+            if (this.categoriesToSave.includes('GHG_SCALE') && item.method === 'SCALE') { save_ghg_sc = true }
+            if (this.categoriesToSave.includes('GHG_SUSTAINED') && item.method === 'SUSTAINED') { save_ghg_sus = true }
+          } else if (item.type === 'ADAPTATION') {
+            if (this.categoriesToSave.includes('ADAPTATION_SCALE') && item.method === 'SCALE') { save_ad_sc = true }
+            if (this.categoriesToSave.includes('ADAPTATION_SUSTAINED') && item.method === 'SUSTAINED') { save_ad_sus = true }
+          }
+        } else { save_ghg_sc = true; save_ghg_sus = true; save_ad_sc = true; save_ad_sus = true; }
+        if (item.type === 'GHG') {
+          if (save_ghg_sc || save_ghg_sus) {
+            item.results.forEach((res: any) => {
+              res.type = this.approach
+              if (res.institution?.id) {
+                let inst = new Institution()
+                inst.id = res.institution.id
+                res.institution = inst
+              }
+              if (res.selectedScore) {
+                let score = new ScoreDto()
+                score.name = res.selectedScore.name
+                score.code = res.selectedScore.code
+                score.value = res.selectedScore.value
+                res.selectedScore = score
+                res.type = this.approach
+                res.selectedSdg = new PortfolioSdg()
+                if (this.isEditMode){
+                  let assQ = this.assessmentquestions.find(o => (o.characteristic.id === res.characteristic.id) )
+                  if (assQ) {
+                    res.assessmentQuestionId = assQ.id
+                    res.assessmentAnswerId = assQ.assessmentAnswers[0].id
+                  }
+                }
+                res.isSDG = false
+                res.isAdaptation = false
+                res.isGHG = true
+                this.results.push(res)
+              }
+            })
+          }
+        }
+        if (item.type === 'ADAPTATION') {
+          if (save_ad_sc || save_ad_sus) {
+            item.results.forEach((res: any) => {
+              res.type = this.approach
+              if (res.institution?.id) {
+                let inst = new Institution()
+                inst.id = res.institution.id
+                res.institution = inst
+              }
+              if (res.selectedScore) {
+                let score = new ScoreDto()
+                score.name = res.selectedScore.name
+                score.code = res.selectedScore.code
+                score.value = res.selectedScore.value
+                res.selectedScore = score
+                res.type = this.approach
+                res.selectedSdg = new PortfolioSdg()
+                if (this.isEditMode){
+                  let assQ = this.assessmentquestions.find(o => (o.characteristic.id === res.characteristic.id) )
+                  if (assQ) {
+                    res.assessmentQuestionId = assQ.id
+                    res.assessmentAnswerId = assQ.assessmentAnswers[0].id
+                  }
+                }
+                res.isSDG = false
+                res.isAdaptation = true
+                res.isGHG = false
+                this.results.push(res)
+              }
+            })
+          }
+        }
+        save_ghg_sc = false; save_ghg_sus = false; save_ad_sc = false; save_ad_sus = false;
+      }
+    }
+
+    this.categoriesToSave = []
+    this.isDraftSaved = true
+    this.onSubmit.emit({result: this.results, isDraft: isDraft})
+    // this.isEditMode = true
+    // this.setInitialState() //TODO this occurres faulty data load. data get from the database before saving. This should be called after saving data.
   }
 
   onUpload(event: UploadEvent, res: CMResultDto) {

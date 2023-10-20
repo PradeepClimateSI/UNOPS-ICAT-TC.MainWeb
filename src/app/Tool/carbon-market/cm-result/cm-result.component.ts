@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Assessment, AssessmentCMDetail, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CMScoreDto, CalculateDto, Characteristics, ClimateAction } from 'shared/service-proxies/service-proxies';
+import { Assessment, AssessmentCMDetail, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CMScoreDto, CalculateDto, Characteristics, ClimateAction, ScoreDto } from 'shared/service-proxies/service-proxies';
 import * as XLSX from 'xlsx-js-style';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
@@ -32,12 +32,12 @@ export class CmResultComponent implements OnInit {
   outcomeData: { scale_GHGs: any[], sustained_GHGs: any[], scale_SDs: any[], sustained_SDs: any[], scale_adaptation: any[], sustained_adaptation: any[] } = { scale_GHGs: [], sustained_GHGs: [], scale_SDs: [], sustained_SDs: [], scale_adaptation:[], sustained_adaptation: [] };
   fileServerURL:any
   SDGs: SDG[]
-  scale_GHG_score_macro:SelectedScoreDto[]
-  scale_GHG_score_medium:SelectedScoreDto[]
-  scale_GHG_score_micro:SelectedScoreDto[]
-  sustained_GHG_score:SelectedScoreDto[]
-  scale_SD_score:SelectedScoreDto[]
-  sustained_SD_score:SelectedScoreDto[]
+  scale_GHG_score_macro: ScoreDto[]
+  scale_GHG_score_medium: ScoreDto[]
+  scale_GHG_score_micro: ScoreDto[]
+  sustained_GHG_score: ScoreDto[]
+  scale_SD_score: ScoreDto[]
+  sustained_SD_score: ScoreDto[]
   relevances: any
 
   xData: {label: string; value: number}[]

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SDG } from 'app/Tool/carbon-market/cm-section-three/cm-section-three.component';
 import { SelectedScoreDto } from './score.dto';
+import { ScoreDto } from 'shared/service-proxies/service-proxies';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +30,7 @@ export class MasterDataService {
   private _sectorial_boundries: {name: string, id: number, code: string}[] = []
   private _impact_categories: {name: string, id: number, code: string, type: string}[] = []
   private _impact_characteristics: {name: string, id: number, code: string, type: string[]}[] = []
-  private _level_of_implemetation: {name: string, id: number, code: string}[] = []
+  private _level_of_implemetation: MasterDataDto[] = []
   private _impact_covered: {name: string, id: number}[] = []
   private _assessment_method: {name: string, id: number}[] = []
   private _assessment_approach2: {name: string, id: number}[] = []
@@ -37,15 +38,15 @@ export class MasterDataService {
   private _likelihood: {id: string, value: number}[] = []
   private _outcomeScaleScore: {id: string, value: number | null}[] = []
   private _outcomeSustainedScore: {id: string, value: number | null}[] = []
-  private _GHG_scale_score: SelectedScoreDto[] = []
-  private _GHG_scale_score_macro: SelectedScoreDto[] = []
-  private _GHG_scale_score_medium: SelectedScoreDto[] = []
-  private _GHG_scale_score_micro: SelectedScoreDto[] = []
-  private _GHG_sustained_score: SelectedScoreDto[] = []
-  private _SDG_scale_score: SelectedScoreDto[] = []
-  private _SDG_sustained_score: SelectedScoreDto[] = []
-  private _adaptation_scale_score: SelectedScoreDto[] = []
-  private _adaptation_sustained_score: SelectedScoreDto[] = []
+  private _GHG_scale_score: ScoreDto[] = []
+  private _GHG_scale_score_macro: ScoreDto[] = []
+  private _GHG_scale_score_medium: ScoreDto[] = []
+  private _GHG_scale_score_micro: ScoreDto[] = []
+  private _GHG_sustained_score: ScoreDto[] = []
+  private _SDG_scale_score: ScoreDto[] = []
+  private _SDG_sustained_score: ScoreDto[] = []
+  private _adaptation_scale_score: ScoreDto[] = []
+  private _adaptation_sustained_score: ScoreDto[] = []
   private _SDGs: SDG[] = []
   private _score: {name: string, value: number}[] = []
   private _xData: {label: string, value: number}[] = []
@@ -288,66 +289,67 @@ export class MasterDataService {
 
 
     this.GHG_scale_score_macro = [
-      {label: '3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.1% of global emissions in the latest year for which data is available', code: '3', value: 3},
-      {label: '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.05% of global emissions in the latest year for which data is available', code: '2', value: 2},
-      {label: '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.01% of global emissions in the latest year for which data is available', code: '1', value: 1},
-      {label: '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) <0.1% of global emissions in the latest year for which data is available', code: '0', value: 0},
-      {label: '-3 - any emissions increase', code: '-3', value: -3}
+      new ScoreDto({name: '3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.1% of global emissions in the latest year for which data is available', code: '3', value: 3}),
+      new ScoreDto({name: '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.05% of global emissions in the latest year for which data is available', code: '2', value: 2}),
+      new ScoreDto({name: '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.01% of global emissions in the latest year for which data is available', code: '1', value: 1}),
+      new ScoreDto({name: '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) <0.1% of global emissions in the latest year for which data is available', code: '0', value: 0}),
+      new ScoreDto({name: '-3 - any emissions increase', code: '-3', value: -3})
     ]
+
     this.GHG_scale_score_medium = [
-      {label: '3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >1% of national/sectoral emissions in the latest year for which data is available', code: '3', value: 3},
-      {label: '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.5-1% of national/sectoral emissions in the latest year for which data is available', code: '2', value: 2},
-      {label: '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.1-0.5% of national/sectoral emissions in the latest year for which data is available', code: '1', value: 1},
-      {label: '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) <0.1% of national/sectoral emissions in the latest year for which data is available', code: '0', value: 0},
-      {label: '-3 - any emissions increase', code: '-3', value: -3}
+      new ScoreDto({name: '3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >1% of national/sectoral emissions in the latest year for which data is available', code: '3', value: 3}),
+      new ScoreDto({name: '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.5-1% of national/sectoral emissions in the latest year for which data is available', code: '2', value: 2}),
+      new ScoreDto({name: '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.1-0.5% of national/sectoral emissions in the latest year for which data is available', code: '1', value: 1}),
+      new ScoreDto({name: '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) <0.1% of national/sectoral emissions in the latest year for which data is available', code: '0', value: 0}),
+      new ScoreDto({name: '-3 - any emissions increase', code: '-3', value: -3})
     ]
     this.GHG_scale_score_micro = [
-      {label: '3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >5% of subnational/regional/municipal emissions in the latest year for which data is available', code: '3', value: 3},
-      {label: '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 1-5% of subnational/regional/municipal emissions in the latest year for which data is available', code: '2', value: 2},
-      {label: '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.5-1% of subnational/regional/municipal emissions in the latest year for which data is available', code: '1', value: 1},
-      {label: '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) less than 0.5% of subnational/regional/municipal emissions in the latest year for which data is available', code: '0', value: 0},
-      {label: '-3 - any emissions increase', code: '-3', value: -3}
+      new ScoreDto({name: '3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >5% of subnational/regional/municipal emissions in the latest year for which data is available', code: '3', value: 3}),
+      new ScoreDto({name: '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 1-5% of subnational/regional/municipal emissions in the latest year for which data is available', code: '2', value: 2}),
+      new ScoreDto({name: '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.5-1% of subnational/regional/municipal emissions in the latest year for which data is available', code: '1', value: 1}),
+      new ScoreDto({name: '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) less than 0.5% of subnational/regional/municipal emissions in the latest year for which data is available', code: '0', value: 0}),
+      new ScoreDto({name: '-3 - any emissions increase', code: '-3', value: -3})
     ]
     this.GHG_sustained_score = [
-      {label: '3 - Expected positive impact of over 20 years on the selected scale', code: '3', value: 3},
-      {label: '2 - Expected positive impact of 11-20 years on the selected scale', code: '2', value: 2},
-      {label: '1 - Expected positive impact of 0-10 years on the selected scale', code: '1', value: 1},
-      {label: '0 - No expected impact on the selected scale', code: '0', value: 0},
-      {label: '-1 - Expected negative impact', code: '-1', value: -1}
+      new ScoreDto({name: '3 - Expected positive impact of over 20 years on the selected scale', code: '3', value: 3}),
+      new ScoreDto({name: '2 - Expected positive impact of 11-20 years on the selected scale', code: '2', value: 2}),
+      new ScoreDto({name: '1 - Expected positive impact of 0-10 years on the selected scale', code: '1', value: 1}),
+      new ScoreDto({name: '0 - No expected impact on the selected scale', code: '0', value: 0}),
+      new ScoreDto({name: '-1 - Expected negative impact', code: '-1', value: -1})
     ]
     this.SDG_scale_score = [
-      {label: '3 - Positive material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '3', value: 3},
-      {label: '2 - Positive material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '2', value: 2},
-      {label: '1 - Positive material change of more than 5% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '1', value: 1},
-      {label: '0 - No material change of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '0', value: 0},
-      {label: '-1 - Negative material change of more than 5% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '-1', value: -1},
-      {label: '-2 - Negative material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '-2', value: -2},
-      {label: '-3 - Negative material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '-3', value: -3},
+      new ScoreDto({name: '3 - Positive material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '3', value: 3}),
+      new ScoreDto({name: '2 - Positive material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '2', value: 2}),
+      new ScoreDto({name: '1 - Positive material change of more than 5% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '1', value: 1}),
+      new ScoreDto({name: '0 - No material change of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '0', value: 0}),
+      new ScoreDto({name: '-1 - Negative material change of more than 5% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '-1', value: -1}),
+      new ScoreDto({name: '-2 - Negative material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '-2', value: -2}),
+      new ScoreDto({name: '-3 - Negative material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '-3', value: -3}),
     ]
     this.SDG_sustained_score = [
-      {label: '3 - Expected positive impact of over 20 years on the selected scale', code: '3', value: 3},
-      {label: '2 - Expected positive impact of 11-20 years on the selected scale', code: '2', value: 2},
-      {label: '1 - Expected positive impact of 0-10 years on the selected scale', code: '1', value: 1},
-      {label: '0 - No expected impact on the selected scale', code: '0', value: 0},
-      {label: '-1 - Expected negative impact', code: '-1', value: -1},
+      new ScoreDto({name: '3 - Expected positive impact of over 20 years on the selected scale', code: '3', value: 3}),
+      new ScoreDto({name: '2 - Expected positive impact of 11-20 years on the selected scale', code: '2', value: 2}),
+      new ScoreDto({name: '1 - Expected positive impact of 0-10 years on the selected scale', code: '1', value: 1}),
+      new ScoreDto({name: '0 - No expected impact on the selected scale', code: '0', value: 0}),
+      new ScoreDto({name: '-1 - Expected negative impact', code: '-1', value: -1}),
     ]
 
     this.adaptation_scale_score = [
-      {label: '3 - adaptation co-benefit identified and impact is material (indicator value change from baseline to project scenario is above 5%).', code: '3', value: 3},
-      {label: '2 - adaptation co benefit identified but impact is not material (indicator value change from baseline to project scenario is below 5%).', code: '2', value: 2},
-      {label: '1 - adaptation co-benefit identified but not measured.).', code: '1', value: 1},
-      {label: '0 - no adaptation co-benefit', code: '0', value: 0},
-      {label: '-1 - maladaptation identified but not measured.', code: '-1', value: -1},
-      {label: '-2 - maladaptation identified but impact is not material (indicator value change from baseline to project scenario is below 5%).', code: '-2', value: -2},
-      {label: '-3 - maladaptation identified and impact is material (indicator value change from baseline to project scenario is above 5%). ', code: '-3', value: -3},
+      new ScoreDto({name: '3 - adaptation co-benefit identified and impact is material (indicator value change from baseline to project scenario is above 5%).', code: '3', value: 3}),
+      new ScoreDto({name: '2 - adaptation co benefit identified but impact is not material (indicator value change from baseline to project scenario is below 5%).', code: '2', value: 2}),
+      new ScoreDto({name: '1 - adaptation co-benefit identified but not measured.).', code: '1', value: 1}),
+      new ScoreDto({name: '0 - no adaptation co-benefit', code: '0', value: 0}),
+      new ScoreDto({name: '-1 - maladaptation identified but not measured.', code: '-1', value: -1}),
+      new ScoreDto({name: '-2 - maladaptation identified but impact is not material (indicator value change from baseline to project scenario is below 5%).', code: '-2', value: -2}),
+      new ScoreDto({name: '-3 - maladaptation identified and impact is material (indicator value change from baseline to project scenario is above 5%). ', code: '-3', value: -3}),
     ]
 
     this.adaptation_sustained_score = [
-      {label: '3 - Expected positive impact of over 20 years on the selected scale', code: '3', value: 3},
-      {label: '2 - Expected positive impact of 11-20 years on the selected scale', code: '2', value: 2},
-      {label: '1 - Expected positive impact of 0-10 years on the selected scale', code: '1', value: 1},
-      {label: '0 - No expected impact on the selected scale', code: '0', value: 0},
-      {label: '-1 - Expected negative impact', code: '-1', value: -1},
+      new ScoreDto({name: '3 - Expected positive impact of over 20 years on the selected scale', code: '3', value: 3}),
+      new ScoreDto({name: '2 - Expected positive impact of 11-20 years on the selected scale', code: '2', value: 2}),
+      new ScoreDto({name: '1 - Expected positive impact of 0-10 years on the selected scale', code: '1', value: 1}),
+      new ScoreDto({name: '0 - No expected impact on the selected scale', code: '0', value: 0}),
+      new ScoreDto({name: '-1 - Expected negative impact', code: '-1', value: -1}),
     ]
 
     this.xData = [
@@ -576,11 +578,11 @@ export class MasterDataService {
   get impact_characteristics(): { name: string; id: number, code: string, type: string[] }[] {
     return this._impact_characteristics;
   }
-  set level_of_implemetation (value: { name: string; id: number; code: string }[]) {
+  set level_of_implemetation(value: MasterDataDto[]) {
     this._level_of_implemetation = value;
   }
 
-  get level_of_implemetation (): { name: string; id: number; code: string }[] {
+  get level_of_implemetation (): MasterDataDto[] {
     return this._level_of_implemetation;
   }
 
@@ -647,67 +649,67 @@ export class MasterDataService {
     return this._assessment_approach;
   }
 
-  set GHG_scale_score_macro(value: SelectedScoreDto[]) {
+  set GHG_scale_score_macro(value: ScoreDto[]) {
     this._GHG_scale_score_macro = value;
   }
 
-  get GHG_scale_score_macro (): SelectedScoreDto[] {
+  get GHG_scale_score_macro (): ScoreDto[] {
     return this._GHG_scale_score_macro;
   }
 
-  set GHG_scale_score_medium(value: SelectedScoreDto[]) {
+  set GHG_scale_score_medium(value: ScoreDto[]) {
     this._GHG_scale_score_medium = value;
   }
 
-  get GHG_scale_score_medium (): SelectedScoreDto[] {
+  get GHG_scale_score_medium (): ScoreDto[] {
     return this._GHG_scale_score_medium;
   }
 
-  set GHG_scale_score_micro(value: SelectedScoreDto[]) {
+  set GHG_scale_score_micro(value: ScoreDto[]) {
     this._GHG_scale_score_micro = value;
   }
 
-  get GHG_scale_score_micro (): SelectedScoreDto[] {
+  get GHG_scale_score_micro (): ScoreDto[] {
     return this._GHG_scale_score_micro;
   }
 
-  set GHG_sustained_score(value: SelectedScoreDto[]) {
+  set GHG_sustained_score(value: ScoreDto[]) {
     this._GHG_sustained_score = value;
   }
 
-  get GHG_sustained_score (): SelectedScoreDto[] {
+  get GHG_sustained_score (): ScoreDto[] {
     return this._GHG_sustained_score;
   }
 
-  set SDG_scale_score(value: SelectedScoreDto[]) {
+  set SDG_scale_score(value: ScoreDto[]) {
     this._SDG_scale_score = value;
   }
 
-  get SDG_scale_score (): SelectedScoreDto[] {
+  get SDG_scale_score (): ScoreDto[] {
     return this._SDG_scale_score;
   }
 
-  set SDG_sustained_score(value: SelectedScoreDto[]) {
+  set SDG_sustained_score(value: ScoreDto[]) {
     this._SDG_sustained_score = value;
   }
 
-  get SDG_sustained_score (): SelectedScoreDto[] {
+  get SDG_sustained_score (): ScoreDto[] {
     return this._SDG_sustained_score;
   }
 
-  set adaptation_scale_score(value: SelectedScoreDto[]) {
+  set adaptation_scale_score(value: ScoreDto[]) {
     this._adaptation_scale_score = value;
   }
 
-  get adaptation_scale_score (): SelectedScoreDto[] {
+  get adaptation_scale_score (): ScoreDto[] {
     return this._adaptation_scale_score;
   }
 
-  set adaptation_sustained_score(value: SelectedScoreDto[]) {
+  set adaptation_sustained_score(value: ScoreDto[]) {
     this._adaptation_sustained_score = value;
   }
 
-  get adaptation_sustained_score (): SelectedScoreDto[] {
+  get adaptation_sustained_score (): ScoreDto[] {
     return this._adaptation_sustained_score;
   }
 
@@ -759,4 +761,10 @@ export class MasterDataService {
       return ''
     }
   }
+}
+
+export class MasterDataDto{
+  id: number
+  name: string
+  code: string
 }
