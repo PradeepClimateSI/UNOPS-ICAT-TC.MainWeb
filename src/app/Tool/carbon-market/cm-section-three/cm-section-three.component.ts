@@ -4,7 +4,7 @@ import { MasterDataService } from 'app/shared/master-data.service';
 import { SelectedScoreDto } from 'app/shared/score.dto';
 import { environment } from 'environments/environment';
 import { MessageService } from 'primeng/api';
-import { CMAssessmentQuestion, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, ScoreDto } from 'shared/service-proxies/service-proxies';
+import { CMAnswer, CMAssessmentQuestion, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, ScoreDto } from 'shared/service-proxies/service-proxies';
 
 
 interface UploadEvent {
@@ -142,7 +142,7 @@ export class CmSectionThreeComponent implements OnInit {
               cat.characteristics.map((char: any) => {
                 let assQ = this.assessmentquestions.find(o => o.characteristic.id === char.id)
                 if (assQ) {
-                  let rel = this.relevance.find(o => o.value.toString() === assQ?.relevance)
+                  let rel = this.relevance.find(o => o.value === assQ?.relevance)
                   char.relevance = rel?.value
                 }
                 return char
@@ -409,7 +409,7 @@ export class CmSectionThreeComponent implements OnInit {
               let assQ = this.assessmentquestions.find(o => (o.characteristic.id === char.id) && (o.question.id === q.id))
               if (assQ) {
                 res.assessmentQuestionId = assQ.id
-                res.assessmentAnswerId = assQ.assessmentAnswers[0].id
+                res.assessmentAnswerId = assQ.assessmentAnswers[0]?.id
               }
             }
             res.selectedSdg = new PortfolioSdg()
