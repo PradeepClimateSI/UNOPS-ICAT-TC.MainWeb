@@ -972,6 +972,23 @@ assignSDG(sdg : any , data : any){
   console.log("data22", data)
 }
 
+onChangeRelevance(relevance : any , data : any){
+  console.log("relevance", relevance)
+  console.log("data22", data)
+
+  if(relevance == 0){
+    data.likelihood_justification = null;
+    data.likelihood = null;
+
+    for(let item of data.indicator_details){
+      item.value = null;
+      item.justification = null;
+    }
+
+  }
+}
+
+
     onItemSelectSDGs(event: any) {
       console.log("rrr", this.selectedSDGs);
       console.log("event", event);

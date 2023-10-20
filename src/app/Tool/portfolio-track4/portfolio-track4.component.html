@@ -561,6 +561,7 @@
                                     <label for="Description">Relevance*</label>
                                     <p-dropdown appendTo="body" name="data.charData.relavance" #rel="ngModel" placeholder="Select Relevance"
                                       [(ngModel)]="data.relavance" [options]="relevance" optionLabel="name" optionValue="value"
+                                      (ngModelChange)="onChangeRelevance(data.relavance, data)"
                                       [required]="true"></p-dropdown>
                                     <p class="info-message text-danger" *ngIf="data.relavance ==null  && (fData1.submitted || rel.touched) ">
                                       This is a mandatory field </p>
