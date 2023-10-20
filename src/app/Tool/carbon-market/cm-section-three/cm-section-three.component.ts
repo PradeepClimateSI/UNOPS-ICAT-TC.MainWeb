@@ -159,6 +159,7 @@ export class CmSectionThreeComponent implements OnInit {
                   res.sdgIndicator = assQ.sdgIndicator
                   res.adaptationCoBenifit = assQ.adaptationCoBenifit
                   res.assessmentQuestionId = assQ.id
+                  res.filePath = assQ.uploadedDocumentPath
                   let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0]?.selectedScore, res.characteristic)
                   if (score) {
                     res.selectedScore = score
@@ -180,6 +181,7 @@ export class CmSectionThreeComponent implements OnInit {
               sc.expectedImpact = assQ.expectedImpact
               sc.comment = assQ.comment
               sc.assessmentQuestionId = assQ.id
+              sc.filePath = assQ.uploadedDocumentPath
               let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, sc.characteristic)
               if (score) sc.selectedScore = score
             }
@@ -189,6 +191,7 @@ export class CmSectionThreeComponent implements OnInit {
             if (assQ) {
               sc.comment = assQ.comment
               sc.assessmentQuestionId = assQ.id
+              sc.filePath = assQ.uploadedDocumentPath
               let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, sc.characteristic)
               if (score) {
                 sc.selectedScore = score

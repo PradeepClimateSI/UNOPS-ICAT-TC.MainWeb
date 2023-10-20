@@ -75,7 +75,9 @@ export class CmQuestionComponent implements OnInit {
     if (this.isEditMode) {
       let _question: any = this.assessmentquestions.find(o => o.question.id === this.question.id)
       if (_question) {
-        let ans = this.answers.find(o => o.id === _question.assessmentAnswers[0].answer.id)
+        let ans = this.answers.find(o => o.id === _question.assessmentAnswers[0]?.answer.id)
+        this.question['result'] = {}
+        this.question['result'].filePath = _question.uploadedDocumentPath
         if (ans) {
           this.selectedAnswer = ans
           this.comment = _question.comment
