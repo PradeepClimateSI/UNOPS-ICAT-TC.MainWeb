@@ -55,10 +55,10 @@ export class DataRequestPathService {
         let category = answer.assessment_question.characteristic.category.code
         if (category === 'SUSTAINED_GHG') {
             let scores = this.masterDataService.GHG_sustained_score
-            return scores.find(o => o.code === answer.selectedScore)?.label
+            return scores.find(o => o.code === answer.selectedScore)?.name
         } else if (category === 'SUSTAINED_SD') {
             let scores = this.masterDataService.SDG_sustained_score
-            return scores.find(o => o.code === answer.selectedScore)?.label
+            return scores.find(o => o.code === answer.selectedScore)?.name
         } else if (category === 'SCALE_GHG') {
             let score
             if (answer.assessment_question.characteristic.code === 'MACRO_LEVEL'){
@@ -68,10 +68,10 @@ export class DataRequestPathService {
             } else {
                 score = this.masterDataService.GHG_scale_score_micro
             }
-            return score.find(o => o.code === answer.selectedScore)?.label
+            return score.find(o => o.code === answer.selectedScore)?.name
         } else {
             let scores = this.masterDataService.SDG_scale_score
-            return scores.find(o => o.code === answer.selectedScore)?.label
+            return scores.find(o => o.code === answer.selectedScore)?.name
         }
     }
 }

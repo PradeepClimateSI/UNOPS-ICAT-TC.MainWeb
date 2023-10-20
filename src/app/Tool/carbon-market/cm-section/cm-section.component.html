@@ -11,14 +11,14 @@
                                 <div class="row p-2" *ngIf="shownCriterias[idxs][idxc]">
                                     <label >{{criteria.name}}</label>
                                     <ng-container *ngFor="let question of criteria.questions;let idx=index;">
-                                        <app-cm-question [question]="question" (prev_answer)="onAnswer($event, question.message, criteria,idxs, idxc, idx )"
-                                            *ngIf="shownQuestions[idxs][idxc][idx]" [approach]="approach"></app-cm-question>
+                                        <app-cm-question [assessmentquestions]="assessmentQuestions" [question]="question" (prev_answer)="onAnswer($event, question.message, criteria,idxs, idxc, idx )"
+                                            *ngIf="shownQuestions[idxs][idxc][idx]" [approach]="approach" [isEditMode]="isEditMode"></app-cm-question>
                                     </ng-container>
                                 </div>
                             </ng-container>
                         </ng-container>
                         <ng-container *ngIf="section.code === 'SECTION_3'">
-                            <app-cm-section-three [approach]="approach"  (onSubmit)="save($event)"></app-cm-section-three>
+                            <app-cm-section-three [assessmentquestions]="assessmentQuestions" [isEditMode]="isEditMode" [approach]="approach"  (onSubmit)="save($event)"></app-cm-section-three>
                         </ng-container>
                     </p-accordionTab>
                 </ng-container>
@@ -28,9 +28,12 @@
             <div class="row p-grid p-fluid col-sm-12">
                 <div class="col-10"></div>
                 <div class="d-flex flex-row-reverse mt-20 ">
-                    <button class="btn btn-primary text-uppercase" type="submit" (click)="save([])">
-                      {{ assessment.assessment_approach=== 'INDIRECT' ? 'Send to Data Collection Team' : 'Calculate & Check Results' }}
+                    <button class="btn btn-primary text-uppercase" type="submit" (click)="save({result: [], isDraft: false})">
+                      {{ (assessment && assessment.assessment_approach=== 'INDIRECT') ? 'Send to Data Collection Team' : 'Calculate & Check Results' }}
                     </button>
+                    <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="save({result: [], isDraft: true})">
+                        Save
+                    </div>
                 </div>
             </div>
         </div>

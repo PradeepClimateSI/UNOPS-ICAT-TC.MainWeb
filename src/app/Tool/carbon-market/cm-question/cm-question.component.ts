@@ -2,7 +2,7 @@ import { HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { environment } from 'environments/environment';
 import { MessageService } from 'primeng/api';
-import { CMAnswer, CMQuestion, CMQuestionControllerServiceProxy, Institution, InstitutionControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { CMAnswer, CMAssessmentAnswerControllerServiceProxy, CMAssessmentQuestion, CMQuestion, CMQuestionControllerServiceProxy, Institution, InstitutionControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 interface UploadEvent {
   originalEvent: HttpResponse<FileDocument>;
@@ -23,6 +23,8 @@ export class CmQuestionComponent implements OnInit {
   @Input() question: CMQuestion
   @Input() approach: string
   @Output() prev_answer = new EventEmitter()
+  @Input() assessmentquestions: CMAssessmentQuestion[]
+  @Input() isEditMode: boolean
 
   answers: CMAnswer[] = []
   selectedAnswers: any
@@ -39,11 +41,12 @@ export class CmQuestionComponent implements OnInit {
   uploadedFiles: any = [];
   acceptedFiles: string = ".pdf, .jpg, .png, .doc, .docx, .xls, .xlsx, .csv";
   fileServerURL: string;
+  selectedAnswer: CMAnswer
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
     private institutionControllerServiceProxy: InstitutionControllerServiceProxy,
-    private messageService: MessageService
+    private messageService: MessageService,
   ) {
     this.uploadUrl = environment.baseUrlAPI + '/cm-assessment-question/upload-file'
     this.fileServerURL = environment.baseUrlAPI+'/uploads'
@@ -64,6 +67,22 @@ export class CmQuestionComponent implements OnInit {
     this.institutionControllerServiceProxy.getAllInstitutions().subscribe((res: any) => {
       this.institutions = res;
     });
+    this.setInitialState()
+    
+  }
+
+  setInitialState() {
+    if (this.isEditMode) {
+      let _question: any = this.assessmentquestions.find(o => o.question.id === this.question.id)
+      if (_question) {
+        let ans = this.answers.find(o => o.id === _question.assessmentAnswers[0].answer.id)
+        if (ans) {
+          this.selectedAnswer = ans
+          this.comment = _question.comment
+          this.onSelectAnswer({value: this.selectedAnswer}, _question.answer_type)
+        }
+      }
+    }
   }
 
   async getAnswers(){

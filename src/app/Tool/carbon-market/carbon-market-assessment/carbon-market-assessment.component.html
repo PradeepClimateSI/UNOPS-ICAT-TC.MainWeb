@@ -12,7 +12,7 @@
                             <label for="policy">Select Intervetion *</label>
                             <p-dropdown name="policy" #policy="ngModel" placeholder="Select intervention"
                                 [(ngModel)]="assessment.climateAction" appendTo="body" [options]="policies"
-                                optionLabel="policyName" [required]="true"></p-dropdown>
+                                optionLabel="policyName" [required]="true" [disabled]="isEditMode"></p-dropdown>
                             <p class="info-message text-danger" *ngIf="
                                 !assessment.climateAction &&
                                 (fData.submitted || policy.touched)
@@ -24,7 +24,7 @@
                             <label for="policy">Assessment Type *</label>
                             <p-dropdown name="type" #type="ngModel" placeholder="Select Assessment Type"
                                 [(ngModel)]="assessment.assessmentType" [options]="assessment_types" optionLabel="name"
-                                optionValue="name" [required]="true"
+                                optionValue="name" [required]="true" [disabled]="isEditMode"
                                 (onChange)="selectAssessmentType($event)"></p-dropdown>
                             <p class="info-message text-danger" *ngIf="
                                 !assessment.assessmentType &&
@@ -35,12 +35,12 @@
                         </div>
                         <div class="p-field p-2">
                             <label for="Level of implementation">Geographical Areas Covered *</label>
-                            <p-multiSelect appendTo="body" name="geographical_areas_covered"
-                                #type="ngModel" placeholder="Select Geographical Areas Covered"
-                                [(ngModel)]="geographicalAreasCoveredArr" [options]="levelOfImplementation"
-                                optionLabel="name" [required]="true"></p-multiSelect>
+                              <p-multiSelect name="geographical_areas_covered" placeholder="Select Geographical Areas Covered" appendTo="body"
+                              [options]="levelOfImplementation" [(ngModel)]="geographicalAreasCoveredArr" optionLabel="name"
+                              [disabled]="isEditMode" >
+                            </p-multiSelect>
                             <p class="info-message text-danger" *ngIf="
-                                geographicalAreasCoveredArr.length===0 &&
+                                geographicalAreasCoveredArr?.length===0 &&
                                 (fData.submitted || type.touched)
                               ">
                                 This is a mandatory field
@@ -51,9 +51,9 @@
                             <p-multiSelect appendTo="body" name="sectors" #type="ngModel"
                                 placeholder="Select Sectors Covered" [(ngModel)]="sectorArray" [options]="sectorList"
                                 (ngModelChange)="onItemSelectSectors($event)" [disabled]="isSavedAssessment"
-                                optionLabel="name" [required]="true"></p-multiSelect>
+                                optionLabel="name" [required]="true" [disabled]="isEditMode"></p-multiSelect>
                             <p class="info-message text-danger" *ngIf="
-                                              sectorArray.length===0 &&
+                                              sectorArray?.length===0 &&
                                               (fData.submitted || type.touched)
                                             ">
                                 This is a mandatory field
@@ -64,7 +64,7 @@
                                 *</label>
                             <input pInputText type="text" #opportunities="ngModel" name="opportunities" ngModel
                                 [disabled]="isSavedAssessment" placeholder="Opportunities"
-                                [(ngModel)]="assessment.opportunities" required />
+                                [(ngModel)]="assessment.opportunities" [disabled]="isEditMode" required />
                             <p class="info-message text-danger"
                                 *ngIf="!opportunities.value && (fData.submitted || opportunities.touched)">This is a
                                 mandatory field</p>
@@ -73,7 +73,7 @@
                             <label for="principles">Principles on which the assessment is based *</label>
                             <input pInputText type="text" #principles="ngModel" name="principles" ngModel
                                 [disabled]="isSavedAssessment" placeholder="Principles"
-                                [(ngModel)]="assessment.principles" required />
+                                [(ngModel)]="assessment.principles" [disabled]="isEditMode" required />
                             <p class="info-message text-danger"
                                 *ngIf="!principles.value && (fData.submitted || principles.touched)">This is a mandatory
                                 field</p>
@@ -86,12 +86,12 @@
                                 </span>
                                 <p-calendar dateFormat="mm-dd-yy" inputId="date1" placeholder="From"
                                     [(ngModel)]="assessment.from" name="date1" #date1="ngModel" [required]="true"
-                                    appendTo="body" [disabled]="isSavedAssessment">
+                                    appendTo="body" [disabled]="isSavedAssessment || isEditMode">
                                 </p-calendar>
                                 <span class="p-inputgroup-addon">to</span>
                                 <p-calendar dateFormat="mm-dd-yy" inputId="date2" placeholder="To"
                                     [(ngModel)]="assessment.to" name="date2" #date2="ngModel" [required]="true"
-                                    appendTo="body" [disabled]="isSavedAssessment"></p-calendar>
+                                    appendTo="body" [disabled]="isSavedAssessment || isEditMode"></p-calendar>
                             </div>
                             <div class="col-12">
                                 <p class="info-message text-danger"
@@ -103,7 +103,7 @@
                         <div class="p-field p-2">
                             <label for="policy">Assessment Boundaries (If different from the intervention boundary
                                 specified in the baseline methodology)</label>
-                            <input type="text" name="tboundrary" #tboundrary="ngModel"
+                            <input type="text" name="tboundrary" #tboundrary="ngModel"  [disabled]="isEditMode"
                                 [(ngModel)]="cm_detail.boundraries" class="form-control" placeholder="Enter Boundary" />
                             <!-- <p class="info-message text-danger" *ngIf="
                                         (!cm_detail.boundraries || cm_detail.boundraries === '') &&
@@ -117,7 +117,7 @@
                                 style="font-size: 1rem"></i></label>
                             <p-dropdown name="int-approach" #type="ngModel" placeholder="Select Assessment Type"
                                 [(ngModel)]="cm_detail.intCMApproach" [options]="int_cm_approches" optionLabel="name"
-                                optionValue="code" [required]="true"></p-dropdown>
+                                optionValue="code" [required]="true" [disabled]="isEditMode"></p-dropdown>
                             <p class="info-message text-danger" *ngIf="
                                 !assessment.assessmentType &&
                                 (fData.submitted || type.touched)
@@ -127,13 +127,13 @@
                         </div>
                         <div class="p-field p-2" *ngIf="cm_detail.intCMApproach === 'OTHER'">
                             <label for="policy">Please specify</label>
-                            <input type="text" name="cmApproach" #cmApproach="ngModel"
+                            <input type="text" name="cmApproach" #cmApproach="ngModel" [disabled]="isEditMode"
                                 [(ngModel)]="cm_detail.otherIntCMApproach" class="form-control"
                                 placeholder="Enter carbon market approach" required />
                         </div>
                         <div class="p-field p-2">
                             <label for="policy">Baseline and monitoring methodology applied by the intervention</label>
-                            <input type="text" name="methodology" #methodology="ngModel"
+                            <input type="text" name="methodology" #methodology="ngModel" [disabled]="isEditMode"
                                 [(ngModel)]="cm_detail.appliedMethodology" class="form-control"
                                 placeholder="Enter methodology" />
                         </div>
@@ -219,7 +219,7 @@
                             <div class="p-field">
                               <textarea  name="envisioned_change" placeholder="Enter an answer" #envisioned_change="ngModel" [disabled]="isSavedAssessment"
                                 [(ngModel)]="assessment.envisioned_change" rows="1" cols="130" pInputText autoResize="autoResize" required
-                                ></textarea>
+                                [disabled]="isEditMode"></textarea>
                                 <p class="info-message text-danger" *ngIf="  !envisioned_change.value &&                     
                                   (fData.submitted || envisioned_change.touched || envisioned_change.dirty)
                                 ">
@@ -240,7 +240,7 @@
                               <label for="vision_short">Within 5 years? *</label>
                               <textarea name="vision_short" placeholder="Short Term Vision" #vision_short="ngModel" [disabled]="isSavedAssessment"
                                 [(ngModel)]="assessment.vision_short" rows="1" cols="130" pInputText autoResize="autoResize" required
-                                ></textarea>
+                                [disabled]="isEditMode"></textarea>
                                 <p class="info-message text-danger" *ngIf="  !vision_short.value &&                     
                                 (fData.submitted || vision_short.touched || vision_short.dirty)
                               ">
@@ -255,7 +255,7 @@
                               <label for="vision_short">Between 5 and 15 years? *</label>
                               <textarea name="vision_medium" placeholder="Medium Term Vision" #vision_medium="ngModel" [disabled]="isSavedAssessment"
                                 [(ngModel)]="assessment.vision_medium" rows="1" cols="130" pInputText autoResize="autoResize" required
-                                ></textarea>
+                                [disabled]="isEditMode"></textarea>
                                 <p class="info-message text-danger" *ngIf="  !vision_medium.value &&                     
                                 (fData.submitted || vision_medium.touched || vision_medium.dirty)
                               ">
@@ -269,7 +269,7 @@
                               <label for="vision_short">After 15 years? *</label>
                               <textarea name="vision_long" placeholder="Long Term Vision" [disabled]="isSavedAssessment"
                                 #vision_long="ngModel" [(ngModel)]="assessment.vision_long" rows="1" cols="130" pInputText
-                                autoResize="autoResize" required></textarea>
+                                autoResize="autoResize" required [disabled]="isEditMode"></textarea>
                                 <p class="info-message text-danger" *ngIf="  !vision_long.value &&                     
                                 (fData.submitted || vision_long.touched || vision_long.dirty)
                               ">
@@ -288,7 +288,7 @@
                             <div class="p-field">
                               <textarea name="phase_of_transformation" placeholder="Enter an answer" #phase_of_transformation="ngModel" [disabled]="isSavedAssessment"
                                 [(ngModel)]="assessment.phase_of_transformation" rows="1" cols="130" pInputText autoResize="autoResize" required
-                                ></textarea>
+                                [disabled]="isEditMode"></textarea>
                                 <p class="info-message text-danger" *ngIf="  !phase_of_transformation.value &&                     
                                 (fData.submitted || phase_of_transformation.touched || phase_of_transformation.dirty)
                               ">
@@ -306,7 +306,7 @@
                             <div class="p-field">
                               <textarea name="change_in_system" placeholder="Enter an answer" #change_in_system="ngModel" [disabled]="isSavedAssessment"
                                 [(ngModel)]="assessment.change_in_system" rows="1" cols="130" pInputText autoResize="autoResize" required
-                                ></textarea>
+                                [disabled]="isEditMode"></textarea>
                                 <p class="info-message text-danger" *ngIf="  !change_in_system.value &&                     
                                 (fData.submitted || change_in_system.touched || change_in_system.dirty)
                               ">This is a mandatory field
@@ -322,7 +322,7 @@
                       <div class=" mt-2">
                         <div class="p-grid p-fluid col-sm-12">
                           <div class="p-2">
-                            <h6>Barriers &nbsp; <p-button  icon="pi pi-plus "  styleClass="p-button-sm p-button-rounded"  (click)="showDialog()"></p-button></h6>
+                            <h6>Barriers &nbsp; <p-button [disabled]="isEditMode"  icon="pi pi-plus "  styleClass="p-button-sm p-button-rounded"  (click)="showDialog()"></p-button></h6>
                           </div>
                           <p-dialog header="Add Barrier" [(visible)]="barrierBox"  [modal]="true" appendTo="body"  [style]="{width: '50vw'}"  >
 
@@ -545,7 +545,7 @@
         </div>
     </form>
     <div class="p-grid p-fluid col-sm-12" *ngIf="showSections">
-        <app-cm-section [assessment]="assessmentres" [approach]="assessment.assessment_approach"></app-cm-section>
+        <app-cm-section [assessment]="assessmentres" [approach]="assessment.assessment_approach" [isEditMode]="isEditMode"></app-cm-section>
     </div>
 </div>
 
