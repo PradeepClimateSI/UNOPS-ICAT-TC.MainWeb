@@ -923,6 +923,7 @@ onRelavanceChange(data:any,ins:any){
 pushBarriers(barrier:any){
   console.log("barrier",barrier)
   this.finalBarrierList.push(barrier)
+  this.barrierSelected = new BarrierSelected()
 
 }
 barriersNameArray(Characteristics:any[]){

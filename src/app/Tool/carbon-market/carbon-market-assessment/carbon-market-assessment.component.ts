@@ -294,6 +294,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
 
   pushBarriers(barrier:any){
     this.finalBarrierList.push(barrier)
+    this.barrierSelected = new BarrierSelected()
   
   }
   barriersNameArray(Characteristics:any[]){

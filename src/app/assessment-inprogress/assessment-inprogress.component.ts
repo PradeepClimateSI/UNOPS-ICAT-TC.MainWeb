@@ -71,7 +71,7 @@ getTool(code:string){
   detail(assessment: Assessment) {
     console.log("climateactions", assessment)
     if (assessment.tool =="CARBON_MARKET"){
-      this.router.navigate(['app/carbon-market-tool'], {  
+      this.router.navigate(['app/carbon-market-tool/edit'], {  
       queryParams: { id: assessment.id,isEdit:assessment.isDraft},  
       });
     }
