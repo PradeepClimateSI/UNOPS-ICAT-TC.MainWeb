@@ -159,8 +159,8 @@ export class PortfolioTrack4Component implements OnInit {
   tableData : any;
 
   async ngOnInit(): Promise<void> {
- this.load = false; //need to change as false
- //this.isSavedAssessment = true //need to change as false
+ this.load = true; //need to change as false
+ this.isSavedAssessment = true //need to change as false
 
 this.tableData =  this.getProductsData();
 
