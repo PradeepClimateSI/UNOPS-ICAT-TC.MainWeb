@@ -1053,7 +1053,16 @@ console.log("wwwwww", this.outcomeData)
     }
     console.log("ppppp", this.processData)
   } */
-
+  onChangeRelevance(relevance : any , data : any){
+    console.log("relevance", relevance)
+    console.log("data22", data)
+  
+     if(relevance == 0){
+      data.likelihood_justification = null;
+      data.likelihood = null;
+    }
+  }
+  
   getProductsData() {
     return [
         {

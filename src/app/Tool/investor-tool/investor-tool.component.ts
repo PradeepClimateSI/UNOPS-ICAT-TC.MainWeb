@@ -972,7 +972,21 @@ showDialog(){
   console.log(this.barrierBox)  
 }
 
+onChangeRelevance(relevance : any , data : any){
+  console.log("relevance", relevance)
+  console.log("data22", data)
 
+  if(relevance == 0){
+    data.likelihood_justification = null;
+    data.likelihood = null;
+
+    for(let item of data.indicator_details){
+      item.value = null;
+      item.justification = null;
+    }
+
+  }
+}
 onUpload(event:UploadEvent, data : InvestorAssessment) {
   if(event.originalEvent.body){
     data.uploadedDocumentPath = event.originalEvent.body.fileName
