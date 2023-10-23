@@ -624,14 +624,15 @@
                                                                 </div>
                                                                 <div class="col-4">
                                                                     <p-dropdown  
-                                                                    name="data.charData.relavance"
+                                                                    [name]="data.characteristics.name+ 'rel'"
                                                                     #rel="ngModel"
                                                                     placeholder="Select Relevance"
                                                                     [(ngModel)]="data.relavance"
                                                                     [options]="relevance" optionLabel="name"
+                                                                    (ngModelChange)="onChangeRelevance(data.relavance, data)"
                                                                     appendTo="body"
                                                                     optionValue="value" [required]="true"></p-dropdown>
-                                                                    <p class="info-message text-danger" *ngIf="data.relavance ==null  && (fData1.submitted || rel.touched) ">
+                                                                    <p class="info-message text-danger" *ngIf="data.relavance ==null  && (fData1.submitted || rel.touched)  || (category.isValidated==false && data.relavance ==null)">
                                                                       This is a mandatory field </p>
                                                                 </div>
 
@@ -693,8 +694,8 @@
                                                                     [(ngModel)]="question.justification"
                                                                     placeholder="Enter Justification"
                                                                     #questionJustification="ngModel"
-                                                                    name="questionJustification" />
-                                                                    <p class="info-message text-danger" *ngIf="!question.justification  && (fData1.submitted || questionJustification.touched) ">
+                                                                    [name]="question.question.name+'question'" />
+                                                                    <p class="info-message text-danger" *ngIf="!question.justification  && (fData1.submitted || questionJustification.touched) || (category.isValidated==false && !question.justification)">
                                                                       This is a mandatory field </p>
 
                                                                  </div>
@@ -712,14 +713,14 @@
                                                                 <label for="likelihood" >Likelihood*</label>
                                                                 <p-dropdown 
                                                                     appendTo="body"
-                                                                    name="data.charData.likelihood"
+                                                                    [name]="data.characteristics.name+ 'likelihood' "
                                                                     #likelihood2="ngModel" 
                                                                     placeholder="Select Likelihood"
                                                                     [(ngModel)]="data.likelihood"
                                                                     [options]="likelihood" optionLabel="id"
                                                                     optionValue="value" [required]="true"
                                                                     ></p-dropdown>
-                                                                    <p class="info-message text-danger" *ngIf="data.likelihood ==null && (fData1.submitted || likelihood2.touched) ">
+                                                                    <p class="info-message text-danger" *ngIf="data.likelihood ==null && (fData1.submitted || likelihood2.touched) || (category.isValidated==false && data.likelihood ==null)">
                                                                       This is a mandatory field </p>
                                                                     <!-- <p-dropdown  *ngIf="approach===2"
                                                                     name={{data}}_charData.relavance
@@ -739,8 +740,8 @@
                                                                 <input type="text" pInputText
                                                                     [(ngModel)]="data.likelihood_justification" #just1="ngModel"
                                                                     placeholder="Enter Justification"
-                                                                    name="data.charData.likelihood_justification" />
-                                                                    <p class="info-message text-danger" *ngIf="!data.likelihood_justification  && (fData1.submitted || just1.touched) ">
+                                                                    [name]="data.characteristics.name+ 'Justification' " />
+                                                                    <p class="info-message text-danger" *ngIf="!data.likelihood_justification  && (fData1.submitted || just1.touched)||(category.isValidated==false && !data.likelihood_justification) ">
                                                                       This is a mandatory field </p>
 
                                                             </div>
@@ -783,7 +784,7 @@
 
                         <div  class="row justify-content-end">
                           <div class="d-flex flex-row-reverse mt-20 ">
-                               <div class="btn btn-primary text-uppercase"  (click)="next(category.data,'process')" >
+                               <div class="btn btn-primary text-uppercase"  (click)="next(category,'process')" >
                                    Next
                                </div>
                           </div>
@@ -956,7 +957,7 @@
                                         <label for="justification">Justification*</label>
                                         <input type="text" pInputText [(ngModel)]="data.justification" #just2="ngModel"
                                           placeholder="Enter Justification" name="justification" />
-                                          <p class="info-message text-danger" *ngIf="!data.justification  && (fData1.submitted || just2.touched) ">
+                                          <p class="info-message text-danger" *ngIf="!data.justification  && (fData1.submitted || just2.touched) || (category.isValidated==false && !data.justification)">
                                             This is a mandatory field </p>
 
                                       </div>
@@ -1022,7 +1023,7 @@
                     </div>
                     <div  class="row justify-content-end" *ngIf="activeIndex2!==5 || activeIndexMain!==1">
                       <div class="d-flex flex-row-reverse mt-20 ">
-                           <div class="btn btn-primary text-uppercase"  (click)="next(category.data,'outcome')" >
+                           <div class="btn btn-primary text-uppercase"  (click)="next(category,'outcome')" >
                                Next
                            </div>
                       </div>
@@ -1128,7 +1129,7 @@
                                           <input (ngModelChange)="assignSDG(selectedSDGs[i], data)" type="text"
                                             pInputText [(ngModel)]="data.justification" #just3="ngModel"
                                             placeholder="Enter Justification" name="justification" />
-                                            <p class="info-message text-danger" *ngIf="!data.justification  && (fData1.submitted || just3.touched) ">
+                                            <p class="info-message text-danger" *ngIf="!data.justification  && (fData1.submitted || just3.touched) || (isValidSCaleSD==false && !data.justification)">
                                               This is a mandatory field </p>
                                         </div>
                                       </div>
@@ -1169,7 +1170,7 @@
                   </div>
                   <div  class="row justify-content-end" >
                     <div class="d-flex flex-row-reverse mt-20 ">
-                         <div class="btn btn-primary text-uppercase"  (click)="next(sdgDataSendArray2,'sdg')" >
+                         <div class="btn btn-primary text-uppercase"  (click)="nextSDG(sdgDataSendArray2,'scaleSD')" >
                              Next
                          </div>
                     </div>
@@ -1266,7 +1267,7 @@
                                           <input (ngModelChange)="assignSDG(selectedSDGs[i], data)" type="text"
                                             pInputText [(ngModel)]="data.justification" #just4="ngModel"
                                             placeholder="Enter Justification" name="justification" />
-                                            <p class="info-message text-danger" *ngIf="!data.justification  && (fData1.submitted || just4.touched) ">
+                                            <p class="info-message text-danger" *ngIf="!data.justification  && (fData1.submitted || just4.touched) || (isValidSustainedSD==false && !data.justification)">
                                               This is a mandatory field </p>
                                         </div>
                                       </div>
@@ -1307,7 +1308,7 @@
                   </div>
                   <div  class="row justify-content-end" >
                     <div class="d-flex flex-row-reverse mt-20 ">
-                         <div class="btn btn-primary text-uppercase"  (click)="next(sdgDataSendArray4,'sdg')" >
+                         <div class="btn btn-primary text-uppercase"  (click)="nextSDG(sdgDataSendArray4,'sustainedSD')" >
                              Next
                          </div>
                     </div>

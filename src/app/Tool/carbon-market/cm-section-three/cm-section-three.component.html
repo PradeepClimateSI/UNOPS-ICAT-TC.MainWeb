@@ -14,10 +14,16 @@
                             <label for="Description">Relevance *</label>
                         </div>
                         <div class="col-5">
-                            <p-dropdown name="data.charData.relavance" #type="ngModel" placeholder="Select Relevance"
+                            <p-dropdown name="data_charData_relavance" #data_charData_relavance="ngModel" placeholder="Select Relevance"
                                 [(ngModel)]="char.relevance" [options]="relevance" optionLabel="name" appendTo="body"
                                 optionValue="value" [required]="true" (onChange)="onRelevanceChange($event, char)"></p-dropdown>
                         </div>
+                        <p class="info-message text-danger" *ngIf="
+                                char.relevance === undefined &&
+                                (nextClicked || data_charData_relavance.touched)
+                              ">
+                                This is a mandatory field
+                            </p>
                     </div>
                     <br>
                     <div *ngIf="char.relevance !== 0">

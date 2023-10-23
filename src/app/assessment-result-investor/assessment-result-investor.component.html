@@ -387,10 +387,10 @@
                   <td  class="table-data">{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</td>
                   <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
                   <ng-container *ngFor="let char of scale_GHGs.characteristicData">
-                    <td class="table-data">{{(char.score.value==null?'Empty':(char.score.value + "-" + char.score.name))}}</td>
+                    <td class="table-data">{{(char.score.value==null?'Outside assessment boundaries':(char.score.value + "-" + char.score.name))}}</td>
                   </ng-container>
-                  <td class="table-data">{{scale_GHGs.category_score.value!=null?(scale_GHGs.category_score.value):'Empty'}}</td>
-                  <td class="table-data">{{scale_GHGs.category_score.value!=null?(scale_GHGs.category_score.value + "-" + scale_GHGs.category_score.name):'Empty'}}</td>
+                  <td class="table-data">{{scale_GHGs.category_score.value!=null?(scale_GHGs.category_score.value):'Outside assessment boundaries'}}</td>
+                  <td class="table-data">{{scale_GHGs.category_score.value!=null?(scale_GHGs.category_score.value + "-" + scale_GHGs.category_score.name):'Outside assessment boundaries'}}</td>
                   <td class="table-data">{{scale_GHGs.category_weight?scale_GHGs.category_weight+'%':'-'}}</td>
                 </tr>
             </ng-template>
@@ -429,10 +429,10 @@
                 <td  class="table-data">{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</td>
                 <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
                 <ng-container *ngFor="let char of sustained_GHGs.characteristicData">
-                  <td class="table-data">{{(char.score.value==null?'Empty':(char.score.value + "-" + char.score.name))}}</td>
+                  <td class="table-data">{{(char.score.value==null?'Outside assessment boundaries':(char.score.value + "-" + char.score.name))}}</td>
                 </ng-container>
-                <td class="table-data">{{(sustained_GHGs.category_score.value!=null)?(sustained_GHGs.category_score.value):'Empty'}}</td>
-                <td class="table-data">{{(sustained_GHGs.category_score.value!=null)?(sustained_GHGs.category_score.value + "-" + sustained_GHGs.category_score.name):'Empty'}}</td>
+                <td class="table-data">{{(sustained_GHGs.category_score.value!=null)?(sustained_GHGs.category_score.value):'Outside assessment boundaries'}}</td>
+                <td class="table-data">{{(sustained_GHGs.category_score.value!=null)?(sustained_GHGs.category_score.value + "-" + sustained_GHGs.category_score.name):'Outside assessment boundaries'}}</td>
                 <td class="table-data">{{sustained_GHGs.category_weight?sustained_GHGs.category_weight+'%':'-'}}</td>
               </tr>
           </ng-template>
@@ -484,9 +484,9 @@
                       <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
                       <td  class="table-data">{{(char.name)?(char.name):'-'}}</td>
                       <ng-container *ngFor="let data of char.data">
-                        <td class="table-data">{{(data.score.value==null?'Empty':(data.score.value + "-" + data.score.name))}}</td>
+                        <td class="table-data">{{(data.score.value==null?'Outside assessment boundaries':(data.score.value + "-" + data.score.name))}}</td>
                       </ng-container>
-                      <td class="table-data">{{char.sdg_score!=null?(char.sdg_score):'Empty'}}</td>
+                      <td class="table-data">{{char.sdg_score!=null?(char.sdg_score):'Outside assessment boundaries'}}</td>
                       <td class="table-data"></td>
                   </ng-container>
                   <tr *ngIf="scale_SD.characteristicData.length==0">
@@ -494,18 +494,18 @@
                     <td  class="table-data">{{(intervention.policyName)?(intervention.policyName):'-'}}</td>
                     <td  class="table-data">{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</td>
                     <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
-                    <td  class="table-data">Empty</td>
-                    <td  class="table-data">Empty</td>
-                    <td  class="table-data">Empty</td>
-                    <td  class="table-data">Empty</td>
-                    <td  class="table-data">Empty</td>
+                    <td  class="table-data">Outside assessment boundaries</td>
+                    <td  class="table-data">Outside assessment boundaries</td>
+                    <td  class="table-data">Outside assessment boundaries</td>
+                    <td  class="table-data">Outside assessment boundaries</td>
+                    <td  class="table-data">Outside assessment boundaries</td>
                     <td class="table-data"></td>
                     <!-- <td class="table-data"></td> -->
                   </tr>
                 <tr>
                   <td  class="table-header" colspan="8">Category Score</td>
-                  <td class="table-data">{{(scale_SD.category_score.value!=null)?(scale_SD.category_score.value):'Empty'}}</td>
-                  <td class="table-data">{{(scale_SD.category_score.value!=null)?(scale_SD.category_score.value + "-" + scale_SD.category_score.name):'Empty'}}</td>
+                  <td class="table-data">{{(scale_SD.category_score.value!=null)?(scale_SD.category_score.value):'Outside assessment boundaries'}}</td>
+                  <td class="table-data">{{(scale_SD.category_score.value!=null)?(scale_SD.category_score.value + "-" + scale_SD.category_score.name):'Outside assessment boundaries'}}</td>
                   <!-- <td class="table-data">{{scale_SD.category_weight?scale_SD.category_weight+'%':'-'}}</td> -->
                   <!-- <td class="table-data"></td> -->
                 </tr>
@@ -552,9 +552,9 @@
                     <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
                     <td  class="table-data">{{(char.name)?(char.name):'-'}}</td>
                     <ng-container *ngFor="let data of char.data">
-                      <td class="table-data">{{(data.score.value==null?'Empty':(data.score.value + "-" + data.score.name))}}</td>
+                      <td class="table-data">{{(data.score.value==null?'Outside assessment boundaries':(data.score.value + "-" + data.score.name))}}</td>
                     </ng-container>
-                    <td class="table-data">{{char.sdg_score!=null?(char.sdg_score):'Empty'}}</td>
+                    <td class="table-data">{{char.sdg_score!=null?(char.sdg_score):'Outside assessment boundaries'}}</td>
                     <td class="table-data"></td>
                     <td class="table-data"></td>
                   </tr>
@@ -564,25 +564,25 @@
                     <td  class="table-data">{{(intervention.policyName)?(intervention.policyName):'-'}}</td>
                     <td  class="table-data">{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</td>
                     <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
-                    <td  class="table-data">Empty</td>
-                    <td  class="table-data">Empty</td>
-                    <td  class="table-data">Empty</td>
-                    <td  class="table-data">Empty</td>
-                    <td  class="table-data">Empty</td>
+                    <td  class="table-data">Outside assessment boundaries</td>
+                    <td  class="table-data">Outside assessment boundaries</td>
+                    <td  class="table-data">Outside assessment boundaries</td>
+                    <td  class="table-data">Outside assessment boundaries</td>
+                    <td  class="table-data">Outside assessment boundaries</td>
                     <td class="table-data"></td>
                     <td class="table-data"></td>
                   </tr>
               <tr>
                 <td  class="table-header" colspan="8">Category Score</td>
-                <td class="table-data">{{(sustained_SD.category_score.value!=null)?(sustained_SD.category_score.value):'Empty'}}</td>
-                <td class="table-data">{{(sustained_SD.category_score.value!=null)?(sustained_SD.category_score.value + "-" + sustained_SD.category_score.name):'Empty'}}</td>
+                <td class="table-data">{{(sustained_SD.category_score.value!=null)?(sustained_SD.category_score.value):'Outside assessment boundaries'}}</td>
+                <td class="table-data">{{(sustained_SD.category_score.value!=null)?(sustained_SD.category_score.value + "-" + sustained_SD.category_score.name):'Outside assessment boundaries'}}</td>
                 <!-- <td class="table-data">{{sustained_SD.category_weight?sustained_SD.category_weight+'%':'-'}}</td> -->
                 <td class="table-data"></td>
               </tr>
               <tr>
                 <td  class="table-header" colspan="8">Aggregated SDG Outcome Score</td>
-                <td class="table-data">{{(aggregated_score.value!=null)?(aggregated_score.value):'Empty'}}</td>
-                <td class="table-data">{{(aggregated_score.value!=null)?(aggregated_score.value + "-" + aggregated_score.name):'Empty'}}</td>
+                <td class="table-data">{{(aggregated_score.value!=null)?(aggregated_score.value):'Outside assessment boundaries'}}</td>
+                <td class="table-data">{{(aggregated_score.value!=null)?(aggregated_score.value + "-" + aggregated_score.name):'Outside assessment boundaries'}}</td>
                 <td class="table-data">50%</td>
                 <!-- <td class="table-data">{{sustained_SD.category_weight?sustained_SD.category_weight+'%':'-'}}</td> -->
               </tr>
@@ -632,10 +632,10 @@
               <td  class="table-data">{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</td>
               <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
               <ng-container *ngFor="let char of scale_adaptation.characteristicData">
-                <td class="table-data">{{(char.score.value==null?'Empty':(char.score.value + "-" + char.score.name))}}</td>
+                <td class="table-data">{{(char.score.value==null?'Outside assessment boundaries':(char.score.value + "-" + char.score.name))}}</td>
               </ng-container>
-              <td class="table-data">{{scale_adaptation.category_score.value!=null?(scale_adaptation.category_score.value):'Empty'}}</td>
-              <td class="table-data">{{scale_adaptation.category_score.value!=null?(scale_adaptation.category_score.value + "-" + scale_adaptation.category_score.name):'Empty'}}</td>
+              <td class="table-data">{{scale_adaptation.category_score.value!=null?(scale_adaptation.category_score.value):'Outside assessment boundaries'}}</td>
+              <td class="table-data">{{scale_adaptation.category_score.value!=null?(scale_adaptation.category_score.value + "-" + scale_adaptation.category_score.name):'Outside assessment boundaries'}}</td>
               <td class="table-data">{{scale_adaptation.category_weight?scale_adaptation.category_weight+'%':'-'}}</td>
             </tr>
         </ng-template>
@@ -677,10 +677,10 @@
               <td  class="table-data">{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</td>
               <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
               <ng-container *ngFor="let char of sustained_adaptation.characteristicData">
-                <td class="table-data">{{(char.score.value==null?'Empty':(char.score.value + "-" + char.score.name))}}</td>
+                <td class="table-data">{{(char.score.value==null?'Outside assessment boundaries':(char.score.value + "-" + char.score.name))}}</td>
               </ng-container>
-              <td class="table-data">{{(sustained_adaptation.category_score.value!=null)?(sustained_adaptation.category_score.value):'Empty'}}</td>
-              <td class="table-data">{{(sustained_adaptation.category_score.value!=null)?(sustained_adaptation.category_score.value + "-" + sustained_adaptation.category_score.name):'Empty'}}</td>
+              <td class="table-data">{{(sustained_adaptation.category_score.value!=null)?(sustained_adaptation.category_score.value):'Outside assessment boundaries'}}</td>
+              <td class="table-data">{{(sustained_adaptation.category_score.value!=null)?(sustained_adaptation.category_score.value + "-" + sustained_adaptation.category_score.name):'Outside assessment boundaries'}}</td>
               <td class="table-data">{{sustained_adaptation.category_weight?sustained_adaptation.category_weight+'%':'-'}}</td>
             </tr>
         </ng-template>
@@ -690,7 +690,7 @@
       <br>
         <table> 
           <tr></tr>
-          <tr class="table-header-left"> <p class="category-topic">Outcome Score - {{outcomeScore}}</p></tr>
+          <tr class="table-header-left"> <p class="category-topic">Outcome Score - {{outcomeScore==null?'N/A':outcomeScore}}</p></tr>
           <tr></tr>
           <tr></tr>
         </table>  
