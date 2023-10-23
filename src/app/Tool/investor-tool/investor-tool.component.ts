@@ -3,12 +3,13 @@ import { NgForm } from '@angular/forms';
 import { MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import {Any, AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, AssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import {Any, AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, AssessmentControllerServiceProxy, Category } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'environments/environment';
 import { HttpResponse } from '@angular/common/http';
+import { Type } from '@angular/compiler';
 // import { IndicatorDetails } from './IndicatorDetails';
 
 
@@ -92,6 +93,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     type: string,
     CategoryName: string,
     categoryID: number,
+    isValidated:boolean|null
     data: InvestorAssessment[],
 
   }[] = [];
@@ -100,6 +102,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     type: string,
     CategoryName: string,
     categoryID: number,
+    isValidated:boolean|null
     data: InvestorAssessment[]
   }[] = [];
   //class variable
@@ -138,6 +141,10 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   tableData : any;
   assessmentId:number;
   isEditMode:boolean=false;
+  isValidSCaleSD: boolean;
+  isValidSustainedSD: boolean;
+  // isValidated:boolean;
+
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
     private masterDataService: MasterDataService,
@@ -360,7 +367,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
         if (x.type === 'process') {
           this.processData.push({
             type: 'process', CategoryName: x.name, categoryID: x.id,
-            data:categoryArray
+            data: categoryArray,
+            isValidated: null
           })
 
 
@@ -370,7 +378,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
           this.outcomeData.push({
             type: 'outcome', CategoryName: x.name, categoryID: x.id,
-            data:categoryArray
+            data: categoryArray,
+            isValidated: null
           })
 
           if(x.name === 'SDG Scale of the Outcome'){
@@ -528,14 +537,15 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   onMainTabChange(event: any) {
     this.mainTabIndex =event.index;
-    if(this.mainTabIndex==1){
-      this.activeIndex2=0;
-    }
+    // this.isValidated = true;
+    // if(this.mainTabIndex==1){
+    //   this.activeIndex2=0;
+    // }
     console.log("main index", this.mainTabIndex)
   }
   onCategoryTabChange(event: any, tabview: TabView) {
     console.log("mainTabIndexArray",this.mainTabIndexArray,this.activeIndex)
-
+    // this.isValidated=true
     this.categoryTabIndex =event.index;
     if(!this.failedLikelihoodArray.some(
       element  => element.tabIndex === this.categoryTabIndex
@@ -753,24 +763,30 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
        }, 2000);
 
   }
-  next(data:any[],type:string){
-  // console.log("category",data)
+  next(data:{
+    
+    isValidated:boolean|null
+    data: any[],
+
+  },type:string){
+    data.isValidated = false;
+  console.log("category",data,type)
   // data?.filter(investorAssessment => console.log(investorAssessment.relavance,investorAssessment.relavance == 0))
-  if((data?.filter(investorAssessment => 
+  if((data.data?.filter(investorAssessment => 
       (investorAssessment.relavance !== undefined) && 
       (investorAssessment.likelihood !== undefined) && 
       (investorAssessment.likelihood_justification !== undefined) &&
       (investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
         (indicator_details.justification !== undefined))?.length === (investorAssessment.indicator_details?.length-1)
-      )|| (investorAssessment.relavance == 0))?.length === data?.length && type=='process')||
-      (data?.filter(investorAssessment => 
+      )|| (investorAssessment.relavance == 0))?.length === data?.data?.length && type=='process')||
+      (data?.data.filter(investorAssessment => 
         (investorAssessment.justification !== undefined) 
-       )?.length === data?.length && type=='outcome')||
-      (data?.filter(sdg => 
+       )?.length === data?.data.length && type=='outcome')||
+      (data?.data.filter(sdg => 
         (sdg.data?.filter((data: { justification: undefined; } ) =>
           (data.justification!== undefined))?.length === (sdg.data?.length)
-        ))?.length === data?.length && type=='sdg')) {
-    
+        ))?.length === data?.data.length && type=='sdg')) {
+          data.isValidated = true;
     if(this.activeIndexMain ===1 ){
 
       this.activeIndex2 =this.activeIndex2+1;
@@ -807,7 +823,54 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     //   this.isRelavanceDisabled=true;
     // }
   }
+  nextSDG(data:any[],type:string){
+    console.log("category",data,type)
+    if(type=='scaleSD'){
+      this.isValidSCaleSD = false
+    }
+    if(type=='sustainedSD'){
+      this.isValidSustainedSD = false
+    }
+    console.log("category",this.isValidSCaleSD,this.isValidSustainedSD)
+    // this.isValidSustainedSD = false
+    if((data?.filter(sdg => 
+        (sdg.data?.filter((data: { justification: undefined; } ) =>
+          (data.justification!== undefined))?.length === (sdg.data?.length)
+        ))?.length === data?.length )) {
+          // data.isValidated = true;
+          this.isValidSCaleSD=true
+          if(type=='scaleSD'){
+            this.isValidSCaleSD = true
+          }
+           if(type=='sustainedSD'){
+            this.isValidSustainedSD = true
+          }
+    if(this.activeIndexMain ===1 ){
 
+      this.activeIndex2 =this.activeIndex2+1;
+      console.log( "activeIndex2",this.activeIndex2)
+
+    }
+    if (this.activeIndex === 3 && this.activeIndexMain !== 1) {
+      this.activeIndexMain = 1;
+      this.activeIndex2=0;
+
+    }
+    if (this.activeIndex<=2 && this.activeIndex>=0 && this.activeIndexMain===0){
+      this.activeIndex =this.activeIndex +1;
+      console.log( this.activeIndex)
+
+    }
+    // return true
+  }else{
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Please fill all mandotory fields',
+      closable: true,
+    });
+  }
+  }
   onLevelofImplementationChange(event:any){
     console.log(event)
     if(event==='National')
