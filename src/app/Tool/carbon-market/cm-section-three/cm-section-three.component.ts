@@ -71,6 +71,7 @@ export class CmSectionThreeComponent implements OnInit {
   selectedSDGsList: PortfolioSdg[];
   categoriesToSave: string[] = []
   isDraftSaved: boolean = false
+  nextClicked: boolean;
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -241,11 +242,11 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   async onCategoryTabChange(event: any) {
+    this.nextClicked = false
     this.categoryTabIndex = event.index;
   }
 
   onSelectSDG(event: any) {
-    console.log(event)
     let scaleResults: CMResultDto[] = []
     let sustainResults: CMResultDto[] = []
     this.outcome.forEach((category: { type: string; results: any[]; method: string; }) => {
@@ -260,10 +261,15 @@ export class CmSectionThreeComponent implements OnInit {
       }
     })
 
-    console.log(this.selectedSDGsList)
-    console.log(this.selectedSDGs)
+    let deSelected = this.selectedSDGs?.filter(sd => !this.selectedSDGsList?.find(o => o.id === sd.id))
+
+    if (deSelected && deSelected.length > 0) {
+      for (let de of deSelected) {
+        this.selectedSDGs.splice(this.selectedSDGs.findIndex(o => o.id === de.id))
+      }
+    }
+
     let newSdgs = this.selectedSDGsList.filter(sd => !this.selectedSDGs?.find(o => o.id === sd.id))
-    console.log(newSdgs)
 
     if (newSdgs && newSdgs.length > 0) {
       let mappedSdgs = newSdgs.map(sdg => {
@@ -299,7 +305,6 @@ export class CmSectionThreeComponent implements OnInit {
         }
         return _sdg
       })
-      console.log(this.selectedSDGs, mappedSdgs)
       if (this.selectedSDGs) this.selectedSDGs.push(...mappedSdgs) 
       else this.selectedSDGs = mappedSdgs
     }
@@ -310,6 +315,7 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   next(category: string, characteristics?: any[]) {
+    this.nextClicked = true
     if (!this.isDraftSaved) {
       this.categoriesToSave.push(category)
     } else this.isDraftSaved = !this.isDraftSaved
@@ -395,6 +401,7 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   async submit(draftCategory: string, isDraft: boolean = false) {
+    this.nextClicked = true
     this.results = []
     this.categoriesToSave.push(draftCategory)
     let save_process: boolean = false
