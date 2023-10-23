@@ -131,6 +131,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   tableData : any;
   assessmentId:number;
   isEditMode:boolean=false;
+  isValidated:boolean;
+
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
     private masterDataService: MasterDataService,
@@ -503,14 +505,15 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   onMainTabChange(event: any) {
     this.mainTabIndex =event.index;
-    if(this.mainTabIndex==1){
-      this.activeIndex2=0;
-    }
+    this.isValidated = true;
+    // if(this.mainTabIndex==1){
+    //   this.activeIndex2=0;
+    // }
     console.log("main index", this.mainTabIndex)
   }
   onCategoryTabChange(event: any, tabview: TabView) {
     console.log("mainTabIndexArray",this.mainTabIndexArray,this.activeIndex)
-
+    this.isValidated=true
     this.categoryTabIndex =event.index;
     if(!this.failedLikelihoodArray.some(
       element  => element.tabIndex === this.categoryTabIndex
@@ -729,6 +732,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   }
   next(data:any[],type:string){
+    this.isValidated = false;
   // console.log("category",data)
   // data?.filter(investorAssessment => console.log(investorAssessment.relavance,investorAssessment.relavance == 0))
   if((data?.filter(investorAssessment => 
@@ -745,7 +749,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
         (sdg.data?.filter((data: { justification: undefined; } ) =>
           (data.justification!== undefined))?.length === (sdg.data?.length)
         ))?.length === data?.length && type=='sdg')) {
-    
+          this.isValidated = false;
     if(this.activeIndexMain ===1 ){
 
       this.activeIndex2 =this.activeIndex2+1;

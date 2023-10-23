@@ -582,8 +582,8 @@
     <!-- <div class="p-grid p-fluid col-sm-12" *ngIf="showSections">
         <app-cm-section [assessment]="assessmentres"></app-cm-section>
     </div> -->
-    <div class="card" *ngIf="isSavedAssessment && tabLoading">
-        <!-- <div class="card" > -->
+    <!-- <div class="card" *ngIf="isSavedAssessment && tabLoading"> -->
+        <div class="card" >
         <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)" >
         <p-tabView  (onChange)="onMainTabChange($event) " [(activeIndex)]="activeIndexMain ">
 
@@ -631,7 +631,7 @@
                                                                     [options]="relevance" optionLabel="name"
                                                                     appendTo="body"
                                                                     optionValue="value" [required]="true"></p-dropdown>
-                                                                    <p class="info-message text-danger" *ngIf="data.relavance ==null  && (fData1.submitted || rel.touched) ">
+                                                                    <p class="info-message text-danger" *ngIf="data.relavance ==null  && (fData1.submitted || rel.touched)  || (isValidated==false && data.relavance ==null)">
                                                                       This is a mandatory field </p>
                                                                 </div>
 
@@ -694,7 +694,7 @@
                                                                     placeholder="Enter Justification"
                                                                     #questionJustification="ngModel"
                                                                     name="questionJustification" />
-                                                                    <p class="info-message text-danger" *ngIf="!question.justification  && (fData1.submitted || questionJustification.touched) ">
+                                                                    <p class="info-message text-danger" *ngIf="!question.justification  && (fData1.submitted || questionJustification.touched) || (isValidated==false && !question.justification)">
                                                                       This is a mandatory field </p>
 
                                                                  </div>
@@ -719,7 +719,7 @@
                                                                     [options]="likelihood" optionLabel="id"
                                                                     optionValue="value" [required]="true"
                                                                     ></p-dropdown>
-                                                                    <p class="info-message text-danger" *ngIf="data.likelihood ==null && (fData1.submitted || likelihood2.touched) ">
+                                                                    <p class="info-message text-danger" *ngIf="data.likelihood ==null && (fData1.submitted || likelihood2.touched) || (isValidated==false && data.likelihood ==null)">
                                                                       This is a mandatory field </p>
                                                                     <!-- <p-dropdown  *ngIf="approach===2"
                                                                     name={{data}}_charData.relavance
@@ -740,7 +740,7 @@
                                                                     [(ngModel)]="data.likelihood_justification" #just1="ngModel"
                                                                     placeholder="Enter Justification"
                                                                     name="data.charData.likelihood_justification" />
-                                                                    <p class="info-message text-danger" *ngIf="!data.likelihood_justification  && (fData1.submitted || just1.touched) ">
+                                                                    <p class="info-message text-danger" *ngIf="!data.likelihood_justification  && (fData1.submitted || just1.touched) || (isValidated==false && !data.likelihood_justification)">
                                                                       This is a mandatory field </p>
 
                                                             </div>
@@ -956,7 +956,7 @@
                                         <label for="justification">Justification*</label>
                                         <input type="text" pInputText [(ngModel)]="data.justification" #just2="ngModel"
                                           placeholder="Enter Justification" name="justification" />
-                                          <p class="info-message text-danger" *ngIf="!data.justification  && (fData1.submitted || just2.touched) ">
+                                          <p class="info-message text-danger" *ngIf="!data.justification  && (fData1.submitted || just2.touched) || (isValidated==false && !data.justification)">
                                             This is a mandatory field </p>
 
                                       </div>
@@ -1128,7 +1128,7 @@
                                           <input (ngModelChange)="assignSDG(selectedSDGs[i], data)" type="text"
                                             pInputText [(ngModel)]="data.justification" #just3="ngModel"
                                             placeholder="Enter Justification" name="justification" />
-                                            <p class="info-message text-danger" *ngIf="!data.justification  && (fData1.submitted || just3.touched) ">
+                                            <p class="info-message text-danger" *ngIf="!data.justification  && (fData1.submitted || just3.touched) || (isValidated==false && !data.justification)">
                                               This is a mandatory field </p>
                                         </div>
                                       </div>
@@ -1266,7 +1266,7 @@
                                           <input (ngModelChange)="assignSDG(selectedSDGs[i], data)" type="text"
                                             pInputText [(ngModel)]="data.justification" #just4="ngModel"
                                             placeholder="Enter Justification" name="justification" />
-                                            <p class="info-message text-danger" *ngIf="!data.justification  && (fData1.submitted || just4.touched) ">
+                                            <p class="info-message text-danger" *ngIf="!data.justification  && (fData1.submitted || just4.touched) || (isValidated==false && !data.justification)">
                                               This is a mandatory field </p>
                                         </div>
                                       </div>
