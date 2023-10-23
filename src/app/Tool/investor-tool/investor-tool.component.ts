@@ -207,7 +207,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
         this.setTo() */
     //upto this
 
-   this.isSavedAssessment = true; this.tabLoading= true; // Need to remove  
+  // this.isSavedAssessment = true; this.tabLoading= true; // Need to remove  
   // this.isSavedAssessment = true // Need to remove  
   this.tableData =  this.getProductsData();
     this.categoryTabIndex =0;
