@@ -413,6 +413,8 @@ this.tableData =  this.getProductsData();
 
     this.assessment.tool = 'PORTFOLIO'
     this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
+    if (!this.assessment.id) this.assessment.createdOn = moment(new Date())
+    this.assessment.editedOn = moment(new Date())
 
     if (form.valid) {
       this.methodologyAssessmentControllerServiceProxy.saveAssessment(this.assessment)

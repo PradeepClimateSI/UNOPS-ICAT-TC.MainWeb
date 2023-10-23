@@ -391,6 +391,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     //save assessment
     this.assessment.tool = 'INVESTOR'
     this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
+    if (!this.assessment.id) this.assessment.createdOn = moment(new Date())
+    this.assessment.editedOn = moment(new Date())
 
     if (form.valid) {
       this.methodologyAssessmentControllerServiceProxy.saveAssessment(this.assessment)
@@ -923,6 +925,7 @@ onRelavanceChange(data:any,ins:any){
 pushBarriers(barrier:any){
   console.log("barrier",barrier)
   this.finalBarrierList.push(barrier)
+  this.barrierSelected = new BarrierSelected()
 
 }
 barriersNameArray(Characteristics:any[]){

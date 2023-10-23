@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { MasterDataService } from 'app/shared/master-data.service';
+import { MasterDataDto, MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import { AllBarriersSelected, Assessment, AssessmentCMDetail, BarrierSelected, Characteristics, ClimateAction, GeographicalAreasCovered, InvestorSector, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy,  ServiceProxy, ToolsMultiselectDto } from 'shared/service-proxies/service-proxies';
+import { AllBarriersSelected, Assessment, AssessmentCMDetail, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, BarrierSelected, Characteristics, ClimateAction, GeographicalAreasCovered, InvestorSector, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, ServiceProxy, ToolsMultiselectDto } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-carbon-market-assessment',
@@ -38,23 +39,25 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   date2: any
 
   assessmentres: Assessment
-  levelOfImplementation: any[] = [];
-  sectorArray: Sector[] = [];
-  geographicalAreasCoveredArr: any[] = []
+  levelOfImplementation: MasterDataDto[];
+  sectorArray: Sector[];
+  geographicalAreasCoveredArr: MasterDataDto[];
   sectorList: any[] = [];
   international_tooltip:string;
   
-  barrierBox:boolean=false;
-  barrierSelected:BarrierSelected= new BarrierSelected();
-  finalBarrierList :BarrierSelected[]=[];
-  barrierArray:PolicyBarriers[];
+  barrierBox: boolean = false;
+  barrierSelected: BarrierSelected = new BarrierSelected();
+  finalBarrierList: BarrierSelected[] = [];
+  barrierArray: PolicyBarriers[];
   isDownloading: boolean = true;
   isDownloadMode: number = 0;
-  sectorsJoined :string='';
-  finalSectors:Sector[]=[]
+  sectorsJoined: string = '';
+  finalSectors: Sector[] = []
   characteristicsList: Characteristics[] = [];
   isStageDisble:boolean=false;
   tableData : any;
+  isEditMode: boolean 
+  assessmentId: number 
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -63,7 +66,10 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     private serviceProxy: ServiceProxy,
     private messageService: MessageService,
     private sectorProxy: SectorControllerServiceProxy,
-    private investorToolControllerServiceProxy: InvestorToolControllerServiceProxy
+    private investorToolControllerServiceProxy: InvestorToolControllerServiceProxy,
+    private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
+    private assessmentCMDetailControllerServiceProxy: AssessmentCMDetailControllerServiceProxy,
+    private route: ActivatedRoute
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -77,8 +83,60 @@ export class CarbonMarketAssessmentComponent implements OnInit {
 
     await this.getPolicies()
     await this.getSetors()
+    this.route.queryParams.subscribe(params => {
+      this.assessmentId = params['id']
+      this.isEditMode = params['isEdit']
+    })
+    await this.setInitialStates()
+
     this.international_tooltip = 'Name of international or private carbon market standard under which the intervention is registered.'
     await this.getCharacteristics();
+  }
+
+  async setInitialStates() {
+    if (this.isEditMode) {
+      this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+      this.finalBarrierList = this.assessment['policy_barrier']
+      let policy = this.policies.find(o => o.id === this.assessment.climateAction.id)
+      if (policy) this.assessment.climateAction = policy
+      this.cm_detail = await this.assessmentCMDetailControllerServiceProxy.getAssessmentCMDetailByAssessmentId(this.assessmentId).toPromise()
+      let areas: MasterDataDto[] = []
+      this.cm_detail.geographicalAreasCovered.map(area => {
+        let level = this.levelOfImplementation.find(o => o.code === area.code)
+        if (level) {
+          areas.push(level)
+        }
+      })
+      this.geographicalAreasCoveredArr = areas
+      let sectors: any[] = []
+      this.cm_detail.sectorsCovered.map(sector => {
+        sectors.push(this.sectorList.find(o => o.name === sector.sector.name))
+      })
+      this.sectorArray = sectors
+      this.setFrom()
+      this.setTo()
+      this.assessmentres = this.assessment
+      this.showSections = true
+      this.isSavedAssessment = true
+    }
+  }
+
+  setFrom(){
+    if(this.assessment.from){  
+      let convertTime = moment(this.assessment.from).format("YYYY-MM-DD HH:mm:ss");
+      let convertTimeObject = new Date(convertTime);
+      //@ts-ignore
+      this.assessment.from = convertTimeObject;
+    }
+  }
+
+  setTo(){
+    if(this.assessment.to){
+      let convertTime = moment(this.assessment.to).format("YYYY-MM-DD HH:mm:ss");
+      let convertTimeObject = new Date(convertTime);
+      //@ts-ignore
+      this.assessment.to = convertTimeObject;
+    }
   }
 
   async getSetors() {
@@ -106,6 +164,8 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
     this.assessment.assessment_approach = 'DIRECT'
     this.isStageDisble =true;
+    if (!this.assessment.id) this.assessment.createdOn = moment(new Date())
+    this.assessment.editedOn = moment(new Date())
 
     if (form.valid) {
       this.methodologyAssessmentControllerServiceProxy.saveAssessment(this.assessment)
@@ -236,6 +296,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
 
   pushBarriers(barrier:any){
     this.finalBarrierList.push(barrier)
+    this.barrierSelected = new BarrierSelected()
   
   }
   barriersNameArray(Characteristics:any[]){
@@ -254,7 +315,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     
   }
   showDialog(){
-    this.barrierBox =true; 
+    if (!this.isEditMode) this.barrierBox =true; 
   }
   onItemSelectSectors($event: any) {
    

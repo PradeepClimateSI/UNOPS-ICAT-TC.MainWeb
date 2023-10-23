@@ -5,6 +5,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import { environment } from 'environments/environment';
 import { Router, ActivatedRoute } from '@angular/router';
 import {
   ConfirmationService,
@@ -95,5 +96,22 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
 
   viewPdf(obj: any) {
     window.location.href = obj.savedLocation;
+  }
+
+  toLogin() {
+    this.router.navigate(['/auth/login']);
+  }
+
+  toRegister(){
+    this.router.navigate(['/auth/register-user']);
+  }
+
+  public navigateToSection(section: string) {
+    window.location.hash = '';
+    window.location.hash = section;
+  }
+
+  toPMU() {
+    window.location.href = environment.baseUrlPMU;
   }
 }

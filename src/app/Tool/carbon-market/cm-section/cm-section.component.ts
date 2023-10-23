@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { Assessment, CMAnswer, CMAssessmentQuestionControllerServiceProxy, CMQuestionControllerServiceProxy, CMResultDto, Institution, SaveCMResultDto } from 'shared/service-proxies/service-proxies';
+import { Assessment, CMAnswer, CMAssessmentQuestion, CMAssessmentQuestionControllerServiceProxy, CMQuestionControllerServiceProxy, CMResultDto, Institution, SaveCMResultDto, ScoreDto, ServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-cm-section',
@@ -12,7 +12,8 @@ export class CmSectionComponent implements OnInit {
 
   @Input() assessment: Assessment
   @Input() approach: string
-
+  @Input() isEditMode: boolean;
+ 
   openAccordion = 0
 
   sections: any[] = []
@@ -33,6 +34,8 @@ export class CmSectionComponent implements OnInit {
 
   message: string
   defaultMessage = 'The preconditions for transformational change have not been met. <br> Transformational change = 0'
+  assessmentQuestions: CMAssessmentQuestion[]
+  isFirstLoading: boolean = false
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -40,6 +43,7 @@ export class CmSectionComponent implements OnInit {
     private messageService: MessageService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
+    private serviceProxy: ServiceProxy
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -53,6 +57,7 @@ export class CmSectionComponent implements OnInit {
     this.shownCriterias[0].push(true)
     this.shownSections.push(true)
 
+    if (this.isEditMode) this.isFirstLoading = true
 
     this.result = {
       sections: [
@@ -72,6 +77,14 @@ export class CmSectionComponent implements OnInit {
       ]
     }
 
+    await this.setInitialState()
+
+  }
+
+  async setInitialState() {
+    if (this.isEditMode) {
+      this.assessmentQuestions = await this.cMAssessmentQuestionControllerServiceProxy.getAssessmentQuestionsByAssessmentId(this.assessment.id).toPromise()
+    }
   }
 
   async getSections() {
@@ -114,6 +127,13 @@ export class CmSectionComponent implements OnInit {
         this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['answer'] = e.answer
       }
       this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['question'] = question
+      if (this.isEditMode) {
+        let q = this.assessmentQuestions.find(o => o.question.id === question.id)
+        if (q) {
+          this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['assessmentQuestionId'] = q.id
+          this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['assessmentAnswerId'] = q.assessmentAnswers[0].id
+        }
+      }
       this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['type'] = e.type
 
       if (criteria.questions.length === idx + 1 && !this.recievedQuestions.includes(idx)) {
@@ -173,7 +193,11 @@ export class CmSectionComponent implements OnInit {
             } else {
               this.message = this.defaultMessage
             }
-            this.visible = true
+            if (!this.isFirstLoading) {
+              this.visible = true
+            } else {
+              this.isFirstLoading = false
+            }
             this.shownCriterias[sectionIdx].splice(criteriaIdx + 1, this.shownCriterias[sectionIdx].length - (criteriaIdx + 1))
             this.shownSections.splice(sectionIdx + 1, this.shownSections.length - (sectionIdx + 1))
             this.isPassed = false
@@ -193,7 +217,11 @@ export class CmSectionComponent implements OnInit {
               this.result.sections[sectionIdx].criteria[criteriaIdx].questions.push({ id: idx + 1 })
             }
           } else {
-            this.visible = true
+            if (!this.isFirstLoading) {
+              this.visible = true
+            } else {
+              this.isFirstLoading = false
+            }
             if (message) {
               this.message = message
             } else {
@@ -213,10 +241,10 @@ export class CmSectionComponent implements OnInit {
   }
 
 
-  save(event: CMResultDto[]) {
+  save(event: SaveDto) {
     let result: SaveCMResultDto = new SaveCMResultDto()
     result.result = []
-    result.result = [...event]
+    result.result = [...event.result]
     this.result.sections.forEach((section: any) => {
       section.criteria.forEach((cr: any) => {
         cr.questions.forEach((q: any) => {
@@ -229,23 +257,43 @@ export class CmSectionComponent implements OnInit {
           item.question = q.question
           item.type = q.type
           item.filePath = q.file
-          result.result.push(item)
+          if (this.isEditMode){
+            let assQ = this.assessmentQuestions.find(o => (o.question.id === q.question?.id))
+            if (assQ) {
+              item.assessmentQuestionId = assQ.id
+              item.assessmentAnswerId = assQ.assessmentAnswers[0]?.id
+            }
+          }
+          if (item.question) result.result.push(item)
         })
       })
     })
     result.assessment = this.assessment
+    result.isDraft = event.isDraft
     this.cMAssessmentQuestionControllerServiceProxy.saveResult(result)
       .subscribe(res => {
         if (res) {
+          let message = ''
+          if (event.isDraft) {
+            message = 'Assessment saved successfully. You will be able to continue the assessment from the “In progress” menu'
+          } else {
+            message = 'Assessment created successfully'
+          }
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Assessment created successfully',
+            detail: message,
             closable: true,
           })
-          if (result.assessment.assessment_approach === 'DIRECT') {
-            this.router.navigate(['../carbon-market-tool-result'], { queryParams: { id: this.assessment.id }, relativeTo: this.activatedRoute });
+          if (event.isDraft) {
+            this.isEditMode = true
+            this.setInitialState()
+            this.router.navigate(['../carbon-market-tool/edit'], { queryParams: { id: this.assessment.id, isEdit: true }, relativeTo: this.activatedRoute });
+            // window.location.reload()
           }
+          if (result.assessment.assessment_approach === 'DIRECT' && !event.isDraft) {
+            this.router.navigate(['../carbon-market-tool/result'], { queryParams: { id: this.assessment.id }, relativeTo: this.activatedRoute });
+          } 
 
         }
       }, error => {
@@ -265,4 +313,9 @@ export class CmSectionComponent implements OnInit {
     throw new Error('Method not implemented.');
   }
 
+}
+
+export class SaveDto {
+  result: CMResultDto[]
+  isDraft: boolean = false
 }

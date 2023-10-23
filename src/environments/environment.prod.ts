@@ -13,6 +13,7 @@ export const environment = {
   baseUrlJsonFile: 'http://3.108.9.184:3600/filename',
   baseUrlAPIDocUploadAnonymousAPI: 'http://3.108.9.184/web-api/document/upload2',
   baseUrlExcelUpload:  'http://3.108.9.184/web-api/parameter/upload',
+  baseUrlPMU: 'http://3.108.9.184/pmu/login',
 };
 // baseUrlAPI: 'http://3.110.188.89:7080',
 /*
