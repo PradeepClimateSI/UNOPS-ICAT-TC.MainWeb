@@ -165,11 +165,11 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
     //   this.isEditMode = params['isEdit']
        // this.isEditMode = true
-        this.assessmentId = 857
-        this.isEditMode = true
+      //  this.assessmentId = 857
+      //  this.isEditMode = true
 
     // })
-  /*   if(this.isEditMode==false){
+     if(this.isEditMode==false){
       await this.getPolicies();
       await this.getAllImpactsCovered();
       await this.getCharacteristics();
@@ -189,24 +189,22 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       }
       
 
-    } */
+    } 
 
     //comment this
-    console.log(this.isEditMode,this.assessmentId)
+    /* console.log(this.isEditMode,this.assessmentId)
         this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
         this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
         this.outcomeData = await this.investorToolControllerproxy.getOutcomeData(this.assessmentId).toPromise();
         this.sdgDataSendArray2 = await this.investorToolControllerproxy.getScaleSDGData(this.assessmentId).toPromise();
         this.selectedSDGs = await this.investorToolControllerproxy.getSelectedSDGs(this.assessmentId).toPromise();
 
-    /*    this.selectedSDGs = [{id:5, name: "Gender Equality",number: 5}, 
-       {id:4, name: "Quality Education",number: 4}] */
         console.log("this.processData",this.processData,this.assessment)
         console.log("this.outcomeData",this.outcomeData)
         console.log("this.selectedSDGs", this.selectedSDGs)
         console.log("this.sdgDataSendArray2", this.sdgDataSendArray2)
         this.setFrom()
-        this.setTo()
+        this.setTo() */
     //upto this
 
    this.isSavedAssessment = true; this.tabLoading= true; // Need to remove  

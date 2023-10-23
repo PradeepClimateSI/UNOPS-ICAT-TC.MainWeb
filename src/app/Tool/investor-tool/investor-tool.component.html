@@ -624,7 +624,7 @@
                                                                 </div>
                                                                 <div class="col-4">
                                                                     <p-dropdown  
-                                                                    name="data.charData.relavance"
+                                                                    [name]="data.characteristics.name+ 'rel'"
                                                                     #rel="ngModel"
                                                                     placeholder="Select Relevance"
                                                                     [(ngModel)]="data.relavance"
@@ -713,7 +713,7 @@
                                                                 <label for="likelihood" >Likelihood*</label>
                                                                 <p-dropdown 
                                                                     appendTo="body"
-                                                                    name="data.charData.likelihood"
+                                                                    [name]="data.characteristics.name+ 'likelihood' "
                                                                     #likelihood2="ngModel" 
                                                                     placeholder="Select Likelihood"
                                                                     [(ngModel)]="data.likelihood"
@@ -740,7 +740,7 @@
                                                                 <input type="text" pInputText
                                                                     [(ngModel)]="data.likelihood_justification" #just1="ngModel"
                                                                     placeholder="Enter Justification"
-                                                                    name="data.charData.likelihood_justification" />
+                                                                    [name]="data.characteristics.name+ 'Justification' " />
                                                                     <p class="info-message text-danger" *ngIf="!data.likelihood_justification  && (fData1.submitted || just1.touched) ">
                                                                       This is a mandatory field </p>
 

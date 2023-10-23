@@ -1055,7 +1055,14 @@ console.log("wwwwww", this.outcomeData)
     }
     console.log("ppppp", this.processData)
   } */
-  onChangeRelevance(relevance : any , data : any){
+  touchedState: { [key: string]: boolean } = {};
+
+  onBlur(data: any) {
+    this.touchedState[data.characteristics.name] = true;
+  }
+
+  onChangeRelevance(relevance : any , data : any ){
+    this.touchedState[data.characteristics.name] = true;
     console.log("relevance", relevance)
     console.log("data22", data)
   
@@ -1064,6 +1071,8 @@ console.log("wwwwww", this.outcomeData)
       data.likelihood = null;
     }
   }
+
+
   
   getProductsData() {
     return [
