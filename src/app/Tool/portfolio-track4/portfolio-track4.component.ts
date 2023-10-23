@@ -159,7 +159,7 @@ export class PortfolioTrack4Component implements OnInit {
   tableData : any;
 
   async ngOnInit(): Promise<void> {
- this.load = false; //need to change as false
+ //this.load = false; //need to change as false
  //this.isSavedAssessment = true //need to change as false
 
 this.tableData =  this.getProductsData();
@@ -1055,7 +1055,25 @@ console.log("wwwwww", this.outcomeData)
     }
     console.log("ppppp", this.processData)
   } */
+  touchedState: { [key: string]: boolean } = {};
 
+  onBlur(data: any) {
+    this.touchedState[data.characteristics.name] = true;
+  }
+
+  onChangeRelevance(relevance : any , data : any ){
+    this.touchedState[data.characteristics.name] = true;
+    console.log("relevance", relevance)
+    console.log("data22", data)
+  
+     if(relevance == 0){
+      data.likelihood_justification = null;
+      data.likelihood = null;
+    }
+  }
+
+
+  
   getProductsData() {
     return [
         {
