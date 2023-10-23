@@ -20,6 +20,12 @@ interface ChaCategoryWeightTotal {
   [key: string]: number;
 }
 
+interface SelectedSDG {
+  id: number;
+  answer: string;
+  name: string;
+  number: number;
+}
 interface ChaCategoryTotalEqualsTo1 {
   [key: string]: boolean;
 }
@@ -63,8 +69,9 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   geographicalAreasCoveredArr: GeographicalAreasCoveredDto[] = []
 
   //Newww
+  
   sdgList : any = []
-  selectedSDGs : any = []
+  selectedSDGs : SelectedSDG[];
   sdgDataSendArray: any = [];
   sdgDataSendArray3: any= [];
   sdgDataSendArray4: any = [];
@@ -157,11 +164,12 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     //   this.assessmentId = params['id']
 
     //   this.isEditMode = params['isEdit']
-    //   // this.isEditMode = true
-    //   // this.assessmentId = 415
+       // this.isEditMode = true
+      //  this.assessmentId = 857
+      //  this.isEditMode = true
 
     // })
-    if(this.isEditMode==false){
+     if(this.isEditMode==false){
       await this.getPolicies();
       await this.getAllImpactsCovered();
       await this.getCharacteristics();
@@ -181,8 +189,25 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       }
       
 
-    }
-   //this.isSavedAssessment = true; this.tabLoading= true; // Need to remove  
+    } 
+
+    //comment this
+    /* console.log(this.isEditMode,this.assessmentId)
+        this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+        this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
+        this.outcomeData = await this.investorToolControllerproxy.getOutcomeData(this.assessmentId).toPromise();
+        this.sdgDataSendArray2 = await this.investorToolControllerproxy.getScaleSDGData(this.assessmentId).toPromise();
+        this.selectedSDGs = await this.investorToolControllerproxy.getSelectedSDGs(this.assessmentId).toPromise();
+
+        console.log("this.processData",this.processData,this.assessment)
+        console.log("this.outcomeData",this.outcomeData)
+        console.log("this.selectedSDGs", this.selectedSDGs)
+        console.log("this.sdgDataSendArray2", this.sdgDataSendArray2)
+        this.setFrom()
+        this.setTo() */
+    //upto this
+
+  // this.isSavedAssessment = true; this.tabLoading= true; // Need to remove  
   // this.isSavedAssessment = true // Need to remove  
   this.tableData =  this.getProductsData();
     this.categoryTabIndex =0;
@@ -948,7 +973,21 @@ showDialog(){
   console.log(this.barrierBox)  
 }
 
+onChangeRelevance(relevance : any , data : any){
+  console.log("relevance", relevance)
+  console.log("data22", data)
 
+  if(relevance == 0){
+    data.likelihood_justification = null;
+    data.likelihood = null;
+
+    for(let item of data.indicator_details){
+      item.value = null;
+      item.justification = null;
+    }
+
+  }
+}
 onUpload(event:UploadEvent, data : InvestorAssessment) {
   if(event.originalEvent.body){
     data.uploadedDocumentPath = event.originalEvent.body.fileName
