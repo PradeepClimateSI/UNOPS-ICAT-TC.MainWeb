@@ -9,35 +9,33 @@
         <div class="nav-bar py-2">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-8">
-                        <div class="row">
-                            <div class="col-8">
-                                <div class="row mb-2">
-                                    <div class="logo_img_w">
-                                        <img class="logo_img active_mod"
-                                            src="https://climateactiontransparency.org/wp-content/themes/custom/assets/i/logo/logo_yellow.svg"
-                                            alt="logo" height="45px" style="padding-right: 2%;" />
-                                        <img class="logo_img active_mod"
-                                            src="https://climateactiontransparency.org/wp-content/themes/custom/assets/i/logo/logo_text.svg"
-                                            alt="logo text" height="40px" />
-                                    </div>
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="row mb-2">
+                                <div class="logo_img_w">
+                                    <img class="logo_img active_mod"
+                                        src="https://climateactiontransparency.org/wp-content/themes/custom/assets/i/logo/logo_yellow.svg"
+                                        alt="logo" height="45px" style="padding-right: 2%;" />
+                                    <img class="logo_img active_mod"
+                                        src="https://climateactiontransparency.org/wp-content/themes/custom/assets/i/logo/logo_text.svg"
+                                        alt="logo text" height="40px" />
                                 </div>
                             </div>
-                            <div class="col-1"></div>
-                            <div class="col-3 d-flex justify-content-end align-items-center">
-                                <button class="btn btn-primary mx-2" style="font-size: medium" type="button"
-                                    (click)="toLogin()">
-                                    Register New User
-                                </button>
-                                <button class="btn btn-primary mx-2" style="font-size: medium" type="button"
-                                    (click)="toLogin()">
-                                    User Login
-                                </button>
-                                <button class="btn btn-primary mx-2" style="font-size: medium" type="button"
-                                    (click)="toPMU()">
-                                    ICAT PMU Login
-                                </button>
-                            </div>
+                        </div>
+                        <div class="col-1"></div>
+                        <div class="col-3 d-flex justify-content-end align-items-center">
+                            <button class="btn btn-primary mx-2" style="font-size: medium" type="button"
+                                (click)="toRegister()">
+                                Register New User
+                            </button>
+                            <button class="btn btn-primary mx-2" style="font-size: medium" type="button"
+                                (click)="toLogin()">
+                                User Login
+                            </button>
+                            <button class="btn btn-primary mx-2" style="font-size: medium" type="button"
+                                (click)="toPMU()">
+                                ICAT PMU Login
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -46,36 +44,32 @@
     </header>
 
     <main>
-        <section class="section-heighlight py-5">
-            <div class="banner">
+        <section id="contact-us" class="contact-us">
+            <div>
                 <div class="container row col-xxl-8 px-4 py-5 align-items-center m-auto">
-                    <div>
-                        <div class="container">
-                            <h2 class="text-center">
-                                ICAT <br>
-                                Transformational Change Assessment Tool <br>
-                                (ICAT TC Toolkit)
-                            </h2>
-                        </div>
-
-                    </div>
+                    <h2 class="text-center" style="color:white; background-color: rgba(0,0,0, 0.4); ">
+                        ICAT <br>
+                        Transformational Change Assessment Tool <br>
+                        (ICAT TC Toolkit)
+                    </h2>
                 </div>
             </div>
+
         </section>
         <section class="py-5" id="about-tool">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-6 card card-about">
                         <h2 class="text-center"><b>About the TC toolkit</b></h2>
-                        <h4 class="text-center" style="color:black">The ICAT Transformational Change Assessment Tool is
+                        <h3 class="text-center" style="color:black">The ICAT Transformational Change Assessment Tool is
                             a digital soloution
                             that aids users in evaluating the potential or realized effects of
                             policies and actions (interventions) on Transformational Change.
-                        </h4>
+                        </h3>
                     </div>
                     <div class="col-md-6">
                         <div>
-                            <img src="../../assets/images/hero-image.jpg" class="d-block mx-lg-auto img-fluid"
+                            <img src="./assets/images/home.png" class="d-block mx-lg-auto img-fluid"
                                 alt="Bootstrap Themes" width="700" height="300" loading="lazy" />
                         </div>
                     </div>
@@ -84,39 +78,43 @@
 
 
         </section>
-        <section class="section-heighlight py-5" id="tool">
+        <section class="section-heighlight py-5" id="tool"
+            style="background-image: url(./assets/images/land001.jpg);  background-position: center; ">
             <div class="container">
                 <div class="row">
                     <div>
-                        <h2 class="text-center">There are three main tools in TC Toolkit</h2>
+                        <h2 class="text-center" style="color:white;">There are three main tools in TC Toolkit</h2>
                     </div>
-                <br/><br><br>
-                    <div style="padding: 50px;  border: 2px solid red; margin-top: 15px;">
-                        <h3 class="text-center">Carbon Market Tool</h3>
-                        <h4>Assess Transformational Change impact of the Carbon Market interventions</h4>
+                    <br /><br><br>
+                    <div style="padding: 50px;  border: 2px solid white; margin-top: 15px;">
+                        <h2 class="text-center" style="color:white;">Carbon Market Tool</h2>
+                        <h3 style="color:white;">Assess Transformational Change impact of the Carbon Market
+                            interventions</h3>
                     </div>
-                    <br/><br><br>
-                    <div style="padding: 50px;  border: 2px solid red;margin-top: 15px;">
-                        <h3 class="text-center">Investor & Private Sector Tool</h3>
-                        <h4>Assess Transformational Change impact of the investment interventions</h4>
+                    <br /><br><br>
+                    <div style="padding: 50px;  border: 2px solid white;margin-top: 15px;">
+                        <h2 class="text-center" style="color:white;">Investor & Private Sector Tool</h2>
+                        <h3 style="color:white;">Assess Transformational Change impact of the investment interventions
+                        </h3>
                     </div>
                     <br>
-                    <div style="padding: 50px;  border: 2px solid red;margin-top: 15px;">
-                        <h3 class="text-center">Other Intervention Tool</h3>
-                        <h4>Assess Transformational Change impact of the other types of interventions</h4>
+                    <div style="padding: 50px;  border: 2px solid white;margin-top: 15px;">
+                        <h2 class="text-center" style="color:white;">Other Intervention Tool</h2>
+                        <h3 style="color:white;">Assess Transformational Change impact of the other types of
+                            interventions</h3>
                     </div>
                 </div>
             </div>
         </section>
-        <section class="section-heighlight py-5" id="Case-studies">
+        <section class="case-studies " id="case-studies">
             <div class="container">
-                <div class="row">
+                <div class="row" >
                     <div class="col-md-12">
-                        <h2 class="text-center">Get started with TC Toolkit</h2>
-                        <h5 class="text-center">ICAT TC Toolkit is a free software.If you are interested in using TC
-                            Toolkit and wish to
-                            learn more about the tool and its potential application, please contact the ICAT
-                            Secretariat:
+                        <h2 class="text-center" style="color:white; background-color: rgba(0,0,0, 0.4);">Get started with TC Toolkit</h2>
+                        <h5 class="text-center" style="color:white; background-color: rgba(0,0,0, 0.4);">ICAT TC Toolkit is a free software.If you are
+                            interested in using TC
+                            Toolkit and wish to learn more about the tool and its potential application, please contact
+                            the ICAT Secretariat:
                             <a href="mailto:icat@unops.org">icat@unops.org</a>
                         </h5>
                     </div>
@@ -126,22 +124,42 @@
     </main>
 </body>
 <footer class="main-footer py-3">
-    <div class="container">
         <div class="row">
 
-            <div class="col-md-7 mb-3">
-                <h5 class="text-center"> Technical Partners</h5>
+            <div class="col-md-7 mb-3" style=" border: 2px solid rgba(0,0,0, 0.4); border-right-color: white;">
+                <h5 class="text-center" style=" background-color: rgba(0,0,0, 0.4);"> Technical Partners</h5>
                 <div class="row">
+                <div  class="col-1 mb-2">
+
+                </div>
                     <div class="col-3 mb-2">
                         <a href="https://climatesi.com/" target="_blank">
                             <img src="./assets/images/climateSILogo.png" class="developed-logo" />
                         </a>
                     </div>
+                    <div class="col-2 mb-2">
+                        <a href="" target="_blank">
+                            <img src="./assets/images/logo22.png" class="developed-logo" />
+                        </a>
+                    </div>
+                    <div class="col-2 mb-2">
+                        <a href="" target="_blank">
+                            <img src="./assets/images/logo33.png" class="developed-logo" />
+                        </a>
+                    </div>
+                    <div class="col-2 mb-2">
+                        <a href="" target="_blank">
+                            <img src="./assets/images/logo11.png" class="developed-logo" />
+                        </a>
+                    </div>
                 </div>
                 <div class="row">
-                    <div class="col-12">
+                    <div  class="col-1 mb-2">
+
+                    </div>
+                    <div class="col-11">
                         <p style="color: white; font-size: small;">
-                            The development of TC Toolkit was supported by
+                            The development of TC Toolkit <br> was supported by
                             <a href="https://www.climatesi.com/index.php" target="_blank"><u>Climate SI</u></a>
                         </p>
                     </div>
@@ -149,9 +167,9 @@
             </div>
             <div class="col-md-5 mb-8">
                 <div class="row">
-                    <div class="col-md-8">
-                        <h5> Contact Us</h5>
-                        <div class="row">
+                    <div class="col-md-7">
+                        <h5 style=" background-color: rgba(0,0,0, 0.4);"> Contact Us</h5>
+                        <div class="row" >
                             <div class="col-12">
                                 <a href="mailto:icat@unops.org"><small>Email : </small></a>
                                 <a href="mailto:icat@unops.org"><small>icat@unops.org</small> </a>
@@ -167,18 +185,29 @@
                             </div>
                         </div>
                         <div class="mb-8"></div>
-                        <h5> <small>ICAT TC @ 2023 All right reserved</small></h5>
+                        <h5 style=" background-color: rgba(0,0,0, 0.4);"> <small>ICAT TC @ 2023 All right reserved</small></h5>
                     </div>
                     <div class="col-md-4">
-                        <div class="row">
-                            <div class="row mb-2">
-                                <div style="background-color: #fff" class="col-md-3">
-                                    <img src="https://climateactiontransparency.org/wp-content/themes/custom/assets/i/logo/logo_purple.svg"
-                                        alt="logo" height="30px" />
+                        <div class="row" style="background-color: #fff">
+                            <div class="col-md-4">
+                                <div class="logo_img_w">
+                                    <img class="logo_img active_mod"
+                                        src="https://climateactiontransparency.org/wp-content/themes/custom/assets/i/logo/logo_yellow.svg"
+                                        alt="logo" height="30px" style="padding-right: 1%;" />
                                 </div>
-                                <div style="background-color: #fff" class="col-md-9">
-                                    <img src="https://climateactiontransparency.org/wp-content/themes/custom/assets/i/logo/logo_text.svg"
-                                        alt="logo text" height="23px" />
+                            </div>
+                            <div class="col-md-7">
+                                <div class="logo_img_w">
+                                    <img class="logo_img active_mod" style="background-color: #fff"
+                                        src="https://climateactiontransparency.org/wp-content/themes/custom/assets/i/logo/logo_text.svg"
+                                        alt="logo text" height="30px" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="row mb-2" style="background-color: #fff">
+
                                 </div>
                             </div>
                         </div>
@@ -186,7 +215,7 @@
 
                 </div>
             </div>
-        </div>
+        <!-- </div> -->
     </div>
 </footer>
 

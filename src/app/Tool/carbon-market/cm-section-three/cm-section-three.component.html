@@ -14,18 +14,26 @@
                             <label for="Description">Relevance *</label>
                         </div>
                         <div class="col-5">
-                            <p-dropdown name="data.charData.relavance" #type="ngModel" placeholder="Select Relevance"
+                            <p-dropdown name="data_charData_relavance" #data_charData_relavance="ngModel" placeholder="Select Relevance"
                                 [(ngModel)]="char.relevance" [options]="relevance" optionLabel="name" appendTo="body"
-                                optionValue="value" [required]="true"></p-dropdown>
+                                optionValue="value" [required]="true" (onChange)="onRelevanceChange($event, char)"></p-dropdown>
                         </div>
+                        <p class="info-message text-danger" *ngIf="
+                                char.relevance === undefined &&
+                                (nextClicked || data_charData_relavance.touched)
+                              ">
+                                This is a mandatory field
+                            </p>
                     </div>
                     <br>
-                    <p><strong>{{char.main_question}}</strong></p>
-                    <br>
-                    <p><strong><u>Guiding Question(s)</u></strong></p>
-                    <div *ngFor="let question of char.questions">
-                        <app-cm-question [question]="question" [approach]="approach" [assessmentquestions]="assessmentquestions" [isEditMode]="isEditMode"
-                            (prev_answer)="onAnswer($event, question, char)"></app-cm-question>
+                    <div *ngIf="char.relevance !== 0">
+                        <p><strong>{{char.main_question}}</strong></p>
+                        <br>
+                        <p><strong><u>Guiding Question(s)</u></strong></p>
+                        <div *ngFor="let question of char.questions">
+                            <app-cm-question [question]="question" [approach]="approach" [assessmentquestions]="assessmentquestions" [isEditMode]="isEditMode"
+                                (prev_answer)="onAnswer($event, question, char)"></app-cm-question>
+                        </div>
                     </div>
                 </ng-container>
                 <div class="row justify-content-end">
@@ -311,7 +319,7 @@
                         <div class="row p-2">
                             <div class="col-4">Aggregated Answer</div>
                             <div class="col-8">
-                                <input type="text" name="ghgScore" #tboundrary="ngModel" disabled="true"
+                                <input type="text" name="adaptationScore" #tboundrary="ngModel" disabled="true"
                                     [(ngModel)]="adaptationScore" class="form-control" />
                             </div>
                         </div>

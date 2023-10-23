@@ -4,7 +4,7 @@ import { MasterDataService } from 'app/shared/master-data.service';
 import { SelectedScoreDto } from 'app/shared/score.dto';
 import { environment } from 'environments/environment';
 import { MessageService } from 'primeng/api';
-import { CMAssessmentQuestion, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, ScoreDto } from 'shared/service-proxies/service-proxies';
+import { CMAnswer, CMAssessmentQuestion, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, ScoreDto } from 'shared/service-proxies/service-proxies';
 
 
 interface UploadEvent {
@@ -71,6 +71,7 @@ export class CmSectionThreeComponent implements OnInit {
   selectedSDGsList: PortfolioSdg[];
   categoriesToSave: string[] = []
   isDraftSaved: boolean = false
+  nextClicked: boolean;
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -132,7 +133,7 @@ export class CmSectionThreeComponent implements OnInit {
           sdgs.push(o.selectedSdg)
         }
       })
-      this.selectedSDGsList = [...new Map(sdgs.map(item =>[item['name'], item])).values()];
+      this.selectedSDGsList = [...new Map(sdgs?.map(item =>[item['name'], item])).values()];
       this.onSelectSDG({})
 
       await Promise.all(
@@ -142,7 +143,7 @@ export class CmSectionThreeComponent implements OnInit {
               cat.characteristics.map((char: any) => {
                 let assQ = this.assessmentquestions.find(o => o.characteristic.id === char.id)
                 if (assQ) {
-                  let rel = this.relevance.find(o => o.value.toString() === assQ?.relevance)
+                  let rel = this.relevance.find(o => o.value === assQ?.relevance)
                   char.relevance = rel?.value
                 }
                 return char
@@ -159,6 +160,7 @@ export class CmSectionThreeComponent implements OnInit {
                   res.sdgIndicator = assQ.sdgIndicator
                   res.adaptationCoBenifit = assQ.adaptationCoBenifit
                   res.assessmentQuestionId = assQ.id
+                  res.filePath = assQ.uploadedDocumentPath
                   let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0]?.selectedScore, res.characteristic)
                   if (score) {
                     res.selectedScore = score
@@ -171,8 +173,8 @@ export class CmSectionThreeComponent implements OnInit {
         })
       )
       await Promise.all(
-        this.selectedSDGs.map((sdl: any) => {
-          sdl.scaleResult.map((sc: any) => {
+        this.selectedSDGs = this.selectedSDGs.map((sdl: any) => {
+          sdl.scaleResult = sdl.scaleResult.map((sc: any) => {
             let assQ = this.assessmentquestions.find(o => (o.characteristic.id === sc.characteristic.id) && (o.selectedSdg.id === sc.selectedSdg.id) )
             if (assQ) {
               sc.sdgIndicator = assQ.sdgIndicator
@@ -180,22 +182,29 @@ export class CmSectionThreeComponent implements OnInit {
               sc.expectedImpact = assQ.expectedImpact
               sc.comment = assQ.comment
               sc.assessmentQuestionId = assQ.id
+              sc.filePath = assQ.uploadedDocumentPath
+              sc.selectedSdg = assQ.selectedSdg
               let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, sc.characteristic)
               if (score) sc.selectedScore = score
             }
+            return sc
           })
-          sdl.sustainResult.map((sc: any) => {
+          sdl.sustainResult = sdl.sustainResult.map((sc: any) => {
             let assQ = this.assessmentquestions.find(o => (o.characteristic.id === sc.characteristic.id) && (o.selectedSdg.id === sc.selectedSdg.id))
             if (assQ) {
               sc.comment = assQ.comment
               sc.assessmentQuestionId = assQ.id
+              sc.filePath = assQ.uploadedDocumentPath
+              sc.selectedSdg = assQ.selectedSdg
               let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, sc.characteristic)
               if (score) {
                 sc.selectedScore = score
                 this.onSelectScore({}, sc, 2)
               }
             }
+            return sc
           })
+          return sdl
         })
       )
     }
@@ -233,6 +242,7 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   async onCategoryTabChange(event: any) {
+    this.nextClicked = false
     this.categoryTabIndex = event.index;
   }
 
@@ -250,38 +260,54 @@ export class CmSectionThreeComponent implements OnInit {
         })
       }
     })
-    this.selectedSDGs = this.selectedSDGsList.map(sdg => {
-      let pSdg = new PortfolioSdg()
-      pSdg.id = sdg.id
-      pSdg.name = sdg.name
-      let res: CMResultDto[] = scaleResults.map((o: any) => {
-        let _r = new CMResultDto()
-        Object.keys(_r).forEach(e => {
-          _r[e] = o[e]
-        })
-        _r.selectedSdg = pSdg
-        _r.isSDG = true
-        return _r
-      })
-      let res2: CMResultDto[] = sustainResults.map((o: any) => {
-        let _r = new CMResultDto()
-        Object.keys(_r).forEach(e => {
-          _r[e] = o[e]
-        })
-        _r.selectedSdg = pSdg
-        _r.isSDG = true
-        return _r
-      })
 
-      let _sdg: SDG = {
-        name: sdg.name,
-        code: (sdg.name.replace(/ /g, '')).toUpperCase(),
-        number: sdg.number,
-        scaleResult: res,
-        sustainResult: res2
+    let deSelected = this.selectedSDGs?.filter(sd => !this.selectedSDGsList?.find(o => o.id === sd.id))
+
+    if (deSelected && deSelected.length > 0) {
+      for (let de of deSelected) {
+        this.selectedSDGs.splice(this.selectedSDGs.findIndex(o => o.id === de.id))
       }
-      return _sdg
-    })
+    }
+
+    let newSdgs = this.selectedSDGsList.filter(sd => !this.selectedSDGs?.find(o => o.id === sd.id))
+
+    if (newSdgs && newSdgs.length > 0) {
+      let mappedSdgs = newSdgs.map(sdg => {
+        let pSdg = new PortfolioSdg()
+        pSdg.id = sdg.id
+        pSdg.name = sdg.name
+        let res: CMResultDto[] = scaleResults.map((o: any) => {
+          let _r = new CMResultDto()
+          Object.keys(_r).forEach(e => {
+            _r[e] = o[e]
+          })
+          _r.selectedSdg = pSdg
+          _r.isSDG = true
+          return _r
+        })
+        let res2: CMResultDto[] = sustainResults.map((o: any) => {
+          let _r = new CMResultDto()
+          Object.keys(_r).forEach(e => {
+            _r[e] = o[e]
+          })
+          _r.selectedSdg = pSdg
+          _r.isSDG = true
+          return _r
+        })
+  
+        let _sdg: SDG = {
+          name: sdg.name,
+          code: (sdg.name.replace(/ /g, '')).toUpperCase(),
+          id: sdg.id,
+          number: sdg.number,
+          scaleResult: res,
+          sustainResult: res2
+        }
+        return _sdg
+      })
+      if (this.selectedSDGs) this.selectedSDGs.push(...mappedSdgs) 
+      else this.selectedSDGs = mappedSdgs
+    }
   }
 
   onCategoryTabChange2($event: any) {
@@ -289,6 +315,7 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   next(category: string, characteristics?: any[]) {
+    this.nextClicked = true
     if (!this.isDraftSaved) {
       this.categoriesToSave.push(category)
     } else this.isDraftSaved = !this.isDraftSaved
@@ -339,14 +366,14 @@ export class CmSectionThreeComponent implements OnInit {
           })
         })
         this.SDGScore = Math.round(score / 6 / this.selectedSDGs.length)
-      } else if (char.characteristic.category.code === 'ADAPTATION') {
+      } else if (char.characteristic.category.code === 'SUSTAINED_ADAPTATION') {
         let score = 0
         this.outcome.forEach((category: OutcomeCategory) => {
           category.results.forEach((result) => {
             if (result.selectedScore.value) score = score + result.selectedScore.value
           })
         })
-        this.GHGScore = Math.round(score / 6)
+        this.adaptationScore = Math.round(score / 6)
       }
     }
   }
@@ -374,6 +401,7 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   async submit(draftCategory: string, isDraft: boolean = false) {
+    this.nextClicked = true
     this.results = []
     this.categoriesToSave.push(draftCategory)
     let save_process: boolean = false
@@ -406,14 +434,18 @@ export class CmSectionThreeComponent implements OnInit {
             }
             res.type = this.approach
             if (this.isEditMode){
-              let assQ = this.assessmentquestions.find(o => (o.characteristic.id === char.id) && (o.question.id === q.id))
+              let assQ = this.assessmentquestions.find(o => (o.characteristic.id === char.id) && (o.question.id === q.id || o.relevance === 0))
               if (assQ) {
                 res.assessmentQuestionId = assQ.id
-                res.assessmentAnswerId = assQ.assessmentAnswers[0].id
+                res.assessmentAnswerId = assQ.assessmentAnswers[0]?.id
               }
             }
             res.selectedSdg = new PortfolioSdg()
-            this.results.push(res)
+            if (res.question.id) {
+              this.results.push(res)
+            } else if (res.relevance === 0 && !res.assessmentQuestionId) {
+              this.results.push(res)
+            }
           }
         }
       }
@@ -448,7 +480,9 @@ export class CmSectionThreeComponent implements OnInit {
                   res.assessmentAnswerId = assQ.assessmentAnswers[0].id
                 }
               }
-              this.results.push(res)
+              if (res.selectedScore.name) {
+                this.results.push(res)
+              }
             }
           })
         }
@@ -473,7 +507,9 @@ export class CmSectionThreeComponent implements OnInit {
                   res.assessmentAnswerId = assQ.assessmentAnswers[0].id
                 }
               }
-              this.results.push(res)
+              if (res.selectedScore.name) {
+                this.results.push(res)
+              }
             }
           })
         }
@@ -518,7 +554,9 @@ export class CmSectionThreeComponent implements OnInit {
                 res.isSDG = false
                 res.isAdaptation = false
                 res.isGHG = true
-                this.results.push(res)
+                if (res.selectedScore.name) {
+                  this.results.push(res)
+                }
               }
             })
           }
@@ -550,7 +588,9 @@ export class CmSectionThreeComponent implements OnInit {
                 res.isSDG = false
                 res.isAdaptation = true
                 res.isGHG = false
-                this.results.push(res)
+                if (res.selectedScore.name) {
+                  this.results.push(res)
+                }
               }
             })
           }
@@ -586,6 +626,9 @@ export class CmSectionThreeComponent implements OnInit {
       return false
     }
   }
+
+  onRelevanceChange(event: any, characteristic: any) {
+  }
 }
 
 
@@ -599,6 +642,7 @@ export interface SDG {
   name: string
   code: string
   number: number
+  id: number
   scaleResult: CMResultDto[]
   sustainResult: CMResultDto[]
 }

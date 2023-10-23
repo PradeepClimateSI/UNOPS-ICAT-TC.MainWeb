@@ -99,7 +99,11 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
   }
 
   toLogin() {
-    this.router.navigate(['/login']);
+    this.router.navigate(['/auth/login']);
+  }
+
+  toRegister(){
+    this.router.navigate(['/auth/register-user']);
   }
 
   public navigateToSection(section: string) {

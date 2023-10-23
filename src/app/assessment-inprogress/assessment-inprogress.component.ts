@@ -31,7 +31,7 @@ export class AssessmentInprogressComponent implements OnInit {
     private router: Router,
     private serviceProxy: ServiceProxy,
     private assessmentProxy: AssessmentControllerServiceProxy,
-    private masterDataService: MasterDataService,
+    public masterDataService: MasterDataService,
   ) { }
 
 
@@ -43,14 +43,10 @@ export class AssessmentInprogressComponent implements OnInit {
     this.loadgridData(event);
   }
 
-getTool(code:string){
-  this.masterDataService.getToolName(code)
-}
   loadgridData = (event: LazyLoadEvent) => {
     let filterText = this.searchBy.text ? this.searchBy.text : '';
     let pageNumber = event.first === 0 || event.first === undefined ? 1 : (event.first / (event.rows === undefined ? 10 : event.rows)) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
-    console.log('event Date', event);
 
     this.assessmentProxy.assessmentInprogress(pageNumber,this.rows,filterText).subscribe(res => {
         this.assesments=res.items;
@@ -69,9 +65,8 @@ getTool(code:string){
   }
 
   detail(assessment: Assessment) {
-    console.log("climateactions", assessment)
     if (assessment.tool =="CARBON_MARKET"){
-      this.router.navigate(['app/carbon-market-tool'], {  
+      this.router.navigate(['app/carbon-market-tool/edit'], {  
       queryParams: { id: assessment.id,isEdit:assessment.isDraft},  
       });
     }

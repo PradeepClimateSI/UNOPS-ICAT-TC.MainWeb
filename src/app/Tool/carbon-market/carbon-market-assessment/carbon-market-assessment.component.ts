@@ -164,6 +164,8 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
     this.assessment.assessment_approach = 'DIRECT'
     this.isStageDisble =true;
+    if (!this.assessment.id) this.assessment.createdOn = moment(new Date())
+    this.assessment.editedOn = moment(new Date())
 
     if (form.valid) {
       this.methodologyAssessmentControllerServiceProxy.saveAssessment(this.assessment)
@@ -294,6 +296,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
 
   pushBarriers(barrier:any){
     this.finalBarrierList.push(barrier)
+    this.barrierSelected = new BarrierSelected()
   
   }
   barriersNameArray(Characteristics:any[]){

@@ -87,6 +87,7 @@ export class PortfolioTrack4Component implements OnInit {
     type: string,
     CategoryName: string,
     categoryID: number,
+    isValidated:boolean|null
     data: InvestorAssessment[]
   }[] = [];
 
@@ -94,6 +95,7 @@ export class PortfolioTrack4Component implements OnInit {
     type: string,
     CategoryName: string,
     categoryID: number,
+    isValidated:boolean|null
     data: InvestorAssessment[]
   }[] = [];
   //class variable
@@ -125,6 +127,8 @@ export class PortfolioTrack4Component implements OnInit {
   sectorsJoined :string='';
   finalSectors:Sector[]=[];
   isStageDisble:boolean=false;
+  isValidSCaleSD: boolean;
+  isValidSustainedSD: boolean;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -359,7 +363,8 @@ this.tableData =  this.getProductsData();
         if (x.type === 'process') {
           this.processData.push({
             type: 'process', CategoryName: x.name, categoryID: x.id,
-            data: categoryArray
+            data: categoryArray,
+            isValidated: null
           })
 
 
@@ -371,7 +376,8 @@ this.tableData =  this.getProductsData();
 
           this.outcomeData.push({
             type: 'outcome', CategoryName: x.name, categoryID: x.id,
-            data: categoryArray
+            data: categoryArray,
+            isValidated: null
           })
 
           if(x.name === 'SDG Scale of the Outcome'){
@@ -413,6 +419,8 @@ this.tableData =  this.getProductsData();
 
     this.assessment.tool = 'PORTFOLIO'
     this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
+    if (!this.assessment.id) this.assessment.createdOn = moment(new Date())
+    this.assessment.editedOn = moment(new Date())
 
     if (form.valid) {
       this.methodologyAssessmentControllerServiceProxy.saveAssessment(this.assessment)
@@ -821,22 +829,27 @@ console.log("wwwwww", this.outcomeData)
   //   }
 
   // }
-   next(data:any[],type:string){
-  // console.log("category",data)
+  next(data:{
+    
+    isValidated:boolean|null
+    data: any[],
+
+  },type:string){
+    data.isValidated = false;
+  console.log("category",data,type)
   // data?.filter(investorAssessment => console.log(investorAssessment.relavance,investorAssessment.relavance == 0))
-  if((data?.filter(investorAssessment => 
+  if((data.data?.filter(investorAssessment => 
       (investorAssessment.relavance !== undefined) && 
       (investorAssessment.likelihood !== undefined) && 
-      (investorAssessment.likelihood_justification !== undefined) || 
-      (investorAssessment.relavance == 0))?.length === data?.length && type=='process')||
-      (data?.filter(investorAssessment => 
+      (investorAssessment.likelihood_justification !== undefined) || (investorAssessment.relavance == 0))?.length === data?.data?.length && type=='process')||
+      (data?.data.filter(investorAssessment => 
         (investorAssessment.justification !== undefined) 
-       )?.length === data?.length && type=='outcome')||
-      (data?.filter(sdg => 
+       )?.length === data?.data.length && type=='outcome')||
+      (data?.data.filter(sdg => 
         (sdg.data?.filter((data: { justification: undefined; } ) =>
           (data.justification!== undefined))?.length === (sdg.data?.length)
-        ))?.length === data?.length && type=='sdg')) {
-    
+        ))?.length === data?.data.length && type=='sdg')) {
+          data.isValidated = true;
     if(this.activeIndexMain ===1 ){
 
       this.activeIndex2 =this.activeIndex2+1;
@@ -862,7 +875,64 @@ console.log("wwwwww", this.outcomeData)
       closable: true,
     });
   }
-   
+    // if(!this.mainTabIndexArray.includes(this.activeIndex)){
+    //   console.log("mainTabIndexArray",this.mainTabIndexArray)
+    //   this.isLikelihoodDisabled=false;
+    //   this.isRelavanceDisabled=false;
+    // }
+    // if (this.mainTabIndexArray.includes(this.activeIndex)) {
+
+    //   this.isLikelihoodDisabled=true;
+    //   this.isRelavanceDisabled=true;
+    // }
+  }
+  nextSDG(data:any[],type:string){
+    console.log("category",data,type)
+    if(type=='scaleSD'){
+      this.isValidSCaleSD = false
+    }
+    if(type=='sustainedSD'){
+      this.isValidSustainedSD = false
+    }
+    console.log("category",this.isValidSCaleSD,this.isValidSustainedSD)
+    // this.isValidSustainedSD = false
+    if((data?.filter(sdg => 
+        (sdg.data?.filter((data: { justification: undefined; } ) =>
+          (data.justification!== undefined))?.length === (sdg.data?.length)
+        ))?.length === data?.length )) {
+          // data.isValidated = true;
+          this.isValidSCaleSD=true
+          if(type=='scaleSD'){
+            this.isValidSCaleSD = true
+          }
+           if(type=='sustainedSD'){
+            this.isValidSustainedSD = true
+          }
+    if(this.activeIndexMain ===1 ){
+
+      this.activeIndex2 =this.activeIndex2+1;
+      console.log( "activeIndex2",this.activeIndex2)
+
+    }
+    if (this.activeIndex === 3 && this.activeIndexMain !== 1) {
+      this.activeIndexMain = 1;
+      this.activeIndex2=0;
+
+    }
+    if (this.activeIndex<=2 && this.activeIndex>=0 && this.activeIndexMain===0){
+      this.activeIndex =this.activeIndex +1;
+      console.log( this.activeIndex)
+
+    }
+    // return true
+  }else{
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Please fill all mandotory fields',
+      closable: true,
+    });
+  }
   }
 
   getCategory(characteristics: any, category: any) {
@@ -1053,8 +1123,14 @@ console.log("wwwwww", this.outcomeData)
     }
     console.log("ppppp", this.processData)
   } */
+  touchedState: { [key: string]: boolean } = {};
 
-  onChangeRelevance(relevance : any , data : any){
+  onBlur(data: any) {
+    this.touchedState[data.characteristics.name] = true;
+  }
+
+  onChangeRelevance(relevance : any , data : any ){
+    this.touchedState[data.characteristics.name] = true;
     console.log("relevance", relevance)
     console.log("data22", data)
   
@@ -1064,6 +1140,8 @@ console.log("wwwwww", this.outcomeData)
     }
   }
 
+
+  
   getProductsData() {
     return [
         {

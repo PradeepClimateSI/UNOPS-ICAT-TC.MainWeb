@@ -371,23 +371,23 @@ export class MasterDataService {
     ]
 
     this.SDGs= [
-      {name: 'No poverty', number: 1, code: 'NO_POVERTY', scaleResult: [], sustainResult: []},
-      {name: 'Zero hunger', number: 2, code: 'ZERO_HUNGER', scaleResult: [], sustainResult: []},
-      {name: 'Good health and well-being', number: 3, code: 'GOOD_HEALTH_AND_WELL_BEING', scaleResult: [], sustainResult: []},
-      {name: 'Quality education', number: 4, code: 'QULITY_EDUCATION', scaleResult: [], sustainResult: []},
-      {name: 'Gender equality', number: 5, code: 'GENDER_EQUALITY', scaleResult: [], sustainResult: []},
-      {name: 'Clean water and sanitation', number: 6, code: 'CLEAN_WATER_AND_SANITATION', scaleResult: [], sustainResult: []},
-      {name: 'Affordable and clean energy', number: 7, code: 'AFFORDABLE_AND_CLEAN_ENERGY', scaleResult: [], sustainResult: []},
-      {name: 'Decent work and economic growth', number: 8, code: 'DECENT_WORK_AND_ECONOMIC_GROWTH', scaleResult: [], sustainResult: []},
-      {name: 'Industry innovation and infrastructure', number: 9, code: 'INDUSTRY_INNOVATION_AND_INFRASTRUCTURE', scaleResult: [], sustainResult: []},
-      {name: 'Reduced inequalities', number: 10, code: 'REDUCED_INEQUALITIES', scaleResult: [], sustainResult: []},
-      {name: 'Sustainable cities and communities', number: 11, code: 'SUSTAINABLE_CITIES_AND_COMMUNIIES', scaleResult: [], sustainResult: []},
-      {name: 'Responsible consumption and production', number: 12, code: 'RESPONSIBLE_CONSUMPTION_AND_PRODUCTION', scaleResult: [], sustainResult: []},
-      {name: 'Climate action', number: 13, code: 'CLIMATE_ACTION', scaleResult: [], sustainResult: []},
-      {name: 'Life below water', number: 14, code: 'LIFE_BELOW_WATER', scaleResult: [], sustainResult: []},
-      {name: 'Life on land', number: 15, code: 'LIFE_ON_LAND', scaleResult: [], sustainResult: []},
-      {name: 'Peace, justice and strong institutions', number: 16, code: 'PEACE_JUSTICE_AND_STRING_INSTITUTIONS', scaleResult: [], sustainResult: []},
-      {name: 'Partnerships for the goals', number: 17, code: 'PARTNERSHIPS_FOR_THE_GOALS', scaleResult: [], sustainResult: []}
+      {id: 1, name: 'No poverty', number: 1, code: 'NO_POVERTY', scaleResult: [], sustainResult: []},
+      {id: 2, name: 'Zero hunger', number: 2, code: 'ZERO_HUNGER', scaleResult: [], sustainResult: []},
+      {id: 3, name: 'Good health and well-being', number: 3, code: 'GOOD_HEALTH_AND_WELL_BEING', scaleResult: [], sustainResult: []},
+      {id: 4, name: 'Quality education', number: 4, code: 'QULITY_EDUCATION', scaleResult: [], sustainResult: []},
+      {id: 5, name: 'Gender equality', number: 5, code: 'GENDER_EQUALITY', scaleResult: [], sustainResult: []},
+      {id: 6, name: 'Clean water and sanitation', number: 6, code: 'CLEAN_WATER_AND_SANITATION', scaleResult: [], sustainResult: []},
+      {id: 7, name: 'Affordable and clean energy', number: 7, code: 'AFFORDABLE_AND_CLEAN_ENERGY', scaleResult: [], sustainResult: []},
+      {id: 8, name: 'Decent work and economic growth', number: 8, code: 'DECENT_WORK_AND_ECONOMIC_GROWTH', scaleResult: [], sustainResult: []},
+      {id: 9, name: 'Industry innovation and infrastructure', number: 9, code: 'INDUSTRY_INNOVATION_AND_INFRASTRUCTURE', scaleResult: [], sustainResult: []},
+      {id: 10, name: 'Reduced inequalities', number: 10, code: 'REDUCED_INEQUALITIES', scaleResult: [], sustainResult: []},
+      {id: 11, name: 'Sustainable cities and communities', number: 11, code: 'SUSTAINABLE_CITIES_AND_COMMUNIIES', scaleResult: [], sustainResult: []},
+      {id: 12, name: 'Responsible consumption and production', number: 12, code: 'RESPONSIBLE_CONSUMPTION_AND_PRODUCTION', scaleResult: [], sustainResult: []},
+      {id: 13, name: 'Climate action', number: 13, code: 'CLIMATE_ACTION', scaleResult: [], sustainResult: []},
+      {id: 14, name: 'Life below water', number: 14, code: 'LIFE_BELOW_WATER', scaleResult: [], sustainResult: []},
+      {id: 15, name: 'Life on land', number: 15, code: 'LIFE_ON_LAND', scaleResult: [], sustainResult: []},
+      {id: 16, name: 'Peace, justice and strong institutions', number: 16, code: 'PEACE_JUSTICE_AND_STRING_INSTITUTIONS', scaleResult: [], sustainResult: []},
+      {id: 17, name: 'Partnerships for the goals', number: 17, code: 'PARTNERSHIPS_FOR_THE_GOALS', scaleResult: [], sustainResult: []}
     ]
 
     this.tools = [
