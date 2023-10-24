@@ -14,25 +14,36 @@
                             <label for="Description">Relevance *</label>
                         </div>
                         <div class="col-5">
-                            <p-dropdown name="data.charData.relavance" #type="ngModel" placeholder="Select Relevance"
+                            <p-dropdown name="data_charData_relavance" #data_charData_relavance="ngModel" placeholder="Select Relevance"
                                 [(ngModel)]="char.relevance" [options]="relevance" optionLabel="name" appendTo="body"
-                                optionValue="value" [required]="true"></p-dropdown>
+                                optionValue="value" [required]="true" (onChange)="onRelevanceChange($event, char)"></p-dropdown>
                         </div>
+                        <p class="info-message text-danger" *ngIf="
+                                char.relevance === undefined &&
+                                (nextClicked || data_charData_relavance.touched)
+                              ">
+                                This is a mandatory field
+                            </p>
                     </div>
                     <br>
-                    <p><strong>{{char.main_question}}</strong></p>
-                    <br>
-                    <p><strong><u>Guiding Question(s)</u></strong></p>
-                    <div *ngFor="let question of char.questions">
-                        <app-cm-question [question]="question" [approach]="approach"
-                            (prev_answer)="onAnswer($event, question, char)"></app-cm-question>
+                    <div *ngIf="char.relevance !== 0">
+                        <p><strong>{{char.main_question}}</strong></p>
+                        <br>
+                        <p><strong><u>Guiding Question(s)</u></strong></p>
+                        <div *ngFor="let question of char.questions">
+                            <app-cm-question [question]="question" [approach]="approach" [assessmentquestions]="assessmentquestions" [isEditMode]="isEditMode"
+                                (prev_answer)="onAnswer($event, question, char)"></app-cm-question>
+                        </div>
                     </div>
                 </ng-container>
                 <div class="row justify-content-end">
                     <div>
                         <div class="d-flex flex-row-reverse mt-20 ">
-                            <div class="btn btn-primary text-uppercase" (click)="next(category.characteristics)">
+                            <div class="btn btn-primary text-uppercase" (click)="next(category.code, category.characteristics)">
                                 Next
+                            </div>
+                            <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.code, true)">
+                                Save
                             </div>
                         </div>
                     </div>
@@ -69,10 +80,10 @@
                                     <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.id" #type="ngModel" 
                                         placeholder="Select Score" [(ngModel)]="char.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}" 
                                         [options]="char.characteristic.code === 'INTERNATIONAL' ? GHG_scale_score_macro : (char.characteristic.code === 'NATIONAL' ? GHG_scale_score_medium : GHG_scale_score_micro)" 
-                                         [required]="true" appendTo="body" (onChange)="onSelectScore($event, char, idx, category.type)" optionLabel="label">
+                                         [required]="true" appendTo="body" (onChange)="onSelectScore($event, char, idx, category.type)" optionLabel="name">
                                         <ng-template let-option pTemplate="item" >
                                             <div class="custom-option">
-                                               {{ option.label }}
+                                               {{ option.name }}
                                             </div>
                                          </ng-template>
                                     </p-dropdown>
@@ -115,12 +126,12 @@
                                 <div class="col-6">
                                     <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.id" #type="ngModel"
                                         placeholder="Select Score" [(ngModel)]="char.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
-                                        [options]="GHG_sustained_score" optionLabel="label" [required]="true"
+                                        [options]="GHG_sustained_score" optionLabel="name" [required]="true"
                                         appendTo="body"
                                         (onChange)="onSelectScore($event, char, idx, category.type)">
                                         <ng-template let-option pTemplate="item" >
                                             <div class="custom-option">
-                                               {{ option.label }}
+                                               {{ option.name }}
                                             </div>
                                          </ng-template>
                                     </p-dropdown>
@@ -170,8 +181,11 @@
                     <div class="row justify-content-end">
                         <div>
                             <div class="d-flex flex-row-reverse mt-20 " *ngIf="activeIndex2 < outcome.length - 1">
-                                <div class="btn btn-primary text-uppercase" (click)="next()">
+                                <div class="btn btn-primary text-uppercase" (click)="next(category.type+'_'+category.method)">
                                     Next
+                                </div>
+                                <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, true)">
+                                    Save
                                 </div>
                             </div>
                         </div>
@@ -212,10 +226,10 @@
                                     <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.id" #type="ngModel"
                                         placeholder="Select Score" [(ngModel)]="char.selectedScore"
                                         [options]="adaptation_scale_score"  [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
-                                        optionLabel="label" [required]="true" appendTo="body" (onChange)="onSelectScore($event, char, idx, category.type)">
+                                        optionLabel="name" [required]="true" appendTo="body" (onChange)="onSelectScore($event, char, idx, category.type)">
                                         <ng-template let-option pTemplate="item" >
                                             <div class="custom-option">
-                                               {{ option.label }}
+                                               {{ option.name }}
                                             </div>
                                          </ng-template>
                                     </p-dropdown>
@@ -258,12 +272,12 @@
                                 <div class="col-6">
                                     <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.id" #type="ngModel"
                                         placeholder="Select Score" [(ngModel)]="char.selectedScore"
-                                        [options]="adaptation_sustained_score" optionLabel="label" [required]="true"
+                                        [options]="adaptation_sustained_score" optionLabel="name" [required]="true"
                                         appendTo="body" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
                                         (onChange)="onSelectScore($event, char, idx, category.type)">
                                         <ng-template let-option pTemplate="item" >
                                             <div class="custom-option">
-                                               {{ option.label }}
+                                               {{ option.name }}
                                             </div>
                                          </ng-template>
                                     </p-dropdown>
@@ -305,16 +319,19 @@
                         <div class="row p-2">
                             <div class="col-4">Aggregated Answer</div>
                             <div class="col-8">
-                                <input type="text" name="ghgScore" #tboundrary="ngModel" disabled="true"
+                                <input type="text" name="adaptationScore" #tboundrary="ngModel" disabled="true"
                                     [(ngModel)]="adaptationScore" class="form-control" />
                             </div>
                         </div>
                     </ng-container>
                     <div class="row justify-content-end">
                         <div>
-                            <div class="d-flex flex-row-reverse mt-20 " *ngIf="activeIndex2 < outcome.length - 1">
-                                <div class="btn btn-primary text-uppercase" (click)="next()">
+                            <div class="d-flex flex-row-reverse mt-20 ">
+                                <div *ngIf="activeIndex2 < outcome.length - 1" class="btn btn-primary text-uppercase" (click)="next(category.type+'_'+category.method)">
                                     Next
+                                </div>
+                                <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, true)">
+                                    Save
                                 </div>
                             </div>
                         </div>
@@ -330,143 +347,139 @@
                                 (onChange)="onSelectSDG($event)" [disabled]="category.method === 'SUSTAINED'">
                             </p-multiSelect>
                         </div>
-                        <!-- <div class="col-8" *ngIf="category.method === 'SUSTAINED'">
-                            <p-multiSelect name="impact_categories" placeholder="Select SDG(s)" appendTo="body"
-                                [options]="SDGsustained" [(ngModel)]="selectedSDGsustained" optionLabel="name"
-                                (onChange)="onSelectSDGSustained($event, category)">
-                            </p-multiSelect>
-                        </div> -->
                     </div>
                     <ng-container selectedSDGs && selectedSDGs.length>
                         <ng-container *ngFor="let SDG of selectedSDGs; let sidx = index">
                             <h5> SDG {{SDG.number}} - {{SDG.name}}</h5>
-                            <ng-container *ngIf="category.method === 'SCALE'">
-                                <ng-container *ngFor="let char of SDG.scaleResult; let idx = index;">
-                                    <h6>{{idx+1}}. {{char.characteristic.name}}</h6>
-                                    <div class="row p-2">
-                                        <div class="col-4">SDG Indicator</div>
-                                        <div class="col-8">
-                                            <input type="text" [name]="'indicator'+SDG.code"
-                                                [(ngModel)]="char.sdgIndicator" class="form-control"
-                                                placeholder="Please describe the indicator used to assess the contribution to the selected SDG(i.e. number of jobs created)." required />
+                            <div class="card">
+                                <ng-container *ngIf="category.method === 'SCALE'">
+                                    <ng-container *ngFor="let char of SDG.scaleResult; let idx = index;">
+                                        <h6>{{idx+1}}. {{char.characteristic.name}}</h6>
+                                        <div class="row p-2">
+                                            <div class="col-4">SDG Indicator</div>
+                                            <div class="col-8">
+                                                <input type="text" [name]="'indicator'+SDG.code"
+                                                    [(ngModel)]="char.sdgIndicator" class="form-control"
+                                                    placeholder="Please describe the indicator used to assess the contribution to the selected SDG(i.e. number of jobs created)." required />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row p-2">
-                                        <div class="col-4">Starting Situation</div>
-                                        <div class="col-8">
-                                            <input type="text" [name]="'stSituation'+SDG.code"
-                                                [(ngModel)]="char.startingSituation" class="form-control"
-                                                placeholder="Please describe the value of the indicator before intervention implementation." required />
+                                        <div class="row p-2">
+                                            <div class="col-4">Starting Situation</div>
+                                            <div class="col-8">
+                                                <input type="text" [name]="'stSituation'+SDG.code"
+                                                    [(ngModel)]="char.startingSituation" class="form-control"
+                                                    placeholder="Please describe the value of the indicator before intervention implementation." required />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row p-2">
-                                        <div class="col-4">Expected Impact</div>
-                                        <div class="col-8">
-                                            <input type="text" [name]="'impact'+SDG.code"
-                                                [(ngModel)]="char.expectedImpact" class="form-control"
-                                                placeholder="Please describe the value of the indicator after intervention implementation." required />
+                                        <div class="row p-2">
+                                            <div class="col-4">Expected Impact</div>
+                                            <div class="col-8">
+                                                <input type="text" [name]="'impact'+SDG.code"
+                                                    [(ngModel)]="char.expectedImpact" class="form-control"
+                                                    placeholder="Please describe the value of the indicator after intervention implementation." required />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row p-2">
-                                        <div class="col-4">Score</div>
-                                        <div class="col-8">
-                                            <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+SDG.code"
-                                                #type="ngModel" placeholder="Select Score"
-                                                [(ngModel)]="char.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
-                                                (onChange)="onSelectScore($event, char, idx, category.type)"
-                                                [options]="SDG_scale_score" optionLabel="label" [required]="true"
-                                                appendTo="body">
-                                                <ng-template let-option pTemplate="item" >
-                                                    <div class="custom-option">
-                                                       {{ option.label }}
-                                                    </div>
-                                                 </ng-template>
-                                            </p-dropdown>
-                                            <p-dropdown *ngIf="approach === 'INDIRECT'" name="institution"
-                                                [options]="institutions" [(ngModel)]="char.institution"
-                                                #finstitution="ngModel" placeholder="Select an institution"
-                                                optionLabel="name" [required]="true"></p-dropdown>
+                                        <div class="row p-2">
+                                            <div class="col-4">Score</div>
+                                            <div class="col-8">
+                                                <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+SDG.code"
+                                                    #type="ngModel" placeholder="Select Score"
+                                                    [(ngModel)]="char.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
+                                                    (onChange)="onSelectScore($event, char, idx, category.type)"
+                                                    [options]="SDG_scale_score" optionLabel="name" [required]="true"
+                                                    appendTo="body">
+                                                    <ng-template let-option pTemplate="item" >
+                                                        <div class="custom-option">
+                                                           {{ option.name }}
+                                                        </div>
+                                                     </ng-template>
+                                                </p-dropdown>
+                                                <p-dropdown *ngIf="approach === 'INDIRECT'" name="institution"
+                                                    [options]="institutions" [(ngModel)]="char.institution"
+                                                    #finstitution="ngModel" placeholder="Select an institution"
+                                                    optionLabel="name" [required]="true"></p-dropdown>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row p-2">
-                                        <div class="col-4">Justification</div>
-                                        <div class="col-6">
-                                            <input type="text" [name]="'justification'+SDG.code"
-                                                [(ngModel)]="char.comment" class="form-control"
-                                                placeholder="Enter Justification" required />
+                                        <div class="row p-2">
+                                            <div class="col-4">Justification</div>
+                                            <div class="col-6">
+                                                <input type="text" [name]="'justification'+SDG.code"
+                                                    [(ngModel)]="char.comment" class="form-control"
+                                                    placeholder="Enter Justification" required />
+                                            </div>
+                                            <div class="col-2">
+                                                <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload"
+                                                    name="files" [url]="uploadUrl" (onUpload)="onUpload($event,char)"
+                                                    [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="5000000"
+                                                    [auto]="true">
+                                                </p-fileUpload>
+                                            </div>
                                         </div>
-                                        <div class="col-2">
-                                            <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload"
-                                                name="files" [url]="uploadUrl" (onUpload)="onUpload($event,char)"
-                                                [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="5000000"
-                                                [auto]="true">
-                                            </p-fileUpload>
+                                        <div class="row p-2" *ngIf="char.filePath">
+                                            <div class="col-4"></div>
+                                            <div class="col-4">
+                                                <p class="col-5">{{char.filePath}}</p>
+                                            </div>
+                                            <div class="col-4">
+                                                <a target="_blank" [href]="fileServerURL+'/'+char.filePath"><i
+                                                        class="pi pi-download download col-4"></i></a>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row p-2" *ngIf="char.filePath">
-                                        <div class="col-4"></div>
-                                        <div class="col-4">
-                                            <p class="col-5">{{char.filePath}}</p>
-                                        </div>
-                                        <div class="col-4">
-                                            <a target="_blank" [href]="fileServerURL+'/'+char.filePath"><i
-                                                    class="pi pi-download download col-4"></i></a>
-                                        </div>
-                                    </div>
+                                    </ng-container>
                                 </ng-container>
-                            </ng-container>
-                            <ng-container *ngIf="category.method === 'SUSTAINED'">
-                                <ng-container *ngFor="let chSus of SDG.sustainResult; let idx = index">
-                                    <h6>{{idx+1}}. {{chSus.characteristic.name}}</h6>
-                                    <p>Is the activity’s contribution to the selected SDG sustained in nature?</p>
-                                    <div class="row p-2">
-                                        <div class="col-4">Score</div>
-                                        <div class="col-6">
-                                            <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'susScore'+SDG.code"
-                                                #type="ngModel" placeholder="Select Score"
-                                                [(ngModel)]="chSus.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
-                                                (onChange)="onSelectScore($event, chSus, idx, category.type)"
-                                                [options]="SDG_sustained_score" optionLabel="label" [required]="true"
-                                                appendTo="body">
-                                                <ng-template let-option pTemplate="item" >
-                                                    <div class="custom-option">
-                                                       {{ option.label }}
-                                                    </div>
-                                                 </ng-template>
-                                            </p-dropdown>
-                                            <p-dropdown *ngIf="approach === 'INDIRECT'" name="institution"
-                                                [options]="institutions" [(ngModel)]="chSus.institution"
-                                                #finstitution="ngModel" placeholder="Select an institution"
-                                                optionLabel="name" [required]="true"></p-dropdown>
+                                <ng-container *ngIf="category.method === 'SUSTAINED'">
+                                    <ng-container *ngFor="let chSus of SDG.sustainResult; let idx = index">
+                                        <h6>{{idx+1}}. {{chSus.characteristic.name}}</h6>
+                                        <p>Is the activity’s contribution to the selected SDG sustained in nature?</p>
+                                        <div class="row p-2">
+                                            <div class="col-4">Score</div>
+                                            <div class="col-6">
+                                                <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'susScore'+SDG.code"
+                                                    #type="ngModel" placeholder="Select Score"
+                                                    [(ngModel)]="chSus.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
+                                                    (onChange)="onSelectScore($event, chSus, idx, category.type)"
+                                                    [options]="SDG_sustained_score" optionLabel="name" [required]="true"
+                                                    appendTo="body">
+                                                    <ng-template let-option pTemplate="item" >
+                                                        <div class="custom-option">
+                                                           {{ option.name }}
+                                                        </div>
+                                                     </ng-template>
+                                                </p-dropdown>
+                                                <p-dropdown *ngIf="approach === 'INDIRECT'" name="institution"
+                                                    [options]="institutions" [(ngModel)]="chSus.institution"
+                                                    #finstitution="ngModel" placeholder="Select an institution"
+                                                    optionLabel="name" [required]="true"></p-dropdown>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row p-2">
-                                        <div class="col-4">Justification</div>
-                                        <div class="col-6">
-                                            <input type="text" [name]="'susJustification'+SDG.code"
-                                                [(ngModel)]="chSus.comment" class="form-control"
-                                                placeholder="Enter Justification" required />
+                                        <div class="row p-2">
+                                            <div class="col-4">Justification</div>
+                                            <div class="col-6">
+                                                <input type="text" [name]="'susJustification'+SDG.code"
+                                                    [(ngModel)]="chSus.comment" class="form-control"
+                                                    placeholder="Enter Justification" required />
+                                            </div>
+                                            <div class="col-2">
+                                                <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload"
+                                                    name="files" [url]="uploadUrl" (onUpload)="onUpload($event,chSus)"
+                                                    [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="5000000"
+                                                    [auto]="true">
+                                                </p-fileUpload>
+                                            </div>
                                         </div>
-                                        <div class="col-2">
-                                            <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload"
-                                                name="files" [url]="uploadUrl" (onUpload)="onUpload($event,chSus)"
-                                                [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="5000000"
-                                                [auto]="true">
-                                            </p-fileUpload>
+                                        <div class="row p-2" *ngIf="chSus.filePath">
+                                            <div class="col-4"></div>
+                                            <div class="col-4">
+                                                <p class="col-5">{{chSus.filePath}}</p>
+                                            </div>
+                                            <div class="col-4">
+                                                <a target="_blank" [href]="fileServerURL+'/'+chSus.filePath"><i
+                                                        class="pi pi-download download col-4"></i></a>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row p-2" *ngIf="chSus.filePath">
-                                        <div class="col-4"></div>
-                                        <div class="col-4">
-                                            <p class="col-5">{{chSus.filePath}}</p>
-                                        </div>
-                                        <div class="col-4">
-                                            <a target="_blank" [href]="fileServerURL+'/'+chSus.filePath"><i
-                                                    class="pi pi-download download col-4"></i></a>
-                                        </div>
-                                    </div>
+                                    </ng-container>
                                 </ng-container>
-                            </ng-container>
+                            </div>
                         </ng-container>
                         <ng-container *ngIf="category.method === 'SUSTAINED'">
                             <h6>SDG Score</h6>
@@ -489,8 +502,11 @@
                     <div class="row justify-content-end" *ngIf="activeIndex2 < outcome.length - 1">
                         <div>
                             <div class="d-flex flex-row-reverse mt-20 ">
-                                <div class="btn btn-primary text-uppercase" (click)="next()">
+                                <div class="btn btn-primary text-uppercase" (click)="next(category.type+'_'+category.method)">
                                     Next
+                                </div>
+                                <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, true)">
+                                    Save
                                 </div>
                             </div>
                         </div>
@@ -500,7 +516,7 @@
                 <div class="row justify-content-end" *ngIf="activeIndex2 === outcome.length - 1">
                     <div>
                         <div class="d-flex flex-row-reverse mt-20 ">
-                            <div class="btn btn-primary text-uppercase" (click)="submit()">
+                            <div class="btn btn-primary text-uppercase" (click)="submit('')">
                                 {{ approach === 'INDIRECT' ? 'Send to Data Collection Team' : 'Calculate & CheckResults'
                                 }}
                             </div>

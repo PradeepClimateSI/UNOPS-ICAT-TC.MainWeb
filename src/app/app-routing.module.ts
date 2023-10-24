@@ -35,8 +35,9 @@ export enum UserRoles {
 
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/auth/login', pathMatch: 'full' },
   { path: 'landing-page', component: LandingPageComponent },
+  { path: '', redirectTo: 'landing-page', pathMatch: 'full' },
+  
   { path: 'loard-more', component: LoardMoreComponent },
   {
     path: 'auth',

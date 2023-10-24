@@ -3,12 +3,13 @@ import { NgForm } from '@angular/forms';
 import { MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import {Any, AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, AssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import {Any, AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, AssessmentControllerServiceProxy, Category } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'environments/environment';
 import { HttpResponse } from '@angular/common/http';
+import { Type } from '@angular/compiler';
 // import { IndicatorDetails } from './IndicatorDetails';
 
 
@@ -20,6 +21,12 @@ interface ChaCategoryWeightTotal {
   [key: string]: number;
 }
 
+interface SelectedSDG {
+  id: number;
+  answer: string;
+  name: string;
+  number: number;
+}
 interface ChaCategoryTotalEqualsTo1 {
   [key: string]: boolean;
 }
@@ -63,8 +70,9 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   geographicalAreasCoveredArr: GeographicalAreasCoveredDto[] = []
 
   //Newww
+  
   sdgList : any = []
-  selectedSDGs : any = []
+  selectedSDGs : SelectedSDG[];
   sdgDataSendArray: any = [];
   sdgDataSendArray3: any= [];
   sdgDataSendArray4: any = [];
@@ -85,6 +93,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     type: string,
     CategoryName: string,
     categoryID: number,
+    isValidated:boolean|null
     data: InvestorAssessment[],
 
   }[] = [];
@@ -93,6 +102,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     type: string,
     CategoryName: string,
     categoryID: number,
+    isValidated:boolean|null
     data: InvestorAssessment[]
   }[] = [];
   //class variable
@@ -131,6 +141,10 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   tableData : any;
   assessmentId:number;
   isEditMode:boolean=false;
+  isValidSCaleSD: boolean;
+  isValidSustainedSD: boolean;
+  // isValidated:boolean;
+
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
     private masterDataService: MasterDataService,
@@ -182,8 +196,25 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       }
       
 
-    }
-   //this.isSavedAssessment = true; this.tabLoading= true; // Need to remove  
+    } 
+
+    //comment this
+    /* console.log(this.isEditMode,this.assessmentId)
+        this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+        this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
+        this.outcomeData = await this.investorToolControllerproxy.getOutcomeData(this.assessmentId).toPromise();
+        this.sdgDataSendArray2 = await this.investorToolControllerproxy.getScaleSDGData(this.assessmentId).toPromise();
+        this.selectedSDGs = await this.investorToolControllerproxy.getSelectedSDGs(this.assessmentId).toPromise();
+
+        console.log("this.processData",this.processData,this.assessment)
+        console.log("this.outcomeData",this.outcomeData)
+        console.log("this.selectedSDGs", this.selectedSDGs)
+        console.log("this.sdgDataSendArray2", this.sdgDataSendArray2)
+        this.setFrom()
+        this.setTo() */
+    //upto this
+
+  // this.isSavedAssessment = true; this.tabLoading= true; // Need to remove  
   // this.isSavedAssessment = true // Need to remove  
   this.tableData =  this.getProductsData();
     this.categoryTabIndex =0;
@@ -336,7 +367,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
         if (x.type === 'process') {
           this.processData.push({
             type: 'process', CategoryName: x.name, categoryID: x.id,
-            data:categoryArray
+            data: categoryArray,
+            isValidated: null
           })
 
 
@@ -346,7 +378,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
           this.outcomeData.push({
             type: 'outcome', CategoryName: x.name, categoryID: x.id,
-            data:categoryArray
+            data: categoryArray,
+            isValidated: null
           })
 
           if(x.name === 'SDG Scale of the Outcome'){
@@ -392,6 +425,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     //save assessment
     this.assessment.tool = 'INVESTOR'
     this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
+    if (!this.assessment.id) this.assessment.createdOn = moment(new Date())
+    this.assessment.editedOn = moment(new Date())
 
     if (form.valid) {
       this.methodologyAssessmentControllerServiceProxy.saveAssessment(this.assessment)
@@ -502,14 +537,15 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   onMainTabChange(event: any) {
     this.mainTabIndex =event.index;
-    if(this.mainTabIndex==1){
-      this.activeIndex2=0;
-    }
+    // this.isValidated = true;
+    // if(this.mainTabIndex==1){
+    //   this.activeIndex2=0;
+    // }
     console.log("main index", this.mainTabIndex)
   }
   onCategoryTabChange(event: any, tabview: TabView) {
     console.log("mainTabIndexArray",this.mainTabIndexArray,this.activeIndex)
-
+    // this.isValidated=true
     this.categoryTabIndex =event.index;
     if(!this.failedLikelihoodArray.some(
       element  => element.tabIndex === this.categoryTabIndex
@@ -749,12 +785,12 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       (investorAssessment.relavance == 0))?.length === data?.length && type=='process')||
       (data?.filter(investorAssessment => 
         (investorAssessment.justification !== undefined) 
-       )?.length === data?.length && type=='outcome')||
-      (data?.filter(sdg => 
+       )?.length === data?.data.length && type=='outcome')||
+      (data?.data.filter(sdg => 
         (sdg.data?.filter((data: { justification: undefined; } ) =>
           (data.justification!== undefined))?.length === (sdg.data?.length)
-        ))?.length === data?.length && type=='sdg')) {
-    
+        ))?.length === data?.data.length && type=='sdg')) {
+          data.isValidated = true;
     if(this.activeIndexMain ===1 ){
 
       this.activeIndex2 =this.activeIndex2+1;
@@ -791,7 +827,54 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     //   this.isRelavanceDisabled=true;
     // }
   }
+  nextSDG(data:any[],type:string){
+    console.log("category",data,type)
+    if(type=='scaleSD'){
+      this.isValidSCaleSD = false
+    }
+    if(type=='sustainedSD'){
+      this.isValidSustainedSD = false
+    }
+    console.log("category",this.isValidSCaleSD,this.isValidSustainedSD)
+    // this.isValidSustainedSD = false
+    if((data?.filter(sdg => 
+        (sdg.data?.filter((data: { justification: undefined; } ) =>
+          (data.justification!== undefined))?.length === (sdg.data?.length)
+        ))?.length === data?.length )) {
+          // data.isValidated = true;
+          this.isValidSCaleSD=true
+          if(type=='scaleSD'){
+            this.isValidSCaleSD = true
+          }
+           if(type=='sustainedSD'){
+            this.isValidSustainedSD = true
+          }
+    if(this.activeIndexMain ===1 ){
 
+      this.activeIndex2 =this.activeIndex2+1;
+      console.log( "activeIndex2",this.activeIndex2)
+
+    }
+    if (this.activeIndex === 3 && this.activeIndexMain !== 1) {
+      this.activeIndexMain = 1;
+      this.activeIndex2=0;
+
+    }
+    if (this.activeIndex<=2 && this.activeIndex>=0 && this.activeIndexMain===0){
+      this.activeIndex =this.activeIndex +1;
+      console.log( this.activeIndex)
+
+    }
+    // return true
+  }else{
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Please fill all mandotory fields',
+      closable: true,
+    });
+  }
+  }
   onLevelofImplementationChange(event:any){
     console.log(event)
     if(event==='National')
@@ -934,6 +1017,7 @@ onRelavanceChange(data:any,ins:any){
 pushBarriers(barrier:any){
   console.log("barrier",barrier)
   this.finalBarrierList.push(barrier)
+  this.barrierSelected = new BarrierSelected()
 
 }
 barriersNameArray(Characteristics:any[]){
@@ -956,7 +1040,21 @@ showDialog(){
   console.log(this.barrierBox)  
 }
 
+onChangeRelevance(relevance : any , data : any){
+  console.log("relevance", relevance)
+  console.log("data22", data)
 
+  if(relevance == 0){
+    data.likelihood_justification = null;
+    data.likelihood = null;
+
+    for(let item of data.indicator_details){
+      item.value = null;
+      item.justification = null;
+    }
+
+  }
+}
 onUpload(event:UploadEvent, data : InvestorAssessment) {
   if(event.originalEvent.body){
     data.uploadedDocumentPath = event.originalEvent.body.fileName
