@@ -518,7 +518,54 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     }
 
   }
+  saveDraft(category:any){
+    
+    if(this.isEditMode ==true){
+      console.log("assessment",this.assessment)
+      this.processData.map(x => x.data.map(y => y.assessment = this.assessment))
+    }
+    else{
+      console.log("mainAssessment",this.mainAssessment)
+      this.processData.map(x => x.data.map(y => y.assessment = this.assessment))
+    }
+    
+    let data : any ={
+      finalArray : this.processData,
+      isDraft : true
+      // scaleSDGs : this.sdgDataSendArray2,
+      // sustainedSDGs : this.sdgDataSendArray4,
+      // sdgs : this.selectedSDGs
+    }
+    // this.assessmentControllerServiceProxy.update
+    //@ts-ignore
+    console.log("data",data)
+    this.investorToolControllerproxy.createFinalAssessment(data)
+      .subscribe(_res => {
+        console.log("res final", _res)
 
+        console.log(_res)
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Assessment draft has been saved successfully',
+          closable: true,
+        })
+        // this.showResults();
+        // this.isSavedAssessment = true
+        // this.onCategoryTabChange('', this.tabView);
+
+
+        // form.reset();
+      }, error => {
+        console.log(error)
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Assessment detail saving failed',
+          closable: true,
+        })
+      })
+  }
 
 
   selectAssessmentType(e: any) {
@@ -700,7 +747,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
             detail: 'Assessment has been created successfully',
             closable: true,
           })
-          this.showResults();
+          // this.showResults();
           // this.isSavedAssessment = true
           // this.onCategoryTabChange('', this.tabView);
 
@@ -763,27 +810,87 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
        }, 2000);
 
   }
-  next(data:any[],type:string){
-  console.log("category",data)
-  // data?.filter(investorAssessment => console.log(investorAssessment.likelihood_justification, investorAssessment.likelihood_justification !== undefined , investorAssessment.likelihood_justification !== ""))
-  data?.filter(investorAssessment => console.log(investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
-  (indicator_details.justification !==""))?.length === (investorAssessment.indicator_details?.length) && this.isEditMode == true
-  ))
-  data?.filter(investorAssessment => console.log(investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
-  (indicator_details.justification !=="")),(investorAssessment.indicator_details?.length) , this.isEditMode 
-  ))
-  if((data?.filter(investorAssessment => 
+  // next(data:any[],type:string){
+  // console.log("category",data)
+  // // data?.filter(investorAssessment => console.log(investorAssessment.likelihood_justification, investorAssessment.likelihood_justification !== undefined , investorAssessment.likelihood_justification !== ""))
+  // data?.filter(investorAssessment => console.log(investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
+  // (indicator_details.justification !==""))?.length === (investorAssessment.indicator_details?.length) && this.isEditMode == true
+  // ))
+  // data?.filter(investorAssessment => console.log(investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
+  // (indicator_details.justification !=="")),(investorAssessment.indicator_details?.length) , this.isEditMode 
+  // ))
+  // if((data?.filter(investorAssessment => 
+  //     (investorAssessment.relavance !== undefined) && 
+  //     (investorAssessment.likelihood !== undefined) && 
+  //     (investorAssessment.likelihood_justification !==undefined && investorAssessment.likelihood_justification !== "") &&
+  //     ((investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
+  //       (indicator_details.justification !== undefined))?.length === (investorAssessment.indicator_details?.length-1) && this.isEditMode == false
+  //     )||
+  //     (investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
+  //       (indicator_details.justification !== undefined && indicator_details.justification !== ""))?.length === (investorAssessment.indicator_details?.length) && this.isEditMode == true
+  //     ))||  
+  //     (investorAssessment.relavance == 0))?.length === data?.length && type=='process')||
+  //     (data?.filter(investorAssessment => 
+  //       (investorAssessment.justification !== undefined) 
+  //      )?.length === data?.data.length && type=='outcome')||
+  //     (data?.data.filter(sdg => 
+  //       (sdg.data?.filter((data: { justification: undefined; } ) =>
+  //         (data.justification!== undefined))?.length === (sdg.data?.length)
+  //       ))?.length === data?.data.length && type=='sdg')) {
+  //         data.isValidated = true;
+  //   if(this.activeIndexMain ===1 ){
+
+  //     this.activeIndex2 =this.activeIndex2+1;
+  //     console.log( "activeIndex2",this.activeIndex2)
+
+  //   }
+  //   if (this.activeIndex === 3 && this.activeIndexMain !== 1) {
+  //     this.activeIndexMain = 1;
+  //     this.activeIndex2=0;
+
+  //   }
+  //   if (this.activeIndex<=2 && this.activeIndex>=0 && this.activeIndexMain===0){
+  //     this.activeIndex =this.activeIndex +1;
+  //     console.log( this.activeIndex)
+
+  //   }
+  //   // return true
+  // }else{
+  //   this.messageService.add({
+  //     severity: 'error',
+  //     summary: 'Error',
+  //     detail: 'Please fill all mandatory fields',
+  //     closable: true,
+  //   });
+  // }
+  //   // if(!this.mainTabIndexArray.includes(this.activeIndex)){
+  //   //   console.log("mainTabIndexArray",this.mainTabIndexArray)
+  //   //   this.isLikelihoodDisabled=false;
+  //   //   this.isRelavanceDisabled=false;
+  //   // }
+  //   // if (this.mainTabIndexArray.includes(this.activeIndex)) {
+
+  //   //   this.isLikelihoodDisabled=true;
+  //   //   this.isRelavanceDisabled=true;
+  //   // }
+  // }
+  next(data:{
+    
+    isValidated:boolean|null
+    data: any[],
+
+  },type:string){
+    data.isValidated = false;
+  console.log("category",data,type)
+  // data?.filter(investorAssessment => console.log(investorAssessment.relavance,investorAssessment.relavance == 0))
+  if((data.data?.filter(investorAssessment => 
       (investorAssessment.relavance !== undefined) && 
       (investorAssessment.likelihood !== undefined) && 
-      (investorAssessment.likelihood_justification !==undefined && investorAssessment.likelihood_justification !== "") &&
-      ((investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
-        (indicator_details.justification !== undefined))?.length === (investorAssessment.indicator_details?.length-1) && this.isEditMode == false
-      )||
+      (investorAssessment.likelihood_justification !== undefined) &&
       (investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
-        (indicator_details.justification !== undefined && indicator_details.justification !== ""))?.length === (investorAssessment.indicator_details?.length) && this.isEditMode == true
-      ))||  
-      (investorAssessment.relavance == 0))?.length === data?.length && type=='process')||
-      (data?.filter(investorAssessment => 
+        (indicator_details.justification !== undefined))?.length === (investorAssessment.indicator_details?.length-1)
+      )|| (investorAssessment.relavance == 0))?.length === data?.data?.length && type=='process')||
+      (data?.data.filter(investorAssessment => 
         (investorAssessment.justification !== undefined) 
        )?.length === data?.data.length && type=='outcome')||
       (data?.data.filter(sdg => 
@@ -812,7 +919,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.messageService.add({
       severity: 'error',
       summary: 'Error',
-      detail: 'Please fill all mandatory fields',
+      detail: 'Please fill all mandotory fields',
       closable: true,
     });
   }
