@@ -171,6 +171,8 @@ export class ClimateActionComponent implements OnInit  {
   int_id_sectors='Sector';
   int_id_year='YYYY';
   int_id_country='Country';
+  tooltips: any = {}
+
   constructor(
     private serviceProxy: ServiceProxy,
     private countryProxy: CountryControllerServiceProxy,
@@ -208,6 +210,16 @@ export class ClimateActionComponent implements OnInit  {
     const countryId = token ? decode<any>(token).countryId : 0;
     console.log("country", countryId)
     this.counID = countryId;
+
+    this.tooltips = {
+      id: 'To be assigned by the tool',
+      start_date: 'State the date that the intervention comes into effect. Not to be confused with the date new legislation is passed in the case of policies',
+      end_date: 'State the date the intervention ceases, such as the date a tax is no longer levied or the end date of an incentive scheme with a limited duration not the date that the policy/action no longer has an impact',
+      entity: 'List the entities that implement the intervention, including the role of various local, subnational, national, international or any other entities',
+      objectives: 'State the intended impacts the intervention intends to achieve (e.g., the purpose stated in the legislation or regulation), including specific goals for GHG emission reductions and sustainable development impacts where available',
+      related: 'List other policies or actions that may interact with the policy or action assessed',
+      reference: 'Provide a link or full reference to access further, detailed information about the intevention'
+    }
  ;
     let filterUser: string[] = [];
     filterUser.push('username||$eq||' + this.userName);
