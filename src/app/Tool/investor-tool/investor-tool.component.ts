@@ -171,11 +171,12 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     //   this.assessmentId = params['id']
 
     //   this.isEditMode = params['isEdit']
-       // this.isEditMode = true
+        this.isEditMode = true
         this.assessmentId = 857
 
     // })
-      if(this.isEditMode==false){
+
+/*       if(this.isEditMode==false){
       await this.getPolicies();
       await this.getAllImpactsCovered();
       await this.getCharacteristics();
@@ -193,7 +194,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       catch (error) {
         console.log(error)
       }
-    }  
+    }   */
 
    
     //comment this
