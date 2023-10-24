@@ -117,18 +117,18 @@
           <div class="p-field p-2">
             <label for="opportunities">Opportunities for stakeholders to participate in the assessment *</label>
             <input pInputText type="text" #opportunities="ngModel" name="opportunities" ngModel
-              [disabled]="isSavedAssessment" placeholder="Opportunities" [(ngModel)]="assessment.opportunities"
+              [disabled]="isSavedAssessment" placeholder="Explain how different stakeholders if any will participate in the assessment" [(ngModel)]="assessment.opportunities"
               required />
             <p class="info-message text-danger"
               *ngIf="!opportunities.value && (fData.submitted || opportunities.touched)">This is a mandatory field</p>
           </div>
 
-            <div class="p-field p-2">
+            <!-- <div class="p-field p-2">
                   <label for="principles">Principles on which the assessment is based *</label>
                   <input pInputText type="text" #principles="ngModel" name="principles" ngModel [disabled]="isSavedAssessment"
                   placeholder="Principles" [(ngModel)]="assessment.principles" required />
                   <p class="info-message text-danger" *ngIf="!principles.value && (fData.submitted || principles.touched)">This is a mandatory field</p>
-            </div>
+            </div> -->
 
 
           <!-- <div class="p-field p-2">
