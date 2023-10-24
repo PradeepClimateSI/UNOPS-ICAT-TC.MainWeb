@@ -166,6 +166,12 @@ export class CmSectionComponent implements OnInit {
           this.recievedQuestions = []
         } else {
           if (this.prev_answer.isPassing || (e.type === "INDIRECT")) {
+            if (e.answer.label === 'Unsure') {
+              this.message = 'You are allowed to continue with the assessment, but we are strongly encouraged to evaluate all preconditions to ensure that they are met to enable transformational change.'
+              if (!e.isLoading) {
+                this.visible = true
+              } 
+            }
             if (this.criterias[sectionIdx]?.length === this.shownCriterias[sectionIdx].length) {
               this.shownSections.push(true)
               this.isPassed = true
@@ -211,6 +217,12 @@ export class CmSectionComponent implements OnInit {
           }
         } else {
           if (this.prev_answer.isPassing) {
+            if (e.answer.label === 'Unsure') {
+              this.message = 'You are allowed to continue with the assessment, but we are strongly encouraged to evaluate all preconditions to ensure that they are met to enable transformational change.'
+              if (!e.isLoading) {
+                this.visible = true
+              } 
+            }
             if (this.preQuestionIdx !== idx) this.shownQuestions[sectionIdx][criteriaIdx].push(true)
             this.preQuestionIdx = idx
             if (!this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx + 1]) {

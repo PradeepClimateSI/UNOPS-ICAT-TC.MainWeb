@@ -58,6 +58,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   tableData : any;
   isEditMode: boolean 
   assessmentId: number 
+  scales: MasterDataDto[]
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -80,6 +81,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     this.assessment_approaches = this.masterDataService.assessment_approach
     this.int_cm_approches = this.masterDataService.int_cm_approaches
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;
+    this.scales = this.masterDataService.scale_of_activity;
 
     await this.getPolicies()
     await this.getSetors()
