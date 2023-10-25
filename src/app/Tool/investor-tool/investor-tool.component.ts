@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import {Any, AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, AssessmentControllerServiceProxy, Category } from 'shared/service-proxies/service-proxies';
+import {Any, AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, AssessmentControllerServiceProxy, Category, PortfolioSdg } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -26,6 +26,12 @@ interface SelectedSDG {
   answer: string;
   name: string;
   number: number;
+}
+
+interface SelectItem<T = any>{
+  label?:string;
+  value: T;
+  icon?:string;
 }
 interface ChaCategoryTotalEqualsTo1 {
   [key: string]: boolean;
@@ -71,8 +77,9 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   //Newww
   
-  sdgList : any = []
+  sdgList : any[];
   selectedSDGs : SelectedSDG[] = [];
+  selectedSDGsWithAnswers : SelectedSDG[] = [];
   sdgDataSendArray: any = [];
   sdgDataSendArray3: any= [];
   sdgDataSendArray4: any = [];
@@ -206,10 +213,12 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
         this.sdgDataSendArray2 = await this.investorToolControllerproxy.getScaleSDGData(this.assessmentId).toPromise();
         this.sdgDataSendArray4 = await this.investorToolControllerproxy.getSustainedSDGData(this.assessmentId).toPromise();
         this.selectedSDGs = await this.investorToolControllerproxy.getSelectedSDGs(this.assessmentId).toPromise();
+        this.selectedSDGsWithAnswers = await this.investorToolControllerproxy.getSelectedSDGsWithAnswers(this.assessmentId).toPromise();
 
         console.log("this.processData",this.processData,this.assessment)
         console.log("this.outcomeData",this.outcomeData)
         console.log("this.selectedSDGs", this.selectedSDGs)
+        console.log("this.selectedSDGsWithAnswers", this.selectedSDGsWithAnswers)
         console.log("this.sdgDataSendArray2", this.sdgDataSendArray2)
         console.log("this.sdgDataSendArray4", this.sdgDataSendArray4)
         this.setFrom()
@@ -252,11 +261,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       console.log( "listtt",this.instiTutionList)
     });
     // this.getSelectedHeader();
-
-    this.investorToolControllerproxy.findAllSDGs().subscribe((res: any) => {
-      console.log("ressssSDGs", res)
-      this.sdgList = res
-     });
      
     this.sectorList = await this.sectorProxy.findAllSector().toPromise()
     if (countryId > 0) {
@@ -280,6 +284,11 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
 
 
+  }
+
+  onChangeSDGsAnswer(withAnswers:any , item : any){
+    console.log("withAnswers", withAnswers)
+console.log("itemmmm", item)
   }
 
   ngAfterContentChecked(): void {
@@ -316,6 +325,11 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   async getCharacteristics() {
    
+    this.investorToolControllerproxy.findAllSDGs().subscribe((res: any[]) => {
+      console.log("ressssSDGs", res)
+      this.sdgList = res
+     });
+
     try{
       this.investorQuestions= await this.investorToolControllerproxy.findAllIndicatorquestions().toPromise();
        console.log("ressss3333",  this.investorQuestions)
@@ -687,7 +701,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
         finalArray : finalArray,
         scaleSDGs : this.sdgDataSendArray2,
         sustainedSDGs : this.sdgDataSendArray4,
-        sdgs : this.selectedSDGs
+        sdgs : this.selectedSDGsWithAnswers
       }
 
       //@ts-ignore
@@ -1080,14 +1094,20 @@ assignSDG(sdg : any , data : any){
 }
 
 
-    onItemSelectSDGs(event: any) {
+   /*  onItemSelectSDGs(event: any) {
       console.log("rrr", this.selectedSDGs);
       console.log("event", event);
+     /// this.selectedSDGsWithAnswers = this.selectedSDGs;
+     // console.log(" this.selectedSDGsWithAnswers", this.selectedSDGsWithAnswers);
+     const len1 =  this.sdgDataSendArray2.length;
+     const len2 =  this.sdgDataSendArray4.length;
 
-      this.sdgDataSendArray2 = [];
-      this.sdgDataSendArray4 = [];
+     console.log("lengthh", len1);
+     console.log("selectedSDGs.lengthh", this.selectedSDGs.length);
+    //  this.sdgDataSendArray2 = [];
+    //  this.sdgDataSendArray4 = [];
 
-      for (let index = 0; index < this.selectedSDGs.length; index++) {
+      for (let index = len1; index < this.selectedSDGs.length; index++) {
         const sdgData = JSON.parse(JSON.stringify(this.sdgDataSendArray[0]));
 
         const newObj = {
@@ -1102,7 +1122,7 @@ assignSDG(sdg : any , data : any){
       }
 
 
-      for (let index = 0; index < this.selectedSDGs.length; index++) {
+      for (let index = len2; index < this.selectedSDGs.length; index++) {
         const sdgData = JSON.parse(JSON.stringify(this.sdgDataSendArray3[0]));
 
         const newObj = {
@@ -1121,8 +1141,73 @@ assignSDG(sdg : any , data : any){
       console.log("this.sdgDataSendArray2", this.sdgDataSendArray2);
       console.log("this.sdgDataSendArray4", this.sdgDataSendArray4);
     }
+ */
+    onItemSelectSDGs(event: any) {
+      console.log("rrr", this.selectedSDGs);
+      console.log("event", event);
+    
+      // Create an array of indexes for selected items
+      const selectedIndexes = this.selectedSDGs.map(sdg => sdg.id);
+    
+      // Remove items from sdgDataSendArray2 that are not in the selectedSDGs
+      this.sdgDataSendArray2 = this.sdgDataSendArray2.filter((sdgData: { index: number; }) => selectedIndexes.includes(sdgData.index));
+    
+      // Remove items from sdgDataSendArray4 that are not in the selectedSDGs
+      this.sdgDataSendArray4 = this.sdgDataSendArray4.filter((sdgData: { index: number; }) => selectedIndexes.includes(sdgData.index));
+    
+      // Find items in selectedSDGs that are not in sdgDataSendArray2 and add them
+      this.selectedSDGs.forEach(selectedSdg => {
+        if (!this.sdgDataSendArray2.some((sdgData: { index: number; }) => sdgData.index === selectedSdg.id)) {
+          const sdgData = JSON.parse(JSON.stringify(this.sdgDataSendArray[0]));
+          const newObj = {
+            CategoryName: sdgData.CategoryName,
+            categoryID: sdgData.categoryID,
+            type: sdgData.type,
+            data: sdgData.data,
+            index: selectedSdg.id
+          };
+          this.sdgDataSendArray2.push(newObj);
+        }
+      });
+    
+      // Find items in selectedSDGs that are not in sdgDataSendArray4 and add them
+      this.selectedSDGs.forEach(selectedSdg => {
+        if (!this.sdgDataSendArray4.some((sdgData: { index: number; }) => sdgData.index === selectedSdg.id)) {
+          const sdgData = JSON.parse(JSON.stringify(this.sdgDataSendArray3[0]));
+          const newObj = {
+            CategoryName: sdgData.CategoryName,
+            categoryID: sdgData.categoryID,
+            type: sdgData.type,
+            data: sdgData.data,
+            index: selectedSdg.id
+          };
+          this.sdgDataSendArray4.push(newObj);
+        }
+      });
 
 
+      // Update selectedSDGsWithAnswers based on the selectedSDGs
+  this.selectedSDGsWithAnswers = this.selectedSDGs.map(selectedSdg => {
+    const existingAnswer = this.selectedSDGsWithAnswers.find(
+      sdgWithAnswer => sdgWithAnswer.id === selectedSdg.id
+    );
+
+    if (existingAnswer) {
+      return { ...selectedSdg, answer: existingAnswer.answer };
+    } else {
+      // If the selected item is not in selectedSDGsWithAnswers, initialize it with a default answer
+      return { ...selectedSdg, answer: ""  };
+    }
+  });
+
+    
+      console.log("this.sdgDataSendArray2", this.sdgDataSendArray2);
+      console.log("this.sdgDataSendArray4", this.sdgDataSendArray4);
+      console.log("this.selectedSDGsWithAnswers", this.selectedSDGsWithAnswers);
+    }
+    
+
+    
     getProductsData() {
       return [
           {

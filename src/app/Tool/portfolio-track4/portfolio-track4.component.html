@@ -541,17 +541,17 @@
                             <div class="p-grid p-fluid col-12">
 
                               <div class="row p-2">
-                                <div class="row" *ngFor="let question of data.portfolioQuestion_details">
+                               <!--  <div class="row" *ngFor="let question of data.portfolioQuestion_details"> -->
                                   <div class="row">
                                     <div class="col-2">
                                       <label for="Description">Description</label>
                                     </div>
                                     <div class="col-10">
                                       <!-- <label for="Description">{{question.question.description}}</label> -->
-                                      <p style="text-align: justify;">{{question.question.description}}</p>
+                                      <p style="text-align: justify;">{{data.characteristics.portfolioDescription}}</p>
                                     </div>
                                   </div>
-                                </div>
+                               <!--  </div> -->
                               </div>
 
 
@@ -570,17 +570,17 @@
 
                           <div *ngIf="data.relavance !=0">
                               <div class="row p-2">
-                                <div class="row" *ngFor="let question of data.portfolioQuestion_details">
-                                  <label style="font-size: 17px;" for="question">{{question.question.name}} </label>
+                            <!--     <div class="row" *ngFor="let question of data.portfolioQuestion_details"> -->
+                                  <label style="font-size: 17px;" for="question">{{data.characteristics.portfolioQuestion}} </label>
 
                                   <div class="tooltip-container">
-                                    <div *ngIf="question.question.hint">
+                                    <div *ngIf="data.characteristics.portfolioHint">
                                       <span class="tooltip-icon">i</span>
-                                      <div class="tooltip-text" [innerHTML]="addNewline(question.question.hint)"></div>
+                                      <div class="tooltip-text" [innerHTML]="addNewline(data.characteristics.portfolioHint)"></div>
 
                                     </div>
                                   </div>
-                                </div>
+                              <!--   </div> -->
                               </div>
 
 
@@ -728,17 +728,17 @@
 
 
                                   <div class="row p-2">
-                                    <div class="row" *ngFor="let question of data.portfolioQuestion_details">
-                                      <label style="font-size: 17px;" for="question">{{question.question.name}} </label>
+                              <!--       <div class="row" *ngFor="let question of data.portfolioQuestion_details"> -->
+                                      <label style="font-size: 17px;" for="question">{{data.characteristics.portfolioQuestion}} </label>
 
                                       <div class="tooltip-container">
-                                        <div *ngIf="question.question.hint">
+                                        <div *ngIf="data.characteristics.portfolioHint">
                                           <span class="tooltip-icon">i</span>
                                         </div>
                                         <!-- <div class="tooltip-text">{{addNewline(question.question.hint)}}</div> -->
-                                        <div class="tooltip-text" [innerHTML]="addNewline(question.question.hint)"></div>
+                                        <div class="tooltip-text" [innerHTML]="addNewline(data.characteristics.portfolioHint)"></div>
                                       </div>
-                                    </div>
+                                 <!--    </div> -->
                                   </div>
 
                                   <!-- Newwwwwww -->
@@ -899,8 +899,8 @@
                           <h6 style="color: black; font-weight: normal; font-size: 17px;">Could the intervention have an impact on this particular SDG?</h6>
                         </div>
                         <div class="col-4">
-                          <p-dropdown appendTo="body" name="type" #type="ngModel" placeholder="Select Answer"
-                            [(ngModel)]="selectedSDGs[i].answer" [options]="sdg_answers" optionLabel="name"
+                          <p-dropdown appendTo="body" [name]="selectedSDGs[i].name" #type="ngModel" placeholder="Select Answer"
+                            [(ngModel)]="selectedSDGsWithAnswers[i].answer" [options]="sdg_answers" optionLabel="name"
                             optionValue="name" ></p-dropdown>
                         </div>
                       </div> <br>
@@ -949,17 +949,17 @@
                                     </div> -->
 
                                     <div class="row p-2">
-                                      <div class="row" *ngFor="let question of data.portfolioQuestion_details">
-                                        <label style="font-size: 17px;" for="question">{{question.question.name}} </label>
+                                    <!--   <div class="row" *ngFor="let question of data.portfolioQuestion_details"> -->
+                                        <label style="font-size: 17px;" for="question">{{data.characteristics.portfolioQuestion}} </label>
 
                                         <div class="tooltip-container">
-                                          <div *ngIf="question.question.hint">
+                                          <div *ngIf="data.characteristics.portfolioHint">
                                             <span class="tooltip-icon">i</span>
                                           </div>
                                           <!-- <div class="tooltip-text">{{addNewline(question.question.hint)}}</div> -->
-                                          <div class="tooltip-text" [innerHTML]="addNewline(question.question.hint)"></div>
+                                          <div class="tooltip-text" [innerHTML]="addNewline(data.characteristics.portfolioHint)"></div>
                                         </div>
-                                      </div>
+                                    <!--   </div> -->
                                     </div>
 
                                     <div class="row p-2">
@@ -1090,17 +1090,17 @@
                                     </div> -->
 
                                     <div class="row p-2">
-                                      <div class="row" *ngFor="let question of data.portfolioQuestion_details">
-                                        <label style="font-size: 17px;" for="question">{{question.question.name}} </label>
+                                     <!--  <div class="row" *ngFor="let question of data.portfolioQuestion_details"> -->
+                                        <label style="font-size: 17px;" for="question">{{data.characteristics.portfolioQuestion}} </label>
 
                                         <div class="tooltip-container">
-                                          <div *ngIf="question.question.hint">
+                                          <div *ngIf="data.characteristics.portfolioHint">
                                             <span class="tooltip-icon">i</span>
                                           </div>
                                           <!-- <div class="tooltip-text">{{addNewline(question.question.hint)}}</div> -->
-                                          <div class="tooltip-text" [innerHTML]="addNewline(question.question.hint)"></div>
+                                          <div class="tooltip-text" [innerHTML]="addNewline(data.characteristics.portfolioHint)"></div>
                                         </div>
-                                      </div>
+                                      <!-- </div> -->
                                     </div>
 
                                     <div class="row p-2">

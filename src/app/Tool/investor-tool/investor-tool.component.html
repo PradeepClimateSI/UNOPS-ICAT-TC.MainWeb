@@ -818,7 +818,7 @@
                       </div>
 
                       <div class="col-2 ">
-                        <p-multiSelect appendTo="body" name="sdgs" placeholder="Select SDGs" [(ngModel)]="selectedSDGs"
+                        <p-multiSelect appendTo="body" name="sdgssss" placeholder="Select SDGs" [(ngModel)]="selectedSDGs"
                           [options]="sdgList" (ngModelChange)="onItemSelectSDGs($event)" optionLabel="name"
                           ></p-multiSelect>
                       </div>
@@ -1039,8 +1039,9 @@
                           <h6 style="color: black; font-weight: normal; font-size: 17px;">Could the intervention have an impact on this particular SDG?</h6>
                         </div>
                         <div class="col-4">
-                          <p-dropdown appendTo="body" name="type" #type="ngModel" placeholder="Select Answer"
-                          [(ngModel)]="selectedSDGs[i].answer" [options]="sdg_answers" optionLabel="name"
+                          <p-dropdown appendTo="body" [name]="selectedSDGs[i].name" #type="ngModel" placeholder="Select Answer"
+                          [(ngModel)]="selectedSDGsWithAnswers[i].answer" [options]="sdg_answers" optionLabel="name"
+                          (onChange)="onChangeSDGsAnswer(selectedSDGs[i],selectedSDGs[i])"
                           optionValue="name"  ></p-dropdown>
                         </div>
                       </div>
