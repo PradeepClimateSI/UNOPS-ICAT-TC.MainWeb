@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import { AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, PortfolioQuestionDetails, PortfolioQuestions, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { AllBarriersSelected, Assessment, AssessmentControllerServiceProxy, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, PortfolioQuestionDetails, PortfolioQuestions, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { Dropdown } from 'primeng/dropdown';
@@ -17,6 +17,12 @@ interface CharacteristicWeight {
   [key: string]: number;
 }
 
+interface SelectedSDG {
+  id: number;
+  answer: string;
+  name: string;
+  number: number;
+}
 interface ChaCategoryWeightTotal {
   [key: string]: number;
 }
@@ -140,7 +146,8 @@ export class PortfolioTrack4Component implements OnInit {
     private router: Router,
     private instituionProxy: InstitutionControllerServiceProxy,
     private activatedRoute: ActivatedRoute,
-    public sanitizer: DomSanitizer
+    public sanitizer: DomSanitizer,
+    private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
 
   ) {
     this.uploadUrl = environment.baseUrlAPI + '/investor-tool/upload-file'
@@ -151,7 +158,8 @@ export class PortfolioTrack4Component implements OnInit {
   instiTutionList : any = []
   userCountryId:number = 0;
   sdgList : any = []
-  selectedSDGs : any = []
+  selectedSDGs : SelectedSDG[] = [];
+  selectedSDGsWithAnswers : SelectedSDG[] = [];
 
   sdgDataSendArray: any = [];
 
@@ -162,16 +170,64 @@ export class PortfolioTrack4Component implements OnInit {
   sdgDataSendArray2: any = []
   tableData : any;
 
+  assessmentId:number;
+  isEditMode:boolean=false;
+
   async ngOnInit(): Promise<void> {
- //this.load = false; //need to change as false
- //this.isSavedAssessment = true //need to change as false
 
-this.tableData =  this.getProductsData();
+    this.activatedRoute.queryParams.subscribe( params => {
+      params['isEdit']=='true'?(this.isEditMode =true ):false
+      this.assessmentId = params['id']
+      
+      //  console.log("params",params['id'],typeof(params['id']), params['isEdit'],typeof(params['isEdit']))
+      // this.isEditMode = true
+      // this.assessmentId = 415
 
- this.selectedApproach = 'Direct';
- this.assessment.assessment_approach = 'Direct';
+    })
+    if(this.isEditMode==false){
+      await this.getPolicies();
+      await this.getAllImpactsCovered();
+      await this.getCharacteristics();
+      this.sectorList = await this.sectorProxy.findAllSector().toPromise()
+    }
+    else{
+      try{
+        await this.getCharacteristics();
+        console.log(this.isEditMode,this.assessmentId)
+        this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+        this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
+        this.outcomeData = await this.investorToolControllerproxy.getOutcomeData(this.assessmentId).toPromise();
+        this.sdgDataSendArray2 = await this.investorToolControllerproxy.getScaleSDGData(this.assessmentId).toPromise();
+        this.sdgDataSendArray4 = await this.investorToolControllerproxy.getSustainedSDGData(this.assessmentId).toPromise();
+        this.selectedSDGs = await this.investorToolControllerproxy.getSelectedSDGs(this.assessmentId).toPromise();
+        this.selectedSDGsWithAnswers = await this.investorToolControllerproxy.getSelectedSDGsWithAnswers(this.assessmentId).toPromise();
 
-  await this.getPortfolioQuestions();
+        console.log("this.processData",this.processData,this.assessment)
+        console.log("this.outcomeData",this.outcomeData)
+        console.log("this.selectedSDGs", this.selectedSDGs)
+        console.log("this.selectedSDGsWithAnswers", this.selectedSDGsWithAnswers)
+        console.log("this.sdgDataSendArray2", this.sdgDataSendArray2)
+        console.log("this.sdgDataSendArray4", this.sdgDataSendArray4)
+        this.setFrom()
+        this.setTo() 
+        
+      }
+      catch (error) {
+        console.log(error)
+      }
+      
+
+    } 
+
+    this.load = true; //need to change as false
+    this.isSavedAssessment = true //need to change as false
+
+    this.tableData = this.getProductsData();
+
+    this.selectedApproach = 'Direct';
+    this.assessment.assessment_approach = 'Direct';
+
+    await this.getPortfolioQuestions();
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
     this.userCountryId  = tokenPayload.countryId;
@@ -187,7 +243,6 @@ this.tableData =  this.getProductsData();
       this.instiTutionList = res;
       console.log( "listtt",this.instiTutionList)
     });
-
 
     this.categoryTabIndex = 0;
 
@@ -213,25 +268,10 @@ this.tableData =  this.getProductsData();
     console.log("tabName", this.tabName)
     // this.getSelectedHeader();
 
-    this.sectorList = await this.sectorProxy.findAllSector().toPromise()
-    if (countryId > 0) {
-      // this.sectorList = await this.sectorProxy.getCountrySector(countryId).toPromise()
-      
-      // this.sectorProxy.getSectorDetails(1,100,'').subscribe((res:any) =>{
-      //   res.items.forEach((re:any)=>{
-      //     if(re.id !=6){
-      //       this.sectorList.push(re)
-      //     }
-      //   })
-      // })
-
-      // console.log("++++", this.sectorList)
-
-    } // countryid = 0
-
-    await this.getPolicies();
-    await this.getAllImpactsCovered();
-    await this.getCharacteristics();
+    //this.sectorList = await this.sectorProxy.findAllSector().toPromise()
+   // await this.getPolicies();
+   // await this.getAllImpactsCovered();
+   // await this.getCharacteristics();
     
     console.log(this.policies)
     console.log(this.assessment)
@@ -241,7 +281,25 @@ this.tableData =  this.getProductsData();
      this.sdgList = res
     });
 
+  }
 
+  setFrom(){
+    if(this.assessment.from){  
+      let convertTime = moment(this.assessment.from).format("YYYY-MM-DD HH:mm:ss");
+      let convertTimeObject = new Date(convertTime);
+      //@ts-ignore
+      this.assessment.from = convertTimeObject;
+    }
+
+  }
+
+  setTo(){
+    if(this.assessment.to){
+      let convertTime = moment(this.assessment.to).format("YYYY-MM-DD HH:mm:ss");
+      let convertTimeObject = new Date(convertTime);
+      //@ts-ignore
+      this.assessment.to = convertTimeObject;
+    }
   }
 
   assignSDG(sdg : any , data : any){
@@ -253,7 +311,7 @@ this.tableData =  this.getProductsData();
     console.log("data22", data)
   }
 
-  onItemSelectSDGs(event: any) {
+  /* onItemSelectSDGs(event: any) {
     console.log("rrr", this.selectedSDGs);
     console.log("event", event);
 
@@ -294,8 +352,72 @@ this.tableData =  this.getProductsData();
     console.log("this.sdgDataSendArray2", this.sdgDataSendArray2);
     console.log("this.sdgDataSendArray4", this.sdgDataSendArray4);
   }
+ */
+
+  onItemSelectSDGs(event: any) {
+    console.log("rrr", this.selectedSDGs);
+    console.log("event", event);
+  
+    // Create an array of indexes for selected items
+    const selectedIndexes = this.selectedSDGs.map(sdg => sdg.id);
+  
+    // Remove items from sdgDataSendArray2 that are not in the selectedSDGs
+    this.sdgDataSendArray2 = this.sdgDataSendArray2.filter((sdgData: { index: number; }) => selectedIndexes.includes(sdgData.index));
+  
+    // Remove items from sdgDataSendArray4 that are not in the selectedSDGs
+    this.sdgDataSendArray4 = this.sdgDataSendArray4.filter((sdgData: { index: number; }) => selectedIndexes.includes(sdgData.index));
+  
+    // Find items in selectedSDGs that are not in sdgDataSendArray2 and add them
+    this.selectedSDGs.forEach(selectedSdg => {
+      if (!this.sdgDataSendArray2.some((sdgData: { index: number; }) => sdgData.index === selectedSdg.id)) {
+        const sdgData = JSON.parse(JSON.stringify(this.sdgDataSendArray[0]));
+        const newObj = {
+          CategoryName: sdgData.CategoryName,
+          categoryID: sdgData.categoryID,
+          type: sdgData.type,
+          data: sdgData.data,
+          index: selectedSdg.id
+        };
+        this.sdgDataSendArray2.push(newObj);
+      }
+    });
+  
+    // Find items in selectedSDGs that are not in sdgDataSendArray4 and add them
+    this.selectedSDGs.forEach(selectedSdg => {
+      if (!this.sdgDataSendArray4.some((sdgData: { index: number; }) => sdgData.index === selectedSdg.id)) {
+        const sdgData = JSON.parse(JSON.stringify(this.sdgDataSendArray3[0]));
+        const newObj = {
+          CategoryName: sdgData.CategoryName,
+          categoryID: sdgData.categoryID,
+          type: sdgData.type,
+          data: sdgData.data,
+          index: selectedSdg.id
+        };
+        this.sdgDataSendArray4.push(newObj);
+      }
+    });
 
 
+    // Update selectedSDGsWithAnswers based on the selectedSDGs
+this.selectedSDGsWithAnswers = this.selectedSDGs.map(selectedSdg => {
+  const existingAnswer = this.selectedSDGsWithAnswers.find(
+    sdgWithAnswer => sdgWithAnswer.id === selectedSdg.id
+  );
+
+  if (existingAnswer) {
+    return { ...selectedSdg, answer: existingAnswer.answer };
+  } else {
+    // If the selected item is not in selectedSDGsWithAnswers, initialize it with a default answer
+    return { ...selectedSdg, answer: ""  };
+  }
+});
+
+  
+    console.log("this.sdgDataSendArray2", this.sdgDataSendArray2);
+    console.log("this.sdgDataSendArray4", this.sdgDataSendArray4);
+    console.log("this.selectedSDGsWithAnswers", this.selectedSDGsWithAnswers);
+  }
+  
   async getPolicies() {
     this.policies = await this.projectControllerServiceProxy.findAllPolicies().toPromise()
 
@@ -617,6 +739,81 @@ console.log("wwwwww", this.outcomeData)
   }
 
 
+  async saveDraft(category:any){
+    
+    let finalArray = this.processData.concat(this.outcomeData)
+    if(this.isEditMode ==true){
+      this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+      console.log("assessment",this.assessment.id)
+      finalArray.map(x => x.data.map(y => y.assessment = this.assessment))
+      console.log("finalArray33", finalArray)
+    }
+    else{
+      console.log("mainAssessment",this.mainAssessment.id)
+      finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
+    }
+
+    for(let i=0; i< this.sdgDataSendArray2.length; i++){
+      for(let item of this.sdgDataSendArray2[i].data){
+        item.portfolioSdg = this.selectedSDGs[i];
+      }
+      
+    }
+
+    for(let i=0; i< this.sdgDataSendArray4.length; i++){
+      for(let item of this.sdgDataSendArray4[i].data){
+        item.portfolioSdg = this.selectedSDGs[i];
+      }
+    }
+    
+    let data : any ={
+      finalArray : finalArray,
+      isDraft : true,
+      isEdit : this.isEditMode,
+      scaleSDGs : this.sdgDataSendArray2,
+      sustainedSDGs : this.sdgDataSendArray4,
+      sdgs : this.selectedSDGsWithAnswers
+    }
+    // this.assessmentControllerServiceProxy.update
+    //@ts-ignore
+    console.log("data",data)
+    this.investorToolControllerproxy.createFinalAssessment2(data)
+      .subscribe(async _res => {
+        console.log("res final", _res)
+
+        console.log(_res)
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Assessment draft has been saved successfully',
+          closable: true,
+        })
+        if(this.isEditMode ==false){
+          console.log("mainAssessment",this.mainAssessment.id)
+          this.router.navigate(['app/portfolio-tool-edit'], {  
+            queryParams: { id: this.mainAssessment.id,isEdit:true},  
+            });
+          // window.location.reload();
+        }
+       
+        
+        // this.showResults();
+        // this.isSavedAssessment = true
+        // this.onCategoryTabChange('', this.tabView);
+
+
+        // form.reset();
+      }, error => {
+        console.log(error)
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Assessment detail saving failed',
+          closable: true,
+        })
+      })
+  }
+
   onsubmit(form: NgForm) {
 
     console.log("processData ---", this.processData)
@@ -730,7 +927,7 @@ console.log("wwwwww", this.outcomeData)
         finalArray : finalArray,
         scaleSDGs : this.sdgDataSendArray2,
         sustainedSDGs : this.sdgDataSendArray4,
-        sdgs : this.selectedSDGs
+        sdgs : this.selectedSDGsWithAnswers
       }
       this.investorToolControllerproxy.createFinalAssessment2(data)
         .subscribe(_res => {

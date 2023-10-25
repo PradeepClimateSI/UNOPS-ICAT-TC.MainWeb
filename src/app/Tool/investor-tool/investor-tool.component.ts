@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { MasterDataDto, MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import {Any, AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, AssessmentControllerServiceProxy, Category } from 'shared/service-proxies/service-proxies';
+import {Any, AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, AssessmentControllerServiceProxy, Category, PortfolioSdg } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -26,6 +26,12 @@ interface SelectedSDG {
   answer: string;
   name: string;
   number: number;
+}
+
+interface SelectItem<T = any>{
+  label?:string;
+  value: T;
+  icon?:string;
 }
 interface ChaCategoryTotalEqualsTo1 {
   [key: string]: boolean;
@@ -71,15 +77,16 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   //Newww
   
-  sdgList : any = []
-  selectedSDGs : SelectedSDG[];
+  sdgList : any[];
+  selectedSDGs : SelectedSDG[] = [];
+  selectedSDGsWithAnswers : SelectedSDG[] = [];
   sdgDataSendArray: any = [];
   sdgDataSendArray3: any= [];
   sdgDataSendArray4: any = [];
   sdgDataSendArray2: any = [];
   outcomeScaleScore: any[] = [];
   outcomeSustainedScore : any[] = [];
-  sdg_answers: any[];
+  sdg_answers: any[]= [];;
 
   description = '';
   levelofImplementation:number=0;
@@ -192,23 +199,29 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
     } 
 
+   
     //comment this
-    /* console.log(this.isEditMode,this.assessmentId)
+        /* await this.getCharacteristics();
+        console.log(this.isEditMode,this.assessmentId)
         this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
         this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
         this.outcomeData = await this.investorToolControllerproxy.getOutcomeData(this.assessmentId).toPromise();
         this.sdgDataSendArray2 = await this.investorToolControllerproxy.getScaleSDGData(this.assessmentId).toPromise();
+        this.sdgDataSendArray4 = await this.investorToolControllerproxy.getSustainedSDGData(this.assessmentId).toPromise();
         this.selectedSDGs = await this.investorToolControllerproxy.getSelectedSDGs(this.assessmentId).toPromise();
+        this.selectedSDGsWithAnswers = await this.investorToolControllerproxy.getSelectedSDGsWithAnswers(this.assessmentId).toPromise();
 
         console.log("this.processData",this.processData,this.assessment)
         console.log("this.outcomeData",this.outcomeData)
         console.log("this.selectedSDGs", this.selectedSDGs)
+        console.log("this.selectedSDGsWithAnswers", this.selectedSDGsWithAnswers)
         console.log("this.sdgDataSendArray2", this.sdgDataSendArray2)
+        console.log("this.sdgDataSendArray4", this.sdgDataSendArray4)
         this.setFrom()
-        this.setTo() */
+        this.setTo()  */
     //upto this
 
-  // this.isSavedAssessment = true; this.tabLoading= true; // Need to remove  
+ // this.isSavedAssessment = true; this.tabLoading= true; // Need to remove  
   // this.isSavedAssessment = true // Need to remove  
   this.tableData =  this.getProductsData();
     this.categoryTabIndex =0;
@@ -251,7 +264,28 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
      });
 
   }
+  
+     
+    
+    
+  
   async getSavedAssessment(){
+    await this.getCharacteristics();
+    console.log(this.isEditMode,this.assessmentId)
+    this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+    this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
+    this.outcomeData = await this.investorToolControllerproxy.getOutcomeData(this.assessmentId).toPromise();
+    this.sdgDataSendArray2 = await this.investorToolControllerproxy.getScaleSDGData(this.assessmentId).toPromise();
+    this.sdgDataSendArray4 = await this.investorToolControllerproxy.getSustainedSDGData(this.assessmentId).toPromise();
+    this.selectedSDGs = await this.investorToolControllerproxy.getSelectedSDGs(this.assessmentId).toPromise();
+    this.selectedSDGsWithAnswers = await this.investorToolControllerproxy.getSelectedSDGsWithAnswers(this.assessmentId).toPromise();
+
+    console.log("this.processData",this.processData,this.assessment)
+    console.log("this.outcomeData",this.outcomeData)
+    console.log("this.selectedSDGs", this.selectedSDGs)
+    console.log("this.selectedSDGsWithAnswers", this.selectedSDGsWithAnswers)
+    console.log("this.sdgDataSendArray2", this.sdgDataSendArray2)
+    console.log("this.sdgDataSendArray4", this.sdgDataSendArray4)
     console.log(this.isEditMode,this.assessmentId)
     this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
     this.policies.push(this.assessment.climateAction)
@@ -275,6 +309,12 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.setFrom()
     this.setTo()
   }
+
+  onChangeSDGsAnswer(withAnswers:any , item : any){
+    console.log("withAnswers", withAnswers)
+console.log("itemmmm", item)
+  }
+
   ngAfterContentChecked(): void {
     this.changeDetector.detectChanges();
   }
@@ -309,9 +349,14 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   async getCharacteristics() {
    
+    this.investorToolControllerproxy.findAllSDGs().subscribe((res: any[]) => {
+      console.log("ressssSDGs", res)
+      this.sdgList = res
+     });
+
     try{
       this.investorQuestions= await this.investorToolControllerproxy.findAllIndicatorquestions().toPromise();
-      // console.log("ressss3333",  this.investorQuestions)
+       console.log("ressss3333",  this.investorQuestions)
       console.log("1111")
 
     // });
@@ -515,23 +560,38 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   }
   async saveDraft(category:any){
     
+    let finalArray = this.processData.concat(this.outcomeData)
     if(this.isEditMode ==true){
       this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
       console.log("assessment",this.assessment.id)
-      this.processData.map(x => x.data.map(y => y.assessment = this.assessment))
+      finalArray.map(x => x.data.map(y => y.assessment = this.assessment))
+      console.log("finalArray33", finalArray)
     }
     else{
       console.log("mainAssessment",this.mainAssessment.id)
-      this.processData.map(x => x.data.map(y => y.assessment = this.mainAssessment))
+      finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
+    }
+
+    for(let i=0; i< this.sdgDataSendArray2.length; i++){
+      for(let item of this.sdgDataSendArray2[i].data){
+        item.portfolioSdg = this.selectedSDGs[i];
+      }
+      
+    }
+
+    for(let i=0; i< this.sdgDataSendArray4.length; i++){
+      for(let item of this.sdgDataSendArray4[i].data){
+        item.portfolioSdg = this.selectedSDGs[i];
+      }
     }
     
     let data : any ={
-      finalArray : this.processData,
+      finalArray : finalArray,
       isDraft : true,
-      isEdit : this.isEditMode
-      // scaleSDGs : this.sdgDataSendArray2,
-      // sustainedSDGs : this.sdgDataSendArray4,
-      // sdgs : this.selectedSDGs
+      isEdit : this.isEditMode,
+      scaleSDGs : this.sdgDataSendArray2,
+      sustainedSDGs : this.sdgDataSendArray4,
+      sdgs : this.selectedSDGsWithAnswers
     }
     // this.assessmentControllerServiceProxy.update
     //@ts-ignore
@@ -738,7 +798,9 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
         finalArray : finalArray,
         scaleSDGs : this.sdgDataSendArray2,
         sustainedSDGs : this.sdgDataSendArray4,
-        sdgs : this.selectedSDGs
+        sdgs : this.selectedSDGsWithAnswers,
+        isEdit:false
+
       }
 
       //@ts-ignore
@@ -1194,14 +1256,21 @@ assignSDG(sdg : any , data : any){
   console.log("data22", data)
 }
 
-    onItemSelectSDGs(event: any) {
+
+   /*  onItemSelectSDGs(event: any) {
       console.log("rrr", this.selectedSDGs);
       console.log("event", event);
+     /// this.selectedSDGsWithAnswers = this.selectedSDGs;
+     // console.log(" this.selectedSDGsWithAnswers", this.selectedSDGsWithAnswers);
+     const len1 =  this.sdgDataSendArray2.length;
+     const len2 =  this.sdgDataSendArray4.length;
 
-      this.sdgDataSendArray2 = [];
-      this.sdgDataSendArray4 = [];
+     console.log("lengthh", len1);
+     console.log("selectedSDGs.lengthh", this.selectedSDGs.length);
+    //  this.sdgDataSendArray2 = [];
+    //  this.sdgDataSendArray4 = [];
 
-      for (let index = 0; index < this.selectedSDGs.length; index++) {
+      for (let index = len1; index < this.selectedSDGs.length; index++) {
         const sdgData = JSON.parse(JSON.stringify(this.sdgDataSendArray[0]));
 
         const newObj = {
@@ -1216,7 +1285,7 @@ assignSDG(sdg : any , data : any){
       }
 
 
-      for (let index = 0; index < this.selectedSDGs.length; index++) {
+      for (let index = len2; index < this.selectedSDGs.length; index++) {
         const sdgData = JSON.parse(JSON.stringify(this.sdgDataSendArray3[0]));
 
         const newObj = {
@@ -1235,8 +1304,73 @@ assignSDG(sdg : any , data : any){
       console.log("this.sdgDataSendArray2", this.sdgDataSendArray2);
       console.log("this.sdgDataSendArray4", this.sdgDataSendArray4);
     }
+ */
+    onItemSelectSDGs(event: any) {
+      console.log("rrr", this.selectedSDGs);
+      console.log("event", event);
+    
+      // Create an array of indexes for selected items
+      const selectedIndexes = this.selectedSDGs.map(sdg => sdg.id);
+    
+      // Remove items from sdgDataSendArray2 that are not in the selectedSDGs
+      this.sdgDataSendArray2 = this.sdgDataSendArray2.filter((sdgData: { index: number; }) => selectedIndexes.includes(sdgData.index));
+    
+      // Remove items from sdgDataSendArray4 that are not in the selectedSDGs
+      this.sdgDataSendArray4 = this.sdgDataSendArray4.filter((sdgData: { index: number; }) => selectedIndexes.includes(sdgData.index));
+    
+      // Find items in selectedSDGs that are not in sdgDataSendArray2 and add them
+      this.selectedSDGs.forEach(selectedSdg => {
+        if (!this.sdgDataSendArray2.some((sdgData: { index: number; }) => sdgData.index === selectedSdg.id)) {
+          const sdgData = JSON.parse(JSON.stringify(this.sdgDataSendArray[0]));
+          const newObj = {
+            CategoryName: sdgData.CategoryName,
+            categoryID: sdgData.categoryID,
+            type: sdgData.type,
+            data: sdgData.data,
+            index: selectedSdg.id
+          };
+          this.sdgDataSendArray2.push(newObj);
+        }
+      });
+    
+      // Find items in selectedSDGs that are not in sdgDataSendArray4 and add them
+      this.selectedSDGs.forEach(selectedSdg => {
+        if (!this.sdgDataSendArray4.some((sdgData: { index: number; }) => sdgData.index === selectedSdg.id)) {
+          const sdgData = JSON.parse(JSON.stringify(this.sdgDataSendArray3[0]));
+          const newObj = {
+            CategoryName: sdgData.CategoryName,
+            categoryID: sdgData.categoryID,
+            type: sdgData.type,
+            data: sdgData.data,
+            index: selectedSdg.id
+          };
+          this.sdgDataSendArray4.push(newObj);
+        }
+      });
 
 
+      // Update selectedSDGsWithAnswers based on the selectedSDGs
+  this.selectedSDGsWithAnswers = this.selectedSDGs.map(selectedSdg => {
+    const existingAnswer = this.selectedSDGsWithAnswers.find(
+      sdgWithAnswer => sdgWithAnswer.id === selectedSdg.id
+    );
+
+    if (existingAnswer) {
+      return { ...selectedSdg, answer: existingAnswer.answer };
+    } else {
+      // If the selected item is not in selectedSDGsWithAnswers, initialize it with a default answer
+      return { ...selectedSdg, answer: ""  };
+    }
+  });
+
+    
+      console.log("this.sdgDataSendArray2", this.sdgDataSendArray2);
+      console.log("this.sdgDataSendArray4", this.sdgDataSendArray4);
+      console.log("this.selectedSDGsWithAnswers", this.selectedSDGsWithAnswers);
+    }
+    
+
+    
     getProductsData() {
       return [
           {

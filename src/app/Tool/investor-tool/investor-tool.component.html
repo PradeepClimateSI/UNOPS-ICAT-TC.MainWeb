@@ -821,7 +821,7 @@
                       </div>
 
                       <div class="col-2 ">
-                        <p-multiSelect appendTo="body" name="sdgs" placeholder="Select SDGs" [(ngModel)]="selectedSDGs"
+                        <p-multiSelect appendTo="body" name="sdgssss" placeholder="Select SDGs" [(ngModel)]="selectedSDGs"
                           [options]="sdgList" (ngModelChange)="onItemSelectSDGs($event)" optionLabel="name"
                           ></p-multiSelect>
                       </div>
@@ -877,15 +877,14 @@
 
 
                                   <div class="row p-2">
-                                    <div class="row" *ngFor="let question of data.indicator_details">
-                                     <label style="font-size: 17px;" for="question">{{question.question.name}} </label>
+                                     <label style="font-size: 17px;" for="question">{{data.characteristics.main_question}} </label>
 
                                      <!--    <div class="tooltip-container">
                                           <div *ngIf="question.question.hint">
                                            <span class="tooltip-icon">i</span> </div>
                                           <div class="tooltip-text">{{addNewline(question.question.hint)}}</div>
                                       </div> -->
-                                    </div>
+
                                 </div>
 
                                 <!-- Newwwwwww -->
@@ -1029,6 +1028,9 @@
                            <div class="btn btn-primary text-uppercase"  (click)="next(category,'outcome')" >
                                Next
                            </div>
+                           <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category)">
+                            Save
+                          </div>
                       </div>
                     </div>
                   </div>
@@ -1043,8 +1045,9 @@
                           <h6 style="color: black; font-weight: normal; font-size: 17px;">Could the intervention have an impact on this particular SDG?</h6>
                         </div>
                         <div class="col-4">
-                          <p-dropdown appendTo="body" name="type" #type="ngModel" placeholder="Select Answer"
-                          [(ngModel)]="selectedSDGs[i].answer" [options]="sdg_answers" optionLabel="name"
+                          <p-dropdown appendTo="body" [name]="selectedSDGs[i].name" #type="ngModel" placeholder="Select Answer"
+                          [(ngModel)]="selectedSDGsWithAnswers[i].answer" [options]="sdg_answers" optionLabel="name"
+                          (onChange)="onChangeSDGsAnswer(selectedSDGs[i],selectedSDGs[i])"
                           optionValue="name"  ></p-dropdown>
                         </div>
                       </div>
@@ -1093,15 +1096,14 @@
                                     </div> -->
 
                                     <div class="row p-2">
-                                      <div class="row" *ngFor="let question of data.indicator_details">
-                                       <label style="font-size: 17px;" for="question">{{question.question.name}} </label>
+                                       <label style="font-size: 17px;" for="question">{{data.characteristics.main_question}} </label>
 
                                          <!--  <div class="tooltip-container">
                                             <div *ngIf="question.question.hint">
                                              <span class="tooltip-icon">i</span> </div>
                                             <div class="tooltip-text">{{addNewline(question.question.hint)}}</div>
                                         </div> -->
-                                      </div>
+
                                   </div>
 
                                     <div class="row p-2">
@@ -1176,6 +1178,9 @@
                          <div class="btn btn-primary text-uppercase"  (click)="nextSDG(sdgDataSendArray2,'scaleSD')" >
                              Next
                          </div>
+                         <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category)">
+                          Save
+                        </div>
                     </div>
                   </div>
                   
@@ -1231,15 +1236,13 @@
                                     </div> -->
 
                                     <div class="row p-2">
-                                      <div class="row" *ngFor="let question of data.indicator_details">
-                                       <label style="font-size: 17px;" for="question">{{question.question.name}} </label>
+                                       <label style="font-size: 17px;" for="question">{{data.characteristics.main_question}} </label>
 
                                          <!--  <div class="tooltip-container">
                                             <div *ngIf="question.question.hint">
                                              <span class="tooltip-icon">i</span> </div>
                                             <div class="tooltip-text">{{addNewline(question.question.hint)}}</div>
                                         </div> -->
-                                      </div>
                                   </div>
 
                                     <div class="row p-2">
@@ -1314,6 +1317,9 @@
                          <div class="btn btn-primary text-uppercase"  (click)="nextSDG(sdgDataSendArray4,'sustainedSD')" >
                              Next
                          </div>
+                         <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category)">
+                          Save
+                        </div>
                     </div>
                   </div>
                   </div>
