@@ -241,6 +241,13 @@ const routes: Routes = [
     data: {}
   },
   {
+    path: 'investor-tool-new-edit',
+    component: InvestorToolComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
     path: 'assessment-result/:id',
     component: AssessmentResultComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),

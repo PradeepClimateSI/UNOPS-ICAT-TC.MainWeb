@@ -518,20 +518,22 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     }
 
   }
-  saveDraft(category:any){
+  async saveDraft(category:any){
     
     if(this.isEditMode ==true){
-      console.log("assessment",this.assessment)
+      this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+      console.log("assessment",this.assessment.id)
       this.processData.map(x => x.data.map(y => y.assessment = this.assessment))
     }
     else{
-      console.log("mainAssessment",this.mainAssessment)
-      this.processData.map(x => x.data.map(y => y.assessment = this.assessment))
+      console.log("mainAssessment",this.mainAssessment.id)
+      this.processData.map(x => x.data.map(y => y.assessment = this.mainAssessment))
     }
     
     let data : any ={
       finalArray : this.processData,
-      isDraft : true
+      isDraft : true,
+      isEdit : this.isEditMode
       // scaleSDGs : this.sdgDataSendArray2,
       // sustainedSDGs : this.sdgDataSendArray4,
       // sdgs : this.selectedSDGs
@@ -540,7 +542,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     //@ts-ignore
     console.log("data",data)
     this.investorToolControllerproxy.createFinalAssessment(data)
-      .subscribe(_res => {
+      .subscribe(async _res => {
         console.log("res final", _res)
 
         console.log(_res)
@@ -550,6 +552,15 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
           detail: 'Assessment draft has been saved successfully',
           closable: true,
         })
+        if(this.isEditMode ==false){
+          console.log("mainAssessment",this.mainAssessment.id)
+          this.router.navigate(['app/investor-tool-new-edit'], {  
+            queryParams: { id: this.mainAssessment.id,isEdit:true},  
+            });
+          // window.location.reload();
+        }
+       
+        
         // this.showResults();
         // this.isSavedAssessment = true
         // this.onCategoryTabChange('', this.tabView);
