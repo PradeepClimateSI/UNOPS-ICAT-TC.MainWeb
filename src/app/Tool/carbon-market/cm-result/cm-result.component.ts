@@ -4,7 +4,7 @@ import { Assessment, AssessmentCMDetail, AssessmentCMDetailControllerServiceProx
 import * as XLSX from 'xlsx-js-style';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-import { MasterDataService } from 'app/shared/master-data.service';
+import { MasterDataDto, MasterDataService } from 'app/shared/master-data.service';
 import { environment } from 'environments/environment';
 import { SDG } from '../cm-section-three/cm-section-three.component';
 import { SelectedScoreDto } from 'app/shared/score.dto';
@@ -43,6 +43,7 @@ export class CmResultComponent implements OnInit {
   xData: {label: string; value: number}[]
   yData: {label: string; value: number}[]
   heatMapScore: HeatMapScore[]
+  scales: MasterDataDto[];
 
   constructor(
     private route: ActivatedRoute,
@@ -69,18 +70,22 @@ export class CmResultComponent implements OnInit {
       this.relevances = this.masterDataService.relevance
       this.xData = this.masterDataService.xData
       this.yData = this.masterDataService.yData
+      this.scales = this.masterDataService.scale_of_activity
 
       this.assessmentCMDetail = await this.assessmentCMDetailControllerServiceProxy.getAssessmentCMDetailByAssessmentId(assessmentId).toPromise()
       let cmApproache = cmApproaches.find(o => o.code === this.assessmentCMDetail.intCMApproach)
+      let scale = this.scales.find(o => o.code === this.assessmentCMDetail.scale)
+
       this.card.push(
         ...[
           { title: 'Intervention', data: this.intervention.policyName },
+          { title: 'Scale of Activity', data: scale?.name },
           { title: 'Assessment Type', data: this.assessment.assessmentType },
           // { title: 'Assessment Boundaries', data: this.assessmentCMDetail.boundraries },
           { title: 'Geographical Areas Covered', data: this.assessmentCMDetail.geographicalAreasCovered.map(a => a.name)},
           { title: 'Sectors Covered', data: this.assessmentCMDetail.sectorsCovered.map(a => a.sector.name)},
           { title: 'Opportunities for stakeholders to participate in the assessment', data: this.assessment.opportunities},
-          { title: 'Principles on which the assessment is based', data: this.assessment.principles},
+          // { title: 'Principles on which the assessment is based', data: this.assessment.principles},
           { title: 'Assessment Period', data: moment(this.assessment.from).format('YYYY-MM-DD') + ' - ' + moment(this.assessment.to).format('YYYY-MM-DD')},
           { title: 'Assessment Boundaries (If different from the intervention boundary specified in the baseline methodology)', data: this.assessmentCMDetail.boundraries},
           { title: 'International Carbon Market Approach Used', data: cmApproache?.name},

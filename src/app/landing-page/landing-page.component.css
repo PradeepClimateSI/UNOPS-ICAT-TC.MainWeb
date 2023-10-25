@@ -47,7 +47,7 @@ a.link{
     background-position: 45% 55%;
     background-repeat: no-repeat;
     
-    /* background-image: url('./assets/images/land002.jpg'); */
+    background-image: url('../../assets/images/land002.jpg');
 }
 
 .contact-us:before{
@@ -74,7 +74,7 @@ a.link{
     background-position: 45% 55%;
     background-repeat: no-repeat;
     
-   /*  background-image: url('./assets/images/land003.jpg'); */
+    background-image: url('../../assets/images/land003.jpg');
 }
 
 .case-studies:before{

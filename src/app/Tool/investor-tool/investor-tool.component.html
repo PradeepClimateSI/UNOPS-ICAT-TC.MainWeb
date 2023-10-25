@@ -176,7 +176,7 @@
                             <!-- <label >What is the envisioned change in the system the intervention is 
                               impacting in moving from where the system is currently to where it should be to achieve 
                               the transformational shift desired?</label> -->
-                              <label >What is the vision for the desired change of the system over time towards zero-carbon and sustainable practices? *</label>
+                              <label >How do you see the system the intervention is impacting on moving from its current status towards a situation where? *</label>
                           </div>
                           <div class="col-12 col-md-6">
                             <div class="p-field">
@@ -260,7 +260,7 @@
                             </div>
                           </div>
                         </div>
-                        <div class="row p-2">
+                        <!-- <div class="row p-2">
                           <div class="  col-12">
                                                                     
                             <label >How does the intervention seek to contribute to the change in the system to achieve the vision? *</label>
@@ -276,7 +276,7 @@
                             </p>
                             </div>
                           </div>
-                        </div>
+                        </div> -->
             
             
                       </div>
@@ -582,8 +582,8 @@
     <!-- <div class="p-grid p-fluid col-sm-12" *ngIf="showSections">
         <app-cm-section [assessment]="assessmentres"></app-cm-section>
     </div> -->
-    <div class="card" *ngIf="isSavedAssessment && tabLoading">
-        <!-- <div class="card" > -->
+    <!-- <div class="card" *ngIf="isSavedAssessment && tabLoading"> -->
+        <div class="card" >
         <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)" >
         <p-tabView  (onChange)="onMainTabChange($event) " [(activeIndex)]="activeIndexMain ">
 
@@ -592,7 +592,7 @@
 
                 <p-tabView #tabView (onChange)="onCategoryTabChange($event, tabView)" [(activeIndex)]="activeIndex "    >
 
-                    <p-tabPanel  [header]="category.CategoryName" *ngFor="let category of processData" >
+                    <p-tabPanel  [header]="category.CategoryName" *ngFor="let category of processData; index as cat" >
 
                         <div class="characteristic-Topic " *ngFor="let data of category.data; index as i">
                             <h6 *ngIf="data.characteristics.name!= 'Research and Development'">{{i+1}}.{{data.characteristics.name}}</h6>
@@ -624,7 +624,7 @@
                                                                 </div>
                                                                 <div class="col-4">
                                                                     <p-dropdown  
-                                                                    [name]="data.characteristics.name+ 'rel'"
+                                                                    name="cat-{{cat}}-data.charData.relavance-{{i}}"
                                                                     #rel="ngModel"
                                                                     placeholder="Select Relevance"
                                                                     [(ngModel)]="data.relavance"
@@ -643,7 +643,7 @@
 
                                                     <div class="row p-2">
                                                         <!-- <label for="Indicator"><u>Indicator</u></label> -->
-                                                        <div class="row" *ngFor="let question of data.indicator_details">
+                                                        <div class="row" *ngFor="let question of data.indicator_details ; let j = index">
                                                             <label style="font-size: 17px;" *ngIf="question.question.isMain" for="Indicator" class="mt-10 mb-10"><u>{{question.question.name}}</u></label>
 
                                                              <div class="row" *ngIf="!question.question.isMain">
@@ -662,7 +662,7 @@
                                                                  <div class="col-4 mb-20">
 
                                                                     <p-dropdown *ngIf="approach===1"
-                                                                        name="data.charData.question01" #type="ngModel"
+                                                                        name="cat-{{cat}}-data.charData.question-{{i}}-{{j}}" #type="ngModel"
                                                                         placeholder="Select Answer"
                                                                         [(ngModel)]="question.value"
                                                                         [options]="yesNoAnswer" optionLabel="name"
@@ -694,8 +694,8 @@
                                                                     [(ngModel)]="question.justification"
                                                                     placeholder="Enter Justification"
                                                                     #questionJustification="ngModel"
-                                                                    [name]="question.question.name+'question'" />
-                                                                    <p class="info-message text-danger" *ngIf="!question.justification  && (fData1.submitted || questionJustification.touched) || (category.isValidated==false && !question.justification)">
+                                                                    name="cat-{{cat}}-questionJustification-{{i}}-{{j}}" />
+                                                                    <p class="info-message text-danger" *ngIf="!question.justification  && (fData1.submitted || questionJustification.touched) ">
                                                                       This is a mandatory field </p>
 
                                                                  </div>
@@ -713,7 +713,7 @@
                                                                 <label for="likelihood" >Likelihood*</label>
                                                                 <p-dropdown 
                                                                     appendTo="body"
-                                                                    [name]="data.characteristics.name+ 'likelihood' "
+                                                                    name="cat-{{cat}}-data.charData.likelihood-{{i}}"
                                                                     #likelihood2="ngModel" 
                                                                     placeholder="Select Likelihood"
                                                                     [(ngModel)]="data.likelihood"
@@ -740,8 +740,8 @@
                                                                 <input type="text" pInputText
                                                                     [(ngModel)]="data.likelihood_justification" #just1="ngModel"
                                                                     placeholder="Enter Justification"
-                                                                    [name]="data.characteristics.name+ 'Justification' " />
-                                                                    <p class="info-message text-danger" *ngIf="!data.likelihood_justification  && (fData1.submitted || just1.touched)||(category.isValidated==false && !data.likelihood_justification) ">
+                                                                    name="cat-{{cat}}-data.charData.likelihood_justification-{{i}}" />
+                                                                    <p class="info-message text-danger" *ngIf="!data.likelihood_justification  && (fData1.submitted || just1.touched) ">
                                                                       This is a mandatory field </p>
 
                                                             </div>
@@ -787,6 +787,9 @@
                                <div class="btn btn-primary text-uppercase"  (click)="next(category,'process')" >
                                    Next
                                </div>
+                               <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category)">
+                                Save
+                              </div>
                           </div>
                         </div>
 

@@ -173,20 +173,21 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   }
   async ngOnInit(): Promise<void> {
     
-    // this.activatedRoute.queryParams.subscribe(async params => {
+    this.activatedRoute.queryParams.subscribe( params => {
+      params['isEdit']=='true'?(this.isEditMode =true ):false
+      this.assessmentId = params['id']
+      
+      //  console.log("params",params['id'],typeof(params['id']), params['isEdit'],typeof(params['isEdit']))
+      // this.isEditMode = true
+      // this.assessmentId = 415
 
-    //   this.assessmentId = params['id']
-
-    //   this.isEditMode = params['isEdit']
-        this.isEditMode = true
-        this.assessmentId = 857
-
-    // })
+    })
 
 /*       if(this.isEditMode==false){
       await this.getPolicies();
       await this.getAllImpactsCovered();
       await this.getCharacteristics();
+      this.sectorList = await this.sectorProxy.findAllSector().toPromise()
     }
     else{
       try{
@@ -256,13 +257,13 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
     intTypeFilter.push('type.id||$eq||' + 3);
 
-    this.instituionProxy.getInstituion(3,countryId,1000,0).subscribe((res: any) => {
-      this.instiTutionList = res;
-      console.log( "listtt",this.instiTutionList)
-    });
+    // this.instituionProxy.getInstituion(3,countryId,1000,0).subscribe((res: any) => {
+    //   this.instiTutionList = res;
+    //   console.log( "listtt",this.instiTutionList)
+    // });
     // this.getSelectedHeader();
      
-    this.sectorList = await this.sectorProxy.findAllSector().toPromise()
+    
     if (countryId > 0) {
       // this.sectorList = await this.sectorProxy.getCountrySector(countryId).toPromise()
       // this.sectorProxy.getSectorDetails(1,100,'').subscribe((res:any) =>{
@@ -534,7 +535,65 @@ console.log("itemmmm", item)
     }
 
   }
+  async saveDraft(category:any){
+    
+    if(this.isEditMode ==true){
+      this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+      console.log("assessment",this.assessment.id)
+      this.processData.map(x => x.data.map(y => y.assessment = this.assessment))
+    }
+    else{
+      console.log("mainAssessment",this.mainAssessment.id)
+      this.processData.map(x => x.data.map(y => y.assessment = this.mainAssessment))
+    }
+    
+    let data : any ={
+      finalArray : this.processData,
+      isDraft : true,
+      isEdit : this.isEditMode
+      // scaleSDGs : this.sdgDataSendArray2,
+      // sustainedSDGs : this.sdgDataSendArray4,
+      // sdgs : this.selectedSDGs
+    }
+    // this.assessmentControllerServiceProxy.update
+    //@ts-ignore
+    console.log("data",data)
+    this.investorToolControllerproxy.createFinalAssessment(data)
+      .subscribe(async _res => {
+        console.log("res final", _res)
 
+        console.log(_res)
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Assessment draft has been saved successfully',
+          closable: true,
+        })
+        if(this.isEditMode ==false){
+          console.log("mainAssessment",this.mainAssessment.id)
+          this.router.navigate(['app/investor-tool-new-edit'], {  
+            queryParams: { id: this.mainAssessment.id,isEdit:true},  
+            });
+          // window.location.reload();
+        }
+       
+        
+        // this.showResults();
+        // this.isSavedAssessment = true
+        // this.onCategoryTabChange('', this.tabView);
+
+
+        // form.reset();
+      }, error => {
+        console.log(error)
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Assessment detail saving failed',
+          closable: true,
+        })
+      })
+  }
 
 
   selectAssessmentType(e: any) {
@@ -716,7 +775,7 @@ console.log("itemmmm", item)
             detail: 'Assessment has been created successfully',
             closable: true,
           })
-          this.showResults();
+          // this.showResults();
           // this.isSavedAssessment = true
           // this.onCategoryTabChange('', this.tabView);
 
@@ -779,6 +838,70 @@ console.log("itemmmm", item)
        }, 2000);
 
   }
+  // next(data:any[],type:string){
+  // console.log("category",data)
+  // // data?.filter(investorAssessment => console.log(investorAssessment.likelihood_justification, investorAssessment.likelihood_justification !== undefined , investorAssessment.likelihood_justification !== ""))
+  // data?.filter(investorAssessment => console.log(investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
+  // (indicator_details.justification !==""))?.length === (investorAssessment.indicator_details?.length) && this.isEditMode == true
+  // ))
+  // data?.filter(investorAssessment => console.log(investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
+  // (indicator_details.justification !=="")),(investorAssessment.indicator_details?.length) , this.isEditMode 
+  // ))
+  // if((data?.filter(investorAssessment => 
+  //     (investorAssessment.relavance !== undefined) && 
+  //     (investorAssessment.likelihood !== undefined) && 
+  //     (investorAssessment.likelihood_justification !==undefined && investorAssessment.likelihood_justification !== "") &&
+  //     ((investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
+  //       (indicator_details.justification !== undefined))?.length === (investorAssessment.indicator_details?.length-1) && this.isEditMode == false
+  //     )||
+  //     (investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
+  //       (indicator_details.justification !== undefined && indicator_details.justification !== ""))?.length === (investorAssessment.indicator_details?.length) && this.isEditMode == true
+  //     ))||  
+  //     (investorAssessment.relavance == 0))?.length === data?.length && type=='process')||
+  //     (data?.filter(investorAssessment => 
+  //       (investorAssessment.justification !== undefined) 
+  //      )?.length === data?.data.length && type=='outcome')||
+  //     (data?.data.filter(sdg => 
+  //       (sdg.data?.filter((data: { justification: undefined; } ) =>
+  //         (data.justification!== undefined))?.length === (sdg.data?.length)
+  //       ))?.length === data?.data.length && type=='sdg')) {
+  //         data.isValidated = true;
+  //   if(this.activeIndexMain ===1 ){
+
+  //     this.activeIndex2 =this.activeIndex2+1;
+  //     console.log( "activeIndex2",this.activeIndex2)
+
+  //   }
+  //   if (this.activeIndex === 3 && this.activeIndexMain !== 1) {
+  //     this.activeIndexMain = 1;
+  //     this.activeIndex2=0;
+
+  //   }
+  //   if (this.activeIndex<=2 && this.activeIndex>=0 && this.activeIndexMain===0){
+  //     this.activeIndex =this.activeIndex +1;
+  //     console.log( this.activeIndex)
+
+  //   }
+  //   // return true
+  // }else{
+  //   this.messageService.add({
+  //     severity: 'error',
+  //     summary: 'Error',
+  //     detail: 'Please fill all mandatory fields',
+  //     closable: true,
+  //   });
+  // }
+  //   // if(!this.mainTabIndexArray.includes(this.activeIndex)){
+  //   //   console.log("mainTabIndexArray",this.mainTabIndexArray)
+  //   //   this.isLikelihoodDisabled=false;
+  //   //   this.isRelavanceDisabled=false;
+  //   // }
+  //   // if (this.mainTabIndexArray.includes(this.activeIndex)) {
+
+  //   //   this.isLikelihoodDisabled=true;
+  //   //   this.isRelavanceDisabled=true;
+  //   // }
+  // }
   next(data:{
     
     isValidated:boolean|null

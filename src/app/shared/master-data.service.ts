@@ -53,6 +53,7 @@ export class MasterDataService {
   private _yData: {label: string, value: number}[] = []
   private _tools: {id: number, name: string, code: string}[] = []
   private _sdg_priorities: {id: number, name: string, code: string, value: number}[] = []
+  private _scale_of_activity: MasterDataDto[] = []
 
 
   constructor() {
@@ -395,11 +396,17 @@ export class MasterDataService {
       {id: 2, name: 'Carbon Market Tool', code: 'CARBON_MARKET'},
       {id: 3, name: 'Investor & Private Sector Tool', code: 'INVESTOR'},
     ]
+
     this.sdg_priorities = [
       { id: 1, name: 'High Priority', code: 'HIGH', value: 3 },
       { id: 2, name: 'Medium Priority', code: 'MEDIUM', value: 2 },
       { id: 3, name: 'Low Priority', code: 'LOW', value: 1 },
       { id: 3, name: 'No Priority', code: 'NO', value: 0 },
+    ]
+
+    this.scale_of_activity = [
+      { id: 1, name: 'Project', code: 'PROJECT'},
+      { id: 2, name: 'Programme', code: 'PROGRAMME'}
     ]
   }
 
@@ -751,6 +758,14 @@ export class MasterDataService {
 
   get sdg_priorities (): {id: number; name: string; code: string; value: number}[] {
     return this._sdg_priorities;
+  }
+
+  set scale_of_activity(value: MasterDataDto[]) {
+    this._scale_of_activity = value;
+  }
+
+  get scale_of_activity (): MasterDataDto[] {
+    return this._scale_of_activity;
   }
 
   getToolName(code: string) {
