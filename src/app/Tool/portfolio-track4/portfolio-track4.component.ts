@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { MasterDataService } from 'app/shared/master-data.service';
+import { MasterDataDto, MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
 import { AllBarriersSelected, Assessment, AssessmentControllerServiceProxy, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, PortfolioQuestionDetails, PortfolioQuestions, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
@@ -44,7 +44,7 @@ export class PortfolioTrack4Component implements OnInit {
   impactArray: ImpactCovered[] = [];
   assessment_types: any[];
   sdg_answers: any[];
-  policies: ClimateAction[];
+  policies: ClimateAction[]=[];
   isSavedAssessment: boolean = false;
   levelOfImplementation: any[] = [];
   geographicalAreasCovered: any[] = [];
@@ -122,7 +122,7 @@ export class PortfolioTrack4Component implements OnInit {
   tabLoading: boolean=false;
   characteristicsLoaded:boolean = false;
   categoriesLoaded:boolean = false;
-  geographicalAreasCoveredArr: GeographicalAreasCoveredDto[] = []
+  geographicalAreasCoveredArr: any[] = []
 
   barrierBox:boolean=false;
   barrierSelected:BarrierSelected= new BarrierSelected();
@@ -192,24 +192,8 @@ export class PortfolioTrack4Component implements OnInit {
     }
     else{
       try{
-        await this.getCharacteristics();
-        console.log(this.isEditMode,this.assessmentId)
-        this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
-        this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
-        this.outcomeData = await this.investorToolControllerproxy.getOutcomeData(this.assessmentId).toPromise();
-        this.sdgDataSendArray2 = await this.investorToolControllerproxy.getScaleSDGData(this.assessmentId).toPromise();
-        this.sdgDataSendArray4 = await this.investorToolControllerproxy.getSustainedSDGData(this.assessmentId).toPromise();
-        this.selectedSDGs = await this.investorToolControllerproxy.getSelectedSDGs(this.assessmentId).toPromise();
-        this.selectedSDGsWithAnswers = await this.investorToolControllerproxy.getSelectedSDGsWithAnswers(this.assessmentId).toPromise();
-
-        console.log("this.processData",this.processData,this.assessment)
-        console.log("this.outcomeData",this.outcomeData)
-        console.log("this.selectedSDGs", this.selectedSDGs)
-        console.log("this.selectedSDGsWithAnswers", this.selectedSDGsWithAnswers)
-        console.log("this.sdgDataSendArray2", this.sdgDataSendArray2)
-        console.log("this.sdgDataSendArray4", this.sdgDataSendArray4)
-        this.setFrom()
-        this.setTo() 
+        await this.getSavedAssessment()
+        
         
       }
       catch (error) {
@@ -219,8 +203,8 @@ export class PortfolioTrack4Component implements OnInit {
 
     } 
 
-    this.load = true; //need to change as false
-    this.isSavedAssessment = true //need to change as false
+    // this.load = true; //need to change as false
+    // this.isSavedAssessment = true //need to change as false
 
     this.tableData = this.getProductsData();
 
@@ -282,7 +266,46 @@ export class PortfolioTrack4Component implements OnInit {
     });
 
   }
+  async getSavedAssessment(){
+    await this.getCharacteristics();
+    console.log(this.isEditMode,this.assessmentId)
+    this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+    this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
+    this.outcomeData = await this.investorToolControllerproxy.getOutcomeData(this.assessmentId).toPromise();
+    this.sdgDataSendArray2 = await this.investorToolControllerproxy.getScaleSDGData(this.assessmentId).toPromise();
+    this.sdgDataSendArray4 = await this.investorToolControllerproxy.getSustainedSDGData(this.assessmentId).toPromise();
+    this.selectedSDGs = await this.investorToolControllerproxy.getSelectedSDGs(this.assessmentId).toPromise();
+    this.selectedSDGsWithAnswers = await this.investorToolControllerproxy.getSelectedSDGsWithAnswers(this.assessmentId).toPromise();
 
+    console.log("this.processData",this.processData,this.assessment)
+    console.log("this.outcomeData",this.outcomeData)
+    console.log("this.selectedSDGs", this.selectedSDGs)
+    console.log("this.selectedSDGsWithAnswers", this.selectedSDGsWithAnswers)
+    console.log("this.sdgDataSendArray2", this.sdgDataSendArray2)
+    console.log("this.sdgDataSendArray4", this.sdgDataSendArray4)
+    console.log(this.isEditMode,this.assessmentId)
+    // this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+    this.policies.push(this.assessment.climateAction)
+    this.finalBarrierList = this.assessment['policy_barrier']
+    let areas: MasterDataDto[] = []
+    this.assessment['geographicalAreasCovered'].map((area: { code: any; }) => {
+    let level = this.levelOfImplementation.find(o => o.code === area.code)
+    if (level) {
+      areas.push(level)
+    }
+    })
+    this.geographicalAreasCoveredArr = areas
+    let sectors: any[] = []
+    // console.log(this.assessment['investor_sector'])
+    this.assessment['sector'].map((sector: { name: any; }) => {
+      sectors.push(this.sectorList.find(o => o.name === sector.name))
+    })
+    this.sectorArray = sectors
+    this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
+    console.log("this.processData",this.processData,this.assessment)
+    this.setFrom()
+    this.setTo()
+  }
   setFrom(){
     if(this.assessment.from){  
       let convertTime = moment(this.assessment.from).format("YYYY-MM-DD HH:mm:ss");
@@ -927,7 +950,8 @@ console.log("wwwwww", this.outcomeData)
         finalArray : finalArray,
         scaleSDGs : this.sdgDataSendArray2,
         sustainedSDGs : this.sdgDataSendArray4,
-        sdgs : this.selectedSDGsWithAnswers
+        sdgs : this.selectedSDGsWithAnswers,
+        isEdit:false
       }
       this.investorToolControllerproxy.createFinalAssessment2(data)
         .subscribe(_res => {
