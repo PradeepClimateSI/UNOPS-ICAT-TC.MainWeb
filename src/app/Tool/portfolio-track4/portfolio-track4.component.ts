@@ -175,10 +175,24 @@ export class PortfolioTrack4Component implements OnInit {
 
   async ngOnInit(): Promise<void> {
 
-        //Comment
-        this.isEditMode = true
-        this.assessmentId = 857
-    await this.getCharacteristics();
+    this.activatedRoute.queryParams.subscribe( params => {
+      params['isEdit']=='true'?(this.isEditMode =true ):false
+      this.assessmentId = params['id']
+      
+      //  console.log("params",params['id'],typeof(params['id']), params['isEdit'],typeof(params['isEdit']))
+      // this.isEditMode = true
+      // this.assessmentId = 415
+
+    })
+    if(this.isEditMode==false){
+      await this.getPolicies();
+      await this.getAllImpactsCovered();
+      await this.getCharacteristics();
+      this.sectorList = await this.sectorProxy.findAllSector().toPromise()
+    }
+    else{
+      try{
+        await this.getCharacteristics();
         console.log(this.isEditMode,this.assessmentId)
         this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
         this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
@@ -196,19 +210,24 @@ export class PortfolioTrack4Component implements OnInit {
         console.log("this.sdgDataSendArray4", this.sdgDataSendArray4)
         this.setFrom()
         this.setTo() 
-
-        //upto now
-
         
- this.load = true; //need to change as false
- this.isSavedAssessment = true //need to change as false
+      }
+      catch (error) {
+        console.log(error)
+      }
+      
 
-this.tableData =  this.getProductsData();
+    } 
 
- this.selectedApproach = 'Direct';
- this.assessment.assessment_approach = 'Direct';
+    this.load = true; //need to change as false
+    this.isSavedAssessment = true //need to change as false
 
-  await this.getPortfolioQuestions();
+    this.tableData = this.getProductsData();
+
+    this.selectedApproach = 'Direct';
+    this.assessment.assessment_approach = 'Direct';
+
+    await this.getPortfolioQuestions();
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
     this.userCountryId  = tokenPayload.countryId;
@@ -249,22 +268,7 @@ this.tableData =  this.getProductsData();
     console.log("tabName", this.tabName)
     // this.getSelectedHeader();
 
-    this.sectorList = await this.sectorProxy.findAllSector().toPromise()
-    if (countryId > 0) {
-      // this.sectorList = await this.sectorProxy.getCountrySector(countryId).toPromise()
-      
-      // this.sectorProxy.getSectorDetails(1,100,'').subscribe((res:any) =>{
-      //   res.items.forEach((re:any)=>{
-      //     if(re.id !=6){
-      //       this.sectorList.push(re)
-      //     }
-      //   })
-      // })
-
-      // console.log("++++", this.sectorList)
-
-    } // countryid = 0
-
+    //this.sectorList = await this.sectorProxy.findAllSector().toPromise()
    // await this.getPolicies();
    // await this.getAllImpactsCovered();
    // await this.getCharacteristics();
@@ -734,6 +738,81 @@ console.log("wwwwww", this.outcomeData)
     console.log("tabnaaame", this.tabView.tabs[this.selectedIndex].header);
   }
 
+
+  async saveDraft(category:any){
+    
+    let finalArray = this.processData.concat(this.outcomeData)
+    if(this.isEditMode ==true){
+      this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+      console.log("assessment",this.assessment.id)
+      finalArray.map(x => x.data.map(y => y.assessment = this.assessment))
+      console.log("finalArray33", finalArray)
+    }
+    else{
+      console.log("mainAssessment",this.mainAssessment.id)
+      finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
+    }
+
+    for(let i=0; i< this.sdgDataSendArray2.length; i++){
+      for(let item of this.sdgDataSendArray2[i].data){
+        item.portfolioSdg = this.selectedSDGs[i];
+      }
+      
+    }
+
+    for(let i=0; i< this.sdgDataSendArray4.length; i++){
+      for(let item of this.sdgDataSendArray4[i].data){
+        item.portfolioSdg = this.selectedSDGs[i];
+      }
+    }
+    
+    let data : any ={
+      finalArray : finalArray,
+      isDraft : true,
+      isEdit : this.isEditMode,
+      scaleSDGs : this.sdgDataSendArray2,
+      sustainedSDGs : this.sdgDataSendArray4,
+      sdgs : this.selectedSDGsWithAnswers
+    }
+    // this.assessmentControllerServiceProxy.update
+    //@ts-ignore
+    console.log("data",data)
+    this.investorToolControllerproxy.createFinalAssessment2(data)
+      .subscribe(async _res => {
+        console.log("res final", _res)
+
+        console.log(_res)
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Assessment draft has been saved successfully',
+          closable: true,
+        })
+        if(this.isEditMode ==false){
+          console.log("mainAssessment",this.mainAssessment.id)
+          this.router.navigate(['app/portfolio-tool-edit'], {  
+            queryParams: { id: this.mainAssessment.id,isEdit:true},  
+            });
+          // window.location.reload();
+        }
+       
+        
+        // this.showResults();
+        // this.isSavedAssessment = true
+        // this.onCategoryTabChange('', this.tabView);
+
+
+        // form.reset();
+      }, error => {
+        console.log(error)
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Assessment detail saving failed',
+          closable: true,
+        })
+      })
+  }
 
   onsubmit(form: NgForm) {
 

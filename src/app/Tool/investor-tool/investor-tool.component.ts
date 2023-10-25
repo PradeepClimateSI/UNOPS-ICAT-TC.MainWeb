@@ -182,8 +182,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       // this.assessmentId = 415
 
     })
-
-/*       if(this.isEditMode==false){
+    if(this.isEditMode==false){
       await this.getPolicies();
       await this.getAllImpactsCovered();
       await this.getCharacteristics();
@@ -191,21 +190,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     }
     else{
       try{
-        console.log(this.isEditMode,this.assessmentId)
-        this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
-        this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
-        console.log("this.processData",this.processData,this.assessment)
-        this.setFrom()
-        this.setTo()
-        
-      }
-      catch (error) {
-        console.log(error)
-      }
-    }   */
-
-   
-    //comment this
         await this.getCharacteristics();
         console.log(this.isEditMode,this.assessmentId)
         this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
@@ -224,9 +208,38 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
         console.log("this.sdgDataSendArray4", this.sdgDataSendArray4)
         this.setFrom()
         this.setTo() 
+        
+      }
+      catch (error) {
+        console.log(error)
+      }
+      
+
+    } 
+
+   
+    //comment this
+        /* await this.getCharacteristics();
+        console.log(this.isEditMode,this.assessmentId)
+        this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+        this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
+        this.outcomeData = await this.investorToolControllerproxy.getOutcomeData(this.assessmentId).toPromise();
+        this.sdgDataSendArray2 = await this.investorToolControllerproxy.getScaleSDGData(this.assessmentId).toPromise();
+        this.sdgDataSendArray4 = await this.investorToolControllerproxy.getSustainedSDGData(this.assessmentId).toPromise();
+        this.selectedSDGs = await this.investorToolControllerproxy.getSelectedSDGs(this.assessmentId).toPromise();
+        this.selectedSDGsWithAnswers = await this.investorToolControllerproxy.getSelectedSDGsWithAnswers(this.assessmentId).toPromise();
+
+        console.log("this.processData",this.processData,this.assessment)
+        console.log("this.outcomeData",this.outcomeData)
+        console.log("this.selectedSDGs", this.selectedSDGs)
+        console.log("this.selectedSDGsWithAnswers", this.selectedSDGsWithAnswers)
+        console.log("this.sdgDataSendArray2", this.sdgDataSendArray2)
+        console.log("this.sdgDataSendArray4", this.sdgDataSendArray4)
+        this.setFrom()
+        this.setTo()  */
     //upto this
 
-  this.isSavedAssessment = true; this.tabLoading= true; // Need to remove  
+ // this.isSavedAssessment = true; this.tabLoading= true; // Need to remove  
   // this.isSavedAssessment = true // Need to remove  
   this.tableData =  this.getProductsData();
     this.categoryTabIndex =0;
@@ -537,23 +550,38 @@ console.log("itemmmm", item)
   }
   async saveDraft(category:any){
     
+    let finalArray = this.processData.concat(this.outcomeData)
     if(this.isEditMode ==true){
       this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
       console.log("assessment",this.assessment.id)
-      this.processData.map(x => x.data.map(y => y.assessment = this.assessment))
+      finalArray.map(x => x.data.map(y => y.assessment = this.assessment))
+      console.log("finalArray33", finalArray)
     }
     else{
       console.log("mainAssessment",this.mainAssessment.id)
-      this.processData.map(x => x.data.map(y => y.assessment = this.mainAssessment))
+      finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
+    }
+
+    for(let i=0; i< this.sdgDataSendArray2.length; i++){
+      for(let item of this.sdgDataSendArray2[i].data){
+        item.portfolioSdg = this.selectedSDGs[i];
+      }
+      
+    }
+
+    for(let i=0; i< this.sdgDataSendArray4.length; i++){
+      for(let item of this.sdgDataSendArray4[i].data){
+        item.portfolioSdg = this.selectedSDGs[i];
+      }
     }
     
     let data : any ={
-      finalArray : this.processData,
+      finalArray : finalArray,
       isDraft : true,
-      isEdit : this.isEditMode
-      // scaleSDGs : this.sdgDataSendArray2,
-      // sustainedSDGs : this.sdgDataSendArray4,
-      // sdgs : this.selectedSDGs
+      isEdit : this.isEditMode,
+      scaleSDGs : this.sdgDataSendArray2,
+      sustainedSDGs : this.sdgDataSendArray4,
+      sdgs : this.selectedSDGsWithAnswers
     }
     // this.assessmentControllerServiceProxy.update
     //@ts-ignore

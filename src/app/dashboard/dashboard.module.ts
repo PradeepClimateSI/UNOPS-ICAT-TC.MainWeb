@@ -248,6 +248,13 @@ const routes: Routes = [
     data: {}
   },
   {
+    path: 'portfolio-tool-edit',
+    component: PortfolioTrack4Component,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
     path: 'assessment-result/:id',
     component: AssessmentResultComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
