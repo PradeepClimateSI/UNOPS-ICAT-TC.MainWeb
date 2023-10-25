@@ -34,7 +34,7 @@ export class CmQuestionComponent implements OnInit {
   selectedInstitution: Institution
 
   tooltip: string = ''
-  adoptionTooltip = 'High-hanging fruit are mitigation actions that are at the higher end of a marginal abatement cost curve (MACC).'
+  adoptionTooltip = 'High-hanging fruit are mitigation actions that are at the higher end of a marginal abatement cost curve (MACC) or are hard to reach as they face real barriers to adoption.'
   tootltipCodes = ['S-3-ADOPTION-Q-1']
   weight = 0
   uploadUrl: string;
@@ -81,7 +81,7 @@ export class CmQuestionComponent implements OnInit {
         if (ans) {
           this.selectedAnswer = ans
           this.comment = _question.comment
-          this.onSelectAnswer({value: this.selectedAnswer}, _question.answer_type)
+          this.onSelectAnswer({value: this.selectedAnswer}, _question.answer_type, true)
         }
       }
     }
@@ -91,11 +91,11 @@ export class CmQuestionComponent implements OnInit {
     this.answers = await this.cMQuestionControllerServiceProxy.getAnswersByQuestion(this.question.id).toPromise()
   }
 
-  onSelectAnswer(e: any, type: string) {
+  onSelectAnswer(e: any, type: string, isLoading: boolean = false) {
     if (type === 'COMMENT'){
-      this.prev_answer.emit({comment: this.comment, type: type})
+      this.prev_answer.emit({comment: this.comment, type: type, isLoading: isLoading})
     } else {
-      this.prev_answer.emit({answer: e.value, type: type})
+      this.prev_answer.emit({answer: e.value, type: type, isLoading: isLoading})
     }
   }
 

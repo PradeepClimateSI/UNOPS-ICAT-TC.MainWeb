@@ -117,18 +117,18 @@
           <div class="p-field p-2">
             <label for="opportunities">Opportunities for stakeholders to participate in the assessment *</label>
             <input pInputText type="text" #opportunities="ngModel" name="opportunities" ngModel
-              [disabled]="isSavedAssessment" placeholder="Opportunities" [(ngModel)]="assessment.opportunities"
+              [disabled]="isSavedAssessment" placeholder="Explain how different stakeholders if any will participate in the assessment" [(ngModel)]="assessment.opportunities"
               required />
             <p class="info-message text-danger"
               *ngIf="!opportunities.value && (fData.submitted || opportunities.touched)">This is a mandatory field</p>
           </div>
 
-            <div class="p-field p-2">
+            <!-- <div class="p-field p-2">
                   <label for="principles">Principles on which the assessment is based *</label>
                   <input pInputText type="text" #principles="ngModel" name="principles" ngModel [disabled]="isSavedAssessment"
                   placeholder="Principles" [(ngModel)]="assessment.principles" required />
                   <p class="info-message text-danger" *ngIf="!principles.value && (fData.submitted || principles.touched)">This is a mandatory field</p>
-            </div>
+            </div> -->
 
 
           <!-- <div class="p-field p-2">
@@ -256,8 +256,8 @@
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <textarea [disabled]="isSavedAssessment" name="phase_of_transformation" placeholder="Enter an answer" #phase_of_transformation="ngModel"
-                    [(ngModel)]="assessment.phase_of_transformation" rows="1" cols="130" pInputText autoResize="autoResize" required
+                  <textarea [disabled]="isSavedAssessment" name="phase_of_transformation" placeholder="See Chapter 6 of the ICAT Transformational Change Methodology" #phase_of_transformation="ngModel"
+                    [(ngModel)]="assessment.phase_of_transformation" rows="2" cols="130" pInputText autoResize="autoResize" required
                     ></textarea>
                     <p class="info-message text-danger" *ngIf="  !phase_of_transformation.value &&                     
                     (fData.submitted || phase_of_transformation.touched || phase_of_transformation.dirty)
