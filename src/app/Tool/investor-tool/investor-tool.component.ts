@@ -1,6 +1,6 @@
 import { AfterContentChecked, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { MasterDataService } from 'app/shared/master-data.service';
+import { MasterDataDto, MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
 import {Any, AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, AssessmentControllerServiceProxy, Category } from 'shared/service-proxies/service-proxies';
@@ -42,7 +42,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   sectorArray: Sector[] = [];
   impactArray: ImpactCovered[] = [];
   assessment_types: any[];
-  policies: ClimateAction[];
+  policies: ClimateAction[]=[];
   isSavedAssessment: boolean = false;
   levelOfImplementation: any[] = [];
   geographicalAreasCovered: any[] = [];
@@ -67,7 +67,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   approach:number=0;
   instiTutionList : any = []
   investorQuestions:InvestorQuestions[]=[];
-  geographicalAreasCoveredArr: GeographicalAreasCoveredDto[] = []
+  geographicalAreasCoveredArr: any[] = []
 
   //Newww
   
@@ -165,31 +165,25 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   }
   async ngOnInit(): Promise<void> {
-    
+    this.sectorList = await this.sectorProxy.findAllSector().toPromise()
+    console.log("sectors",this.sectorList)
+    this.levelOfImplementation = this.masterDataService.level_of_implemetation;
+    this.geographicalAreasCovered = this.masterDataService.level_of_implemetation;
+
     this.activatedRoute.queryParams.subscribe( params => {
       params['isEdit']=='true'?(this.isEditMode =true ):false
       this.assessmentId = params['id']
-      
-      //  console.log("params",params['id'],typeof(params['id']), params['isEdit'],typeof(params['isEdit']))
-      // this.isEditMode = true
-      // this.assessmentId = 415
 
     })
     if(this.isEditMode==false){
       await this.getPolicies();
       await this.getAllImpactsCovered();
       await this.getCharacteristics();
-      this.sectorList = await this.sectorProxy.findAllSector().toPromise()
+     
     }
     else{
       try{
-        console.log(this.isEditMode,this.assessmentId)
-        this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
-        this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
-        console.log("this.processData",this.processData,this.assessment)
-        this.setFrom()
-        this.setTo()
-        
+        await this.getSavedAssessment()
       }
       catch (error) {
         console.log(error)
@@ -223,8 +217,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.isLikelihoodDisabled=true;
     this.isRelavanceDisabled=true;
     this.assessment_types = this.masterDataService.assessment_type;
-    this.levelOfImplementation = this.masterDataService.level_of_implemetation;
-    this.geographicalAreasCovered = this.masterDataService.level_of_implemetation;
+  
+   
     this.likelihood = this.masterDataService.likelihood;
     this.relevance = this.masterDataService.relevance;
     this.score = this.masterDataService.score;
@@ -255,31 +249,32 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       console.log("ressssSDGs", res)
       this.sdgList = res
      });
-     
-    
-    if (countryId > 0) {
-      // this.sectorList = await this.sectorProxy.getCountrySector(countryId).toPromise()
-      // this.sectorProxy.getSectorDetails(1,100,'').subscribe((res:any) =>{
-      //   res.items.forEach((re:any)=>{
-      //     if(re.id !=6){
-      //       this.sectorList.push(re)
-      //     }
-      //   })
-      // })
-
-      // console.log("++++", this.sectorList)
-
-    } // countryid = 0
-
-   
-    // await this.getInvestorQuestions();
-    // console.log(this.policies)
-    // console.log(this.assessment)
-
-
 
   }
-
+  async getSavedAssessment(){
+    console.log(this.isEditMode,this.assessmentId)
+    this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+    this.policies.push(this.assessment.climateAction)
+    this.finalBarrierList = this.assessment['policy_barrier']
+    let areas: MasterDataDto[] = []
+    this.assessment['geographicalAreasCovered'].map((area: { code: any; }) => {
+    let level = this.levelOfImplementation.find(o => o.code === area.code)
+    if (level) {
+      areas.push(level)
+    }
+    })
+    this.geographicalAreasCoveredArr = areas
+    let sectors: any[] = []
+    // console.log(this.assessment['investor_sector'])
+    this.assessment['sector'].map((sector: { name: any; }) => {
+      sectors.push(this.sectorList.find(o => o.name === sector.name))
+    })
+    this.sectorArray = sectors
+    this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
+    console.log("this.processData",this.processData,this.assessment)
+    this.setFrom()
+    this.setTo()
+  }
   ngAfterContentChecked(): void {
     this.changeDetector.detectChanges();
   }
