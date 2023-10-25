@@ -95,7 +95,7 @@ export class PortfolioComparisonComponent implements OnInit {
         { label: 'INTERVENTION NAME', code: 'name' },
         { label: 'INTERVENTION TYPE', code: 'type' },
         { label: 'STATUS', code: 'status' },
-        { label: 'GHG MITIGATION (MT CO2-EG)', code: 'mitigation' },
+        { label: 'EXPECTED GHG REDUCTIONS OVER INTERVENTION LIFETIME (MT CO2-EQ)', code: 'mitigation' },
       ],
       interventions: interventions.aggregation_data.interventions,
       total: interventions.aggregation_data.total

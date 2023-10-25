@@ -573,7 +573,7 @@ this.selectPortfolio();
               beginAtZero: true,
               title: {
                 display: true,
-                text: 'Expected GHG Mitigation (Mt CO2-eq)',
+                text: 'Expected GHG reductions over intervention lifetime (Mt CO2-eq)',
                 font: {
                   size: 10,
                   weight: 'bold',
@@ -595,7 +595,7 @@ this.selectPortfolio();
                   // console.log("context",context,"4444",data[context.dataIndex])
                   return[
 
-                    `Expected GHG Mitigation (Mt CO2-eq): ${context.raw}`,
+                    `Expected GHG reductions over intervention lifetime  (Mt CO2-eq): ${context.raw}`,
                   ];
                  }
               },
