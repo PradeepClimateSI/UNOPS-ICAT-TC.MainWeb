@@ -4,7 +4,7 @@ import { Assessment, AssessmentCMDetail, AssessmentCMDetailControllerServiceProx
 import * as XLSX from 'xlsx-js-style';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-import { MasterDataService } from 'app/shared/master-data.service';
+import { MasterDataDto, MasterDataService } from 'app/shared/master-data.service';
 import { environment } from 'environments/environment';
 import { SDG } from '../cm-section-three/cm-section-three.component';
 import { SelectedScoreDto } from 'app/shared/score.dto';
@@ -43,7 +43,7 @@ export class CmResultComponent implements OnInit {
   xData: {label: string; value: number}[]
   yData: {label: string; value: number}[]
   heatMapScore: HeatMapScore[]
-  scales: import("/Users/sanduni/Documents/ClimateSI/TC_Tools/tc-web/src/app/shared/master-data.service").MasterDataDto[];
+  scales: MasterDataDto[];
 
   constructor(
     private route: ActivatedRoute,
