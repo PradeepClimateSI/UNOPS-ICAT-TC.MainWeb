@@ -109,19 +109,28 @@
                             </div>
 
                         </div>
+                       
                         <div class="p-field p-2">
                             <label for="opportunities">Opportunities for stakeholders to participate in the assessment *</label>
                             <input pInputText type="text" #opportunities="ngModel" name="opportunities" ngModel
                             placeholder="Opportunities" [(ngModel)]="assessment.opportunities" required [disabled]="isSavedAssessment|| isEditMode"/>
                             <p class="info-message text-danger" *ngIf="!opportunities.value && (fData.submitted || opportunities.touched)">This is a mandatory field</p>
                       </div>
-
                       <div class="p-field p-2">
+                        <label for="additioinalInfo">Additional information*</label>
+                        <textarea [disabled]="isSavedAssessment|| isEditMode" name="additioinalInfo" placeholder="Enter additional info" #additioinalInfo="ngModel"
+                        [(ngModel)]="assessment.additioinalInfo" rows="2" cols="130" pInputText autoResize="autoResize" required
+                        ></textarea>
+                        <p class="info-message text-danger"
+                          *ngIf="!additioinalInfo.value && (fData.submitted || additioinalInfo.touched)">This is a mandatory field</p>
+                      </div>
+
+                      <!-- <div class="p-field p-2">
                             <label for="principles">Principles on which the assessment is based *</label>
                             <input pInputText type="text" #principles="ngModel" name="principles" ngModel
                             placeholder="Principles" [(ngModel)]="assessment.principles" required [disabled]="isSavedAssessment|| isEditMode"/>
                             <p class="info-message text-danger" *ngIf="!principles.value && (fData.submitted || principles.touched)">This is a mandatory field</p>
-                      </div>
+                      </div> -->
 
                             <!-- <div class="p-field p-2">
                             <label for="Sectors Covered">Assessment Method*</label>

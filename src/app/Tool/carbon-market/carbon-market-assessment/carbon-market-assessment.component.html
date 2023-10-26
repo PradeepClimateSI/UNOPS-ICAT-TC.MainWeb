@@ -149,6 +149,14 @@
                                 [(ngModel)]="cm_detail.appliedMethodology" class="form-control"
                                 placeholder="Enter methodology" />
                         </div>
+                        <div class="p-field p-2">
+                          <label for="additioinalInfo">Additional information*</label>
+                          <textarea [disabled]=" isEditMode" name="additioinalInfo" placeholder="Enter additional info" #additioinalInfo="ngModel"
+                          [(ngModel)]="assessment.additioinalInfo" rows="2" cols="130" pInputText autoResize="autoResize" required
+                          ></textarea>
+                          <p class="info-message text-danger"
+                            *ngIf="!additioinalInfo.value && (fData.submitted || additioinalInfo.touched)">This is a mandatory field</p>
+                        </div>
                         <!-- <div class="p-field p-2">
                             <label for="policy">Impact Types *</label>
                             <p-multiSelect name="impact_types" placeholder="Select .." appendTo="body"
