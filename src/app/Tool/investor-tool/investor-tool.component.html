@@ -694,8 +694,8 @@
                                                                     [(ngModel)]="question.justification"
                                                                     placeholder="Enter Justification"
                                                                     #questionJustification="ngModel"
-                                                                    name="cat-{{cat}}-questionJustification-{{i}}-{{j}}" />
-                                                                    <p class="info-message text-danger" *ngIf="!question.justification  && (fData1.submitted || questionJustification.touched) ">
+                                                                    [name]="question.question.name+'question'" />
+                                                                    <p class="info-message text-danger" *ngIf="!question.justification  && (fData1.submitted || questionJustification.touched) || (category.isValidated==false && !question.justification)">
                                                                       This is a mandatory field </p>
 
                                                                  </div>
@@ -740,8 +740,8 @@
                                                                 <input type="text" pInputText
                                                                     [(ngModel)]="data.likelihood_justification" #just1="ngModel"
                                                                     placeholder="Enter Justification"
-                                                                    name="cat-{{cat}}-data.charData.likelihood_justification-{{i}}" />
-                                                                    <p class="info-message text-danger" *ngIf="!data.likelihood_justification  && (fData1.submitted || just1.touched) ">
+                                                                    [name]="data.characteristics.name+ 'likelihood_justification'" />
+                                                                    <p class="info-message text-danger" *ngIf="!data.likelihood_justification  && (fData1.submitted || just1.touched) ||(category.isValidated==false && !data.likelihood_justification) ">
                                                                       This is a mandatory field </p>
 
                                                             </div>
