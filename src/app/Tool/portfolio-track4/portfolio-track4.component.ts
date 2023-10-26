@@ -135,6 +135,7 @@ export class PortfolioTrack4Component implements OnInit {
   isStageDisble:boolean=false;
   isValidSCaleSD: boolean;
   isValidSustainedSD: boolean;
+  draftLoading: boolean=false;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -174,10 +175,16 @@ export class PortfolioTrack4Component implements OnInit {
   isEditMode:boolean=false;
 
   async ngOnInit(): Promise<void> {
-
+    this.sectorList = await this.sectorProxy.findAllSector().toPromise()
+    console.log("sectors",this.sectorList)
+    this.levelOfImplementation = this.masterDataService.level_of_implemetation;
+    this.geographicalAreasCovered = this.masterDataService.level_of_implemetation;
     this.activatedRoute.queryParams.subscribe( params => {
       params['isEdit']=='true'?(this.isEditMode =true ):false
       this.assessmentId = params['id']
+      if(!this.assessmentId && this.isEditMode ){
+        window.location.reload()
+      }
       
       //  console.log("params",params['id'],typeof(params['id']), params['isEdit'],typeof(params['isEdit']))
       // this.isEditMode = true
@@ -193,16 +200,11 @@ export class PortfolioTrack4Component implements OnInit {
     else{
       try{
         await this.getSavedAssessment()
-        
-        
       }
       catch (error) {
         console.log(error)
       }
-      
-
     } 
-
     // this.load = true; //need to change as false
     // this.isSavedAssessment = true //need to change as false
 
@@ -305,6 +307,7 @@ export class PortfolioTrack4Component implements OnInit {
     console.log("this.processData",this.processData,this.assessment)
     this.setFrom()
     this.setTo()
+    this.draftLoading = true
   }
   setFrom(){
     if(this.assessment.from){  

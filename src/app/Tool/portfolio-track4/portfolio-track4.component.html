@@ -40,7 +40,7 @@
           <div class="p-field p-2">
             <label for="policy">Select Intervetion *</label>
             <p-dropdown appendTo="body" name="policy" #policy="ngModel" placeholder="Select Intervetion"
-              [disabled]="isSavedAssessment" [(ngModel)]="assessment.climateAction" appendTo="body" [options]="policies"
+              [disabled]="isSavedAssessment|| isEditMode" [(ngModel)]="assessment.climateAction" appendTo="body" [options]="policies"
               optionLabel="policyName" [required]="true"></p-dropdown>
             <p class="info-message text-danger" *ngIf="
                                                   !assessment.climateAction &&
@@ -53,7 +53,7 @@
             <label for="policy">Assessment Type *</label>
             <p-dropdown appendTo="body" name="type" #type="ngModel" placeholder="Select Assessment Type"
               [(ngModel)]="assessment.assessmentType" [options]="assessment_types" optionLabel="name"
-              [disabled]="isSavedAssessment" optionValue="name" [required]="true"
+              [disabled]="isSavedAssessment|| isEditMode" optionValue="name" [required]="true"
               (onChange)="selectAssessmentType($event)"></p-dropdown>
             <p class="info-message text-danger" *ngIf="
                               !assessment.assessmentType &&
@@ -77,7 +77,7 @@
           <div class="p-field p-2">
             <label for="Level of implementation">Geographical Areas Covered *</label>
             <p-multiSelect appendTo="body" name="investorAssessment.geographical_areas_covered" #type="ngModel"
-              placeholder="Select Geographical Areas Covered" [disabled]="isSavedAssessment"
+              placeholder="Select Geographical Areas Covered" [disabled]="isSavedAssessment|| isEditMode"
               [(ngModel)]="geographicalAreasCoveredArr" [options]="levelOfImplementation"
               optionLabel="name" [required]="true"></p-multiSelect>
               <p class="info-message text-danger" *ngIf="
@@ -92,7 +92,7 @@
 
             <p-multiSelect appendTo="body" name="sectors" #type="ngModel" placeholder="Select Sectors Covered"
               [(ngModel)]="sectorArray" [options]="sectorList" (ngModelChange)="onItemSelectSectors($event)"
-              [disabled]="isSavedAssessment" optionLabel="name" [required]="true"></p-multiSelect>
+              [disabled]="isSavedAssessment|| isEditMode" optionLabel="name" [required]="true"></p-multiSelect>
             <p class="info-message text-danger" *ngIf="
                               sectorArray.length===0 &&
                               (fData.submitted || type.touched)
@@ -117,7 +117,7 @@
           <div class="p-field p-2">
             <label for="opportunities">Opportunities for stakeholders to participate in the assessment *</label>
             <input pInputText type="text" #opportunities="ngModel" name="opportunities" ngModel
-              [disabled]="isSavedAssessment" placeholder="Explain how different stakeholders if any will participate in the assessment" [(ngModel)]="assessment.opportunities"
+              [disabled]="isSavedAssessment|| isEditMode" placeholder="Explain how different stakeholders if any will participate in the assessment" [(ngModel)]="assessment.opportunities"
               required />
             <p class="info-message text-danger"
               *ngIf="!opportunities.value && (fData.submitted || opportunities.touched)">This is a mandatory field</p>
@@ -151,12 +151,12 @@
                 <i class="pi pi-calendar"></i>
               </span>
               <p-calendar dateFormat="mm-dd-yy" inputId="date1" placeholder="From" [(ngModel)]="assessment.from"
-                name="date1" #date1="ngModel" [required]="true" appendTo="body" [disabled]="isSavedAssessment">
+                name="date1" #date1="ngModel" [required]="true" appendTo="body" [disabled]="isSavedAssessment|| isEditMode">
               </p-calendar>
               <span class="p-inputgroup-addon">to</span>
               <p-calendar dateFormat="mm-dd-yy" inputId="date2" placeholder="To" [(ngModel)]="assessment.to"
                 name="date2" #date2="ngModel" [required]="true" appendTo="body"
-                [disabled]="isSavedAssessment"></p-calendar>
+                [disabled]="isSavedAssessment|| isEditMode"></p-calendar>
 
             </div>
             <div class="col-12">
@@ -187,7 +187,7 @@
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <textarea [disabled]="isSavedAssessment" name="envisioned_change" placeholder="Enter an answer" #envisioned_change="ngModel"
+                  <textarea [disabled]="isSavedAssessment|| isEditMode" name="envisioned_change" placeholder="Enter an answer" #envisioned_change="ngModel"
                     [(ngModel)]="assessment.envisioned_change" rows="1" cols="130" pInputText autoResize="autoResize" required
                     ></textarea>
                     <p class="info-message text-danger" *ngIf="  !envisioned_change.value &&                     
@@ -208,7 +208,7 @@
                 <div class="p-field">
                   <!-- <label for="vision_short">Short Term ({{"\u003C"}}5 years)</label> -->
                   <label for="vision_short">Within 5 years? *</label>
-                  <textarea [disabled]="isSavedAssessment"  name="vision_short" placeholder="Short Term Vision" #vision_short="ngModel"
+                  <textarea [disabled]="isSavedAssessment|| isEditMode"  name="vision_short" placeholder="Short Term Vision" #vision_short="ngModel"
                     [(ngModel)]="assessment.vision_short" rows="1" cols="130" pInputText autoResize="autoResize" required
                     ></textarea>
                     <p class="info-message text-danger" *ngIf="  !vision_short.value &&                     
@@ -223,7 +223,7 @@
                 <div class="p-field">
                   <!-- <label for="vision_medium">Medium Term ({{"\u003E"}}5 years and   {{"\u003C"}}15 years)</label> -->
                   <label for="vision_short">Between 5 and 15 years? *</label>
-                  <textarea [disabled]="isSavedAssessment"  name="vision_medium" placeholder="Medium Term Vision" #vision_medium="ngModel"
+                  <textarea [disabled]="isSavedAssessment|| isEditMode"  name="vision_medium" placeholder="Medium Term Vision" #vision_medium="ngModel"
                     [(ngModel)]="assessment.vision_medium" rows="1" cols="130" pInputText autoResize="autoResize" required
                     ></textarea>
                     <p class="info-message text-danger" *ngIf="  !vision_medium.value &&                     
@@ -237,7 +237,7 @@
                 <div class="p-field">
                   <!-- <label for="vision_long">Long Term ({{"\u003E"}}15 years)</label> -->
                   <label for="vision_short">After 15 years? *</label>
-                  <textarea [disabled]="isSavedAssessment" name="vision_long" placeholder="Long Term Vision"
+                  <textarea [disabled]="isSavedAssessment|| isEditMode" name="vision_long" placeholder="Long Term Vision"
                     #vision_long="ngModel" [(ngModel)]="assessment.vision_long" rows="1" cols="130" pInputText required
                     autoResize="autoResize"></textarea>
                     <p class="info-message text-danger" *ngIf="  !vision_long.value &&                     
@@ -256,7 +256,7 @@
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <textarea [disabled]="isSavedAssessment" name="phase_of_transformation" placeholder="See Chapter 6 of the ICAT Transformational Change Methodology" #phase_of_transformation="ngModel"
+                  <textarea [disabled]="isSavedAssessment|| isEditMode" name="phase_of_transformation" placeholder="See Chapter 6 of the ICAT Transformational Change Methodology" #phase_of_transformation="ngModel"
                     [(ngModel)]="assessment.phase_of_transformation" rows="2" cols="130" pInputText autoResize="autoResize" required
                     ></textarea>
                     <p class="info-message text-danger" *ngIf="  !phase_of_transformation.value &&                     
@@ -274,7 +274,7 @@
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <textarea [disabled]="isSavedAssessment" name="change_in_system" placeholder="Enter an answer" #change_in_system="ngModel"
+                  <textarea [disabled]="isSavedAssessment|| isEditMode" name="change_in_system" placeholder="Enter an answer" #change_in_system="ngModel"
                     [(ngModel)]="assessment.change_in_system" rows="1" cols="130" pInputText autoResize="autoResize" required
                     ></textarea>
                     <p class="info-message text-danger" *ngIf="  !change_in_system.value &&                     
@@ -515,10 +515,10 @@
     <!-- <div class="p-grid p-fluid col-sm-12" *ngIf="showSections">
       <app-cm-section [assessment]="assessmentres"></app-cm-section>
   </div> -->
-    <div *ngIf=" load && selectedApproach === 'Direct'|| isEditMode">
+    <div *ngIf=" load && selectedApproach === 'Direct'|| (isEditMode && draftLoading)">
       <!-- <div > -->
         <!-- <div> -->
-      <div class="card" *ngIf="isSavedAssessment && tabLoading || isEditMode">
+      <div class="card" *ngIf="isSavedAssessment && tabLoading || (isEditMode && draftLoading)">
         <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)">
           <p-tabView (onChange)="onMainTabChange($event)" [(activeIndex)]="activeIndexMain ">
 

@@ -86,7 +86,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   sdgDataSendArray2: any = [];
   outcomeScaleScore: any[] = [];
   outcomeSustainedScore : any[] = [];
-  sdg_answers: any[]= [];;
+  sdg_answers: any[]= [];
+  draftLoading: boolean=false;
 
   description = '';
   levelofImplementation:number=0;
@@ -180,7 +181,10 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.activatedRoute.queryParams.subscribe( params => {
       params['isEdit']=='true'?(this.isEditMode =true ):false
       this.assessmentId = params['id']
-
+      console.log("isEditMode",this.isEditMode,"assessmentId",this.assessmentId)
+      if(!this.assessmentId && this.isEditMode ){
+        window.location.reload()
+      }
     })
     if(this.isEditMode==false){
       await this.getPolicies();
@@ -308,6 +312,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     console.log("this.processData",this.processData,this.assessment)
     this.setFrom()
     this.setTo()
+    this.draftLoading = true
   }
 
   onChangeSDGsAnswer(withAnswers:any , item : any){
