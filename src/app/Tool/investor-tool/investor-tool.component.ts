@@ -820,7 +820,7 @@ console.log("itemmmm", item)
             detail: 'Assessment has been created successfully',
             closable: true,
           })
-          // this.showResults();
+          this.showResults();
           // this.isSavedAssessment = true
           // this.onCategoryTabChange('', this.tabView);
 
@@ -999,7 +999,7 @@ console.log("itemmmm", item)
     this.messageService.add({
       severity: 'error',
       summary: 'Error',
-      detail: 'Please fill all mandotory fields',
+      detail: 'Please fill all mandatory fields',
       closable: true,
     });
   }
@@ -1057,7 +1057,7 @@ console.log("itemmmm", item)
     this.messageService.add({
       severity: 'error',
       summary: 'Error',
-      detail: 'Please fill all mandotory fields',
+      detail: 'Please fill all mandatory fields',
       closable: true,
     });
   }
