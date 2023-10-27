@@ -75,7 +75,7 @@
                             <label for="opportunities">Opportunities for stakeholders to participate in the assessment
                                 *</label>
                             <input pInputText type="text" #opportunities="ngModel" name="opportunities" ngModel
-                                [disabled]="isSavedAssessment" placeholder="Opportunities"
+                                [disabled]="isSavedAssessment" placeholder="Explain how different stakeholders if any will participate in the assessment"
                                 [(ngModel)]="assessment.opportunities" [disabled]="isEditMode" required />
                             <p class="info-message text-danger"
                                 *ngIf="!opportunities.value && (fData.submitted || opportunities.touched)">This is a
@@ -149,14 +149,14 @@
                                 [(ngModel)]="cm_detail.appliedMethodology" class="form-control"
                                 placeholder="Enter methodology" />
                         </div>
-                        <div class="p-field p-2">
+                        <!-- <div class="p-field p-2">
                           <label for="additioinalInfo">Additional information*</label>
                           <textarea [disabled]=" isEditMode" name="additioinalInfo" placeholder="Enter additional info" #additioinalInfo="ngModel"
                           [(ngModel)]="assessment.additioinalInfo" rows="2" cols="130" pInputText autoResize="autoResize" required
                           ></textarea>
                           <p class="info-message text-danger"
                             *ngIf="!additioinalInfo.value && (fData.submitted || additioinalInfo.touched)">This is a mandatory field</p>
-                        </div>
+                        </div> -->
                         <!-- <div class="p-field p-2">
                             <label for="policy">Impact Types *</label>
                             <p-multiSelect name="impact_types" placeholder="Select .." appendTo="body"
