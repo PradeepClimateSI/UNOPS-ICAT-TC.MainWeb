@@ -212,13 +212,13 @@ const routes: Routes = [
     canActivate: [],
     data: {}
   },
-  {
+ /*  {
     path: 'portfolio-tool',
     component: PortfolioComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}
-  },
+  }, */
   {
     path: 'investor-tool',
     component: InvestorComponent,
