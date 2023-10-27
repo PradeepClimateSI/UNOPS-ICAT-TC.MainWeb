@@ -38,7 +38,8 @@
             </div>
 
             <div class="p-field p-2">
-              <label for="description">Description *</label>
+              <label for="description">Description of the Portfolio* <i class="pi pi-info-circle" pTooltip="Describe in general terms the interventions composing the portfolio" tooltipPosition="bottom"
+                style="font-size: 1rem"></i></label>
               <input pInputText type="text" #description="ngModel" name="description"
                 [(ngModel)]="portfolio.description" placeholder="Description" required />
               <p class="info-message text-danger"
@@ -109,7 +110,8 @@
 
             <div class="p-field p-2">
 
-              <label for="date">Date*</label>
+              <label for="date">Date* <i class="pi pi-info-circle" pTooltip="Date of the assessment" tooltipPosition="bottom"
+                style="font-size: 1rem"></i></label>
               <div class="p-inputgroup">
                 <span class="p-inputgroup-addon">
                   <i class="pi pi-calendar"></i>

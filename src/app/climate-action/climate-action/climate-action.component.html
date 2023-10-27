@@ -190,7 +190,8 @@
 
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="interventionID">Intervention ID</label> 
+                  <label for="interventionID">Intervention ID <i class="pi pi-info-circle" pTooltip="{{tooltips.id}}" tooltipPosition="bottom"
+                    style="font-size: 1rem"></i></label> 
                   <!-- <div type="button" class="pi pi-info-circle ml-10"
                   pTooltip="Unique project ID/number identifying
                   the policy/action/investment"></div> -->
@@ -501,6 +502,31 @@
 
                 </div>
               </div>
+              <div class="col-12 col-md-6">
+                <div class="p-field">
+                  <label for="projStatus">Geographical Area Covered* <i class="pi pi-info-circle" pTooltip="{{tooltips.geo}}" tooltipPosition="bottom"
+                    style="font-size: 1rem"></i></label>
+                  <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlockGeoAreas">
+                    <p-dropdown [disabled]="editEntytyId > 0" placeholder="Please Select the Level of Implementation"
+                      name="level_of_implemetation" #geographical_areas="ngModel" [(ngModel)]="project.geographicalAreaCovered"
+                      [options]="levelOfImplementation" optionLabel="name" optionValue="name"
+                      [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false"  appendTo="body"
+                      [required]="true"></p-dropdown>
+                    <p class="info-message text-danger" *ngIf="
+                    !project.geographicalAreaCovered &&
+                    (fData.submitted || geographical_areas.touched || geographical_areas.dirty)
+                  ">
+                      This is a mandatory field
+                    </p>
+                  </ng-container>
+                  <ng-template #elseBlockGeoAreas>
+                    <input [disabled]="editEntytyId > 0" type="text" maxlength="50" name="geographical_areas"
+                      #geographical_areas="ngModel" class="p-inputtext" [(ngModel)]="project.levelofImplemenation"
+                      [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
+                  </ng-template>
+
+                </div>
+              </div>
 
 
             </div>
@@ -581,12 +607,13 @@
 
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="impleDate"> Start date*</label>
-                  <div class="tooltip-container">
+                  <label for="impleDate"> Start date* <i class="pi pi-info-circle" pTooltip="{{tooltips.start_date}}" tooltipPosition="bottom"
+                    style="font-size: 1rem"></i></label>
+                  <!-- <div class="tooltip-container">
                       <span class="tooltip-icon">i</span>
                       <div class="tooltip-text" style="width: 800px;">State the date that the intervention comes into effect.
                          Not to be confused with the date new legislation is passed in the case of policies.</div>
-                  </div>
+                  </div> -->
                   <div>
 
                     <p-calendar [disabled]="editEntytyId > 0"
@@ -608,7 +635,8 @@
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="propsedDate"> Date of Completion*</label>
+                  <label for="propsedDate"> End Date* <i class="pi pi-info-circle" pTooltip="{{tooltips.end_date}}" tooltipPosition="bottom"
+                    style="font-size: 1rem"></i></label>
                   <div>
 
                     <p-calendar [disabled]="editEntytyId > 0" placeholder="DD/MM/YYYY" dateFormat="dd/mm/yy"
@@ -629,7 +657,8 @@
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="impEntity">Implementing entity or entities*</label>
+                  <label for="impEntity">Implementing entity or entities* <i class="pi pi-info-circle" pTooltip="{{tooltips.entity}}" tooltipPosition="bottom"
+                    style="font-size: 1rem"></i></label>
                   <input [disabled]="editEntytyId > 0" type="text" placeholder="Name of the Implementing Entity"
                     name="impEntity" #impEntity="ngModel" field="contatname" pInputText [required]="true"
                     [(ngModel)]="project.implementingEntity" />
@@ -646,7 +675,8 @@
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="relatedPolicies">Related Policies </label>
+                  <label for="relatedPolicies">Related Policies <i class="pi pi-info-circle" pTooltip="{{tooltips.related}}" tooltipPosition="bottom"
+                    style="font-size: 1rem"></i></label>
                   <textarea [disabled]="editEntytyId > 0" name="relatedPolicies" placeholder="Related interventions"
                     #relatedPolicies="ngModel" [(ngModel)]="project.related_policies" rows="1" cols="130" pInputText
                     autoResize="autoResize" class="p-inputtext"></textarea>
@@ -654,7 +684,8 @@
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="reference">Reference</label>
+                  <label for="reference">Reference <i class="pi pi-info-circle" pTooltip="{{tooltips.reference}}" tooltipPosition="bottom"
+                    style="font-size: 1rem"></i></label>
                   <textarea [disabled]="editEntytyId > 0" name="reference" placeholder="Reference" #reference="ngModel"
                     [(ngModel)]="project.reference" rows="1" cols="130" pInputText autoResize="autoResize"
                     class="p-inputtext"></textarea>
