@@ -1234,6 +1234,7 @@ onChangeRelevance(relevance : any , data : any){
   if(relevance == 0){
     data.likelihood_justification = null;
     data.likelihood = null;
+    data.uploadedDocumentPath = null;
 
     for(let item of data.indicator_details){
       item.value = null;
