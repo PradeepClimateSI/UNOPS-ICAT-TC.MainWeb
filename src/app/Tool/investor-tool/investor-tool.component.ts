@@ -972,24 +972,24 @@ console.log("itemmmm", item)
 
   },type:string){
     data.isValidated = false;
-//   console.log("category",data,type)
-//   // data.data?.filter(investorAssessment => console.log(investorAssessment.relavance,investorAssessment.relavance == 0))
+  console.log("category",data,type)
+  // data.data?.filter(investorAssessment => console.log(investorAssessment.likelihood,investorAssessment.likelihood !== undefined , investorAssessment.likelihood !== null , investorAssessment.likelihood !== ''))
 //   data.data?.filter(investorAssessment => console.log((investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
 //   (indicator_details.justification !== undefined && indicator_details.justification !== null))?.length
 // ), (investorAssessment.indicator_details?.length-1)))
   if((data.data?.filter(investorAssessment => 
       (investorAssessment.relavance !== undefined) && 
-      (investorAssessment.likelihood !== undefined) && 
-      (investorAssessment.likelihood_justification !== undefined) &&
+      (investorAssessment.likelihood !== undefined ) && 
+      (investorAssessment.likelihood_justification !== undefined && investorAssessment.likelihood_justification !== null && investorAssessment.likelihood_justification !== '') &&
       (investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
-        (indicator_details.justification !== undefined && indicator_details.justification !== null))?.length === (investorAssessment.indicator_details?.length-1)
+        (indicator_details.justification !== undefined && indicator_details.justification !== null && indicator_details.justification !== ''))?.length === (investorAssessment.indicator_details?.length-1)
       )||
       // (investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
       // (indicator_details.justification !== undefined))?.length === (investorAssessment.indicator_details?.length-1) && this.isEditMode==true
       // )||
        (investorAssessment.relavance == 0))?.length === data?.data?.length && type=='process')||
       (data?.data.filter(investorAssessment => 
-        (investorAssessment.justification !== undefined) 
+        (investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '') 
        )?.length === data?.data.length && type=='outcome')||
       (data?.data.filter(sdg => 
         (sdg.data?.filter((data: { justification: undefined; } ) =>
@@ -1044,7 +1044,7 @@ console.log("itemmmm", item)
     // this.isValidSustainedSD = false
     if((data?.filter(sdg => 
         (sdg.data?.filter((data: { justification: undefined; } ) =>
-          (data.justification!== undefined))?.length === (sdg.data?.length)
+           (data.justification!== undefined && data.justification !== null && data.justification !== ''))?.length === (sdg.data?.length)
         ))?.length === data?.length )) {
           // data.isValidated = true;
           this.isValidSCaleSD=true
@@ -1252,6 +1252,7 @@ onChangeRelevance(relevance : any , data : any){
   if(relevance == 0){
     data.likelihood_justification = null;
     data.likelihood = null;
+    data.uploadedDocumentPath = null;
 
     for(let item of data.indicator_details){
       item.value = null;

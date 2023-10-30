@@ -206,9 +206,9 @@ export class PortfolioTrack4Component implements OnInit {
         console.log(error)
       }
     } 
-    this.load = true; //need to change as false
-    this.isSavedAssessment = true //need to change as false
-    this.visionExample = [
+     //this.load = true; //need to change as false
+     //this.isSavedAssessment = true //need to change as false
+     this.visionExample = [
       { title: 'Transformational Vision', value: 'Decarbonized electricity sector with a high % of Solar PV energy which will enable economic growth and will lead the shift of the labour market towards green jobs.' },
       { title: 'Long term ( > 15 years)', value: 'Zero-carbon electricity production. The 2050 vision is to achieve 60% solar PV in the national electricity mix and create 2 million new green jobs.' },
       { title: 'Medium term (> 5 years and  < 15 years)', value: 'Achieve 30% solar PV in the national electricity mix and create 1 million new green jobs. ' },
@@ -1074,9 +1074,10 @@ console.log("wwwwww", this.outcomeData)
   if((data.data?.filter(investorAssessment => 
       (investorAssessment.relavance !== undefined) && 
       (investorAssessment.likelihood !== undefined) && 
-      (investorAssessment.likelihood_justification !== undefined) || (investorAssessment.relavance == 0))?.length === data?.data?.length && type=='process')||
+      (investorAssessment.likelihood_justification !== undefined && investorAssessment.likelihood_justification !== null && investorAssessment.likelihood_justification !== '') || 
+      (investorAssessment.relavance == 0))?.length === data?.data?.length && type=='process')||
       (data?.data.filter(investorAssessment => 
-        (investorAssessment.justification !== undefined) 
+        (investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '') 
        )?.length === data?.data.length && type=='outcome')||
       (data?.data.filter(sdg => 
         (sdg.data?.filter((data: { justification: undefined; } ) =>
@@ -1131,7 +1132,7 @@ console.log("wwwwww", this.outcomeData)
     // this.isValidSustainedSD = false
     if((data?.filter(sdg => 
         (sdg.data?.filter((data: { justification: undefined; } ) =>
-          (data.justification!== undefined))?.length === (sdg.data?.length)
+          (data.justification!== undefined && data.justification !== null && data.justification !== ''))?.length === (sdg.data?.length)
         ))?.length === data?.length )) {
           // data.isValidated = true;
           this.isValidSCaleSD=true
@@ -1370,6 +1371,7 @@ console.log("wwwwww", this.outcomeData)
      if(relevance == 0){
       data.likelihood_justification = null;
       data.likelihood = null;
+      data.uploadedDocumentPath = null;
     }
   }
 
