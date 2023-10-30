@@ -1068,7 +1068,7 @@ console.log("wwwwww", this.outcomeData)
       (investorAssessment.likelihood_justification !== undefined && investorAssessment.likelihood_justification !== null && investorAssessment.likelihood_justification !== '') || 
       (investorAssessment.relavance == 0))?.length === data?.data?.length && type=='process')||
       (data?.data.filter(investorAssessment => 
-        (investorAssessment.justification !== undefined) 
+        (investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '') 
        )?.length === data?.data.length && type=='outcome')||
       (data?.data.filter(sdg => 
         (sdg.data?.filter((data: { justification: undefined; } ) =>
