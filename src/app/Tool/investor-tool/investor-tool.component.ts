@@ -964,7 +964,7 @@ console.log("itemmmm", item)
       (investorAssessment.likelihood !== undefined) && 
       (investorAssessment.likelihood_justification !== undefined) &&
       (investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
-        (indicator_details.justification !== undefined && indicator_details.justification !== null))?.length === (investorAssessment.indicator_details?.length-1)
+        (indicator_details.justification !== undefined && indicator_details.justification !== null && indicator_details.justification !== ''))?.length === (investorAssessment.indicator_details?.length-1)
       )||
       // (investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
       // (indicator_details.justification !== undefined))?.length === (investorAssessment.indicator_details?.length-1) && this.isEditMode==true
