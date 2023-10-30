@@ -68,7 +68,7 @@
                               ">
                                 This is a mandatory field
                             </p>
-                            </div>
+                        </div>
 
                         <!-- <div class="p-field p-2">
                             <label for="Sectors Covered">Impacts Covered*</label>
@@ -87,6 +87,44 @@
                             </p>
                         </div>
      -->
+                        <div class="p-field p-2">
+                          <label for="Sectors Covered">Total Investement (in USD)*</label>
+                          <input pInputText type="number" #totInvestment="ngModel" name="totInvestment" ngModel
+                          placeholder="Enter total investment" [(ngModel)]="investorAssessment.total_investemnt" required [disabled]="isSavedAssessment|| isEditMode"/>
+                          <p class="info-message text-danger" *ngIf="
+                                !investorAssessment.total_investemnt &&
+                                (fData.submitted || totInvestment.touched)
+                              ">
+                                This is a mandatory field
+                            </p>
+                        </div>
+
+                        <div class="p-field p-2">
+                          <table>
+                            <thead>
+                              <tr>
+                                <th [style]="{'width': '200%'}">Investment instrument used</th>
+                                <ng-container *ngFor="let tot of totalInvestments">
+                                  <td>
+                                    <p-dropdown style="border: none;" [style]="{'width':'100%'}"  name="invest" #type="ngModel" placeholder="Select Answer" [(ngModel)]="tot.instrument_code" [options]="yesNoAnswer" optionLabel="name" appendTo="body" optionValue="name">
+                                    </p-dropdown>
+                                  </td>
+                                </ng-container>
+                                </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <th>Proportion of total investment</th>
+                                <ng-container *ngFor="let tot of totalInvestments">
+                                  <td>
+                                    <input pInputText type="number" #totInvestment="ngModel" name="totInvestment" ngModel
+                                    [(ngModel)]="tot.propotion" required [disabled]="isSavedAssessment|| isEditMode"/>
+                                  </td>
+                                </ng-container>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
                         <div class="p-field p-2">
 
                             <label for="date1">Assessment Period*</label>
@@ -177,7 +215,7 @@
                     <div class="mt-2 overflow-visible" style="z-index: 1;">
                       <div class="p-grid p-fluid col-sm-12">
                         <div class="p-2">
-                          <h6>Transformational Vision & Stage</h6>
+                          <h6>Transformational Vision & Stage <i class="pi pi-info-circle" (mouseover)="op.toggle($event)" (mouseout)="op.toggle($event)" style="font-size: 1rem"></i></h6>
                         </div>
                         <div class="row p-2">
                           <div class="  col-12">
@@ -1011,7 +1049,7 @@
                                   </div>
                                 </div>
 
-                                <div *ngIf="category.CategoryName ==='GHG Scale of the Outcome'" style="text-align: justify;">
+                                <!-- <div *ngIf="category.CategoryName ==='GHG Scale of the Outcome'" style="text-align: justify;">
                                   <p>  <br><br>
                                     Note: all reduction in emissions calculated as average reduction in emissions
                                     (tCO2e/yr calculated as total estimated reductions over lifetime of the project
@@ -1019,7 +1057,7 @@
                                     subnational and subsectorial emissions for the latest year for which those emissions data
                                     is available
                                   </p>
-                                </div>
+                                </div> -->
 
                                 </div>
 
@@ -1392,3 +1430,14 @@
 
 
 </div>
+
+<p-overlayPanel #op [style]="{'width': '600px'}">
+  <div class="p-grid p-fluid col-md-12 col-sm-12 text-title">
+    <p><b>Example for a Solar PV Policy:</b></p>
+    <div class="row p-2" *ngFor="let item of visionExample">
+      <div class="col-3">{{item.title}} : </div>
+      <div class="col-9">{{item.value}}</div>
+      <br>
+    </div>
+  </div>
+</p-overlayPanel>

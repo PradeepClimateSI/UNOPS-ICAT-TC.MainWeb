@@ -136,6 +136,7 @@ export class PortfolioTrack4Component implements OnInit {
   isValidSCaleSD: boolean;
   isValidSustainedSD: boolean;
   draftLoading: boolean=false;
+  visionExample: { title: string; value: string; }[];
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -205,8 +206,16 @@ export class PortfolioTrack4Component implements OnInit {
         console.log(error)
       }
     } 
-    // this.load = true; //need to change as false
-    // this.isSavedAssessment = true //need to change as false
+    this.load = true; //need to change as false
+    this.isSavedAssessment = true //need to change as false
+    this.visionExample = [
+      { title: 'Transformational Vision', value: 'Decarbonized electricity sector with a high % of Solar PV energy which will enable economic growth and will lead the shift of the labour market towards green jobs.' },
+      { title: 'Long term ( > 15 years)', value: 'Zero-carbon electricity production. The 2050 vision is to achieve 60% solar PV in the national electricity mix and create 2 million new green jobs.' },
+      { title: 'Medium term (> 5 years and  < 15 years)', value: 'Achieve 30% solar PV in the national electricity mix and create 1 million new green jobs. ' },
+      { title: 'Short term (< 5 years)', value: 'Install 20 GW of rooftop solar PV and create 200,000 new green jobs in doing so. The solar PV policy is implemented at subnational levels, supported by incentives for private sector involvement and knowledge development.' },
+      { title: 'Phase of transformation', value: 'Acceleration. Solar PV is widely accepted in the society and its use is spreading increasingly fast. Fossil-fuel based energy production is being challenged as the only way to ensure a reliable energy supply. Changes have already occurred in the economy, institutions and society as a result of the spreading of Solar PV.' },
+      { title: 'Intervention contribution to change the system to achieve the vision', value: 'The intervention being assessed will facilitate the spreading of Solar PV installations and thus contribute to increase the penetration of solar PV in the national electricity mix.' },
+    ]
 
     this.tableData = this.getProductsData();
 
