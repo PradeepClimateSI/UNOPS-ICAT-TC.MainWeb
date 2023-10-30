@@ -1065,7 +1065,8 @@ console.log("wwwwww", this.outcomeData)
   if((data.data?.filter(investorAssessment => 
       (investorAssessment.relavance !== undefined) && 
       (investorAssessment.likelihood !== undefined) && 
-      (investorAssessment.likelihood_justification !== undefined) || (investorAssessment.relavance == 0))?.length === data?.data?.length && type=='process')||
+      (investorAssessment.likelihood_justification !== undefined && investorAssessment.likelihood_justification !== null && investorAssessment.likelihood_justification !== '') || 
+      (investorAssessment.relavance == 0))?.length === data?.data?.length && type=='process')||
       (data?.data.filter(investorAssessment => 
         (investorAssessment.justification !== undefined) 
        )?.length === data?.data.length && type=='outcome')||
@@ -1122,7 +1123,7 @@ console.log("wwwwww", this.outcomeData)
     // this.isValidSustainedSD = false
     if((data?.filter(sdg => 
         (sdg.data?.filter((data: { justification: undefined; } ) =>
-          (data.justification!== undefined))?.length === (sdg.data?.length)
+          (data.justification!== undefined && data.justification !== null && data.justification !== ''))?.length === (sdg.data?.length)
         ))?.length === data?.length )) {
           // data.isValidated = true;
           this.isValidSCaleSD=true
