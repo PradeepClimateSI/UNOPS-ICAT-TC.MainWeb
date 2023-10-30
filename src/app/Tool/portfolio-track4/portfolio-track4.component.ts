@@ -205,8 +205,8 @@ export class PortfolioTrack4Component implements OnInit {
         console.log(error)
       }
     } 
-    // this.load = true; //need to change as false
-    // this.isSavedAssessment = true //need to change as false
+     //this.load = true; //need to change as false
+     //this.isSavedAssessment = true //need to change as false
 
     this.tableData = this.getProductsData();
 
@@ -1361,6 +1361,7 @@ console.log("wwwwww", this.outcomeData)
      if(relevance == 0){
       data.likelihood_justification = null;
       data.likelihood = null;
+      data.uploadedDocumentPath = null;
     }
   }
 
