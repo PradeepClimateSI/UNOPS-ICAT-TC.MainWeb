@@ -774,7 +774,7 @@ console.log("wwwwww", this.outcomeData)
   }
 
 
-  async saveDraft(category:any){
+  async saveDraft(category:any,processDraftLocation:string,type:string){
     
     let finalArray = this.processData.concat(this.outcomeData)
     if(this.isEditMode ==true){
@@ -800,11 +800,23 @@ console.log("wwwwww", this.outcomeData)
         item.portfolioSdg = this.selectedSDGs[i];
       }
     }
+
+    let proDraftLocation =this.assessment.processDraftLocation;
+    let outDraftLocation = this.assessment.outcomeDraftLocation;
+
+    if(type ='pro'){
+      proDraftLocation= processDraftLocation
+    }
+   if(type ='out'){
+    outDraftLocation= processDraftLocation
+    }
     
     let data : any ={
       finalArray : finalArray,
       isDraft : true,
       isEdit : this.isEditMode,
+      proDraftLocation: proDraftLocation,
+      outDraftLocation: outDraftLocation,
       scaleSDGs : this.sdgDataSendArray2,
       sustainedSDGs : this.sdgDataSendArray4,
       sdgs : this.selectedSDGsWithAnswers
@@ -823,8 +835,11 @@ console.log("wwwwww", this.outcomeData)
           detail: 'Assessment draft has been saved successfully',
           closable: true,
         })
+        if (data.isDraft) {
+           this.setFrom()
+           this.setTo()
+        }
         if(this.isEditMode ==false){
-          console.log("mainAssessment",this.mainAssessment.id)
           this.router.navigate(['app/portfolio-tool-edit'], {  
             queryParams: { id: this.mainAssessment.id,isEdit:true},  
             });

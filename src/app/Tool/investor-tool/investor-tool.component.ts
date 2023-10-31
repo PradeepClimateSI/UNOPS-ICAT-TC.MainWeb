@@ -608,8 +608,8 @@ console.log("itemmmm", item)
     }
 
   }
-  async saveDraft(category:any){
-    
+  async saveDraft(category:any,processDraftLocation:string,type:string){
+
     let finalArray = this.processData.concat(this.outcomeData)
     if(this.isEditMode ==true){
       this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
@@ -634,10 +634,21 @@ console.log("itemmmm", item)
         item.portfolioSdg = this.selectedSDGs[i];
       }
     }
-    
+    let proDraftLocation =this.assessment.processDraftLocation;
+    let outDraftLocation = this.assessment.outcomeDraftLocation;
+
+    if(type ='pro'){
+      proDraftLocation= processDraftLocation
+    }
+   if(type ='out'){
+    outDraftLocation= processDraftLocation
+    }
+
     let data : any ={
       finalArray : finalArray,
       isDraft : true,
+      proDraftLocation: proDraftLocation,
+      outDraftLocation: outDraftLocation,
       isEdit : this.isEditMode,
       scaleSDGs : this.sdgDataSendArray2,
       sustainedSDGs : this.sdgDataSendArray4,
@@ -657,6 +668,8 @@ console.log("itemmmm", item)
           detail: 'Assessment draft has been saved successfully',
           closable: true,
         })
+        this.setFrom()
+        this.setTo()
         if(this.isEditMode ==false){
           console.log("mainAssessment",this.mainAssessment.id)
           this.router.navigate(['app/investor-tool-new-edit'], {  
