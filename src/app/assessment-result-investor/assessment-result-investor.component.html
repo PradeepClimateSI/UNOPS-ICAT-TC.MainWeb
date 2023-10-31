@@ -494,7 +494,7 @@
                     <td  class="table-data">{{(intervention.policyName)?(intervention.policyName):'-'}}</td>
                     <td  class="table-data">{{masterDataService.getToolName(investerTool ? 'INVESTOR' : 'PORTFOLIO')}}</td>
                     <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
-                    <td  class="table-data">Outside assessment boundaries</td>
+                    <td  class="table-data">-</td>
                     <td  class="table-data">Outside assessment boundaries</td>
                     <td  class="table-data">Outside assessment boundaries</td>
                     <td  class="table-data">Outside assessment boundaries</td>
@@ -520,7 +520,7 @@
           <ng-template pTemplate="header">
             <tr>
               <th class="table-header-main" colspan="4">Sustained</th>
-              <th class="table-header-main" colspan="7">Outcomes</th>
+              <th class="table-header-main" colspan="6">Outcomes</th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-rowData>
@@ -528,7 +528,7 @@
                 <td colspan="4" class="table-header-left">Intervention Information</td>
                 <td  class="table-header">SDG</td>
                 <td colspan="5" class="table-header">Sustainable Development</td>
-                <td  class="table-header">Weights</td>
+                <!-- <td  class="table-header">Weights</td> -->
               </tr>
               <tr>
                 <td class="table-header">ID</td>
@@ -541,7 +541,7 @@
                 <td class="table-header">Short term (<5 years)</td>
                 <td class="table-header">SDG Score</td>
                 <td class="table-header"></td>
-                <td class="table-header"></td>
+                <!-- <td class="table-header"></td> -->
               </tr>
              
                 <ng-container *ngFor="let char of sustained_SD.characteristicData">
@@ -556,7 +556,7 @@
                     </ng-container>
                     <td class="table-data">{{char.sdg_score!=null?(char.sdg_score):'Outside assessment boundaries'}}</td>
                     <td class="table-data"></td>
-                    <td class="table-data"></td>
+                    <!-- <td class="table-data"></td> -->
                   </tr>
                 </ng-container>
                   <tr *ngIf="sustained_SD.characteristicData.length==0">
@@ -564,32 +564,49 @@
                     <td  class="table-data">{{(intervention.policyName)?(intervention.policyName):'-'}}</td>
                     <td  class="table-data">{{masterDataService.getToolName(investerTool ? 'INVESTOR' : 'PORTFOLIO')}}</td>
                     <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
-                    <td  class="table-data">Outside assessment boundaries</td>
+                    <td  class="table-data">-</td>
                     <td  class="table-data">Outside assessment boundaries</td>
                     <td  class="table-data">Outside assessment boundaries</td>
                     <td  class="table-data">Outside assessment boundaries</td>
                     <td  class="table-data">Outside assessment boundaries</td>
                     <td class="table-data"></td>
-                    <td class="table-data"></td>
+                    <!-- <td class="table-data"></td> -->
                   </tr>
               <tr>
                 <td  class="table-header" colspan="8">Category Score</td>
                 <td class="table-data">{{(sustained_SD.category_score.value!=null)?(sustained_SD.category_score.value):'Outside assessment boundaries'}}</td>
                 <td class="table-data">{{(sustained_SD.category_score.value!=null)?(sustained_SD.category_score.value + "-" + sustained_SD.category_score.name):'Outside assessment boundaries'}}</td>
                 <!-- <td class="table-data">{{sustained_SD.category_weight?sustained_SD.category_weight+'%':'-'}}</td> -->
-                <td class="table-data"></td>
+                <!-- <td class="table-data"></td> -->
               </tr>
-              <tr>
+             <!--  <tr>
                 <td  class="table-header" colspan="8">Aggregated SDG Outcome Score</td>
                 <td class="table-data">{{(aggregated_score.value!=null)?(aggregated_score.value):'Outside assessment boundaries'}}</td>
                 <td class="table-data">{{(aggregated_score.value!=null)?(aggregated_score.value + "-" + aggregated_score.name):'Outside assessment boundaries'}}</td>
                 <td class="table-data">50%</td>
-                <!-- <td class="table-data">{{sustained_SD.category_weight?sustained_SD.category_weight+'%':'-'}}</td> -->
-              </tr>
+              </tr> -->
                 
           </ng-template>
           
       </p-table>
+      <br>
+      <p-table [value]="[{}]" styleClass="p-datatable-gridlines" *ngIf="loading && sdgListWithScores.length>0">
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="table-header-main" colspan="1">SDG</th>
+            <th class="table-header-main" colspan="1">SDG Score</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData>
+              <ng-container *ngFor="let sdg of sdgListWithScores">
+                <tr>
+                <td class="table-data">{{sdg.name}}</td>
+                <td class="table-data">{{sdg.score}}</td>
+              </tr>
+              </ng-container>
+        </ng-template>
+      </p-table>
+
       <br>
         <table> 
           <tr></tr>

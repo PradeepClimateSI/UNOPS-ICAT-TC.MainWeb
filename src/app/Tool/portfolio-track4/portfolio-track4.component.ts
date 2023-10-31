@@ -864,7 +864,7 @@ console.log("wwwwww", this.outcomeData)
       })
   }
 
-  onsubmit(form: NgForm) {
+  async onsubmit(form: NgForm) {
 
     console.log("processData ---", this.processData)
       console.log("outcomeData ---", this.outcomeData)
@@ -954,7 +954,17 @@ console.log("wwwwww", this.outcomeData)
     if(this.assessment.assessment_approach === 'Direct'){
       console.log("Directttt")
       let finalArray = this.processData.concat(this.outcomeData)
-      finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
+      if(this.isEditMode ==true){
+        this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+        console.log("assessment",this.assessment.id)
+        finalArray.map(x => x.data.map(y => y.assessment = this.assessment))
+        // console.log("finalArray33", finalArray)
+      }
+      else{
+        console.log("mainAssessment",this.mainAssessment.id)
+        finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
+      }
+      // finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
 
       console.log("finalArray", finalArray)
       //@ts-ignore
@@ -978,7 +988,8 @@ console.log("wwwwww", this.outcomeData)
         scaleSDGs : this.sdgDataSendArray2,
         sustainedSDGs : this.sdgDataSendArray4,
         sdgs : this.selectedSDGsWithAnswers,
-        isEdit:false
+        isEdit:this.isEditMode,
+        isDraft : false,
       }
       this.investorToolControllerproxy.createFinalAssessment2(data)
         .subscribe(_res => {
@@ -1050,11 +1061,21 @@ console.log("wwwwww", this.outcomeData)
   }
 
 
-  showResults() {
-
-    setTimeout(() => {
-      this.router.navigate(['../assessment-result-investor', this.mainAssessment.id], { queryParams: { assessmentId: this.mainAssessment.id }, relativeTo: this.activatedRoute });
-    }, 2000);
+  async showResults() {
+    if(this.isEditMode ==true){
+      this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+      setTimeout(() => {
+        this.router.navigate(['../assessment-result-investor', this.assessment.id], { queryParams: { assessmentId: this.assessment.id }, relativeTo: this.activatedRoute });
+      }, 2000);
+      console.log("assessment",this.assessment.id)
+      // console.log("finalArray33", finalArray)
+    }
+    else{
+      console.log("mainAssessment",this.mainAssessment.id)
+      setTimeout(() => {
+        this.router.navigate(['../assessment-result-investor', this.mainAssessment.id], { queryParams: { assessmentId: this.mainAssessment.id }, relativeTo: this.activatedRoute });
+      }, 2000);
+    }
   }
 
   // next() {
