@@ -103,10 +103,10 @@
                           <table>
                             <thead>
                               <tr>
-                                <th [style]="{'width': '200%'}">Investment instrument used</th>
-                                <ng-container *ngFor="let tot of totalInvestments">
+                                <th [style]="{'width': '200%', 'font-weight':'normal'}">Investment instrument used</th>
+                                <ng-container *ngFor="let tot of totalInvestments; let idx = index">
                                   <td>
-                                    <p-dropdown [style]="{'width':'100%'}"  name="invest" #type="ngModel" placeholder="Select" [(ngModel)]="tot.instrument_code" [options]="investment_instruments" 
+                                    <p-dropdown [style]="{'width':'100%'}"  [name]="'invest'+idx" #type="ngModel" placeholder="Select" [(ngModel)]="tot.instrument_code" [options]="investment_instruments" 
                                     optionLabel="name" appendTo="body" optionValue="code" [disabled]="isSavedAssessment|| isEditMode">
                                     </p-dropdown>
                                   </td>
@@ -115,10 +115,10 @@
                             </thead>
                             <tbody>
                               <tr>
-                                <th>Proportion of total investment</th>
-                                <ng-container *ngFor="let tot of totalInvestments">
+                                <th [style]="{'width': '200%', 'font-weight':'normal'}">Proportion of total investment</th>
+                                <ng-container *ngFor="let tot of totalInvestments; let idx = index">
                                   <td>
-                                    <input pInputText type="number" #totInvestment="ngModel" name="totInvestment" ngModel
+                                    <input pInputText type="number" #totInvestment="ngModel" [name]="'totInvestment'+idx" ngModel
                                     [(ngModel)]="tot.propotion" required [disabled]="isSavedAssessment|| isEditMode"/>
                                   </td>
                                 </ng-container>
