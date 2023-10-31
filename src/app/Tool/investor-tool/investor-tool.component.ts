@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { MasterDataDto, MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import {Any, AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, AssessmentControllerServiceProxy, Category, PortfolioSdg, TotalInvestment } from 'shared/service-proxies/service-proxies';
+import {Any, AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, AssessmentControllerServiceProxy, Category, PortfolioSdg, TotalInvestment, TotalInvestmentDto } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -153,7 +153,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   isValidSCaleSD: boolean;
   isValidSustainedSD: boolean;
   visionExample: { title: string; value: string; }[];
-invest1: any;
+  invest1: any;
+  investment_instruments: MasterDataDto[];
   // isValidated:boolean;
 
   constructor(
@@ -180,6 +181,7 @@ invest1: any;
     console.log("sectors",this.sectorList)
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;
     this.geographicalAreasCovered = this.masterDataService.level_of_implemetation;
+    this.investment_instruments = this.masterDataService.investment_instruments
 
     this.activatedRoute.queryParams.subscribe( params => {
       params['isEdit']=='true'?(this.isEditMode =true ):false
@@ -189,20 +191,22 @@ invest1: any;
         window.location.reload()
       }
     })
-    if(this.isEditMode==false){
+    if (this.isEditMode == false) {
       await this.getPolicies();
       await this.getAllImpactsCovered();
       await this.getCharacteristics();
-     
-    }
-    else{
-      try{
+      for (let i = 0; i < 3; i++) {
+        this.totalInvestments.push(new TotalInvestment)
+      }
+
+    } else {
+      try {
         await this.getSavedAssessment()
       }
       catch (error) {
         console.log(error)
       }
-      
+
 
     } 
 
@@ -279,10 +283,6 @@ invest1: any;
       this.sdgList = res
      });
 
-    for (let i = 0; i < 3; i++) {
-      this.totalInvestments.push(new TotalInvestment)
-    }
-
   }
   
      
@@ -299,6 +299,18 @@ invest1: any;
     this.sdgDataSendArray4 = await this.investorToolControllerproxy.getSustainedSDGData(this.assessmentId).toPromise();
     this.selectedSDGs = await this.investorToolControllerproxy.getSelectedSDGs(this.assessmentId).toPromise();
     this.selectedSDGsWithAnswers = await this.investorToolControllerproxy.getSelectedSDGsWithAnswers(this.assessmentId).toPromise();
+    this.investorAssessment = await this.investorToolControllerproxy.getResultByAssessment(this.assessmentId).toPromise()
+
+    this.investorAssessment.total_investements.map((tot, idx) => {
+      console.log("index", idx, this.totalInvestments)
+      let inst = this.investment_instruments.find(o => o.code === tot.instrument_code)
+      if (inst) {
+        let instObj = new TotalInvestment()
+        instObj.instrument_code = inst.code
+        instObj.propotion = tot.propotion
+        this.totalInvestments.push(instObj)
+      }
+    })
 
     console.log("this.processData",this.processData,this.assessment)
     console.log("this.outcomeData",this.outcomeData)
@@ -538,10 +550,23 @@ console.log("itemmmm", item)
              this.createInvestorToolDto.geographicalAreas = this.geographicalAreasCoveredArr;
             console.log("investorassessmet",this.createInvestorToolDto)
             this.investorToolControllerproxy.createinvestorToolAssessment(this.createInvestorToolDto)
-              .subscribe(_res => {
+              .subscribe(async _res => {
                 console.log("res final", _res)
                 if (_res) {
                   console.log(_res)
+                  let investDto = new TotalInvestmentDto()
+                  this.totalInvestments = this.totalInvestments.map(invest => {
+                    let instrument = this.masterDataService.investment_instruments.find(o => o.code === invest.instrument_code)
+                    if (instrument) {
+                      invest.instrument_name = instrument.name
+                    }
+                    let tool = new InvestorTool()
+                    tool.id = _res.id
+                    invest.investor_tool = tool
+                    return invest
+                  })
+                  investDto.totalInvestements = this.totalInvestments
+                  await this.investorToolControllerproxy.saveTotalInvestments(investDto).toPromise()
                   // this.messageService.add({
                   //   severity: 'success',
                   //   summary: 'Success',

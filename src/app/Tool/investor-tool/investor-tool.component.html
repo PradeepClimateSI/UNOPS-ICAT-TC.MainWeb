@@ -106,7 +106,8 @@
                                 <th [style]="{'width': '200%'}">Investment instrument used</th>
                                 <ng-container *ngFor="let tot of totalInvestments">
                                   <td>
-                                    <p-dropdown style="border: none;" [style]="{'width':'100%'}"  name="invest" #type="ngModel" placeholder="Select Answer" [(ngModel)]="tot.instrument_code" [options]="yesNoAnswer" optionLabel="name" appendTo="body" optionValue="name">
+                                    <p-dropdown [style]="{'width':'100%'}"  name="invest" #type="ngModel" placeholder="Select" [(ngModel)]="tot.instrument_code" [options]="investment_instruments" 
+                                    optionLabel="name" appendTo="body" optionValue="code" [disabled]="isSavedAssessment|| isEditMode">
                                     </p-dropdown>
                                   </td>
                                 </ng-container>
@@ -474,7 +475,7 @@
                         </div>
             
                       </div>
-                      <div *ngIf="finalBarrierList.length !==0" >
+                      <div *ngIf="finalBarrierList?.length !==0" >
                         <div class="row p-2" *ngFor="let barriers of finalBarrierList">
             
                           <div class="col-12 col-md-2">
