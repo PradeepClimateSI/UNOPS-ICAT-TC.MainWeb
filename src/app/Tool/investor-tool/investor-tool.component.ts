@@ -155,6 +155,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   visionExample: { title: string; value: string; }[];
   invest1: any;
   investment_instruments: MasterDataDto[];
+abatement: any;
   // isValidated:boolean;
 
   constructor(
@@ -554,6 +555,7 @@ console.log("itemmmm", item)
                 console.log("res final", _res)
                 if (_res) {
                   console.log(_res)
+                  this.investorAssessment = _res
                   let investDto = new TotalInvestmentDto()
                   this.totalInvestments = this.totalInvestments.map(invest => {
                     let instrument = this.masterDataService.investment_instruments.find(o => o.code === invest.instrument_code)
@@ -1448,8 +1450,16 @@ assignSDG(sdg : any , data : any){
           ans: 'No',
       },
       ]
+  }
+
+  calculateAbatement(value: number, data: any) {
+    if (this.investorAssessment?.total_investment) {
+      data['abatement']= value / this.investorAssessment.total_investment 
+    } else {
+      data['abatement'] = 0
     }
-  
+  }
+
 }
 interface UploadEvent {
   originalEvent: HttpResponse<FileDocument>;

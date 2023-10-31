@@ -90,9 +90,9 @@
                         <div class="p-field p-2">
                           <label for="Sectors Covered">Total Investement (in USD)*</label>
                           <input pInputText type="number" #totInvestment="ngModel" name="totInvestment" ngModel
-                          placeholder="Enter total investment" [(ngModel)]="investorAssessment.total_investemnt" required [disabled]="isSavedAssessment|| isEditMode"/>
+                          placeholder="Enter total investment" [(ngModel)]="investorAssessment.total_investment" required [disabled]="isSavedAssessment|| isEditMode"/>
                           <p class="info-message text-danger" *ngIf="
-                                !investorAssessment.total_investemnt &&
+                                !investorAssessment.total_investment &&
                                 (fData.submitted || totInvestment.touched)
                               ">
                                 This is a mandatory field
@@ -1035,32 +1035,54 @@
                               </div>
 
 
-                              <!-- lllllllllllllllllllllllllllll -->
+                                <!-- lllllllllllllllllllllllllllll -->
+                                <!-- *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level' " -->
+                              <div >
+                                <div class="row p-2">
+                                  <div class="col-12 col-lg-6">
+                                    <div class="p-field">
+                                      <label for="expected_ghg_mitigation">Expected GHG reductions over intervention lifetime(Mt CO2-eq)</label>
+                                      <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation" name="expected_ghg_mitigation"
+                                          placeholder="Expected GHG reductions over intervention lifetime" inputId="locale-us" mode="decimal"
+                                        locale="en-US" [minFractionDigits]="2" (onInput)="calculateAbatement($event.value, data)">
+                                      </p-inputNumber>
+                                    </div>
+                                  </div>
 
+                                  <!-- <div *ngIf="category.CategoryName ==='GHG Scale of the Outcome'" style="text-align: justify;">
+                                    <p>  <br><br>
+                                      Note: all reduction in emissions calculated as average reduction in emissions
+                                      (tCO2e/yr calculated as total estimated reductions over lifetime of the project
+                                      divided by project lifetime) and compared respectively to global, national/sectoral or
+                                      subnational and subsectorial emissions for the latest year for which those emissions data
+                                      is available
+                                    </p>
+                                  </div> -->
 
-                              <div class="row p-2"
-                              *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level' ">
-                              <div class="col-12 col-lg-6">
-                                <div class="p-field">
-                                  <label for="expected_ghg_mitigation">Expected GHG reductions over intervention lifetime(Mt CO2-eq)</label>
-                                  <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation" name="expected_ghg_mitigation"
-                                      placeholder="Expected GHG reductions over intervention lifetime" inputId="locale-us" mode="decimal"
-                                    locale="en-US" [minFractionDigits]="2">
-                                  </p-inputNumber>
+                                </div>
+                                <div class="row p-2">
+                                  <div class="col-12 col-lg-6">
+                                    <div class="p-field">
+                                      <label for="expected_ghg_mitigation">Expected GHG reduction (Mt CO2-eq) per year</label>
+                                      <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation_year" name="expected_ghg_mitigation_year"
+                                          placeholder="Expected GHG reduction per year" inputId="locale-us" mode="decimal"
+                                        locale="en-US" [minFractionDigits]="2">
+                                      </p-inputNumber>
+                                    </div>
                                   </div>
                                 </div>
-
-                                <!-- <div *ngIf="category.CategoryName ==='GHG Scale of the Outcome'" style="text-align: justify;">
-                                  <p>  <br><br>
-                                    Note: all reduction in emissions calculated as average reduction in emissions
-                                    (tCO2e/yr calculated as total estimated reductions over lifetime of the project
-                                    divided by project lifetime) and compared respectively to global, national/sectoral or
-                                    subnational and subsectorial emissions for the latest year for which those emissions data
-                                    is available
-                                  </p>
-                                </div> -->
-
+                                <div class="row p-2">
+                                  <div class="col-12 col-lg-6">
+                                    <div class="p-field">
+                                      <label for="expected_ghg_mitigation">Abatement per dollar (GHG reduction over intervention lifetime/total investment), t CO2-eq/USD</label>
+                                      <p-inputNumber [(ngModel)]="data['abatement']" disabl [name]="'abatement'+data.characteristics.id"
+                                          placeholder="Expected GHG reduction per year"  mode="decimal"
+                                        locale="en-US" [minFractionDigits]="2">
+                                      </p-inputNumber>
+                                    </div>
+                                  </div>
                                 </div>
+                              </div>
 
 
                               </div>
