@@ -219,7 +219,8 @@ export class ClimateActionComponent implements OnInit  {
       objectives: 'State the intended impacts the intervention intends to achieve (e.g., the purpose stated in the legislation or regulation), including specific goals for GHG emission reductions and sustainable development impacts where available',
       related: 'List other policies or actions that may interact with the policy or action assessed',
       reference: 'Provide a link or full reference to access further, detailed information about the intevention',
-      geo: 'Where is the policy applied?'
+      geo: 'Where is the policy applied?',
+      objective: 'State the intended impacts the intervention intends to achieve (e.g., the purpose stated in the legislation or regulation), including specific goals for GHG emission reductions and sustainable development impacts where available)'
     }
  ;
     let filterUser: string[] = [];

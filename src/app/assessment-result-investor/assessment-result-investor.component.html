@@ -15,7 +15,7 @@
         <div style="display: flex; flex-direction: row;">
           <div style="flex-basis: 40%;">
             <p><strong>Intervention ID</strong></p>
-            <p><strong>Intervention Type</strong></p>
+            <p><strong>Tool Applied</strong></p>
             <p><strong>Intervention Status</strong></p>
             <p><strong>Assessment Type</strong></p>
             <!--    <p><strong>Assessment Approach</strong></p>
@@ -41,7 +41,7 @@
           <div style="flex-basis: 50%;">
             <!--    <p>{{policyName}}</p> -->
             <p>{{(intervention.intervention_id)?(intervention.intervention_id):'-'}}</p>
-            <p>{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</p>
+            <p>{{masterDataService.getToolName(investerTool ? 'INVESTOR' : 'PORTFOLIO')}}</p>
             <p>{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</p>
             <p>{{assessmentType}}</p>
             <!--   <p>{{assessment_approach}}</p>
@@ -243,7 +243,7 @@
                 <tr>
                   <td class="table-header">ID</td>
                   <td class="table-header">Intervention Name</td>
-                  <td class="table-header">Intervention Type</td>
+                  <td class="table-header">Tool Applied</td>
                   <td class="table-header">Status</td>
                   <ng-container *ngFor="let cat of processData">
                     <ng-container *ngFor="let data of cat.characteristicData">
@@ -254,7 +254,7 @@
                 <tr >
                   <td  class="table-data">{{(intervention.intervention_id)?(intervention.intervention_id):'-'}}</td>
                   <td  class="table-data">{{(intervention.policyName)?(intervention.policyName):'-'}}</td>
-                  <td  class="table-data">{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</td>
+                  <td  class="table-data">{{masterDataService.getToolName(investerTool ? 'INVESTOR' : 'PORTFOLIO')}}</td>
                   <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
                   <ng-container *ngFor="let cat of processData">
                       <ng-container *ngFor="let data of cat.characteristicData">
@@ -275,7 +275,7 @@
                 <tr  class="table-header">
                   <td class="table-header">ID</td>
                   <td class="table-header">Intervention Name</td>
-                  <td class="table-header">Intervention Type</td>
+                  <td class="table-header">Tool Applied</td>
                   <td class="table-header">Status</td>
                   <ng-container *ngFor="let cat of processData">
                     <ng-container *ngFor="let data of cat.characteristicData">
@@ -286,7 +286,7 @@
                 <tr >
                   <td  class="table-data">{{(intervention.intervention_id)?(intervention.intervention_id):'-'}}</td>
                   <td  class="table-data">{{(intervention.policyName)?(intervention.policyName):'-'}}</td>
-                  <td  class="table-data">{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</td>
+                  <td  class="table-data">{{masterDataService.getToolName(investerTool ? 'INVESTOR' : 'PORTFOLIO')}}</td>
                   <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
                   <ng-container *ngFor="let cat of processData">
                       <ng-container *ngFor="let data of cat.characteristicData">
@@ -371,7 +371,7 @@
                 <tr>
                   <td class="table-header">ID</td>
                   <td class="table-header">Intervention Name</td>
-                  <td class="table-header">Intervention Type</td>
+                  <td class="table-header">Tool Applied</td>
                   <td class="table-header">Status</td>
                   <ng-container *ngFor="let char of scale_GHGs.characteristicData">
                       <td class="table-header">{{char.characteristic}}</td>
@@ -384,7 +384,7 @@
                 <tr >
                   <td  class="table-data">{{(intervention.intervention_id)?(intervention.intervention_id):'-'}}</td>
                   <td  class="table-data">{{(intervention.policyName)?(intervention.policyName):'-'}}</td>
-                  <td  class="table-data">{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</td>
+                  <td  class="table-data">{{masterDataService.getToolName(investerTool ? 'INVESTOR' : 'PORTFOLIO')}}</td>
                   <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
                   <ng-container *ngFor="let char of scale_GHGs.characteristicData">
                     <td class="table-data">{{(char.score.value==null?'Outside assessment boundaries':(char.score.value + "-" + char.score.name))}}</td>
@@ -413,7 +413,7 @@
               <tr>
                 <td class="table-header">ID</td>
                 <td class="table-header">Intervention Name</td>
-                <td class="table-header">Intervention Type</td>
+                <td class="table-header">Tool Applied</td>
                 <td class="table-header">Status</td>
                 <ng-container *ngFor="let char of sustained_GHGs.characteristicData">
                     <td class="table-header">{{char.characteristic}}</td>
@@ -426,7 +426,7 @@
               <tr >
                 <td  class="table-data">{{(intervention.intervention_id)?(intervention.intervention_id):'-'}}</td>
                 <td  class="table-data">{{(intervention.policyName)?(intervention.policyName):'-'}}</td>
-                <td  class="table-data">{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</td>
+                <td  class="table-data">{{masterDataService.getToolName(investerTool ? 'INVESTOR' : 'PORTFOLIO')}}</td>
                 <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
                 <ng-container *ngFor="let char of sustained_GHGs.characteristicData">
                   <td class="table-data">{{(char.score.value==null?'Outside assessment boundaries':(char.score.value + "-" + char.score.name))}}</td>
@@ -465,7 +465,7 @@
                 <tr>
                   <td class="table-header">ID</td>
                   <td class="table-header">Intervention Name</td>
-                  <td class="table-header">Intervention Type</td>
+                  <td class="table-header">Tool Applied</td>
                   <td class="table-header">Status</td>
                   <td class="table-header"></td>
                   <td class="table-header">International/global level</td>
@@ -480,7 +480,7 @@
                     <tr >
                       <td  class="table-data">{{(intervention.intervention_id)?(intervention.intervention_id):'-'}}</td>
                       <td  class="table-data">{{(intervention.policyName)?(intervention.policyName):'-'}}</td>
-                      <td  class="table-data">{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</td>
+                      <td  class="table-data">{{masterDataService.getToolName(investerTool ? 'INVESTOR' : 'PORTFOLIO')}}</td>
                       <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
                       <td  class="table-data">{{(char.name)?(char.name):'-'}}</td>
                       <ng-container *ngFor="let data of char.data">
@@ -492,7 +492,7 @@
                   <tr *ngIf="scale_SD.characteristicData.length==0">
                     <td  class="table-data">{{(intervention.intervention_id)?(intervention.intervention_id):'-'}}</td>
                     <td  class="table-data">{{(intervention.policyName)?(intervention.policyName):'-'}}</td>
-                    <td  class="table-data">{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</td>
+                    <td  class="table-data">{{masterDataService.getToolName(investerTool ? 'INVESTOR' : 'PORTFOLIO')}}</td>
                     <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
                     <td  class="table-data">Outside assessment boundaries</td>
                     <td  class="table-data">Outside assessment boundaries</td>
@@ -533,7 +533,7 @@
               <tr>
                 <td class="table-header">ID</td>
                 <td class="table-header">Intervention Name</td>
-                <td class="table-header">Intervention Type</td>
+                <td class="table-header">Tool Applied</td>
                 <td class="table-header">Status</td>
                 <td class="table-header"></td>
                 <td class="table-header">Long term (>15 years)</td>
@@ -548,7 +548,7 @@
                   <tr >
                     <td  class="table-data">{{(intervention.intervention_id)?(intervention.intervention_id):'-'}}</td>
                     <td  class="table-data">{{(intervention.policyName)?(intervention.policyName):'-'}}</td>
-                    <td  class="table-data">{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</td>
+                    <td  class="table-data">{{masterDataService.getToolName(investerTool ? 'INVESTOR' : 'PORTFOLIO')}}</td>
                     <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
                     <td  class="table-data">{{(char.name)?(char.name):'-'}}</td>
                     <ng-container *ngFor="let data of char.data">
@@ -562,7 +562,7 @@
                   <tr *ngIf="sustained_SD.characteristicData.length==0">
                     <td  class="table-data">{{(intervention.intervention_id)?(intervention.intervention_id):'-'}}</td>
                     <td  class="table-data">{{(intervention.policyName)?(intervention.policyName):'-'}}</td>
-                    <td  class="table-data">{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</td>
+                    <td  class="table-data">{{masterDataService.getToolName(investerTool ? 'INVESTOR' : 'PORTFOLIO')}}</td>
                     <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
                     <td  class="table-data">Outside assessment boundaries</td>
                     <td  class="table-data">Outside assessment boundaries</td>
@@ -616,7 +616,7 @@
             <tr>
               <td class="table-header">ID</td>
               <td class="table-header">Intervention Name</td>
-              <td class="table-header">Intervention Type</td>
+              <td class="table-header">Tool Applied</td>
               <td class="table-header">Status</td>
               <ng-container *ngFor="let char of scale_adaptation.characteristicData">
                   <td class="table-header">{{char.characteristic}}</td>
@@ -629,7 +629,7 @@
             <tr >
               <td  class="table-data">{{(intervention.intervention_id)?(intervention.intervention_id):'-'}}</td>
               <td  class="table-data">{{(intervention.policyName)?(intervention.policyName):'-'}}</td>
-              <td  class="table-data">{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</td>
+              <td  class="table-data">{{masterDataService.getToolName(investerTool ? 'INVESTOR' : 'PORTFOLIO')}}</td>
               <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
               <ng-container *ngFor="let char of scale_adaptation.characteristicData">
                 <td class="table-data">{{(char.score.value==null?'Outside assessment boundaries':(char.score.value + "-" + char.score.name))}}</td>
@@ -661,7 +661,7 @@
             <tr>
               <td class="table-header">ID</td>
               <td class="table-header">Intervention Name</td>
-              <td class="table-header">Intervention Type</td>
+              <td class="table-header">Tool Applied</td>
               <td class="table-header">Status</td>
               <ng-container *ngFor="let char of sustained_adaptation.characteristicData">
                   <td class="table-header">{{char.characteristic}}</td>
@@ -674,7 +674,7 @@
             <tr >
               <td  class="table-data">{{(intervention.intervention_id)?(intervention.intervention_id):'-'}}</td>
               <td  class="table-data">{{(intervention.policyName)?(intervention.policyName):'-'}}</td>
-              <td  class="table-data">{{(intervention.typeofAction)?(intervention.typeofAction):'-'}}</td>
+              <td  class="table-data">{{masterDataService.getToolName(investerTool ? 'INVESTOR' : 'PORTFOLIO')}}</td>
               <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
               <ng-container *ngFor="let char of sustained_adaptation.characteristicData">
                 <td class="table-data">{{(char.score.value==null?'Outside assessment boundaries':(char.score.value + "-" + char.score.name))}}</td>

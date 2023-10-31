@@ -140,17 +140,24 @@
       <p-table #dt2 [value]="assessList" dataKey="id" [rows]="10" [showCurrentPageReport]="true" [totalRecords]="assessList.length"
         [rowsPerPageOptions]="[10, 25, 50]" [paginator]="true"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-        [globalFilterFields]="['tc_value', 'climateAction.policyName', 'assessmentType', 'assessment_approach', 'climateAction.typeofAction', 'climateAction.id','from', 'to']"
+        [globalFilterFields]="['tc_value', 'climateAction.policyName', 'assessmentType', 'assessment_approach', 'climateAction.policy_sector', 'climateAction.id','from', 'to']"
         [tableStyle]="{ 'min-width': '100%' }">
         <ng-template pTemplate="caption">
           <div class="row">
 
             <div class="col-md-3 ">
-              <p-columnFilter field="climateAction.typeofAction" matchMode="equals" [showMenu]="false">
+              <!-- <p-columnFilter field="climateAction.typeofAction" matchMode="equals" [showMenu]="false">
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                   <p-dropdown [ngModel]="value" [options]="interventionsList" (onChange)="filter($event.value)"
                     placeholder="Select Intervention Type" [showClear]="true">
                   </p-dropdown>
+                </ng-template>
+              </p-columnFilter> -->
+              <p-columnFilter field="climateAction.policy_sector" matchMode="contains" [showMenu]="false">
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect [ngModel]="value" [options]="sectorList" (onChange)="filter($event.value)" optionLabel="name"
+                    placeholder="Select Sector" [showClear]="true">
+                  </p-multiSelect>
                 </ng-template>
               </p-columnFilter>
             </div>
@@ -193,7 +200,7 @@
             <th style="width:8%"></th>
             <th style="width:6%">ID</th>
             <th style="width:20%">Intervention</th>
-            <th style="width:20%">Intervention Type</th>
+            <th style="width:20%">Sectors Covered</th>
             <th style="width:12%">Assessment Approach</th>
             <th style="width:12%">Assessment Type</th>
             <th style="width:12%">Tool</th>
@@ -215,7 +222,9 @@
               {{ assessList.climateAction.policyName }}
             </td>
             <td>
-              {{ assessList.climateAction.typeofAction }}
+              <span *ngFor="let sec of assessList.climateAction.policy_sector; let idx=index;">
+                {{sec.sector.name}}<span *ngIf="idx !== assessList.climateAction.policy_sector.length-1">, </span>
+              </span>
             </td>
             <td>
               {{ assessList.assessment_approach }}

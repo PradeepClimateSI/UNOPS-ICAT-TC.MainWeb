@@ -44,6 +44,7 @@ export class CmResultComponent implements OnInit {
   yData: {label: string; value: number}[]
   heatMapScore: HeatMapScore[]
   scales: MasterDataDto[];
+  selectedSdgs: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -145,6 +146,7 @@ export class CmResultComponent implements OnInit {
       this.outcomeData =res.outComeData;
       this.sections = Object.keys(this.results)
       this.sections = this.sections.filter(e => e !== "undefined")
+      this.selectedSdgs = res.sdgs
 
       this.criterias.forEach((c: any) => {
         this.expandedRows[c] = false
@@ -156,6 +158,16 @@ export class CmResultComponent implements OnInit {
       let response = await this.cMAssessmentQuestionControllerServiceProxy.calculateResult(req).toPromise()
       this.score = response
       this.heatMapScore = [{processScore: this.score.process_score, outcomeScore: this.score.outcome_score.outcome_score}]
+      Object.keys(response.outcome_score.sdgs_score).map((key: any) => {
+        this.selectedSdgs = this.selectedSdgs.map((sd: any) => {
+          console.log(key, sd.id)
+          if (+key === sd.id) {
+            sd['score'] = response.outcome_score.sdgs_score[key]
+          }
+          return sd
+        })
+      }) 
+      console.log(this.selectedSdgs) 
     }
   }
 

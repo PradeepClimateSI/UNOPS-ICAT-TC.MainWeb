@@ -54,6 +54,7 @@ export class MasterDataService {
   private _tools: {id: number, name: string, code: string}[] = []
   private _sdg_priorities: {id: number, name: string, code: string, value: number}[] = []
   private _scale_of_activity: MasterDataDto[] = []
+  private _investment_instruments: MasterDataDto[] = []
 
 
   constructor() {
@@ -402,6 +403,22 @@ export class MasterDataService {
       { id: 2, name: 'Medium Priority', code: 'MEDIUM', value: 2 },
       { id: 3, name: 'Low Priority', code: 'LOW', value: 1 },
       { id: 3, name: 'No Priority', code: 'NO', value: 0 },
+    ]
+
+    this.investment_instruments = [
+      { id: 1, name: 'Own capital', code: 'OWN_CAPITAL'},
+      { id: 2, name: 'National/subnational budget', code: 'NATIONAL_SUBNATIONAL_BUDGET'},
+      { id: 2, name: 'Capital markets', code: 'CAPITAL_MARKETS'},
+      { id: 2, name: 'Private Funding/venture capital (national)', code: 'PRIVATE_FUNDING_VENTURE_CAPITAL_NATIONAL'},
+      { id: 2, name: 'Private funding/venture capital (inter.)', code: 'PRIVATE_FUNDING_VENTURE_CAPITAL_INTER'},
+      { id: 2, name: 'Senior debt', code: 'SENIOR_DEBT'},
+      { id: 2, name: 'Green bonds', code: 'GREEN_BONDS'},
+      { id: 2, name: 'Blended finance', code: 'BLENDED_FINANCE'},
+      { id: 2, name: 'Grants (ODA)', code: 'GRANTS_ODA'},
+      { id: 2, name: 'Concesional loans (ODA)', code: 'CONCESIONAL_LOANS_ODA'},
+      { id: 2, name: 'Investment loans', code: 'INVESTMENT_LOANS'},
+      { id: 2, name: 'Credit lines', code: 'CREDIT_LINES'},
+      { id: 2, name: 'Other', code: 'OTHER'},
     ]
 
     this.scale_of_activity = [
@@ -766,6 +783,14 @@ export class MasterDataService {
 
   get scale_of_activity (): MasterDataDto[] {
     return this._scale_of_activity;
+  }
+
+  set investment_instruments(value: MasterDataDto[]) {
+    this._investment_instruments = value;
+  }
+
+  get investment_instruments (): MasterDataDto[] {
+    return this._investment_instruments;
   }
 
   getToolName(code: string) {

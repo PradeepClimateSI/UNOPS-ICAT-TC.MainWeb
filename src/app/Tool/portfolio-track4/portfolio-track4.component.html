@@ -184,7 +184,7 @@
         <div class="mt-2 overflow-visible" style="z-index: 1;">
           <div class="p-grid p-fluid col-sm-12">
             <div class="p-2">
-              <h6>Transformational Vision & Stage</h6>
+              <h6>Transformational Vision & Stage <i class="pi pi-info-circle" (mouseover)="op.toggle($event)" (mouseout)="op.toggle($event)" style="font-size: 1rem"></i></h6>
             </div>
             <div class="row p-2">
               <div class="  col-12">
@@ -872,11 +872,9 @@
                                 
                                     <div *ngIf="category.CategoryName ==='GHG Scale of the Outcome'" style="text-align: justify;">
                                       <p>  <br><br>
-                                        Note: all reduction in emissions calculated as average reduction in emissions
-                                        (tCO2e/yr calculated as total estimated reductions over lifetime of the project
-                                        divided by project lifetime) and compared respectively to global, national/sectoral or
-                                        subnational and subsectorial emissions for the latest year for which those emissions data
-                                        is available
+                                        Note: All emissions reductions shall be calculated as annual average (tCO2e/yr. calculated as total estimated reductions over 
+                                        lifetime of the project divided by project lifetime) and compared respectively to global, national/sectoral or 
+                                        subnational and sub sectorial emissions for the latest year for which those emissions data is available.
                                       </p>
                                     </div>
                                   
@@ -1616,3 +1614,14 @@
 <div *ngIf="!track4Selectt">
   <app-carbon></app-carbon>
 </div>
+
+<p-overlayPanel #op [style]="{'width': '600px'}">
+  <div class="p-grid p-fluid col-md-12 col-sm-12 text-title">
+    <p><b>Example for a Solar PV Policy:</b></p>
+    <div class="row p-2" *ngFor="let item of visionExample">
+      <div class="col-3">{{item.title}} : </div>
+      <div class="col-9">{{item.value}}</div>
+      <br>
+    </div>
+  </div>
+</p-overlayPanel>

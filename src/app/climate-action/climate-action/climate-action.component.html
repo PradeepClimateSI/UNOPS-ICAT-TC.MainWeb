@@ -320,7 +320,7 @@
                   </ng-template>
                 </div>
               </div>
-
+<!-- 
               <div class="col-12 col-md-6">
                 <div class="p-field">
                   <label for="projType">Type of intervention*</label>
@@ -343,7 +343,7 @@
                       [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
                   </ng-template>
                 </div>
-              </div>
+              </div> -->
             </div>
             <!-- <div class="row p-2" *ngIf="isMapped != 0">
               <div class="col-12 col-md-6">
@@ -558,7 +558,8 @@
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="objective">Objectives and intended impacts or benefits of the intervention*</label>
+                  <label for="objective">Objectives and intended impacts or benefits of the intervention* <i class="pi pi-info-circle" pTooltip="{{tooltips.objective}}" tooltipPosition="bottom"
+                    style="font-size: 1rem"></i></label>
                   <textarea [disabled]="editEntytyId > 0" name="objective" placeholder="Objective" #objective="ngModel"
                     [(ngModel)]="project.objective" rows="5" cols="130" pInputText autoResize="autoResize" [required]="true"></textarea>
                     

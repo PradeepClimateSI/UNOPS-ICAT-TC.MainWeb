@@ -225,7 +225,7 @@
                     <div class="mt-2 overflow-visible" style="z-index: 1;">
                       <div class="p-grid p-fluid col-sm-12">
                         <div class="p-2">
-                          <h6>Transformational Vision & Stage</h6>
+                          <h6>Transformational Vision & Stage <i class="pi pi-info-circle" (mouseover)="op.toggle($event)" (mouseout)="op.toggle($event)" style="font-size: 1rem"></i></h6>
                         </div>
                         <div class="row p-2">
                           <div class="  col-12">
@@ -585,3 +585,14 @@
         </button>
     </div>
 </p-dialog>
+
+<p-overlayPanel #op [style]="{'width': '600px'}">
+  <div class="p-grid p-fluid col-md-12 col-sm-12 text-title">
+    <p><b>Example for a Solar PV Policy:</b></p>
+    <div class="row p-2" *ngFor="let item of visionExample">
+      <div class="col-3">{{item.title}} : </div>
+      <div class="col-9">{{item.value}}</div>
+      <br>
+    </div>
+  </div>
+</p-overlayPanel>
