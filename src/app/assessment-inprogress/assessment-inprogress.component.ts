@@ -49,10 +49,20 @@ export class AssessmentInprogressComponent implements OnInit {
     this.rows = event.rows === undefined ? 10 : event.rows;
 
     this.assessmentProxy.assessmentInprogress(pageNumber,this.rows,filterText).subscribe(res => {
-        this.assesments=res.items;
-        this.totalRecords= res.meta.totalItems
+        this.assesments=res[1];
+        this.totalRecords= res[0];
+        console.log(this.assesments)
       }
       )
+  }
+   setName(item:any){
+    let name:string ='';
+    if(item?.climateAction?.policySector.length>0){
+      for(let data of item?.climateAction?.policySector){
+        name =name + data.sector.name +", ";
+      }
+    }   
+    return name.slice(0,-2);
   }
 
   onSearch() {

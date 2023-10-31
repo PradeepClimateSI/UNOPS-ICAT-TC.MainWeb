@@ -601,7 +601,7 @@
 
                 <p-tabView #tabView (onChange)="onCategoryTabChange($event, tabView)" [(activeIndex)]="activeIndex "    >
 
-                    <p-tabPanel  [header]="category.CategoryName" *ngFor="let category of processData; index as cat" >
+                    <p-tabPanel  [header]="category.CategoryName" [selected]="category.CategoryName==assessment.processDraftLocation" *ngFor="let category of processData; index as cat" >
 
                         <div class="characteristic-Topic " *ngFor="let data of category.data; index as i">
                             <h6 *ngIf="data.characteristics.name!= 'Research and Development'">{{i+1}}.{{data.characteristics.name}}</h6>
@@ -787,7 +787,6 @@
                                     </div>
 
 
-
                             </div>
                         </div>
 
@@ -796,7 +795,7 @@
                                <div class="btn btn-primary text-uppercase"  (click)="next(category,'process')" >
                                    Next
                                </div>
-                               <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category)">
+                               <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category,category.CategoryName,'pro')">
                                 Save
                               </div>
                           </div>
@@ -816,7 +815,7 @@
             <p-tabPanel  header="Outcome of Change">
               <p-tabView #tabView2 (onChange)="onCategoryTabChange($event, tabView2) " [(activeIndex)]="activeIndex2">
 
-                <p-tabPanel *ngFor="let category of outcomeData">
+                <p-tabPanel *ngFor="let category of outcomeData" [selected]="category.CategoryName==assessment.outcomeDraftLocation">
 
                   <ng-template pTemplate="header">
                     <!-- Use a container div for the header -->
@@ -1037,7 +1036,7 @@
                            <div class="btn btn-primary text-uppercase"  (click)="next(category,'outcome')" >
                                Next
                            </div>
-                           <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category)">
+                           <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category,category.CategoryName,'out')">
                             Save
                           </div>
                       </div>
@@ -1187,7 +1186,7 @@
                          <div class="btn btn-primary text-uppercase"  (click)="nextSDG(sdgDataSendArray2,'scaleSD')" >
                              Next
                          </div>
-                         <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category)">
+                         <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category,category.CategoryName,'out')">
                           Save
                         </div>
                     </div>
@@ -1326,7 +1325,7 @@
                          <div class="btn btn-primary text-uppercase"  (click)="nextSDG(sdgDataSendArray4,'sustainedSD')" >
                              Next
                          </div>
-                         <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category)">
+                         <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category,category.CategoryName,'out')">
                           Save
                         </div>
                     </div>
