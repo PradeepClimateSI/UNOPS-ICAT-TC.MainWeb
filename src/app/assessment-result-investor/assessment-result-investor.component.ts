@@ -84,7 +84,7 @@ export class AssessmentResultInvestorComponent implements OnInit {
   loading: boolean = false;
   heatMapScore: HeatMapScore[];
   geographicalAreasList: any;
-
+  sdgListWithScores:any[]=[]
 
   constructor(private route: ActivatedRoute,
     private methassess: MethodologyAssessmentControllerServiceProxy,
@@ -121,7 +121,9 @@ export class AssessmentResultInvestorComponent implements OnInit {
       this.sustained_SD = res?.outcomeData.find((item: { code: string; })=>item?.code=='SUSTAINED_SD')
       this.scale_adaptation = res?.outcomeData.find((item: { code: string; })=>item?.code=='SCALE_ADAPTATION')
       this.sustained_adaptation = res?.outcomeData.find((item: { code: string; })=>item?.code=='SUSTAINED_ADAPTATION')
-      this.aggregated_score =res?.aggregatedScore;
+      this.aggregated_score = res?.aggregatedScore;
+      this.sdgListWithScores = res?.sdgListwithScores;
+      console.log("sdglist",this.sdgListWithScores)
       console.log("aggregated_score",this.aggregated_score)
       console.log("all: ",  this.scale_GHGs,this.scale_SD,this.sustained_GHGs ,this.sustained_SD,this.scale_adaptation,this.sustained_adaptation)
       // console.log("processData: ", this.processData)

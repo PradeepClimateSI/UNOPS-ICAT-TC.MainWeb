@@ -695,7 +695,7 @@ console.log("itemmmm", item)
     console.log("tabnaaame", this.tabView.tabs[this.selectedIndex].header);
   }
 
-  onsubmit(form: NgForm) {
+  async onsubmit(form: NgForm) {
     for(let item of this.processData){
       for(let item2 of item.data){
         if((item2.likelihood == null || item2.relavance == null) && item2.relavance != 0){
@@ -781,7 +781,17 @@ console.log("itemmmm", item)
     if(this.assessment.assessment_approach === 'Direct'){
       console.log("Directttt")
       let finalArray = this.processData.concat(this.outcomeData)
-      finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
+      if(this.isEditMode ==true){
+        this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+        console.log("assessment",this.assessment.id)
+        finalArray.map(x => x.data.map(y => y.assessment = this.assessment))
+        // console.log("finalArray33", finalArray)
+      }
+      else{
+        console.log("mainAssessment",this.mainAssessment.id)
+        finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
+      }
+      // finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
       // finalArray.map(x=>x.data.map(y=>y.investorTool=this.mainAssessment))
       console.log("finalArray", finalArray)
 
@@ -804,7 +814,8 @@ console.log("itemmmm", item)
         scaleSDGs : this.sdgDataSendArray2,
         sustainedSDGs : this.sdgDataSendArray4,
         sdgs : this.selectedSDGsWithAnswers,
-        isEdit:false
+        isEdit:this.isEditMode,
+        isDraft : false,
 
       }
 
@@ -875,13 +886,21 @@ console.log("itemmmm", item)
 
   }
 
-  showResults(){
-    setTimeout(() => {
-
-       this.router.navigate(['../assessment-result-investor',this.mainAssessment.id], { queryParams: { assessmentId: this.mainAssessment.id}, relativeTo: this.activatedRoute });
-
-       }, 2000);
-
+  async showResults(){
+    if(this.isEditMode ==true){
+      this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+      setTimeout(() => {
+        this.router.navigate(['../assessment-result-investor', this.assessment.id], { queryParams: { assessmentId: this.assessment.id }, relativeTo: this.activatedRoute });
+      }, 2000);
+      console.log("assessment",this.assessment.id)
+      // console.log("finalArray33", finalArray)
+    }
+    else{
+      console.log("mainAssessment",this.mainAssessment.id)
+      setTimeout(() => {
+        this.router.navigate(['../assessment-result-investor', this.mainAssessment.id], { queryParams: { assessmentId: this.mainAssessment.id }, relativeTo: this.activatedRoute });
+      }, 2000);
+    }
   }
   // next(data:any[],type:string){
   // console.log("category",data)
