@@ -68,7 +68,7 @@
                               ">
                                 This is a mandatory field
                             </p>
-                            </div>
+                        </div>
 
                         <!-- <div class="p-field p-2">
                             <label for="Sectors Covered">Impacts Covered*</label>
@@ -87,6 +87,45 @@
                             </p>
                         </div>
      -->
+                        <div class="p-field p-2">
+                          <label for="Sectors Covered">Total Investement (in USD)*</label>
+                          <input pInputText type="number" #totInvestment="ngModel" name="totInvestment" ngModel
+                          placeholder="Enter total investment" [(ngModel)]="investorAssessment.total_investment" required [disabled]="isSavedAssessment|| isEditMode"/>
+                          <p class="info-message text-danger" *ngIf="
+                                !investorAssessment.total_investment &&
+                                (fData.submitted || totInvestment.touched)
+                              ">
+                                This is a mandatory field
+                            </p>
+                        </div>
+
+                        <div class="p-field p-2">
+                          <table>
+                            <thead>
+                              <tr>
+                                <th [style]="{'width': '200%', 'font-weight':'normal'}">Investment instrument used</th>
+                                <ng-container *ngFor="let tot of totalInvestments; let idx = index">
+                                  <td>
+                                    <p-dropdown [style]="{'width':'100%'}"  [name]="'invest'+idx" #type="ngModel" placeholder="Select" [(ngModel)]="tot.instrument_code" [options]="investment_instruments" 
+                                    optionLabel="name" appendTo="body" optionValue="code" [disabled]="isSavedAssessment|| isEditMode">
+                                    </p-dropdown>
+                                  </td>
+                                </ng-container>
+                                </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <th [style]="{'width': '200%', 'font-weight':'normal'}">Proportion of total investment</th>
+                                <ng-container *ngFor="let tot of totalInvestments; let idx = index">
+                                  <td>
+                                    <input pInputText type="number" #totInvestment="ngModel" [name]="'totInvestment'+idx" ngModel
+                                    [(ngModel)]="tot.propotion" required [disabled]="isSavedAssessment|| isEditMode"/>
+                                  </td>
+                                </ng-container>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
                         <div class="p-field p-2">
 
                             <label for="date1">Assessment Period*</label>
@@ -177,7 +216,7 @@
                     <div class="mt-2 overflow-visible" style="z-index: 1;">
                       <div class="p-grid p-fluid col-sm-12">
                         <div class="p-2">
-                          <h6>Transformational Vision & Stage</h6>
+                          <h6>Transformational Vision & Stage <i class="pi pi-info-circle" (mouseover)="op.toggle($event)" (mouseout)="op.toggle($event)" style="font-size: 1rem"></i></h6>
                         </div>
                         <div class="row p-2">
                           <div class="  col-12">
@@ -454,7 +493,7 @@
                         </div>
             
                       </div>
-                      <div *ngIf="finalBarrierList.length !==0" >
+                      <div *ngIf="finalBarrierList?.length !==0" >
                         <div class="row p-2" *ngFor="let barriers of finalBarrierList">
             
                           <div class="col-12 col-md-2">
@@ -619,7 +658,7 @@
 
                 <p-tabView #tabView (onChange)="onCategoryTabChange($event, tabView)" [(activeIndex)]="activeIndex "    >
 
-                    <p-tabPanel  [header]="category.CategoryName" *ngFor="let category of processData; index as cat" >
+                    <p-tabPanel  [header]="category.CategoryName" [selected]="category.CategoryName==assessment.processDraftLocation" *ngFor="let category of processData; index as cat" >
 
                         <div class="characteristic-Topic " *ngFor="let data of category.data; index as i">
                             <h6 *ngIf="data.characteristics.name!= 'Research and Development'">{{i+1}}.{{data.characteristics.name}}</h6>
@@ -805,7 +844,6 @@
                                     </div>
 
 
-
                             </div>
                         </div>
 
@@ -814,7 +852,7 @@
                                <div class="btn btn-primary text-uppercase"  (click)="next(category,'process')" >
                                    Next
                                </div>
-                               <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category)">
+                               <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category,category.CategoryName,'pro')">
                                 Save
                               </div>
                           </div>
@@ -834,7 +872,7 @@
             <p-tabPanel  header="Outcome of Change">
               <p-tabView #tabView2 (onChange)="onCategoryTabChange($event, tabView2) " [(activeIndex)]="activeIndex2">
 
-                <p-tabPanel *ngFor="let category of outcomeData">
+                <p-tabPanel *ngFor="let category of outcomeData" [selected]="category.CategoryName==assessment.outcomeDraftLocation">
 
                   <ng-template pTemplate="header">
                     <!-- Use a container div for the header -->
@@ -1014,32 +1052,54 @@
                               </div>
 
 
-                              <!-- lllllllllllllllllllllllllllll -->
+                                <!-- lllllllllllllllllllllllllllll -->
+                                <!-- *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level' " -->
+                              <div >
+                                <div class="row p-2">
+                                  <div class="col-12 col-lg-6">
+                                    <div class="p-field">
+                                      <label for="expected_ghg_mitigation">Expected GHG reductions over intervention lifetime(Mt CO2-eq)</label>
+                                      <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation" name="expected_ghg_mitigation"
+                                          placeholder="Expected GHG reductions over intervention lifetime" inputId="locale-us" mode="decimal"
+                                        locale="en-US" [minFractionDigits]="2" (onInput)="calculateAbatement($event.value, data)">
+                                      </p-inputNumber>
+                                    </div>
+                                  </div>
 
+                                  <!-- <div *ngIf="category.CategoryName ==='GHG Scale of the Outcome'" style="text-align: justify;">
+                                    <p>  <br><br>
+                                      Note: all reduction in emissions calculated as average reduction in emissions
+                                      (tCO2e/yr calculated as total estimated reductions over lifetime of the project
+                                      divided by project lifetime) and compared respectively to global, national/sectoral or
+                                      subnational and subsectorial emissions for the latest year for which those emissions data
+                                      is available
+                                    </p>
+                                  </div> -->
 
-                              <div class="row p-2"
-                              *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level' ">
-                              <div class="col-12 col-lg-6">
-                                <div class="p-field">
-                                  <label for="expected_ghg_mitigation">Expected GHG reductions over intervention lifetime(Mt CO2-eq)</label>
-                                  <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation" name="expected_ghg_mitigation"
-                                      placeholder="Expected GHG reductions over intervention lifetime" inputId="locale-us" mode="decimal"
-                                    locale="en-US" [minFractionDigits]="2">
-                                  </p-inputNumber>
+                                </div>
+                                <div class="row p-2">
+                                  <div class="col-12 col-lg-6">
+                                    <div class="p-field">
+                                      <label for="expected_ghg_mitigation">Expected GHG reduction (Mt CO2-eq) per year</label>
+                                      <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation_year" name="expected_ghg_mitigation_year"
+                                          placeholder="Expected GHG reduction per year" inputId="locale-us" mode="decimal"
+                                        locale="en-US" [minFractionDigits]="2">
+                                      </p-inputNumber>
+                                    </div>
                                   </div>
                                 </div>
-
-                                <div *ngIf="category.CategoryName ==='GHG Scale of the Outcome'" style="text-align: justify;">
-                                  <p>  <br><br>
-                                    Note: all reduction in emissions calculated as average reduction in emissions
-                                    (tCO2e/yr calculated as total estimated reductions over lifetime of the project
-                                    divided by project lifetime) and compared respectively to global, national/sectoral or
-                                    subnational and subsectorial emissions for the latest year for which those emissions data
-                                    is available
-                                  </p>
+                                <div class="row p-2">
+                                  <div class="col-12 col-lg-6">
+                                    <div class="p-field">
+                                      <label for="expected_ghg_mitigation">Abatement per dollar (GHG reduction over intervention lifetime/total investment), t CO2-eq/USD</label>
+                                      <p-inputNumber [(ngModel)]="data['abatement']" disabl [name]="'abatement'+data.characteristics.id"
+                                          placeholder="Expected GHG reduction per year"  mode="decimal"
+                                        locale="en-US" [minFractionDigits]="2">
+                                      </p-inputNumber>
+                                    </div>
+                                  </div>
                                 </div>
-
-                                </div>
+                              </div>
 
 
                               </div>
@@ -1055,11 +1115,20 @@
                            <div class="btn btn-primary text-uppercase"  (click)="next(category,'outcome')" >
                                Next
                            </div>
-                           <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category)">
+                           <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category,category.CategoryName,'out')">
                             Save
                           </div>
                       </div>
                     </div>
+
+                    <div  class="row justify-content-end" *ngIf="activeIndex2==5 && activeIndexMain==1">
+                      <div class="d-flex flex-row-reverse mt-20 ">
+                            <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category)">
+                            Save
+                          </div>
+                      </div>
+                    </div>
+                    
                   </div>
 
                   <div *ngIf="category.CategoryName === 'SDG Scale of the Outcome'">
@@ -1205,7 +1274,7 @@
                          <div class="btn btn-primary text-uppercase"  (click)="nextSDG(sdgDataSendArray2,'scaleSD')" >
                              Next
                          </div>
-                         <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category)">
+                         <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category,category.CategoryName,'out')">
                           Save
                         </div>
                     </div>
@@ -1344,7 +1413,7 @@
                          <div class="btn btn-primary text-uppercase"  (click)="nextSDG(sdgDataSendArray4,'sustainedSD')" >
                              Next
                          </div>
-                         <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category)">
+                         <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category,category.CategoryName,'out')">
                           Save
                         </div>
                     </div>
@@ -1410,3 +1479,14 @@
 
 
 </div>
+
+<p-overlayPanel #op [style]="{'width': '600px'}">
+  <div class="p-grid p-fluid col-md-12 col-sm-12 text-title">
+    <p><b>Example for a Solar PV Policy:</b></p>
+    <div class="row p-2" *ngFor="let item of visionExample">
+      <div class="col-3">{{item.title}} : </div>
+      <div class="col-9">{{item.value}}</div>
+      <br>
+    </div>
+  </div>
+</p-overlayPanel>

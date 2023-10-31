@@ -4,7 +4,7 @@ import { MasterDataService } from 'app/shared/master-data.service';
 import { SelectedScoreDto } from 'app/shared/score.dto';
 import { environment } from 'environments/environment';
 import { MessageService } from 'primeng/api';
-import { CMAnswer, CMAssessmentQuestion, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, ScoreDto } from 'shared/service-proxies/service-proxies';
+import { Assessment, CMAnswer, CMAssessmentQuestion, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, ScoreDto } from 'shared/service-proxies/service-proxies';
 
 
 interface UploadEvent {
@@ -26,6 +26,7 @@ export class CmSectionThreeComponent implements OnInit {
   @Input() approach: string
   @Input() assessmentquestions: CMAssessmentQuestion[]
   @Input() isEditMode: boolean
+  @Input() assessment:Assessment;
   @Output() onSubmit = new EventEmitter()
 
   comment: any;
@@ -400,7 +401,7 @@ export class CmSectionThreeComponent implements OnInit {
 
   }
 
-  async submit(draftCategory: string, isDraft: boolean = false) {
+  async submit(draftCategory: string, isDraft: boolean = false, name:string,type:string) {
     this.nextClicked = true
     this.results = []
     this.categoriesToSave.push(draftCategory)
@@ -601,7 +602,7 @@ export class CmSectionThreeComponent implements OnInit {
 
     this.categoriesToSave = []
     this.isDraftSaved = true
-    this.onSubmit.emit({result: this.results, isDraft: isDraft})
+    this.onSubmit.emit({result: this.results, isDraft: isDraft,name:name,type:type})
     // this.isEditMode = true
     // this.setInitialState() //TODO this occurres faulty data load. data get from the database before saving. This should be called after saving data.
   }

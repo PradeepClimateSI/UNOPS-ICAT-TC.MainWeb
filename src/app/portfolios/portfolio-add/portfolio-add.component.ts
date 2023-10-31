@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { MessageService } from 'primeng/api';
-import {  Assessment, GetAssessmentDetailsDto, MethodologyAssessmentControllerServiceProxy, Portfolio, PortfolioControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import {  Assessment, GetAssessmentDetailsDto, MethodologyAssessmentControllerServiceProxy, Portfolio, PortfolioControllerServiceProxy, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-portfolio-add',
@@ -10,6 +10,7 @@ import {  Assessment, GetAssessmentDetailsDto, MethodologyAssessmentControllerSe
   styleUrls: ['./portfolio-add.component.css']
 })
 export class PortfolioAddComponent implements OnInit {
+  sectorList: any[];
 
   constructor(
     private methassess : MethodologyAssessmentControllerServiceProxy,
@@ -17,7 +18,8 @@ export class PortfolioAddComponent implements OnInit {
     private messageService: MessageService,
     private router: Router,
     private route: ActivatedRoute,
-    public masterDataService: MasterDataService
+    public masterDataService: MasterDataService,
+    private sectorControllerServiceProxy: SectorControllerServiceProxy,
   ) { }
 
   portfolio : Portfolio = new Portfolio();
@@ -45,6 +47,7 @@ export class PortfolioAddComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.tool = 'PORTFOLIO';
     this.tools = ['PORTFOLIO', 'CARBON_MARKET', 'INVESTOR']
+    this.sectorList = await this.sectorControllerServiceProxy.findAllSector().toPromise()
     this.addLink=false;
       this.resultsList = await this.methassess.results().toPromise()
       this.methassess.assessmentDetails().subscribe(async (res: any) => {

@@ -184,7 +184,7 @@
         <div class="mt-2 overflow-visible" style="z-index: 1;">
           <div class="p-grid p-fluid col-sm-12">
             <div class="p-2">
-              <h6>Transformational Vision & Stage</h6>
+              <h6>Transformational Vision & Stage <i class="pi pi-info-circle" (mouseover)="op.toggle($event)" (mouseout)="op.toggle($event)" style="font-size: 1rem"></i></h6>
             </div>
             <div class="row p-2">
               <div class="  col-12">
@@ -536,7 +536,7 @@
 
               <p-tabView #tabView (onChange)="onCategoryTabChange($event, tabView)" [(activeIndex)]="activeIndex ">
 
-                <p-tabPanel [header]="category.CategoryName" *ngFor="let category of processData">
+                <p-tabPanel [header]="category.CategoryName" [selected]="category.CategoryName==assessment.processDraftLocation"  *ngFor="let category of processData">
 
 
                   <div class="characteristic-Topic" *ngFor="let data of category.data; index as i">
@@ -655,7 +655,7 @@
                          <div class="btn btn-primary text-uppercase"  (click)="next(category,'process')" >
                              Next
                          </div>
-                          <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category)">
+                          <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category,category.CategoryName,'pro')">
                           Save
                         </div>
                     </div>
@@ -670,7 +670,7 @@
             <p-tabPanel  header="Outcome of Change">
               <p-tabView #tabView2 (onChange)="onCategoryTabChange($event, tabView2) " [(activeIndex)]="activeIndex2">
 
-                <p-tabPanel  *ngFor="let category of outcomeData">
+                <p-tabPanel  *ngFor="let category of outcomeData" [selected]="category.CategoryName==assessment.outcomeDraftLocation">
 
                   <ng-template pTemplate="header">
                     <!-- Use a container div for the header -->
@@ -872,11 +872,9 @@
                                 
                                     <div *ngIf="category.CategoryName ==='GHG Scale of the Outcome'" style="text-align: justify;">
                                       <p>  <br><br>
-                                        Note: all reduction in emissions calculated as average reduction in emissions
-                                        (tCO2e/yr calculated as total estimated reductions over lifetime of the project
-                                        divided by project lifetime) and compared respectively to global, national/sectoral or
-                                        subnational and subsectorial emissions for the latest year for which those emissions data
-                                        is available
+                                        Note: All emissions reductions shall be calculated as annual average (tCO2e/yr. calculated as total estimated reductions over 
+                                        lifetime of the project divided by project lifetime) and compared respectively to global, national/sectoral or 
+                                        subnational and sub sectorial emissions for the latest year for which those emissions data is available.
                                       </p>
                                     </div>
                                   
@@ -897,6 +895,13 @@
                            <div class="btn btn-primary text-uppercase"  (click)="next(category,'outcome')" >
                                Next
                            </div>
+                            <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category,category.CategoryName,'out')">
+                            Save
+                          </div>
+                      </div>
+                    </div>
+                    <div  class="row justify-content-end" *ngIf="activeIndex2==5 && activeIndexMain==1">
+                      <div class="d-flex flex-row-reverse mt-20 ">
                             <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category)">
                             Save
                           </div>
@@ -1050,7 +1055,7 @@
                            <div class="btn btn-primary text-uppercase"  (click)="nextSDG(sdgDataSendArray2,'scaleSD')" >
                                Next
                            </div>
-                           <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category)">
+                           <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category,category.CategoryName,'out')">
                             Save
                           </div> 
                       </div>
@@ -1194,7 +1199,7 @@
                            <div class="btn btn-primary text-uppercase"  (click)="nextSDG(sdgDataSendArray4,'sustainedSD')" >
                                Next
                            </div>
-                            <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category)">
+                            <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category,category.CategoryName,'out')">
                             Save
                           </div> 
                       </div>
@@ -1609,3 +1614,14 @@
 <div *ngIf="!track4Selectt">
   <app-carbon></app-carbon>
 </div>
+
+<p-overlayPanel #op [style]="{'width': '600px'}">
+  <div class="p-grid p-fluid col-md-12 col-sm-12 text-title">
+    <p><b>Example for a Solar PV Policy:</b></p>
+    <div class="row p-2" *ngFor="let item of visionExample">
+      <div class="col-3">{{item.title}} : </div>
+      <div class="col-9">{{item.value}}</div>
+      <br>
+    </div>
+  </div>
+</p-overlayPanel>

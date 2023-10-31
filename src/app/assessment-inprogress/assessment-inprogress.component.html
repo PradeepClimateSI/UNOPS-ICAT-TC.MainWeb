@@ -30,8 +30,8 @@
                     <th>Intervention</th>
                     <th>Assessment Approach</th>
                     <th>Tool</th>
-                    <th>Intervention Type</th>
-                    <th>Last Update Date</th>
+                    <th>Sector/Sectors(Intervention)</th>
+                    <th style="width:10%" >Last Update Date</th>
                     <th>Action</th>
                 </tr>
             </ng-template>
@@ -46,7 +46,7 @@
                         {{masterDataService.getToolName(assessment.tool)}}
                     </td>
                     <td>
-                        {{assessment?.climateAction?.typeofAction}}
+                        {{setName( assessment)}}
                     </td>
                     <td>
                         {{assessment?.editedOn | date: "dd-MM-yyyy "}}

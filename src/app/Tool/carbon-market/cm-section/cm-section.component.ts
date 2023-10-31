@@ -254,6 +254,7 @@ export class CmSectionComponent implements OnInit {
 
 
   save(event: SaveDto) {
+    console.log(event)
     let result: SaveCMResultDto = new SaveCMResultDto()
     result.result = []
     result.result = [...event.result]
@@ -282,6 +283,8 @@ export class CmSectionComponent implements OnInit {
     })
     result.assessment = this.assessment
     result.isDraft = event.isDraft
+    result.type =event.type;
+    result.name=event.name;
     this.cMAssessmentQuestionControllerServiceProxy.saveResult(result)
       .subscribe(res => {
         if (res) {
@@ -330,4 +333,6 @@ export class CmSectionComponent implements OnInit {
 export class SaveDto {
   result: CMResultDto[]
   isDraft: boolean = false
+  name:string
+  type:string
 }
