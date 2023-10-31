@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { MasterDataDto, MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import {Any, AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, AssessmentControllerServiceProxy, Category, PortfolioSdg } from 'shared/service-proxies/service-proxies';
+import {Any, AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, AssessmentControllerServiceProxy, Category, PortfolioSdg, TotalInvestment, TotalInvestmentDto } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -74,6 +74,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   instiTutionList : any = []
   investorQuestions:InvestorQuestions[]=[];
   geographicalAreasCoveredArr: any[] = []
+  totalInvestments: TotalInvestment[] = []
 
   //Newww
   
@@ -151,6 +152,10 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   isEditMode:boolean=false;
   isValidSCaleSD: boolean;
   isValidSustainedSD: boolean;
+  visionExample: { title: string; value: string; }[];
+  invest1: any;
+  investment_instruments: MasterDataDto[];
+abatement: any;
   // isValidated:boolean;
 
   constructor(
@@ -177,6 +182,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     console.log("sectors",this.sectorList)
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;
     this.geographicalAreasCovered = this.masterDataService.level_of_implemetation;
+    this.investment_instruments = this.masterDataService.investment_instruments
 
     this.activatedRoute.queryParams.subscribe( params => {
       params['isEdit']=='true'?(this.isEditMode =true ):false
@@ -186,20 +192,22 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
         window.location.reload()
       }
     })
-    if(this.isEditMode==false){
+    if (this.isEditMode == false) {
       await this.getPolicies();
       await this.getAllImpactsCovered();
       await this.getCharacteristics();
-     
-    }
-    else{
-      try{
+      for (let i = 0; i < 3; i++) {
+        this.totalInvestments.push(new TotalInvestment)
+      }
+
+    } else {
+      try {
         await this.getSavedAssessment()
       }
       catch (error) {
         console.log(error)
       }
-      
+
 
     } 
 
@@ -224,6 +232,15 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
         this.setFrom()
         this.setTo()  */
     //upto this
+
+    this.visionExample = [
+      { title: 'Transformational Vision', value: 'Decarbonized electricity sector with a high % of Solar PV energy which will enable economic growth and will lead the shift of the labour market towards green jobs.' },
+      { title: 'Long term ( > 15 years)', value: 'Zero-carbon electricity production. The 2050 vision is to achieve 60% solar PV in the national electricity mix and create 2 million new green jobs.' },
+      { title: 'Medium term (> 5 years and  < 15 years)', value: 'Achieve 30% solar PV in the national electricity mix and create 1 million new green jobs. ' },
+      { title: 'Short term (< 5 years)', value: 'Install 20 GW of rooftop solar PV and create 200,000 new green jobs in doing so. The solar PV policy is implemented at subnational levels, supported by incentives for private sector involvement and knowledge development.' },
+      { title: 'Phase of transformation', value: 'Acceleration. Solar PV is widely accepted in the society and its use is spreading increasingly fast. Fossil-fuel based energy production is being challenged as the only way to ensure a reliable energy supply. Changes have already occurred in the economy, institutions and society as a result of the spreading of Solar PV.' },
+      { title: 'Intervention contribution to change the system to achieve the vision', value: 'The intervention being assessed will facilitate the spreading of Solar PV installations and thus contribute to increase the penetration of solar PV in the national electricity mix.' },
+    ]
 
  // this.isSavedAssessment = true; this.tabLoading= true; // Need to remove  
   // this.isSavedAssessment = true // Need to remove  
@@ -283,6 +300,18 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.sdgDataSendArray4 = await this.investorToolControllerproxy.getSustainedSDGData(this.assessmentId).toPromise();
     this.selectedSDGs = await this.investorToolControllerproxy.getSelectedSDGs(this.assessmentId).toPromise();
     this.selectedSDGsWithAnswers = await this.investorToolControllerproxy.getSelectedSDGsWithAnswers(this.assessmentId).toPromise();
+    this.investorAssessment = await this.investorToolControllerproxy.getResultByAssessment(this.assessmentId).toPromise()
+
+    this.investorAssessment.total_investements.map((tot, idx) => {
+      console.log("index", idx, this.totalInvestments)
+      let inst = this.investment_instruments.find(o => o.code === tot.instrument_code)
+      if (inst) {
+        let instObj = new TotalInvestment()
+        instObj.instrument_code = inst.code
+        instObj.propotion = tot.propotion
+        this.totalInvestments.push(instObj)
+      }
+    })
 
     console.log("this.processData",this.processData,this.assessment)
     console.log("this.outcomeData",this.outcomeData)
@@ -468,6 +497,8 @@ console.log("itemmmm", item)
     this.isStageDisble =true;
     // this.showSections = true
     //save assessment
+
+    console.log("totalInvestments", this.totalInvestments)
     this.assessment.tool = 'INVESTOR'
     this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
     if (!this.assessment.id) this.assessment.createdOn = moment(new Date())
@@ -520,10 +551,24 @@ console.log("itemmmm", item)
              this.createInvestorToolDto.geographicalAreas = this.geographicalAreasCoveredArr;
             console.log("investorassessmet",this.createInvestorToolDto)
             this.investorToolControllerproxy.createinvestorToolAssessment(this.createInvestorToolDto)
-              .subscribe(_res => {
+              .subscribe(async _res => {
                 console.log("res final", _res)
                 if (_res) {
                   console.log(_res)
+                  this.investorAssessment = _res
+                  let investDto = new TotalInvestmentDto()
+                  this.totalInvestments = this.totalInvestments.map(invest => {
+                    let instrument = this.masterDataService.investment_instruments.find(o => o.code === invest.instrument_code)
+                    if (instrument) {
+                      invest.instrument_name = instrument.name
+                    }
+                    let tool = new InvestorTool()
+                    tool.id = _res.id
+                    invest.investor_tool = tool
+                    return invest
+                  })
+                  investDto.totalInvestements = this.totalInvestments
+                  await this.investorToolControllerproxy.saveTotalInvestments(investDto).toPromise()
                   // this.messageService.add({
                   //   severity: 'success',
                   //   summary: 'Success',
@@ -563,8 +608,8 @@ console.log("itemmmm", item)
     }
 
   }
-  async saveDraft(category:any){
-    
+  async saveDraft(category:any,processDraftLocation:string,type:string){
+
     let finalArray = this.processData.concat(this.outcomeData)
     if(this.isEditMode ==true){
       this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
@@ -589,10 +634,21 @@ console.log("itemmmm", item)
         item.portfolioSdg = this.selectedSDGs[i];
       }
     }
-    
+    let proDraftLocation =this.assessment.processDraftLocation;
+    let outDraftLocation = this.assessment.outcomeDraftLocation;
+
+    if(type ='pro'){
+      proDraftLocation= processDraftLocation
+    }
+   if(type ='out'){
+    outDraftLocation= processDraftLocation
+    }
+
     let data : any ={
       finalArray : finalArray,
       isDraft : true,
+      proDraftLocation: proDraftLocation,
+      outDraftLocation: outDraftLocation,
       isEdit : this.isEditMode,
       scaleSDGs : this.sdgDataSendArray2,
       sustainedSDGs : this.sdgDataSendArray4,
@@ -612,6 +668,8 @@ console.log("itemmmm", item)
           detail: 'Assessment draft has been saved successfully',
           closable: true,
         })
+        this.setFrom()
+        this.setTo()
         if(this.isEditMode ==false){
           console.log("mainAssessment",this.mainAssessment.id)
           this.router.navigate(['app/investor-tool-new-edit'], {  
@@ -695,7 +753,7 @@ console.log("itemmmm", item)
     console.log("tabnaaame", this.tabView.tabs[this.selectedIndex].header);
   }
 
-  onsubmit(form: NgForm) {
+  async onsubmit(form: NgForm) {
     for(let item of this.processData){
       for(let item2 of item.data){
         if((item2.likelihood == null || item2.relavance == null) && item2.relavance != 0){
@@ -781,7 +839,17 @@ console.log("itemmmm", item)
     if(this.assessment.assessment_approach === 'Direct'){
       console.log("Directttt")
       let finalArray = this.processData.concat(this.outcomeData)
-      finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
+      if(this.isEditMode ==true){
+        this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+        console.log("assessment",this.assessment.id)
+        finalArray.map(x => x.data.map(y => y.assessment = this.assessment))
+        // console.log("finalArray33", finalArray)
+      }
+      else{
+        console.log("mainAssessment",this.mainAssessment.id)
+        finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
+      }
+      // finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
       // finalArray.map(x=>x.data.map(y=>y.investorTool=this.mainAssessment))
       console.log("finalArray", finalArray)
 
@@ -804,7 +872,8 @@ console.log("itemmmm", item)
         scaleSDGs : this.sdgDataSendArray2,
         sustainedSDGs : this.sdgDataSendArray4,
         sdgs : this.selectedSDGsWithAnswers,
-        isEdit:false
+        isEdit:this.isEditMode,
+        isDraft : false,
 
       }
 
@@ -875,13 +944,21 @@ console.log("itemmmm", item)
 
   }
 
-  showResults(){
-    setTimeout(() => {
-
-       this.router.navigate(['../assessment-result-investor',this.mainAssessment.id], { queryParams: { assessmentId: this.mainAssessment.id}, relativeTo: this.activatedRoute });
-
-       }, 2000);
-
+  async showResults(){
+    if(this.isEditMode ==true){
+      this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+      setTimeout(() => {
+        this.router.navigate(['../assessment-result-investor', this.assessment.id], { queryParams: { assessmentId: this.assessment.id }, relativeTo: this.activatedRoute });
+      }, 2000);
+      console.log("assessment",this.assessment.id)
+      // console.log("finalArray33", finalArray)
+    }
+    else{
+      console.log("mainAssessment",this.mainAssessment.id)
+      setTimeout(() => {
+        this.router.navigate(['../assessment-result-investor', this.mainAssessment.id], { queryParams: { assessmentId: this.mainAssessment.id }, relativeTo: this.activatedRoute });
+      }, 2000);
+    }
   }
   // next(data:any[],type:string){
   // console.log("category",data)
@@ -1405,8 +1482,16 @@ assignSDG(sdg : any , data : any){
           ans: 'No',
       },
       ]
+  }
+
+  calculateAbatement(value: number, data: any) {
+    if (this.investorAssessment?.total_investment) {
+      data['abatement']= value / this.investorAssessment.total_investment 
+    } else {
+      data['abatement'] = 0
     }
-  
+  }
+
 }
 interface UploadEvent {
   originalEvent: HttpResponse<FileDocument>;

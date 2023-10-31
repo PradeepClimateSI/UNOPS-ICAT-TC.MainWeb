@@ -136,6 +136,7 @@ export class PortfolioTrack4Component implements OnInit {
   isValidSCaleSD: boolean;
   isValidSustainedSD: boolean;
   draftLoading: boolean=false;
+  visionExample: { title: string; value: string; }[];
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -207,6 +208,14 @@ export class PortfolioTrack4Component implements OnInit {
     } 
      //this.load = true; //need to change as false
      //this.isSavedAssessment = true //need to change as false
+     this.visionExample = [
+      { title: 'Transformational Vision', value: 'Decarbonized electricity sector with a high % of Solar PV energy which will enable economic growth and will lead the shift of the labour market towards green jobs.' },
+      { title: 'Long term ( > 15 years)', value: 'Zero-carbon electricity production. The 2050 vision is to achieve 60% solar PV in the national electricity mix and create 2 million new green jobs.' },
+      { title: 'Medium term (> 5 years and  < 15 years)', value: 'Achieve 30% solar PV in the national electricity mix and create 1 million new green jobs. ' },
+      { title: 'Short term (< 5 years)', value: 'Install 20 GW of rooftop solar PV and create 200,000 new green jobs in doing so. The solar PV policy is implemented at subnational levels, supported by incentives for private sector involvement and knowledge development.' },
+      { title: 'Phase of transformation', value: 'Acceleration. Solar PV is widely accepted in the society and its use is spreading increasingly fast. Fossil-fuel based energy production is being challenged as the only way to ensure a reliable energy supply. Changes have already occurred in the economy, institutions and society as a result of the spreading of Solar PV.' },
+      { title: 'Intervention contribution to change the system to achieve the vision', value: 'The intervention being assessed will facilitate the spreading of Solar PV installations and thus contribute to increase the penetration of solar PV in the national electricity mix.' },
+    ]
 
     this.tableData = this.getProductsData();
 
@@ -765,7 +774,7 @@ console.log("wwwwww", this.outcomeData)
   }
 
 
-  async saveDraft(category:any){
+  async saveDraft(category:any,processDraftLocation:string,type:string){
     
     let finalArray = this.processData.concat(this.outcomeData)
     if(this.isEditMode ==true){
@@ -791,11 +800,23 @@ console.log("wwwwww", this.outcomeData)
         item.portfolioSdg = this.selectedSDGs[i];
       }
     }
+
+    let proDraftLocation =this.assessment.processDraftLocation;
+    let outDraftLocation = this.assessment.outcomeDraftLocation;
+
+    if(type ='pro'){
+      proDraftLocation= processDraftLocation
+    }
+   if(type ='out'){
+    outDraftLocation= processDraftLocation
+    }
     
     let data : any ={
       finalArray : finalArray,
       isDraft : true,
       isEdit : this.isEditMode,
+      proDraftLocation: proDraftLocation,
+      outDraftLocation: outDraftLocation,
       scaleSDGs : this.sdgDataSendArray2,
       sustainedSDGs : this.sdgDataSendArray4,
       sdgs : this.selectedSDGsWithAnswers
@@ -814,8 +835,11 @@ console.log("wwwwww", this.outcomeData)
           detail: 'Assessment draft has been saved successfully',
           closable: true,
         })
+        if (data.isDraft) {
+           this.setFrom()
+           this.setTo()
+        }
         if(this.isEditMode ==false){
-          console.log("mainAssessment",this.mainAssessment.id)
           this.router.navigate(['app/portfolio-tool-edit'], {  
             queryParams: { id: this.mainAssessment.id,isEdit:true},  
             });
@@ -840,7 +864,7 @@ console.log("wwwwww", this.outcomeData)
       })
   }
 
-  onsubmit(form: NgForm) {
+  async onsubmit(form: NgForm) {
 
     console.log("processData ---", this.processData)
       console.log("outcomeData ---", this.outcomeData)
@@ -930,7 +954,17 @@ console.log("wwwwww", this.outcomeData)
     if(this.assessment.assessment_approach === 'Direct'){
       console.log("Directttt")
       let finalArray = this.processData.concat(this.outcomeData)
-      finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
+      if(this.isEditMode ==true){
+        this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+        console.log("assessment",this.assessment.id)
+        finalArray.map(x => x.data.map(y => y.assessment = this.assessment))
+        // console.log("finalArray33", finalArray)
+      }
+      else{
+        console.log("mainAssessment",this.mainAssessment.id)
+        finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
+      }
+      // finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
 
       console.log("finalArray", finalArray)
       //@ts-ignore
@@ -954,7 +988,8 @@ console.log("wwwwww", this.outcomeData)
         scaleSDGs : this.sdgDataSendArray2,
         sustainedSDGs : this.sdgDataSendArray4,
         sdgs : this.selectedSDGsWithAnswers,
-        isEdit:false
+        isEdit:this.isEditMode,
+        isDraft : false,
       }
       this.investorToolControllerproxy.createFinalAssessment2(data)
         .subscribe(_res => {
@@ -1026,11 +1061,21 @@ console.log("wwwwww", this.outcomeData)
   }
 
 
-  showResults() {
-
-    setTimeout(() => {
-      this.router.navigate(['../assessment-result-investor', this.mainAssessment.id], { queryParams: { assessmentId: this.mainAssessment.id }, relativeTo: this.activatedRoute });
-    }, 2000);
+  async showResults() {
+    if(this.isEditMode ==true){
+      this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+      setTimeout(() => {
+        this.router.navigate(['../assessment-result-investor', this.assessment.id], { queryParams: { assessmentId: this.assessment.id }, relativeTo: this.activatedRoute });
+      }, 2000);
+      console.log("assessment",this.assessment.id)
+      // console.log("finalArray33", finalArray)
+    }
+    else{
+      console.log("mainAssessment",this.mainAssessment.id)
+      setTimeout(() => {
+        this.router.navigate(['../assessment-result-investor', this.mainAssessment.id], { queryParams: { assessmentId: this.mainAssessment.id }, relativeTo: this.activatedRoute });
+      }, 2000);
+    }
   }
 
   // next() {

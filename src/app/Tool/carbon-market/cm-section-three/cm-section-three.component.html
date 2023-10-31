@@ -2,7 +2,8 @@
     <p-tabPanel  *ngFor="let type of types" header="{{type.name}}">
         <p-tabView #tabView (onChange)="onCategoryTabChange($event)" [(activeIndex)]="activeIndex"
             *ngIf="type.code === 'process'">
-            <p-tabPanel  *ngFor="let category of categories[type.code]" [header]="category.name">
+            <!-- <p-tabPanel  *ngFor="let category of categories[type.code]" [header]="category.name" > -->
+            <p-tabPanel  *ngFor="let category of categories[type.code]" [header]="category.name" [selected]="category.name==assessment.processDraftLocation" >
                 <br>
                 <p style="font-size: large;">{{category.description}}</p>
                 <br>
@@ -42,7 +43,7 @@
                             <div class="btn btn-primary text-uppercase" (click)="next(category.code, category.characteristics)">
                                 Next
                             </div>
-                            <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.code, true)">
+                            <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.code, true,category.name,'prose')">
                                 Save
                             </div>
                         </div>
@@ -52,7 +53,7 @@
         </p-tabView>
         <p-tabView #tabView (onChange)="onCategoryTabChange2($event)" [(activeIndex)]="activeIndex2"
             *ngIf="type.code === 'outcome'">
-            <p-tabPanel *ngFor="let category of outcome" >
+            <p-tabPanel *ngFor="let category of outcome"  [selected]="category.name==assessment.outcomeDraftLocation">
                 <ng-template pTemplate="header">
                     <span [innerHTML]="category.name"></span>
                 </ng-template>
@@ -184,7 +185,7 @@
                                 <div class="btn btn-primary text-uppercase" (click)="next(category.type+'_'+category.method)">
                                     Next
                                 </div>
-                                <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, true)">
+                                <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, true,category.name,'out')">
                                     Save
                                 </div>
                             </div>
@@ -330,7 +331,7 @@
                                 <div *ngIf="activeIndex2 < outcome.length - 1" class="btn btn-primary text-uppercase" (click)="next(category.type+'_'+category.method)">
                                     Next
                                 </div>
-                                <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, true)">
+                                <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, true,category.name,'out')">
                                     Save
                                 </div>
                             </div>
@@ -505,7 +506,7 @@
                                 <div class="btn btn-primary text-uppercase" (click)="next(category.type+'_'+category.method)">
                                     Next
                                 </div>
-                                <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, true)">
+                                <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, true,category.name,'out')">
                                     Save
                                 </div>
                             </div>
@@ -516,7 +517,7 @@
                 <div class="row justify-content-end" *ngIf="activeIndex2 === outcome.length - 1">
                     <div>
                         <div class="d-flex flex-row-reverse mt-20 ">
-                            <div class="btn btn-primary text-uppercase" (click)="submit('')">
+                            <div class="btn btn-primary text-uppercase" (click)="submit('',false,'','')">
                                 {{ approach === 'INDIRECT' ? 'Send to Data Collection Team' : 'Calculate & CheckResults'
                                 }}
                             </div>
