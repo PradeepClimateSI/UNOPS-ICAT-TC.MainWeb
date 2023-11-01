@@ -132,9 +132,9 @@ this.selectPortfolio();
       console.log("arrayyy : ", res)
       
       this.barChartData=res;
-      // setTimeout(() => {
+      setTimeout(() => {
       this.viewPortfolioBarChart();
-    // },300)
+    },300)
    
 
 
@@ -505,6 +505,10 @@ this.selectPortfolio();
     //   this.portfolioBarChart.update();
     // }
     // else{
+      if (this.portfolioBarChart) {
+        this.portfolioBarChart.destroy();
+       
+    } 
       this.portfolioBarChart =new Chart(ctx, {
         type: 'bar',
 
