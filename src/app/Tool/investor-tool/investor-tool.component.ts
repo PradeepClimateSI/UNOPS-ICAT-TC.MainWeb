@@ -638,10 +638,10 @@ console.log("itemmmm", item)
     let proDraftLocation =this.assessment.processDraftLocation;
     let outDraftLocation = this.assessment.outcomeDraftLocation;
 
-    if(type ='pro'){
+    if(type =='pro'){
       proDraftLocation= processDraftLocation
     }
-   if(type ='out'){
+   if(type =='out'){
     outDraftLocation= processDraftLocation
     }
 
