@@ -43,6 +43,7 @@ interface ChaCategoryTotalEqualsTo1 {
 })
 export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
+
   assessment: Assessment = new Assessment();
   investorAssessment: InvestorTool = new InvestorTool();
   sectorArray: Sector[] = [];
@@ -154,7 +155,9 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   isValidSustainedSD: boolean;
   visionExample: { title: string; value: string; }[];
   invest1: any;
-  investment_instruments: MasterDataDto[];
+  investment_instruments_1: MasterDataDto[];
+  investment_instruments_2: MasterDataDto[];
+  investment_instruments_3: MasterDataDto[];
 abatement: any;
   // isValidated:boolean;
 
@@ -182,7 +185,9 @@ abatement: any;
     console.log("sectors",this.sectorList)
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;
     this.geographicalAreasCovered = this.masterDataService.level_of_implemetation;
-    this.investment_instruments = this.masterDataService.investment_instruments
+    this.investment_instruments_1 = this.masterDataService.investment_instruments
+    this.investment_instruments_2 = this.masterDataService.investment_instruments
+    this.investment_instruments_3 = this.masterDataService.investment_instruments
 
     this.activatedRoute.queryParams.subscribe( params => {
       params['isEdit']=='true'?(this.isEditMode =true ):false
@@ -304,7 +309,10 @@ abatement: any;
 
     this.investorAssessment.total_investements.map((tot, idx) => {
       console.log("index", idx, this.totalInvestments)
-      let inst = this.investment_instruments.find(o => o.code === tot.instrument_code)
+      let inst 
+      if (idx === 0) inst = this.investment_instruments_1.find(o => o.code === tot.instrument_code)
+      else if (idx === 1) inst = this.investment_instruments_2.find(o => o.code === tot.instrument_code)
+      else if (idx === 2) inst = this.investment_instruments_3.find(o => o.code === tot.instrument_code)
       if (inst) {
         let instObj = new TotalInvestment()
         instObj.instrument_code = inst.code
@@ -1489,6 +1497,20 @@ assignSDG(sdg : any , data : any){
       data['abatement']= value / this.investorAssessment.total_investment 
     } else {
       data['abatement'] = 0
+    }
+  }
+
+  onSelectInstrument(event: any, id: number) {
+    // this.investment_instruments.splice(this.investment_instruments.findIndex(item => item.code === event.value), 1)
+    if (id === 0) {
+      this.investment_instruments_2 = this.investment_instruments_2.filter(o => o.code !== event.value)
+      this.investment_instruments_3 = this.investment_instruments_3.filter(o => o.code !== event.value)
+    } else if (id == 1) {
+      this.investment_instruments_1 = this.investment_instruments_1.filter(o => o.code !== event.value)
+      this.investment_instruments_3 = this.investment_instruments_3.filter(o => o.code !== event.value)
+    } else if (id === 2) {
+      this.investment_instruments_1 = this.investment_instruments_1.filter(o => o.code !== event.value)
+      this.investment_instruments_2 = this.investment_instruments_2.filter(o => o.code !== event.value)
     }
   }
 
