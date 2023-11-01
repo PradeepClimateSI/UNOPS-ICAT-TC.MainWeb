@@ -17,7 +17,7 @@
                                 </div>
                             </ng-container>
                         </ng-container>
-                        <ng-container *ngIf="section.code === 'SECTION_3'">
+                        <ng-container  *ngIf="section.code === 'SECTION_3'">
                             <app-cm-section-three [assessmentquestions]="assessmentQuestions" [isEditMode]="isEditMode" [approach]="approach" [assessment]="assessment" (onSubmit)="save($event)"></app-cm-section-three>
                         </ng-container>
                     </p-accordionTab>
