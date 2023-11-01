@@ -56,7 +56,10 @@ export class CmSectionComponent implements OnInit {
     this.shownCriterias[0] = []
     this.shownCriterias[0].push(true)
     this.shownSections.push(true)
-
+    if (this.assessment.processDraftLocation || this.assessment.outcomeDraftLocation) {
+      this.openAccordion=1;
+      this.shownSections.push(true)
+    }
     if (this.isEditMode) this.isFirstLoading = true
 
     this.result = {
@@ -254,6 +257,9 @@ export class CmSectionComponent implements OnInit {
 
 
   save(event: SaveDto) {
+     if(event.type){
+      this.shownSections.push(true)
+     }
     console.log(event)
     let result: SaveCMResultDto = new SaveCMResultDto()
     result.result = []
