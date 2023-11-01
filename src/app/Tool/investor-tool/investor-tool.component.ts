@@ -43,6 +43,7 @@ interface ChaCategoryTotalEqualsTo1 {
 })
 export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
+
   assessment: Assessment = new Assessment();
   investorAssessment: InvestorTool = new InvestorTool();
   sectorArray: Sector[] = [];
@@ -1490,6 +1491,10 @@ assignSDG(sdg : any , data : any){
     } else {
       data['abatement'] = 0
     }
+  }
+
+  onSelectInstrument(event: any) {
+    this.investment_instruments.splice(this.investment_instruments.findIndex(item => item.code === event.value), 1)
   }
 
 }
