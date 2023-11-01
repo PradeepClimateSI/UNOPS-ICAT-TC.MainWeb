@@ -4,16 +4,16 @@
 
 export const environment = {
   production: true,
-  baseUrlAPI: 'http://3.108.9.184/web-api',
-  esbaseUrlAPI: 'http://3.108.9.184:7090',
-  authBaseUrlAPI: 'http://3.108.9.184/auth-api',
-  baseUrlAPIDocUploadAPI: 'http://3.108.9.184/web-api/document/upload2',
+  baseUrlAPI: 'http://15.206.202.183/web-api',
+  esbaseUrlAPI: 'http://15.206.202.183:7090',
+  authBaseUrlAPI: 'http://15.206.202.183/auth-api',
+  baseUrlAPIDocUploadAPI: 'http://15.206.202.183/web-api/document/upload2',
   
-  baseUrlAuditlog :  'http://3.108.9.184/audit-api',
-  baseUrlJsonFile: 'http://3.108.9.184:3600/filename',
-  baseUrlAPIDocUploadAnonymousAPI: 'http://3.108.9.184/web-api/document/upload2',
-  baseUrlExcelUpload:  'http://3.108.9.184/web-api/parameter/upload',
-  baseUrlPMU: 'http://3.108.9.184/pmu/login',
+  baseUrlAuditlog :  'http://15.206.202.183/audit-api',
+  baseUrlJsonFile: 'http://15.206.202.183:3600/filename',
+  baseUrlAPIDocUploadAnonymousAPI: 'http://15.206.202.183/web-api/document/upload2',
+  baseUrlExcelUpload:  'http://15.206.202.183/web-api/parameter/upload',
+  baseUrlPMU: 'http://15.206.202.183/pmu/login',
 };
 // baseUrlAPI: 'http://3.110.188.89:7080',
 /*
