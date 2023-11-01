@@ -99,15 +99,15 @@
                             </p>
                         </div>
 
-                        <div class="p-field p-2">
-                          <table>
+                        <div class="" style="width: 185%">
+                          <table style="table-layout: fixed;">
                             <thead>
                               <tr>
-                                <th [style]="{'width': '200%', 'font-weight':'normal'}">Investment instrument used</th>
+                                <th style="width:50%;font-weight: normal;overflow-x: auto;">Investment instrument used</th>
                                 <ng-container *ngFor="let tot of totalInvestments; let idx = index">
                                   <td>
-                                    <p-dropdown [style]="{'width':'100%'}"  [name]="'invest'+idx" #type="ngModel" placeholder="Select" [(ngModel)]="tot.instrument_code" [options]="investment_instruments" 
-                                    optionLabel="name" appendTo="body" optionValue="code" [disabled]="isSavedAssessment|| isEditMode">
+                                    <p-dropdown [name]="'invest'+idx" #type="ngModel" placeholder="Select investment instrument" [(ngModel)]="tot.instrument_code" [options]="investment_instruments" 
+                                    optionLabel="name" appendTo="body" optionValue="code" [disabled]="isSavedAssessment|| isEditMode" (onChange)="onSelectInstrument($event)">
                                     </p-dropdown>
                                   </td>
                                 </ng-container>
@@ -115,7 +115,7 @@
                             </thead>
                             <tbody>
                               <tr>
-                                <th [style]="{'width': '200%', 'font-weight':'normal'}">Proportion of total investment</th>
+                                <th style="font-weight:normal">Proportion of total investment</th>
                                 <ng-container *ngFor="let tot of totalInvestments; let idx = index">
                                   <td>
                                     <input pInputText type="number" #totInvestment="ngModel" [name]="'totInvestment'+idx" ngModel
@@ -1054,7 +1054,7 @@
 
                                 <!-- lllllllllllllllllllllllllllll -->
                                 <!-- *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level' " -->
-                              <div >
+                              <div *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level' "  >
                                 <div class="row p-2">
                                   <div class="col-12 col-lg-6">
                                     <div class="p-field">
@@ -1092,9 +1092,9 @@
                                   <div class="col-12 col-lg-6">
                                     <div class="p-field">
                                       <label for="expected_ghg_mitigation">Abatement per dollar (GHG reduction over intervention lifetime/total investment), t CO2-eq/USD</label>
-                                      <p-inputNumber [(ngModel)]="data['abatement']" disabl [name]="'abatement'+data.characteristics.id"
+                                      <p-inputNumber [disabled]="true" [(ngModel)]="data['abatement']" disabl [name]="'abatement'+data.characteristics.id"
                                           placeholder="Expected GHG reduction per year"  mode="decimal"
-                                        locale="en-US" [minFractionDigits]="2">
+                                        locale="en-US" [minFractionDigits]="3">
                                       </p-inputNumber>
                                     </div>
                                   </div>
