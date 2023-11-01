@@ -106,8 +106,8 @@
                                 <th style="width:50%;font-weight: normal;overflow-x: auto;">Investment instrument used</th>
                                 <ng-container *ngFor="let tot of totalInvestments; let idx = index">
                                   <td>
-                                    <p-dropdown [name]="'invest'+idx" #type="ngModel" placeholder="Select investment instrument" [(ngModel)]="tot.instrument_code" [options]="investment_instruments" 
-                                    optionLabel="name" appendTo="body" optionValue="code" [disabled]="isSavedAssessment|| isEditMode" (onChange)="onSelectInstrument($event)">
+                                    <p-dropdown [name]="'invest'+idx" #type="ngModel" placeholder="Select investment instrument" [(ngModel)]="tot.instrument_code" [options]="idx === 0 ? investment_instruments_1 : (idx === 1 ? investment_instruments_2 : investment_instruments_3)" 
+                                    optionLabel="name" appendTo="body" optionValue="code" [disabled]="isSavedAssessment|| isEditMode" (onChange)="onSelectInstrument($event, idx)">
                                     </p-dropdown>
                                   </td>
                                 </ng-container>
