@@ -1508,7 +1508,7 @@ assignSDG(sdg : any , data : any){
     } else if (id == 1) {
       this.investment_instruments_1 = this.investment_instruments_1.filter(o => o.code !== event.value)
       this.investment_instruments_3 = this.investment_instruments_3.filter(o => o.code !== event.value)
-    } else if (id === 3) {
+    } else if (id === 2) {
       this.investment_instruments_1 = this.investment_instruments_1.filter(o => o.code !== event.value)
       this.investment_instruments_2 = this.investment_instruments_2.filter(o => o.code !== event.value)
     }
