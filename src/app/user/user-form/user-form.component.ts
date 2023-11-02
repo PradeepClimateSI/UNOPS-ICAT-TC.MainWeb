@@ -132,8 +132,12 @@ export class UserFormComponent implements OnInit, AfterViewInit {
     this.UserTypeServiceProxy.getUserTypes().subscribe((res: any) => {
       this.userTypes = res;
     });
+    let userid=0;
+    if(this.editUserId){
+      userid =this.editUserId;
+    }
 
-    this.instProxy.getInstitutionForManageUsers(0, 0)
+    this.instProxy.getInstitutionForManageUsers(0, 0,userid)
       .subscribe((res) => {
         this.institutions = res.items;
 

@@ -61,7 +61,7 @@
                 
                     <p-button
                  
-                    (click)="genarateReport()"
+                    (click)=" generate()"
                         label="Report"
                 
                     ></p-button>
@@ -160,4 +160,27 @@
         <app-portfolio-alignment [alignment_data]="alignment_data"></app-portfolio-alignment>
 
     </div>
+</div>
  
+    <p-dialog [(visible)]="display">
+        <div class="container" style="width: 600px; height: 400px">
+          
+          
+            <div class="row p-2">
+                <div class="col-2">
+                    <div>
+                        <label for="sector">Report Name</label>
+                    </div>
+                </div>
+                <div class="col-10">
+                    <div>
+                        <input [style]="{ width: '75%' }" type="text" name="reportName" class="p-inputtext"
+                            [(ngModel)]="reportName" pInputText />
+                    </div>
+                </div>
+            </div>
+            <div>
+                <button style="margin-right: 5px" pButton pRipple label="Generate" (click)="confirm()"></button>
+            </div>
+        </div>
+      </p-dialog>

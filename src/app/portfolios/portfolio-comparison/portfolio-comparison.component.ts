@@ -15,6 +15,7 @@ import { environment } from 'environments/environment';
 })
 export class PortfolioComparisonComponent implements OnInit {
   activeIndexMain: number;
+  display: boolean;
   onMainTabChange($event: any) {
     throw new Error('Method not implemented.');
   }
@@ -30,6 +31,7 @@ export class PortfolioComparisonComponent implements OnInit {
   isLoaded: boolean = false;
   hasCMToolAssessments: boolean = false
   isDownloading: boolean;
+  reportName: string;
   SERVER_URL = environment.baseUrlAPI;
   constructor(
     private route: ActivatedRoute,
@@ -137,16 +139,18 @@ export class PortfolioComparisonComponent implements OnInit {
       XLSX.writeFile(workbook, "Report.xlsx", { cellStyles: true });
     }, 1000);
   }
-  genarateReport() {
+  confirm() {
     
     let body = new CreateComparisonReportDto()
     body.portfolioId = this.portfolioId
     // body.climateAction = this.selectedClimateAction
-    body.reportName = 'report'
+    body.tool = ""
+    body.type = 'Comparison'
+    body.reportName = this.reportName
     body.reportTitle = this.portfolio.portfolioName
     this.reportControllerServiceProxy.generateComparisonReport(body).subscribe(res => {
       console.log("generated repotr", res)
-      window.open(this.SERVER_URL +"/report.pdf", "_blank");
+      window.open(this.SERVER_URL +'/'+res.generateReportName, "_blank");
       if (res) {
         this.messageService.add({
           severity: 'success',
@@ -156,6 +160,7 @@ export class PortfolioComparisonComponent implements OnInit {
         })
         
       }
+      this.display = false
     }, error => {
       this.messageService.add({
         severity: 'error',
@@ -229,6 +234,9 @@ export class PortfolioComparisonComponent implements OnInit {
       default:
         return 'white';
     }
+  }
+  generate(){
+    this.display = true;
   }
 
 }
