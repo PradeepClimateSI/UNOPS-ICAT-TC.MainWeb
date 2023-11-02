@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  
  // baseUrlAPI: 'http://15.206.202.183/web-api',
   baseUrlPMU: 'http://15.206.202.183/pmu/login',
  // esbaseUrlAPI: 'http://15.206.202.183:7090',
@@ -11,8 +12,8 @@ export const environment = {
   // baseUrlAPI: 'http://15.206.202.183:7080',
    baseUrlAPI: 'http://localhost:7080',
    esbaseUrlAPI: 'http://localhost:7070', 
-  // authBaseUrlAPI: 'http://15.206.202.183:7090',
-  authBaseUrlAPI: 'http://localhost:7090',
+  // authBaseUrlAPI: 'http://3.108.9.184:7090',
+authBaseUrlAPI: 'http://localhost:7090',
   baseUrlAPIDocUploadAPI: 'http://localhost:7080/document/upload2',
   baseUrlJsonFile: 'http://35.154.205.109:3600/filename',
   baseUrlAPIDocUploadAnonymousAPI: 'http://localhost:7080/document/upload2',
