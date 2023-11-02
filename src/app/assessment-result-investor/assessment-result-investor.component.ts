@@ -422,7 +422,7 @@ console.log(this.geographicalAreasList)
           { title: 'From', data: this.datePipe.transform(this.date1, 'yyyy-MM-dd') },
           { title: 'To', data: this.datePipe.transform(this.date2, 'yyyy-MM-dd') },
           { title: 'Opportunities for stakeholders to participate in the assessment', data: (this.opportunities)?(this.opportunities):'-' },
-          { title: 'Principles on which the assessment is based', data: (this.principles)?(this.principles):'-' },
+          // { title: 'Principles on which the assessment is based', data: (this.principles)?(this.principles):'-' },
 
         ])
 
