@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  
  // baseUrlAPI: 'http://15.206.202.183/web-api',
   baseUrlPMU: 'http://15.206.202.183/pmu/login',
  // esbaseUrlAPI: 'http://15.206.202.183:7090',
