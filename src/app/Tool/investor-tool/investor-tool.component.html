@@ -872,7 +872,7 @@
             <p-tabPanel  header="Outcome of Change">
               <p-tabView #tabView2 (onChange)="onCategoryTabChange($event, tabView2) " [(activeIndex)]="activeIndex2">
 
-                <p-tabPanel *ngFor="let category of outcomeData" [selected]="category.CategoryName==assessment.outcomeDraftLocation">
+                <p-tabPanel *ngFor="let category of outcomeData; index as cat" [selected]="category.CategoryName==assessment.outcomeDraftLocation">
 
                   <ng-template pTemplate="header">
                     <!-- Use a container div for the header -->
@@ -1004,18 +1004,24 @@
 
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
-                                        <label for="score">Score</label>
+                                        <label for="score">Score*</label>
                                         <div *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' ||  category.CategoryName ==='Adaptation Scale of the Outcome' ">
-                                        <p-dropdown appendTo="body" name="score" #type="ngModel"
-                                          placeholder="Select Score" [(ngModel)]="data.score"
-                                          [options]="outcomeScaleScore" optionLabel="id" optionValue="value"
-                                         ></p-dropdown></div>
+                                        <p-dropdown appendTo="body"  name="{{cat}}_{{i}}_outcomeScaleScore_" #type="ngModel"
+                                          placeholder="Select Score" [(ngModel)]="data.score" (autoDisplayFirst) =false
+                                          [options]="outcomeScaleScore" optionLabel="id" optionValue="value" 
+                                         ></p-dropdown>
+                                         <p class="info-message text-danger" *ngIf="data.score==undefined  && (fData1.submitted || type.touched) || (category.isValidated==false && data.score==undefined)">
+                                          This is a mandatory field </p>
+                                        </div>
 
                                           <div *ngIf=" category.CategoryName ==='GHG Time frame over which the outcome is sustained' ||  category.CategoryName ==='Adaptation Time frame over which the outcome is sustained' ">
-                                            <p-dropdown appendTo="body" name="score" #type="ngModel"
+                                            <p-dropdown appendTo="body" name="{{cat}}_{{i}}_outcomeSustainedScore_" #type="ngModel"
                                               placeholder="Select Score" [(ngModel)]="data.score"
                                               [options]="outcomeSustainedScore" optionLabel="id" optionValue="value"
-                                              ></p-dropdown></div>
+                                              ></p-dropdown>
+                                              <p class="info-message text-danger" *ngIf="data.score==undefined  && (fData1.submitted || type.touched) || (category.isValidated==false && data.score==undefined)">
+                                                This is a mandatory field </p>
+                                            </div>
                                       </div>
                                     </div>
 
@@ -1216,11 +1222,13 @@
 
                                       <div class="col-12 col-lg-6">
                                         <div class="p-field">
-                                          <label for="score">Score</label>
+                                          <label for="score">Score*</label>
                                           <p-dropdown appendTo="body" name="score" #type="ngModel"
                                             placeholder="Select Score" [(ngModel)]="data.score" (ngModelChange)="assignSDG(selectedSDGs[i], data)"
                                             [options]="outcomeScaleScore" optionLabel="id" optionValue="value"
                                            ></p-dropdown>
+                                           <p class="info-message text-danger" *ngIf="data.score==undefined  && (fData1.submitted || type.touched) || (isValidSCaleSD==false && data.score==undefined)">
+                                            This is a mandatory field </p>
                                         </div>
                                       </div>
 
@@ -1355,11 +1363,13 @@
 
                                       <div class="col-12 col-lg-6">
                                         <div class="p-field">
-                                          <label for="score">Score</label>
+                                          <label for="score">Score*</label>
                                           <p-dropdown appendTo="body" name="score" #type="ngModel"
                                             placeholder="Select Score" [(ngModel)]="data.score" (ngModelChange)="assignSDG(selectedSDGs[i], data)"
                                             [options]="outcomeSustainedScore" optionLabel="id" optionValue="value"
                                             ></p-dropdown>
+                                            <p class="info-message text-danger" *ngIf="data.score==undefined   && (fData1.submitted || type.touched) || (isValidSustainedSD==false && data.score==undefined)">
+                                              This is a mandatory field </p>
                                         </div>
                                       </div>
 
