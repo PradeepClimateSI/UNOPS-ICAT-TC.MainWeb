@@ -21,7 +21,10 @@ export class ReportComponent implements OnInit {
   allSelect: boolean
   reportName: string;
   assessmentTypes: any[]
-
+ reportTypes=['Result','Comparison']
+ selectedReportTypes:string='';
+ tools=['Investment','Other Interventions']
+ selectedTool:string='';
   selectedClimateAction: ClimateAction
   selectedAssessment: Assessment
   selectedAssessmentType: any
@@ -53,10 +56,23 @@ export class ReportComponent implements OnInit {
 
   onCAChange(e: any){
     console.log(e)
+    this.selectedTool='';
     this.searchBy.climateAction = e.value
     this.filterReportData()
   }
 
+  onSelectType(e: any){
+    this.selectedReportTypes=this.selectedReportTypes||''
+   this.selectedTool='';
+   this.searchBy.climateAction =''
+   console.log(this.selectedReportTypes)
+   this.filterReportData()
+  }
+
+  onSelectTool(e: any){
+    console.log(this.selectedTool)
+    this.filterReportData()
+   }
   generate(){
     this.display = true;
   }
@@ -99,8 +115,9 @@ export class ReportComponent implements OnInit {
     let reportName = this.searchBy.text ? this.searchBy.text : "";
     console.log(climateAction)
 
-    this.reportControllerServiceProxy.getReportData(climateAction, reportName).subscribe(res => {
+    this.reportControllerServiceProxy.getReportData(climateAction, reportName,this.selectedReportTypes,this.selectedTool).subscribe(res => {
       this.pdfFiles = res
+      console.log('pdfFiles',res)
     })
 
 

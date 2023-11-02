@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ClimateAction, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { ClimateAction, CreateReportDto, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ReportControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import { DatePipe } from '@angular/common';
 import { DomSanitizer } from '@angular/platform-browser';
 import { jsPDF } from "jspdf"
@@ -9,6 +9,8 @@ import * as XLSX from 'xlsx-js-style';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { ColorMap } from 'app/Tool/carbon-market/cm-result/cm-result.component';
 import { HeatMapScore } from 'app/charts/heat-map/heat-map.component';
+import { MessageService } from 'primeng/api';
+import { environment } from 'environments/environment';
 
 
 @Component({
@@ -20,15 +22,15 @@ export class AssessmentResultInvestorComponent implements OnInit {
 
   @ViewChild('content', { static: false }) el!: ElementRef;
   @ViewChild('content') content: ElementRef;
-
+  SERVER_URL = environment.baseUrlAPI;
   title = "Angular CLI and isPDF"
   assessmentId: number
   averageProcess: number
   averageOutcome: number
-
+  reportName: string;
   assessmentData: any = []
   assessmentParameters: any = []
-
+  display:boolean 
   impactCoverList: any = []
   sectorList: any = []
   levelofImplementation: string
@@ -91,7 +93,9 @@ export class AssessmentResultInvestorComponent implements OnInit {
     private datePipe: DatePipe,
     private sanitizer: DomSanitizer,
     private investorToolControllerproxy: InvestorToolControllerServiceProxy,
-    public masterDataService: MasterDataService
+    public masterDataService: MasterDataService,
+    private reportControllerServiceProxy: ReportControllerServiceProxy,
+    private messageService: MessageService
 
   ) { }
   ngOnInit(): void {
@@ -575,6 +579,37 @@ console.log(this.geographicalAreasList)
     })
 
   }
-
+  confirm(){
+    console.log("confirm")
+    let body = new CreateReportDto()
+    body.assessmentId = this.assessmentId
+    body.tool = this.tool=="PORTFOLIO"?"Other Interventions":"Investment"
+    body.type = 'Result'
+    body.climateAction = this.intervention
+    body.reportName = this.reportName
+    this.reportControllerServiceProxy.generateReport(body).subscribe(res => {
+      console.log("generated repotr", res)
+      if (res) {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Report generated successfully',
+          closable: true,
+        })
+        this.display = false
+        window.open(this.SERVER_URL +'/'+res.generateReportName, "_blank");
+      }
+    }, error => {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to generate report',
+        closable: true,
+      })
+    })
+  }
+  generate(){
+    this.display = true;
+  }
 
 }
