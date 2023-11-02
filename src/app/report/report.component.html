@@ -17,6 +17,17 @@
             <div class="col-md-4">
                 <div class="col-12">
                     <div class="p-field">
+                        <label for="projNdc">Select Report Type</label>
+                        <p-dropdown appendTo="body" name="reporttype" [options]="reportTypes" placeholder="Select .."
+                            [(ngModel)]="selectedReportTypes"  [showClear]="true" [filter]="true"
+                             (onChange)="onSelectType($event)">
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div  *ngIf="selectedReportTypes=='Result'"  class="col-md-4">
+                <div class="col-12">
+                    <div class="p-field">
                         <label for="projNdc">Select Intervention</label>
                         <p-dropdown appendTo="body" name="ndc" [options]="climateActions" placeholder="Select .."
                             [(ngModel)]="searchBy.climateAction" #fndc="ngModel" [showClear]="true" [filter]="true"
@@ -25,15 +36,28 @@
                     </div>
                 </div>
             </div>
+            <div *ngIf="selectedReportTypes=='Result'" class="col-md-4">
+                <div class="col-12">
+                    <div class="p-field">
+                        <label for="projNdc">Select Tool</label>
+                        <p-dropdown appendTo="body" name="rporttool" [options]="tools" placeholder="Select .."
+                            [(ngModel)]="selectedTool"   [showClear]="true" [filter]="true"
+                            (onChange)="onSelectTool($event)" >
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+     
+           
         </div>
         <div class="row mb-3"></div>
-        <div class="row mb-3">
+        <!-- <div class="row mb-3">
             <div class="col-md-4"></div>
             <div class="col-md-5"></div>
             <div class="col-md-3 text-end">
                 <button pButton pRipple label="Genarate" (click)="generate()"></button>
             </div>
-        </div>
+        </div> -->
         <h6 class="mt-4" style="color: #1a4f7b">Reports</h6>
         <!-- <div class="row">
             <div *ngFor="let file of pdfFiles" class="col col-md-6" style="margin: auto;">
@@ -44,7 +68,7 @@
         <div class="row">
             <div _ngcontent-mil-c27="" style="padding: 10px; cursor: pointer;" class="col-md-4 col-xs-6 ng-star-inserted" *ngFor="let r of pdfFiles">
                 <div _ngcontent-mil-c27="" class="row  d-flex justify-content-center">
-                    <img (click)="view(r.generateReportName)" _ngcontent-mil-c27="" src="../../../assets/images/pdf.webp" style="display: block; min-width:120px;max-width: 120px;">
+                    <img (click)="view(r.generateReportName)" _ngcontent-mil-c27="" src="./assets/images/pdf.webp" style="display: block; min-width:120px;max-width: 120px;">
                 </div>
                 <div _ngcontent-mil-c27="" class="row d-flex justify-content-center">
                     <span  class="row d-flex justify-content-center" (click)="view(r.generateReportName)">{{r.reportName}}</span>                
@@ -52,7 +76,7 @@
             </div>
         </div>
     </div>
-    <p-dialog [(visible)]="display">
+    <!-- <p-dialog [(visible)]="display">
         <div class="container" style="width: 600px; height: 400px">
             <div class="row p-2">
                 <div class="col-2">
@@ -69,21 +93,7 @@
                     </div>
                 </div>
             </div>
-            <!-- <div class="row p-2">
-                <div class="col-2">
-                    <div>
-                        <label for="project">Select Assessment Type</label>
-                    </div>
-                </div>
-                <div class="col-10">
-                    <div>
-                        <p-dropdown appendTo="body" name="ndc" [options]="assessmentTypes" placeholder="Select .."
-                            [(ngModel)]="selectedAssessmentType" #fndc="ngModel" [showClear]="true" [filter]="true"
-                            optionLabel="name">
-                        </p-dropdown>
-                    </div>
-                </div>
-            </div> -->
+      
             <div class="row p-2">
                 <div class="col-2">
                     <div>
@@ -121,4 +131,4 @@
                 <button style="margin-right: 5px" pButton pRipple label="Generate" (click)="confirm()"></button>
             </div>
         </div>
-    </p-dialog>
+    </p-dialog> -->
