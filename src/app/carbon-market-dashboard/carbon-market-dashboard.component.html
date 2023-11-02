@@ -152,7 +152,7 @@
                   <ng-template pTemplate="body" let-tableData>
                       <tr>
                           <td>{{ tableData?.intervention }}</td>
-                          <td>{{ tableData.process_score }}</td>
+                          <td>{{ tableData.process_score === null ? 'N/A' :  tableData.process_score}}</td>
                           <td>{{ tableData.outcome_score }}</td>
                       </tr>
                   </ng-template>
