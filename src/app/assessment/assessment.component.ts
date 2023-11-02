@@ -12,18 +12,19 @@ import { MethodologyAssessmentControllerServiceProxy } from 'shared/service-prox
 })
 export class AssessmentComponent implements OnInit {
 
-  resultsList : any = []
-  assessmentData :any =[]
+  resultsList: any = []
+  assessmentData: any = []
 
-  results : any = []
-data2 : any
-loading: boolean ;
-totalRecords : number
-load : boolean = false
+  results: any = []
+  data2: any
+  loading: boolean;
+  totalRecords: number
+  load: boolean = false
 
-dt2 : Table
+  dt2: Table
+  rows: number = 10;
   constructor(
-    private methassess : MethodologyAssessmentControllerServiceProxy,
+    private methassess: MethodologyAssessmentControllerServiceProxy,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     public masterDataService: MasterDataService
@@ -34,99 +35,112 @@ dt2 : Table
 
   async ngOnInit() {
     this.loading = true;
-    // this.methassess.results().subscribe((res: any) => {
-    //   this.resultsList = res
+    await this.loadData({})
+    
+    // this.results = await this.methassess.results().toPromise()
+
+   
+
+    // this.methassess.assessmentDetails().subscribe(async (res: any) => {
+    //   this.assessmentData = res
+
+    //   for await (let x of this.assessmentData) {
+    //     for await (let result of this.resultsList) {
+
+    //       if (result.assessment?.id == x.id) {
+    //         //  console.log("aaaaaaaaaaaaaaaa")
+    //         let data: any = {
+    //           id: result.id,
+    //           assessId: x.id,
+    //           meth: x.climateAction.policyName,
+    //           method: result.assessment.assessment_method,
+    //           approach: result.assessment.assessment_approach,
+    //           tool: result.assessment.tool,
+    //           assessmentType: result.assessment.assessmentType,
+    //           averageOutcome: result.averageOutcome,
+    //           averageProcess: result.averageProcess
+
+    //         }
+
+    //         this.results.push(data)
+    //       }
+    //     }
+    //   }
+
+      console.log("resultdataa", this.results)
+
+
+      //  console.log("resultdataareverse",  this.results.reverse())
+
 
     // });
 
-    this.resultsList = await this.methassess.results().toPromise()
-    //console.log("resultsss : ", this.resultsList)
 
 
-    this.methassess.assessmentDetails().subscribe(async (res: any) => {
-    //  console.log("assessmentData : ", res)
-      this.assessmentData = res
-
-
-      for await (let x of this.assessmentData){
-        for await (let result of this.resultsList){
-
-          if(result.assessment?.id == x.id){
-          //  console.log("aaaaaaaaaaaaaaaa")
-            let data : any = {
-              id : result.id,
-              assessId : x.id,
-              meth : x.climateAction.policyName,
-              method : result.assessment.assessment_method,
-              approach : result.assessment.assessment_approach,
-              tool : result.assessment.tool,
-              assessmentType : result.assessment.assessmentType,
-              averageOutcome : result.averageOutcome,
-              averageProcess : result.averageProcess
-
-            }
-
-            this.results.push(data)
-          }
-        }
-      }
-
-      console.log("resultdataa",this.results)
-
-
-    //  console.log("resultdataareverse",  this.results.reverse())
-
-
-    });
-
-
-
-      setTimeout(() => {
-        this.load = true;
-        this.loading = false;
-      }, 5000);
+    // setTimeout(() => {
+    //   this.load = true;
+    //   this.loading = false;
+    // }, 5000);
 
   }
 
 
   clear(table: Table) {
     table.clear();
-}
-
-onInput(event: any, dt: any) {
-  const value = event.target.value;
-  dt.filterGlobal(value, 'contains');
-}
-
-
-
-myFunction(assessId: any, averageProcess: any, averageOutcome: any, tool: string, assessment_method: string) {
-  console.log("dddd", assessId, tool, assessment_method, averageProcess, averageOutcome);
-
-  if (tool === 'INVESTOR' || (tool === 'PORTFOLIO' && assessment_method === 'Track 4')) {
-    this.router.navigate(['/app/assessment-result-investor', assessId], {
-      queryParams: {
-        assessmentId: assessId
-      },
-      relativeTo: this.activatedRoute
-    });
-  } else if (tool === 'CARBON_MARKET') {
-    this.router.navigate(['../carbon-market-tool/result'], {
-      queryParams: {
-        id: assessId
-      },
-      relativeTo: this.activatedRoute
-    });
-  } else {
-    this.router.navigate(['/assessment-result', assessId], {
-      queryParams: {
-        assessmentId: assessId,
-        averageProcess: averageProcess,
-        averageOutcome: averageOutcome
-      }
-    });
   }
-}
+
+  onInput(event: any, dt: any) {
+    const value = event.target.value;
+    dt.filterGlobal(value, 'contains');
+  }
+
+  async loadData(event: LazyLoadEvent) {
+    this.totalRecords = 0;
+
+    let pageNumber = (event.first === 0 || event.first == undefined) ? 1 : event.first / (event.rows == undefined ? 1 : event.rows) + 1;
+    this.rows = event.rows == undefined ? 10 : event.rows;
+
+    let skip = pageNumber * this.rows
+    let res = await this.methassess.getResultPageData(skip, this.rows).toPromise()
+
+    this.results = res[0]
+    this.totalRecords = res[1]
+
+    if (this.results){
+      this.load = true
+      this.loading = false
+    }
+  }
+
+
+
+  myFunction(assessId: any, averageProcess: any, averageOutcome: any, tool: string, assessment_method: string) {
+    console.log("dddd", assessId, tool, assessment_method, averageProcess, averageOutcome);
+
+    if (tool === 'INVESTOR' || (tool === 'PORTFOLIO' && assessment_method === 'Track 4')) {
+      this.router.navigate(['/app/assessment-result-investor', assessId], {
+        queryParams: {
+          assessmentId: assessId
+        },
+        relativeTo: this.activatedRoute
+      });
+    } else if (tool === 'CARBON_MARKET') {
+      this.router.navigate(['../carbon-market-tool/result'], {
+        queryParams: {
+          id: assessId
+        },
+        relativeTo: this.activatedRoute
+      });
+    } else {
+      this.router.navigate(['/assessment-result', assessId], {
+        queryParams: {
+          assessmentId: assessId,
+          averageProcess: averageProcess,
+          averageOutcome: averageOutcome
+        }
+      });
+    }
+  }
 
 
 }
