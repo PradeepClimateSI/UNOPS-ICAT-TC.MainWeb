@@ -88,8 +88,7 @@
                 <label for="projScope">Contact Number</label>
                 <input
                 [disabled]="institutionId > 0"
-                pattern="^[a-zA-Z]{1,64}$"
-                  type="text"
+                  type="number"
                   placeholder=""
                   name="projScope"
                   [(ngModel)]="institution.telephoneNumber"

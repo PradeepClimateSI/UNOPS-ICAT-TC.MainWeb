@@ -117,11 +117,8 @@
                                 #telephoneNumber="ngModel" [styleClass]="'form-control'">
                             </p-inputMask> -->
                             <input id="telephoneNumber" type="number" name="telephone" class="form-control" required 
-                [(ngModel)]="intelephoneNumber" #telephoneNumber="ngModel" placeholder="+xxxxxxxxx" pattern="^((\\+-?)|0)?[0-9]{5,20}$"
+                [(ngModel)]="intelephoneNumber" #telephoneNumber="ngModel" placeholder="+xxxxxxxxx" 
                  />
-                 <p class="info-message text-danger" *ngIf="(telephoneNumber.errors?.['pattern'])">
-                   Invalid mobile number.
-          </p>
                             <p class="info-message text-danger" *ngIf="
               !intelephoneNumber &&
               (fData.submitted || telephoneNumber.touched || telephoneNumber.dirty)

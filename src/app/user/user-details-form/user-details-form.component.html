@@ -145,12 +145,9 @@
               #ftelephone="ngModel"
               
             > -->
-            <input id="ftelephone" type="number" name="ftelephone" class="form-control" [disabled]="editUserId > 0"
-            [(ngModel)]="user.landline" #ftelephone="ngModel" placeholder="+xxxxxxxxx" pattern="^((\\+-?)|0)?[0-9]{5,20}$"
+            <input id="ftelephone" type="text" name="ftelephone" class="form-control" [disabled]="editUserId > 0"
+            [(ngModel)]="user.landline" #ftelephone="ngModel" placeholder="+xxxxxxxxx"
              />
-             <p class="info-message text-danger" *ngIf="(ftelephone.errors?.['pattern'])">
-               Invalid Landline number.
-      </p>
           </div>
         </div>
       </div>
@@ -174,11 +171,8 @@
             
           > -->
           <input id="mobile" type="number" name="mobile" class="form-control" [disabled]="editUserId > 0"
-          [(ngModel)]="user.landline" #mobile="ngModel" placeholder="+xxxxxxxxx" pattern="^((\\+-?)|0)?[0-9]{5,20}$"
+          [(ngModel)]="user.landline" #mobile="ngModel" placeholder="+xxxxxxxxx"
            />
-           <p class="info-message text-danger" *ngIf="(mobile.errors?.['pattern'])">
-             Invalid mobile number.
-    </p>
           </div>
         </div>
       </div>
