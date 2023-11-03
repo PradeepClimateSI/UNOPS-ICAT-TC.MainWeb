@@ -19,8 +19,8 @@ export class CarbonMarketDashboardComponent implements OnInit,AfterViewInit {
   canvascmRefSDGsPieChart: ElementRef<HTMLCanvasElement>;
   @ViewChild('sourceDiv', { read: ElementRef }) sourceDiv: ElementRef;
   @ViewChild('targetDiv', { read: ElementRef }) targetDiv: ElementRef;
-  @ViewChild('sourceDiv2', { read: ElementRef }) sourceDiv2: ElementRef;
-  @ViewChild('targetDiv2', { read: ElementRef }) targetDiv2: ElementRef;
+  // @ViewChild('sourceDiv2', { read: ElementRef }) sourceDiv2: ElementRef;
+  // @ViewChild('targetDiv2', { read: ElementRef }) targetDiv2: ElementRef;
 
 
   @ViewChild('cmSectorCountPieChart')
@@ -30,8 +30,8 @@ export class CarbonMarketDashboardComponent implements OnInit,AfterViewInit {
   heatMapScore: HeatMapScore[];
   heatMapData: TableData[];
   targetDivHeight: any;
-  targetDivHeightofMeetingEnvironmental: any;
-  cmloading: boolean=false;
+  // targetDivHeightofMeetingEnvironmental: any;
+  // cmloading: boolean=false;
 
   constructor(
     // private projectProxy: ProjectControllerServiceProxy,
@@ -122,8 +122,10 @@ CMPrerequiste: {
     this.assessmentCMProxy.getPrerequisite().subscribe((res:any)=>{
 
       this.CMPrerequiste=res
+      setTimeout(() => {
+        this.viewPieChartCM();
+      }, 20);
       console.log("CMPrerequiste",res, this.CMPrerequiste[0]?.count, this.CMPrerequiste[1]?.count)
-     this.cmloading=true
       
     })
 
@@ -136,7 +138,7 @@ CMPrerequiste: {
     console.log('event Date', event);
     
     this.totalRecords = 0;
-
+    // this.loading = true;
     let pageNumber =
       event.first === 0 || event.first === undefined
         ? 1
@@ -152,11 +154,6 @@ CMPrerequiste: {
     }, err => {
       this.loading = false;});
 
-    setTimeout(() => {
-      this.viewPieChartCM();
-      this.updateSourceDivHeight()
-      
-    }, 200);
 
     // setTimeout(() => {
     // }, 1);
@@ -174,8 +171,8 @@ CMPrerequiste: {
     this.targetDivHeight = this.targetDiv.nativeElement.offsetHeight;
     this.renderer.setStyle(this.sourceDiv.nativeElement, 'height', `${this.targetDivHeight}px`);
     this.renderer.setStyle(this.sourceDiv.nativeElement, 'overflow-y', 'auto');
-    this.targetDivHeightofMeetingEnvironmental = this.targetDiv2.nativeElement.offsetHeight;
-    this.renderer.setStyle(this.sourceDiv2.nativeElement, 'height', `${this.targetDivHeightofMeetingEnvironmental}px`);
+    // this.targetDivHeightofMeetingEnvironmental = this.targetDiv2.nativeElement.offsetHeight;
+    // this.renderer.setStyle(this.sourceDiv2.nativeElement, 'height', `${this.targetDivHeightofMeetingEnvironmental}px`);
     // this.renderer.setStyle(this.sourceDiv2.nativeElement, 'overflow-y', 'auto');
     this.cdr.detectChanges();
   }
@@ -203,10 +200,10 @@ sectorCountResult(){
       setTimeout(() => {
        
         this.viewSecterTargetedPieChart();
-        this.updateSourceDivHeight();
+        // this.updateSourceDivHeight();
       }, 20);
       
-      this.sdgResults()
+      // this.sdgResults()
       // 
      
     });

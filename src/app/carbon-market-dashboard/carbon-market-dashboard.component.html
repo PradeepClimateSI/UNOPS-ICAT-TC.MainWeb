@@ -107,7 +107,7 @@
 
 
 <div class="row">
-  <div #targetDiv2 class="col-md-7 col-sm-7 col-12">
+  <div  class="col-md-7 col-sm-7 col-12">
       <div class="p-grid p-fluid card m-3">
           <div class="row text-center ">
               <h3>Recent Assessments Done</h3>
@@ -169,16 +169,16 @@
           </div>
       </div>
   </div>
-  <div #sourceDiv2 class="col-md-5 col-sm-5 col-12 d-flex align-items-stretch">
+  <div  class="col-md-5 col-sm-5 col-12 d-flex align-items-stretch">
 
     <div  class="p-grid p-fluid card m-3 ">
       <div class="row text-center ">
           <!-- <h3>Meeting Preconditions</h3> -->
           <h3>Meeting Environmental Integrity Criteria</h3>
-          <div *ngIf="CMPrerequiste && cmloading" [hidden]="CMPrerequiste[0].count==0 && CMPrerequiste[1].count==0" class="col-12  mt-20 ml-10 "  >
+          <div *ngIf="CMPrerequiste" [hidden]="CMPrerequiste[0].count==0 && CMPrerequiste[1].count==0" class="col-12  mt-20 ml-10 "  >
               <canvas id="pieChartCM" >{{pieChartCM}}</canvas>
           </div>
-          <div  *ngIf=" !loading" class="col-12 " [hidden]="loading">
+          <div  *ngIf="CMPrerequiste" class="col-12 " [hidden]="CMPrerequiste[0].count!=0 || CMPrerequiste[1].count!=0">
             <p-messages severity="warn" >
               <ng-template pTemplate>
                   <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
