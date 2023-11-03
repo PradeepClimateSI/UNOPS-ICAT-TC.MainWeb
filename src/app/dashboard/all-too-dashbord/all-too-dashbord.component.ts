@@ -15,7 +15,7 @@ import { HeatMapScore, TableData } from 'app/charts/heat-map/heat-map.component'
 export class AllTooDashbordComponent implements OnInit {
   calResults: any;
 
-  @ViewChild('investmentSDGsPieChart')
+  @ViewChild('investmentSDGsPieChart2')
   canvasRefSDGsPieChart: ElementRef<HTMLCanvasElement>;
 
 
