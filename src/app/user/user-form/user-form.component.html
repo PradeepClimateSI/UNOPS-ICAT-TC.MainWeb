@@ -163,22 +163,22 @@
                 placeholder="+99 999 999-9999" [(ngModel)]="user.landline" [styleClass]="'form-control'" #ftelephone="ngModel"
                 >
               </p-inputMask> -->
-              <input id="ftelephone" type="number" name="ftelephone" class="form-control" [disabled]="editUserId > 0"
+              <input id="ftelephone" type="number" name="ftelephone" class="form-control" [disabled]="editUserId > 0" required
               [(ngModel)]="user.landline" #ftelephone="ngModel" placeholder="+xxxxxxxxx" pattern="^((\\+-?)|0)?[0-9]{5,20}$"
                />
                <p class="info-message text-danger" *ngIf="(ftelephone.errors?.['pattern'])">
                  Invalid Landline number.
         </p>
 
-              <!-- <p
+              <p
                 class="info-message text-danger"
                 *ngIf="
-                  (!user.landline || user.landline!.length < 12) &&
+                  (!user.landline) &&
                   (fLogin.submitted || ftelephone.touched || ftelephone.dirty)
                 "
               >
                 This is a mandatory field
-              </p> -->
+              </p>
               <!-- <p class="info-message text-danger" *ngIf=" user.landline !== undefined &&  user?.landline!.indexOf('_') > 0">
 
                 A valid telephone number is required.
@@ -197,21 +197,21 @@
               <!-- <p-inputMask type="text" name="mobile" mask="+99 99-999-9999" [autoClear]="false"
                 placeholder="+99 999 999-999" [(ngModel)]="user.mobile" [styleClass]="'form-control'"
                 #fmobile="ngModel"></p-inputMask> -->
-                <input id="fmobile" type="number" name="fmobile" class="form-control" [disabled]="editUserId > 0"
+                <input id="fmobile" type="number" name="fmobile" class="form-control" [disabled]="editUserId > 0" required
               [(ngModel)]="user.mobile" #fmobile="ngModel" placeholder="+xxxxxxxxx" pattern="^((\\+-?)|0)?[0-9]{5,20}$"
                />
                <p class="info-message text-danger" *ngIf="(fmobile.errors?.['pattern'])">
                  Invalid Landline number.
         </p>
-              <!-- <p
+              <p
                 class="info-message text-danger"
                 *ngIf="
-                  (!user?.mobile || (user?.mobile)!.length < 12) &&
+                  (!user?.mobile) &&
                   (fLogin.submitted || fmobile.touched || fmobile.dirty)
                 "
               >
                 This is a mandatory field
-              </p> -->
+              </p>
               <!-- <p class="info-message text-danger" *ngIf="
                   user.mobile !== undefined && user?.mobile!.indexOf('_') > 0
                 ">
