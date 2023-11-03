@@ -112,11 +112,16 @@
                         <div class="p-field">
                             <label for="objective">Contact Number*</label>
 
-                            <p-inputMask type="text" name="telephone" mask="+99 99-999-9999" [autoClear]="false"
+                            <!-- <p-inputMask type="text" name="telephone" mask="+99 99-999-9999" [autoClear]="false"
                                 placeholder="+99 999 999-9999" [(ngModel)]="intelephoneNumber"
                                 #telephoneNumber="ngModel" [styleClass]="'form-control'">
-                            </p-inputMask>
-
+                            </p-inputMask> -->
+                            <input id="telephoneNumber" type="number" name="telephone" class="form-control" required 
+                [(ngModel)]="intelephoneNumber" #telephoneNumber="ngModel" placeholder="+xxxxxxxxx" pattern="^((\\+-?)|0)?[0-9]{5,20}$"
+                 />
+                 <p class="info-message text-danger" *ngIf="(telephoneNumber.errors?.['pattern'])">
+                   Invalid mobile number.
+          </p>
                             <p class="info-message text-danger" *ngIf="
               !intelephoneNumber &&
               (fData.submitted || telephoneNumber.touched || telephoneNumber.dirty)
