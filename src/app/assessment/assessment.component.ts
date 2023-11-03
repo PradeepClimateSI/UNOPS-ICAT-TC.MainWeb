@@ -146,7 +146,7 @@ export class AssessmentComponent implements OnInit {
         relativeTo: this.activatedRoute
       });
     } else if (tool === 'CARBON_MARKET') {
-      this.router.navigate(['../carbon-market-tool/result'], {
+      this.router.navigate(['../carbon-market-tool-result'], {
         queryParams: {
           id: assessId
         },

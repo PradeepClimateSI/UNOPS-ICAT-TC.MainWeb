@@ -76,7 +76,7 @@ export class AssessmentInprogressComponent implements OnInit {
 
   detail(assessment: Assessment) {
     if (assessment.tool =="CARBON_MARKET"){
-      this.router.navigate(['app/carbon-market-tool/edit'], {  
+      this.router.navigate(['app/carbon-market-tool-edit'], {  
       queryParams: { id: assessment.id,isEdit:assessment.isDraft},  
       });
     }
