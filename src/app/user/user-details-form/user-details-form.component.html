@@ -134,7 +134,7 @@
         <div class="col-12 col-md-8">
           <div class="p-field">
             <label for="institution">Landline </label>
-            <input
+            <!-- <input
               [disabled]="editUserId > 0"
               type="text"
               name="telephone"
@@ -144,7 +144,13 @@
               [(ngModel)]="user.landline"
               #ftelephone="ngModel"
               
-            >
+            > -->
+            <input id="ftelephone" type="number" name="ftelephone" class="form-control" [disabled]="editUserId > 0"
+            [(ngModel)]="user.landline" #ftelephone="ngModel" placeholder="+xxxxxxxxx" pattern="^((\\+-?)|0)?[0-9]{5,20}$"
+             />
+             <p class="info-message text-danger" *ngIf="(ftelephone.errors?.['pattern'])">
+               Invalid Landline number.
+      </p>
           </div>
         </div>
       </div>
@@ -156,7 +162,7 @@
           <div class="p-field">
             <label for="mobile">Mobile </label>
 
-            <input
+            <!-- <input
             [disabled]="editUserId > 0"
             type="text"
             name="telephone"
@@ -164,9 +170,15 @@
             class="form-control"
             placeholder="+99 999 999-9999"
             [(ngModel)]="user.mobile"
-            #ftelephone="ngModel"
+            #mobile="ngModel"
             
-          >
+          > -->
+          <input id="mobile" type="number" name="mobile" class="form-control" [disabled]="editUserId > 0"
+          [(ngModel)]="user.landline" #mobile="ngModel" placeholder="+xxxxxxxxx" pattern="^((\\+-?)|0)?[0-9]{5,20}$"
+           />
+           <p class="info-message text-danger" *ngIf="(mobile.errors?.['pattern'])">
+             Invalid mobile number.
+    </p>
           </div>
         </div>
       </div>
