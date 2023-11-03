@@ -200,10 +200,10 @@ sectorCountResult(){
       setTimeout(() => {
        
         this.viewSecterTargetedPieChart();
-        // this.updateSourceDivHeight();
+        this.updateSourceDivHeight();
       }, 20);
       
-      // this.sdgResults()
+      this.sdgResults()
       // 
      
     });
