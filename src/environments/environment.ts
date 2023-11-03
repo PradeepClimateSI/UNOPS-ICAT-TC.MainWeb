@@ -14,6 +14,7 @@ export const environment = {
    esbaseUrlAPI: 'http://localhost:7070', 
   // authBaseUrlAPI: 'http://3.108.9.184:7090',
 // authBaseUrlAPI: 'http://localhost:7090',
+// authBaseUrlAPI: 'http://localhost:7090',
   baseUrlAPIDocUploadAPI: 'http://localhost:7080/document/upload2',
   baseUrlJsonFile: 'http://35.154.205.109:3600/filename',
   baseUrlAPIDocUploadAnonymousAPI: 'http://localhost:7080/document/upload2',
