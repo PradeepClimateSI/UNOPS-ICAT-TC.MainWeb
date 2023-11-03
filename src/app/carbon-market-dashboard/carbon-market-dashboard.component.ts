@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Chart, ChartType } from 'chart.js';
 import { AssessmentCMDetailControllerServiceProxy, CMAssessmentAnswerControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CMScoreDto, ClimateAction, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
@@ -17,6 +17,10 @@ import { HeatMapScore, TableData } from 'app/charts/heat-map/heat-map.component'
 export class CarbonMarketDashboardComponent implements OnInit,AfterViewInit {
   @ViewChild('cmSDGsPieChart')
   canvascmRefSDGsPieChart: ElementRef<HTMLCanvasElement>;
+  @ViewChild('sourceDiv', { read: ElementRef }) sourceDiv: ElementRef;
+  @ViewChild('targetDiv', { read: ElementRef }) targetDiv: ElementRef;
+  @ViewChild('sourceDiv2', { read: ElementRef }) sourceDiv2: ElementRef;
+  @ViewChild('targetDiv2', { read: ElementRef }) targetDiv2: ElementRef;
 
 
   @ViewChild('cmSectorCountPieChart')
@@ -25,6 +29,9 @@ export class CarbonMarketDashboardComponent implements OnInit,AfterViewInit {
   @ViewChild('op') op: OverlayPanel;
   heatMapScore: HeatMapScore[];
   heatMapData: TableData[];
+  targetDivHeight: any;
+  targetDivHeightofMeetingEnvironmental: any;
+  cmloading: boolean=false;
 
   constructor(
     // private projectProxy: ProjectControllerServiceProxy,
@@ -33,7 +40,8 @@ export class CarbonMarketDashboardComponent implements OnInit,AfterViewInit {
     private investorProxy: InvestorToolControllerServiceProxy,
     private cmAssessmentQuestionProxy : CMAssessmentQuestionControllerServiceProxy,
     public masterDataService: MasterDataService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private renderer: Renderer2
   ) { 
     // Chart.register(ChartDataLabels)
   }
@@ -110,24 +118,23 @@ CMPrerequiste: {
 
     this.xData = this.masterDataService.xData
     this.yData = this.masterDataService.yData
+    console.log("CMPrerequistepre", this.CMPrerequiste)
     this.assessmentCMProxy.getPrerequisite().subscribe((res:any)=>{
 
       this.CMPrerequiste=res
-      // console.log("CMPrerequiste",res, this.CMPrerequiste[0]?.count, this.CMPrerequiste[1]?.count)
-      setTimeout(() => {
-        this.viewPieChartCM();
-      }, 200);
+      console.log("CMPrerequiste",res, this.CMPrerequiste[0]?.count, this.CMPrerequiste[1]?.count)
+     this.cmloading=true
       
     })
 
-    this.sdgResults();
+    // this.sdgResults();
     this.sectorCountResult();
 
   }
 
   loadgridData = (event: LazyLoadEvent) => {
     console.log('event Date', event);
-    this.loading = true;
+    
     this.totalRecords = 0;
 
     let pageNumber =
@@ -145,10 +152,31 @@ CMPrerequiste: {
     }, err => {
       this.loading = false;});
 
+    setTimeout(() => {
+      this.viewPieChartCM();
+      this.updateSourceDivHeight()
+      
+    }, 200);
+
     // setTimeout(() => {
     // }, 1);
   };
   ngAfterViewInit(): void {
+    this.cdr.detectChanges();
+    // this.updateSourceDivHeight();
+  }
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {
+    this.updateSourceDivHeight();
+  }
+
+  updateSourceDivHeight(): void {
+    this.targetDivHeight = this.targetDiv.nativeElement.offsetHeight;
+    this.renderer.setStyle(this.sourceDiv.nativeElement, 'height', `${this.targetDivHeight}px`);
+    this.renderer.setStyle(this.sourceDiv.nativeElement, 'overflow-y', 'auto');
+    this.targetDivHeightofMeetingEnvironmental = this.targetDiv2.nativeElement.offsetHeight;
+    this.renderer.setStyle(this.sourceDiv2.nativeElement, 'height', `${this.targetDivHeightofMeetingEnvironmental}px`);
+    // this.renderer.setStyle(this.sourceDiv2.nativeElement, 'overflow-y', 'auto');
     this.cdr.detectChanges();
   }
 
@@ -159,8 +187,10 @@ CMPrerequiste: {
       this.sdgDetailsList = res;
       setTimeout(() => {
         this.viewFrequencyofSDGsChart();
+        
       }, 200);
      });
+    
 
   
    
@@ -173,7 +203,11 @@ sectorCountResult(){
       setTimeout(() => {
        
         this.viewSecterTargetedPieChart();
-      }, 200);
+        this.updateSourceDivHeight();
+      }, 20);
+      
+      this.sdgResults()
+      // 
      
     });
 
@@ -226,8 +260,18 @@ sectorCountResult(){
             'rgba(123, 122, 125, 1)',
             'rgba(255, 99, 132, 1)',
             'rgba(255, 205, 86, 1)',
-            'rgba(255, 99, 132, 1)',
-
+            'rgba(70, 51, 102, 1)',
+            'rgba(40, 102, 102, 1)',
+            'rgba(27, 74, 107, 1)',
+            'rgba(75, 74, 77, 1)',
+            'rgba(121, 27, 53, 1)',
+            'rgba(121, 98, 20, 1)',
+            'rgba(51, 0, 51, 1)',
+            'rgba(25, 25, 112, 1)',
+            'rgba(139, 0, 0, 1)',
+            'rgba(0, 0, 139, 1)',
+            'rgba(47, 79, 79, 1)',
+            'rgba(139, 69, 19, 1)'
           ],
          
         }]
@@ -239,7 +283,7 @@ sectorCountResult(){
           legend:{
             position: 'bottom',
             labels: {
-              padding: 20
+              // padding: 20
             }
           },
           datalabels: {
@@ -351,6 +395,7 @@ sectorCountResult(){
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        
         plugins:{
           legend:{
             position: 'bottom',
@@ -362,6 +407,7 @@ sectorCountResult(){
             color: '#fff',
             font: {
               size: 12
+              
             },
             formatter: (value, ctx) => {
               const label = ctx.chart.data.labels![ctx.dataIndex];

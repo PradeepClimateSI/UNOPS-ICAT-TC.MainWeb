@@ -617,7 +617,6 @@ console.log("itemmmm", item)
 
   }
   async saveDraft(category:any,processDraftLocation:string,type:string){
-
     let finalArray = this.processData.concat(this.outcomeData)
     if(this.isEditMode ==true){
       this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
@@ -796,7 +795,7 @@ console.log("itemmmm", item)
       if(item.categoryID == 5 || item.categoryID ==7 || item.categoryID ==9 || item.categoryID ==10){
 
         for(let item2 of item.data){
-          if(item2.justification == null || item2.justification === ""){
+          if(item2.justification == null || item2.justification === "" || item2.score == null || item2.score == undefined){
             this.messageService.add({
               severity: 'error',
               summary: 'Warning',
@@ -812,7 +811,7 @@ console.log("itemmmm", item)
     
     for(let item of this.sdgDataSendArray2){
       for(let item2 of item.data){
-        if(item2.justification == null || item2.justification === ""){
+        if(item2.justification == null || item2.justification === ""|| item2.score == null || item2.score == undefined){
           this.messageService.add({
             severity: 'error',
             summary: 'Warning',
@@ -827,7 +826,7 @@ console.log("itemmmm", item)
 
     for(let item of this.sdgDataSendArray4){
       for(let item2 of item.data){
-        if(item2.justification == null || item2.justification === ""){
+        if(item2.justification == null || item2.justification === "" || item2.score == null || item2.score == undefined){
           this.messageService.add({
             severity: 'error',
             summary: 'Warning',
@@ -1056,7 +1055,8 @@ console.log("itemmmm", item)
       // )||
        (investorAssessment.relavance == 0))?.length === data?.data?.length && type=='process')||
       (data?.data.filter(investorAssessment => 
-        (investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '') 
+        ((investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '')&&
+         (investorAssessment.score !== undefined && investorAssessment.score !== null )) 
        )?.length === data?.data.length && type=='outcome')||
       (data?.data.filter(sdg => 
         (sdg.data?.filter((data: { justification: undefined; } ) =>
@@ -1110,8 +1110,11 @@ console.log("itemmmm", item)
     console.log("category",this.isValidSCaleSD,this.isValidSustainedSD)
     // this.isValidSustainedSD = false
     if((data?.filter(sdg => 
-        (sdg.data?.filter((data: { justification: undefined; } ) =>
-           (data.justification!== undefined && data.justification !== null && data.justification !== ''))?.length === (sdg.data?.length)
+        (sdg.data?.filter((data: {
+          score: undefined; justification: undefined; 
+            } ) =>
+           (data.justification!== undefined && data.justification !== null && data.justification !== '') &&
+           (data.score !== undefined && data.score !== null))?.length === (sdg.data?.length)
         ))?.length === data?.length )) {
           // data.isValidated = true;
           this.isValidSCaleSD=true
