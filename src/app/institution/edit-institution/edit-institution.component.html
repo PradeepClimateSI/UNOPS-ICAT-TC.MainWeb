@@ -91,11 +91,8 @@
                                 [(ngModel)]="institution.telephoneNumber" [styleClass]="'form-control'"
                                 [autoClear]="false"> -->
                                 <input id="telephoneNumber" type="number" name="telephoneNumber" class="form-control" required 
-                                [(ngModel)]="institution.telephoneNumber" #telephoneNumber="ngModel" placeholder="+xxxxxxxxx" pattern="^((\\+-?)|0)?[0-9]{5,20}$"
+                                [(ngModel)]="institution.telephoneNumber" #telephoneNumber="ngModel" placeholder="+xxxxxxxxx" 
                                  />
-                                 <p class="info-message text-danger" *ngIf="(telephoneNumber.errors?.['pattern'])">
-                                   Invalid mobile number.
-                          </p>
                                 <p class="info-message text-danger" *ngIf="
                 !institution.telephoneNumber &&
                 (fData.submitted || telephoneNumber.touched || telephoneNumber.dirty)
