@@ -164,11 +164,8 @@
                 >
               </p-inputMask> -->
               <input id="ftelephone" type="number" name="ftelephone" class="form-control" [disabled]="editUserId > 0" required
-              [(ngModel)]="user.landline" #ftelephone="ngModel" placeholder="+xxxxxxxxx" pattern="^((\\+-?)|0)?[0-9]{5,20}$"
+              [(ngModel)]="user.landline" #ftelephone="ngModel" placeholder="+xxxxxxxxx" 
                />
-               <p class="info-message text-danger" *ngIf="(ftelephone.errors?.['pattern'])">
-                 Invalid Landline number.
-        </p>
 
               <p
                 class="info-message text-danger"
@@ -198,11 +195,8 @@
                 placeholder="+99 999 999-999" [(ngModel)]="user.mobile" [styleClass]="'form-control'"
                 #fmobile="ngModel"></p-inputMask> -->
                 <input id="fmobile" type="number" name="fmobile" class="form-control" [disabled]="editUserId > 0" required
-              [(ngModel)]="user.mobile" #fmobile="ngModel" placeholder="+xxxxxxxxx" pattern="^((\\+-?)|0)?[0-9]{5,20}$"
+              [(ngModel)]="user.mobile" #fmobile="ngModel" placeholder="+xxxxxxxxx" 
                />
-               <p class="info-message text-danger" *ngIf="(fmobile.errors?.['pattern'])">
-                 Invalid Landline number.
-        </p>
               <p
                 class="info-message text-danger"
                 *ngIf="
