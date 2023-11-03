@@ -107,7 +107,7 @@
 
 
 <div class="row">
-  <div class="col-md-7 col-12">
+  <div #targetDiv2 class="col-md-7 col-sm-7 col-12">
       <div class="p-grid p-fluid card m-3">
           <div class="row text-center ">
               <h3>Recent Assessments Done</h3>
@@ -169,16 +169,16 @@
           </div>
       </div>
   </div>
-  <div class="col-md-5 col-12 d-flex align-items-stretch">
+  <div #sourceDiv2 class="col-md-5 col-sm-5 col-12 d-flex align-items-stretch">
 
-    <div class="p-grid p-fluid card m-3 ">
+    <div  class="p-grid p-fluid card m-3 ">
       <div class="row text-center ">
           <!-- <h3>Meeting Preconditions</h3> -->
           <h3>Meeting Environmental Integrity Criteria</h3>
-          <div *ngIf="CMPrerequiste" [hidden]="CMPrerequiste[0].count==0 && CMPrerequiste[1].count==0" class="col-12  mt-20 ml-10 chart-container"  >
-              <canvas  id="pieChartCM" >{{pieChartCM}}</canvas>
+          <div *ngIf="CMPrerequiste && cmloading" [hidden]="CMPrerequiste[0].count==0 && CMPrerequiste[1].count==0" class="col-12  mt-20 ml-10 "  >
+              <canvas id="pieChartCM" >{{pieChartCM}}</canvas>
           </div>
-          <div  *ngIf="CMPrerequiste" class="col-12 " [hidden]="CMPrerequiste[0].count!=0 || CMPrerequiste[1].count!=0">
+          <div  *ngIf=" !loading" class="col-12 " [hidden]="loading">
             <p-messages severity="warn" >
               <ng-template pTemplate>
                   <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
@@ -259,17 +259,12 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-md-6 col-12 d-flex align-items-stretch">
-    <div  class="p-grid p-fluid card m-3">
-      <div style="position: relative; height:100%;" class="row text-center">
-        <!-- <h3>Frequency of SDGs</h3> -->
+  <div class="col-md-6 col-sm-6 col-12 d-flex align-items-stretch">
+    <div #sourceDiv class="p-grid p-fluid card m-3 " >
+      <div  class="row text-center">
         <h3>SDGs impacted by the assessed interventions</h3>
-        <div
-          *ngIf="sdgDetailsList.length != 0"
-          class="col-12 mt-20"
-         
-        >
-          <canvas  #cmSDGsPieChart>{{ cmPieChartSDG }}</canvas>
+        <div class="mt-20 ml-10 " *ngIf="sdgDetailsList.length != 0">
+          <canvas  height="450" #cmSDGsPieChart></canvas>
         </div>
       </div>
       <div
@@ -287,8 +282,8 @@
       </div>
     </div>
   </div>
-  <div class="col-md-6 col-12 d-flex align-items-stretch">
-    <div class="p-grid p-fluid card m-3">
+  <div  class="col-md-6 col-sm-6 col-12 d-flex align-items-stretch" >
+    <div #targetDiv class="p-grid p-fluid card m-3">
       <div class="row text-center">
         <!-- <h3>Sectors Targeted</h3> -->
         <h3>Sectors represented</h3>
