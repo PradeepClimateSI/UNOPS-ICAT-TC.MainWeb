@@ -4,16 +4,16 @@
 
 export const environment = {
   production: true,
-  baseUrlAPI: 'http://15.206.202.183/web-api',
+  baseUrlAPI: 'https://icat-tc-tool.climatesi.com/web-api',
   esbaseUrlAPI: 'http://15.206.202.183:7090',
-  authBaseUrlAPI: 'http://15.206.202.183/auth-api',
-  baseUrlAPIDocUploadAPI: 'http://15.206.202.183/web-api/document/upload2',
+  authBaseUrlAPI: 'https://icat-tc-tool.climatesi.com/auth-api',
+  baseUrlAPIDocUploadAPI: 'https://icat-tc-tool.climatesi.com/web-api/document/upload2',
   
-  baseUrlAuditlog :  'http://15.206.202.183/audit-api',
+  baseUrlAuditlog :  'https://icat-tc-tool.climatesi.com/audit-api',
   baseUrlJsonFile: 'http://15.206.202.183:3600/filename',
-  baseUrlAPIDocUploadAnonymousAPI: 'http://15.206.202.183/web-api/document/upload2',
-  baseUrlExcelUpload:  'http://15.206.202.183/web-api/parameter/upload',
-  baseUrlPMU: 'http://15.206.202.183/pmu/login',
+  baseUrlAPIDocUploadAnonymousAPI: 'https://icat-tc-tool.climatesi.com/web-api/document/upload2',
+  baseUrlExcelUpload:  'https://icat-tc-tool.climatesi.com/web-api/parameter/upload',
+  baseUrlPMU: 'https://icat-tc-tool.climatesi.com/pmu/login',
 };
 // baseUrlAPI: 'http://3.110.188.89:7080',
 /*
