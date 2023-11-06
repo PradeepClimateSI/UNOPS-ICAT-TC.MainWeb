@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { HeatMapScore, TableData } from 'app/charts/heat-map/heat-map.component';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { Chart, ChartType } from 'chart.js';
@@ -12,7 +12,7 @@ import { Assessment, InvestorToolControllerServiceProxy, MethodologyAssessmentCo
   templateUrl: './portfolio-dashboard.component.html',
   styleUrls: ['./portfolio-dashboard.component.css']
 })
-export class PortfolioDashboardComponent implements OnInit {
+export class PortfolioDashboardComponent implements OnInit,AfterViewInit {
   loading: boolean;
   totalRecords: number;
   heatMapScore: HeatMapScore[];
@@ -23,7 +23,9 @@ export class PortfolioDashboardComponent implements OnInit {
     private methassess: MethodologyAssessmentControllerServiceProxy,
     private investorProxy: InvestorToolControllerServiceProxy,
     private portfolioServiceProxy : PortfolioControllerServiceProxy,
-    public masterDataService: MasterDataService
+    public masterDataService: MasterDataService,
+    private cdr: ChangeDetectorRef,
+    private renderer: Renderer2
   ) {
     this.test= [{data: 'AAA', x:2,y:3}, {data: 'BBB', x:3,y:3},{data: 'CCC', x:4,y:4}]
   }
@@ -38,7 +40,10 @@ export class PortfolioDashboardComponent implements OnInit {
   @ViewChild('portfolioSectorCountPieChart')
   canvasRefSectorCountPieChart: ElementRef<HTMLCanvasElement>;
   @ViewChild('op') op: OverlayPanel;
-
+  @ViewChild('sourceDiv', { read: ElementRef }) sourceDiv: ElementRef;
+  @ViewChild('targetDiv', { read: ElementRef }) targetDiv: ElementRef;
+  @ViewChild('targetDiv2', { read: ElementRef }) targetDiv2: ElementRef;
+  targetDivHeight: any;
   tableData:any[]=[]
   pointTableDatas:Assessment[]=[]
   chart: Chart;
@@ -101,8 +106,36 @@ export class PortfolioDashboardComponent implements OnInit {
     
 
      this.getSectorCount(this.tool);
-     this.sdgResults()
+    //  this.sdgResults()
   
+  }
+  ngAfterViewInit(): void {
+    this.cdr.detectChanges();
+    // this.updateSourceDivHeight();
+  }
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {
+    this.updateSourceDivHeight();
+  }
+  updateSourceDivHeight(): void {
+    // console.log(".....",this.barChartData)
+    if(this.barChartData.length==0){
+      console.log(".....",this.barChartData)
+      this.targetDivHeight = this.targetDiv.nativeElement.offsetHeight;
+      this.renderer.setStyle(this.canvasRefSDGsPieChart.nativeElement, 'height', `400px`);
+      this.renderer.setStyle(this.sourceDiv.nativeElement, 'height', `${this.targetDivHeight}px`);
+      this.renderer.setStyle(this.sourceDiv.nativeElement, 'overflow-y', 'auto');
+      this.cdr.detectChanges();
+    }
+    else{
+      let newHeight = 250;
+      // console.log(".....",this.barChartData)
+      this.renderer.setStyle(this.canvasRefSDGsPieChart.nativeElement, 'height', `${newHeight}px`);
+      
+      // this.renderer.setStyle(this.sourceDiv.nativeElement, 'height', `${this.targetDivHeight}px`);
+      // this.renderer.setStyle(this.sourceDiv.nativeElement, 'overflow-y', 'auto');
+    }
+   
   }
 
 
@@ -125,8 +158,8 @@ this.selectPortfolio();
     event.first = 0;
     this.loadgridData(event);
 
-
-   this.sdgResults()
+    
+   
    if(this.selectedPortfolio){
     this.portfolioServiceProxy.assessmentsDataByAssessmentId(this.selectedPortfolio?this.selectedPortfolio.id:0).subscribe(async (res: any) => {
       console.log("arrayyy : ", res)
@@ -134,6 +167,8 @@ this.selectPortfolio();
       this.barChartData=res;
       setTimeout(() => {
       this.viewPortfolioBarChart();
+      this.updateSourceDivHeight()
+   this.sdgResults()
     },300)
    
 
@@ -173,8 +208,10 @@ this.selectPortfolio();
    
       setTimeout(() => {
         this.viewPortfolioSectorCountPieChart();
-     
-      },100)
+        this.updateSourceDivHeight();
+      }, 20);
+      
+      this.sdgResults()
      
      
     });
@@ -285,19 +322,24 @@ this.selectPortfolio();
           datasets: [{
             data: counts,
             backgroundColor: [
-              'rgb(250,227,114)',
-              'rgb(51,51,51)',
-              'rgb(0,170,187)',
-              'rgb(227,120,42)',
-              'rgb(150,131,141)',
-              'rgb(42,61,227)',
               'rgba(153, 102, 255, 1)',
               'rgba(75, 192, 192,1)',
               'rgba(54, 162, 235, 1)',
               'rgba(123, 122, 125, 1)',
               'rgba(255, 99, 132, 1)',
               'rgba(255, 205, 86, 1)',
-              'rgba(255, 99, 132, 1)',
+              'rgba(70, 51, 102, 1)',
+              'rgba(40, 102, 102, 1)',
+              'rgba(27, 74, 107, 1)',
+              'rgba(75, 74, 77, 1)',
+              'rgba(121, 27, 53, 1)',
+              'rgba(121, 98, 20, 1)',
+              'rgba(51, 0, 51, 1)',
+              'rgba(25, 25, 112, 1)',
+              'rgba(139, 0, 0, 1)',
+              'rgba(0, 0, 139, 1)',
+              'rgba(47, 79, 79, 1)',
+              'rgba(139, 69, 19, 1)'
 
             ],
 

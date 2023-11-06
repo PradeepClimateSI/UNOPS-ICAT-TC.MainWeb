@@ -14,7 +14,6 @@
       paginatorDropdownAppendTo="body"
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
       [rowsPerPageOptions]="[ 5, 10, 20]"
-      [loading]="loading"
       [responsive]="true"
       >
         <ng-template pTemplate="header">
@@ -88,22 +87,20 @@
 </div>
 <div class="row">
   <div class="col-md-6 col-12 d-flex align-items-stretch">
-    <div  class="p-grid p-fluid card m-3">
-      <div style="position: relative; height:100%;" class="row text-center">
+    <div #sourceDiv  class="p-grid p-fluid card m-3">
+      <div  class="row text-center">
         <!-- <h3>Frequency of SDGs</h3> -->
         <h3>SDGs impacted by the assessed interventions</h3>
         <div
-          *ngIf="sdgDetailsList"
+        *ngIf="sdgDetailsList.length != 0"
           class="col-12 mt-20"
-          [hidden]="sdgDetailsList.length == 0"
         >
-          <canvas  #investmentSDGsPieChart>{{ pieChart1 }}</canvas>
+          <canvas height="450"  #investmentSDGsPieChart>{{ pieChart1 }}</canvas>
         </div>
       </div>
       <div
-        *ngIf="sdgDetailsList"
+      *ngIf="sdgDetailsList.length == 0"
         class="col-12"
-        [hidden]="sdgDetailsList.length != 0"
       >
         <p-messages severity="warn">
           <ng-template pTemplate>
@@ -116,7 +113,7 @@
     </div>
   </div>
   <div class="col-md-6 col-12 d-flex align-items-stretch">
-    <div class="p-grid p-fluid card m-3">
+    <div #targetDiv class="p-grid p-fluid card m-3">
       <div class="row text-center">
         <!-- <h3>Sectors Targeted</h3> -->
         <h3>Sectors represented</h3>

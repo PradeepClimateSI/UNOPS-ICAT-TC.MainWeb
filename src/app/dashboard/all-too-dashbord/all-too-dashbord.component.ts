@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { LazyLoadEvent } from 'primeng/api';
@@ -12,12 +12,14 @@ import { HeatMapScore, TableData } from 'app/charts/heat-map/heat-map.component'
   templateUrl: './all-too-dashbord.component.html',
   styleUrls: ['./all-too-dashbord.component.css']
 })
-export class AllTooDashbordComponent implements OnInit {
+export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
   calResults: any;
 
-  @ViewChild('investmentSDGsPieChart')
+  @ViewChild('investmentSDGsPieChart2')
   canvasRefSDGsPieChart: ElementRef<HTMLCanvasElement>;
-
+  @ViewChild('sourceDiv', { read: ElementRef }) sourceDiv: ElementRef;
+  @ViewChild('targetDiv', { read: ElementRef }) targetDiv: ElementRef;
+  targetDivHeight: any;
 
   @ViewChild('investmentSectorCountPieChart')
   canvasRefSectorCountPieChart: ElementRef<HTMLCanvasElement>;
@@ -46,11 +48,13 @@ export class AllTooDashbordComponent implements OnInit {
 
   constructor(
     private investorProxy: InvestorToolControllerServiceProxy,
-    public masterDataService: MasterDataService
+    public masterDataService: MasterDataService,
+    private cdr: ChangeDetectorRef,
+    private renderer: Renderer2
   ) {
   }
   ngOnInit(): void {
-    let tool = 'All Option'
+    // let tool = 'All Option'
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
     this.userRole = tokenPayload.role.code;
@@ -58,21 +62,53 @@ export class AllTooDashbordComponent implements OnInit {
 
     this.xData = this.masterDataService.xData
     this.yData = this.masterDataService.yData
+    // this.investorProxy.findSectorCount(tool).subscribe((res: any) => {
+    //   this.sectorCount = res;
+    //   setTimeout(() => {
+
+    //     this.viewSecterTargetedPieChart();
+    //   }, 100);
+
+    // });
+    let event: any = {};
+    event.rows = this.rows;
+    event.first = 0;
+    this.loadgridData(event);
+    // this.sdgResults();
+    this.sectorCountResult();
+
+  }
+  ngAfterViewInit(): void {
+    this.cdr.detectChanges();
+    // this.updateSourceDivHeight();
+  }
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {
+    this.updateSourceDivHeight();
+  }
+  updateSourceDivHeight(): void {
+    this.targetDivHeight = this.targetDiv.nativeElement.offsetHeight;
+    this.renderer.setStyle(this.sourceDiv.nativeElement, 'height', `${this.targetDivHeight}px`);
+    this.renderer.setStyle(this.sourceDiv.nativeElement, 'overflow-y', 'auto');
+    // this.targetDivHeightofMeetingEnvironmental = this.targetDiv2.nativeElement.offsetHeight;
+    // this.renderer.setStyle(this.sourceDiv2.nativeElement, 'height', `${this.targetDivHeightofMeetingEnvironmental}px`);
+    // this.renderer.setStyle(this.sourceDiv2.nativeElement, 'overflow-y', 'auto');
+    this.cdr.detectChanges();
+  }
+  sectorCountResult(){
+    let tool = 'All Option'
     this.investorProxy.findSectorCount(tool).subscribe((res: any) => {
       this.sectorCount = res;
       setTimeout(() => {
 
         this.viewSecterTargetedPieChart();
-      }, 100);
+        this.updateSourceDivHeight();
+      }, 20);
+      this.sdgResults()
 
     });
-    let event: any = {};
-    event.rows = this.rows;
-    event.first = 0;
-    this.loadgridData(event);
-    this.sdgResults();
+   }
 
-  }
 
   viewSecterTargetedPieChart() {
     const labels = this.sectorCount.map((item) => item.sector);
@@ -286,7 +322,10 @@ export class AllTooDashbordComponent implements OnInit {
     this.sdgDetailsList = []
     this.investorProxy.sdgSumAllCalculate().subscribe(async (res: any) => {
       this.sdgDetailsList = res;
-      this.viewFrequencyofSDGsChart();
+      setTimeout(() => {
+        this.viewFrequencyofSDGsChart();
+        
+      }, 200);
     });
   }
 
@@ -324,13 +363,24 @@ export class AllTooDashbordComponent implements OnInit {
           datasets: [{
             data: counts,
             backgroundColor: [
-              'rgba(153, 102, 255, 1)',
-              'rgba(75, 192, 192,1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(123, 122, 125, 1)',
-              'rgba(255, 99, 132, 1)',
-              'rgba(255, 205, 86, 1)',
-              'rgba(255, 99, 132, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(75, 192, 192,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(123, 122, 125, 1)',
+            'rgba(255, 99, 132, 1)',
+            'rgba(255, 205, 86, 1)',
+            'rgba(70, 51, 102, 1)',
+            'rgba(40, 102, 102, 1)',
+            'rgba(27, 74, 107, 1)',
+            'rgba(75, 74, 77, 1)',
+            'rgba(121, 27, 53, 1)',
+            'rgba(121, 98, 20, 1)',
+            'rgba(51, 0, 51, 1)',
+            'rgba(25, 25, 112, 1)',
+            'rgba(139, 0, 0, 1)',
+            'rgba(0, 0, 139, 1)',
+            'rgba(47, 79, 79, 1)',
+            'rgba(139, 69, 19, 1)'
 
             ],
 

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit ,ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit ,Renderer2,ViewChild } from '@angular/core';
 import { Chart, ChartType, registerables } from 'chart.js';
 import { Assessment, AssessmentCMDetailControllerServiceProxy, ClimateAction, InvestorToolControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
@@ -15,16 +15,17 @@ import { HeatMapScore, TableData } from 'app/charts/heat-map/heat-map.component'
   templateUrl: './investment-dashboard.component.html',
   styleUrls: ['./investment-dashboard.component.css','../portfolio-dashboard/portfolio-dashboard.component.css']
 })
-export class InvestmentDashboardComponent implements OnInit {
-  canvas: any;
-  ctx: any;
+export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
+  // canvas: any;
+  // ctx: any;
  
 
 
   @ViewChild('investmentSDGsPieChart')
   canvasRefSDGsPieChart: ElementRef<HTMLCanvasElement>;
-
-
+  @ViewChild('sourceDiv', { read: ElementRef }) sourceDiv: ElementRef;
+  @ViewChild('targetDiv', { read: ElementRef }) targetDiv: ElementRef;
+  targetDivHeight: any;
   @ViewChild('investmentSectorCountPieChart')
   canvasRefSectorCountPieChart: ElementRef<HTMLCanvasElement>;
   
@@ -81,7 +82,9 @@ export class InvestmentDashboardComponent implements OnInit {
     private projectProxy: ProjectControllerServiceProxy,
     private investorProxy: InvestorToolControllerServiceProxy,
     private assessmentCMProxy:AssessmentCMDetailControllerServiceProxy,
-    public masterDataService: MasterDataService
+    public masterDataService: MasterDataService,
+    private cdr: ChangeDetectorRef,
+    private renderer: Renderer2
   ) {
     Chart.register(...registerables);
   
@@ -89,7 +92,7 @@ export class InvestmentDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.averageTCValue =75
-    let tool ='INVESTOR'
+    // let tool ='INVESTOR'
 
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
@@ -97,30 +100,23 @@ export class InvestmentDashboardComponent implements OnInit {
   
     this.xData = this.masterDataService.xData
     this.yData = this.masterDataService.yData
-    this.investorProxy.findSectorCount(tool).subscribe((res: any) => {
-      this.sectorCount = res
-      console.log("sectorcount",this.sectorCount)
-      setTimeout(() => {
-       
-        this.viewSecterTargetedPieChart();
-      }, 100);
-     
-    });
+    
     
 
-    this.investorProxy.calculateAssessmentResults(tool).subscribe((res: any) => {
-      this.calResults = res[0]
-      console.log("assessdetails",this.calResults)
-      const RecentInterventions = this.calResults.slice(0,10);
-      this.recentResult = RecentInterventions
+    // this.investorProxy.calculateAssessmentResults(tool).subscribe((res: any) => {
+    //   this.calResults = res[0]
+    //   console.log("assessdetails",this.calResults)
+    //   const RecentInterventions = this.calResults.slice(0,10);
+    //   this.recentResult = RecentInterventions
 
 
-    });
+    // });
     let event: any = {};
     event.rows = this.rows;
     event.first = 0;
     this.loadgridData(event);
-    this.sdgResults();
+    this.sectorCountResult();
+    // this.sdgResults();
 
   }
   loadgridData = (event: LazyLoadEvent) => {
@@ -145,12 +141,56 @@ export class InvestmentDashboardComponent implements OnInit {
 
   
   };
+  ngAfterViewInit(): void {
+    this.cdr.detectChanges();
+    // this.updateSourceDivHeight();
+  }
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {
+    this.updateSourceDivHeight();
+  }
+
+  updateSourceDivHeight(): void {
+    this.targetDivHeight = this.targetDiv.nativeElement.offsetHeight;
+    this.renderer.setStyle(this.sourceDiv.nativeElement, 'height', `${this.targetDivHeight}px`);
+    this.renderer.setStyle(this.sourceDiv.nativeElement, 'overflow-y', 'auto');
+    // this.targetDivHeightofMeetingEnvironmental = this.targetDiv2.nativeElement.offsetHeight;
+    // this.renderer.setStyle(this.sourceDiv2.nativeElement, 'height', `${this.targetDivHeightofMeetingEnvironmental}px`);
+    // this.renderer.setStyle(this.sourceDiv2.nativeElement, 'overflow-y', 'auto');
+    this.cdr.detectChanges();
+  }
+
+  sectorCountResult(){
+    let tool ='INVESTOR'
+    this.investorProxy.findSectorCount(tool).subscribe((res: any) => {
+      this.sectorCount = res
+      console.log("sectorcount",this.sectorCount)
+      setTimeout(() => {
+       
+        this.viewSecterTargetedPieChart();
+        this.updateSourceDivHeight();
+      }, 20);
+      this.sdgResults()
+      // 
+     
+    });
+       // this.sectorCount=[{sector:'test1',count:23},
+       // {sector:'test2',count:10}]
+     
+       // setTimeout(() => {
+       //   this.viewSecterTargetedPieChart();
+       // }, 200);
+   }
   sdgResults(){
     this.sdgDetailsList=[]
     this.investorProxy.sdgSumCalculate('INVESTOR').subscribe(async (res: any) => {
       console.log("sdgDetailsList : ", res)
       this.sdgDetailsList = res;
-     this.viewFrequencyofSDGsChart();
+      setTimeout(() => {
+        this.viewFrequencyofSDGsChart();
+        
+      }, 200);
+    //  this.viewFrequencyofSDGsChart();
      });
   }
 
@@ -196,7 +236,18 @@ export class InvestmentDashboardComponent implements OnInit {
             'rgba(123, 122, 125, 1)',
             'rgba(255, 99, 132, 1)',
             'rgba(255, 205, 86, 1)',
-            'rgba(255, 99, 132, 1)',
+            'rgba(70, 51, 102, 1)',
+            'rgba(40, 102, 102, 1)',
+            'rgba(27, 74, 107, 1)',
+            'rgba(75, 74, 77, 1)',
+            'rgba(121, 27, 53, 1)',
+            'rgba(121, 98, 20, 1)',
+            'rgba(51, 0, 51, 1)',
+            'rgba(25, 25, 112, 1)',
+            'rgba(139, 0, 0, 1)',
+            'rgba(0, 0, 139, 1)',
+            'rgba(47, 79, 79, 1)',
+            'rgba(139, 69, 19, 1)'
 
           ],
          
@@ -392,9 +443,6 @@ export class InvestmentDashboardComponent implements OnInit {
     }
     return colors;
   }
-  ngAfterViewInit() {
-
-}
  getBackgroundColor(value: number): string {
     switch (value) {
       case -3:

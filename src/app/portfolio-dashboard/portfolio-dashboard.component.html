@@ -149,7 +149,7 @@
 </div> -->
 <div class="row" >
   <div *ngIf="selectedPortfolio" class="col-md-6 col-12 d-flex align-items-stretch">
-    <div class="p-grid p-fluid card m-3">
+    <div  #targetDiv2 class="p-grid p-fluid card m-3">
       <div class="row text-center ">
         <h3>Expected GHG reductions over intervention lifetime of portfolios</h3>
         <div class="col-12  mt-20 "  >
@@ -160,8 +160,8 @@
     </div>
 </div>
   <div class="col-md-6 col-12 d-flex align-items-stretch">
-    <div class="p-grid p-fluid card m-3" >
-      <div class="row text-center" style="min-height: 350px;">
+    <div  #sourceDiv class="p-grid p-fluid card m-3" >
+      <div class="row text-center" >
         <!-- <h3>Frequency of SDGs</h3> -->
         <h3>SDGs impacted by the assessed interventions</h3>
         <div
@@ -169,7 +169,7 @@
           class="col-12 mt-20"
           [hidden]="sdgDetailsList.length == 0"
         >
-          <canvas #portfolioSDGsPieChart>{{ portfolioSDGsPieChart }}</canvas>
+          <canvas height="400" #portfolioSDGsPieChart >{{ portfolioSDGsPieChart }}</canvas>
         </div>
       </div>
       <div
@@ -188,7 +188,7 @@
     </div>
   </div>
   <div *ngIf="!selectedPortfolio" class="col-md-6 col-12 d-flex align-items-stretch">
-    <div class="p-grid p-fluid card m-3">
+    <div #targetDiv class="p-grid p-fluid card m-3">
       <div class="row text-center">
         <!-- <h3>Sectors Targeted</h3> -->
         <h3>Sectors represented</h3>
