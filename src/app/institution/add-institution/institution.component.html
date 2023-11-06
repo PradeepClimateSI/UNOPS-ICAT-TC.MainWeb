@@ -91,7 +91,7 @@
                     <div class="col-12 col-md-6">
                         <div class="p-field">
                             <label for="emailin">Email*</label>
-                            <input [disabled]="institutionId > 0" pattern="[\w-\.]+@([\w-]+\.)+[\w-]{1,30}$" type="text"
+                            <input [disabled]="institutionId > 0"  type="number"
                                 maxlength="30" placeholder="Email" name="email" #emailin="ngModel" class="p-inputtext"
                                 pInputText [(ngModel)]="inmail" required />
 
