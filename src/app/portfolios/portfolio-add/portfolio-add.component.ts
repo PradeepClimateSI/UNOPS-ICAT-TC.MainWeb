@@ -128,11 +128,11 @@ export class PortfolioAddComponent implements OnInit {
 
     data.portfolioId = this.portfolio.portfolioId
 
-    if(this.selectedValues.length < 1){
+    if(this.selectedValues.length < 2){
       this.messageService.add({
         severity: 'error',
         summary: 'Warning',
-        detail: 'Please select at least one assessment',
+        detail: 'Please select at least two assessments',
         closable: true,
       })
       return

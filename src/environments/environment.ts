@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
   
- // baseUrlAPI: 'http://15.206.202.183/web-api',
-  baseUrlPMU: 'http://15.206.202.183/pmu/login',
+ // baseUrlAPI: 'https://icat-tc-tool.climatesi.com/web-api',
+  baseUrlPMU: 'https://icat-tc-tool.climatesi.com/pmu/login',
  // esbaseUrlAPI: 'http://15.206.202.183:7090',
     //  authBaseUrlAPI: 'http://15.206.202.183/auth-api',
     // baseUrlAPI: 'http://15.206.202.183/web-api',

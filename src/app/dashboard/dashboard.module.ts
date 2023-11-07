@@ -199,14 +199,14 @@ const routes: Routes = [
     data: {}
   },
   {
-    path: 'carbon-market-tool/edit',
+    path: 'carbon-market-tool-edit',
     component: CarbonMarketAssessmentComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}
   },
   {
-    path: 'carbon-market-tool/result',
+    path: 'carbon-market-tool-result',
     component: CmResultComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],

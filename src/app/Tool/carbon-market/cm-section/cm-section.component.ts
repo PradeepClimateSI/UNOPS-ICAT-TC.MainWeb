@@ -309,11 +309,11 @@ export class CmSectionComponent implements OnInit {
           if (event.isDraft) {
             this.isEditMode = true
             this.setInitialState()
-            this.router.navigate(['../carbon-market-tool/edit'], { queryParams: { id: this.assessment.id, isEdit: true }, relativeTo: this.activatedRoute });
+            this.router.navigate(['../carbon-market-tool-edit'], { queryParams: { id: this.assessment.id, isEdit: true }, relativeTo: this.activatedRoute });
             // window.location.reload()
           }
           if (result.assessment.assessment_approach === 'DIRECT' && !event.isDraft) {
-            this.router.navigate(['../carbon-market-tool/result'], { queryParams: { id: this.assessment.id }, relativeTo: this.activatedRoute });
+            this.router.navigate(['../carbon-market-tool-result'], { queryParams: { id: this.assessment.id }, relativeTo: this.activatedRoute });
           } 
 
         }
