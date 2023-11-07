@@ -295,6 +295,20 @@ export class PortfolioTrack4Component implements OnInit {
     console.log("this.sdgDataSendArray2", this.sdgDataSendArray2)
     console.log("this.sdgDataSendArray4", this.sdgDataSendArray4)
     console.log(this.isEditMode,this.assessmentId)
+
+    console.log(this.processData)
+    this.processData.forEach((d)=>{
+      if(d.CategoryName == this.assessment.processDraftLocation){
+        this.activeIndex = d.categoryID -1;
+      }
+    })
+    console.log(this.outcomeData)
+    // this.outcomeData.forEach((d)=>{
+    //   if(d.CategoryName == this.assessment.outcomeDraftLocation){
+    //     this.activeIndex2 = d.categoryID -this.processData.length;
+    //     console.log(this.activeIndex2,d.categoryID)
+    //   }
+    // })
     // this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
     this.policies.push(this.assessment.climateAction)
     this.finalBarrierList = this.assessment['policy_barrier']

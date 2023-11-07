@@ -16,22 +16,10 @@
                 [options]="institutions"
                 [(ngModel)]="user.institution"
                 #finstitution="ngModel"
-                placeholder={{user.institution.name}}
                 optionLabel="name"
                 (ngModelChange)="onInstitutionChange($event)"
               ></p-dropdown>
 
-
-              <!-- <p
-                class="info-message text-danger"
-                *ngIf="
-                  !userInstitution &&
-                  (fLogin.submitted ||
-                    finstitution.touched ||
-                    finstitution.dirty)
-                ">
-                This is a mandatory field
-              </p> -->
             </div>
             <div class="p-field" *ngIf="isNewUser">
               <label for="institution">Assign Institution *</label>
@@ -246,9 +234,13 @@
           Save
         </button>
 
-        <button *ngIf="!isNewUser" [disabled]="user.canNotDelete == true"
+        <button *ngIf="!isNewUser && user.status ===0" [disabled]="user.canNotDelete == true"
           class="btn btn-primary btn-block text-uppercase m-1" type="button" (click)="onDeleteClick()">
           Deactivate
+        </button>
+        <button *ngIf="!isNewUser && user.status ===1" [disabled]="user.canNotDelete == true"
+          class="btn btn-primary btn-block text-uppercase m-1" type="button" (click)="onDeleteClick()">
+          Activate
         </button>
         <button class="btn btn-primary btn-block text-uppercase m-1" (click)="onBackClick()">
           Back

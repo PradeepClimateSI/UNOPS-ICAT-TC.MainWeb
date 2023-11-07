@@ -307,6 +307,20 @@ abatement: any;
     this.selectedSDGsWithAnswers = await this.investorToolControllerproxy.getSelectedSDGsWithAnswers(this.assessmentId).toPromise();
     this.investorAssessment = await this.investorToolControllerproxy.getResultByAssessment(this.assessmentId).toPromise()
 
+    console.log(this.processData)
+    this.processData.forEach((d)=>{
+      if(d.CategoryName == this.assessment.processDraftLocation){
+        this.activeIndex = d.categoryID -1;
+      }
+    })
+    console.log(this.outcomeData)
+    this.outcomeData.forEach((d)=>{
+      if(d.CategoryName == this.assessment.outcomeDraftLocation){
+        this.activeIndex2 = d.categoryID -this.processData.length-1;
+        console.log(this.activeIndex2,d.categoryID)
+      }
+    })
+
     this.investorAssessment.total_investements.map((tot, idx) => {
       console.log("index", idx, this.totalInvestments)
       let inst 

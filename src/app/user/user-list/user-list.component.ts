@@ -95,7 +95,8 @@ export class UserListComponent implements OnInit {
         console.log(userTypeId)
         console.log(res)
         if (userTypeId == 1) {
-          this.userTypes = res.data.filter((a) => (a.id == 1 || a.id == 2 || a.id == 3 || a.id == 5 || a.id == 6 || a.id == 7 || a.id == 8 || a.id == 9 || a.id == 11));
+          // this.userTypes = res.data.filter((a) => (a.id == 1 || a.id == 2 || a.id == 3 || a.id == 5 || a.id == 6 || a.id == 7 || a.id == 8 || a.id == 9 || a.id == 11));
+          this.userTypes = res.data.filter((a) => (a.id == 5 ));
         }
         else if (userTypeId == 2) {
           this.userTypes = res.data.filter((a) => (a.id == 2));
