@@ -340,7 +340,7 @@
                   <div class="p-field">
                     <label style="width:200px" for="impEntity">Barrier</label>
                     <input type="text" placeholder="Please add barrier"  name="category"
-                    #cat="ngModel" [(ngModel)]="barrierSelected.barrier" maxlength="300" class="p-inputtext"
+                    #cat="ngModel" [(ngModel)]="barrierSelected.barrier" maxlength="300" class="p-inputtext custom-input"
                     pInputText />
                     
                   </div>
@@ -352,9 +352,13 @@
                 <div class="col-12 col-md-6">
                   <div class="p-field">
                     <label style="width:200px" for="impEntity">Explanation</label>
-                    <input type="text" placeholder="Please add explanation"  name="explanation" 
+                    <!-- <input type="text" placeholder="Please add explanation"  name="explanation" 
                     #explanation="ngModel" [(ngModel)]="barrierSelected.explanation" maxlength="300" class="p-inputtext"
-                    pInputText />
+                    pInputText /> -->
+                    <textarea  type="text" placeholder="Please add explanation" name="explanation"
+                      #explanation="ngModel" [(ngModel)]="barrierSelected.explanation" [ngModelOptions]="{ standalone: false }"
+                      class="p-inputtext custom-textarea" rows="3" cols="20" pInputText autoResize="autoResize"
+                      ></textarea>
                   </div>
                 </div>
 
