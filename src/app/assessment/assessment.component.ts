@@ -108,24 +108,11 @@ export class AssessmentComponent implements OnInit {
     // if (skip > this.totalRecords) {
     //   skip = skip - (skip - this.totalRecords)
     // }
-    let res = await this.methassess.getResultPageData(skip, this.rows, this.filterText).toPromise()
+    let res = await this.methassess.getResultPageData(skip, this.rows, this.filterText, '', '').toPromise()
 
     this.results = res[0]
     this.totalRecords = res[1]
     console.log(this.totalRecords)
-
-    this.resultsList = this.results.map ((res: any) => {
-      return {
-        meth: res.assessment.climateAction.policyName,
-        approach: res.assessment.assessment_approach,
-        assessmentType: res.assessment.assessmentType,
-        tool: res.assessment.tool,
-        id: res.assessment.id,
-        averageOutcome: res.averageOutcome,
-        method: res.assessment.assessment_method
-      }
-    })
-
    
     if (this.results){
       this.load = true

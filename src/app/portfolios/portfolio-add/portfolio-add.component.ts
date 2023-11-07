@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MasterDataService } from 'app/shared/master-data.service';
-import { MessageService } from 'primeng/api';
-import {  Assessment, GetAssessmentDetailsDto, MethodologyAssessmentControllerServiceProxy, Portfolio, PortfolioControllerServiceProxy, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { LazyLoadEvent, MessageService } from 'primeng/api';
+import {  Assessment, GetAssessmentDetailsDto, MethodologyAssessmentControllerServiceProxy, Portfolio, PortfolioControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-portfolio-add',
@@ -10,7 +10,13 @@ import {  Assessment, GetAssessmentDetailsDto, MethodologyAssessmentControllerSe
   styleUrls: ['./portfolio-add.component.css']
 })
 export class PortfolioAddComponent implements OnInit {
+
   sectorList: any[];
+  totalRecords: number;
+  rows: number = 10;
+  filterText: any = '';
+  searchSectors: string = '';
+  type: string = '';
 
   constructor(
     private methassess : MethodologyAssessmentControllerServiceProxy,
@@ -48,31 +54,32 @@ export class PortfolioAddComponent implements OnInit {
     this.tool = 'PORTFOLIO';
     this.tools = ['PORTFOLIO', 'CARBON_MARKET', 'INVESTOR']
     this.sectorList = await this.sectorControllerServiceProxy.findAllSector().toPromise()
+    await this.loadData({})
     this.addLink=false;
-      this.resultsList = await this.methassess.results().toPromise()
-      this.methassess.assessmentDetails().subscribe(async (res: any) => {
-          this.assessmentData = res
+      // this.resultsList = await this.methassess.results().toPromise()
+      // this.methassess.assessmentDetails().subscribe(async (res: any) => {
+      //     this.assessmentData = res
     
     
-          for await (let x of this.assessmentData){
-            for await (let result of this.resultsList){
+      //     for await (let x of this.assessmentData){
+      //       for await (let result of this.resultsList){
     
-              if(result.assessment?.id == x.id){
+      //         if(result.assessment?.id == x.id){
     
-                this.assessList.push(result.assessment)
-              }
-            }
-          }
+      //           this.assessList.push(result.assessment)
+      //         }
+      //       }
+      //     }
     
           
-          const uniqueNamesSet = new Set<string>(this.assessList.map((item: { climateAction: { typeofAction: any; }; })=> item.climateAction.typeofAction));
-          this.interventionsList = Array.from(uniqueNamesSet, value => ({ value, label: value }));
-          this.assessList.sort(function(a:Assessment, b:Assessment) {
-            // Convert 'id' properties to numbers and compare them
-            return b.id - a.id;
-        });
+      //     const uniqueNamesSet = new Set<string>(this.assessList.map((item: { climateAction: { typeofAction: any; }; })=> item.climateAction.typeofAction));
+      //     this.interventionsList = Array.from(uniqueNamesSet, value => ({ value, label: value }));
+      //     this.assessList.sort(function(a:Assessment, b:Assessment) {
+      //       // Convert 'id' properties to numbers and compare them
+      //       return b.id - a.id;
+      //   });
     
-        });
+      //   });
     
       this.portfolioServiceProxy.getLastID().subscribe(async (res: any) => {
         this.lastId = res[0].portfolioId;
@@ -103,6 +110,38 @@ export class PortfolioAddComponent implements OnInit {
       { label: 'Direct', value: 'Direct' },
       { label: 'Indirect', value: 'Indirect' },
   ];
+  }
+
+  async loadData(event: LazyLoadEvent) {
+    this.totalRecords = 0;
+
+    let pageNumber = (event.first === 0 || event.first == undefined) ? 0 : event.first / (event.rows == undefined ? 1 : event.rows) + 1;
+    this.rows = event.rows == undefined ? 10 : event.rows;
+
+    let skip = pageNumber * this.rows
+    let res = await this.methassess.getResultPageData(skip, this.rows, this.filterText, this.searchSectors, this.type).toPromise()
+
+    this.resultsList = res[0]
+    this.totalRecords = res[1]
+   
+    if (this.resultsList){
+      this.loading = false
+    }
+  }
+
+  onSearch(value: any, type: string) {
+    if (type === 'SECTOR') {
+      let secs = value.map((v: Sector) => v.id)
+      this.searchSectors = secs.join(',')
+    } else if (type === 'TYPE') {
+      this.type = value
+    } else if (type === 'TEXT') {
+      this.filterText = value.target.value ? value.target.value : ''
+    }
+    this.searchSectors ? this.searchSectors : '' 
+    if (!this.type || this.type === null) this.type = ''
+    this.filterText ? this.filterText : '' 
+    this.loadData({})
   }
 
 
