@@ -90,7 +90,7 @@ export class UserFormComponent implements OnInit, AfterViewInit {
     const tokenPayload = decode<any>(token);
     const username = tokenPayload.usr;
 
- this.countryId = tokenPayload.countryId;
+    this.countryId = tokenPayload.countryId;
     this.countryProxy.getCountrySector(this.countryId).subscribe((res: any) => {
       this.country = res;
     });
@@ -103,6 +103,15 @@ export class UserFormComponent implements OnInit, AfterViewInit {
     this.user.userType = undefined!;
     this.user.mobile = '';
     this.user.landline = '';
+    let ins =new Institution()
+
+    this.UserTypeServiceProxy.getUserTypes().subscribe((res: any) => {
+      this.userTypes = res;
+    });
+    let userid = 0;
+    if (this.editUserId) {
+      userid = this.editUserId;
+    }
 
     this.route.queryParams.subscribe((params) => {
       this.editUserId = params['id'];
@@ -119,6 +128,8 @@ export class UserFormComponent implements OnInit, AfterViewInit {
           .subscribe((res: any) => {
             this.onInstitutionChange2(res);
             this.user = res;
+            ins = new Institution(res.institution);
+            this.user.institution = ins;
             this.selecteduserType = {
               "ae_name": this.user.userType.description,
               "ae_id": this.user.userType.id
@@ -128,38 +139,36 @@ export class UserFormComponent implements OnInit, AfterViewInit {
           });
       }
     });
-    console.log('working');
-    this.UserTypeServiceProxy.getUserTypes().subscribe((res: any) => {
-      this.userTypes = res;
+
+    this.instProxy.getInstitutionForManageUsers(0, 0, userid)
+    .subscribe((res) => {
+      this.institutions = res.items;
+
+      if (ins) {
+        this.institutions.forEach((ins: Institution) => {
+          if (ins.id == this.user.institution.id) {
+            let cat = ins.category;
+            let type = ins.type;
+            ins.category = new InstitutionCategory(cat)
+            ins.type = new InstitutionType(type)
+            // let _ins = new Institution(ins)
+            this.user.institution = ins;
+          }
+        });
+      }
+
+      if (this.userRole == 'Data Collection Team') {
+        this.institutions = this.institutions.filter((o) => o.country.id == this.countryId && o.sectorId == this.sectorId && o.type.id == 3);
+      }
+
+
     });
-    let userid=0;
-    if(this.editUserId){
-      userid =this.editUserId;
-    }
-
-    this.instProxy.getInstitutionForManageUsers(0, 0,userid)
-      .subscribe((res) => {
-        this.institutions = res.items;
-
-        if (this.user?.institution) {
-          this.institutions.forEach((ins: Institution) => {
-            if (ins.id == this.user.institution.id) {
-              let cat = ins.category;
-              let type = ins.type;
-              ins.category = new InstitutionCategory(cat)
-              ins.type = new InstitutionType(type)
-              let _ins = new Institution(ins)
-              this.user.institution = _ins;
-            }
-          });
-        }
-
-        if (this.userRole == 'Data Collection Team') {
-          this.institutions = this.institutions.filter((o) => o.country.id == this.countryId && o.sectorId == this.sectorId && o.type.id == 3);
-        }
 
 
-      });
+    console.log('working');
+   
+
+  
   }
 
   onChangeUser(event: any) {
@@ -182,7 +191,7 @@ export class UserFormComponent implements OnInit, AfterViewInit {
 
 
         this.user.country = new Country();
-        this.user.country.id =this.countryId;
+        this.user.country.id = this.countryId;
         this.user.userType = new UserType();
         this.user.userType.id = this.selecteduserType.id;
 
@@ -308,43 +317,52 @@ export class UserFormComponent implements OnInit, AfterViewInit {
   }
 
   onDeleteClick() {
-    this.confirmationService.confirm({
-      message: 'Are you sure you want to delete the user?',
-      header: 'Delete Confirmation',
-      acceptIcon: 'icon-not-visible',
-      rejectIcon: 'icon-not-visible',
-      accept: () => {
-        this.deleteUser();
-      },
-      reject: () => { },
-    });
-    // this.router.navigate(['/user-list']);
+
+    if (this.user.status === 0) {
+     
+      this.confirmationService.confirm({
+        message: 'Are you sure you want to deactivate the user?',
+        header: 'Deactivate Confirmation',
+        acceptIcon: 'icon-not-visible',
+        rejectIcon: 'icon-not-visible',
+        accept: () => {
+          this.user.status = 1;
+          this.deleteUser(1);
+        },
+        reject: () => { },
+      });
+    }
+    else if (this.user.status === 1) {
+     
+      this.confirmationService.confirm({
+        message: 'Are you sure you want to activate the user?',
+        header: 'Activate Confirmation',
+        acceptIcon: 'icon-not-visible',
+        rejectIcon: 'icon-not-visible',
+        accept: () => {
+          this.user.status = 0;
+          this.deleteUser(0);
+        },
+        reject: () => { },
+      });
+    }
+
   }
 
-  deleteUser() {
-    this.serviceProxy
-      .deleteOneBaseUsersControllerUser(this.user.id)
+  async deleteUser(status: number) {
+    // this.serviceProxy
+    this.user.status = status;
+    this.userController.changeStatus(this.user.id, 1)
       .subscribe((res) => {
-        //this.DisplayAlert('Deleted successfully.', AlertType.Message);
-        // this.confirmationService.confirm({
-        //   message: 'User is deleted successfully!',
-        //   header: 'Delete Confirmation',
-        //   //acceptIcon: 'icon-not-visible',
-        //   rejectIcon: 'icon-not-visible',
-        //   rejectVisible: false,
-        //   acceptLabel: 'Ok',
-        //   accept: () => {
-        //     this.onBackClick();
-        //   },
-
-        //   reject: () => {},
-        // });
         this.messageService.add({
           severity: 'success',
           summary: 'Success',
-          detail: 'Delete deactivated user',
+          detail: 'Updated user',
           closable: true,
         });
+      });
+
+       this.authUser.updateStatus(this.user.loginProfile).subscribe(async ( res) => {
       });
   }
 
@@ -378,7 +396,7 @@ export class UserFormComponent implements OnInit, AfterViewInit {
   }
 
   onInstitutionChange2(aaa: any) {
-    let ty=[];
+    let ty = [];
     console.log('event====', aaa.institution);
     console.log('selectedUserTypesFordrop=====', this.selectedUserTypesFordrop);
 
@@ -396,10 +414,10 @@ export class UserFormComponent implements OnInit, AfterViewInit {
       ty = tempList.filter((a) => (a.id == 6))
     }
     if (aaa.institution.type.id == 6) {
-      ty= tempList.filter((a) => (a.id == 7))
+      ty = tempList.filter((a) => (a.id == 7))
     }
 
-    this.selectedUserTypesFordrop= ty   
+    this.selectedUserTypesFordrop = ty
     console.log('selectedUserTypesFordrop=====', this.selectedUserTypesFordrop);
 
   }

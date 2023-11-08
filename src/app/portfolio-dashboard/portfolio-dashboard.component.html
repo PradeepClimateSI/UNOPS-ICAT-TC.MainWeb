@@ -50,17 +50,20 @@
         <ng-template pTemplate="header">
           <tr>
             <th class="table-header-3">Intervention Name</th>
+            <th *ngIf="barChartData.length>0" class="table-header-3" style="line-height: 130%;">Tool</th>
             <th class="table-header" style="line-height: 130%;">Process of Change Score</th>
             <th class="table-header" style="line-height: 130%;">Outcome of Change Score</th>
+            
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-tableData>
           <tr>
             
             <td>{{ tableData.climateAction?.policyName }}</td>
-            <td class="text-center">{{ tableData.process_score!=null && tableData.process_score!=undefined? tableData.process_score:'N/A' }}</td>
-            <td class="text-center">{{ tableData.outcome_score!=null && tableData.outcome_score!=undefined?tableData.outcome_score:'N/A' }}</td>
-
+            <td  *ngIf="barChartData.length>0">{{ masterDataService.getToolName(tableData.tool) }}</td>
+            <td class="text-center">{{ tableData.processScore!=null && tableData.processScore!=undefined? tableData.processScore:'N/A' }}</td>
+            <td class="text-center">{{ tableData.outcomeScore!=null && tableData.outcomeScore!=undefined?tableData.outcomeScore:'N/A' }}</td>
+           
           </tr>
         </ng-template>
 
@@ -148,11 +151,21 @@
 
 </div> -->
 <div class="row" >
-  <div *ngIf="selectedPortfolio" class="col-md-6 col-12 d-flex align-items-stretch">
+  <div *ngIf="selectedPortfolio " class="col-md-6 col-12 d-flex align-items-stretch">
     <div  #targetDiv2 class="p-grid p-fluid card m-3">
+      
       <div class="row text-center ">
         <h3>Expected GHG reductions over intervention lifetime of portfolios</h3>
-        <div class="col-12  mt-20 "  >
+        <div  *ngIf="sectorCount"  class="col-12" [hidden]="barChartData.length != 0" >
+          <p-messages severity="warn">
+            <ng-template pTemplate>
+             
+              <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
+              <div class="ml-2">No data to show.</div>
+            </ng-template>
+          </p-messages>
+        </div>
+        <div class="col-12  mt-20 " [hidden]="barChartData.length == 0" >
     
             <canvas  #portfolioBarChart>{{ barChartData }}</canvas>
          </div>

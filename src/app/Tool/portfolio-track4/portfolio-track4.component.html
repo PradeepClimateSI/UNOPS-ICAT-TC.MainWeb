@@ -1,5 +1,5 @@
 <div class="container pl-20 pr-20">
-  <div *ngIf="track4Selectt">
+  <div>
     <div class="mb-12">
       <h4 class="mt-4">Assessment Information</h4>
     </div>
@@ -340,7 +340,7 @@
                   <div class="p-field">
                     <label style="width:200px" for="impEntity">Barrier</label>
                     <input type="text" placeholder="Please add barrier"  name="category"
-                    #cat="ngModel" [(ngModel)]="barrierSelected.barrier" maxlength="300" class="p-inputtext"
+                    #cat="ngModel" [(ngModel)]="barrierSelected.barrier" maxlength="300" class="p-inputtext custom-input"
                     pInputText />
                     
                   </div>
@@ -352,9 +352,13 @@
                 <div class="col-12 col-md-6">
                   <div class="p-field">
                     <label style="width:200px" for="impEntity">Explanation</label>
-                    <input type="text" placeholder="Please add explanation"  name="explanation" 
+                    <!-- <input type="text" placeholder="Please add explanation"  name="explanation" 
                     #explanation="ngModel" [(ngModel)]="barrierSelected.explanation" maxlength="300" class="p-inputtext"
-                    pInputText />
+                    pInputText /> -->
+                    <textarea  type="text" placeholder="Please add explanation" name="explanation"
+                      #explanation="ngModel" [(ngModel)]="barrierSelected.explanation" [ngModelOptions]="{ standalone: false }"
+                      class="p-inputtext custom-textarea" rows="3" cols="20" pInputText autoResize="autoResize"
+                      ></textarea>
                   </div>
                 </div>
 
@@ -1252,18 +1256,6 @@
             </div>
 
           </div>
-          <!-- <div *ngIf="activeIndex2!==5 || activeIndexMain!==1" class="row justify-content-end">
-            <div>
-
-              <div class="d-flex flex-row-reverse mt-20 ">
-                <div class="btn btn-primary text-uppercase" (click)="next()"
-                  [class.disabled]="(!isLikelihoodDisabled || !isRelavanceDisabled)">
-
-                  Next
-                </div>
-              </div>
-            </div>
-          </div> -->
         </form>
       </div>
     </div>
@@ -1601,17 +1593,6 @@
               </div>
   
             </div>
-            <!-- <div *ngIf="activeIndex2!==3 || activeIndexMain!==1" class="row justify-content-end">
-              <div>
-  
-                <div class="d-flex flex-row-reverse mt-20 ">
-                  <div class="btn btn-primary text-uppercase" (click)="next()"
-                    [class.disabled]="(!isLikelihoodDisabled || !isRelavanceDisabled)">
-                    Next
-                  </div>
-                </div>
-              </div>
-            </div> -->
           </form>
         </div>
       </div>
@@ -1619,10 +1600,6 @@
   </div>
 </div>
 
-
-<div *ngIf="!track4Selectt">
-  <app-carbon></app-carbon>
-</div>
 
 <p-overlayPanel #op [style]="{'width': '600px'}">
   <div class="p-grid p-fluid col-md-12 col-sm-12 text-title">
