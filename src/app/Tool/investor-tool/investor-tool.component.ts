@@ -417,6 +417,8 @@ console.log("itemmmm", item)
 
     // });
     this.characteristicsList = await this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().toPromise();
+    this.characteristicsList = this.characteristicsList.filter(ch => {return !["SCALE_ADAPTATION", "SUSTAINED_ADAPTATION"].includes(ch.category.code)})
+    this.characteristicsList = this.characteristicsList.filter((v, i, a) => a.findIndex(v2 => (v2.code === v.code)) === i)
     this.characteristicsLoaded = true;
     console.log("22222")
     this.methodologyAssessmentControllerServiceProxy.findAllCategories().toPromise().then((res2: any) => {
