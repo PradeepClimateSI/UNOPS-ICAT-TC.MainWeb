@@ -137,26 +137,29 @@
       <br>
       <h4>Add Interventions</h4>
 
-      <p-table #dt2 [value]="assessList" dataKey="id" [rows]="10" [showCurrentPageReport]="true" [totalRecords]="assessList.length"
-        [rowsPerPageOptions]="[10, 25, 50]" [paginator]="true"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      <p-table #dt2 
+      [lazy]="true" 
+      (onLazyLoad)="loadData($event)"
+      paginatorDropdownAppendTo="body"
+      [rows]="rows" 
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
+      [totalRecords]="totalRecords" 
+      [value]="resultsList" 
+      [tableStyle]="{'min-width': '50rem'}"
+      [paginator]="true"
+      [sortField]="'id'" 
+      [sortOrder]="-1"
         [globalFilterFields]="['tc_value', 'climateAction.policyName', 'assessmentType', 'assessment_approach', 'climateAction.policy_sector', 'climateAction.id','from', 'to']"
         [tableStyle]="{ 'min-width': '100%' }">
         <ng-template pTemplate="caption">
           <div class="row">
 
-            <div class="col-md-3 ">
-              <!-- <p-columnFilter field="climateAction.typeofAction" matchMode="equals" [showMenu]="false">
-                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <p-dropdown [ngModel]="value" [options]="interventionsList" (onChange)="filter($event.value)"
-                    placeholder="Select Intervention Type" [showClear]="true">
-                  </p-dropdown>
-                </ng-template>
-              </p-columnFilter> -->
+            <div class="col-md-3" >
               <p-columnFilter field="climateAction.policy_sector" matchMode="contains" [showMenu]="false">
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <p-multiSelect [ngModel]="value" [options]="sectorList" (onChange)="filter($event.value)" optionLabel="name"
-                    placeholder="Select Sector" [showClear]="true">
+                  <p-multiSelect  [options]="sectorList" (onChange)="onSearch($event.value, 'SECTOR')" optionLabel="name"
+                    placeholder="Select Sector" >
                   </p-multiSelect>
                 </ng-template>
               </p-columnFilter>
@@ -165,7 +168,7 @@
             <div class="col-md-3 ">
               <p-columnFilter field="assessmentType" matchMode="equals" [showMenu]="false">
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <p-dropdown [ngModel]="value" [options]="statuses" (onChange)="filter($event.value)"
+                  <p-dropdown [options]="statuses" optionValue="value" (onChange)="onSearch($event.value, 'TYPE')"
                     placeholder="Select Type" [showClear]="true">
                   </p-dropdown>
                 </ng-template>
@@ -173,20 +176,13 @@
             </div>
 
             <div class="col-md-3 ">
-              <p-columnFilter field="assessment_approach" matchMode="equals" [showMenu]="false">
-                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <p-dropdown [ngModel]="value" [options]="apporoachList" (onChange)="filter($event.value)"
-                    placeholder="Select Approach" [showClear]="true">
-                  </p-dropdown>
-                </ng-template>
-              </p-columnFilter>
             </div>
 
             <div class="col-md-3 ">
               <div class="d-flex justify-content-end">
                 <span class="p-input-icon-left ml-auto">
                   <i class="pi pi-search"></i>
-                  <input pInputText type="text" (input)="onInput($event, dt2)" placeholder="Search keyword" />
+                  <input pInputText type="text" (input)="onSearch($event, 'TEXT')" placeholder="Search keyword" />
                 </span>
               </div>
             </div>
@@ -201,7 +197,7 @@
             <th style="width:6%">ID</th>
             <th style="width:20%">Intervention</th>
             <th style="width:20%">Sectors Covered</th>
-            <th style="width:12%">Assessment Approach</th>
+            <!-- <th style="width:12%">Assessment Approach</th> -->
             <th style="width:12%">Assessment Type</th>
             <th style="width:12%">Tool</th>
             <th style="width:20%">Assessment Period</th>
@@ -213,30 +209,30 @@
           <tr>
             <td>
               <p-tableCheckbox #e [value]="assessList"
-                (click)="onCheckboxChange(e.checked, assessList.id)"></p-tableCheckbox>
+                (click)="onCheckboxChange(e.checked, assessList.assessment.id)"></p-tableCheckbox>
             </td>
             <td>
-              {{ assessList.climateAction.intervention_id }}
+              {{ assessList.assessment.climateAction.intervention_id }}
             </td>
             <td>
-              {{ assessList.climateAction.policyName }}
+              {{ assessList.assessment.climateAction.policyName }}
             </td>
             <td>
-              <span *ngFor="let sec of assessList.climateAction.policy_sector; let idx=index;">
-                {{sec.sector.name}}<span *ngIf="idx !== assessList.climateAction.policy_sector.length-1">, </span>
+              <span *ngFor="let sec of assessList.assessment.climateAction.policy_sector; let idx=index;">
+                {{sec.sector.name}}<span *ngIf="idx !== assessList.assessment.climateAction.policy_sector.length-1">, </span>
               </span>
             </td>
-            <td>
+            <!-- <td>
               {{ assessList.assessment_approach }}
+            </td> -->
+            <td>
+              {{ assessList.assessment.assessmentType }}
             </td>
             <td>
-              {{ assessList.assessmentType }}
+              {{ masterDataService.getToolName(assessList.assessment.tool) }}
             </td>
             <td>
-              {{ masterDataService.getToolName(assessList.tool) }}
-            </td>
-            <td>
-              {{ assessList.from | date:'yyyy-MM-dd' }} - {{ assessList.to | date:'yyyy-MM-dd'}}
+              {{ assessList.assessment.from | date:'yyyy-MM-dd' }} - {{ assessList.assessment.to | date:'yyyy-MM-dd'}}
             </td>
 
           </tr>

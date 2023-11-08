@@ -31,7 +31,6 @@ import { ViewComponent } from 'app/climate-action/view/view.component';
 import { DataRequestComponent } from 'app/data-request-flow/data-request/data-request.component';
 import { AssignDataRequestComponent } from 'app/data-request-flow/assign-data-request/assign-data-request.component';
 import { ReviewDataComponent } from 'app/data-request-flow/review-data/review-data.component';
-import { CarbonComponent } from 'app/Tool/carbon/carbon.component';
 import { PortfolioComponent } from 'app/Tool/portfolio/portfolio.component';
 import { InvestorComponent } from 'app/Tool/investor/investor.component';
 import { AssessmentResultComponent } from 'app/assessment-result/assessment-result.component';

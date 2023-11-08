@@ -53,7 +53,7 @@ export class PortfolioDashboardComponent implements OnInit,AfterViewInit {
   resultData2 : any = []
   calResults: any;
   portfolioList : any= [];
-
+  dashboardData:any[]=[]
   recentResult : any ;
 
   averageTCValue:any;
@@ -163,8 +163,7 @@ this.selectPortfolio();
    if(this.selectedPortfolio){
     this.portfolioServiceProxy.assessmentsDataByAssessmentId(this.selectedPortfolio?this.selectedPortfolio.id:0).subscribe(async (res: any) => {
       console.log("arrayyy : ", res)
-      
-      this.barChartData=res;
+      this.barChartData=res
       setTimeout(() => {
       this.viewPortfolioBarChart();
       this.updateSourceDivHeight()
@@ -189,10 +188,13 @@ this.selectPortfolio();
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
     this.portfolioServiceProxy.getDashboardData(this.selectedPortfolio?this.selectedPortfolio.id:0,pageNumber,this.rows).subscribe((res) => {
-      this.tableData=res.items;
-      this.heatMapScore = this.tableData.map(item => {return {processScore: item.process_score, outcomeScore: item.outcome_score}})
-      this.heatMapData = this.tableData.map(item => {return {interventionId: item.climateAction?.intervention_id, interventionName: item.climateAction?.policyName, processScore: item.process_score, outcomeScore: item.outcome_score}}) 
+      this.dashboardData = res.items;
+      this.tableData = this.dashboardData.map(item => {return {climateAction: item.climateAction,tool:item.tool, processScore: item.result.averageOutcome, outcomeScore: item.result.averageProcess}}) 
+      console.log("tableData : ", this.tableData)
+      this.heatMapScore = this.dashboardData.map(item => {return {processScore: item.result.averageOutcome, outcomeScore: item.result.averageProcess,}})
+      this.heatMapData = this.dashboardData.map(item => {return {interventionId: item.climateAction?.intervention_id, interventionName: item.climateAction?.policyName, processScore: item.result.averageOutcome, outcomeScore: item.result.averageProcess}}) 
       console.log("kkkkk : ", res, this.heatMapData)
+      // this.tableData = this.heatMapData
       this.totalRecords= res.meta.totalItems
       this.loading = false;
     }, err => {
