@@ -159,6 +159,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   investment_instruments_2: MasterDataDto[];
   investment_instruments_3: MasterDataDto[];
 abatement: any;
+  barrierChList: any;
   // isValidated:boolean;
 
   constructor(
@@ -417,8 +418,9 @@ console.log("itemmmm", item)
 
     // });
     this.characteristicsList = await this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().toPromise();
-    this.characteristicsList = this.characteristicsList.filter(ch => {return !["SCALE_ADAPTATION", "SUSTAINED_ADAPTATION"].includes(ch.category.code)})
-    this.characteristicsList = this.characteristicsList.filter((v, i, a) => a.findIndex(v2 => (v2.code === v.code)) === i)
+    this.barrierChList = [...this.characteristicsList]
+    this.barrierChList = this.barrierChList.filter((ch: { category: { code: string; }; }) => {return !["SCALE_ADAPTATION", "SUSTAINED_ADAPTATION"].includes(ch.category.code)})
+    this.barrierChList = this.barrierChList.filter((v: { code: any; }, i: any, a: any[]) => a.findIndex(v2 => (v2.code === v.code)) === i)
     this.characteristicsLoaded = true;
     console.log("22222")
     this.methodologyAssessmentControllerServiceProxy.findAllCategories().toPromise().then((res2: any) => {

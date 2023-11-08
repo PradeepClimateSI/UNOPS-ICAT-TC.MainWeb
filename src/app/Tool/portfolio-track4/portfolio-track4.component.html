@@ -370,7 +370,7 @@
                     <label style="width:200px"  for="impEntity">Characteristic Affected</label>
                     <ng-container *ngIf="isDownloadMode == 0; else elseBlockcharacteristics">
                       <p-multiSelect  placeholder="Please select characteristics" name="characteristics"
-                        #characteristic="ngModel" [(ngModel)]="barrierSelected.characteristics" [options]="characteristicsList" appendTo="body"
+                        #characteristic="ngModel" [(ngModel)]="barrierSelected.characteristics" [options]="barrierChList" appendTo="body"
                         optionLabel="name"  [required]="true"></p-multiSelect>
                       <p class="info-message text-danger" *ngIf="  !finalSectors &&                     
                       (fData.submitted || characteristic.touched || characteristic.dirty)
