@@ -95,7 +95,7 @@ export class PortfolioComparisonComponent implements OnInit {
       col_set_2: [
         { label: 'ID', code: 'id' },
         { label: 'INTERVENTION NAME', code: 'name' },
-        { label: 'INTERVENTION TYPE', code: 'type' },
+        { label: 'TOOL APPLIED', code: 'tool' },
         { label: 'STATUS', code: 'status' },
         { label: 'EXPECTED GHG REDUCTIONS OVER INTERVENTION LIFETIME (MT CO2-EQ)', code: 'mitigation' },
       ],
