@@ -1,11 +1,12 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, Message } from 'primeng/api';
 import { AvatarModule } from 'primeng/avatar';
 import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
 import { UserType, ServiceProxy } from 'shared/service-proxies/auth-service-proxies';
-import { NotificationControllerServiceProxy, User, UsersControllerServiceProxy,Notification, CountryControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { NotificationControllerServiceProxy, User, UsersControllerServiceProxy,Notification, CountryControllerServiceProxy, SystemStatusControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { MasterDataService } from 'app/shared/master-data.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dashboard-base',
@@ -29,6 +30,9 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
   isInvesmentTool : boolean = false;
   isCarbonMarketTool : boolean = false;
   isPortfolioTool : boolean = false;
+  messages: Message[] | undefined;
+  private systemTimer: any;
+  isDeploying: boolean=false;
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -37,12 +41,18 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
     private cdr: ChangeDetectorRef,
     private notificationServiceProxy: NotificationControllerServiceProxy,
     private countryProxy: CountryControllerServiceProxy,
-    public masterDataService: MasterDataService
+    public masterDataService: MasterDataService,
+    private systemStatusProxy: SystemStatusControllerServiceProxy,
   ) { }
   ngAfterViewInit(): void {
     this.cdr.detectChanges();
   }
   async ngOnInit() {
+    this.startSystemStatusTimer(true);
+
+    this.messages = [
+      { severity: 'error', summary: '', detail: 'We are making some improvements to the tool. Please refrain from entering data until this message disappears' },
+    ];
 
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
@@ -99,6 +109,7 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
 
   logout() {
     this.appService.logout();
+    this.stopSystemStatusTimer();
     // this.confirmationService.confirm({
 
     //   message: 'Are you sure you want to login out?',
@@ -113,5 +124,33 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
     // });
 
   }
+
+  public startSystemStatusTimer(isFirst: boolean=false) {
+    console.log("isFirst",isFirst)
+    if(isFirst){
+      this.checkSystemStatus().subscribe()
+    }else{
+      this.systemTimer = setTimeout(() => this.checkSystemStatus().subscribe(), 60000 * 5);
+    }
+  }
+
+  private checkSystemStatus() {
+    return this.systemStatusProxy.systemStatus()
+    .pipe(map(res => {
+      console.log("isdeploying",res)
+      if(res === 1 ){        
+        this.isDeploying=true;
+      }else{
+        this.isDeploying=false;
+      }
+      this.startSystemStatusTimer();
+    }))
+  }
+
+  private stopSystemStatusTimer() {
+    clearTimeout(this.systemTimer);
+  }
+
+  
 
 }
