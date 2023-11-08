@@ -490,6 +490,7 @@
           </table> -->
           </div>
         </p-dialog>
+        <p-messages *ngIf="messages && isDeploying" [(value)]="messages" [enableService]="false" [closable]="false"></p-messages>
         <router-outlet></router-outlet>
       </div>
     </div>

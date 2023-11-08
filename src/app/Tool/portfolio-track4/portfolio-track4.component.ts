@@ -304,12 +304,12 @@ export class PortfolioTrack4Component implements OnInit {
       }
     })
     console.log(this.outcomeData)
-    // this.outcomeData.forEach((d)=>{
-    //   if(d.CategoryName == this.assessment.outcomeDraftLocation){
-    //     this.activeIndex2 = d.categoryID -this.processData.length;
-    //     console.log(this.activeIndex2,d.categoryID)
-    //   }
-    // })
+    this.outcomeData.forEach((d)=>{
+      if(d.CategoryName == this.assessment.outcomeDraftLocation){
+        this.activeIndex2 = d.categoryID -this.processData.length-1;
+        console.log(this.activeIndex2,d.categoryID)
+      }
+    })
     // this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
     this.policies.push(this.assessment.climateAction)
     this.finalBarrierList = this.assessment['policy_barrier']
@@ -741,10 +741,10 @@ this.selectedSDGsWithAnswers = this.selectedSDGs.map(selectedSdg => {
 
   onMainTabChange(event: any) {
     this.mainTabIndex = event.index;
-    console.log(event)
-    if(this.mainTabIndex==1){
-      this.activeIndex2=0;
-    }
+    // console.log(event)
+    // if(this.mainTabIndex==1){
+    //   this.activeIndex2=0;
+    // }
 
     console.log("main index", this.mainTabIndex)
   }

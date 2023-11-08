@@ -93,6 +93,7 @@ export class CmSectionComponent implements OnInit {
   async getSections() {
     let res = await this.cMQuestionControllerServiceProxy.getAllSection().toPromise()
     this.sections = res.sort((a, b) => a.order - b.order)
+    
   }
 
   async getCriteriaBySection(sectionId: number) {
@@ -106,7 +107,7 @@ export class CmSectionComponent implements OnInit {
       })
     )
     this.criterias.push(_criterias)
-
+    console.log(this.criterias)
   }
 
   async onOpenTab(e: any) {
