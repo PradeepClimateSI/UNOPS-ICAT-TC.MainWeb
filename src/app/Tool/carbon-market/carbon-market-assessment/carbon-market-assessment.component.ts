@@ -62,6 +62,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   scales: MasterDataDto[]
   tooltipContent: any;
   visionExample: any[] = []
+barrierChList: any[];
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -168,8 +169,9 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   }
   async getCharacteristics() {
     this.characteristicsList = await this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().toPromise();
-    this.characteristicsList = this.characteristicsList.filter(ch => {return !["SCALE_ADAPTATION", "SUSTAINED_ADAPTATION"].includes(ch.category.code)})
-    this.characteristicsList = this.characteristicsList.filter((v, i, a) => a.findIndex(v2 => (v2.code === v.code)) === i)
+    this.barrierChList = [...this.characteristicsList]
+    this.barrierChList = this.barrierChList.filter(ch => {return !["SCALE_ADAPTATION", "SUSTAINED_ADAPTATION"].includes(ch.category.code)})
+    this.barrierChList = this.barrierChList.filter((v, i, a) => a.findIndex(v2 => (v2.code === v.code)) === i)
   }
 
   save(form: NgForm) {
