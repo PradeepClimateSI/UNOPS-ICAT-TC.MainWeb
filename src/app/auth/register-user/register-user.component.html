@@ -39,7 +39,7 @@
                 </p>
             </div>
 
-            <div class="form-group mb-15">
+            <!-- <div class="form-group mb-15">
                 <label class="font-weight-bold">Password</label>
                 <br>
                 <span class="p-input-icon-right col-12">
@@ -54,8 +54,8 @@
                         (fpassowrd.errors?.['required'] && isSubmitted  )">
                     Password is required
                 </p>
-            </div>
-            <div class="form-group mb-15">
+            </div> -->
+            <!-- <div class="form-group mb-15">
                 <label class="font-weight-bold">Confirm Password</label>
                 <br>
                 <span class="p-input-icon-right col-12">
@@ -66,21 +66,21 @@
                     <input required pInputText [type]="confirmPasswordType" #confirmpassowrd="ngModel"
                         name="confirmRegPassword" [(ngModel)]="confirmRegPassword" placeholder="Password"
                         class="form-control" (ngModelChange)="onChange($event)" />
-                </span>
+                </span> -->
                 <!-- <p class="info-message text-danger" *ngIf="
                         (confirmpassowrd.errors?.['required'] && (confirmpassowrd.touched || confirmpassowrd.dirty)) ||
                         (confirmpassowrd.errors?.['required'] && isSubmitted  )">
                     Password is required
                 </p> -->
-            </div>
+            <!-- </div> -->
 
-            <p class="info-message text-danger" *ngIf="!pwConfirmation && (confirmpassowrd.touched || confirmpassowrd.dirty)">
+            <!-- <p class="info-message text-danger" *ngIf="!pwConfirmation && (confirmpassowrd.touched || confirmpassowrd.dirty)">
                 Both passwords must be same
-            </p>
+            </p> -->
             <div class="signup-line col-12">
                 <a [routerLink]="['../login']">&lt;&lt; Back to login</a>
             </div>
-            <button [disabled]="!fData.form.valid || !pwConfirmation " class="btn btn-primary btn-block text-uppercase btn-lg"
+            <button [disabled]="!fData.form.valid" class="btn btn-primary btn-block text-uppercase btn-lg"
                 type="submit">Register</button>
         </form>
 

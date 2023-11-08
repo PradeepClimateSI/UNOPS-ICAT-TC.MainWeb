@@ -295,6 +295,20 @@ export class PortfolioTrack4Component implements OnInit {
     console.log("this.sdgDataSendArray2", this.sdgDataSendArray2)
     console.log("this.sdgDataSendArray4", this.sdgDataSendArray4)
     console.log(this.isEditMode,this.assessmentId)
+
+    console.log(this.processData)
+    this.processData.forEach((d)=>{
+      if(d.CategoryName == this.assessment.processDraftLocation){
+        this.activeIndex = d.categoryID -1;
+      }
+    })
+    console.log(this.outcomeData)
+    this.outcomeData.forEach((d)=>{
+      if(d.CategoryName == this.assessment.outcomeDraftLocation){
+        this.activeIndex2 = d.categoryID -this.processData.length-1;
+        console.log(this.activeIndex2,d.categoryID)
+      }
+    })
     // this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
     this.policies.push(this.assessment.climateAction)
     this.finalBarrierList = this.assessment['policy_barrier']
@@ -471,6 +485,8 @@ this.selectedSDGsWithAnswers = this.selectedSDGs.map(selectedSdg => {
 
   async getCharacteristics() {
     this.characteristicsList = await this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().toPromise();
+    this.characteristicsList = this.characteristicsList.filter(ch => {return !["SCALE_ADAPTATION", "SUSTAINED_ADAPTATION"].includes(ch.category.code)})
+    this.characteristicsList = this.characteristicsList.filter((v, i, a) => a.findIndex(v2 => (v2.code === v.code)) === i)
     this.characteristicsLoaded = true;
      console.log("11111")
    /*  this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().subscribe((res3: any) => {
@@ -723,10 +739,10 @@ this.selectedSDGsWithAnswers = this.selectedSDGs.map(selectedSdg => {
 
   onMainTabChange(event: any) {
     this.mainTabIndex = event.index;
-    console.log(event)
-    if(this.mainTabIndex==1){
-      this.activeIndex2=0;
-    }
+    // console.log(event)
+    // if(this.mainTabIndex==1){
+    //   this.activeIndex2=0;
+    // }
 
     console.log("main index", this.mainTabIndex)
   }

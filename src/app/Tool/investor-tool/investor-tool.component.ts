@@ -307,6 +307,20 @@ abatement: any;
     this.selectedSDGsWithAnswers = await this.investorToolControllerproxy.getSelectedSDGsWithAnswers(this.assessmentId).toPromise();
     this.investorAssessment = await this.investorToolControllerproxy.getResultByAssessment(this.assessmentId).toPromise()
 
+    console.log(this.processData)
+    this.processData.forEach((d)=>{
+      if(d.CategoryName == this.assessment.processDraftLocation){
+        this.activeIndex = d.categoryID -1;
+      }
+    })
+    console.log(this.outcomeData)
+    this.outcomeData.forEach((d)=>{
+      if(d.CategoryName == this.assessment.outcomeDraftLocation){
+        this.activeIndex2 = d.categoryID -this.processData.length-1;
+        console.log(this.activeIndex2,d.categoryID)
+      }
+    })
+
     this.investorAssessment.total_investements.map((tot, idx) => {
       console.log("index", idx, this.totalInvestments)
       let inst 
@@ -403,6 +417,8 @@ console.log("itemmmm", item)
 
     // });
     this.characteristicsList = await this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().toPromise();
+    this.characteristicsList = this.characteristicsList.filter(ch => {return !["SCALE_ADAPTATION", "SUSTAINED_ADAPTATION"].includes(ch.category.code)})
+    this.characteristicsList = this.characteristicsList.filter((v, i, a) => a.findIndex(v2 => (v2.code === v.code)) === i)
     this.characteristicsLoaded = true;
     console.log("22222")
     this.methodologyAssessmentControllerServiceProxy.findAllCategories().toPromise().then((res2: any) => {
@@ -1497,7 +1513,7 @@ assignSDG(sdg : any , data : any){
 
   calculateAbatement(value: number, data: any) {
     if (this.investorAssessment?.total_investment) {
-      data['abatement']= value / this.investorAssessment.total_investment 
+      data['abatement']= value * Math.pow(10, 3) / this.investorAssessment.total_investment 
     } else {
       data['abatement'] = 0
     }
