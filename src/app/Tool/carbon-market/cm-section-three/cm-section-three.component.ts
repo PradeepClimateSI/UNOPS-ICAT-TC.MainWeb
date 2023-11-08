@@ -127,6 +127,20 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   async setInitialState() {
+    let int=0
+
+    this.categories['process'].forEach((d:any)=>{     
+      if(d.name == this.assessment.processDraftLocation){
+        this.activeIndex = int;
+      }
+      int =int+1;
+    })
+
+    this.outcome.forEach((d:any)=>{
+      if(d.code == this.assessment.outcomeDraftLocation){
+        this.activeIndex2 = d.order-1;
+      }
+    })
     if (this.isEditMode) {
       let sdgs: PortfolioSdg[] = []
       this.assessmentquestions.forEach(o => {
