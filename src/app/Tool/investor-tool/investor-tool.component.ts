@@ -322,6 +322,18 @@ abatement: any;
       }
     })
 
+    this.outcomeData = this.outcomeData.map((d) => {
+      if (d.CategoryName === 'GHG Scale of the Outcome') {
+        d.data =  d.data.map(_d => {
+          if (_d.characteristics.code === 'MICRO_LEVEL') {
+            _d['abatement'] = _d.expected_ghg_mitigation * Math.pow(10, 3) / this.investorAssessment.total_investment 
+          }
+          return _d
+        })
+      }
+      return d
+    })
+
     this.investorAssessment.total_investements.map((tot, idx) => {
       console.log("index", idx, this.totalInvestments)
       let inst 
