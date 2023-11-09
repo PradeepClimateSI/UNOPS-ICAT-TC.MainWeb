@@ -91,9 +91,9 @@
                     <div class="col-12 col-md-6">
                         <div class="p-field">
                             <label for="emailin">Email*</label>
-                            <input [disabled]="institutionId > 0"  type="number"
+                            <input [disabled]="institutionId > 0"  type="email"
                                 maxlength="30" placeholder="Email" name="email" #emailin="ngModel" class="p-inputtext"
-                                pInputText [(ngModel)]="inmail" required />
+                                pInputText [(ngModel)]="inmail" pattern="[\w-\.]+@([\w-]+\.)+[\w-]{1,20}$" required />
 
                             <p class="info-message text-danger" *ngIf="
                   !inmail &&
@@ -116,7 +116,7 @@
                                 placeholder="+99 999 999-9999" [(ngModel)]="intelephoneNumber"
                                 #telephoneNumber="ngModel" [styleClass]="'form-control'">
                             </p-inputMask> -->
-                            <input id="telephoneNumber" type="number" name="telephone" class="form-control" required 
+                            <input id="telephoneNumber" type="text" name="telephone" class="form-control" required 
                 [(ngModel)]="intelephoneNumber" #telephoneNumber="ngModel" placeholder="+xxxxxxxxx" 
                  />
                             <p class="info-message text-danger" *ngIf="

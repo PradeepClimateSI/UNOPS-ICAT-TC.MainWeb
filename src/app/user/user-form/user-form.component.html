@@ -151,7 +151,7 @@
                 placeholder="+99 999 999-9999" [(ngModel)]="user.landline" [styleClass]="'form-control'" #ftelephone="ngModel"
                 >
               </p-inputMask> -->
-              <input id="ftelephone" type="number" name="ftelephone" class="form-control" [disabled]="editUserId > 0" required
+              <input id="ftelephone" type="text" name="ftelephone" class="form-control" [disabled]="editUserId > 0" required
               [(ngModel)]="user.landline" #ftelephone="ngModel" placeholder="+xxxxxxxxx" 
                />
 
@@ -182,7 +182,7 @@
               <!-- <p-inputMask type="text" name="mobile" mask="+99 99-999-9999" [autoClear]="false"
                 placeholder="+99 999 999-999" [(ngModel)]="user.mobile" [styleClass]="'form-control'"
                 #fmobile="ngModel"></p-inputMask> -->
-                <input id="fmobile" type="number" name="fmobile" class="form-control" [disabled]="editUserId > 0" required
+                <input id="fmobile" type="text" name="fmobile" class="form-control" [disabled]="editUserId > 0" required
               [(ngModel)]="user.mobile" #fmobile="ngModel" placeholder="+xxxxxxxxx" 
                />
               <p
