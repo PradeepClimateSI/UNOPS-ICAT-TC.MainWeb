@@ -105,6 +105,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     categoryID: number,
     isValidated:boolean|null
     data: InvestorAssessment[],
+    id:number
 
   }[] = [];
 
@@ -114,6 +115,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     categoryID: number,
     isValidated:boolean|null
     data: InvestorAssessment[]
+    id:number
   }[] = [];
   //class variable
   @ViewChild(TabView) tabView: TabView;
@@ -317,7 +319,7 @@ abatement: any;
     console.log(this.outcomeData)
     this.outcomeData.forEach((d)=>{
       if(d.CategoryName == this.assessment.outcomeDraftLocation){
-        this.activeIndex2 = d.categoryID -this.processData.length-1;
+        this.activeIndex2 = d.id -this.processData.length-1;
         console.log(this.activeIndex2,d.categoryID)
       }
     })
@@ -480,7 +482,8 @@ console.log("itemmmm", item)
           this.processData.push({
             type: 'process', CategoryName: x.name, categoryID: x.id,
             data: categoryArray,
-            isValidated: null
+            isValidated: null,
+            id: 0
           })
 
 
@@ -491,7 +494,8 @@ console.log("itemmmm", item)
           this.outcomeData.push({
             type: 'outcome', CategoryName: x.name, categoryID: x.id,
             data: categoryArray,
-            isValidated: null
+            isValidated: null,
+            id: 0
           })
 
           if(x.name === 'SDG Scale of the Outcome'){
