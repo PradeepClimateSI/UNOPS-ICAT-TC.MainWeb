@@ -73,6 +73,7 @@ export class CmSectionThreeComponent implements OnInit {
   categoriesToSave: string[] = []
   isDraftSaved: boolean = false
   nextClicked: boolean;
+  savedData: boolean = false;
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -199,8 +200,10 @@ export class CmSectionThreeComponent implements OnInit {
               sc.assessmentQuestionId = assQ.id
               sc.filePath = assQ.uploadedDocumentPath
               sc.selectedSdg = assQ.selectedSdg
-              let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, sc.characteristic)
-              if (score) sc.selectedScore = score
+              if (assQ.assessmentAnswers[0]) {
+                let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, sc.characteristic)
+                if (score) sc.selectedScore = score
+              }
             }
             return sc
           })
@@ -211,10 +214,12 @@ export class CmSectionThreeComponent implements OnInit {
               sc.assessmentQuestionId = assQ.id
               sc.filePath = assQ.uploadedDocumentPath
               sc.selectedSdg = assQ.selectedSdg
-              let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, sc.characteristic)
-              if (score) {
-                sc.selectedScore = score
-                this.onSelectScore({}, sc, 2)
+              if (assQ.assessmentAnswers[0]) {
+                let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, sc.characteristic)
+                if (score) {
+                  sc.selectedScore = score
+                  this.onSelectScore({}, sc, 2)
+                }
               }
             }
             return sc
@@ -496,7 +501,7 @@ export class CmSectionThreeComponent implements OnInit {
                 let assQ = this.assessmentquestions.find(o => (o.characteristic.id === res.characteristic.id) && (o.selectedSdg.id === res.selectedSdg.id))
                 if (assQ) {
                   res.assessmentQuestionId = assQ.id
-                  res.assessmentAnswerId = assQ.assessmentAnswers[0].id
+                  res.assessmentAnswerId = assQ.assessmentAnswers[0]?.id
                 }
               }
               if (res.selectedScore.name) {
@@ -618,12 +623,41 @@ export class CmSectionThreeComponent implements OnInit {
       }
     }
 
-    this.categoriesToSave = []
-    this.isDraftSaved = true
-    this.onSubmit.emit({result: this.results, isDraft: isDraft,name:name,type:type})
+    let isValid = true
+    if (draftCategory === '') {
+      isValid = await this.checkMandotary()
+    }
+
+    if (isValid) {
+      this.categoriesToSave = []
+      this.isDraftSaved = true
+      this.savedData = true
+      this.onSubmit.emit({result: this.results, isDraft: isDraft,name:name,type:type})
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Please fill all mandotory fields',
+        closable: true,
+      });
+    }
     // this.isEditMode = true
     // this.setInitialState() //TODO this occurres faulty data load. data get from the database before saving. This should be called after saving data.
   }
+
+  async checkMandotary () {
+    let isValid = true
+    for await (let category of this.categories['process']) {
+      for await (let char of category.characteristics) {
+        if (char.relevance === undefined) {
+          isValid = false
+          break
+        }
+      } 
+    }
+    return isValid
+  }
+  
 
   onUpload(event: UploadEvent, res: CMResultDto) {
     if (event.originalEvent.body) {

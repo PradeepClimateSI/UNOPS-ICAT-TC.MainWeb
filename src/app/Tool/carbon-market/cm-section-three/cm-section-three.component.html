@@ -520,10 +520,14 @@
                 <div class="row justify-content-end" *ngIf="activeIndex2 === outcome.length - 1">
                     <div>
                         <div class="d-flex flex-row-reverse mt-20 ">
-                            <div class="btn btn-primary text-uppercase" (click)="submit('',false,'','')">
+                            <!-- <div [ariaDisabled]="savedData" class="btn btn-primary text-uppercase" (click)="submit('',false,'','')">
                                 {{ approach === 'INDIRECT' ? 'Send to Data Collection Team' : 'Calculate & CheckResults'
                                 }}
-                            </div>
+                            </div> -->
+                            <button [disabled]="savedData" class="btn btn-primary text-uppercase" (click)="submit('',false,'','')">
+                                {{ approach === 'INDIRECT' ? 'Send to Data Collection Team' : 'Calculate & CheckResults'
+                                }}
+                            </button>
                         </div>
                     </div>
                 </div>
