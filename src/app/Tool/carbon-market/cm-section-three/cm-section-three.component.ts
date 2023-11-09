@@ -199,8 +199,10 @@ export class CmSectionThreeComponent implements OnInit {
               sc.assessmentQuestionId = assQ.id
               sc.filePath = assQ.uploadedDocumentPath
               sc.selectedSdg = assQ.selectedSdg
-              let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, sc.characteristic)
-              if (score) sc.selectedScore = score
+              if (assQ.assessmentAnswers[0]) {
+                let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, sc.characteristic)
+                if (score) sc.selectedScore = score
+              }
             }
             return sc
           })
@@ -211,10 +213,12 @@ export class CmSectionThreeComponent implements OnInit {
               sc.assessmentQuestionId = assQ.id
               sc.filePath = assQ.uploadedDocumentPath
               sc.selectedSdg = assQ.selectedSdg
-              let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, sc.characteristic)
-              if (score) {
-                sc.selectedScore = score
-                this.onSelectScore({}, sc, 2)
+              if (assQ.assessmentAnswers[0]) {
+                let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, sc.characteristic)
+                if (score) {
+                  sc.selectedScore = score
+                  this.onSelectScore({}, sc, 2)
+                }
               }
             }
             return sc
@@ -496,7 +500,7 @@ export class CmSectionThreeComponent implements OnInit {
                 let assQ = this.assessmentquestions.find(o => (o.characteristic.id === res.characteristic.id) && (o.selectedSdg.id === res.selectedSdg.id))
                 if (assQ) {
                   res.assessmentQuestionId = assQ.id
-                  res.assessmentAnswerId = assQ.assessmentAnswers[0].id
+                  res.assessmentAnswerId = assQ.assessmentAnswers[0]?.id
                 }
               }
               if (res.selectedScore.name) {
