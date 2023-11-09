@@ -361,13 +361,15 @@ export class CmSectionThreeComponent implements OnInit {
   onSelectScore(event: any, char: CMResultDto, index: number, type?: string) {
     let score = new ScoreDto()
 
-    if (index === 2) {
+    // if (index === 2) {
       if (char.characteristic.category.code === 'SUSTAINED_GHG') {
         let score = 0
         this.outcome.forEach((category: OutcomeCategory) => {
-          category.results.forEach((result) => {
-            if (result.selectedScore.value) score = score + result.selectedScore.value
-          })
+          if (['SUSTAINED_GHG', 'SCALE_GHG'].includes(category.code)) {
+            category.results.forEach((result) => {
+              if (result.selectedScore.value) score = score + result.selectedScore.value
+            })
+          }
         })
         this.GHGScore = Math.round(score / 6)
       } else if (char.characteristic.category.code === 'SUSTAINED_SD') {
@@ -384,13 +386,15 @@ export class CmSectionThreeComponent implements OnInit {
       } else if (char.characteristic.category.code === 'SUSTAINED_ADAPTATION') {
         let score = 0
         this.outcome.forEach((category: OutcomeCategory) => {
-          category.results.forEach((result) => {
-            if (result.selectedScore.value) score = score + result.selectedScore.value
-          })
+          if (['SUSTAINED_ADAPTATION', 'SCALE_ADAPTATION'].includes(category.code)) {
+            category.results.forEach((result) => {
+              if (result.selectedScore.value) score = score + result.selectedScore.value
+            })
+          }
         })
         this.adaptationScore = Math.round(score / 6)
       }
-    }
+    // }
   }
 
   onAnswer(event: any, question: any, characteristic?: Characteristics) {
