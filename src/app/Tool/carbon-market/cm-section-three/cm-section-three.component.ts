@@ -136,7 +136,9 @@ export class CmSectionThreeComponent implements OnInit {
       }
       int =int+1;
     })
-
+if(this.assessment.lastDraftLocation=="out"){
+  this.activeIndexMain =1;
+}
     this.outcome.forEach((d:any)=>{
       if(d.code == this.assessment.outcomeDraftLocation){
         this.activeIndex2 = d.order-1;

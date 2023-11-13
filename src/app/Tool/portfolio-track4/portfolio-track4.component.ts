@@ -102,7 +102,8 @@ export class PortfolioTrack4Component implements OnInit {
     CategoryName: string,
     categoryID: number,
     isValidated:boolean|null
-    data: InvestorAssessment[]
+    data: InvestorAssessment[],
+    id:number,
   }[] = [];
   //class variable
   @ViewChild(TabView) tabView: TabView;
@@ -306,10 +307,12 @@ export class PortfolioTrack4Component implements OnInit {
     console.log(this.outcomeData)
     this.outcomeData.forEach((d)=>{
       if(d.CategoryName == this.assessment.outcomeDraftLocation){
-        this.activeIndex2 = d.categoryID -this.processData.length-1;
-        console.log(this.activeIndex2,d.categoryID)
+        this.activeIndex2 = d.id ;
       }
     })
+    if(this.assessment.lastDraftLocation =='out'){
+      this.activeIndexMain =1;
+    }
     // this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
     this.policies.push(this.assessment.climateAction)
     this.finalBarrierList = this.assessment['policy_barrier']
@@ -552,7 +555,8 @@ this.selectedSDGsWithAnswers = this.selectedSDGs.map(selectedSdg => {
           this.outcomeData.push({
             type: 'outcome', CategoryName: x.name, categoryID: x.id,
             data: categoryArray,
-            isValidated: null
+            isValidated: null,
+            id: 0
           })
 
           if(x.name === 'SDG Scale of the Outcome'){
@@ -835,6 +839,7 @@ console.log("wwwwww", this.outcomeData)
       isEdit : this.isEditMode,
       proDraftLocation: proDraftLocation,
       outDraftLocation: outDraftLocation,
+      lastDraftLocation:type,
       scaleSDGs : this.sdgDataSendArray2,
       sustainedSDGs : this.sdgDataSendArray4,
       sdgs : this.selectedSDGsWithAnswers

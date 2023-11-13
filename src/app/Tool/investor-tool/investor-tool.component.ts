@@ -316,13 +316,14 @@ abatement: any;
         this.activeIndex = d.categoryID -1;
       }
     })
-    console.log(this.outcomeData)
     this.outcomeData.forEach((d)=>{
       if(d.CategoryName == this.assessment.outcomeDraftLocation){
-        this.activeIndex2 = d.id -this.processData.length-1;
-        console.log(this.activeIndex2,d.categoryID)
+        this.activeIndex2 = d.id ;
       }
     })
+    if(this.assessment.lastDraftLocation =='out'){
+      this.activeIndexMain =1;
+    }
 
     this.outcomeData = this.outcomeData.map((d) => {
       if (d.CategoryName === 'GHG Scale of the Outcome') {
@@ -690,6 +691,7 @@ console.log("itemmmm", item)
       isDraft : true,
       proDraftLocation: proDraftLocation,
       outDraftLocation: outDraftLocation,
+      lastDraftLocation:type,
       isEdit : this.isEditMode,
       scaleSDGs : this.sdgDataSendArray2,
       sustainedSDGs : this.sdgDataSendArray4,
