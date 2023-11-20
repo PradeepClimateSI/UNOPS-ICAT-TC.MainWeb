@@ -389,17 +389,46 @@
                 <app-heat-map *ngIf="!isDownloading" id="heatmap" [xData]="xData" [yData]="yData" [score]="heatMapScore"></app-heat-map>
 
             </div>
-            <div class="p-grid p-fluid col-md-12 col-sm-12">
+            <!-- <div class="p-grid p-fluid col-md-12 col-sm-12">
                 <div class="row p-2">
                     <div class="col-8"></div>
                     <div class="col-2">
                         <button pButton pRipple type="button" label="Download Excel" (click)="toDownloadExcel()" class="p-button-info" *ngIf="!isDownloading"></button>
+                        <button  class="btn btn-primary btn-block text-uppercase mr-20" label="Genarate" (click)="generate()">Genarate Report</button>
+
                     </div>
-                    <!-- <div class="col-2">
-                    <button pButton pRipple type="button" label="Download PDF" (click)="toDownloadPdf()"
-                        class="p-button-info" *ngIf="!isDownloading"></button>
-                </div> -->
+                 
                 </div>
-            </div>
+             
+            </div> -->
         </div>
     </div>
+    <div class="container pl-20 pr-20">
+ 
+        <div class="d-flex flex-row-reverse mt-2 mb-2">
+          <button (click)="toDownloadExcel()" class="btn btn-primary btn-block text-uppercase">Download as Excel</button>
+          <button  class="btn btn-primary btn-block text-uppercase mr-20" label="Genarate" (click)="generate()">Genarate Report</button>
+        </div>
+      </div>
+    <p-dialog [(visible)]="display">
+        <div class="container" style="width: 600px; height: 400px">
+          
+          
+            <div class="row p-2">
+                <div class="col-2">
+                    <div>
+                        <label for="sector">Report Name</label>
+                    </div>
+                </div>
+                <div class="col-10">
+                    <div>
+                        <input [style]="{ width: '75%' }" type="text" name="reportName" class="p-inputtext"
+                            [(ngModel)]="reportName" pInputText />
+                    </div>
+                </div>
+            </div>
+            <div>
+                <button style="margin-right: 5px" pButton pRipple label="Generate" (click)="confirm()"></button>
+            </div>
+        </div>
+      </p-dialog>
