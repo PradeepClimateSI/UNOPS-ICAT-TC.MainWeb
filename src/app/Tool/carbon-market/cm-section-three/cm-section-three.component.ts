@@ -1,5 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { SelectedScoreDto } from 'app/shared/score.dto';
 import { environment } from 'environments/environment';
@@ -28,6 +29,15 @@ export class CmSectionThreeComponent implements OnInit {
   @Input() isEditMode: boolean
   @Input() assessment:Assessment;
   @Output() onSubmit = new EventEmitter()
+  // @ViewChild('scaleGHGData', { read: NgForm }) scale_ghg_form!: NgForm;
+  // @ViewChild('sustainGHGData', { read: NgForm }) sustaine_ghg_form!: NgForm;
+  // @ViewChild('fData', { read: NgForm }) scale_sdg_form!: NgForm;
+  // @ViewChild('fData', { read: NgForm }) sustaine_sdg_form!: NgForm;
+
+  @ViewChildren(NgForm) viewChildren!: QueryList<NgForm>;
+
+
+  clickedFormMap: {[key: number]: boolean}= {}
 
   comment: any;
   SDGs: SDG[]
@@ -340,26 +350,44 @@ if(this.assessment.lastDraftLocation=="out"){
 
   onCategoryTabChange2($event: any) {
     // throw new Error('Method not implemented.');
+    // this.nextClicked = false
   }
+
+  isFormValid() {
+    let form = this.viewChildren.filter((f, idx) => idx === this.activeIndex2)
+    return form[0].form.valid
+  }
+
 
   next(category: string, characteristics?: any[]) {
     this.nextClicked = true
+    if (this.activeIndexMain === 1) {
+      this.clickedFormMap[this.activeIndex2] = true
+      if (!this.isFormValid()) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Please fill all mandotory fields',
+          closable: true,
+        });
+      }
+    }
     if (!this.isDraftSaved) {
       this.categoriesToSave.push(category)
     } else this.isDraftSaved = !this.isDraftSaved
     if (characteristics?.filter(o => o.relevance !== undefined)?.length === characteristics?.length) {
-      if (this.activeIndexMain === 1) {
+      if (this.activeIndexMain === 1 && this.isFormValid()) {
         this.activeIndex2 = this.activeIndex2 + 1;
       }
-      if (this.activeIndex === this.categories.process.length - 1) {
+      if (this.activeIndex === this.categories.process.length - 1 ) {
         this.activeIndexMain = 1;
       }
-      if (this.activeIndex <= this.categories.process.length - 2 && this.activeIndex >= 0 && this.activeIndexMain === 0) {
+      if (this.activeIndex <= this.categories.process.length - 2 && this.activeIndex >= 0 && this.activeIndexMain === 0 ) {
         this.activeIndex = this.activeIndex + 1;
       }
       if (this.activeIndexMain === 0) {
         this.onCategoryTabChange({ index: this.activeIndex })
-      }
+      } 
     } else {
       this.messageService.add({
         severity: 'error',
