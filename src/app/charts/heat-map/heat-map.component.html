@@ -14,7 +14,7 @@
         <tr *ngFor="let y of yData">
             <td style="font-size: small;">{{y.label}}</td>
             <ng-container *ngFor="let x of xData">
-                <td class="charttd" [style.background-color]="getBackgroundColor(y.value+x.value)" [style.color]="getIntervention(x.value, y.value)?'blue':getBackgroundColor(y.value+x.value)">
+                <td class="charttd" [style.background-color]="getBackgroundColor(x.value, y.value)" [style.color]="getIntervention(x.value, y.value)?'blue':getBackgroundColor(x.value, y.value)">
                     <span (mouseenter)="enterHeatMapPoint(x.value, y.value,$event);"
                         (mouseleave)="leaveHeatMapPoint();op.hide()"
                         [ngClass]="getIntervention(x.value, y.value)? 'intervention':''">1</span>

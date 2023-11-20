@@ -76,7 +76,8 @@
                                 </div>
                             </div>
                             <div class="row p-2">
-                                <div class="col-4">Score</div>
+                                <div class="col-4">Score <i class="pi pi-info-circle" pTooltip="{{char.characteristic.code === 'INTERNATIONAL' ? GHG_scale_info.macro : (char.characteristic.code === 'NATIONAL' ? GHG_scale_info.medium : GHG_scale_info.micro)}}" tooltipPosition="bottom"
+                                    style="font-size: 1rem"></i></div>
                                 <div class="col-6">
                                     <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.id" #type="ngModel" 
                                         placeholder="Select Score" [(ngModel)]="char.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}" 
@@ -222,7 +223,8 @@
                                 </div>
                             </div>
                             <div class="row p-2">
-                                <div class="col-4">Score</div>
+                                <div class="col-4">Score <i class="pi pi-info-circle" pTooltip="{{char.characteristic.code === 'INTERNATIONAL' ? adaptation_scale_info.macro : (char.characteristic.code === 'NATIONAL' ? adaptation_scale_info.medium : adaptation_scale_info.micro)}}" tooltipPosition="bottom"
+                                    style="font-size: 1rem"></i></div>
                                 <div class="col-6">
                                     <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.id" #type="ngModel"
                                         placeholder="Select Score" [(ngModel)]="char.selectedScore"
@@ -384,7 +386,8 @@
                                             </div>
                                         </div>
                                         <div class="row p-2">
-                                            <div class="col-4">Score</div>
+                                            <div class="col-4">Score <i class="pi pi-info-circle" pTooltip="{{char.characteristic.code === 'INTERNATIONAL' ? SD_scale_info.macro : (char.characteristic.code === 'NATIONAL' ? SD_scale_info.medium : SD_scale_info.micro)}}" tooltipPosition="bottom"
+                                                style="font-size: 1rem"></i></div>
                                             <div class="col-8">
                                                 <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+SDG.code"
                                                     #type="ngModel" placeholder="Select Score"

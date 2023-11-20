@@ -49,6 +49,9 @@ export class CmSectionThreeComponent implements OnInit {
   sdgsToLoop: SDG[]
   uploadedFiles: any = [];
   uploadUrl: string;
+  GHG_scale_info: any
+  SD_scale_info: any
+  adaptation_scale_info: any
   GHG_scale_score_macro: ScoreDto[]
   GHG_scale_score_medium: ScoreDto[]
   GHG_scale_score_micro: ScoreDto[]
@@ -103,6 +106,9 @@ export class CmSectionThreeComponent implements OnInit {
     this.starting_situation_tooltip = "Please describe the baseline scenario on the indicated scale for the intervention, including the current and expected climate risks and impacts in the project area."
     this.expected_impact_tooltip = "Please describe the proposed technology/intervention (i.e. unit) in its technical parameters, e.g. size, volume, lifetime and its operational output that lead to adaptation co-benefit under the intervention on the indicated scale."
 
+    this.GHG_scale_info = this.masterDataService.GHG_scale_info
+    this.SD_scale_info = this.masterDataService.SD_scale_info
+    this.adaptation_scale_info = this.masterDataService.adaptation_scale_info
     this.GHG_scale_score_macro = this.masterDataService.GHG_scale_score_macro
     this.GHG_scale_score_medium = this.masterDataService.GHG_scale_score_medium
     this.GHG_scale_score_micro = this.masterDataService.GHG_scale_score_micro

@@ -25,32 +25,37 @@ export class HeatMapComponent {
     this.isSafari = platform.SAFARI
   }
 
-  getBackgroundColor(value: number): string {
-    switch (value) {
-      case -3:
-        return '#ec6665';
-      case -2:
-        return '#ed816c';
-      case -1:
-        return '#f19f70';
-      case 0:
-        return '#f4b979';
-      case 1:
-        return '#f9d57f';
-      case 2:
-        return '#fcf084';
-      case 3:
-        return '#e0e885';
-      case 4:
-        return '#c1e083';
-      case 5:
-        return '#a3d481';
-      case 6:
-        return '#84cc80';
-      case 7:
-        return '#65c17e';
-      default:
-        return 'white';
+  getBackgroundColor(x: number, y: number): string {
+    if ((x <= -1) || (x === 1 && y === 0) || (x === 0 && y === 1) || (x === 0 && y === 0)) {
+      return '#ec6665'
+    } else {
+      let value = x + y
+      switch (value) {
+        case -3:
+          return '#ec6665';
+        case -2:
+          return '#ed816c';
+        case -1:
+          return '#f19f70';
+        case 0:
+          return '#f4b979';
+        case 1:
+          return '#f9d57f';
+        case 2:
+          return '#f98570';
+        case 3:
+          return '#fdbf7b';
+        case 4:
+          return '#fedc82';
+        case 5:
+          return '#a9d27f';
+        case 6:
+          return '#86c97d';
+        case 7:
+          return '#63be7b';
+        default:
+          return 'white';
+      }
     }
   }
 
