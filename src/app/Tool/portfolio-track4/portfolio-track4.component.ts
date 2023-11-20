@@ -487,8 +487,9 @@ this.selectedSDGsWithAnswers = this.selectedSDGs.map(selectedSdg => {
   async getCharacteristics() {
     this.characteristicsList = await this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().toPromise();
     this.barrierChList = [...this.characteristicsList]
-    this.barrierChList = this.barrierChList.filter((ch: { category: { code: string; }; }) => {return !["SCALE_ADAPTATION", "SUSTAINED_ADAPTATION"].includes(ch.category.code)})
-    this.barrierChList = this.barrierChList.filter((v: { code: any; }, i: any, a: any[]) => a.findIndex(v2 => (v2.code === v.code)) === i)
+    this.barrierChList = this.barrierChList.filter((ch: Characteristics) => {return ch.category.type === 'process'})
+    // this.barrierChList = this.barrierChList.filter((ch: { category: { code: string; }; }) => {return !["SCALE_ADAPTATION", "SUSTAINED_ADAPTATION"].includes(ch.category.code)})
+    // this.barrierChList = this.barrierChList.filter((v: { code: any; }, i: any, a: any[]) => a.findIndex(v2 => (v2.code === v.code)) === i)
     this.characteristicsLoaded = true;
      console.log("11111")
    /*  this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().subscribe((res3: any) => {
