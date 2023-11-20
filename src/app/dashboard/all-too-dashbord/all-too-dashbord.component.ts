@@ -245,7 +245,51 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
   
   };
 
+  mapOutcomeScores(value: number) {
+    
+    switch (value) {
+      case -1:
+        return 'Minor Negative';
+      case -2:
+        return 'Moderate Negative';
+      case -3:
+        return 'Major Negative';
+      case 0:
+        return 'None';
+      case 1:
+        return 'Minor';
+      case 2:
+        return 'Moderate';
+      case 3:
+        return 'Major';
+      
+      case null:
+        return 'N/A'
+      default:
+        return 'N/A';
 
+    }
+  }
+
+  mapProcessScores(value: number) {
+   
+    switch (value) {
+      case 0:
+        return 'Very unlikely (0-10%)';
+      case 1:
+        return 'Unlikely (10-30%)     ';
+      case 2:
+        return 'Possible (30-60%)';
+      case 3:
+        return 'Likely (60-90%)';
+      case 4:
+        return 'Very likely (90-100%)'
+      case null:
+        return 'N/A'
+      default:
+        return 'N/A';
+    }
+  }
   getBackgroundColor(value: number): string {
     switch (value) {
       case -3:

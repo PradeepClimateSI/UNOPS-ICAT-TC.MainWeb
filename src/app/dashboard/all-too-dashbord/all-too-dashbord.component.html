@@ -20,10 +20,12 @@
                     <tr>
                         <td>{{ tableData.climateAction?.policyName }}</td>
                         <td>{{ masterDataService.getToolName(tableData.tool) }}</td>
-                        <td class="text-center">{{ tableData.process_score!=null && tableData.process_score!=undefined?
+                        <!-- <td class="text-center">{{ tableData.process_score!=null && tableData.process_score!=undefined?
                             tableData.process_score:'-' }}</td>
                         <td class="text-center">{{ tableData.outcome_score!=null &&
-                            tableData.outcome_score!=undefined?tableData.outcome_score:'-' }}</td>
+                            tableData.outcome_score!=undefined?tableData.outcome_score:'-' }}</td> -->
+                            <td>{{ mapProcessScores(tableData.process_score) }}</td>
+                            <td>{{ mapOutcomeScores(tableData.outcome_score) }}</td>
                     </tr>
                 </ng-template>
 

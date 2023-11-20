@@ -221,7 +221,7 @@ export class DashboardComponent implements OnInit {
           },
           title: {
             display: true,
-            text: 'Number of Interventions', // Set the X-axis label
+            text: 'Number of assessments', // Set the X-axis label
             color: textColorSecondary,
             font: {
               weight: 'bold',

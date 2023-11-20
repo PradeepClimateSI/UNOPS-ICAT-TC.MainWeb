@@ -583,7 +583,7 @@ console.log(this.geographicalAreasList)
     console.log("confirm")
     let body = new CreateReportDto()
     body.assessmentId = this.assessmentId
-    body.tool = this.tool=="PORTFOLIO"?"Other Interventions":"Investment"
+    body.tool = this.tool=="PORTFOLIO"?"General tool":"Investment"
     body.type = 'Result'
     body.climateAction = this.intervention
     body.reportName = this.reportName

@@ -393,7 +393,7 @@ export class MasterDataService {
     ]
 
     this.tools = [
-      {id: 1, name: 'Other Interventions', code: 'PORTFOLIO'},
+      {id: 1, name: 'General tool', code: 'PORTFOLIO'},
       {id: 2, name: 'Carbon Market Tool', code: 'CARBON_MARKET'},
       {id: 3, name: 'Investor & Private Sector Tool', code: 'INVESTOR'},
     ]
