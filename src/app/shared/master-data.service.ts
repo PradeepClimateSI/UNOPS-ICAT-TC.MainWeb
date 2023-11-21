@@ -430,21 +430,21 @@ export class MasterDataService {
     ]
 
     this.xData = [
-      {label: '3 - Major', value: 3},
-      {label: '2 - Moderate', value: 2},
-      {label: '1 - Minor', value: 1},
-      {label: '0 - None', value: 0},
-      {label: '-1 - Minor Negative', value: -1},
-      {label: '-2 - Moderate Negative', value: -2},
-      {label: '-3 - Major Negative', value: -3}
+      {label: 'Major', value: 3},
+      {label: 'Moderate', value: 2},
+      {label: 'Minor', value: 1},
+      {label: 'None', value: 0},
+      {label: 'Minor Negative', value: -1},
+      {label: 'Moderate Negative', value: -2},
+      {label: 'Major Negative', value: -3}
     ]
   
     this.yData = [
-      {label: '4 - Very likely (90-100%)', value: 4},
-      {label: '3 - Likely (60-90%)', value: 3},
-      {label: '2 - Possible (30-60%)', value: 2},
-      {label: '1 - Unlikely (10-30%)', value: 1},
-      {label: '0 - Very Unlikely (0-10%)', value: 0}
+      {label: 'Very likely', value: 4},
+      {label: 'Likely', value: 3},
+      {label: 'Possible', value: 2},
+      {label: 'Unlikely', value: 1},
+      {label: 'Very Unlikely', value: 0}
     ]
 
     this.SDGs= [
