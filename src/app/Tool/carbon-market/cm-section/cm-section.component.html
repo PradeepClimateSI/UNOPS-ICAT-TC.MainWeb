@@ -2,7 +2,7 @@
     <div class="p-2" style="min-height: 600px;">
         <div class="p-grid p-fluid  col-sm-12">
             <!-- <app-cm-section-three [approach]="approach" (onSubmit)="save($event)"></app-cm-section-three> -->
-            <p-accordion [activeIndex]="openAccordion" (onOpen)="onOpenTab($event)">
+            <!-- <p-accordion [activeIndex]="openAccordion" (onOpen)="onOpenTab($event)">
                 <ng-container *ngFor="let section of sections; let idxs = index;">
                     <p-accordionTab *ngIf="shownSections[idxs]"   header="{{section.name}}">
                         <p>{{section.description}}</p>
@@ -13,6 +13,27 @@
                                     <ng-container *ngFor="let question of criteria.questions;let idx=index;">
                                         <app-cm-question [assessmentquestions]="assessmentQuestions" [question]="question" (prev_answer)="onAnswer($event, question.message, criteria,idxs, idxc, idx )"
                                             *ngIf="shownQuestions[idxs][idxc][idx]" [approach]="approach" [isEditMode]="isEditMode"></app-cm-question>
+                                    </ng-container>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                        <ng-container  *ngIf="section.code === 'SECTION_3'">
+                            <app-cm-section-three [assessmentquestions]="assessmentQuestions" [isEditMode]="isEditMode" [approach]="approach" [assessment]="assessment" (onSubmit)="save($event)"></app-cm-section-three>
+                        </ng-container>
+                    </p-accordionTab>
+                </ng-container>
+            </p-accordion> -->
+
+            <p-accordion [activeIndex]="openAccordion" (onOpen)="onOpenTab($event)">
+                <ng-container *ngFor="let section of sections; let idxs = index;">
+                    <p-accordionTab  header="{{section.name}}"  *ngIf="idxs <= currentSection">
+                        <ng-container *ngIf="section.code === 'SECTION_2'">
+                            <ng-container *ngFor="let criteria of criterias[idxs]; let idxc = index;">
+                                <div class="row p-2" *ngIf="idxc <= currentCriteria">
+                                    <label >{{criteria.name}}</label>
+                                    <ng-container *ngFor="let question of criteria.questions;let idx=index; ">
+                                        <app-cm-question *ngIf="idx <= criteria.currentQuestion" [assessmentquestions]="assessmentQuestions" [question]="question" (prev_answer)="onAnswer2($event, question.message, question, criteria, section )"
+                                            [approach]="approach" [isEditMode]="isEditMode"></app-cm-question>
                                     </ng-container>
                                 </div>
                             </ng-container>

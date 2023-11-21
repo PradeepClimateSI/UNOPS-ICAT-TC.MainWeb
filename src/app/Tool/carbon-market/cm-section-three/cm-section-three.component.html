@@ -64,7 +64,7 @@
                                     <div class="col-8">
                                         <input type="text" [name]="'stSituation'+char.characteristic.id" #tboundrary="ngModel" placeholder="Please describe the baseline emissions on the indicated scale." [(ngModel)]="char.startingSituation" class="form-control" required />
                                         <p class="info-message text-danger" *ngIf="
-                                            (fData.form.controls['stSituation'+char.characteristic.id].touched ? 
+                                            (fData.form.controls['stSituation'+char.characteristic.id]?.touched ? 
                                                 (char.startingSituation === undefined || char.startingSituation === '')
                                              : char.startingSituation === undefined && clickedFormMap[activeIndex2])
                                             ">
@@ -78,7 +78,7 @@
                                     <div class="col-8">
                                         <input type="text" [name]="'impact'+char.characteristic.id" #tboundrary="ngModel" placeholder="Please describe the expected emissions reductions on the indicated scale." [(ngModel)]="char.expectedImpact" class="form-control" required />
                                         <p class="info-message text-danger" *ngIf="
-                                                (fData.form.controls['impact'+char.characteristic.id].touched ? 
+                                                (fData.form.controls['impact'+char.characteristic.id]?.touched ? 
                                                     (char.expectedImpact === undefined || char.expectedImpact === '')
                                                 : char.expectedImpact === undefined && clickedFormMap[activeIndex2])
                                                 ">
@@ -114,7 +114,7 @@
                                     <div class="col-6">
                                         <input type="text" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" placeholder="Enter Justification" required />
                                         <p class="info-message text-danger" *ngIf="
-                                                (fData.form.controls['justification'+char.characteristic.id].touched ? 
+                                                (fData.form.controls['justification'+char.characteristic.id]?.touched ? 
                                                     (char.comment === undefined || char.comment === '')
                                                 : char.comment === undefined && clickedFormMap[activeIndex2])
                                                 ">

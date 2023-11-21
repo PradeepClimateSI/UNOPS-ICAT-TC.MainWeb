@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { Assessment, CMAnswer, CMAssessmentQuestion, CMAssessmentQuestionControllerServiceProxy, CMQuestionControllerServiceProxy, CMResultDto, Institution, SaveCMResultDto, ScoreDto, ServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Assessment, CMAnswer, CMAssessmentQuestion, CMAssessmentQuestionControllerServiceProxy, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Criteria, Institution, SaveCMResultDto, ScoreDto, Section, ServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-cm-section',
@@ -29,6 +29,7 @@ export class CmSectionComponent implements OnInit {
   visible: boolean = false
 
   result: any
+  sectionResult: SectionResultDto = new SectionResultDto()
   isPassed: boolean = false
   preQuestionIdx: number | undefined
 
@@ -36,6 +37,11 @@ export class CmSectionComponent implements OnInit {
   defaultMessage = 'The preconditions for transformational change have not been met. <br> Transformational change = 0'
   assessmentQuestions: CMAssessmentQuestion[]
   isFirstLoading: boolean = false
+  currentQuestion: number = 0;
+  loadedQuestions: number[] = []
+  currentCriteria: number = 0
+  currentSection: number = 0
+  loadedCriterias: number[] = []
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -103,11 +109,11 @@ export class CmSectionComponent implements OnInit {
       _criterias.map(async criteria => {
         let q = await this.cMQuestionControllerServiceProxy.getQuestionsByCriteria(criteria.id).toPromise()
         criteria['questions'] = q
+        criteria['currentQuestion'] = 0
         return criteria
       })
     )
     this.criterias.push(_criterias)
-    console.log(this.criterias)
   }
 
   async onOpenTab(e: any) {
@@ -115,9 +121,137 @@ export class CmSectionComponent implements OnInit {
     await this.getCriteriaBySection(section.id)
   }
 
+  onAnswer2(e:any, message: string, question: any, criteria: any, section: any) {
+    if (!this.loadedQuestions.includes(question.id)){
+      criteria.currentQuestion++
+      this.loadedQuestions.push(question.id)
+    }
+    if ((criteria.questions.length === criteria.currentQuestion) && !this.loadedCriterias.includes(criteria.id)) {
+      this.currentCriteria++
+      this.loadedCriterias.push(criteria.id)
+    }
+    
+    let sectionDto = this.sectionResult.sections?.find(s => s.section.id === section.id)
+    if (!sectionDto) {
+      sectionDto = new SectionDto()
+      sectionDto.section = section
+      sectionDto.criteria = []
+      let _criteriaDto = new CriteriaDto()
+      _criteriaDto.criteria = criteria
+      _criteriaDto.questions = []
+      sectionDto.criteria.push(_criteriaDto)
+      this.sectionResult.sections = []
+      this.sectionResult.sections.push(sectionDto)
+    } 
+
+    let c = sectionDto.criteria.find(cr => cr.criteria.id === criteria.id)
+    let questionDto = new QuestionDto()
+    let q
+    if (c) {
+      q = c.questions.find(_q => _q.question.id === question.id)
+    }
+    if (q) questionDto = q
+
+
+    if (e.type === 'COMMENT') {
+      questionDto.comment = e.comment
+    } else if (e.type === 'FILE') {
+      questionDto.file = e.path
+      this.criterias[0].map((cr: any) => {
+        return cr.questions.map((q: any) => {
+          if (q.id === question.id) {
+            q['result']['filePath'] = e.path
+          }
+          return q
+        })
+      })
+    } else {
+      if (e.type === 'INDIRECT') {
+        questionDto.institution = e.answer
+      } else {
+        if (e.answer.label === 'Unsure') {
+          this.message = 'You are allowed to continue with the assessment, but we are strongly encouraged to evaluate all preconditions to ensure that they are met to enable transformational change.'
+          if (!e.isLoading) {
+            this.visible = true
+          } 
+        }
+        if (!e.answer.isPassing) {
+          if (!this.isFirstLoading) {
+            this.visible = true
+          } else {
+            this.isFirstLoading = false
+          }
+          if (message) {
+            this.message = message
+          } else {
+            this.message = this.defaultMessage
+          }
+        }
+        questionDto.answer = e.answer
+        // if (this.isPassed) this.isPassed = e.answer.isPassed
+      }
+      questionDto.question = question
+      questionDto.type = e.type
+    }
+
+    this.sectionResult.sections.map(sec => {
+      if (sec.section.id === section.id) {
+        sec.criteria.map(cr => {
+          if (cr.criteria.id === criteria.id) {
+            cr.questions.map(q => {
+              if (q.question.id === question.id) {
+                q.answer = questionDto.answer
+                q.comment = questionDto.comment
+                q.file = questionDto.file
+                q.institution = questionDto.institution
+                q.question = questionDto.question
+                q.type = questionDto.type
+              } 
+              return q
+            })
+            if (!cr.questions.find(_q => _q.question?.id === question.id)) {
+              cr.questions.push(questionDto)
+            }
+          }
+          return cr
+        })
+        if (!sec.criteria.find(_cr => _cr.criteria.id === criteria.id)) {
+          let _crt = new CriteriaDto()
+          _crt.criteria = criteria
+          _crt.questions = [questionDto]
+          sec.criteria.push(_crt)
+        }
+      }
+      return sec
+    })
+
+    if ((this.criterias[0].length === this.currentCriteria) ) {
+      this.isPassed = true
+      this.sectionResult.sections.forEach(sec => {
+        sec.criteria.forEach(cr => {
+          cr.questions.forEach(q => {
+            if (this.isPassed) this.isPassed = q.answer.isPassing
+          })
+        })
+      })
+      if (this.isPassed) {
+        this.currentSection++
+      } else {
+        if (this.currentSection === (this.sections.length - 1)) {
+          this.currentSection--
+        }
+      }
+    }
+
+  }
+
   onAnswer(e: any, message: string, criteria: any, sectionIdx: number, criteriaIdx: number, idx: number) {
     this.prev_answer = e.answer
     let question = criteria.questions[idx]
+    if (!this.loadedQuestions.includes(question.id)){
+      this.currentQuestion++
+      this.loadedQuestions.push(question.id)
+    }
     if (e.type === 'COMMENT') {
       this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['comment'] = e.comment
     } else if (e.type === 'FILE') {
@@ -261,11 +395,10 @@ export class CmSectionComponent implements OnInit {
      if(event.type){
       this.shownSections.push(true)
      }
-    console.log(event)
     let result: SaveCMResultDto = new SaveCMResultDto()
     result.result = []
     result.result = [...event.result]
-    this.result.sections.forEach((section: any) => {
+    this.sectionResult.sections.forEach((section: any) => {
       section.criteria.forEach((cr: any) => {
         cr.questions.forEach((q: any) => {
           let item = new CMResultDto()
@@ -342,4 +475,27 @@ export class SaveDto {
   isDraft: boolean = false
   name:string
   type:string
+}
+
+export class SectionResultDto{
+  sections: SectionDto[]
+}
+
+export class SectionDto {
+  section: Section
+  criteria: CriteriaDto[]
+}
+
+export class CriteriaDto {
+  criteria: Criteria
+  questions: QuestionDto[]
+}
+
+export class QuestionDto {
+  answer: CMAnswer
+  institution: Institution
+  comment: string
+  question: CMQuestion
+  type: string
+  file: string
 }
