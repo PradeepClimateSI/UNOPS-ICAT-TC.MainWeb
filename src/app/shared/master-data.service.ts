@@ -39,6 +39,9 @@ export class MasterDataService {
   private _outcomeScaleScore: {id: string, value: number | null}[] = []
   private _outcomeSustainedScore: {id: string, value: number | null}[] = []
   private _GHG_scale_score: ScoreDto[] = []
+  private _GHG_scale_info: any
+  private _SD_scale_info: any
+  private _adaptation_scale_info: any
   private _GHG_scale_score_macro: ScoreDto[] = []
   private _GHG_scale_score_medium: ScoreDto[] = []
   private _GHG_scale_score_micro: ScoreDto[] = []
@@ -289,28 +292,99 @@ export class MasterDataService {
 
     ]
 
+    this.GHG_scale_info = {
+      macro: 'Quantitative impacts can also be entered here, using the following indicators as a guide: 3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.1% of global emissions in the sector in the latest year for which data is available\n' +
+        '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.05% of global emissions in the sector in the latest year for which data is available\n' +
+        '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.01% of global emissions in the sector in the latest year for which data is available\n' +
+        '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) <0.1% of global emissions in the sector in the latest year for which data is available\n' +
+        '-3 - any emissions increase',
+      medium: 'Quantitative impacts can also be entered here, using the following indicators as a guide: 3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >1% of national/sectoral emissions in the latest year for which data is available\n' +
+        '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.5-1% of national/sectoral emissions in the latest year for which data is available\n' +
+        '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.1-0.5% of national/sectoral emissions in the latest year for which data is available\n' +
+        '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) <0.1% of national/sectoral emissions in the latest year for which data is available\n' +
+        '-3 - any emissions increase',
+      micro: 'Quantitative impacts can also be entered here, using the following indicators as a guide: 3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >5% of subnational/regional/municipal emissions in the latest year for which data is available\n' +
+        '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 1-5% of subnational/regional/municipal emissions in the latest year for which data is available\n' +
+        '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.5-1% of subnational/regional/municipal emissions in the latest year for which data is available\n' +
+        '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) less than 0.5% of subnational/regional/municipal emissions in the latest year for which data is available\n' +
+        '-3 - any emissions increase'
+    }
 
+    this.SD_scale_info = {
+      macro: 'Quantitative impacts can also be entered here, using the following indicators as a guide: 3 - Positive material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
+        '2 - Positive material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
+        '1 - Positive material change of more than 5% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
+        '0 - No material change of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
+        '-1 - Negative material change of more than 5% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
+        '-2 - Negative material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
+        '-3 - Negative material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area',
+      medium: 'Quantitative impacts can also be entered here, using the following indicators as a guide: 3 - Positive material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
+        '2 - Positive material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
+        '1 - Positive material change of more than 5% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
+        '0 - No material change of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
+        '-1 - Negative material change of more than 5% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
+        '-2 - Negative material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
+        '-3 - Negative material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area',
+      micro: 'Quantitative impacts can also be entered here, using the following indicators as a guide: 3 - Positive material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
+        '2 - Positive material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
+        '1 - Positive material change of more than 5% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
+        '0 - No material change of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
+        '-1 - Negative material change of more than 5% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
+        '-2 - Negative material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
+        '-3 - Negative material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area'
+    }
+
+    this.adaptation_scale_info = {
+      macro: 'Quantitative impacts can also be entered here, using the following indicators as a guide: 3 - adaptation co-benefit identified and impact is material (indicator value change from baseline to project scenario is above 5%).\n' +
+        '2 - adaptation co benefit identified but impact is not material (indicator value change from baseline to project scenario is below 5%).\n' +
+        '1 - adaptation co-benefit identified but not measured.\n' +
+        '0 - no adaptation co-benefit\n' +
+        '-1 - maladaptation identified but not measured.\n' +
+        '-2 - maladaptation identified but impact is not material (indicator value change from baseline to project scenario is below 5%).\n' +
+        '-3 - maladaptation identified and impact is material (indicator value change from baseline to project scenario is above 5%). ',
+      medium: 'Quantitative impacts can also be entered here, using the following indicators as a guide: 3 - adaptation co-benefit identified and impact is material (indicator value change from baseline to project scenario is above 5%).\n' +
+        '2 - adaptation co benefit identified but impact is not material (indicator value change from baseline to project scenario is below 5%).\n' +
+        '1 - adaptation co-benefit identified but not measured.\n' +
+        '0 - no adaptation co-benefit\n' +
+        '-1 - maladaptation identified but not measured.\n' +
+        '-2 - maladaptation identified but impact is not material (indicator value change from baseline to project scenario is below 5%).\n' +
+        '-3 - maladaptation identified and impact is material (indicator value change from baseline to project scenario is above 5%). ',
+      micro: 'Quantitative impacts can also be entered here, using the following indicators as a guide: 3 - adaptation co-benefit identified and impact is material (indicator value change from baseline to project scenario is above 5%).\n' +
+        '2 - adaptation co benefit identified but impact is not material (indicator value change from baseline to project scenario is below 5%).\n' +
+        '1 - adaptation co-benefit identified but not measured.\n' +
+        '0 - no adaptation co-benefit\n' +
+        '-1 - maladaptation identified but not measured.\n' +
+        '-2 - maladaptation identified but impact is not material (indicator value change from baseline to project scenario is below 5%).\n' +
+        '-3 - maladaptation identified and impact is material (indicator value change from baseline to project scenario is above 5%). '
+    }
+   
     this.GHG_scale_score_macro = [
-      new ScoreDto({name: '3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.1% of global emissions in the latest year for which data is available', code: '3', value: 3}),
-      new ScoreDto({name: '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.05% of global emissions in the latest year for which data is available', code: '2', value: 2}),
-      new ScoreDto({name: '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.01% of global emissions in the latest year for which data is available', code: '1', value: 1}),
-      new ScoreDto({name: '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) <0.1% of global emissions in the latest year for which data is available', code: '0', value: 0}),
-      new ScoreDto({name: '-3 - any emissions increase', code: '-3', value: -3})
+      new ScoreDto({name: '3 - The intervention will result in GHG impacts that represent large emissions reductions, relative to the starting situation, at the level of assessment targeted.', code: '3', value: 3}),
+      new ScoreDto({name: '2 - The intervention will result in GHG impacts that represent moderate emissions reductions, relative to the starting situation, at the level of assessment targeted.', code: '2', value: 2}),
+      new ScoreDto({name: '1 - The intervention will result in GHG impacts that represent minor emissions reductions, relative to the starting situation, at the level of assessment targeted.', code: '1', value: 1}),
+      new ScoreDto({name: '0 - The intervention will not result in GHG impacts relative to the starting situation at the level of assessment targeted.', code: '0', value: 0}),
+      new ScoreDto({name: '-1  - The intervention will result in GHG impacts that represent a minor increase in emissions, relative to the starting situation, at the level of assessment targeted.', code: '-1', value: -1}),
+      new ScoreDto({name: '-2 - The intervention will result in GHG impacts that represent moderate emissions increasing, relative to the starting situation, at the level of assessment targeted.', code: '-2', value: -2}),
+      new ScoreDto({name: '-3 - The intervention will result in GHG impacts that represent a large increase in emissions, relative to the starting situation, at the level of assessment targeted.', code: '-3', value: -3})
     ]
 
     this.GHG_scale_score_medium = [
-      new ScoreDto({name: '3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >1% of national/sectoral emissions in the latest year for which data is available', code: '3', value: 3}),
-      new ScoreDto({name: '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.5-1% of national/sectoral emissions in the latest year for which data is available', code: '2', value: 2}),
-      new ScoreDto({name: '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.1-0.5% of national/sectoral emissions in the latest year for which data is available', code: '1', value: 1}),
-      new ScoreDto({name: '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) <0.1% of national/sectoral emissions in the latest year for which data is available', code: '0', value: 0}),
-      new ScoreDto({name: '-3 - any emissions increase', code: '-3', value: -3})
+      new ScoreDto({name: '3 - The intervention will result in GHG impacts that represent large emissions reductions, relative to the starting situation, at the level of assessment targeted.', code: '3', value: 3}),
+      new ScoreDto({name: '2 - The intervention will result in GHG impacts that represent moderate emissions reductions, relative to the starting situation, at the level of assessment targeted.', code: '2', value: 2}),
+      new ScoreDto({name: '1 - The intervention will result in GHG impacts that represent minor emissions reductions, relative to the starting situation, at the level of assessment targeted.', code: '1', value: 1}),
+      new ScoreDto({name: '0 - The intervention will not result in GHG impacts relative to the starting situation at the level of assessment targeted.', code: '0', value: 0}),
+      new ScoreDto({name: '-1  - The intervention will result in GHG impacts that represent a minor increase in emissions, relative to the starting situation, at the level of assessment targeted.', code: '-1', value: -1}),
+      new ScoreDto({name: '-2 - The intervention will result in GHG impacts that represent moderate emissions increasing, relative to the starting situation, at the level of assessment targeted.', code: '-2', value: -2}),
+      new ScoreDto({name: '-3 - The intervention will result in GHG impacts that represent a large increase in emissions, relative to the starting situation, at the level of assessment targeted.', code: '-3', value: -3})
     ]
     this.GHG_scale_score_micro = [
-      new ScoreDto({name: '3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >5% of subnational/regional/municipal emissions in the latest year for which data is available', code: '3', value: 3}),
-      new ScoreDto({name: '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 1-5% of subnational/regional/municipal emissions in the latest year for which data is available', code: '2', value: 2}),
-      new ScoreDto({name: '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.5-1% of subnational/regional/municipal emissions in the latest year for which data is available', code: '1', value: 1}),
-      new ScoreDto({name: '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) less than 0.5% of subnational/regional/municipal emissions in the latest year for which data is available', code: '0', value: 0}),
-      new ScoreDto({name: '-3 - any emissions increase', code: '-3', value: -3})
+      new ScoreDto({name: '3 - The intervention will result in GHG impacts that represent large emissions reductions, relative to the starting situation, at the level of assessment targeted.', code: '3', value: 3}),
+      new ScoreDto({name: '2 - The intervention will result in GHG impacts that represent moderate emissions reductions, relative to the starting situation, at the level of assessment targeted.', code: '2', value: 2}),
+      new ScoreDto({name: '1 - The intervention will result in GHG impacts that represent minor emissions reductions, relative to the starting situation, at the level of assessment targeted.', code: '1', value: 1}),
+      new ScoreDto({name: '0 - The intervention will not result in GHG impacts relative to the starting situation at the level of assessment targeted.', code: '0', value: 0}),
+      new ScoreDto({name: '-1  - The intervention will result in GHG impacts that represent a minor increase in emissions, relative to the starting situation, at the level of assessment targeted.', code: '-1', value: -1}),
+      new ScoreDto({name: '-2 - The intervention will result in GHG impacts that represent moderate emissions increasing, relative to the starting situation, at the level of assessment targeted.', code: '-2', value: -2}),
+      new ScoreDto({name: '-3 - The intervention will result in GHG impacts that represent a large increase in emissions, relative to the starting situation, at the level of assessment targeted.', code: '-3', value: -3})
     ]
     this.GHG_sustained_score = [
       new ScoreDto({name: '3 - Expected positive impact of over 20 years on the selected scale', code: '3', value: 3}),
@@ -319,14 +393,15 @@ export class MasterDataService {
       new ScoreDto({name: '0 - No expected impact on the selected scale', code: '0', value: 0}),
       new ScoreDto({name: '-1 - Expected negative impact', code: '-1', value: -1})
     ]
+
     this.SDG_scale_score = [
-      new ScoreDto({name: '3 - Positive material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '3', value: 3}),
-      new ScoreDto({name: '2 - Positive material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '2', value: 2}),
-      new ScoreDto({name: '1 - Positive material change of more than 5% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '1', value: 1}),
-      new ScoreDto({name: '0 - No material change of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '0', value: 0}),
-      new ScoreDto({name: '-1 - Negative material change of more than 5% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '-1', value: -1}),
-      new ScoreDto({name: '-2 - Negative material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '-2', value: -2}),
-      new ScoreDto({name: '-3 - Negative material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area', code: '-3', value: -3}),
+      new ScoreDto({name: '3 - The intervention will result in large net positive sustainable development impacts, relative to the starting situation, at the level of assessment targeted.', code: '3', value: 3}),
+      new ScoreDto({name: '2 - The intervention will result in moderate net positive sustainable development impacts, relative to the starting situation, at the level of assessment targeted.', code: '2', value: 2}),
+      new ScoreDto({name: '1 - The intervention will result in minor net positive sustainable development impacts, relative to the starting situation, at the level of assessment targeted.', code: '1', value: 1}),
+      new ScoreDto({name: '0 - The intervention will not result in sustainable development impacts, relative to the starting situation, at the level of assessment targeted.', code: '0', value: 0}),
+      new ScoreDto({name: '-1 - The intervention will result in minor net negative sustainable development impacts, relative to the starting situation, at the level of assessment targeted.', code: '-1', value: -1}),
+      new ScoreDto({name: '-2 - The intervention will result in moderate net negative sustainable development impacts, relative to the starting situation, at the level of assessment targeted.', code: '-2', value: -2}),
+      new ScoreDto({name: '-3 - The intervention will result in large net negative sustainable development impacts, relative to the starting situation, at the level of assessment targeted.', code: '-3', value: -3}),
     ]
     this.SDG_sustained_score = [
       new ScoreDto({name: '3 - Expected positive impact of over 20 years on the selected scale', code: '3', value: 3}),
@@ -337,13 +412,13 @@ export class MasterDataService {
     ]
 
     this.adaptation_scale_score = [
-      new ScoreDto({name: '3 - adaptation co-benefit identified and impact is material (indicator value change from baseline to project scenario is above 5%).', code: '3', value: 3}),
-      new ScoreDto({name: '2 - adaptation co benefit identified but impact is not material (indicator value change from baseline to project scenario is below 5%).', code: '2', value: 2}),
-      new ScoreDto({name: '1 - adaptation co-benefit identified but not measured.).', code: '1', value: 1}),
-      new ScoreDto({name: '0 - no adaptation co-benefit', code: '0', value: 0}),
-      new ScoreDto({name: '-1 - maladaptation identified but not measured.', code: '-1', value: -1}),
-      new ScoreDto({name: '-2 - maladaptation identified but impact is not material (indicator value change from baseline to project scenario is below 5%).', code: '-2', value: -2}),
-      new ScoreDto({name: '-3 - maladaptation identified and impact is material (indicator value change from baseline to project scenario is above 5%). ', code: '-3', value: -3}),
+      new ScoreDto({name: '3 - The intervention will address the root causes of vulnerability to climate change resulting in large net positive climate change adaptation impacts, relative to the starting situation, at the level of assessment targeted.', code: '3', value: 3}),
+      new ScoreDto({name: '2 - The intervention will result in moderate net positive climate change adaptation impacts, relative to the starting situation, at the level of assessment targeted.', code: '2', value: 2}),
+      new ScoreDto({name: '1 - The intervention will result in minor net positive climate change adaptation impacts, relative to the starting situation, at the level of assessment targeted.', code: '1', value: 1}),
+      new ScoreDto({name: '0 - The intervention will not result in climate change adaptation impacts, relative to the starting situation, at the level of assessment targeted.', code: '0', value: 0}),
+      new ScoreDto({name: '-1 - The intervention will result in minor net negative climate change adaptation impacts, relative to the starting situation, at the level of assessment targeted.', code: '-1', value: -1}),
+      new ScoreDto({name: '-2 - The intervention will result in moderate net negative climate change adaptation impacts, relative to the starting situation, at the level of assessment targeted.', code: '-2', value: -2}),
+      new ScoreDto({name: '-3 - The intervention will result in large net negative climate change adaptation impacts, relative to the starting situation, at the level of assessment targeted.', code: '-3', value: -3}),
     ]
 
     this.adaptation_sustained_score = [
@@ -355,21 +430,21 @@ export class MasterDataService {
     ]
 
     this.xData = [
-      {label: '3 - Major', value: 3},
-      {label: '2 - Moderate', value: 2},
-      {label: '1 - Minor', value: 1},
-      {label: '0 - None', value: 0},
-      {label: '-1 - Minor Negative', value: -1},
-      {label: '-2 - Moderate Negative', value: -2},
-      {label: '-3 - Major Negative', value: -3}
+      {label: 'Major', value: 3},
+      {label: 'Moderate', value: 2},
+      {label: 'Minor', value: 1},
+      {label: 'None', value: 0},
+      {label: 'Minor Negative', value: -1},
+      {label: 'Moderate Negative', value: -2},
+      {label: 'Major Negative', value: -3}
     ]
   
     this.yData = [
-      {label: '4 - Very likely (90-100%)', value: 4},
-      {label: '3 - Likely (60-90%)', value: 3},
-      {label: '2 - Possible (30-60%)', value: 2},
-      {label: '1 - Unlikely (10-30%)', value: 1},
-      {label: '0 - Very Unlikely (0-10%)', value: 0}
+      {label: 'Very likely', value: 4},
+      {label: 'Likely', value: 3},
+      {label: 'Possible', value: 2},
+      {label: 'Unlikely', value: 1},
+      {label: 'Very Unlikely', value: 0}
     ]
 
     this.SDGs= [
@@ -671,6 +746,30 @@ export class MasterDataService {
 
   get assessment_approach2 (): { name: string; id: number }[] {
     return this._assessment_approach;
+  }
+
+  set GHG_scale_info(value: any) {
+    this._GHG_scale_info = value;
+  }
+
+  get GHG_scale_info (): any {
+    return this._GHG_scale_info;
+  }
+
+  set SD_scale_info(value: any) {
+    this._SD_scale_info = value;
+  }
+
+  get SD_scale_info (): any {
+    return this._SD_scale_info;
+  }
+
+  set adaptation_scale_info(value: any) {
+    this._adaptation_scale_info = value;
+  }
+
+  get adaptation_scale_info (): any {
+    return this._adaptation_scale_info;
   }
 
   set GHG_scale_score_macro(value: ScoreDto[]) {
