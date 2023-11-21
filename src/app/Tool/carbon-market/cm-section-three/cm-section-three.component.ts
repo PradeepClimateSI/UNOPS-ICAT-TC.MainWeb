@@ -146,17 +146,17 @@ export class CmSectionThreeComponent implements OnInit {
   async setInitialState() {
     let int=0
 
-    this.categories['process'].forEach((d:any)=>{     
-      if(d.name == this.assessment.processDraftLocation){
+    this.categories['process'].forEach((d: any) => {
+      if (d.name == this.assessment.processDraftLocation) {
         this.activeIndex = int;
       }
-      int =int+1;
+      int = int + 1;
     })
-if(this.assessment.lastDraftLocation=="out"){
-  this.activeIndexMain =1;
-}
-    this.outcome.forEach((d:any)=>{
-      if(d.code == this.assessment.outcomeDraftLocation){
+    if (this.assessment.lastDraftLocation == "out") {
+      this.activeIndexMain = 1;
+    }
+    this.outcome.forEach((d: any) => {
+      if (d.code == this.assessment.outcomeDraftLocation) {
         this.activeIndex2 = d.order-1;
       }
     })
@@ -206,45 +206,47 @@ if(this.assessment.lastDraftLocation=="out"){
           }
         })
       )
-      await Promise.all(
-        this.selectedSDGs = this.selectedSDGs.map((sdl: any) => {
-          sdl.scaleResult = sdl.scaleResult.map((sc: any) => {
-            let assQ = this.assessmentquestions.find(o => (o.characteristic.id === sc.characteristic.id) && (o.selectedSdg.id === sc.selectedSdg.id) )
-            if (assQ) {
-              sc.sdgIndicator = assQ.sdgIndicator
-              sc.startingSituation = assQ.startingSituation
-              sc.expectedImpact = assQ.expectedImpact
-              sc.comment = assQ.comment
-              sc.assessmentQuestionId = assQ.id
-              sc.filePath = assQ.uploadedDocumentPath
-              sc.selectedSdg = assQ.selectedSdg
-              if (assQ.assessmentAnswers[0]) {
-                let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, sc.characteristic)
-                if (score) sc.selectedScore = score
-              }
-            }
-            return sc
-          })
-          sdl.sustainResult = sdl.sustainResult.map((sc: any) => {
-            let assQ = this.assessmentquestions.find(o => (o.characteristic.id === sc.characteristic.id) && (o.selectedSdg.id === sc.selectedSdg.id))
-            if (assQ) {
-              sc.comment = assQ.comment
-              sc.assessmentQuestionId = assQ.id
-              sc.filePath = assQ.uploadedDocumentPath
-              sc.selectedSdg = assQ.selectedSdg
-              if (assQ.assessmentAnswers[0]) {
-                let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, sc.characteristic)
-                if (score) {
-                  sc.selectedScore = score
-                  this.onSelectScore({}, sc, 2)
+      if (this.selectedSDGs?.length > 0) {
+        await Promise.all(
+          this.selectedSDGs = this.selectedSDGs.map((sdl: any) => {
+            sdl.scaleResult = sdl.scaleResult.map((sc: any) => {
+              let assQ = this.assessmentquestions.find(o => (o.characteristic.id === sc.characteristic.id) && (o.selectedSdg.id === sc.selectedSdg.id) )
+              if (assQ) {
+                sc.sdgIndicator = assQ.sdgIndicator
+                sc.startingSituation = assQ.startingSituation
+                sc.expectedImpact = assQ.expectedImpact
+                sc.comment = assQ.comment
+                sc.assessmentQuestionId = assQ.id
+                sc.filePath = assQ.uploadedDocumentPath
+                sc.selectedSdg = assQ.selectedSdg
+                if (assQ.assessmentAnswers[0]) {
+                  let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, sc.characteristic)
+                  if (score) sc.selectedScore = score
                 }
               }
-            }
-            return sc
+              return sc
+            })
+            sdl.sustainResult = sdl.sustainResult.map((sc: any) => {
+              let assQ = this.assessmentquestions.find(o => (o.characteristic.id === sc.characteristic.id) && (o.selectedSdg.id === sc.selectedSdg.id))
+              if (assQ) {
+                sc.comment = assQ.comment
+                sc.assessmentQuestionId = assQ.id
+                sc.filePath = assQ.uploadedDocumentPath
+                sc.selectedSdg = assQ.selectedSdg
+                if (assQ.assessmentAnswers[0]) {
+                  let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, sc.characteristic)
+                  if (score) {
+                    sc.selectedScore = score
+                    this.onSelectScore({}, sc, 2)
+                  }
+                }
+              }
+              return sc
+            })
+            return sdl
           })
-          return sdl
-        })
-      )
+        )
+      }
     }
   }
 
