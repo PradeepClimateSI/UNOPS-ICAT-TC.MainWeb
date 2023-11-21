@@ -162,6 +162,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   investment_instruments_3: MasterDataDto[];
 abatement: any;
   barrierChList: any;
+isExceeded: any;
   // isValidated:boolean;
 
   constructor(
@@ -1552,6 +1553,24 @@ assignSDG(sdg : any , data : any){
       this.investment_instruments_1 = this.investment_instruments_1.filter(o => o.code !== event.value)
       this.investment_instruments_2 = this.investment_instruments_2.filter(o => o.code !== event.value)
     }
+  }
+
+  onInputChange(event: any) {
+    const inputValue = event.target.value;
+    const numericValue = parseFloat(inputValue);
+
+
+    if ( numericValue > 100) {
+      event.target.value = 100;
+    }
+
+    let tot = 0
+    this.totalInvestments.forEach(invest => {
+      if (invest.propotion) tot = tot + invest.propotion
+    })
+
+    if (tot > 100) this.isExceeded = true
+    else this.isExceeded = false
   }
 
 }

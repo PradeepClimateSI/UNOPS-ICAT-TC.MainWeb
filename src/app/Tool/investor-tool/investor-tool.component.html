@@ -115,13 +115,21 @@
                             </thead>
                             <tbody>
                               <tr>
-                                <th style="font-weight:normal">Proportion of total investment</th>
+                                <th style="font-weight:normal">Proportion of total investment (%)</th>
                                 <ng-container *ngFor="let tot of totalInvestments; let idx = index">
                                   <td>
-                                    <input pInputText type="number" #totInvestment="ngModel" [name]="'totInvestment'+idx" ngModel
+                                    <input pInputText type="number" (input)="onInputChange($event)"   #totInvestment="ngModel" [name]="'totInvestment'+idx" ngModel
                                     [(ngModel)]="tot.propotion" required [disabled]="isSavedAssessment|| isEditMode"/>
                                   </td>
                                 </ng-container>
+                              </tr>
+                              <tr>
+                                <td></td>
+                                <td colspan="3">
+                                  <p class="info-message text-danger" *ngIf="isExceeded">
+                                    The sum of three propotions need to be less than or equal 100
+                                  </p>
+                                </td>
                               </tr>
                             </tbody>
                           </table>
