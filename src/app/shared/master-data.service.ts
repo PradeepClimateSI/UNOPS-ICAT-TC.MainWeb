@@ -42,6 +42,10 @@ export class MasterDataService {
   private _GHG_scale_info: any
   private _SD_scale_info: any
   private _adaptation_scale_info: any
+  private _other_invest_ghg_info: any
+  private _other_invest_sdg_info: any
+  private _other_invest_adaptation_info: any
+  private _other_invest_ghg_score_info: any
   private _GHG_scale_score_macro: ScoreDto[] = []
   private _GHG_scale_score_medium: ScoreDto[] = []
   private _GHG_scale_score_micro: ScoreDto[] = []
@@ -58,6 +62,7 @@ export class MasterDataService {
   private _sdg_priorities: {id: number, name: string, code: string, value: number}[] = []
   private _scale_of_activity: MasterDataDto[] = []
   private _investment_instruments: MasterDataDto[] = []
+  private _SDG_color_map: {id: number, sdgNumber: number, color: string}[] = []
 
 
   constructor() {
@@ -292,6 +297,8 @@ export class MasterDataService {
 
     ]
 
+
+
     this.GHG_scale_info = {
       macro: 'Quantitative impacts can also be entered here, using the following indicators as a guide: 3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.1% of global emissions in the sector in the latest year for which data is available\n' +
         '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.05% of global emissions in the sector in the latest year for which data is available\n' +
@@ -357,12 +364,54 @@ export class MasterDataService {
         '-2 - maladaptation identified but impact is not material (indicator value change from baseline to project scenario is below 5%).\n' +
         '-3 - maladaptation identified and impact is material (indicator value change from baseline to project scenario is above 5%). '
     }
-   
+
+    this.other_invest_ghg_info = '3 - The intervention will result in GHG impacts that represent large emissions reductions, relative to the starting situation, at the level of assessment targeted.\n' +
+      '2 - The intervention will result in GHG impacts that represent moderate emissions reductions, relative to the starting situation, at the level of assessment targeted.\n' +
+      '1 - The intervention will result in GHG impacts that represent minor emissions reductions, relative to the starting situation, at the level of assessment targeted.\n' +
+      '0 - The intervention will not result in GHG impacts relative to the starting situation at the level of assessment targeted.\n' +
+      '-1  - The intervention will result in GHG impacts that represent a minor increase in emissions, relative to the starting situation, at the level of assessment targeted.\n' +
+      '-2 - The intervention will result in GHG impacts that represent moderate emissions increasing, relative to the starting situation, at the level of assessment targeted.\n' +
+      '-3 - The intervention will result in GHG impacts that represent a large increase in emissions, relative to the starting situation, at the level of assessment targeted.'
+
+    this.other_invest_sdg_info = '3 - The intervention will result in large net positive sustainable development impacts, relative to the starting situation, at the level of assessment targeted.\n' +
+      '2 - The intervention will result in moderate net positive sustainable development impacts, relative to the starting situation, at the level of assessment targeted.\n' +
+      '1 - The intervention will result in minor net positive sustainable development impacts, relative to the starting situation, at the level of assessment targeted.\n' +
+      '0 - The intervention will not result in sustainable development impacts, relative to the starting situation, at the level of assessment targeted.\n' +
+      '-1 - The intervention will result in minor net negative sustainable development impacts, relative to the starting situation, at the level of assessment targeted.\n' +
+      '-2 - The intervention will result in moderate net negative sustainable development impacts, relative to the starting situation, at the level of assessment targeted.\n' +
+      '-3 - The intervention will result in large net negative sustainable development impacts, relative to the starting situation, at the level of assessment targeted.'
+
+    this._other_invest_adaptation_info = '3 - The intervention will address the root causes of vulnerability to climate change resulting in large net positive climate change adaptation impacts, relative to the starting situation, at the level of assessment targeted.\n' +
+      '2 - The intervention will result in moderate net positive climate change adaptation impacts, relative to the starting situation, at the level of assessment targeted.\n' +
+      '1 - The intervention will result in minor net positive climate change adaptation impacts, relative to the starting situation, at the level of assessment targeted.\n' +
+      '0 - The intervention will not result in climate change adaptation impacts, relative to the starting situation, at the level of assessment targeted.\n' +
+      '-1 - The intervention will result in minor net negative climate change adaptation impacts, relative to the starting situation, at the level of assessment targeted.\n' +
+      '-2 - The intervention will result in moderate net negative climate change adaptation impacts, relative to the starting situation, at the level of assessment targeted.\n' +
+      '-3 - The intervention will result in large net negative climate change adaptation impacts, relative to the starting situation, at the level of assessment targeted.'
+
+    this.other_invest_ghg_score_info = {
+      macro: '3 - reduction in emissions > 0.1% of global emissions\n' +
+        '2 - reduction in emissions > 0.05% of global emissions\n' +
+        '1 - reduction in emissions > 0.01% of global emissions\n' +
+        '0 - reduction in emissions < 0.01% of global emissions\n' +
+        '-3 - any emissions increase',
+      medium: '3 - reduction in emissions > 1% of national/sectoral emissions\n' +
+        '2 - reduction in emissions equal to 0.5 - 1% of national/sectoral emissions\n' +
+        '1 - reduction in emissions equal to 0.1 - 0.5% of national/sectoral emissions\n' +
+        '0 - reduction in emissions less than 0.1% of national/sectoral emissions\n' +
+        '-3 - any emissions increase',
+      micro: '3 - reduction in emissions > 5% of subnational/regional/municipal emissions or subsectoral level\n' +
+        '2 - reduction in emissions equal to 1 - 5% subnational/regional/municipal emissions or subsectoral level\n' +
+        '1 - reduction in emissions equal to 0.5 - 1% of subnational/regional/municipal emissions or subsectoral level\n' +
+        '0 - reduction in emissions less than 0.5% of subnational/regional/municipal emissions or subsectoral level\n' +
+        '-3 - any emissions increase'
+    }
+
     this.GHG_scale_score_macro = [
-      new ScoreDto({name: '3 - The intervention will result in GHG impacts that represent large emissions reductions, relative to the starting situation, at the level of assessment targeted.', code: '3', value: 3}),
-      new ScoreDto({name: '2 - The intervention will result in GHG impacts that represent moderate emissions reductions, relative to the starting situation, at the level of assessment targeted.', code: '2', value: 2}),
-      new ScoreDto({name: '1 - The intervention will result in GHG impacts that represent minor emissions reductions, relative to the starting situation, at the level of assessment targeted.', code: '1', value: 1}),
-      new ScoreDto({name: '0 - The intervention will not result in GHG impacts relative to the starting situation at the level of assessment targeted.', code: '0', value: 0}),
+      new ScoreDto({ name: '3 - The intervention will result in GHG impacts that represent large emissions reductions, relative to the starting situation, at the level of assessment targeted.', code: '3', value: 3 }),
+      new ScoreDto({ name: '2 - The intervention will result in GHG impacts that represent moderate emissions reductions, relative to the starting situation, at the level of assessment targeted.', code: '2', value: 2 }),
+      new ScoreDto({ name: '1 - The intervention will result in GHG impacts that represent minor emissions reductions, relative to the starting situation, at the level of assessment targeted.', code: '1', value: 1 }),
+      new ScoreDto({ name: '0 - The intervention will not result in GHG impacts relative to the starting situation at the level of assessment targeted.', code: '0', value: 0 }),
       new ScoreDto({name: '-1  - The intervention will result in GHG impacts that represent a minor increase in emissions, relative to the starting situation, at the level of assessment targeted.', code: '-1', value: -1}),
       new ScoreDto({name: '-2 - The intervention will result in GHG impacts that represent moderate emissions increasing, relative to the starting situation, at the level of assessment targeted.', code: '-2', value: -2}),
       new ScoreDto({name: '-3 - The intervention will result in GHG impacts that represent a large increase in emissions, relative to the starting situation, at the level of assessment targeted.', code: '-3', value: -3})
@@ -499,6 +548,26 @@ export class MasterDataService {
     this.scale_of_activity = [
       { id: 1, name: 'Project', code: 'PROJECT'},
       { id: 2, name: 'Programme', code: 'PROGRAMME'}
+    ]
+
+    this.SDG_color_map = [
+      {id: 1, sdgNumber: 1, color: '#e5233d'},
+      {id: 2, sdgNumber: 2, color: '#dda73a'},
+      {id: 3, sdgNumber: 3, color: '#4ca146'},
+      {id: 4, sdgNumber: 4, color: '#c5192d'},
+      {id: 5, sdgNumber: 5, color: '#ef402c'},
+      {id: 6, sdgNumber: 6, color: '#27bfe6'},
+      {id: 7, sdgNumber: 7, color: '#fbc412'},
+      {id: 8, sdgNumber: 8, color: '#a31c44'},
+      {id: 9, sdgNumber: 9, color: '#f26a2d'},
+      {id: 10, sdgNumber: 10, color: '#e01483'},
+      {id: 11, sdgNumber: 11, color: '#f89d2a'},
+      {id: 12, sdgNumber: 12, color: '#bf8d2c'},
+      {id: 13, sdgNumber: 13, color: '#407f46'},
+      {id: 14, sdgNumber: 14, color: '#1f97d4'},
+      {id: 15, sdgNumber: 15, color: '#59ba48'},
+      {id: 16, sdgNumber: 16, color: '#126a9f'},
+      {id: 17, sdgNumber: 17, color: '#13496b'},
     ]
   }
 
@@ -772,6 +841,38 @@ export class MasterDataService {
     return this._adaptation_scale_info;
   }
 
+  set other_invest_ghg_info(value: any) {
+    this._other_invest_ghg_info = value;
+  }
+
+  get other_invest_ghg_info (): any {
+    return this._other_invest_ghg_info;
+  }
+
+  set other_invest_sdg_info(value: any) {
+    this._other_invest_sdg_info = value;
+  }
+
+  get other_invest_sdg_info (): any {
+    return this._other_invest_sdg_info;
+  }
+
+  set other_invest_adaptation_info(value: any) {
+    this._other_invest_adaptation_info= value;
+  }
+
+  get other_invest_adaptation_info (): any {
+    return this._other_invest_adaptation_info;
+  }
+
+  set other_invest_ghg_score_info(value: any) {
+    this._other_invest_ghg_score_info= value;
+  }
+
+  get other_invest_ghg_score_info (): any {
+    return this._other_invest_ghg_score_info;
+  }
+
   set GHG_scale_score_macro(value: ScoreDto[]) {
     this._GHG_scale_score_macro = value;
   }
@@ -890,6 +991,14 @@ export class MasterDataService {
 
   get investment_instruments (): MasterDataDto[] {
     return this._investment_instruments;
+  }
+
+  set SDG_color_map(value: {id: number; sdgNumber: number; color: string;}[]) {
+    this._SDG_color_map = value;
+  }
+
+  get SDG_color_map (): {id: number; sdgNumber: number; color: string;}[] {
+    return this._SDG_color_map;
   }
 
   getToolName(code: string) {

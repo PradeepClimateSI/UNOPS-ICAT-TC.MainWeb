@@ -108,7 +108,7 @@
 
 <div class="row">
   <div  class="col-md-7 col-sm-7 col-12">
-      <div class="p-grid p-fluid card m-3">
+      <div class="p-grid p-fluid card m-3" style="height: 95.5%;">
           <div class="row text-center ">
               <h3>Recent Assessments Done</h3>
               <ng-container *ngIf="tableData.length==0; else elseBlock3">
@@ -292,7 +292,7 @@
           class="col-12 mt-20"
         
         >
-          <canvas #cmSectorCountPieChart>{{ cmPieChartSectorCount }}</canvas>
+          <canvas height="450" #cmSectorCountPieChart>{{ cmPieChartSectorCount }}</canvas>
         </div>
       </div>
       <div

@@ -101,7 +101,7 @@
             <div class="row text-center">
                 <h3>Sectors represented</h3>
                 <div *ngIf="sectorCount" class="col-12 mt-20" [hidden]="sectorCount.length == 0">
-                    <canvas #investmentSectorCountPieChart>{{ pieChart2 }}</canvas>
+                    <canvas  height="450" #investmentSectorCountPieChart>{{ pieChart2 }}</canvas>
                 </div>
             </div>
             <div *ngIf="sectorCount" class="col-12" [hidden]="sectorCount.length != 0">
