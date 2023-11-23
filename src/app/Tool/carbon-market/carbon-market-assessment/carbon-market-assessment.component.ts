@@ -63,6 +63,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   tooltipContent: any;
   visionExample: any[] = []
   barrierChList: any[];
+  minDate: Date;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -358,6 +359,10 @@ export class CarbonMarketAssessmentComponent implements OnInit {
         ans: 'No',
     },
     ]
+  }
+
+  onSelectIntervention(event: any) {
+    this.minDate = new Date(event.value.dateOfImplementation)
   }
 
 }

@@ -12,7 +12,7 @@
                             <label for="policy">Select Intervetion *</label>
                             <p-dropdown name="policy" #policy="ngModel" placeholder="Select intervention"
                                 [(ngModel)]="assessment.climateAction" appendTo="body" [options]="policies"
-                                optionLabel="policyName" [required]="true" [disabled]="isEditMode"></p-dropdown>
+                                optionLabel="policyName" [required]="true" [disabled]="isEditMode" (onChange)="onSelectIntervention($event)"></p-dropdown>
                             <p class="info-message text-danger" *ngIf="
                                 !assessment.climateAction &&
                                 (fData.submitted || policy.touched)
@@ -98,7 +98,7 @@
                                 </span>
                                 <p-calendar dateFormat="mm-dd-yy" inputId="date1" placeholder="From"
                                     [(ngModel)]="assessment.from" name="date1" #date1="ngModel" [required]="true"
-                                    appendTo="body" [disabled]="isSavedAssessment || isEditMode">
+                                    appendTo="body" [disabled]="isSavedAssessment || isEditMode" [minDate]="minDate">
                                 </p-calendar>
                                 <span class="p-inputgroup-addon">to</span>
                                 <p-calendar dateFormat="mm-dd-yy" inputId="date2" placeholder="To"

@@ -42,6 +42,8 @@ export class CmSectionComponent implements OnInit {
   currentCriteria: number = 0
   currentSection: number = 0
   loadedCriterias: number[] = []
+  showConditionDialog: boolean;
+  visible_condition: boolean;
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -122,6 +124,7 @@ export class CmSectionComponent implements OnInit {
   }
 
   onAnswer2(e:any, message: string, question: any, criteria: any, section: any) {
+    this.showConditionDialog = false
     if (!this.loadedQuestions.includes(question.id)){
       criteria.currentQuestion++
       this.loadedQuestions.push(question.id)
@@ -227,10 +230,12 @@ export class CmSectionComponent implements OnInit {
 
     if ((this.criterias[0].length === this.currentCriteria) ) {
       this.isPassed = true
+      let notMetCriterias: any[] = []
       this.sectionResult.sections.forEach(sec => {
         sec.criteria.forEach(cr => {
           cr.questions.forEach(q => {
             if (this.isPassed) this.isPassed = q.answer.isPassing
+            else notMetCriterias.push(cr.criteria.name)
           })
         })
       })
@@ -240,6 +245,20 @@ export class CmSectionComponent implements OnInit {
         if (this.currentSection === (this.sections.length - 1)) {
           this.currentSection--
         }
+      }
+
+      if (this.isPassed) {
+        this.visible_condition = true
+        this.message = 'All the criterias have been met.'
+      } else {
+        this.showConditionDialog = true
+        notMetCriterias = [... new Set(notMetCriterias)]
+        this.visible_condition = true
+        this.message = 'Following criterias are not met.<ol>'
+        notMetCriterias.forEach(c => {
+          this.message = this.message + '<li>'+c+'</li>'
+        })
+        this.message = this.message + '</ol>'
       }
     }
 
@@ -462,6 +481,10 @@ export class CmSectionComponent implements OnInit {
   }
   okay() {
     this.visible = false
+  }
+
+  okayCondition(){
+    this.visible_condition = false
   }
 
   onSubmitSectionThree($event: any) {
