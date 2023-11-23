@@ -285,6 +285,7 @@ sectorCountResult(){
     // }, 200);
 }
   viewFrequencyofSDGsChart(){
+    console.log(this.sdgDetailsList)
     this.sdgDetailsList.sort((a: any, b: any) => a.number - b.number)
     let labels = this.sdgDetailsList.map((item:any) => 'SDG ' + item.number + ' - ' + item.sdg);
     let counts:number[] = this.sdgDetailsList.map((item:any) => item.count);
@@ -708,7 +709,7 @@ sectorCountResult(){
   getBackgroundColor(value: number): string {
     switch (value) {
       case -3:
-        return '#ec6665';
+        return '#e5233d';
       case -2:
         return '#ed816c';
       case -1:
