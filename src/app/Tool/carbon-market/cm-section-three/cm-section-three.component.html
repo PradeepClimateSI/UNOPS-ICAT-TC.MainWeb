@@ -11,7 +11,8 @@
                     <p>{{char.description}}</p>
                     <div class="row">
                         <div class="col-2">
-                            <label for="Description">Relevance *</label>
+                            <label for="Description">Relevance * <i class="pi pi-info-circle" pTooltip="{{relevance_tooltip}}" tooltipPosition="bottom"
+                                style="font-size: 1rem"></i></label>
                         </div>
                         <div class="col-5">
                             <p-dropdown name="data_charData_relavance" #data_charData_relavance="ngModel" placeholder="Select Relevance" [(ngModel)]="char.relevance" [options]="relevance" optionLabel="name" appendTo="body" optionValue="value" [required]="true"

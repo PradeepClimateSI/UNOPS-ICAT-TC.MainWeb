@@ -87,6 +87,7 @@ export class CmSectionThreeComponent implements OnInit {
   isDraftSaved: boolean = false
   nextClicked: boolean;
   savedData: boolean = false;
+  relevance_tooltip: string;
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -115,6 +116,7 @@ export class CmSectionThreeComponent implements OnInit {
 
     this.starting_situation_tooltip = "Please describe the baseline scenario on the indicated scale for the intervention, including the current and expected climate risks and impacts in the project area."
     this.expected_impact_tooltip = "Please describe the proposed technology/intervention (i.e. unit) in its technical parameters, e.g. size, volume, lifetime and its operational output that lead to adaptation co-benefit under the intervention on the indicated scale."
+    this.relevance_tooltip = "Does the process characteristic affects/impacts any of the identified barriers? does the intervention affects/impacts the process characteristic?"
 
     this.GHG_scale_info = this.masterDataService.GHG_scale_info
     this.SD_scale_info = this.masterDataService.SD_scale_info

@@ -139,6 +139,11 @@ export class PortfolioTrack4Component implements OnInit {
   draftLoading: boolean=false;
   visionExample: { title: string; value: string; }[];
   barrierChList: any;
+  minDate: Date;
+  ghg_info: any
+  sdg_info: any
+  adaptation_info: any
+  ghg_score_info: any
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -182,6 +187,10 @@ export class PortfolioTrack4Component implements OnInit {
     console.log("sectors",this.sectorList)
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;
     this.geographicalAreasCovered = this.masterDataService.level_of_implemetation;
+    this.ghg_info = this.masterDataService.other_invest_ghg_info
+    this.sdg_info = this.masterDataService.other_invest_sdg_info
+    this.adaptation_info = this.masterDataService.other_invest_adaptation_info
+    this.ghg_score_info = this.masterDataService.other_invest_ghg_score_info
     this.activatedRoute.queryParams.subscribe( params => {
       params['isEdit']=='true'?(this.isEditMode =true ):false
       this.assessmentId = params['id']
@@ -1476,6 +1485,22 @@ hideBarrierDialog() {
   // You can perform any cleanup or reset actions here
 }
 
+  onSelectIntervention(event: any) {
+    this.minDate = new Date(event.value.dateOfImplementation)
+  }
+
+  getTooltipData(ch: string) {
+    switch (ch) {
+      case 'International/global level':
+        return this.ghg_score_info.macro
+      case 'National/Sectorial level':
+        return this.ghg_score_info.medium
+      case 'Subnational/regional/municipal or sub sectorial level':
+        return this.ghg_score_info.micro
+      default:
+        return ''
+    }
+  }
 
 }
 
