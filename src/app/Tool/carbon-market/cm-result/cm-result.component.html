@@ -1,6 +1,6 @@
 <div class="container pl-20 pr-20" id="content">
     <div class="mb-12">
-        <h4 class="mt-4"> Result - {{intervention.policyName}}</h4>
+        <h4 class="mt-4"> Result - {{intervention?.policyName}}</h4>
     </div>
     <div class="card" style="min-height: 600px;" id="cmtool">
         <div class="p-grid p-fluid col-md-12 col-sm-12 text-title">
@@ -34,20 +34,23 @@
                                 <th colspan="2"> Justification</th>
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="groupheader" let-customer let-rowIndex="rowIndex" let-expanded="expanded">
+                        <ng-template pTemplate="groupheader" let-criteria let-rowIndex="rowIndex" let-expanded="expanded">
                             <tr>
                                 <td colspan="5">
-                                    <button type="button" pButton pRipple [pRowToggler]="customer" class="p-button-text p-button-rounded p-button-plain mr-2" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-                                    <span class="font-bold ml-2">{{customer.criteria}}</span>
+                                    <button type="button" pButton pRipple [pRowToggler]="criteria" class="p-button-text p-button-rounded p-button-plain mr-2" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                                    <span class="font-bold ml-2">{{criteria.criteria}}
+                                        <span *ngIf="!criteria.satisfied"> ❌</span>
+                                        <span *ngIf="criteria.satisfied"> ✅</span>
+                                    </span>
                                 </td>
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="rowexpansion" let-customer>
+                        <ng-template pTemplate="rowexpansion" let-criteria>
                             <tr>
-                                <td>{{customer.question}}</td>
-                                <td>{{customer.answer}}</td>
-                                <td>{{customer.comment}}</td>
-                                <td> <a *ngIf="customer?.document" target="_blank" [href]="fileServerURL+'/'+customer?.document"><i class="pi pi-download download"></i></a></td>
+                                <td>{{criteria.question}}</td>
+                                <td>{{criteria.answer}}</td>
+                                <td>{{criteria.comment}}</td>
+                                <td> <a *ngIf="criteria?.document" target="_blank" [href]="fileServerURL+'/'+criteria?.document"><i class="pi pi-download download"></i></a></td>
                             </tr>
                         </ng-template>
                     </p-table>
@@ -71,13 +74,13 @@
                 <table>
                     <tr></tr>
                 </table>
-                <table>
+                <table *ngIf="processData.data.length > 0">
                     <tr class="table-header-left">
                         <p style="font-size: large;">Process of Change</p>
                     </tr>
                 </table>
                 <br>
-                <p-table [value]="[{}]" styleClass="p-datatable-gridlines" [scrollable]="true" scrollHeight="400px" id="process-table">
+                <p-table *ngIf="processData.data.length > 0" [value]="[{}]" styleClass="p-datatable-gridlines" [scrollable]="true" scrollHeight="400px" id="process-table">
                     <ng-template pTemplate="header">
                         <tr>
                             <th></th>
@@ -152,7 +155,7 @@
                 </table>
                 <!-- <p style="font-size: large;">Category Score - Process of change - {{score.process_score}}</p> -->
                 <br>
-                <table>
+                <table *ngIf="processData.data.length > 0">
                     <tr class="table-header-left">
                         <p style="font-size: large;">Category Score - Process of change - {{score.process_score === null ? 'N/A' : score.process_score}}</p>
                     </tr>
@@ -163,7 +166,7 @@
                 </table>
                 <!-- <p style="font-size: large;">Outcome of Change - GHG</p> -->
                 <br>
-                <table>
+                <table *ngIf="outcomeData.scale_GHGs.length!=0 || outcomeData.scale_SDs.length!=0 || outcomeData.scale_adaptation.length!=0">
                     <tr class="table-header-left">
                         <p style="font-size: large;">Outcome of Change - GHG</p>
                     </tr>
@@ -380,26 +383,57 @@
                 </table>
                 <!-- <p style="font-size: large;">Category Score - Outcome of change - {{score.outcome_score.outcome_score}}</p> -->
                 <br>
-                <table>
+                <table *ngIf="outcomeData.scale_GHGs.length!=0 || outcomeData.scale_SDs.length!=0 || outcomeData.scale_adaptation.length!=0">
                     <tr class="table-header-left">
                         <p style="font-size: large;">Category Score - Outcome of change - {{score.outcome_score.outcome_score}}</p>
                     </tr>
                 </table>
                 <br>
-                <app-heat-map *ngIf="!isDownloading" id="heatmap" [xData]="xData" [yData]="yData" [score]="heatMapScore"></app-heat-map>
+                <div *ngIf="processData.data.length!=0 && (outcomeData.scale_GHGs.length!=0 || outcomeData.scale_SDs.length!=0 || outcomeData.scale_adaptation.length!=0)">
+                    <app-heat-map *ngIf="!isDownloading" id="heatmap" [xData]="xData" [yData]="yData" [score]="heatMapScore"></app-heat-map>
+                </div>
 
             </div>
-            <div class="p-grid p-fluid col-md-12 col-sm-12">
+            <!-- <div class="p-grid p-fluid col-md-12 col-sm-12">
                 <div class="row p-2">
                     <div class="col-8"></div>
                     <div class="col-2">
                         <button pButton pRipple type="button" label="Download Excel" (click)="toDownloadExcel()" class="p-button-info" *ngIf="!isDownloading"></button>
+                        <button  class="btn btn-primary btn-block text-uppercase mr-20" label="Genarate" (click)="generate()">Genarate Report</button>
+
                     </div>
-                    <!-- <div class="col-2">
-                    <button pButton pRipple type="button" label="Download PDF" (click)="toDownloadPdf()"
-                        class="p-button-info" *ngIf="!isDownloading"></button>
-                </div> -->
+                 
                 </div>
-            </div>
+             
+            </div> -->
         </div>
     </div>
+    <div class="container pl-20 pr-20">
+ 
+        <div class="d-flex flex-row-reverse mt-2 mb-2">
+          <button (click)="toDownloadExcel()" class="btn btn-primary btn-block text-uppercase">Download as Excel</button>
+          <button  class="btn btn-primary btn-block text-uppercase mr-20" label="Genarate" (click)="generate()">Genarate Report</button>
+        </div>
+      </div>
+    <p-dialog [(visible)]="display">
+        <div class="container" style="width: 600px; height: 400px">
+          
+          
+            <div class="row p-2">
+                <div class="col-2">
+                    <div>
+                        <label for="sector">Report Name</label>
+                    </div>
+                </div>
+                <div class="col-10">
+                    <div>
+                        <input [style]="{ width: '75%' }" type="text" name="reportName" class="p-inputtext"
+                            [(ngModel)]="reportName" pInputText />
+                    </div>
+                </div>
+            </div>
+            <div>
+                <button style="margin-right: 5px" pButton pRipple label="Generate" (click)="confirm()"></button>
+            </div>
+        </div>
+      </p-dialog>

@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { MasterDataDto, MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import { AllBarriersSelected, Assessment, AssessmentCMDetail, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, BarrierSelected, Characteristics, ClimateAction, GeographicalAreasCovered, InvestorSector, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, ServiceProxy, ToolsMultiselectDto } from 'shared/service-proxies/service-proxies';
+import { AllBarriersSelected, Assessment, AssessmentCMDetail, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, BarrierSelected, Category, Characteristics, ClimateAction, GeographicalAreasCovered, InvestorSector, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, ServiceProxy, ToolsMultiselectDto } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -58,11 +58,12 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   isStageDisble:boolean=false;
   tableData : any;
   isEditMode: boolean 
-  assessmentId: number 
+  assessmentId: number
   scales: MasterDataDto[]
   tooltipContent: any;
   visionExample: any[] = []
-barrierChList: any[];
+  barrierChList: any[];
+  minDate: Date;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -170,8 +171,9 @@ barrierChList: any[];
   async getCharacteristics() {
     this.characteristicsList = await this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().toPromise();
     this.barrierChList = [...this.characteristicsList]
-    this.barrierChList = this.barrierChList.filter(ch => {return !["SCALE_ADAPTATION", "SUSTAINED_ADAPTATION"].includes(ch.category.code)})
-    this.barrierChList = this.barrierChList.filter((v, i, a) => a.findIndex(v2 => (v2.code === v.code)) === i)
+    this.barrierChList = this.barrierChList.filter(ch => {return ch.category.type === 'process'})
+    // this.barrierChList = this.barrierChList.filter(ch => {return !["SCALE_ADAPTATION", "SUSTAINED_ADAPTATION"].includes(ch.category.code)})
+    // this.barrierChList = this.barrierChList.filter((v, i, a) => a.findIndex(v2 => (v2.code === v.code)) === i)
   }
 
   save(form: NgForm) {
@@ -357,6 +359,10 @@ barrierChList: any[];
         ans: 'No',
     },
     ]
+  }
+
+  onSelectIntervention(event: any) {
+    this.minDate = new Date(event.value.dateOfImplementation)
   }
 
 }

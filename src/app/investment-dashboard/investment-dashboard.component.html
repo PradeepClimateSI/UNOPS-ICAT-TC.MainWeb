@@ -26,8 +26,10 @@
         <ng-template pTemplate="body" let-tableData>
           <tr>
                           <td>{{ tableData.climateAction?.policyName }}</td>
-                          <td class="text-center">{{ tableData.process_score!=null && tableData.process_score!=undefined? tableData.process_score:'-' }}</td>
-                          <td class="text-center">{{ tableData.outcome_score!=null && tableData.outcome_score!=undefined?tableData.outcome_score:'-' }}</td>
+                          <td class="text-center">{{ mapProcessScores(tableData.process_score) }}</td>
+                          <td class="text-center">{{ mapOutcomeScores(tableData.outcome_score) }}</td>
+                          <!-- <td class="text-center">{{ tableData.process_score!=null && tableData.process_score!=undefined? tableData.process_score:'-' }}</td>
+                          <td class="text-center">{{ tableData.outcome_score!=null && tableData.outcome_score!=undefined?tableData.outcome_score:'-' }}</td> -->
           </tr>
         </ng-template>
         
@@ -122,7 +124,7 @@
           class="col-12 mt-20"
           [hidden]="sectorCount.length == 0"
         >
-          <canvas #investmentSectorCountPieChart>{{ pieChart2 }}</canvas>
+          <canvas  height="450" #investmentSectorCountPieChart>{{ pieChart2 }}</canvas>
         </div>
       </div>
       <div
