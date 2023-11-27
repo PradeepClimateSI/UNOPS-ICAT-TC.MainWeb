@@ -29,9 +29,9 @@
                     <p-table [value]="results[section]" sortField="question" sortMode="single" dataKey="criteria" rowGroupMode="subheader" groupRowsBy="criteria" [tableStyle]="{'min-width': '70rem'}" [expandedRowKeys]="expandedRows">
                         <ng-template pTemplate="header">
                             <tr>
-                                <th>Question</th>
-                                <th> Answer</th>
-                                <th colspan="2"> Justification</th>
+                                <th>Criterion</th>
+                                <th>Criterion met?</th>
+                                <th>Evidence provided?</th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="groupheader" let-criteria let-rowIndex="rowIndex" let-expanded="expanded">
@@ -47,10 +47,11 @@
                         </ng-template>
                         <ng-template pTemplate="rowexpansion" let-criteria>
                             <tr>
-                                <td>{{criteria.question}}</td>
-                                <td>{{criteria.answer}}</td>
-                                <td>{{criteria.comment}}</td>
-                                <td> <a *ngIf="criteria?.document" target="_blank" [href]="fileServerURL+'/'+criteria?.document"><i class="pi pi-download download"></i></a></td>
+                                <td>{{criteria.short_label}}</td>
+                                <td>{{criteria.isPassing ? 'Yes' : 'No'}}</td>
+                                <td *ngIf="criteria.hasEvidence === 'Yes'"><a href="#" (click)="$event.preventDefault();downloadFiles(criteria.document)">{{criteria.hasEvidence}}</a></td>
+                                <td *ngIf="criteria.hasEvidence === 'No'">{{criteria.hasEvidence}}</td>
+                                <!-- <td> <a *ngIf="criteria?.document" target="_blank" [href]="fileServerURL+'/'+criteria?.document"><i class="pi pi-download download"></i></a></td> -->
                             </tr>
                         </ng-template>
                     </p-table>

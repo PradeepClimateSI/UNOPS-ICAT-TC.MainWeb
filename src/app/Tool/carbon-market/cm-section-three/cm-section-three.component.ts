@@ -88,6 +88,7 @@ export class CmSectionThreeComponent implements OnInit {
   nextClicked: boolean;
   savedData: boolean = false;
   relevance_tooltip: string;
+  ghg_starting_situation_placeholder: any;
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -114,8 +115,14 @@ export class CmSectionThreeComponent implements OnInit {
       "- maintained/increased water availability despite a reduction in precipitation or increase in droughts\n" +
       "- Reduced/avoided loss of ecosystem services despite worsening climatic conditions";
 
+    this.ghg_starting_situation_placeholder = {
+      international: 'Please describe the baseline emissions on the international/global level.',
+      national: 'Please describe the baseline emissions on the national or sectoral level',
+      subNational: 'Please describe the baseline emissions on the subnational/regional/municipal or subsectoral level'
+    }
+
     this.starting_situation_tooltip = "Please describe the baseline scenario on the indicated scale for the intervention, including the current and expected climate risks and impacts in the project area."
-    this.expected_impact_tooltip = "Please describe the proposed technology/intervention (i.e. unit) in its technical parameters, e.g. size, volume, lifetime and its operational output that lead to adaptation co-benefit under the intervention on the indicated scale."
+    this.expected_impact_tooltip = "Please describe the adaptation benefits on the indicated scale."
     this.relevance_tooltip = "Does the process characteristic affects/impacts any of the identified barriers? does the intervention affects/impacts the process characteristic?"
 
     this.GHG_scale_info = this.masterDataService.GHG_scale_info

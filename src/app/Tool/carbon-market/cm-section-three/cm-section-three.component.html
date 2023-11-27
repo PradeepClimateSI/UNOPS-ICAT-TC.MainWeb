@@ -63,7 +63,7 @@
                                 <div class="row p-2">
                                     <div class="col-4">Starting Situation</div>
                                     <div class="col-8">
-                                        <input type="text" [name]="'stSituation'+char.characteristic.id" #tboundrary="ngModel" placeholder="Please describe the baseline emissions on the indicated scale." [(ngModel)]="char.startingSituation" class="form-control" required />
+                                        <input type="text" [name]="'stSituation'+char.characteristic.id" #tboundrary="ngModel" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)" [(ngModel)]="char.startingSituation" class="form-control" required />
                                         <p class="info-message text-danger" *ngIf="
                                             (fData.form.controls['stSituation'+char.characteristic.id]?.touched ? 
                                                 (char.startingSituation === undefined || char.startingSituation === '')
@@ -398,9 +398,9 @@
                                             <div class="row p-2">
                                                 <div class="col-4">SDG Indicator <i class="pi pi-info-circle" pTooltip="Please describe the indicator used to assess the contribution to the selected SDG(i.e. number of jobs created)." tooltipPosition="bottom" style="font-size: 1rem"></i></div>
                                                 <div class="col-8">
-                                                    <input type="text" [name]="'indicator'+SDG.code" [(ngModel)]="char.sdgIndicator" class="form-control" placeholder="" required />
+                                                    <input type="text" [name]="'indicator'+SDG.code+char.characteristic.id" [(ngModel)]="char.sdgIndicator" class="form-control" placeholder="" required />
                                                     <p class="info-message text-danger" *ngIf="
-                                                        (fData.form.controls['indicator'+char.characteristic.id]?.touched ? 
+                                                        (fData.form.controls['indicator'+SDG.code+char.characteristic.id]?.touched ? 
                                                             (char.sdgIndicator === undefined || char.sdgIndicator === '')
                                                         : char.sdgIndicator === undefined && clickedFormMap[activeIndex2])
                                                         ">
@@ -411,9 +411,9 @@
                                             <div class="row p-2">
                                                 <div class="col-4">Starting Situation <i class="pi pi-info-circle" pTooltip="Please describe the value of the indicator before intervention implementation." tooltipPosition="bottom" style="font-size: 1rem"></i></div>
                                                 <div class="col-8">
-                                                    <input type="text" [name]="'stSituation'+SDG.code" [(ngModel)]="char.startingSituation" class="form-control" placeholder="" required />
+                                                    <input type="text" [name]="'stSituation'+SDG.code+char.characteristic.id" [(ngModel)]="char.startingSituation" class="form-control" placeholder="" required />
                                                     <p class="info-message text-danger" *ngIf="
-                                                        (fData.form.controls['stSituation'+SDG.code]?.touched ? 
+                                                        (fData.form.controls['stSituation'+SDG.code+char.characteristic.id]?.touched ? 
                                                             (char.startingSituation === undefined || char.startingSituation === '')
                                                         : char.startingSituation === undefined && clickedFormMap[activeIndex2])
                                                         ">
@@ -424,9 +424,9 @@
                                             <div class="row p-2">
                                                 <div class="col-4">Expected Impact <i class="pi pi-info-circle" pTooltip="Please describe the value of the indicator after intervention implementation." tooltipPosition="bottom" style="font-size: 1rem"></i></div>
                                                 <div class="col-8">
-                                                    <input type="text" [name]="'impact'+SDG.code" [(ngModel)]="char.expectedImpact" class="form-control" placeholder="" required />
+                                                    <input type="text" [name]="'impact'+SDG.code+char.characteristic.id" [(ngModel)]="char.expectedImpact" class="form-control" placeholder="" required />
                                                     <p class="info-message text-danger" *ngIf="
-                                                        (fData.form.controls['impact'+SDG.code]?.touched ? 
+                                                        (fData.form.controls['impact'+SDG.code+char.characteristic.id]?.touched ? 
                                                             (char.expectedImpact === undefined || char.expectedImpact === '')
                                                         : char.expectedImpact === undefined && clickedFormMap[activeIndex2])
                                                         ">
@@ -438,7 +438,7 @@
                                                 <div class="col-4">Score <i class="pi pi-info-circle" pTooltip="{{char.characteristic.code === 'INTERNATIONAL' ? SD_scale_info.macro : (char.characteristic.code === 'NATIONAL' ? SD_scale_info.medium : SD_scale_info.micro)}}" tooltipPosition="bottom"
                                                         style="font-size: 1rem"></i></div>
                                                 <div class="col-8">
-                                                    <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+SDG.code" #type="ngModel" placeholder="Select Score" [(ngModel)]="char.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
+                                                    <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+SDG.code+char.characteristic.id" #type="ngModel" placeholder="Select Score" [(ngModel)]="char.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
                                                         (onChange)="onSelectScore($event, char, idx, category.type)" [options]="SDG_scale_score" optionLabel="name" [required]="true" appendTo="body">
                                                         <ng-template let-option pTemplate="item">
                                                             <div class="custom-option">
@@ -447,7 +447,7 @@
                                                         </ng-template>
                                                     </p-dropdown>
                                                     <p class="info-message text-danger" *ngIf="
-                                                        (fData.form.controls['score'+SDG.code]?.touched ? 
+                                                        (fData.form.controls['score'+SDG.code+char.characteristic.id]?.touched ? 
                                                             (char.selectedScore.code === undefined || char.selectedScore.code === '')
                                                         : char.selectedScore.code === undefined && clickedFormMap[activeIndex2])
                                                         ">
@@ -459,9 +459,9 @@
                                             <div class="row p-2">
                                                 <div class="col-4">Justification</div>
                                                 <div class="col-6">
-                                                    <input type="text" [name]="'justification'+SDG.code" [(ngModel)]="char.comment" class="form-control" placeholder="Enter Justification" required />
+                                                    <input type="text" [name]="'justification'+SDG.code+char.characteristic.id" [(ngModel)]="char.comment" class="form-control" placeholder="Enter Justification" required />
                                                     <p class="info-message text-danger" *ngIf="
-                                                        (fData.form.controls['justification'+SDG.code]?.touched ? 
+                                                        (fData.form.controls['justification'+SDG.code+char.characteristic.id]?.touched ? 
                                                             (char.comment === undefined || char.comment === '')
                                                         : char.comment === undefined && clickedFormMap[activeIndex2])
                                                         ">
@@ -491,7 +491,7 @@
                                             <div class="row p-2">
                                                 <div class="col-4">Score</div>
                                                 <div class="col-6">
-                                                    <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'susScore'+SDG.code" #type="ngModel" placeholder="Select Score" [(ngModel)]="chSus.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
+                                                    <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'susScore'+SDG.code+chSus.characteristic.id" #type="ngModel" placeholder="Select Score" [(ngModel)]="chSus.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
                                                         (onChange)="onSelectScore($event, chSus, idx, category.type)" [options]="SDG_sustained_score" optionLabel="name" [required]="true" appendTo="body">
                                                         <ng-template let-option pTemplate="item">
                                                             <div class="custom-option">
@@ -500,7 +500,7 @@
                                                         </ng-template>
                                                     </p-dropdown>
                                                     <p class="info-message text-danger" *ngIf="
-                                                        (fData.form.controls['susScore'+SDG.code]?.touched ? 
+                                                        (fData.form.controls['susScore'+SDG.code+chSus.characteristic.id]?.touched ? 
                                                             (chSus.selectedScore.code === undefined || chSus.selectedScore.code === '')
                                                         : chSus.selectedScore.code === undefined && clickedFormMap[activeIndex2])
                                                         ">
@@ -512,9 +512,9 @@
                                             <div class="row p-2">
                                                 <div class="col-4">Justification</div>
                                                 <div class="col-6">
-                                                    <input type="text" [name]="'susJustification'+SDG.code" [(ngModel)]="chSus.comment" class="form-control" placeholder="Enter Justification" required />
+                                                    <input type="text" [name]="'susJustification'+SDG.code+chSus.characteristic.id" [(ngModel)]="chSus.comment" class="form-control" placeholder="Enter Justification" required />
                                                     <p class="info-message text-danger" *ngIf="
-                                                        (fData.form.controls['susJustification'+SDG.code]?.touched ? 
+                                                        (fData.form.controls['susJustification'+SDG.code+chSus.characteristic.id]?.touched ? 
                                                             (chSus.comment === undefined || chSus.comment === '')
                                                         : chSus.comment === undefined && clickedFormMap[activeIndex2])
                                                         ">

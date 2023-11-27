@@ -162,7 +162,7 @@ export class CmResultComponent implements OnInit {
       let response = await this.cMAssessmentQuestionControllerServiceProxy.calculateResult(req).toPromise()
       this.score = response
       this.heatMapScore = [{processScore: this.score.process_score, outcomeScore: this.score.outcome_score.outcome_score}]
-      Object.keys(response.outcome_score.sdgs_score).map((key: any) => {
+      Object.keys(response.outcome_score.sdgs_score)?.map((key: any) => {
         this.selectedSdgs = this.selectedSdgs.map((sd: any) => {
           console.log(key, sd.id)
           if (+key === sd.id) {
@@ -512,6 +512,29 @@ export class CmResultComponent implements OnInit {
   }
   generate(){
     this.display = true;
+  }
+
+  async downloadFiles(documents: any[]) {
+    console.log(documents)
+    await Promise.all(
+      documents.map(async (doc) => {
+        try {
+          let response = await fetch(this.fileServerURL + '/' + doc);
+          let blob = await response.blob();
+          let link = document.createElement('a');
+          link.href = window.URL.createObjectURL(blob);
+          link.download = doc;
+          link.style.display = 'none';
+
+          document.body.appendChild(link);
+          link.click();
+  
+          document.body.removeChild(link);
+        } catch (error) {
+          console.error(`Error downloading file ${doc}:`, error);
+        }
+      })
+    );
   }
 }
 

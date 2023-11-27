@@ -44,6 +44,7 @@ export class CmSectionComponent implements OnInit {
   loadedCriterias: number[] = []
   showConditionDialog: boolean;
   visible_condition: boolean;
+  condition_message: string;
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -163,6 +164,7 @@ export class CmSectionComponent implements OnInit {
       this.criterias[0].map((cr: any) => {
         return cr.questions.map((q: any) => {
           if (q.id === question.id) {
+            q['result'] = {}
             q['result']['filePath'] = e.path
           }
           return q
@@ -234,8 +236,11 @@ export class CmSectionComponent implements OnInit {
       this.sectionResult.sections.forEach(sec => {
         sec.criteria.forEach(cr => {
           cr.questions.forEach(q => {
-            if (this.isPassed) this.isPassed = q.answer.isPassing
-            else notMetCriterias.push(cr.criteria.name)
+            console.log(q)
+            if (this.isPassed) {this.isPassed = q.answer.isPassing}
+            if (!this.isPassed) {
+              notMetCriterias.push(cr.criteria.name)
+            }
           })
         })
       })
@@ -249,16 +254,17 @@ export class CmSectionComponent implements OnInit {
 
       if (this.isPassed) {
         this.visible_condition = true
-        this.message = 'All the criterias have been met.'
+        this.condition_message = 'All the criterias have been met.'
       } else {
         this.showConditionDialog = true
+        this.visible = true
         notMetCriterias = [... new Set(notMetCriterias)]
         this.visible_condition = true
-        this.message = 'Following criterias are not met.<ol>'
+        this.condition_message = 'Following criterias are not met.<ul>'
         notMetCriterias.forEach(c => {
-          this.message = this.message + '<li>'+c+'</li>'
+          this.condition_message = this.condition_message + '<li>'+c+'</li>'
         })
-        this.message = this.message + '</ol>'
+        this.condition_message = this.condition_message + '</ul>'
       }
     }
 
