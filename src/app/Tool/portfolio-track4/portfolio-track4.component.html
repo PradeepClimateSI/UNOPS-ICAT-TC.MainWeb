@@ -117,7 +117,7 @@
           <div class="p-field p-2">
             <label for="opportunities">Opportunities for stakeholders to participate in the assessment *</label>
             <input pInputText type="text" #opportunities="ngModel" name="opportunities" ngModel
-              [disabled]="isSavedAssessment|| isEditMode" placeholder="Explain how different stakeholders if any will participate in the assessment" [(ngModel)]="assessment.opportunities"
+              [disabled]="isSavedAssessment|| isEditMode" placeholder="Describe if and how stakeholders will participate in the assessment" [(ngModel)]="assessment.opportunities"
               required />
             <p class="info-message text-danger"
               *ngIf="!opportunities.value && (fData.submitted || opportunities.touched)">This is a mandatory field</p>
@@ -930,7 +930,7 @@
                       <div class="card" style="min-height: 300px;">
                       <h6 style="color: black;">SDG {{ selectedSDGs[i].number }} - {{ selectedSDGs[i].name }}</h6> <br>
 
-                      <div class="row">
+                      <!-- <div class="row">
                         <div class="col-8">
                           <h6 style="color: black; font-weight: normal; font-size: 17px;">Could the intervention have an impact on this particular SDG?</h6>
                         </div>
@@ -939,7 +939,7 @@
                             [(ngModel)]="selectedSDGsWithAnswers[i].answer" [options]="sdg_answers" optionLabel="name"
                             optionValue="name" ></p-dropdown>
                         </div>
-                      </div> <br>
+                      </div> <br> -->
 
                       <div class="characteristic-Topic" *ngFor="let data of item.data; index as j">
                         <h6>{{ j+1 }}.{{ data.characteristics.name }}</h6>

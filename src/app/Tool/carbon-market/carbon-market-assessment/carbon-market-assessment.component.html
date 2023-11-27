@@ -75,7 +75,7 @@
                             <label for="opportunities">Opportunities for stakeholders to participate in the assessment
                                 *</label>
                             <input pInputText type="text" #opportunities="ngModel" name="opportunities" ngModel
-                                [disabled]="isSavedAssessment" placeholder="Explain how different stakeholders if any will participate in the assessment"
+                                [disabled]="isSavedAssessment" placeholder="Describe if and how stakeholders will participate in the assessment"
                                 [(ngModel)]="assessment.opportunities" [disabled]="isEditMode" required />
                             <p class="info-message text-danger"
                                 *ngIf="!opportunities.value && (fData.submitted || opportunities.touched)">This is a
