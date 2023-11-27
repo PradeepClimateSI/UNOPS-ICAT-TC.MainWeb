@@ -285,8 +285,8 @@ sectorCountResult(){
     // }, 200);
 }
   viewFrequencyofSDGsChart(){
-    this.sdgDetailsList.sort((a: any, b: any) => a.number - b.number)
     console.log(this.sdgDetailsList)
+    this.sdgDetailsList.sort((a: any, b: any) => a.number - b.number)
     let labels = this.sdgDetailsList.map((item:any) => 'SDG ' + item.number + ' - ' + item.sdg);
     let counts:number[] = this.sdgDetailsList.map((item:any) => item.count);
     this.sdgDetailsList.forEach((sd: any) => {
