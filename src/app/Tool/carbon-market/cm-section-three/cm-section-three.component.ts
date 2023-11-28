@@ -675,10 +675,16 @@ export class CmSectionThreeComponent implements OnInit {
       isValid = await this.checkMandotary()
     }
 
-    if (isValid) {
+    if (!isDraft) {
+      if (this.activeIndexMain === 1) {
+        this.clickedFormMap[this.activeIndex2] = true
+      }
+    }
+
+    if (isValid || this.isFormValid()) {
       this.categoriesToSave = []
       this.isDraftSaved = true
-      this.savedData = true
+      if(!isDraft) this.savedData = true
       this.onSubmit.emit({result: this.results, isDraft: isDraft,name:name,type:type})
     } else {
       this.messageService.add({
