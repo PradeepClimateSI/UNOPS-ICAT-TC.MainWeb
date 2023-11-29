@@ -681,7 +681,9 @@ export class CmSectionThreeComponent implements OnInit {
       }
     }
 
-    if (isValid || this.isFormValid()) {
+    isValid = this.isFormValid()
+
+    if (isValid) {
       this.categoriesToSave = []
       this.isDraftSaved = true
       if(!isDraft) this.savedData = true

@@ -75,13 +75,13 @@
                 <table>
                     <tr></tr>
                 </table>
-                <table *ngIf="processData.data.length > 0">
+                <table *ngIf="processData?.data?.length > 0">
                     <tr class="table-header-left">
                         <p style="font-size: large;">Process of Change</p>
                     </tr>
                 </table>
                 <br>
-                <p-table *ngIf="processData.data.length > 0" [value]="[{}]" styleClass="p-datatable-gridlines" [scrollable]="true" scrollHeight="400px" id="process-table">
+                <p-table *ngIf="processData?.data?.length > 0" [value]="[{}]" styleClass="p-datatable-gridlines" [scrollable]="true" scrollHeight="400px" id="process-table">
                     <ng-template pTemplate="header">
                         <tr>
                             <th></th>
@@ -156,7 +156,7 @@
                 </table>
                 <!-- <p style="font-size: large;">Category Score - Process of change - {{score.process_score}}</p> -->
                 <br>
-                <table *ngIf="processData.data.length > 0">
+                <table *ngIf="processData?.data?.length > 0">
                     <tr class="table-header-left">
                         <p style="font-size: large;">Category Score - Process of change - {{score.process_score === null ? 'N/A' : score.process_score}}</p>
                     </tr>
@@ -390,7 +390,7 @@
                     </tr>
                 </table>
                 <br>
-                <div *ngIf="processData.data.length!=0 && (outcomeData.scale_GHGs.length!=0 || outcomeData.scale_SDs.length!=0 || outcomeData.scale_adaptation.length!=0)">
+                <div *ngIf="processData?.data?.length!=0 && (outcomeData.scale_GHGs.length!=0 || outcomeData.scale_SDs.length!=0 || outcomeData.scale_adaptation.length!=0)">
                     <app-heat-map *ngIf="!isDownloading" id="heatmap" [xData]="xData" [yData]="yData" [score]="heatMapScore"></app-heat-map>
                 </div>
 
