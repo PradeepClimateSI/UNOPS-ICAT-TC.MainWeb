@@ -679,9 +679,9 @@ export class CmSectionThreeComponent implements OnInit {
       if (this.activeIndexMain === 1) {
         this.clickedFormMap[this.activeIndex2] = true
       }
+      isValid = this.isFormValid()
     }
 
-    isValid = this.isFormValid()
 
     if (isValid) {
       this.categoriesToSave = []
