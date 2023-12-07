@@ -6,6 +6,8 @@ import * as moment from 'moment';
 import { DataRequestStatus } from 'app/Model/DataRequestStatus.enum';
 import * as XLSX from 'xlsx';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'environments/environment';
+
 @Component({
   selector: 'app-enter-data-investment',
   templateUrl: './enter-data-investment.component.html',
@@ -48,7 +50,7 @@ export class EnterDataInvestmentComponent implements OnInit {
   isDropdown: boolean;
   answers: any[] = ['Yes', 'No']
   parameterListFilterData: any[];
-  SERVER_URL = 'http://localhost:7080/investor-tool/upload'  
+  SERVER_URL =  environment.baseUrlAPI + '/investor-tool/upload'  
   
   @ViewChild('myInput')
   myInputVariable: ElementRef;
