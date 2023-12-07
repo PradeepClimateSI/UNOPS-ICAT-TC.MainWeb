@@ -2,7 +2,6 @@
     <p-tabPanel  *ngFor="let type of types" header="{{type.name}}">
         <p-tabView #tabView (onChange)="onCategoryTabChange($event)" [(activeIndex)]="activeIndex"
             *ngIf="type.code === 'process'">
-            <!-- <p-tabPanel  *ngFor="let category of categories[type.code]" [header]="category.name" > -->
             <p-tabPanel  *ngFor="let category of categories[type.code]" [header]="category.name" [selected]="category.name==assessment.processDraftLocation" >
                 <br>
                 <p style="font-size: large;">{{category.description}}</p>
@@ -192,7 +191,6 @@
                         </div>
                     </div>
                 </ng-container>
-                <!-- adaptation -->
                 <ng-container *ngIf="category.type === 'ADAPTATION'">
                     <ng-container *ngFor="let char of category.results; let idx = index">
                         <h6>{{idx+1}}. {{char.characteristic.name}}</h6>
@@ -338,7 +336,6 @@
                         </div>
                     </div>
                 </ng-container>
-                <!-- adaptation -->
                 <ng-container *ngIf="category.type === 'SD'">
                     <div class="row p-2">
                         <div class="col-4">Choose SDG</div>
@@ -494,13 +491,6 @@
                                         [(ngModel)]="SDGScore" class="form-control" />
                                 </div>
                             </div>
-                            <!-- <div class="row p-2">
-                                <div class="col-4">Weight</div>
-                                <div class="col-8">
-                                    <input type="text" name="sdgWeight" #tboundrary="ngModel" disabled="true"
-                                        [(ngModel)]="SDGWeight" class="form-control" />
-                                </div>
-                            </div> -->
                         </ng-container>
                     </ng-container>
                     <div class="row justify-content-end" *ngIf="activeIndex2 < outcome.length - 1">
@@ -516,14 +506,9 @@
                         </div>
                     </div>
                 </ng-container>
-                <!-- </ng-container> -->
                 <div class="row justify-content-end" *ngIf="activeIndex2 === outcome.length - 1">
                     <div>
                         <div class="d-flex flex-row-reverse mt-20 ">
-                            <!-- <div [ariaDisabled]="savedData" class="btn btn-primary text-uppercase" (click)="submit('',false,'','')">
-                                {{ approach === 'INDIRECT' ? 'Send to Data Collection Team' : 'Calculate & CheckResults'
-                                }}
-                            </div> -->
                             <button [disabled]="savedData" class="btn btn-primary text-uppercase" (click)="submit('',false,'','')">
                                 {{ approach === 'INDIRECT' ? 'Send to Data Collection Team' : 'Calculate & CheckResults'
                                 }}

@@ -36,11 +36,7 @@
 
     <ng-template pTemplate="header">
         <tr  >
-            <!-- <th pSortableColumn="id" >ID <p-sortIcon field="id"></p-sortIcon></th> -->
-            <!-- <th pSortableColumn="policyName" >INTERVENTION <p-sortIcon field="policyName"></p-sortIcon></th> -->
-            <!-- <th pSortableColumn="contactPersoFullName">PROJECT PROPENENT<p-sortIcon field="contactPersoFullName"></p-sortIcon></th> -->
             <th>Intervention</th>
-            <!-- <th>Type of intervention</th> -->
             <th>Current status</th>
             <th>Status of approval</th>
             <th>Actions</th>
@@ -48,13 +44,8 @@
     </ng-template>
     <ng-template  pTemplate="body" let-climateactions >
         <tr>
-          <!-- <td>{{climateactions.id}}</td> -->
           <td>
             {{ climateactions?.policyName }}</td>
-          <!-- <td>{{ climateactions.contactPersoFullName }}</td> -->
-          <!-- <td>
-             {{climateactions?.typeofAction}}
-         </td> -->
            <td>
              {{climateactions?.projectStatus?.name}}
           </td>

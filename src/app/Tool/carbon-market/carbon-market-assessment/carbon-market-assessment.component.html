@@ -2,7 +2,6 @@
     <div class="mb-12">
         <h4 class="mt-4"> Assessment Information</h4>
     </div>
-    <!-- <app-cm-section-three [approach]="'DIRECT'" (onSubmit)="save($event)"></app-cm-section-three> -->
     <form #fData="ngForm" (ngSubmit)="save(fData)">
         <div class="card" style="min-height: 600px;">
             <div class="p-grid p-fluid col-md-8 col-sm-12">
@@ -81,15 +80,6 @@
                                 *ngIf="!opportunities.value && (fData.submitted || opportunities.touched)">This is a
                                 mandatory field</p>
                         </div>
-                        <!-- <div class="p-field p-2">
-                            <label for="principles">Principles on which the assessment is based *</label>
-                            <input pInputText type="text" #principles="ngModel" name="principles" ngModel
-                                [disabled]="isSavedAssessment" placeholder="Principles"
-                                [(ngModel)]="assessment.principles" [disabled]="isEditMode" required />
-                            <p class="info-message text-danger"
-                                *ngIf="!principles.value && (fData.submitted || principles.touched)">This is a mandatory
-                                field</p>
-                        </div> -->
                         <div class="p-field p-2">
                             <label for="date1">Assessment Period*</label>
                             <div class="p-inputgroup">
@@ -117,12 +107,7 @@
                                 specified in the baseline methodology)</label>
                             <input type="text" name="tboundrary" #tboundrary="ngModel"  [disabled]="isEditMode"
                                 [(ngModel)]="cm_detail.boundraries" class="form-control" placeholder="Enter Boundary" />
-                            <!-- <p class="info-message text-danger" *ngIf="
-                                        (!cm_detail.boundraries || cm_detail.boundraries === '') &&
-                                        (fData.submitted || tboundrary.touched)
-                                        ">
-                                This is a mandatory field
-                            </p> -->
+                           
                         </div>
                         <div class="p-field p-2">
                             <label for="policy">International Carbon Market Approach Used * <i class="pi pi-info-circle" pTooltip="{{international_tooltip}}" tooltipPosition="bottom"
@@ -149,78 +134,7 @@
                                 [(ngModel)]="cm_detail.appliedMethodology" class="form-control"
                                 placeholder="Enter methodology" />
                         </div>
-                        <!-- <div class="p-field p-2">
-                          <label for="additioinalInfo">Additional information*</label>
-                          <textarea [disabled]=" isEditMode" name="additioinalInfo" placeholder="Enter additional info" #additioinalInfo="ngModel"
-                          [(ngModel)]="assessment.additioinalInfo" rows="2" cols="130" pInputText autoResize="autoResize" required
-                          ></textarea>
-                          <p class="info-message text-danger"
-                            *ngIf="!additioinalInfo.value && (fData.submitted || additioinalInfo.touched)">This is a mandatory field</p>
-                        </div> -->
-                        <!-- <div class="p-field p-2">
-                            <label for="policy">Impact Types *</label>
-                            <p-multiSelect name="impact_types" placeholder="Select .." appendTo="body"
-                                [options]="impact_types" [(ngModel)]="selected_impact_types" optionLabel="name"
-                                optionValue="code" (onChange)="onSelectType($event)">
-                            </p-multiSelect>
-                            <p class="info-message text-danger" *ngIf="
-                            selected_impact_types.length === 0 &&
-                            (fData.submitted)
-                            ">
-                                This is a mandatory field
-                            </p>
-                        </div> -->
-                        <!-- <div class="p-field p-2">
-                            <label for="policy">Impact Categories *</label>
-                            <p-multiSelect name="impact_categories" placeholder="Select .." appendTo="body"
-                                [options]="impact_categories" [(ngModel)]="selected_impact_categories"
-                                optionLabel="name" optionValue="code"  (onChange)="onSelectCategory($event)">
-                            </p-multiSelect>
-                            <p class="info-message text-danger" *ngIf="
-                            selected_impact_categories.length === 0 &&
-                            (fData.submitted )
-                            ">
-                                This is a mandatory field
-                            </p>
-                        </div> -->
-                        <!-- <div class="p-field p-2">
-                            <label for="policy">Impact Characteristics *</label>
-                            <p-multiSelect name="impact_characteristics" placeholder="Select .." appendTo="body"
-                                [options]="impact_characteristics" [(ngModel)]="selected_impact_characteristics"
-                                optionLabel="name" optionValue="code">
-                            </p-multiSelect>
-                            <p class="info-message text-danger" *ngIf="
-                            selected_impact_characteristics.length === 0 &&
-                            (fData.submitted )
-                            ">
-                                This is a mandatory field
-                            </p>
-                        </div> -->
-                        <!-- <div class="p-field p-2">
-                            <label for="policy">Impact Indicators *</label>
-                            <input type="text" name="boundrary" #boundrary="ngModel"
-                                [(ngModel)]="cm_detail.impact_indicators" class="form-control"
-                                placeholder="Enter Impact Indicators" required />
-                            <p class="info-message text-danger" *ngIf="
-                            !cm_detail.impact_indicators &&
-                            (fData.submitted )
-                            ">
-                                This is a mandatory field
-                            </p>
-                        </div> -->
-                        <!-- <div class="p-field p-2">
-                            <label for="policy">Assessment Approach *</label>
-                            <p-dropdown name="type" #type="ngModel" placeholder="Select Assessment Approach"
-                                [(ngModel)]="assessment.assessment_approach" [options]="assessment_approaches"
-                                optionLabel="name" optionValue="code" [required]="true"
-                                (onChange)="selectAssessmentApproach($event)" appendTo="body"></p-dropdown>
-                            <p class="info-message text-danger" *ngIf="
-                                !assessment.assessment_approach &&
-                                (fData.submitted || type.touched)
-                              ">
-                                This is a mandatory field
-                            </p>
-                        </div> -->
+                        
                     </div>
                     <div class="mt-2 overflow-visible" style="z-index: 1;">
                       <div class="p-grid p-fluid col-sm-12">
@@ -230,9 +144,6 @@
                         <div class="row p-2">
                           <div class="  col-12">
                                                                     
-                            <!-- <label >What is the envisioned change in the system the intervention is 
-                              impacting in moving from where the system is currently to where it should be to achieve 
-                              the transformational shift desired?</label> -->
                               <label >What is the vision for the desired change of the system over time towards zero-carbon and sustainable practices? *</label>
                           </div>
                           <div class="col-12 col-md-6">
@@ -251,12 +162,10 @@
                         <div class="row p-2">
                           <div class="  col-12">
                                                                     
-                            <!-- <p class="question">How does that change would look like …</p> -->
                             <p class="question">What would that change look like? *</p>
                           </div>
                           <div class="col-12 col-md-6">
                             <div class="p-field">
-                              <!-- <label for="vision_short">Short Term ({{"\u003C"}}5 years)</label> -->
                               <label for="vision_short">Within 5 years? *</label>
                               <textarea name="vision_short" placeholder="Short Term Vision" #vision_short="ngModel" [disabled]="isSavedAssessment"
                                 [(ngModel)]="assessment.vision_short" rows="1" cols="130" pInputText autoResize="autoResize" required
@@ -271,7 +180,6 @@
                          
                           <div class="col-12 col-md-6">
                             <div class="p-field">
-                              <!-- <label for="vision_medium">Medium Term ({{"\u003E"}}5 years and   {{"\u003C"}}15 years)</label> -->
                               <label for="vision_short">Between 5 and 15 years? *</label>
                               <textarea name="vision_medium" placeholder="Medium Term Vision" #vision_medium="ngModel" [disabled]="isSavedAssessment"
                                 [(ngModel)]="assessment.vision_medium" rows="1" cols="130" pInputText autoResize="autoResize" required
@@ -285,7 +193,6 @@
                           </div>
                           <div class="col-12 col-md-6">
                             <div class="p-field">
-                              <!-- <label for="vision_long">Long Term ({{"\u003E"}}15 years)</label> -->
                               <label for="vision_short">After 15 years? *</label>
                               <textarea name="vision_long" placeholder="Long Term Vision" [disabled]="isSavedAssessment"
                                 #vision_long="ngModel" [(ngModel)]="assessment.vision_long" rows="1" cols="130" pInputText
@@ -301,7 +208,6 @@
                         <div class="row p-2">
                           <div class="  col-12">
                                                                     
-                            <!-- <label >In which phase of transformation is the system to be transformed?</label> -->
                             <label >In which phase of transformation is the system currently at? *</label>
                           </div>
                           <div class="col-12 col-md-6">
@@ -391,9 +297,6 @@
                               <div class="col-12 col-md-6">
                                 <div class="p-field">
                                   <label style="width:200px" for="impEntity">Explanation</label>
-                                  <!-- <input type="text" placeholder="Please add explanation"  name="explanation" 
-                                  #explanation="ngModel" [(ngModel)]="barrierSelected.explanation" maxlength="300" class="p-inputtext"
-                                  pInputText /> -->
                                   <textarea  type="text" placeholder="Please add explanation" name="explanation"
                                   #explanation="ngModel" [(ngModel)]="barrierSelected.explanation" [ngModelOptions]="{ standalone: false }"
                                   class="p-inputtext custom-textarea" rows="3" cols="20" pInputText autoResize="autoResize"
@@ -554,11 +457,6 @@
             </div>
             <div class="row justify-content-end" *ngIf="!isSavedAssessment">
                 <div class="row p-grid p-fluid col-md-6 col-sm-6">
-                    <!-- <div class="d-flex col-4 justify-content-start p-button-vertical mb-0 pl-2">
-                                            <button class="btn btn-secondary text-uppercase" (click)="onBackClick()">
-                                              Back
-                                            </button>
-                                          </div> -->
                     <div class="d-flex col-4 justify-content-end p-button-vertical mb-0 pl-2">
                         <button class="btn btn-primary text-uppercase" type="submit">
                             Submit

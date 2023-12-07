@@ -36,7 +36,6 @@
     <div class="col-12" [hidden]="calResults?.length != 0">
       <p-messages severity="warn">
         <ng-template pTemplate>
-          <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
           <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
           <div class="ml-2">No data to show.</div>
         </ng-template>
@@ -48,48 +47,12 @@
 <div class="p-grid p-fluid card mt-20 m-3">
   <div class="row text-center">
     <app-heat-map  id="heatmap" [xData]="xData" [yData]="yData" [score]="heatMapScore" [showOp]="true" [tableData]="heatMapData"></app-heat-map>
-    <!-- <table class="heatmap" style="text-align: center">
-      <tbody>
-        <tr>
-          <td></td>
-          <td colspan="7">
-            Outcome: Extent and sustained nature of the transformation
-          </td>
-        </tr>
-        <tr>
-          <td rowspan="7">Process: Transformational change supported</td>
-        </tr>
-        <tr>
-          <td></td>
-          <ng-container *ngFor="let x of xData">
-            <td>{{ x.label }}</td>
-          </ng-container>
-        </tr>
-        <tr *ngFor="let y of yData">
-          <td>{{ y.label }}</td>
-          <ng-container *ngFor="let x of xData">
-            <td
-              [style.background-color]="getBackgroundColor(y.value + x.value)"
-            >
-              <span (mouseenter)="enterHeatMapPoint(x.value, y.value,$event)" (mouseleave)="leaveHeatMapPoint();op.hide()"
-               [style.background-color]=" getIntervention(x.value, y.value) ?getDotColor(y.value + x.value):''"
-                [ngClass]="
-                  getIntervention(x.value, y.value) ? 'intervention' : ''
-                "
-                >{{ y.value + x.value }}</span
-              >
-            </td>
-          </ng-container>
-        </tr>
-      </tbody>
-    </table> -->
   </div>
 </div>
 <div class="row">
   <div class="col-md-6 col-12 d-flex align-items-stretch">
     <div #sourceDiv  class="p-grid p-fluid card m-3">
       <div  class="row text-center">
-        <!-- <h3>Frequency of SDGs</h3> -->
         <h3>SDGs impacted by the assessed interventions</h3>
         <div
         *ngIf="sdgDetailsList.length != 0"
@@ -104,7 +67,6 @@
       >
         <p-messages severity="warn">
           <ng-template pTemplate>
-            <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
             <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
             <div class="ml-2">No data to show.</div>
           </ng-template>
@@ -115,7 +77,6 @@
   <div class="col-md-6 col-12 d-flex align-items-stretch">
     <div #targetDiv class="p-grid p-fluid card m-3">
       <div class="row text-center">
-        <!-- <h3>Sectors Targeted</h3> -->
         <h3>Sectors represented</h3>
         <div
           *ngIf="sectorCount"
@@ -132,7 +93,6 @@
       >
         <p-messages severity="warn">
           <ng-template pTemplate>
-            <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
             <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
             <div class="ml-2">No data to show.</div>
           </ng-template>
@@ -155,10 +115,6 @@
         <div class="col-4">Intervation Name :</div>
         <div class="col-8">{{pointTableData.climateAction?.policyName}}</div>
       </div>
-      <!-- <div  class="row">
-        <div class="col-4">Assessment period :</div>
-        <div class="col-8"></div>
-      </div> -->
       <div  class="row">
         <div class="col-4">Process score :</div>
         <div class="col-8">{{pointTableData.process_score}}</div>
@@ -171,42 +127,3 @@
     
 </ng-template>
 </p-overlayPanel>
-<!-- <div class="p-grid p-fluid card m-3">
-    <div class="row text-center ">
-        <h3>Transformational Change of Interventions</h3>
-
-        <div class="row">
-        <div class="col-6 " [hidden]="calResults?.length==0">
-          <canvas class="chart-canvas" #myCanvas></canvas>
-         </div>
-
-
-         <div class="col-6 " [hidden]="calResults?.length==0">
-          <canvas class="chart-canvas" #myCanvas2></canvas>
-         </div>
-        </div>
-        <div class="row">
-            <div  class="col-6" [hidden]="calResults?.length!=0">
-                <p-messages severity="warn" >
-                  <ng-template pTemplate>
-                    
-                      <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
-                      <div class="ml-2">No data to show.</div>
-                  </ng-template>
-              </p-messages>
-
-           </div>
-           <div  class="col-6" [hidden]="calResults?.length!=0">
-            <p-messages severity="warn" >
-              <ng-template pTemplate>
-                
-                  <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
-                  <div class="ml-2">No data to show.</div>
-              </ng-template>
-          </p-messages>
-
-          </div>
-        </div>
-
-    </div>
-</div> -->

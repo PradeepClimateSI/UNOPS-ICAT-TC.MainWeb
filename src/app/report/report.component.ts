@@ -55,7 +55,6 @@ export class ReportComponent implements OnInit {
   } 
 
   onCAChange(e: any){
-    console.log(e)
     this.selectedTool='';
     this.searchBy.climateAction = e.value
     this.filterReportData()
@@ -65,12 +64,10 @@ export class ReportComponent implements OnInit {
     this.selectedReportTypes=this.selectedReportTypes||''
    this.selectedTool='';
    this.searchBy.climateAction =''
-   console.log(this.selectedReportTypes)
-   this.filterReportData()
+   this.filterReportData();
   }
 
   onSelectTool(e: any){
-    console.log(this.selectedTool)
     this.filterReportData()
    }
   generate(){
@@ -82,13 +79,11 @@ export class ReportComponent implements OnInit {
   }
 
   confirm(){
-    console.log("confirm")
     let body = new CreateReportDto()
     body.assessmentId = this.selectedAssessment.id
     body.climateAction = this.selectedClimateAction
     body.reportName = this.reportName
     this.reportControllerServiceProxy.generateReport(body).subscribe(res => {
-      console.log("generated repotr", res)
       if (res) {
         this.messageService.add({
           severity: 'success',
@@ -110,14 +105,11 @@ export class ReportComponent implements OnInit {
   }
 
   filterReportData() {
-    console.log("this.searchBy", this.searchBy);
     let climateAction = this.searchBy.climateAction ? this.searchBy.climateAction.policyName.toString() : "";
     let reportName = this.searchBy.text ? this.searchBy.text : "";
-    console.log(climateAction)
 
     this.reportControllerServiceProxy.getReportData(climateAction, reportName,this.selectedReportTypes,this.selectedTool).subscribe(res => {
-      this.pdfFiles = res
-      console.log('pdfFiles',res)
+      this.pdfFiles = res;
     })
 
 

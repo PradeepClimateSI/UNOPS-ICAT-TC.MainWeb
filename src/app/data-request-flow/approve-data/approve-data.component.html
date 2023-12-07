@@ -155,7 +155,6 @@
             
           >
             Reject
-            <!-- {{parameters.find(m => m.parameterRequest.qaStatus !== 4) === undefined ? 'Calculate' :  'Submit'}} -->
           </button>
            </div>
           <button
@@ -165,7 +164,6 @@
             (click)="onOpenPopUP()"
           >
           {{this.buttonLabel}}
-            <!-- {{parameters.find(m => m.parameterRequest.qaStatus !== 4) === undefined ? 'Calculate' :  'Submit'}} -->
           </button>
         </div>
       </div>
@@ -240,23 +238,6 @@
   
   <p-dialog [(visible)]="isOpenPopUp" header="Assign deadline and send to QC">
     <div class="container" style="width: 600px; height: 500px">
-      <!-- <div class="row mb-2">
-        <div class="col-3">Data Provider</div>
-        <div class="col-4">
-          <p-dropdown
-            name="dataProvider"
-            [options]="institutionList"
-            [(ngModel)]="selectedInstitution"
-            #fsector="ngModel"
-            [showClear]="true"
-            [filter]="true"
-            placeholder="Select .."
-            optionLabel="name"
-          >
-          </p-dropdown>
-        </div>
-        <div class="col-5"></div>
-      </div> -->
       <div class="row mb-2">
         <div class="col-3">New Deadline</div>
         <div class="col-4">

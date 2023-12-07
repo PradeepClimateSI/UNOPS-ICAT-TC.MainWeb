@@ -37,51 +37,6 @@ export class AssessmentComponent implements OnInit {
   async ngOnInit() {
     this.loading = true;
     await this.loadData({})
-    
-    // this.results = await this.methassess.results().toPromise()
-
-   
-
-    // this.methassess.assessmentDetails().subscribe(async (res: any) => {
-    //   this.assessmentData = res
-
-    //   for await (let x of this.assessmentData) {
-    //     for await (let result of this.resultsList) {
-
-    //       if (result.assessment?.id == x.id) {
-    //         //  console.log("aaaaaaaaaaaaaaaa")
-    //         let data: any = {
-    //           id: result.id,
-    //           assessId: x.id,
-    //           meth: x.climateAction.policyName,
-    //           method: result.assessment.assessment_method,
-    //           approach: result.assessment.assessment_approach,
-    //           tool: result.assessment.tool,
-    //           assessmentType: result.assessment.assessmentType,
-    //           averageOutcome: result.averageOutcome,
-    //           averageProcess: result.averageProcess
-
-    //         }
-
-    //         this.results.push(data)
-    //       }
-    //     }
-    //   }
-
-      console.log("resultdataa", this.results)
-
-
-      //  console.log("resultdataareverse",  this.results.reverse())
-
-
-    // });
-
-
-
-    // setTimeout(() => {
-    //   this.load = true;
-    //   this.loading = false;
-    // }, 5000);
 
   }
 
@@ -91,10 +46,7 @@ export class AssessmentComponent implements OnInit {
   }
 
   onInput(event: any, dt: any) {
-    // const value = event.target.value;
-    // console.log(value)
-    // dt.filterGlobal(value, 'contains');
-    this.filterText = event.target.value
+    this.filterText = event.target.value;
     this.loadData({})
   }
 
@@ -104,15 +56,11 @@ export class AssessmentComponent implements OnInit {
     let pageNumber = (event.first === 0 || event.first == undefined) ? 0 : event.first / (event.rows == undefined ? 1 : event.rows) + 1;
     this.rows = event.rows == undefined ? 10 : event.rows;
 
-    let skip = pageNumber * this.rows
-    // if (skip > this.totalRecords) {
-    //   skip = skip - (skip - this.totalRecords)
-    // }
-    let res = await this.methassess.getResultPageData(skip, this.rows, this.filterText, '', '').toPromise()
+    let skip = pageNumber * this.rows;
+    let res = await this.methassess.getResultPageData(skip, this.rows, this.filterText, '', '').toPromise();
 
-    this.results = res[0]
-    this.totalRecords = res[1]
-    console.log(this.totalRecords)
+    this.results = res[0];
+    this.totalRecords = res[1];
    
     if (this.results){
       this.load = true
@@ -123,7 +71,6 @@ export class AssessmentComponent implements OnInit {
 
 
   myFunction(assessId: any, averageProcess: any, averageOutcome: any, tool: string, assessment_method: string) {
-    console.log("dddd", assessId, tool, assessment_method, averageProcess, averageOutcome);
 
     if (tool === 'INVESTOR' || (tool === 'PORTFOLIO' && assessment_method === 'Track 4')) {
       this.router.navigate(['/app/assessment-result-investor', assessId], {

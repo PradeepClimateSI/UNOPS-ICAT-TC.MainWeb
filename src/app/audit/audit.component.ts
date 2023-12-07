@@ -139,7 +139,6 @@ export class AuditComponent implements OnInit {
 
 
   loadgridData = (event: LazyLoadEvent) => {
-    console.log('event Date', event);
     this.loading = true;
     this.totalRecords = 0;
 
@@ -158,8 +157,6 @@ export class AuditComponent implements OnInit {
         ? 1
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
-    console.log("work1",pageNumber, this.rows,usertype)
-
 
     setTimeout(() => {
       this.auditserviceproxy

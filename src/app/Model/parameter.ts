@@ -25,12 +25,6 @@ import {
     public displayhisValues: any[] = [];
     public historicalValue: any;
   
-    // public isRootLevel: boolean = false;
-    // public isDimentionLevel: boolean = false;
-    // public isDimensionValueLevel: boolean = false;
-    // public rootParameterName: string = '';
-    // public dimentionName: string = '';
-    // public dimensionValueName: string = '';
   }
   
   export default Parameter;

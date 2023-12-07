@@ -5,17 +5,12 @@ import {
   OnInit,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import * as moment from 'moment';
 import { LazyLoadEvent } from 'primeng/api';
-// import { strictEqual } from 'assert';
 import {
-  // MitigationActionType,
   ClimateAction as Project,
   ProjectControllerServiceProxy,
-  ProjectOwner,
   ProjectStatus,
   Sector,
-  SectorControllerServiceProxy,
   CountryControllerServiceProxy,
   ServiceProxy,
   User,
@@ -40,13 +35,10 @@ export class AcceptedPoliciesComponent implements OnInit, AfterViewInit {
   cols: any;
   columns: any;
   options: any;
-  // sectorList: string[] = new Array();
   sectorList: Sector[] = [];
   projectStatusList: ProjectStatus[] = [];
-  //mitigationActionList: MitigationActionType[] = [];
 
   selectedSectorType: Sector;
-  //selectedMitigationType: MitigationActionType;
   selectedstatustype: ProjectStatus;
   searchText: string;
 
@@ -72,15 +64,8 @@ export class AcceptedPoliciesComponent implements OnInit, AfterViewInit {
     { name: 'test 2', id: 2 },
   ];
 
-  // migrationActionList: string[] = new Array();
   statusList: string[] = new Array();
-  // migrationAction: any;
   loggedUser: User;
-  // products: { code: string; name: string }[] = [
-  //   { code: 'test A', name: 'test 2' },
-  //   { code: 'test B', name: 'test 3' },
-  //   { code: 'test C', name: 'test 4' },
-  // ];
   display: boolean = false;
   reason:string='';
   titleInDialog:string='';
@@ -98,18 +83,13 @@ export class AcceptedPoliciesComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    // this.totalRecords = 0;
 
     this.userName = localStorage.getItem('user_name')!;
     const token = localStorage.getItem('access_token')!;
     const currenyUser=decode<any>(token);
     this.userRole = currenyUser.roles.code;
-    // this.userName = currenyUser.fname;
-    console.log("currenyUser",this.userRole);
-    console.log("this.userName...",this.userName);
     let filter1: string[] = [];
     filter1.push('username||$eq||' + this.userName);
-    // lmFilter.push('LearningMaterial.isPublish||$eq||' + 1);
 
     this.serviceProxy
       .getManyBaseUsersControllerUser(
@@ -126,42 +106,9 @@ export class AcceptedPoliciesComponent implements OnInit, AfterViewInit {
       )
       .subscribe((res: any) => {
         this.loggedUser = res.data[0];
-        console.log("this.loggedUser...",this.loggedUser);
         
       });
 
-
-    // this.serviceProxy
-    //   .getManyBaseProjectControllerProject(
-    //     undefined,
-    //     undefined,
-    //     undefined,
-    //     undefined,
-    //     ['editedOn,DESC'],
-    //     undefined,
-    //     1000,
-    //     0,
-    //     0,
-    //     0
-    //   )
-    //   .subscribe((res: any) => {
-    //     this.climateactions = res.data;
-    //     this.totalRecords = res.totalRecords;
-    //     if (res.totalRecords !== null) {
-    //       this.last = res.count;
-    //     } else {
-    //       this.last = 0;
-    //     }
-
-    //     console.log('climateactions', res.data);
-    //     // for(let project of res.data){
-    //     //   this.migrationActionList.push(project.migrationAction);
-    //     //   console.log("111",this.migrationActionList)
-    //     //   console.log("222",project.migrationAction)
-    //     //   // console.log("M-action",project.migrationAction)
-    //     // }
-    //     // this.migrationActionList.map(this.climateaction)
-    //   });
     let event: any = {};
     event.rows = this.rows;
     event.first = 0;
@@ -172,26 +119,6 @@ export class AcceptedPoliciesComponent implements OnInit, AfterViewInit {
       this.sectorList =res;
     });
 
-    // this.serviceProxy
-    //   .getManyBaseSectorControllerSector(
-    //     ['name'],
-    //     undefined,
-    //     undefined,
-    //     undefined,
-    //     ['name,ASC'],
-    //     undefined,
-    //     1000,
-    //     0,
-    //     0,
-    //     0
-    //   )
-    //   .subscribe((res: any) => {
-    //     // for(let x of res.data){
-    //     //   console.log("sectornames"+x)
-    //     // }
-    //     this.sectorList = res.data;
-    //     console.log('sectorList', this.sectorList);
-    //   });
 
     this.serviceProxy
       .getManyBaseProjectStatusControllerProjectStatus(
@@ -208,26 +135,8 @@ export class AcceptedPoliciesComponent implements OnInit, AfterViewInit {
       )
       .subscribe((res: any) => {
         this.projectStatusList = res.data;
-        console.log('projectStatusList', res.data);
       });
 
-    // this.serviceProxy
-    //   .getManyBaseMitigationActionControllerMitigationActionType(
-    //     ['name'],
-    //     undefined,
-    //     undefined,
-    //     undefined,
-    //     ['name,ASC'],
-    //     undefined,
-    //     1000,
-    //     0,
-    //     0,
-    //     0
-    //   )
-    //   .subscribe((res: any) => {
-    //     this.mitigationActionList = res.data;
-    //     console.log('mitigationList', this.mitigationActionList);
-    //   });
   }
 
   onMAChange(event: any) {
@@ -249,17 +158,11 @@ export class AcceptedPoliciesComponent implements OnInit, AfterViewInit {
     this.loadgridData(event);
   }
 
-  // /////////////////////////////////////////////
 
  loadgridData = (event: LazyLoadEvent) => {
-    //console.log("below loarding data")
-  //  this.loading = true;
-    // this.totalRecords = 0;
     let statusId = this.searchBy.status ? this.searchBy.status.id : 0;
     let currentProgress = this.searchBy.currentProgress ? this.searchBy.currentProgress : '';
-   // console.log("status",statusId)
-    let projectApprovalStatusId = 1; // acccepted =1
-   // console.log("projectApprovalStatusId",projectApprovalStatusId)
+    let projectApprovalStatusId = 1; 
     let filtertext = this.searchBy.text ? this.searchBy.text : '';
     let pageNumber =
       event.first === 0 || event.first === undefined
@@ -271,7 +174,6 @@ export class AcceptedPoliciesComponent implements OnInit, AfterViewInit {
       this.projectProxy
         .getAllClimateActionList(pageNumber, this.rows, filtertext, statusId,projectApprovalStatusId,currentProgress,this.sectorId)
         .subscribe((a) => {
-          console.log('first time climation',a);
           this.climateactions = a.items;
           this.totalRecords = a.meta.totalItems;
           this.loading = false;
@@ -285,7 +187,6 @@ export class AcceptedPoliciesComponent implements OnInit, AfterViewInit {
 
 
   detail(climateactions: Project) {
-    console.log("climateactions",climateactions )
     this.router.navigate(['app/add-polocies'], {
       
     queryParams: { id: climateactions.id ,flag:this.flag},
@@ -322,7 +223,6 @@ export class AcceptedPoliciesComponent implements OnInit, AfterViewInit {
     a.rows = this.rows;
     a.first = 0;
 
-    // this.onClimateActionStatusChange(a);
   }
 
   removeFromString(arr: string[], str: string) {

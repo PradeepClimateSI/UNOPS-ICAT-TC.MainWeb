@@ -56,7 +56,6 @@ export class RoleGuardService  {
     }
 
     if (!grant || !moduleGrant) {
-      console.log('expectedModules555=========',moduleGrant);
       this.router.navigate([' ']);
 
       return false;
@@ -67,9 +66,6 @@ export class RoleGuardService  {
   isTokenExpire(tokenPayload: any) {
     const expiry = tokenPayload['exp'];
 
-    console.log('current=========', new Date().getTime() / 1000);
-    console.log('expire=========', expiry);
-
     return Math.floor(new Date().getTime() / 1000) >= expiry;
   }
 
@@ -77,7 +73,6 @@ export class RoleGuardService  {
     const token = localStorage.getItem('access_token')!;
     const tokenPayload = decode<any>(token);
 
-    console.log('tokenPayload=========', tokenPayload);
     let roles: any[] = tokenPayload['roles'];
     if (roles.length > 0) {
       return roles[0];
@@ -89,7 +84,6 @@ export class RoleGuardService  {
     const token = localStorage.getItem('access_token')!;
     const tokenPayload = decode<any>(token);
 
-    console.log('tokenPayload=========', tokenPayload);
     let roles: any[] = tokenPayload['roles'];
     return roles;
   }
@@ -97,7 +91,6 @@ export class RoleGuardService  {
     const token = localStorage.getItem('access_token')!;
     const tokenPayload = decode<any>(token);
 
-    console.log('tokenPayload=========', tokenPayload);
     let roles: any[] = tokenPayload['roles'];
 
     let grant = false;
@@ -128,7 +121,6 @@ for(let i=0;i<modelsStatus.length;i++){
 
 }
     
-console.log('model',model)
     return model;
   }
 }

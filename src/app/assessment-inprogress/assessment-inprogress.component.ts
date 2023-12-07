@@ -51,7 +51,6 @@ export class AssessmentInprogressComponent implements OnInit {
     this.assessmentProxy.assessmentInprogress(pageNumber,this.rows,filterText).subscribe(res => {
         this.assesments=res[1];
         this.totalRecords= res[0];
-        console.log(this.assesments)
       }
       )
   }

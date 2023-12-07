@@ -5,11 +5,10 @@ import { CMAnswer, CMAssessmentAnswer, CMAssessmentQuestion, CMQuestionControlle
 import decode from 'jwt-decode';
 import { DataRequestStatus } from 'app/Model/DataRequestStatus.enum';
 import * as XLSX from 'xlsx';
-import { environment } from 'environments/environment.prod';
 import { HttpClient } from '@angular/common/http';
 import { DataRequestPathService } from 'app/shared/data-request-path.service';
 import { MasterDataService } from 'app/shared/master-data.service';
-import { SelectedScoreDto } from 'app/shared/score.dto';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-enter-data-cm',
@@ -49,8 +48,7 @@ export class EnterDataCmComponent implements OnInit {
   selectedParameter: any;
   selectedId: number;
   parameterListFilterData: any[];
-  // SERVER_URL = environment.baseUrlExcelUpload; //'http://localhost:7080/parameter/upload'
-  SERVER_URL = 'http://localhost:7080/cm-assessment-answer/upload'
+  SERVER_URL = environment.baseUrlAPI + '/cm-assessment-answer/upload'
 
   @ViewChild('myInput')
   myInputVariable: ElementRef;
@@ -152,7 +150,6 @@ export class EnterDataCmComponent implements OnInit {
           '1234'
         )
         .subscribe((a) => {
-          console.log('aa', a);
           if (a) {
             this.parameterList = a.items;
             this.totalRecords = a.meta.totalItems;
@@ -163,7 +160,6 @@ export class EnterDataCmComponent implements OnInit {
   };
 
   onCAChange(event: any) {
-    console.log('searchby...', this.searchBy);
     this.onSearch();
   }
 
@@ -172,17 +168,14 @@ export class EnterDataCmComponent implements OnInit {
   }
 
   async onClickUpdateValue(parameterList: ParameterRequest) {
-    console.log(parameterList)
-    this.selectedParameter = parameterList.cmAssessmentAnswer
+    this.selectedParameter = parameterList.cmAssessmentAnswer;
     this.selectedId = parameterList.id
 
     if (parameterList.cmAssessmentAnswer.assessment_question.question){
       this.answers = await this.cMQuestionControllerServiceProxy.getAnswersByQuestion(parameterList.cmAssessmentAnswer.assessment_question.question.id).toPromise()
     } else {
-      this.isOutcome = true
-      console.log("else block", parameterList.cmAssessmentAnswer.assessment_question['characteristic']['category']['code'])
+      this.isOutcome = true;
       if (parameterList.cmAssessmentAnswer.assessment_question['characteristic']['category']['code'] === 'SUSTAINED_GHG'){
-        console.log("sustained_ghg")
         this.answers = this.masterDataService.GHG_sustained_score
       } else if (parameterList.cmAssessmentAnswer.assessment_question['characteristic']['category']['code'] === 'SUSTAINED_SD'){
         this.answers = this.masterDataService.SDG_sustained_score
@@ -199,9 +192,6 @@ export class EnterDataCmComponent implements OnInit {
       }
     }
 
-    console.log(this.answers)
-
-
     this.isAddData = true;
   }
 
@@ -216,25 +206,7 @@ export class EnterDataCmComponent implements OnInit {
     inputParameters.ids = [this.selectedDataRequestId];
     inputParameters.status = this.user_role == "Institution Admin" ? DataRequestStatus.Rejected_EnterData_IA : DataRequestStatus.Rejected_EnterData_DEO;
     inputParameters.comment = this.reasonForReject;
-    // this.parameterRequestProxy.rejectEnterData(inputParameters).subscribe(
-    //   (res) => {
-    //     this.messageService.add({
-    //       severity: 'success',
-    //       summary: 'Success',
-    //       detail: 'Data was rejected successfully',
-    //     });
-    //     this.confirm2 = false;
-
-    //     this.onSearch();
-    //   },
-    //   (err) => {
-    //     this.messageService.add({
-    //       severity: 'error',
-    //       summary: 'Error.',
-    //       detail: 'Internal server error, please try again.',
-    //     });
-    //   }
-    // );
+    
   }
 
   onReject() {
@@ -250,36 +222,29 @@ export class EnterDataCmComponent implements OnInit {
   }
 
   getInfo(obj: any) {
-    console.log('dataRequestList...', obj);
     let res = this.dataRequestPathService.getInfo(obj, ParameterRequestTool.Carbon_Market_Tool)
     this.paraId = res?.paraId;
-    this.category = res.category
-    this.sdg = res.sdg
-    this.indicator = res.indicator
-    this.startingSituation = res.startingSituation
-    this.expectedImpact = res.expectedImpact
-    this.justification = res.justification
-    console.log('this.paraId...', this.paraId);
+    this.category = res.category;
+    this.sdg = res.sdg;
+    this.indicator = res.indicator;
+    this.startingSituation = res.startingSituation;
+    this.expectedImpact = res.expectedImpact;
+    this.justification = res.justification;
 
-    // let x = 602;
     this.prHistoryProxy
-      .getHistroyByid(this.paraId) // this.paraId
+      .getHistroyByid(this.paraId)
       .subscribe((res) => {
         this.requestHistoryList = res;
-
-        console.log('this.requestHistoryList...', this.requestHistoryList);
       });
 
     this.displayHistory = true;
   }
 
-  // On file Select
   onChange(event: any) {
     this.fileData = event.target.files[0];
   }
 
   paraListFilter() {
-    console.log("paraListFilter")
 
     if(this.selectedParameters)
     {
@@ -288,7 +253,6 @@ export class EnterDataCmComponent implements OnInit {
 
 
       this.selectedParameters.map((e) => {
-        console.log("====== selected e",e);
         let questionId
         let question 
         let sdg
@@ -302,7 +266,7 @@ export class EnterDataCmComponent implements OnInit {
         let process_outcome = e.cmAssessmentAnswer.assessment_question.characteristic.category.type;
         let category = e.cmAssessmentAnswer.assessment_question.characteristic.category.name;
         let category_code = e.cmAssessmentAnswer.assessment_question.characteristic.category.code;
-        let characteristic = this.dataRequestPathService.mapCharacteristic(e.cmAssessmentAnswer.assessment_question.characteristic)
+        let characteristic = this.dataRequestPathService.mapCharacteristic(e.cmAssessmentAnswer.assessment_question.characteristic);
         let obj = {
           id,
           intervention,
@@ -314,67 +278,45 @@ export class EnterDataCmComponent implements OnInit {
         };
   
         if (e.cmAssessmentAnswer.assessment_question.question){
-          questionId = e.cmAssessmentAnswer.assessment_question.question.id
-          question = e.cmAssessmentAnswer.assessment_question.question.label
-          answer = e.cmAssessmentAnswer?.answer?.label
-          obj = {...obj, ...{questionId, question}}
+          questionId = e.cmAssessmentAnswer.assessment_question.question.id;
+          question = e.cmAssessmentAnswer.assessment_question.question.label;
+          answer = e.cmAssessmentAnswer?.answer?.label;
+          obj = {...obj, ...{questionId, question}};
         } else {
-          sdg = e.cmAssessmentAnswer.assessment_question.selectedSdg
-          startingSituation = e.cmAssessmentAnswer.assessment_question.startingSituation
-          expectedImpact = e.cmAssessmentAnswer.assessment_question.expectedImpact
-          indicator = e.cmAssessmentAnswer.assessment_question.sdgIndicator
-          answer = e.cmAssessmentAnswer.selectedScore
-          obj = {...obj, ...{sdg, startingSituation, expectedImpact, indicator}}
+          sdg = e.cmAssessmentAnswer.assessment_question.selectedSdg;
+          startingSituation = e.cmAssessmentAnswer.assessment_question.startingSituation;
+          expectedImpact = e.cmAssessmentAnswer.assessment_question.expectedImpact;
+          indicator = e.cmAssessmentAnswer.assessment_question.sdgIndicator;
+          answer = e.cmAssessmentAnswer.selectedScore;
+          obj = {...obj, ...{sdg, startingSituation, expectedImpact, indicator}};
         }
         
         obj = {...obj, ...{answer}}
   
        
         this.parameterListFilterData.push(obj);
-  
-        console.log('+++++++obj 1======', obj);
       })
     }
   }
 
   download() {
-    console.log("download")
     this.paraListFilter();
 
     var d = new Date();
     var reportTime = this.formatDate(d);
 
-
-    console.log(this.parameterListFilterData)
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
       this.parameterListFilterData
     );
 
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
 
-    // let dropdownOptions = ['Yes', 'No']
-
-    // const dataValidation = {
-    //   type: 'list',
-    //   formula1: `"${dropdownOptions.join(',')}"`,
-    //   showDropDown: true,
-    // };
-
-    console.log(ws)
-    console.log(wb)
-    // const cellAddress = 'F5'; // Change this to the desired cell address
-
-    // ws['!dataValidations'] = [{
-    //   sqref: cellAddress,
-    //   ...dataValidation,
-    // }];
     XLSX.utils.book_append_sheet(wb, ws, 'sheet1');
 
 
     XLSX.writeFile(wb, 'data_entry_template_' + reportTime + '.xlsx');
 
     this.onSearch();
-    //
     this.messageService.add({
       severity: 'info',
       summary: 'Info',
@@ -391,7 +333,7 @@ export class EnterDataCmComponent implements OnInit {
     var minutes = date.getMinutes();
     var ampm = hours >= 12 ? 'pm' : 'am';
     hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
+    hours = hours ? hours : 12;
     minutes = minutes < 10 ? '0' + minutes : minutes;
     var strTime = hours + ':' + minutes + ' ' + ampm;
     return (
@@ -414,7 +356,6 @@ export class EnterDataCmComponent implements OnInit {
     this.uploadFile = false;
   }
 
-  // OnClick of button Upload
   onUpload() {
     const formData = new FormData();
     formData.append('file', this.fileData);
@@ -440,52 +381,43 @@ export class EnterDataCmComponent implements OnInit {
     );
     setTimeout(() => {
       this.onSearch();
-      //location.reload();
     }, 1000);
   }
 
   async onClickSendNow(status: number) {
-    // let inputValues = new UpdateValueEnterData();
-    // inputValues.id = this.selectedParameterId;
-    // inputValues.value = this.selectedValue;
-    // inputValues.assumptionParameter = this.selectedAssumption;
-
     let assessmentAnswer = new CMAssessmentAnswer()
-    assessmentAnswer.id = this.selectedParameter.id
-    console.log(this.selectedValue)
+    assessmentAnswer.id = this.selectedParameter.id;
     if (this.selectedParameter.assessment_question.question){
-      assessmentAnswer.answer = this.selectedValue
-      assessmentAnswer.score = this.selectedValue.score_portion / 100 * this.selectedValue.weight / 100
+      assessmentAnswer.answer = this.selectedValue;
+      assessmentAnswer.score = this.selectedValue.score_portion / 100 * this.selectedValue.weight / 100;
     } else {
       assessmentAnswer.selectedScore = this.selectedValue.code
       if (['SUSTAINED_GHG', 'SCALE_GHG'].includes(this.selectedParameter.assessment_question.characteristic.category.code)){
-        assessmentAnswer.score = (this.selectedValue.value / 6) * (10 / 100) 
+        assessmentAnswer.score = (this.selectedValue.value / 6) * (10 / 100) ;
       }
       if (['SUSTAINED_SD', 'SCALE_SD'].includes(this.selectedParameter.assessment_question.characteristic.category.code)){
-        assessmentAnswer.score = (this.selectedValue.value / 6) * (2.5 / 100) * (10 / 100) 
+        assessmentAnswer.score = (this.selectedValue.value / 6) * (2.5 / 100) * (10 / 100) ;
       }
     }
 
     if (this.selectedAssumption) {
-      let assessmentQuestion = new CMAssessmentQuestion()
-      assessmentQuestion.id = this.selectedParameter.assessment_question.id
-      assessmentQuestion.enterDataAssumption = this.selectedAssumption
+      let assessmentQuestion = new CMAssessmentQuestion();
+      assessmentQuestion.id = this.selectedParameter.assessment_question.id;
+      assessmentQuestion.enterDataAssumption = this.selectedAssumption;
 
       let res = await this.serviceProxy.updateOneBaseCMAssessmentQuestionControllerCMAssessmentQuestion(
         assessmentQuestion.id, assessmentQuestion
-      ).toPromise()
+      ).toPromise();
     }
 
     let res1 = await this.serviceProxy.updateOneBaseCMAssessmentAnswerControllerCMAssessmentAnswer(
       assessmentAnswer.id, assessmentAnswer
-    ).toPromise()
+    ).toPromise();
 
     let inputParameters = new UpdateDeadlineDto();
     inputParameters.ids = [this.selectedId];
     inputParameters.status = status;
-    inputParameters.tool = UpdateDeadlineDtoTool.Carbon_Market_Tool
-
-    console.log('inputParameters', inputParameters);
+    inputParameters.tool = UpdateDeadlineDtoTool.Carbon_Market_Tool;
     this.parameterRequestControllerServiceProxy.acceptReviewData(inputParameters).subscribe(res => {
       this.messageService.add({
         severity: 'success',
@@ -520,16 +452,12 @@ export class EnterDataCmComponent implements OnInit {
     let idList = new Array<number>();
     for (let index = 0; index < this.selectedParameters.length; index++) {
       let element = this.selectedParameters[index];
-      console.log('++++',element)
       if (element.cmAssessmentAnswer.assessment_question.question){
         if (
           element.cmAssessmentAnswer?.answer != null 
-          // && element.parameterId?.uomDataEntry != null
         ) {
           idList.push(element.id);
-          console.log('element Pushed', element);
         } else {
-          console.log('element', element);
           this.messageService.add({
             severity: 'error',
             summary: 'Error.',
@@ -583,7 +511,6 @@ export class EnterDataCmComponent implements OnInit {
   }
 
   onHideDialog() {
-    // this.isHistorical = false
   }
 
 

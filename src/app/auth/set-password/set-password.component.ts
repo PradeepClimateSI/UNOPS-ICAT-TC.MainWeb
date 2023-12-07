@@ -30,20 +30,12 @@ export class SetPasswordComponent implements OnInit {
   
 
   constructor(
-    // private appServiceProxy: AuthControllerServiceProxy,
     private router: Router,
     private authControllerServiceProxy: AuthControllerServiceProxy,
-    // private fb: FormBuilder,
     private route: ActivatedRoute
   ) { 
-    // this.authenticationService.authenticate(false, true);
     let regEx = new RegExp("^(?=.*[a-z])(?=.*[A-Z])((?=.*[0-9])|(?=.*[!@#$%^&*]))(?=.{6,})");
 
-    // this.form1 = this.fb.group({
-    //   // password: ['', [Validators.required]],
-    //   password: ['', [Validators.required, Validators.pattern(regEx)]],
-    //   confirmPassword: ['', Validators.required],
-    // });
   }
 
   ngOnInit(): void {
@@ -73,7 +65,6 @@ export class SetPasswordComponent implements OnInit {
       },
         err => {
           this.isErrorPopup = true;
-          console.log(err);
 
         });
     }

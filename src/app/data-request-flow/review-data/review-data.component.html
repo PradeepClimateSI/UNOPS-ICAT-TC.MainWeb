@@ -29,11 +29,6 @@
             </div>
             <div class="col-md-4">
                 <div class="p-field">
-                    <!-- <label for="projYear">Year</label>
-                    <p-dropdown name="projYear" [options]="yearList" [(ngModel)]="searchBy.year" #fsector="ngModel"
-                        [showClear]="true" [filter]="true" placeholder="Select .." optionLabel="assessmentYear"
-                        (ngModelChange)="onYearChange($event)">
-                    </p-dropdown> -->
                 </div>
             </div>
 
@@ -47,8 +42,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- <div> {{climateactions|json}} </div> -->
 
         <div class="row p-2">
             <p-table #table [value]="dataRequestList" [lazy]="true" (onLazyLoad)="loadgridData($event)"
@@ -69,9 +62,6 @@
                         <th>CHARACTERISTICS</th>
                         <th>RELENANCY</th>
                         <th>SCORE</th>
-                        <!-- <th>Unit</th>
-              <th>Year</th> -->
-                        <!-- <th>Deadline</th> -->
 
                         <th>User</th>
                         <th>Created On</th>
@@ -89,40 +79,6 @@
                         <td>{{ dataRequestList.parameter?.characteristics.name! }}</td>
                         <td>{{ dataRequestList.parameter?.relevance }}</td>
                         <td>{{ dataRequestList.parameter.score | number: '1.0-5' }}</td>
-                        <!-- <td>
-                {{ dataRequestList.parameter.isAlternative ? "Alternative" : "" }}
-                {{ dataRequestList.parameter.isBaseline ? "Baseline" : "" }}
-                {{ dataRequestList.parameter.isProject ? "Project" : "" }}
-                {{ dataRequestList.parameter.isLekage ? "Lekage" : "" }}
-                {{ dataRequestList.parameter.isProjection ? "Projection" : "" }}
-              </td> -->
-                        <!-- <td>{{ dataRequestList.parameter.name }}</td> -->
-
-                        <!-- <td>{{ dataRequestList.parameter.uomDataEntry }}</td> -->
-
-
-
-
-                        <!-- <ng-container
-                            *ngIf=" dataRequestList.parameter?.DefaultValue?.year! == undefined ; else elseBlockYear">
-                            <td>
-                                {{
-                                dataRequestList?.parameter!?.Assessment!?.AssessmentYear!
-                                ?.assessmentYear!
-                                }}
-                            </td>
-                        </ng-container> -->
-                        <!-- <ng-template #elseBlockYear>
-                            <td>
-                                {{
-                                dataRequestList.parameter?.DefaultValue?.year!
-                                }}
-                            </td>
-                        </ng-template> -->
-
-
-
-                        <!-- <td>{{ dataRequestList.deadline | date: "dd-MM-yyyy " }}</td> -->
 
                         <td>
                             {{

@@ -54,7 +54,6 @@ export class EditInstitutionComponent implements OnInit {
       0
     ).subscribe((res: any) => {
       this.typeList = res.data;
-      console.log("typeList",this.typeList)
     });
 
     this.serviceProxy
@@ -70,7 +69,6 @@ export class EditInstitutionComponent implements OnInit {
       0,
       0
     ).subscribe((res: any) => {
-      console.log("category",res)
       this.categoryList = res.data;
     });
 
@@ -79,7 +77,6 @@ export class EditInstitutionComponent implements OnInit {
      
     ).subscribe((res: any) => {
       this.sectorList = res;
-      console.log('sector........',res)
     });
 
   this.route.queryParams.subscribe((params) => {
@@ -92,7 +89,6 @@ export class EditInstitutionComponent implements OnInit {
       0
     ).subscribe((res) => {
       this.institution = res;
-      console.log('rrrr',res);
     })
   })
 
@@ -102,7 +98,6 @@ export class EditInstitutionComponent implements OnInit {
 
      if (formData.valid) {
 
-      console.log("form validated")
 
     let sector = new Sector();
     sector.id = this.institution.sector?.id;
@@ -122,7 +117,6 @@ export class EditInstitutionComponent implements OnInit {
     }
 
     if (this.institution.id > 0) {
-      console.log("********",this.institution)
       this.serviceProxy
         .updateOneBaseInstitutionControllerInstitution(this.institution.id, this.institution)
         .subscribe(
@@ -152,7 +146,6 @@ export class EditInstitutionComponent implements OnInit {
           }
         );
         
-        console.log(formData);
       
     }}
 
@@ -183,10 +176,5 @@ export class EditInstitutionComponent implements OnInit {
     this.router.navigate(['/app/institutionlist']);
   }
 
-  // view(institution: Institution){
-  //   this.router.navigate(['institution'],{
-  //     queryParams: {  id: institution.id }
-  //   })
-  // }
 
 } 

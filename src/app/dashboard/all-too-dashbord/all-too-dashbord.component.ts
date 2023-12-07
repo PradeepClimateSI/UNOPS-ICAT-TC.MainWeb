@@ -54,33 +54,22 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
   ) {
   }
   ngOnInit(): void {
-    // let tool = 'All Option'
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
     this.userRole = tokenPayload.role.code;
 
 
-    this.xData = this.masterDataService.xData
-    this.yData = this.masterDataService.yData
-    // this.investorProxy.findSectorCount(tool).subscribe((res: any) => {
-    //   this.sectorCount = res;
-    //   setTimeout(() => {
-
-    //     this.viewSecterTargetedPieChart();
-    //   }, 100);
-
-    // });
+    this.xData = this.masterDataService.xData;
+    this.yData = this.masterDataService.yData;
     let event: any = {};
     event.rows = this.rows;
     event.first = 0;
     this.loadgridData(event);
-    // this.sdgResults();
     this.sectorCountResult();
 
   }
   ngAfterViewInit(): void {
     this.cdr.detectChanges();
-    // this.updateSourceDivHeight();
   }
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
@@ -90,9 +79,6 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
     this.targetDivHeight = this.targetDiv.nativeElement.offsetHeight;
     this.renderer.setStyle(this.sourceDiv.nativeElement, 'height', `${this.targetDivHeight}px`);
     this.renderer.setStyle(this.sourceDiv.nativeElement, 'overflow-y', 'auto');
-    // this.targetDivHeightofMeetingEnvironmental = this.targetDiv2.nativeElement.offsetHeight;
-    // this.renderer.setStyle(this.sourceDiv2.nativeElement, 'height', `${this.targetDivHeightofMeetingEnvironmental}px`);
-    // this.renderer.setStyle(this.sourceDiv2.nativeElement, 'overflow-y', 'auto');
     this.cdr.detectChanges();
   }
   sectorCountResult(){
@@ -127,7 +113,6 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
     }
 
     if (this.pieChart2) {
-      // Update the chart data
       this.pieChart2.data.datasets[0].data = counts;
       this.pieChart2.data.labels = labels
       this.pieChart2.update();
@@ -187,9 +172,6 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
               callbacks: {
 
                 label: (ctx) => {
-                  // let sum = ctx.dataset._meta[0].total;
-                  // let percentage = (value * 100 / sum).toFixed(2) + "%";
-                  // return percentage;
                   let sum = 0;
                   let array = counts
                   array.forEach((number) => {
@@ -204,7 +186,7 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
                   ];
                 }
               },
-              backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
+              backgroundColor: 'rgba(0, 0, 0, 0.8)', 
               titleFont: {
                 size: 14,
                 weight: 'bold'
@@ -212,7 +194,7 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
               bodyFont: {
                 size: 14
               },
-              displayColors: true, // Hide the color box in the tooltip
+              displayColors: true, 
               bodyAlign: 'left'
             }
           }
@@ -347,7 +329,6 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
     }
 
     if (this.pieChart1) {
-      // Update the chart data
       this.pieChart1.data.datasets[0].data = counts;
       this.pieChart1.data.labels = labels
       this.pieChart1.update();
@@ -414,9 +395,6 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
               callbacks: {
 
                 label: (ctx) => {
-                  // let sum = ctx.dataset._meta[0].total;
-                  // let percentage = (value * 100 / sum).toFixed(2) + "%";
-                  // return percentage;
                   let sum = 0;
                   let array = counts
                   array.forEach((number) => {
@@ -431,7 +409,7 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
                   ];
                 }
               },
-              backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
+              backgroundColor: 'rgba(0, 0, 0, 0.8)', 
               titleFont: {
                 size: 14,
                 weight: 'bold'
@@ -439,7 +417,7 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
               bodyFont: {
                 size: 14
               },
-              displayColors: true, // Hide the color box in the tooltip
+              displayColors: true, 
               bodyAlign: 'left'
             }
           }

@@ -31,7 +31,6 @@ export class ViewInstitutionComponent implements OnInit {
 
   constructor(
     private serviceProxy: ServiceProxy,
-    // private typeService: InstitutionTypeControllerServiceProxy,
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute,
     private institutionProxy: InstitutionControllerServiceProxy,
@@ -58,19 +57,16 @@ export class ViewInstitutionComponent implements OnInit {
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const currenyUser=decode<any>(token);
     this.userName = currenyUser.username;
-    console.log("currenyUser",currenyUser);
 
 
     this.userProxy.findUserByUserNameEx(
       this.userName
     ).subscribe((res: any) => {
 
-      console.log('responseuserrrrr..',res);
       this.user = res;
 
     });
 
-   // this.route.queryParams.subscribe((params) => {
       this.userId = 4;
 
     this.serviceProxy
@@ -80,10 +76,7 @@ export class ViewInstitutionComponent implements OnInit {
       undefined,
       0,
     ).subscribe((res: any) => {
-      //this.user = res;
-      console.log('ressss..',res);
       this.userTypeId = this.user.userType?.id;
-      console.log('userType',this.userTypeId);
 
       this.serviceProxy
     .getManyBaseInstitutionTypeControllerInstitutionType(
@@ -100,7 +93,7 @@ export class ViewInstitutionComponent implements OnInit {
     ).subscribe((res: any) => {
       this.selectedTypeList = res.data;
 
-      if(this.userTypeId == 1){  //userType ID == 1 ===> Country admin
+      if(this.userTypeId == 1){ 
         this.typeList.push(this.selectedTypeList[0]);
       }
       if(this.userTypeId == 2){
@@ -125,7 +118,6 @@ export class ViewInstitutionComponent implements OnInit {
       0,
       0
     ).subscribe((res: any) => {
-      // console.log("category",res)
       this.categoryList = res.data;
     })
 
@@ -143,7 +135,6 @@ export class ViewInstitutionComponent implements OnInit {
       0
     ).subscribe((res: any) => {
       this.sectorList = res?.data;
-      console.log('sector........',this.sectorList)
     });
 
     this.route.queryParams.subscribe((params) => {
@@ -156,7 +147,6 @@ export class ViewInstitutionComponent implements OnInit {
         0
       ).subscribe((res) => {
         this.institution = res;
-        console.log('rrrr',res);
       })
     });
 
@@ -175,7 +165,6 @@ export class ViewInstitutionComponent implements OnInit {
           this.confirmationService.confirm({
             message: 'Confirm you want to deactivate institution, this action will also deactivate users associated with the institution?',
             accept: () => {
-              console.log('delevting',institution)
               this.updateStatus(institution);
               this.institutionProxy
               .deactivateInstitution(institution.id)
@@ -184,7 +173,6 @@ export class ViewInstitutionComponent implements OnInit {
                 this.confirmationService.confirm({
 
                   accept: () => {
-                    console.log('Deactivated sucessfully')
 
                   }
                 })
@@ -197,7 +185,6 @@ export class ViewInstitutionComponent implements OnInit {
 
     updateStatus(institution: Institution){
 
-      console.log('stasus===',institution.status)
 
         let statusUpdate = 1;
         this.institution.status = statusUpdate;
@@ -225,7 +212,6 @@ export class ViewInstitutionComponent implements OnInit {
 
           .updateOneBaseInstitutionControllerInstitution(institution.id, institution)
           .subscribe((res) => {
-            console.log('done............'),
             this.messageService.add({
               severity: 'success',
               summary: 'Deactivated successfully',
@@ -236,7 +222,6 @@ export class ViewInstitutionComponent implements OnInit {
             });
           },
           (err) => {
-            console.log('error............'),
            this.messageService.add({
              severity: 'error',
              summary: 'Error.',
@@ -249,14 +234,6 @@ export class ViewInstitutionComponent implements OnInit {
       }
 
       activateInstitution(institution: Institution){
-
-       console.log("loguser===",this.user)
-       console.log("institute",institution)
-       console.log("activationinsId===",institution.id)
-
-
-        console.log('stasus===',institution.status)
-        console.log("user.institution.id",this.user.institution.id,"institution.id",institution.id)
         if(this.user.institution.id !== institution.id ){
 
         if(institution.status == 1){
@@ -283,9 +260,6 @@ export class ViewInstitutionComponent implements OnInit {
 
         this.institution.status = this.statusUpdate;
 
-        console.log('stasus===',institution.status)
-
-
 
         let sector = new Sector();
         sector.id = this.institution.sector?.id;
@@ -308,7 +282,6 @@ export class ViewInstitutionComponent implements OnInit {
 
           .updateOneBaseInstitutionControllerInstitution(institution.id, institution)
           .subscribe((res) => {
-            console.log('done............'),
             this.messageService.add({
               severity: 'success',
               summary: institution.status === 0 ? 'Activated successfully' : 'Decativated successfully',
@@ -323,7 +296,6 @@ export class ViewInstitutionComponent implements OnInit {
             },2000)
           },
           (err) => {
-            console.log('error............'),
            this.messageService.add({
              severity: 'error',
              summary: 'Error.',
@@ -360,7 +332,6 @@ export class ViewInstitutionComponent implements OnInit {
       }
 
       edit(institution: Institution){
-        console.log("institution",institution)
         this.router.navigate(['app/edit-institution'],{
           queryParams: { id: institution.id}
         });

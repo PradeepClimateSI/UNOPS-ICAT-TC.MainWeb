@@ -1,5 +1,4 @@
 import {
-  Characteristics,
   Notification,
   ParameterHistoryControllerServiceProxy,
   UpdateDeadlineDto,
@@ -15,14 +14,10 @@ import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
 import decode from 'jwt-decode';
-// import { strictEqual } from 'assert';
 import {
   ParameterRequestControllerServiceProxy,
   ClimateAction as Project,
   ProjectControllerServiceProxy,
-  ProjectOwner,
-  ProjectStatus,
-  Sector,
   ServiceProxy,
   UsersControllerServiceProxy,
 } from 'shared/service-proxies/service-proxies';
@@ -125,9 +120,6 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
       .usersByInstitution(1, 1000, '', 9, this.userName)
       .subscribe((res: any) => {
         this.userList = res.items;
-        // this.totalRecords = res.itemCount;
-
-        console.log('this.userList', this.userList);
       });
   }
   getdata(){
@@ -143,7 +135,6 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
     )
     .subscribe((res) => {
       for (let a of res.items) {
-        // console.log("test countrya",a)
         if(this.tool==Tool.CM_tool){
           if (a?.cmAssessmentAnswer?.assessment_question?.assessment?.climateAction !== null) {
             if (
@@ -152,16 +143,13 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
               )
               
             ) {
-              // console.log("climateactionsList",this.assignCAArray)
 
               this.assignCAArray.push(
                 a.cmAssessmentAnswer.assessment_question.assessment.climateAction.policyName
               );
               this.climateactionsList.push(
-                a.cmAssessmentAnswer.assessment_question.assessment.climateAction
-                
+                a.cmAssessmentAnswer.assessment_question.assessment.climateAction                
               );
-              console.log("climateactionsList",this.climateactionsList)
              
             }
           }
@@ -176,9 +164,7 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
     });
 
   }
-  onCAChange(event: any) {
-    console.log('selectedUser', this.selectedUser);
-    
+  onCAChange(event: any) {    
     this.onSearch();
   }
 
@@ -201,11 +187,9 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
     this.loadgridData(event);
   }
 
-  // /////////////////////////////////////////////
 
   loadgridData = (event: LazyLoadEvent) => {
     
-    console.log('event Date', event);
     this.loading = true;
     this.totalRecords = 0;
 
@@ -221,8 +205,6 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
     setTimeout(() => {
-      console.log('climateActionId', climateActionId);
-      console.log('this.userName', this.userName);
       this.parameterProxy
         .getAssignDateRequest(
           pageNumber,
@@ -234,10 +216,8 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
           "1234"
         )
         .subscribe((res) => {
-          console.log('aa', res);
           if (res) {
             this.assignDataRequestList = res.items;
-            console.log(this.assignDataRequestList)
             this.totalRecords = res.meta.totalItems;
             this.assignCAArray.length=0;
             this.climateactionsList.length=0;
@@ -251,16 +231,13 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
                     )
                     
                   ) {
-                    // console.log("climateactionsList",this.assignCAArray)
       
                     this.assignCAArray.push(
                       a.cmAssessmentAnswer.assessment_question.assessment.climateAction.policyName
                     );
                     this.climateactionsList.push(
-                      a.cmAssessmentAnswer.assessment_question.assessment.climateAction
-                      
+                      a.cmAssessmentAnswer.assessment_question.assessment.climateAction                      
                     );
-                    console.log("climateactionsList",this.climateactionsList)
                    
                   }
                 }
@@ -274,17 +251,13 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
                       a.investmentParameter.assessment.climateAction.policyName
                     )
                     
-                  ) {
-                    // console.log("climateactionsList",this.assignCAArray)
-      
+                  ) {      
                     this.assignCAArray.push(
                       a.investmentParameter.assessment.climateAction.policyName
                     );
                     this.climateactionsList.push(
-                      a.investmentParameter.assessment.climateAction
-                      
+                      a.investmentParameter.assessment.climateAction                      
                     );
-                    console.log("climateactionsList",this.climateactionsList)
                    
                   }
                 }
@@ -323,7 +296,6 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
 
 
   getInfo(obj: any) {
-    // console.log("dataRequestList...", obj)
     if (this.tool == Tool.CM_tool) {
       let res = this.dataRequestPathService.getInfo(obj, this.tool)
       this.paraId = res?.paraId;
@@ -338,17 +310,11 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
       let res = this.dataRequestPathService.getInfo(obj, this.tool)
       this.paraId = res.paraId
     }
-    // console.log("this.paraId...", this.paraId)
-
-    // let x = 602;
     this.prHistoryProxy
-      .getHistroyByid(this.paraId)  // this.paraId
+      .getHistroyByid(this.paraId)
       .subscribe((res) => {
 
         this.requestHistoryList = res;
-
-        console.log('this.requestHistoryList...', this.requestHistoryList);
-
       });
 
     this.displayHistory = true;
@@ -368,8 +334,6 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
     let a: any = {};
     a.rows = this.rows;
     a.first = 0;
-
-    // this.onClimateActionStatusChange(a);
   }
 
   removeFromString(arr: string[], str: string) {
@@ -387,7 +351,6 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
     let userId: number = this.selectedUser ? this.selectedUser.id : 0;
     let idList = new Array<number>();
     if (userId > 0 && this.selectedParameters.length > 0) {
-      console.log('userId', userId);
       for (let index = 0; index < this.selectedParameters.length; index++) {
         const element = this.selectedParameters[index];
         idList.push(element.id);
@@ -398,7 +361,6 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
       inputParameters.userId = userId;
       inputParameters.status = status;
       inputParameters.deadline = moment(this.selectedDeadline);
-      console.log('inputParameters', inputParameters);
       this.parameterProxy.updateDeadlineDataEntry(inputParameters).subscribe(
         (res) => {
           this.messageService.add({
@@ -429,18 +391,15 @@ export class AssignDataRequestComponent implements OnInit, AfterViewInit {
     if (this.activeIndexMain==0){
      this.tool=Tool.CM_tool
      this.loadgridData(event);
-      // this.loadgridData(event2,Tool.CM_tool )
     }
     else if (this.activeIndexMain==1){
       this.tool=Tool.Investor_tool
       this.loadgridData(event);
-      // this.loadgridData(event2,Tool.Investor_tool )
     }
     else if (this.activeIndexMain==2){
       this.tool=Tool.Portfolio_tool;
       this.loadgridData(event);
       
     }
-    console.log("tabIndex",this.tabIndex)
   }
 }

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { SDG } from 'app/Tool/carbon-market/cm-section-three/cm-section-three.component';
-import { SelectedScoreDto } from './score.dto';
 import { ScoreDto } from 'shared/service-proxies/service-proxies';
 
 @Injectable({
@@ -232,9 +231,6 @@ export class MasterDataService {
     ]
     this.assessment_method = [
       { id: 1, name: "Track 1" },
-      // { id: 2, name: "Track 2" },
-      // { id: 3, name: "Track 3" },
-      // { id: 4, name: "Track 4" },
 
     ]
 

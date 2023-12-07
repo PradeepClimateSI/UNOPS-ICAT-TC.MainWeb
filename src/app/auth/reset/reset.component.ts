@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { AppService, ProfileStatus, RecordStatus } from 'shared/AppService';
+import { ProfileStatus, RecordStatus } from 'shared/AppService';
 import { AuthControllerServiceProxy, AuthCredentialDto, ServiceProxy } from 'shared/service-proxies/auth-service-proxies';
 
 @Component({
@@ -89,7 +89,6 @@ export class ResetComponent implements OnInit {
           });
         }     
       }catch(err){
-        console.error(err);
         this.messageService.add({
           severity: 'error',
           summary: 'Error',

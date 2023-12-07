@@ -61,29 +61,8 @@ export class RaiseConcernComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     let userName = localStorage.getItem('USER_NAME')!;
 
-    // let filter1: string[] = [];
-    // filter1.push('username||$eq||' + userName);
-    // // lmFilter.push('LearningMaterial.isPublish||$eq||' + 1);
-
-    // this.serviceProxy
-    //   .getManyBaseUsersControllerUser(
-    //     undefined,
-    //     undefined,
-    //     filter1,
-    //     undefined,
-    //     undefined,
-    //     undefined,
-    //     1000,
-    //     0,
-    //     0,
-    //     0
-    //   )
-    //   .subscribe((res: any) => {
-    //     this.loggedUser = res.data[0];
-    //   });
-    let user = await this.usersControllerServiceProxy.findUserByEmail(userName).toPromise()
-    console.log("user", user)
-    this.loggedUser = user
+    let user = await this.usersControllerServiceProxy.findUserByEmail(userName).toPromise();
+    this.loggedUser = user;
     
   }
 
@@ -153,14 +132,7 @@ export class RaiseConcernComponent implements OnInit {
         vd.assessment = this.assessment;
         vd.userVerifier = this.loggedUser.id;
         vd.year = Number(this.assessment.year.split('-')[0]);
-        vd.updatedDate = moment()
-  
-        // if (this.isNdC) {
-        //   vd.isNDC = true;
-        // }
-        // if (this.isMethodology) {
-        //   vd.isMethodology = true;
-        // }
+        vd.updatedDate = moment();
   
         if (this.isParameter) {
           let param = new MethodologyAssessmentParameters();
@@ -180,7 +152,6 @@ export class RaiseConcernComponent implements OnInit {
       this.verificationProxy
         .saveVerificationDetails(verificationDetails)
         .subscribe((a) => {
-          console.log(4);
   
           this.messageService.add({
             severity: 'success',
@@ -192,13 +163,9 @@ export class RaiseConcernComponent implements OnInit {
       this.isSubmit = false
     }
 
-    // this.router.navigate(['/non-conformance'], {
-    //    queryParams: { id: this.assessmentYear.id },
-    //  });
   }
 
   onCompleteView(){
-    console.log("onCompleteView")
 
     let verificationDetails: VerificationDetail[] = [];
   
@@ -216,7 +183,6 @@ export class RaiseConcernComponent implements OnInit {
       this.verificationProxy
         .saveVerificationDetails(verificationDetails)
         .subscribe((a) => {
-          console.log(4);
   
           this.messageService.add({
             severity: 'success',

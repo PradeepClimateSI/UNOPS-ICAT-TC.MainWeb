@@ -81,7 +81,6 @@
      
           <th>Contact Number</th>
           <th>Email</th>
-          <!-- <th>Status</th> -->
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-customer>
@@ -105,15 +104,9 @@
             icon="pi pi-pencil"
             (click)="EditUser(customer)"
           ></button>
-            <!-- <i
-              class="pi pi-eye"
-              style="font-size: 1.5rem; color: #000; margin-left: 17%"
-              (click)="viewUser(customer)"
-            ></i> -->
           </td>
           <td>{{ customer.userType?.name }}</td>
           <td>{{ customer.firstName }}</td>
-          <!-- <td>{{ customer.lastName }}</td> -->
 
           <td
             pTooltip="{{ customer.institution?.name }}"
@@ -132,7 +125,6 @@
           >
             <a href="mailto:{{ customer.email }}">{{ customer.email }}</a>
           </td>
-          <!-- <td>{{ customer.status == 0 ? "Active" : "Deactivated" }}</td> -->
         </tr>
       </ng-template>
     </p-table>

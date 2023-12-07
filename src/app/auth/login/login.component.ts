@@ -62,12 +62,9 @@ export class LoginComponent implements OnInit {
       a.username = this.userName;
       try{
         const res = await this.authControllerServiceProxy.login(a).toPromise();
-        console.log("returned user data",res);
-        //@ts-ignore
         if(res.isEmailConfirmed){
           this.appService.steToken(res.accessToken);
         this.appService.steRefreshToken(res.refreshToken);
-        // this.appService.steRole(res.role);
         this.appService.steProfileId(res.loginProfileId);
         this.appService.steUserName(this.userName);
         this.appService.startRefreshTokenTimer();
@@ -86,7 +83,6 @@ export class LoginComponent implements OnInit {
         
        
       }catch(err){
-        console.error(err);
         this.messageService.add({
           severity: 'error',
           summary: 'Error',

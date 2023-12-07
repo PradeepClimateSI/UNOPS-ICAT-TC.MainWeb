@@ -48,11 +48,9 @@ export class PortfolioResultComponent implements OnInit {
       this.portfolioId = params['id'];
     });
 
-    console.log("hhh", this.portfolioId)
 
 
     this.portfolioServiceProxy.assessmentsByPortfolioId(this.portfolioId).subscribe(async (res: any) => {
-      console.log("assesssListt : ", res)
       this.assessList = res;
 
       setTimeout(() => {
@@ -62,7 +60,6 @@ export class PortfolioResultComponent implements OnInit {
 
 
     this.portfolioServiceProxy.assessmentsDataByAssessmentId(this.portfolioId).subscribe(async (res: any) => {
-      console.log("arrayyy : ", res)
       this.processData = [];
       this.outcomeData = [];
       this.outcomeData2 = [];
@@ -95,19 +92,9 @@ export class PortfolioResultComponent implements OnInit {
           ghgValue : data.ghgValue,
         }
 
-        this.allData.push(obj)
+        this.allData.push(obj);
       }
 
-      console.log("this.allData : ", this.allData)
-
-
-
-
-     // console.log("this.processData : ", this.processData)
-     // console.log(" this.outcomeData : ",  this.outcomeData)
-
-
-     /* Portfolio toolll */
 
      for(let assessment of this.allData){
 
@@ -118,12 +105,10 @@ export class PortfolioResultComponent implements OnInit {
      data.characteristics.forEach((obj: { name: string; score: any; }) => {
        if (obj.name in averages) {
          averages[obj.name].score += obj.score || 0;
-       //  averages[obj.name].sustainedScore += obj.sustainedScore === '-' ? 0 : parseInt(obj.sustainedScore);
          averages[obj.name].count++;
        } else {
          averages[obj.name] = {
           score: obj.score || 0,
-         //  sustainedScore: obj.sustainedScore === '-' ? 0 : parseInt(obj.sustainedScore),
            count: 1
          };
        }
@@ -133,18 +118,13 @@ export class PortfolioResultComponent implements OnInit {
 
      for (const name in averages) {
        const averageScaleScore = averages[name].score / averages[name].count;
-       //const averageSustainedScore = averages[name].sustainedScore / averages[name].count;
 
        result.push({
         score: averageScaleScore.toFixed(0),
-        // sustainedScore: '-',
          name: name
        });
      }
 
-     console.log("resulttt", result);
-
-      /* Portfolio toolll */
       const data2: any =  assessment.sustained[1]
 
       const averages2: any = {};
@@ -152,12 +132,10 @@ export class PortfolioResultComponent implements OnInit {
       data2.characteristics.forEach((obj: { name: string; score: any; }) => {
         if (obj.name in averages2) {
           averages2[obj.name].score += obj.score || 0;
-          //averages2[obj.name].scaleScore += obj.scaleScore === '-' ? 0 : parseInt(obj.scaleScore);
           averages2[obj.name].count++;
         } else {
           averages2[obj.name] = {
             score: obj.score || 0,
-         //  scaleScore: obj.scaleScore === '-' ? 0 : parseInt(obj.scaleScore),
             count: 1
           };
         }
@@ -166,22 +144,18 @@ export class PortfolioResultComponent implements OnInit {
       const result2 = [];
 
       for (const name in averages2) {
-      //  const averageScaleScore2 = averages2[name].scaleScore / averages2[name].count;
         const averageSustainedScore2 = averages2[name].score / averages2[name].count;
 
         result2.push({
-         // scaleScore: '-',
           score: averageSustainedScore2.toFixed(0),
           name: name
         });
       }
 
-      console.log("resulttt22", result2);
-
-      assessment.scale[1].characteristics = []
-      assessment.scale[1].characteristics = result
-      assessment.sustained[1].characteristics = []
-      assessment.sustained[1].characteristics = result2
+      assessment.scale[1].characteristics = [];
+      assessment.scale[1].characteristics = result;
+      assessment.sustained[1].characteristics = [];
+      assessment.sustained[1].characteristics = result2;
 
      }
 
@@ -192,15 +166,12 @@ export class PortfolioResultComponent implements OnInit {
 
 
     this.portfolioServiceProxy.getPortfolioById(this.portfolioId).subscribe(async (res: any) => {
-      console.log("assesss : ", res)
-      //  this.portfolioList = res;
       this.portfolio = res[0];
 
       await this.portfolioServiceProxy.assessmentsDataByAssessmentId(this.portfolioId).subscribe(async (res5: any) => {
 
         this.noOfAssessments = res5.length;
 
-      console.log("length : ", this.noOfAssessments)
 
 
       this.card.push(
@@ -212,15 +183,10 @@ export class PortfolioResultComponent implements OnInit {
           { title: 'Is this assessment an update of a previous assessment?', data: res[0].IsPreviousAssessment },
           { title: 'Objective(s) of the assessment', data: this.portfolio.objectives },
           { title: 'Intended audience(s) of the assessment', data: this.portfolio.audience },
-/*           { title: 'Opportunities for stakeholders to participate in the assessment', data: this.portfolio.opportunities },
-          { title: 'Principles on which the assessment is based', data: this.portfolio.principles }, */
           { title: 'Number of Assessments', data: await this.noOfAssessments }
         ])
       });
 
-
-
-        console.log("cardddd : ", this.card)
     });
 
   }
@@ -309,47 +275,39 @@ export class PortfolioResultComponent implements OnInit {
   clickData4 : any = [];
 
   handleClick(cha : any){
-    console.log("chaa", cha)
     this.clickData = cha;
     this.tableShow = true;
   }
 
   handleClick2(cha : any){
-    console.log("chaa22", cha)
     this.clickData2 = cha;
     this.tableShow2 = true;
   }
 
   handleClick3(cha : any){
-    console.log("chaa33", cha)
     this.clickData3 = cha;
     this.tableShow3 = true;
   }
 
   handleClick4(cha : any){
-    console.log("chaa44", cha)
     this.clickData4 = cha;
     this.tableShow4 = true;
   }
 
 
   public async showTable() {
-    // this.ngOnInit();
     this.tableShow = false;
 }
 
   public async showTable2() {
-    // this.ngOnInit();
     this.tableShow2 = false;
   }
 
   public async showTable3() {
-    // this.ngOnInit();
     this.tableShow3 = false;
   }
 
   public async showTable4() {
-    // this.ngOnInit();
     this.tableShow4 = false;
   }
 

@@ -13,7 +13,6 @@
                 </div>
             </div>
 
-            <!-- {{institutions|json}}      -->
         </div>
         <div class="row p-2">
             <p-table #table [value]="institutions" [lazy]="true" (onLazyLoad)="loadgridData($event)" [paginator]="true"
@@ -21,7 +20,6 @@
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                 [rowsPerPageOptions]="[ 10, 25, 50]" [totalRecords]="totalRecords" [loading]="loading">
 
-                <!-- [responsive]="true" -->
 
 
                 <ng-template pTemplate="header">

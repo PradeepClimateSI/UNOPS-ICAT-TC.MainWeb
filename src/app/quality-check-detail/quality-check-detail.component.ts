@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DataRequestComponent } from 'app/data-request-flow/data-request/data-request.component';
 import * as moment from 'moment';
 import {
   MethodologyAssessmentControllerServiceProxy,
@@ -48,7 +47,6 @@ export class QualityCheckDetailComponent implements OnInit {
         this.headerAssessmentType = res[0].assessment.assessmentType;
         this.from =  moment(res[0].assessment.from).format('YYYY-MM-DD');
         this.fromTo = moment(res[0].assessment.to).format('YYYY-MM-DD');
-        console.log("param ", this.param)
 
       })
 
@@ -64,7 +62,6 @@ export class QualityCheckDetailComponent implements OnInit {
 
 
     }
-    console.log('selectedParameters', this.selectedParam);
     this.selectedParam =[]
 
   }
@@ -74,7 +71,6 @@ export class QualityCheckDetailComponent implements OnInit {
       
       p.parameterRequest.qaStatus = 3
     }
-    console.log('selectedParameters', this.selectedParam);
     this.selectedParam =[]
   }
 

@@ -84,7 +84,6 @@ export class InstitutionComponent implements OnInit {
     this.usrrole = tokenPayload.role.code;
     this.sectorId = tokenPayload.sectorId;
     this.countryId = tokenPayload['countryId'];
-    // this.dataCollectionModuleStatus =tokenPayload.moduleLevels[3];
 
     if(this.usrrole == "Sector Admin" || this.usrrole =="MRV Admin"){
       this.internalTeam = true
@@ -93,8 +92,6 @@ export class InstitutionComponent implements OnInit {
     
     this.route.queryParams.subscribe((params => {
       this.institutionId = params['id'];
-
-      console.log('dddd', this.institutionId);
 
 
       if (this.institutionId && this.institutionId > 0) {
@@ -107,10 +104,8 @@ export class InstitutionComponent implements OnInit {
             0
           ).subscribe((res) => {
             this.institution = res;
-            console.log('rrrr', res);
 
             this.intype = this.institution?.type;
-            console.log("intype..", this.intype)
           })
       }
     }));
@@ -127,19 +122,11 @@ export class InstitutionComponent implements OnInit {
       ['name,ASC'],
       undefined,
       1000,
-      0,    //name: "UNFCCC Focal Point"
+      0,    
       0,
       0
     ).subscribe((res: any) => {
       this.selectedTypeList = res.data;
-      console.log("++++++",this.selectedTypeList)
-      // if(this.dataCollectionModuleStatus == 0){
-      //   console.log('dataCollectionModuleStatus',this.dataCollectionModuleStatus)
-      //   this.selectedTypeList = this.selectedTypeList.filter((o: any) => o.name != "Data provider" && o.name != "Data Collection Team"&& o.name != "QC Team");
-     
-     
-      // }
-      // if (this.usrrole == "Technical Team") {
         if (this.usrrole == "Country User") {
 
         this.selectedTypeList1 = this.selectedTypeList.filter((o: any) => o.name != "UNFCCC Focal Point" && o.name != "NDC Unit" && o.name != "National Institution" && o.name != "Data Collection Team" && o.name != "QC Team");
@@ -171,7 +158,6 @@ export class InstitutionComponent implements OnInit {
       0
     ).subscribe((res: any) => {
       this.categoryList = res.data;
-      console.log('cat list', this.categoryList)
     });
 
 
@@ -184,10 +170,6 @@ export class InstitutionComponent implements OnInit {
     this.sectorProxy.getSectorDetails(1,100,'').subscribe((res:any) =>{
       this.sectorList = res.items;
     })
-    // this.sectorProxy.getCountrySector(this.countryId).subscribe((res: any) => {
-    //   this.sectorList = res;
-    //   console.log("++++" ,this.sectorList)
-    // });
 
 
   }
@@ -197,7 +179,7 @@ export class InstitutionComponent implements OnInit {
 {
 
   if(['Data Collection Team','QC Team','National Institution'].includes(event.name)){
-  // this.inname = event.name
+
   }
   else{
     this.inname = ""
@@ -222,19 +204,11 @@ async saveForm(formData: NgForm) {
 
 
   if (formData.valid) {
-
-    console.log("formData===")
-
-
-
     let secternew = new Sector();
     let country = new Country();
     country.id = this.countryId;
-    console.log('country', country)
     secternew.id = this.insector.id;
     let institution = new Institution();
-    // console.log('user logged',this.userId);
-    console.log(this.insector)
 
     institution.name = this.inname;
     institution.description = this.indescription;
@@ -246,14 +220,11 @@ async saveForm(formData: NgForm) {
     institution.telephoneNumber = this.intelephoneNumber;
     institution.email = this.inmail;
 
-    // console.log('institution........gggg',institution);
-
 
     if (institution.sector) {
       let sector = new Sector();
       sector.id = this.insector.id;
       this.institution.sector = sector;
-      // console.log('entered sector',this.institution.sector)
     }
 
 
@@ -273,14 +244,10 @@ async saveForm(formData: NgForm) {
     if (institution.id !== 0) {
 
 
-      console.log('institution........', institution)
-
-
       await this.serviceProxy
         .createOneBaseInstitutionControllerInstitution(institution)
         .subscribe(
           (re) => {
-            console.log('resss',re)
             
             
             this.messageService.add({
@@ -293,25 +260,17 @@ async saveForm(formData: NgForm) {
           },
 
           (err) => {
-            console.log('resss', err)
             this.messageService.add({
               severity:'success', 
               summary:'Success', 
               detail:institution.name +' has saved successfully',  
               closable: true,});
-            // this.messageService.add({
-            //   severity: 'error',
-            //   summary: 'Error.',
-            //   detail: 'Internal server error, please try again.',
-            //   sticky: true,
-            // });
           }
           
         );
         setTimeout(() => {
           this.onBackClick();    
         },1000);
-      console.log(formData);
     }
 
   } else {
@@ -325,7 +284,6 @@ deleteInstitution(institution: Institution) {
   this.confirmationService.confirm({
     message: 'confirm you want to deactivate institution, this action will also deactivate users associated with the institution?',
     accept: () => {
-      console.log('delevting', institution)
       this.updateStatus(institution);
       this.institutionProxy
         .deactivateInstitution(institution.id)
@@ -334,7 +292,6 @@ deleteInstitution(institution: Institution) {
           this.confirmationService.confirm({
 
             accept: () => {
-              console.log('delevted sucess')
 
             }
           })
@@ -349,7 +306,6 @@ deleteInstitution(institution: Institution) {
 
 updateStatus(institution: Institution) {
 
-  console.log('sta', institution.status)
 
   let statusUpdate = 1;
   this.institution.status = statusUpdate;
@@ -376,7 +332,6 @@ updateStatus(institution: Institution) {
 
     .updateOneBaseInstitutionControllerInstitution(institution.id, institution)
     .subscribe((res) => {
-      console.log('done............'),
         this.messageService.add({
           severity: 'success',
           summary: 'Deactivated successfully',
@@ -387,7 +342,6 @@ updateStatus(institution: Institution) {
         });
     },
       (err) => {
-        console.log('error............'),
           this.messageService.add({
             severity: 'error',
             summary: 'Error.',
@@ -400,7 +354,6 @@ updateStatus(institution: Institution) {
 }
 
 activateInstitution(institution: Institution) {
-  console.log('sta', institution.status)
 
   if (institution.status == 1) {
     this.statusUpdate = 0;
@@ -433,7 +386,6 @@ activateInstitution(institution: Institution) {
 
     .updateOneBaseInstitutionControllerInstitution(institution.id, institution)
     .subscribe((res) => {
-      console.log('done............'),
         this.messageService.add({
           severity: 'success',
           summary: 'Activated successfully',
@@ -445,7 +397,6 @@ activateInstitution(institution: Institution) {
         });
     },
       (err) => {
-        console.log('error............'),
           this.messageService.add({
             severity: 'error',
             summary: 'Error.',

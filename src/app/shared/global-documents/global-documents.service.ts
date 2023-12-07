@@ -9,7 +9,6 @@ export class GlobalArrayService {
   constructor() { }
 
   getArray(): any[] {
-    console.log(this.myArray)
     return this.myArray;
   }
 
@@ -21,11 +20,9 @@ export class GlobalArrayService {
       }
     }
     
-    console.log(this.myArray)
   }
 
   removeItem(index: number): void {
     this.myArray.splice(index, 1);
-    console.log(this.myArray)
   }
 }

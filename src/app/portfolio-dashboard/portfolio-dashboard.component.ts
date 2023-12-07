@@ -4,7 +4,6 @@ import { MasterDataService } from 'app/shared/master-data.service';
 import { Chart, ChartType } from 'chart.js';
 import { LazyLoadEvent } from 'primeng/api';
 import { OverlayPanel } from 'primeng/overlaypanel';
-import { Paginator } from 'primeng/paginator';
 import { Assessment, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PortfolioControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
@@ -72,7 +71,6 @@ export class PortfolioDashboardComponent implements OnInit,AfterViewInit {
     outcome_score: number,
     intervention: string
   }[]=[];
-  /////
   portfolioSDGsPieChart:Chart;
   sectorCountPieChart:Chart;
   portfolioBarChart:Chart;
@@ -99,28 +97,23 @@ export class PortfolioDashboardComponent implements OnInit,AfterViewInit {
 
 
     this.portfolioServiceProxy.getAll().subscribe(async (res: any) => {
-      console.log("assesss : ", res)
       this.portfolioList = res;
      });
 
     
 
      this.getSectorCount(this.tool);
-    //  this.sdgResults()
   
   }
   ngAfterViewInit(): void {
     this.cdr.detectChanges();
-    // this.updateSourceDivHeight();
   }
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
     this.updateSourceDivHeight();
   }
   updateSourceDivHeight(): void {
-    // console.log(".....",this.barChartData)
     if(this.barChartData.length==0){
-      console.log(".....",this.barChartData)
       this.targetDivHeight = this.targetDiv.nativeElement.offsetHeight;
       this.renderer.setStyle(this.canvasRefSDGsPieChart.nativeElement, 'height', `400px`);
       this.renderer.setStyle(this.sourceDiv.nativeElement, 'height', `${this.targetDivHeight}px`);
@@ -129,11 +122,7 @@ export class PortfolioDashboardComponent implements OnInit,AfterViewInit {
     }
     else{
       let newHeight = 250;
-      // console.log(".....",this.barChartData)
       this.renderer.setStyle(this.canvasRefSDGsPieChart.nativeElement, 'height', `${newHeight}px`);
-      
-      // this.renderer.setStyle(this.sourceDiv.nativeElement, 'height', `${this.targetDivHeight}px`);
-      // this.renderer.setStyle(this.sourceDiv.nativeElement, 'overflow-y', 'auto');
     }
    
   }
@@ -147,7 +136,6 @@ this.selectPortfolio();
   }
 
   selectPortfolio(){
-    console.log("portfolio : ", this.selectedPortfolio)
 
     this.sdgDetailsList=[];
     this.barChartData=[];
@@ -162,8 +150,7 @@ this.selectPortfolio();
    
    if(this.selectedPortfolio){
     this.portfolioServiceProxy.assessmentsDataByAssessmentId(this.selectedPortfolio?this.selectedPortfolio.id:0).subscribe(async (res: any) => {
-      console.log("arrayyy : ", res)
-      this.barChartData=res
+      this.barChartData=res;
       setTimeout(() => {
       this.viewPortfolioBarChart();
       this.updateSourceDivHeight()
@@ -178,7 +165,6 @@ this.selectPortfolio();
 
   }
   loadgridData = (event: LazyLoadEvent) => {
-    console.log('event Date', event);
     this.loading = true;
     this.totalRecords = 0;
 
@@ -190,11 +176,10 @@ this.selectPortfolio();
     this.portfolioServiceProxy.getDashboardData(this.selectedPortfolio?this.selectedPortfolio.id:0,pageNumber,this.rows).subscribe((res) => {
       this.dashboardData = res.items;
       this.tableData = this.dashboardData.map(item => {return {climateAction: item.climateAction,tool:item.tool, processScore: item.result.averageOutcome, outcomeScore: item.result.averageProcess}}) 
-      console.log("tableData : ", this.tableData)
+      
       this.heatMapScore = this.dashboardData.map(item => {return {processScore: item.result.averageOutcome, outcomeScore: item.result.averageProcess,}})
       this.heatMapData = this.dashboardData.map(item => {return {interventionId: item.climateAction?.intervention_id, interventionName: item.climateAction?.policyName, processScore: item.result.averageOutcome, outcomeScore: item.result.averageProcess}}) 
-      console.log("kkkkk : ", res, this.heatMapData)
-      // this.tableData = this.heatMapData
+    
       this.totalRecords= res.meta.totalItems
       this.loading = false;
     }, err => {
@@ -205,8 +190,7 @@ this.selectPortfolio();
 
  async getSectorCount(tool:string){
     this.investorProxy.findSectorCount(tool).subscribe((res: any) => {
-      this.sectorCount = res
-      console.log("sectorcount",this.sectorCount)
+      this.sectorCount = res;
    
       setTimeout(() => {
         this.viewPortfolioSectorCountPieChart();
@@ -223,7 +207,7 @@ this.selectPortfolio();
   async sdgResults(){
     this.sdgDetailsList=[]
     this.portfolioServiceProxy.sdgSumCalculate(this.selectedPortfolio?this.selectedPortfolio.id:0).subscribe(async (res: any) => {
-      console.log("sdgDetailsList : ", res)
+      
       this.sdgDetailsList = res;
       setTimeout(() => {
      this.viewPortfolioSDGsPieChart();
@@ -297,7 +281,6 @@ this.selectPortfolio();
     let percentages = counts.map(count => ((count / total) * 100).toFixed(2));
 
     if (!this.canvasRefSDGsPieChart) {
-      console.error('Could not find canvas element');
       return;
     }
 
@@ -305,12 +288,10 @@ this.selectPortfolio();
     const ctx = canvas.getContext('2d');
 
     if (!ctx) {
-      console.error('Could not get canvas context');
       return;
     }
 
     if (this.portfolioSDGsPieChart) {
-      // Update the chart data
       this.portfolioSDGsPieChart.data.datasets[0].data = counts;
       this.portfolioSDGsPieChart.data.labels=labels
       this.portfolioSDGsPieChart.update();
@@ -391,7 +372,7 @@ this.selectPortfolio();
                   ];
                  }
               },
-              backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
+              backgroundColor: 'rgba(0, 0, 0, 0.8)', 
                 titleFont: {
                   size: 14,
                   weight: 'bold'
@@ -399,7 +380,7 @@ this.selectPortfolio();
                 bodyFont: {
                   size: 14
                 },
-                displayColors: true, // Hide the color box in the tooltip
+                displayColors: true, 
                 bodyAlign: 'left'
             }
          }
@@ -418,7 +399,6 @@ this.selectPortfolio();
     let percentages = counts.map(count => ((count / total) * 100).toFixed(2));
 
     if (!this.canvasRefSectorCountPieChart) {
-      console.error('Could not find canvas element');
       return;
     }
 
@@ -426,7 +406,6 @@ this.selectPortfolio();
     const ctx = canvas.getContext('2d');
 
     if (!ctx) {
-      console.error('Could not get canvas context');
       return;
     }
 
@@ -501,7 +480,7 @@ this.selectPortfolio();
                   ];
                  }
               },
-              backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
+              backgroundColor: 'rgba(0, 0, 0, 0.8)', 
                 titleFont: {
                   size: 14,
                   weight: 'bold'
@@ -509,7 +488,7 @@ this.selectPortfolio();
                 bodyFont: {
                   size: 14
                 },
-                displayColors: true, // Hide the color box in the tooltip
+                displayColors: true,
                 bodyAlign: 'left'
             }
          }
@@ -526,11 +505,9 @@ this.selectPortfolio();
 
     let label =this.barChartData.map((item:any) => item?.assessment?.climateAction?.policyName );
     let data =this.barChartData.map((item:any) => item.ghgValue?item.ghgValue:0);
-    console.log("label",label,"data",data)
 
 
     if (!this.canvasRefBarChart) {
-      console.error('Could not find canvas element');
       return;
     }
 
@@ -538,17 +515,9 @@ this.selectPortfolio();
     const ctx = canvas.getContext('2d');
 
     if (!ctx) {
-      console.error('Could not get canvas context');
       return;
     }
 
-    // if (this.portfolioBarChart) {
-    //   // Update the chart data
-    //   this.portfolioBarChart.data.datasets[0].data = data;
-    //   this.portfolioBarChart.data.labels=label;
-    //   this.portfolioBarChart.update();
-    // }
-    // else{
       if (this.portfolioBarChart) {
         this.portfolioBarChart.destroy();
        
@@ -640,14 +609,13 @@ this.selectPortfolio();
               callbacks:{
 
                 label:(context)=>{
-                  // console.log("context",context,"4444",data[context.dataIndex])
                   return[
 
                     `Expected GHG reductions over intervention lifetime  (Mt CO2-eq): ${context.raw}`,
                   ];
                  }
               },
-              backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
+              backgroundColor: 'rgba(0, 0, 0, 0.8)', 
                 titleFont: {
                   size: 14,
                   weight: 'bold'
@@ -655,7 +623,7 @@ this.selectPortfolio();
                 bodyFont: {
                   size: 14
                 },
-                displayColors: true, // Hide the color box in the tooltip
+                displayColors: true, 
                 bodyAlign: 'left'
             }
           }
@@ -663,7 +631,6 @@ this.selectPortfolio();
         }
     });
 
-  // }
 
 
   }

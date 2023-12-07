@@ -86,10 +86,6 @@
                         <div class="p-field">
                             <label for="objective">Contact Number*</label>
 
-                            <!-- <p-inputMask type="text" placeholder="+99 999 999-9999" mask="+99 99-999-9999"
-                                name="telephoneNumber" #telephoneNumber="ngModel"
-                                [(ngModel)]="institution.telephoneNumber" [styleClass]="'form-control'"
-                                [autoClear]="false"> -->
                                 <input id="telephoneNumber" type="text" name="telephoneNumber" class="form-control" required 
                                 [(ngModel)]="institution.telephoneNumber" #telephoneNumber="ngModel" placeholder="+xxxxxxxxx" 
                                  />
@@ -99,7 +95,6 @@
               ">
                                     This is a mandatory field
                                 </p>
-                            <!-- </p-inputMask> -->
                         </div>
                     </div>
                 </div>

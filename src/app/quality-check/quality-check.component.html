@@ -61,25 +61,6 @@
       </div>
   
       <div class="row mb-3" *ngIf="!qcDisable">
-        <!-- <div class="col-md-6">
-          <div class="col-12">
-            <div class="p-field">
-              <label for="projStatus">Aggregated Actions</label>
-              <p-dropdown
-                name="ndc"
-                [(ngModel)]="searchBy.ndc"
-                [options]="ndcList"
-                #projStatus="ngModel"
-                [showClear]="true"
-                [filter]="true"
-                placeholder="Select .."
-                optionLabel="name"
-                (ngModelChange)="onNDChange($event)"
-              >
-              </p-dropdown>
-            </div>
-          </div>
-        </div> -->
       </div>
   
       <div class="row p-2" [ngStyle]="{'margin-bottom': itemsPerPage === 1?'100px':'unset'}">
@@ -130,7 +111,6 @@
                     : (param.qaDeadline | date: "dd-MM-yyyy ")
                 }}
               </td>
-              <!-- <td>{{ ParameterRequestQaStatus.Fail }}</td> -->
               <td>{{ QuAlityCheckStatusEnum[param.qaStatus] }}</td>
               <td>
                 <button

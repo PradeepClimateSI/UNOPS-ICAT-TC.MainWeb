@@ -70,23 +70,6 @@
                             </p>
                         </div>
 
-                        <!-- <div class="p-field p-2">
-                            <label for="Sectors Covered">Impacts Covered*</label>
-                            <p-multiSelect name="impact" #impacts="ngModel" placeholder="Select Impact Covered"
-                                [(ngModel)]="impactArray" [options]="impactCovered"
-                                (ngModelChange)="onItemSelectImpacts($event)" optionLabel="name"
-                                [required]="true"
-                                [disabled]="isSavedAssessment"
-                                appendTo="body">
-                            </p-multiSelect>
-                            <p class="info-message text-danger" *ngIf="
-                                impactArray.length===0 &&
-                                (fData.submitted || impacts.touched)
-                              ">
-                                This is a mandatory field
-                            </p>
-                        </div>
-     -->
                         <div class="p-field p-2">
                           <label for="Sectors Covered">Total Investement (in USD)*</label>
                           <input pInputText type="number" #totInvestment="ngModel" name="totInvestment" ngModel
@@ -155,61 +138,6 @@
                             placeholder="Explain how different stakeholders if any will participate in the assessment" [(ngModel)]="assessment.opportunities" required [disabled]="isSavedAssessment|| isEditMode"/>
                             <p class="info-message text-danger" *ngIf="!opportunities.value && (fData.submitted || opportunities.touched)">This is a mandatory field</p>
                       </div>
-                      <!-- <div class="p-field p-2">
-                        <label for="additioinalInfo">Additional information*</label>
-                        <textarea [disabled]="isSavedAssessment|| isEditMode" name="additioinalInfo" placeholder="Enter additional info" #additioinalInfo="ngModel"
-                        [(ngModel)]="assessment.additioinalInfo" rows="2" cols="130" pInputText autoResize="autoResize" required
-                        ></textarea>
-                        <p class="info-message text-danger"
-                          *ngIf="!additioinalInfo.value && (fData.submitted || additioinalInfo.touched)">This is a mandatory field</p>
-                      </div> -->
-
-                      <!-- <div class="p-field p-2">
-                            <label for="principles">Principles on which the assessment is based *</label>
-                            <input pInputText type="text" #principles="ngModel" name="principles" ngModel
-                            placeholder="Principles" [(ngModel)]="assessment.principles" required [disabled]="isSavedAssessment|| isEditMode"/>
-                            <p class="info-message text-danger" *ngIf="!principles.value && (fData.submitted || principles.touched)">This is a mandatory field</p>
-                      </div> -->
-
-                            <!-- <div class="p-field p-2">
-                            <label for="Sectors Covered">Assessment Method*</label>
-                            <p-dropdown name="type" #method="ngModel" placeholder="Select Assessment Method"
-                                [(ngModel)]="assessment.assessment_method" [options]="assessmentMethods"  appendTo="body"
-                                optionLabel="name" optionValue="name"></p-dropdown>
-                            <p class="info-message text-danger" *ngIf="
-                                !assessment.assessment_method &&
-                                (fData.submitted || method.touched)
-                              ">
-                                This is a mandatory field
-                            </p>
-                            </div> -->
-                        <!-- <div class="p-field p-2">
-                                <label for="Sectors Covered">Assessment Approach*</label>
-                                <p-dropdown name="approach" #assessApproach="ngModel" placeholder="Select Assessment Method"
-                                    [(ngModel)]="assessment.assessment_approach" [options]="assessmentApproach"  appendTo="body"
-                                    (ngModelChange)="onAssessmentApproachchange(assessment.assessment_approach)" [required]="true"
-                                    [disabled]="isSavedAssessment"
-                                    optionLabel="name" optionValue="name"></p-dropdown>
-                                <p class="info-message text-danger" *ngIf="
-                                    !assessment.assessment_approach &&
-                                    (fData.submitted || assessApproach.touched)
-                                  ">
-                                    This is a mandatory field
-                                </p>
-                            </div>
-                        <div class="p-field p-2">
-                                    <label for="Sectors Covered">Type of Investment</label>
-                                    <p-dropdown
-                                        name="investment_type"
-                                        #investment_type="ngModel"
-                                         placeholder="Select type of investment"
-                                        [(ngModel)]="investorAssessment.investment_type"
-                                        [options]="investmentType"  appendTo="body"
-
-                                        [disabled]="isSavedAssessment"
-                                        optionLabel="name" optionValue="name"></p-dropdown>
-
-                        </div> -->
 
 
                     </div>
@@ -221,10 +149,6 @@
                         <div class="row p-2">
                           <div class="  col-12">
                                                                     
-                            <!-- <label >What is the envisioned change in the system the intervention is 
-                              impacting in moving from where the system is currently to where it should be to achieve 
-                              the transformational shift desired?</label> -->
-                              <!-- <label >How do you see the system the intervention is impacting on moving from its current status towards a situation where? *</label> -->
                               <label >What is the vision for the desired change of the system over time towards zero-carbon and sustainable practices? *</label>
                           </div>
                           <div class="col-12 col-md-6">
@@ -243,12 +167,10 @@
                         <div class="row p-2">
                           <div class="  col-12">
                                                                     
-                            <!-- <p class="question">How does that change would look like …</p> -->
                             <p class="question">What would that change look like? *</p>
                           </div>
                           <div class="col-12 col-md-6">
                             <div class="p-field">
-                              <!-- <label for="vision_short">Short Term ({{"\u003C"}}5 years)</label> -->
                               <label for="vision_short">Within 5 years? *</label>
                               <textarea [disabled]="isSavedAssessment|| isEditMode" name="vision_short" placeholder="Short Term Vision" #vision_short="ngModel"
                                 [(ngModel)]="assessment.vision_short" rows="1" cols="130" pInputText autoResize="autoResize" required
@@ -263,7 +185,6 @@
                          
                           <div class="col-12 col-md-6">
                             <div class="p-field">
-                              <!-- <label for="vision_medium">Medium Term ({{"\u003E"}}5 years and   {{"\u003C"}}15 years)</label> -->
                               <label for="vision_short">Between 5 and 15 years? *</label>
                               <textarea [disabled]="isSavedAssessment|| isEditMode"  name="vision_medium" placeholder="Medium Term Vision" #vision_medium="ngModel"
                                 [(ngModel)]="assessment.vision_medium" rows="1" cols="130" pInputText autoResize="autoResize" required
@@ -277,7 +198,6 @@
                           </div>
                           <div class="col-12 col-md-6">
                             <div class="p-field">
-                              <!-- <label for="vision_long">Long Term ({{"\u003E"}}15 years)</label> -->
                               <label for="vision_short">After 15 years? *</label>
                               <textarea [disabled]="isSavedAssessment|| isEditMode" name="vision_long" placeholder="Long Term Vision"
                                 #vision_long="ngModel" [(ngModel)]="assessment.vision_long" rows="1" cols="130" pInputText required
@@ -293,7 +213,6 @@
                         <div class="row p-2">
                           <div class="  col-12">
                                                                     
-                            <!-- <label >In which phase of transformation is the system to be transformed?</label> -->
                             <label >In which phase of transformation is the system currently at? *</label>
                           </div>
                           <div class="col-12 col-md-6">
@@ -326,23 +245,6 @@
                             </div>
                           </div>
                         </div>
-                        <!-- <div class="row p-2">
-                          <div class="  col-12">
-                                                                    
-                            <label >How does the intervention seek to contribute to the change in the system to achieve the vision? *</label>
-                          </div>
-                          <div class="col-12 col-md-6">
-                            <div class="p-field">
-                              <textarea [disabled]="isSavedAssessment" name="change_in_system" placeholder="Enter an answer" #change_in_system="ngModel"
-                                [(ngModel)]="assessment.change_in_system" rows="1" cols="130" pInputText autoResize="autoResize" required
-                                ></textarea>
-                                <p class="info-message text-danger" *ngIf="  !change_in_system.value &&                     
-                                (fData.submitted || change_in_system.touched || change_in_system.dirty)
-                              ">This is a mandatory field
-                            </p>
-                            </div>
-                          </div>
-                        </div> -->
             
             
                       </div>
@@ -401,9 +303,7 @@
                             <div class="col-12 col-md-6">
                               <div class="p-field">
                                 <label style="width:200px" for="impEntity">Explanation</label>
-                                <!-- <input type="text" placeholder="Please add explanation"  name="explanation" 
-                                #explanation="ngModel" [(ngModel)]="barrierSelected.explanation" maxlength="300" class="p-inputtext"
-                                pInputText /> -->
+                              
                                 <textarea  type="text" placeholder="Please add explanation" name="explanation"
                                 #explanation="ngModel" [(ngModel)]="barrierSelected.explanation" [ngModelOptions]="{ standalone: false }"
                                 class="p-inputtext custom-textarea" rows="3" cols="20" pInputText autoResize="autoResize"
@@ -561,70 +461,6 @@
                       </div>
                     </div>
                 </div>
-                <!-- <div class="row p-2">
-                    <div class="col-12 col-md-6">
-                        <div class="p-field p-2">
-                            <label for="Level of implementation">Level of implementation*</label>
-                            <p-dropdown name="investorAssessment.level_of_implemetation" #levelofimpl="ngModel"
-                                placeholder="Select Level of implementation"
-                                [(ngModel)]="investorAssessment.level_of_implemetation"
-                                appendTo="body"
-                                [options]="levelOfImplementation" optionLabel="name" optionValue="name"
-                                (ngModelChange)="onLevelofImplementationChange($event)"
-                                [disabled]="isSavedAssessment"
-                                [required]="true"></p-dropdown>
-                            <p class="info-message text-danger" *ngIf="
-                                !investorAssessment.level_of_implemetation &&
-                                (fData.submitted || levelofimpl.touched)
-                              ">
-                                This is a mandatory field
-                            </p>
-                        </div>
-
-                    </div>
-                    <div *ngIf="levelofImplementation ===1" class="col-12 col-md-6">
-                        <div class="p-field p-2">
-                            <label for="Level of implementation">Enter country*</label>
-                            <input type="text" pInputText
-                              #country="ngModel"
-                              [required]="true"
-                              placeholder="Enter country"
-                              [(ngModel)]="investorAssessment.national_country"
-                              [disabled]="isSavedAssessment"
-                              name="country" />
-                            <p class="info-message text-danger" *ngIf="
-                                !investorAssessment.national_country &&
-                                (fData.submitted || country.touched)
-                              ">
-                                This is a mandatory field
-                            </p>
-                        </div>
-
-                    </div>
-
-                    <div *ngIf="levelofImplementation ===2" class="col-12 col-md-6">
-                        <div class="p-field p-2">
-                            <label for="Level of implementation">Enter region*</label>
-                            <input type="text" pInputText
-                              #country="ngModel"
-                              [required]="true"
-                              placeholder="Enter region"
-                              [disabled]="isSavedAssessment"
-                              [(ngModel)]="investorAssessment.subnational_region"
-                              name="country" />
-                            <p class="info-message text-danger" *ngIf="
-                                !investorAssessment.subnational_region &&
-                                (fData.submitted || country.touched)
-                              ">
-                                This is a mandatory field
-                            </p>
-                        </div>
-
-                    </div>
-
-
-
-                </div> -->
                 <div class="row p-2">
                     <div class="col-12 col-md-6">
 
@@ -649,16 +485,11 @@
 
 
     </form>
-    <!-- <div class="p-grid p-fluid col-sm-12" *ngIf="showSections">
-        <app-cm-section [assessment]="assessmentres"></app-cm-section>
-    </div> -->
     <div class="card" *ngIf="(isSavedAssessment && tabLoading) || (isEditMode && draftLoading)">
-        <!-- <div class="card" > -->
         <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)" >
         <p-tabView  (onChange)="onMainTabChange($event) " [(activeIndex)]="activeIndexMain ">
 
             <p-tabPanel  header="Process of Change" >
-                <!-- <div *ngFor="let characteristic of meth1Process"> -->
 
                 <p-tabView #tabView (onChange)="onCategoryTabChange($event, tabView)" [(activeIndex)]="activeIndex "    >
 
@@ -680,7 +511,6 @@
                                                       <label for="Description">Description</label>
                                                     </div>
                                                     <div class="col-10">
-                                                      <!-- <label for="Description">{{question.question.description}}</label> -->
                                                       <p style=" white-space: pre-wrap; text-align: justify;">{{data.characteristics.investmentDescription}}</p>
                                                     </div>
                                                   </div>
@@ -712,7 +542,6 @@
                                                     <div *ngIf="data.relavance !=0">
 
                                                     <div class="row p-2">
-                                                        <!-- <label for="Indicator"><u>Indicator</u></label> -->
                                                         <div class="row" *ngFor="let question of data.indicator_details ; let j = index">
                                                             <label style="font-size: 17px;" *ngIf="question.question.isMain" for="Indicator" class="mt-10 mb-10"><u>{{question.question.name}}</u></label>
 
@@ -756,7 +585,6 @@
                                                              <div class="row" *ngIf="!question.question.isMain">
                                                                 <div class=" ml-25 col-6 mb-20">
 
-                                                                    <!-- <p class="justifiaction" class="question">Comment and justification*</p> -->
                                                                     <p class="justifiaction" class="question">Justification*</p>
                                                                   </div>
                                                                   <div class="col-4 mb-20">
@@ -792,14 +620,7 @@
                                                                     ></p-dropdown>
                                                                     <p class="info-message text-danger" *ngIf="data.likelihood ==null && (fData1.submitted || likelihood2.touched) || (category.isValidated==false && data.likelihood ==null)">
                                                                       This is a mandatory field </p>
-                                                                    <!-- <p-dropdown  *ngIf="approach===2"
-                                                                    name={{data}}_charData.relavance
-                                                                    placeholder="Select Institution"
-                                                                    [(ngModel)]="data.likelihood"
-                                                                    [options]="instiTutionList" optionLabel="name"
-                                                                    appendTo="body"
-                                                                    optionValue="id" [required]="true">
-                                                                </p-dropdown> -->
+                                                                  
 
                                                             </div>
                                                         </div>
@@ -870,7 +691,6 @@
 
 
                 </p-tabView>
-                <!-- </div> -->
             </p-tabPanel>
 
             <p-tabPanel  header="Outcome of Change">
@@ -879,7 +699,6 @@
                 <p-tabPanel *ngFor="let category of outcomeData; index as cat" [selected]="category.CategoryName==assessment.outcomeDraftLocation">
 
                   <ng-template pTemplate="header">
-                    <!-- Use a container div for the header -->
                     <div class="custom-tab-header">{{ category.CategoryName }}</div>
                   </ng-template>
 
@@ -911,52 +730,14 @@
                               <div class=" mt-2">
                                 <div class="p-grid p-fluid col-12">
 
-                                  <!-- <div class="row p-2">
-                                    <div class="col-12 col-lg-12">
-                                      <div class="p-field">
-                                        <label for="indicator">Indicator</label>
-                                        <input type="text" pInputText [(ngModel)]="data.indicator"
-                                          placeholder="Indicator Name" name="indicator" />
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  <div class="row p-2">
-                                    <div class="col-12 col-lg-6">
-                                      <div class="p-field">
-                                        <label for="indicatorStartingVal">Indicator Starting Situation Value</label>
-                                        <p-inputNumber [(ngModel)]="data.indicatorStartingVal"
-                                          name="indicatorStartingVal" placeholder="Value at the Starting Situation"
-                                          inputId="locale-us" mode="decimal" locale="en-US" [minFractionDigits]="2">
-                                        </p-inputNumber>
-                                      </div>
-                                    </div>
-
-                                    <div class="col-12 col-lg-6">
-                                      <div class="p-field">
-                                        <label for="indicatorExpectedVal">Indicator Expected Value</label>
-                                        <p-inputNumber [(ngModel)]="data.indicatorExpectedVal"
-                                          name="indicatorExpectedVal" placeholder="Expected Value" inputId="locale-us"
-                                          mode="decimal" locale="en-US" [minFractionDigits]="2">
-                                        </p-inputNumber>
-
-                                      </div>
-                                    </div>
-                                  </div> -->
-
+                                 
 
                                   <div class="row p-2">
                                      <label style="font-size: 17px;" for="question">{{data.characteristics.main_question}} </label>
 
-                                     <!--    <div class="tooltip-container">
-                                          <div *ngIf="question.question.hint">
-                                           <span class="tooltip-icon">i</span> </div>
-                                          <div class="tooltip-text">{{addNewline(question.question.hint)}}</div>
-                                      </div> -->
-
+                                    
                                 </div>
 
-                                <!-- Newwwwwww -->
                                 <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'International/global level'">
                                   <p>3 - reduction in emissions > 0.1% of global emissions</p>
                                   <p>2 - reduction in emissions > 0.05% of global emissions</p>
@@ -992,19 +773,9 @@
                                       compared to subnational/regional/municipal emissions or subsectoral level emissions for the
                                       latest year for which those emissions data is available </p>
                                 </div>
-                                <!-- Newwwwwww - Endddd -->
-
 
                                   <div class="row p-2">
 
-                                   <!--  <div class="col-12 col-lg-6">
-                                      <div class="p-field">
-                                        <label for="Relevance">Score</label>
-                                        <p-inputNumber inputId="integeronly" [(ngModel)]="data.score"
-                                          [showButtons]="true" [min]="-1" [max]="3" [step]="1" inputId="minmax-buttons"
-                                          placeholder="Enter Score" name="data.charData.score"> </p-inputNumber>
-                                      </div>
-                                    </div> -->
 
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
@@ -1042,7 +813,6 @@
                                   </div>
 
 
-                                  <!-- lllllllllllllllllllllllllllll -->
                               <div class="row p-2 align-items-center">
                                 <div class="col-2 d-flex align-items-center">
                                   <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload" name="files"
@@ -1061,9 +831,6 @@
                                 </div>
                               </div>
 
-
-                                <!-- lllllllllllllllllllllllllllll -->
-                                <!-- *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level' " -->
                               <div *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level' "  >
                                 <div class="row p-2">
                                   <div class="col-12 col-lg-6">
@@ -1076,15 +843,6 @@
                                     </div>
                                   </div>
 
-                                  <!-- <div *ngIf="category.CategoryName ==='GHG Scale of the Outcome'" style="text-align: justify;">
-                                    <p>  <br><br>
-                                      Note: all reduction in emissions calculated as average reduction in emissions
-                                      (tCO2e/yr calculated as total estimated reductions over lifetime of the project
-                                      divided by project lifetime) and compared respectively to global, national/sectoral or
-                                      subnational and subsectorial emissions for the latest year for which those emissions data
-                                      is available
-                                    </p>
-                                  </div> -->
 
                                 </div>
                                 <div class="row p-2">
@@ -1168,61 +926,15 @@
                                   <div class="p-grid p-fluid col-12">
 
 
-                                   <!--  <div class="row p-2">
-                                      <div class="col-12 col-lg-12">
-                                        <div class="p-field">
-                                          <label for="indicator">Indicator</label>
-                                          <input type="text" (ngModelChange)="assignSDG(selectedSDGs[i], data)"
-                                            pInputText [(ngModel)]="data.indicator" placeholder="Indicator Name"
-                                            name="indicator" />
-                                        </div>
-                                      </div>
-                                    </div> -->
-
-                                    <!-- <div class="row p-2">
-                                      <div class="col-12 col-lg-6">
-                                        <div class="p-field">
-                                          <label for="indicatorStartingVal">Indicator Starting Situation Value</label>
-                                          <p-inputNumber (ngModelChange)="assignSDG(selectedSDGs[i], data)"
-                                            [(ngModel)]="data.indicatorStartingVal" name="indicatorStartingVal"
-                                            placeholder="Value at the Starting Situation" inputId="locale-us"
-                                            mode="decimal" locale="en-US" [minFractionDigits]="2"></p-inputNumber>
-                                        </div>
-                                      </div>
-
-                                      <div class="col-12 col-lg-6">
-                                        <div class="p-field">
-                                          <label for="indicatorExpectedVal">Indicator Expected Value</label>
-                                          <p-inputNumber (ngModelChange)="assignSDG(selectedSDGs[i], data)"
-                                            [(ngModel)]="data.indicatorExpectedVal" name="indicatorExpectedVal"
-                                            placeholder="Expected Value" inputId="locale-us" mode="decimal"
-                                            locale="en-US" [minFractionDigits]="2"></p-inputNumber>
-                                        </div>
-                                      </div>
-                                    </div> -->
 
                                     <div class="row p-2">
                                        <label style="font-size: 17px;" for="question">{{data.characteristics.main_question}} </label>
 
-                                         <!--  <div class="tooltip-container">
-                                            <div *ngIf="question.question.hint">
-                                             <span class="tooltip-icon">i</span> </div>
-                                            <div class="tooltip-text">{{addNewline(question.question.hint)}}</div>
-                                        </div> -->
 
                                   </div>
 
                                     <div class="row p-2">
 
-                                     <!--  <div class="col-12 col-lg-6">
-                                        <div class="p-field">
-                                          <label for="Relevance">Score</label>
-                                          <p-inputNumber (ngModelChange)="assignSDG(selectedSDGs[i], data)"
-                                            inputId="integeronly" [(ngModel)]="data.score" [showButtons]="true"
-                                            [min]="-1" [max]="3" [step]="1" inputId="minmax-buttons"
-                                            placeholder="Enter Score" name="data.charData.score"></p-inputNumber>
-                                        </div>
-                                      </div> -->
 
                                       <div class="col-12 col-lg-6">
                                         <div class="p-field">
@@ -1248,7 +960,6 @@
                                       </div>
                                     </div>
 
-                                    <!-- lllllllllllllllllllllllllllll -->
                                     <div class="row p-2 align-items-center">
                                       <div class="col-2 d-flex align-items-center">
                                         <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload"
@@ -1269,7 +980,6 @@
                                     </div>
 
 
-                                    <!-- lllllllllllllllllllllllllllll -->
 
 
                                   </div>
@@ -1310,60 +1020,15 @@
                                 <div class=" mt-2">
                                   <div class="p-grid p-fluid col-12">
 
-                                   <!--  <div class="row p-2">
-                                      <div class="col-12 col-lg-12">
-                                        <div class="p-field">
-                                          <label for="indicator">Indicator</label>
-                                          <input (ngModelChange)="assignSDG(selectedSDGs[i], data)" type="text"
-                                            pInputText [(ngModel)]="data.indicator" placeholder="Indicator Name"
-                                            name="indicator" />
-                                        </div>
-                                      </div>
-                                    </div> -->
-
-                                   <!--  <div class="row p-2">
-                                      <div class="col-12 col-lg-6">
-                                        <div class="p-field">
-                                          <label for="indicatorStartingVal">Indicator Starting Situation Value</label>
-                                          <p-inputNumber (ngModelChange)="assignSDG(selectedSDGs[i], data)"
-                                            [(ngModel)]="data.indicatorStartingVal" name="indicatorStartingVal"
-                                            placeholder="Value at the Starting Situation" inputId="locale-us"
-                                            mode="decimal" locale="en-US" [minFractionDigits]="2"></p-inputNumber>
-                                        </div>
-                                      </div>
-
-                                      <div class="col-12 col-lg-6">
-                                        <div class="p-field">
-                                          <label for="indicatorExpectedVal">Indicator Expected Value</label>
-                                          <p-inputNumber (ngModelChange)="assignSDG(selectedSDGs[i], data)"
-                                            [(ngModel)]="data.indicatorExpectedVal" name="indicatorExpectedVal"
-                                            placeholder="Expected Value" inputId="locale-us" mode="decimal"
-                                            locale="en-US" [minFractionDigits]="2"></p-inputNumber>
-                                        </div>
-                                      </div>
-                                    </div> -->
+                               
 
                                     <div class="row p-2">
                                        <label style="font-size: 17px;" for="question">{{data.characteristics.main_question}} </label>
 
-                                         <!--  <div class="tooltip-container">
-                                            <div *ngIf="question.question.hint">
-                                             <span class="tooltip-icon">i</span> </div>
-                                            <div class="tooltip-text">{{addNewline(question.question.hint)}}</div>
-                                        </div> -->
                                   </div>
 
                                     <div class="row p-2">
 
-                                     <!--  <div class="col-12 col-lg-6">
-                                        <div class="p-field">
-                                          <label for="Relevance">Score</label>
-                                          <p-inputNumber (ngModelChange)="assignSDG(selectedSDGs[i], data)"
-                                            inputId="integeronly" [(ngModel)]="data.score" [showButtons]="true"
-                                            [min]="-1" [max]="3" [step]="1" inputId="minmax-buttons"
-                                            placeholder="Enter Score" name="data.charData.score"></p-inputNumber>
-                                        </div>
-                                      </div> -->
 
                                       <div class="col-12 col-lg-6">
                                         <div class="p-field">
@@ -1389,7 +1054,6 @@
                                       </div>
                                     </div>
 
-                                    <!-- lllllllllllllllllllllllllllll -->
                                     <div class="row p-2 align-items-center">
                                       <div class="col-2 d-flex align-items-center">
                                         <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload"
@@ -1410,7 +1074,6 @@
                                     </div>
 
 
-                                    <!-- lllllllllllllllllllllllllllll -->
 
 
                                   </div>
@@ -1447,22 +1110,6 @@
 
         <div  *ngIf="activeIndex2===5 && activeIndexMain===1" class="row justify-content-end">
             <div>
-                <!-- <div class=" col-md-10 offset-md-4" style="color:red" >
-                    <div class="col align-self-end" *ngIf="failedLikelihoodArray.length!=0">
-                       Please make sure to set Likelihood weights for
-                       <span  *ngFor="let data of failedLikelihoodArray ; let last = last" class="array-item">
-                           {{data.category}}<span  *ngIf="!last">, </span>
-                        </span > should sum up to 100%.
-
-                    </div>
-                    <div class="col align-self-end" *ngIf="failedRelevanceArray.length!=0">
-                        Please make sure to set Relevance weights for <span  *ngFor="let data of failedRelevanceArray ; let last = last" class="array-item">
-                            {{data.category}} <span  *ngIf="!last">, </span>
-                         </span > should sum up to 100%.
-
-
-                    </div>
-                </div> -->
 
 
 
@@ -1484,10 +1131,6 @@
 
 
     </form>
-<!-- <ng-template #elseblock> -->
-
-
-<!-- </ng-template> -->
 
     </div>
 

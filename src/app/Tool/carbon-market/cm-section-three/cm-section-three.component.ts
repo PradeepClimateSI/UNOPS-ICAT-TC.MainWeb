@@ -333,7 +333,6 @@ if(this.assessment.lastDraftLocation=="out"){
   }
 
   onCategoryTabChange2($event: any) {
-    // throw new Error('Method not implemented.');
   }
 
   next(category: string, characteristics?: any[]) {
@@ -368,7 +367,6 @@ if(this.assessment.lastDraftLocation=="out"){
   onSelectScore(event: any, char: CMResultDto, index: number, type?: string) {
     let score = new ScoreDto()
 
-    // if (index === 2) {
       if (char.characteristic.category.code === 'SUSTAINED_GHG') {
         let score = 0
         this.outcome.forEach((category: OutcomeCategory) => {
@@ -399,9 +397,8 @@ if(this.assessment.lastDraftLocation=="out"){
             })
           }
         })
-        this.adaptationScore = Math.round(score / 6)
+        this.adaptationScore = Math.round(score / 6);
       }
-    // }
   }
 
   onAnswer(event: any, question: any, characteristic?: Characteristics) {
@@ -643,8 +640,6 @@ if(this.assessment.lastDraftLocation=="out"){
         closable: true,
       });
     }
-    // this.isEditMode = true
-    // this.setInitialState() //TODO this occurres faulty data load. data get from the database before saving. This should be called after saving data.
   }
 
   async checkMandotary () {

@@ -1,5 +1,4 @@
 import { ServiceProxy, User, Institution, UsersControllerServiceProxy, UserType } from 'shared/service-proxies/service-proxies';
-import { LoginProfileControllerServiceProxy } from 'shared/service-proxies/auth-service-proxies';
 import decode from 'jwt-decode';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ConfirmationService, LazyLoadEvent, MessageService, SelectItem } from "primeng/api";
@@ -46,7 +45,6 @@ export class UserListComponent implements OnInit {
     private messageService: MessageService,
     private activatedRoute: ActivatedRoute,
     private userControllerService: UsersControllerServiceProxy,
-    // private loginProfileControllerServiceProxy: LoginProfileControllerServiceProxy,
 
   ) { }
 
@@ -91,11 +89,7 @@ export class UserListComponent implements OnInit {
         0
       )
       .subscribe((res) => {
-        // this.userTypes = res.data;
-        console.log(userTypeId)
-        console.log(res)
         if (userTypeId == 1) {
-          // this.userTypes = res.data.filter((a) => (a.id == 1 || a.id == 2 || a.id == 3 || a.id == 5 || a.id == 6 || a.id == 7 || a.id == 8 || a.id == 9 || a.id == 11));
           this.userTypes = res.data.filter((a) => (a.id == 5 ));
         }
         else if (userTypeId == 2) {
@@ -134,19 +128,14 @@ export class UserListComponent implements OnInit {
 
   load(event: LazyLoadEvent) {
 
-    console.log(event);
 
     this.loading = true;
     this.totalRecords = 0;
 
-    // let pageNumber = event.first === 0 || event.first == undefined ? 1
-    //   :event.first / (event.rows == undefined ? 1 : event.rows) + 1;
 
     let pageNumber = event.first;
     this.rows = event.rows == undefined ? 10 : event.rows;
 
-
-    console.log(this.rows);
     this.serviceProxy.getManyBaseUsersControllerUser(
       undefined,
       undefined,
@@ -165,10 +154,6 @@ export class UserListComponent implements OnInit {
     })
 
   }
-
-  // new(){
-  //   this.router.navigate(['../create'], {relativeTo:this.activatedRoute});
-  // }
 
   edit(id: number) {
     this.router.navigate(['../edit'], { queryParams: { id: id }, relativeTo: this.activatedRoute });
@@ -214,7 +199,6 @@ export class UserListComponent implements OnInit {
     //@ts-ignore
     this.loginProfileControllerServiceProxy.remove(id)
       .subscribe((res: any) => {
-        console.log(res)
       })
   }
   onSearch() {
@@ -225,12 +209,10 @@ export class UserListComponent implements OnInit {
     this.loadCustomers(event);
   }
   loadCustomers(event: LazyLoadEvent) {
-    console.log('loadCustomers===', event);
     this.loading = true;
     this.totalRecords = 0;
 
     let typeId = this.searchBy.userType ? this.searchBy.userType.id : 0;
-    console.log('eventby filter...', this.searchBy.userType);
     let filterText = this.searchBy.text ? this.searchBy.text : '';
 
     let pageNumber =
@@ -246,13 +228,10 @@ export class UserListComponent implements OnInit {
           this.totalRecords = a.meta.totalItems;
           this.loading = false;
           this.itemsPerPage = a.meta.itemsPerPage;
-          console.log('new cutomersss', a);
-          console.log('total..', this.totalRecords);
         });
     }, 1);
   }
   editUser(user: User) {
-    console.log('edit user', user);
 
     this.router.navigate(['app/user/create'], { queryParams: { id: user.id } });
   }
@@ -260,11 +239,9 @@ export class UserListComponent implements OnInit {
   viewUser(user: User) {
 
     this.router.navigate(['app/user/view-user'], { queryParams: { id: user.id } });
-    console.log('hit', user.id);
   }
 
   EditUser(user: User) {
-    console.log('hit');
     this.router.navigate(['/app/user/create'], { queryParams: { id: user.id } });
   }
   new() {
@@ -273,10 +250,7 @@ export class UserListComponent implements OnInit {
 
   onTypeChange(event: any) {
     this.searchBy.userType = event;
-    console.log('selesct from drop down...', event);
-    //console.log('loading.....');
     this.onSearch();
-    //console.log('resualt.....', event);
   }
 
 

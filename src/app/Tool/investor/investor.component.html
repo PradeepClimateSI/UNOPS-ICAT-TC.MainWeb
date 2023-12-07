@@ -201,16 +201,6 @@
         <div class="col-12 col-md-8">
           <div class="p-field">
             <label for="uoutcomecat">Categories:</label>
-            <!--  <ng-multiselect-dropdown
-                [placeholder]="'Select Categories'"
-                [options]="meth1Outcomes"
-                [(ngModel)]="selectedItems2"
-                (onSelect)="onItemSelect2($event)"
-                (onSelectAll)="onSelectAll2($event)"
-                (onDeSelect)="onItemDeSelect2($event)"
-                (onDeSelectAll)="onDeSelectAll2($event)"
-                >
-                </ng-multiselect-dropdown> -->
 
             <p-multiSelect name="uoutcomecat" [options]="meth1Outcomes" [(ngModel)]="selectedItems2"
               (onChange)="onItemSelect2($event)" defaultLabel="Select Categories"
@@ -270,9 +260,7 @@
 
 
 
-    </div> <!--  end of meth1 form -->
-
-    <!--   start of meth 2 form data -->
+    </div> 
     <div *ngIf="selectedType === 'TC NACAG Initiative'" class="form-group">
 
       <br><br>
@@ -452,7 +440,7 @@
     </div>
 
 
-  </div> <!-- ngIf end -->
+  </div>
 </div>
 
 <div *ngIf="selectedTrack === 'Track 1'">
@@ -536,16 +524,6 @@
         <div class="col-12 col-md-8">
           <div class="p-field">
             <label for="uoutcomecat">Categories:</label>
-            <!--  <ng-multiselect-dropdown
-                [placeholder]="'Select Categories'"
-                [options]="meth1Outcomes"
-                [(ngModel)]="selectedItems2"
-                (onSelect)="onItemSelect2($event)"
-                (onSelectAll)="onSelectAll2($event)"
-                (onDeSelect)="onItemDeSelect2($event)"
-                (onDeSelectAll)="onDeSelectAll2($event)"
-                >
-                </ng-multiselect-dropdown> -->
 
             <p-multiSelect [disabled]="isSubmitted" name="uoutcomecat" [options]="meth1Outcomes" [(ngModel)]="selectedItems2"
               (onChange)="onItemSelect2($event)" defaultLabel="Select Categories"
@@ -609,9 +587,7 @@
 
 
 
-    </div> <!--  end of meth1 form -->
-
-    <!--   start of meth 2 form data -->
+    </div>
     <div *ngIf="selectedType === 'TC NACAG Initiative'" class="form-group">
 
       <br><br>
@@ -635,8 +611,6 @@
             <div *ngFor="let category of selectedItems3"><br><br>
               <h6>{{category.name}}</h6>
 
-             <!--  <label for="{{category.name}}_catscore">Category Score: &nbsp;</label>
-              <input [disabled]="isSubmitted" type="number" name="{{category.name}}_catscore" ngModel placeholder="Score"> <br>  -->
               <br>
 
               <label for="{{category.name}}_institution" >Institution for category &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</label>
@@ -740,8 +714,6 @@
             <div *ngFor="let category of selectedItems4"><br><br>
               <h6>{{category.name}}</h6>
 
-             <!--  <label for="{{category.name}}_catscore">Category Score: &nbsp;</label>
-              <input [disabled]="isSubmitted" type="number" name="{{category.name}}_catscore" ngModel placeholder="Score">  -->
               <br>
 
               <label for="{{category.name}}_institution" >Institution for category &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</label>
@@ -901,16 +873,6 @@
         <div class="col-12 col-md-8">
           <div class="p-field">
             <label for="uoutcomecat">Categories:</label>
-            <!--  <ng-multiselect-dropdown
-                [placeholder]="'Select Categories'"
-                [options]="meth1Outcomes"
-                [(ngModel)]="selectedItems2"
-                (onSelect)="onItemSelect2($event)"
-                (onSelectAll)="onSelectAll2($event)"
-                (onDeSelect)="onItemDeSelect2($event)"
-                (onDeSelectAll)="onDeSelectAll2($event)"
-                >
-                </ng-multiselect-dropdown> -->
 
             <p-multiSelect name="uoutcomecat" [options]="meth1Outcomes" [(ngModel)]="selectedItems2"
               (onChange)="onItemSelect2($event)" defaultLabel="Select Categories"
@@ -970,9 +932,7 @@
 
 
 
-    </div> <!--  end of meth1 form -->
-
-    <!--   start of meth 2 form data -->
+    </div> 
     <div *ngIf="selectedType === 'TC NACAG Initiative'" class="form-group">
 
       <br><br>
@@ -1239,15 +1199,12 @@
                 <div *ngFor="let category of selectedItems3"><br><br>
                   <h6>{{category.name}}</h6>
 
-                <!--   <label for="{{category.name}}_catweight">Category Weight: &nbsp;</label>
-                  <input type="number" name="{{category.name}}_catweight" ngModel placeholder="Weight">  -->
 
                   <label for="{{category.name}}_catweight">Category Weight: &nbsp;</label> <br>
                   <input type="radio" name="{{category.name}}_catweight" value="0.25" [(ngModel)]="categoryWeightOption" checked>Default
                   <input type="radio" name="{{category.name}}_catweight_option" value="custom" [(ngModel)]="categoryWeightOption">Custom<br>
                   <input *ngIf="categoryWeightOption === 'custom'" type="number" name="{{category.name}}_catweight" ngModel placeholder="Weight"><br>
-             <!--      <input *ngIf="categoryWeightOption === 'default'" type="number" name="{{category.name}}_catweight" [(ngModel)]="categoryWeight"  value="0.5" placeholder="Weight" readonly>
- -->
+           
                   <br>
 
 
@@ -1281,9 +1238,6 @@
 
                     <label for="{{category.name}}_{{characteristic.name}}_weight">Weight: &nbsp; &nbsp; &nbsp; &nbsp;
                       &nbsp; &nbsp;</label>
-                   <!--  <input type="number" name="{{category.name}}_{{characteristic.name}}_weight" ngModel
-                      placeholder="Weight">
-                    <br> -->
 
                     <input type="radio" name="{{category.name}}_{{characteristic.name}}_weight" value="0.25" [(ngModel)]="characteristicWeightOption" checked>Default
                     <input type="radio" name="{{category.name}}_{{characteristic.name}}_weight_option" value="custom" [(ngModel)]="characteristicWeightOption">Custom<br>
@@ -1296,13 +1250,6 @@
                     <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel
                       placeholder="Score"> <br> <br>
 
-                     <!--  <label for="{{category.name}}_{{characteristic.name}}_institution" >Institution for Characteristic Score &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</label>
-                  <select [disabled]="isSubmitted"  (change)="onChangeInstitution($event)" ngModel
-                  name="{{category.name}}_{{characteristic.name}}_institution"
-                    id="{{category.name}}_{{characteristic.name}}_institution">
-                    <option value="" disabled selected hidden>Select Institution</option>
-                    <option *ngFor="let institu of instiTutionList" [value]="institu.id">{{institu.name}}</option>
-                  </select> <br><br> -->
 
                       <label for="{{category.name}}_{{characteristic.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
                         &nbsp; &nbsp;</label>
@@ -1399,14 +1346,6 @@
                     <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel
                       placeholder="Score"> <br> <br>
 
-                   <!--    <label for="{{category.name}}_{{characteristic.name}}_institution" >Institution for Characteristic Score &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</label>
-                      <select [disabled]="isSubmitted"  (change)="onChangeInstitution($event)" ngModel
-                      name="{{category.name}}_{{characteristic.name}}_institution"
-                        id="{{category.name}}_{{characteristic.name}}_institution">
-                        <option value="" disabled selected hidden>Select Institution</option>
-                        <option *ngFor="let institu of instiTutionList" [value]="institu.id">{{institu.name}}</option>
-                      </select> <br><br>
- -->
 
                       <label for="{{category.name}}_{{characteristic.name}}_comment">Comment: &nbsp; &nbsp; &nbsp; &nbsp;
                         &nbsp; &nbsp;</label>
@@ -1498,15 +1437,12 @@
                 <div *ngFor="let category of selectedItems3"><br><br>
                   <h6>{{category.name}}</h6>
 
-                <!--   <label for="{{category.name}}_catweight">Category Weight: &nbsp;</label>
-                  <input type="number" name="{{category.name}}_catweight" ngModel placeholder="Weight">  -->
 
                   <label for="{{category.name}}_catweight">Category Weight: &nbsp;</label> <br>
                   <input type="radio" name="{{category.name}}_catweight" value="0.25" [(ngModel)]="categoryWeightOption" checked>Default
                   <input type="radio" name="{{category.name}}_catweight_option" value="custom" [(ngModel)]="categoryWeightOption">Custom<br>
                   <input *ngIf="categoryWeightOption === 'custom'" type="number" name="{{category.name}}_catweight" ngModel placeholder="Weight"><br>
-             <!--      <input *ngIf="categoryWeightOption === 'default'" type="number" name="{{category.name}}_catweight" [(ngModel)]="categoryWeight"  value="0.5" placeholder="Weight" readonly>
- -->
+           
                   <br>
 
 
@@ -1540,9 +1476,6 @@
 
                     <label for="{{category.name}}_{{characteristic.name}}_weight">Weight: &nbsp; &nbsp; &nbsp; &nbsp;
                       &nbsp; &nbsp;</label>
-                   <!--  <input type="number" name="{{category.name}}_{{characteristic.name}}_weight" ngModel
-                      placeholder="Weight">
-                    <br> -->
 
                     <input type="radio" name="{{category.name}}_{{characteristic.name}}_weight" value="0.25" [(ngModel)]="characteristicWeightOption" checked>Default
                     <input type="radio" name="{{category.name}}_{{characteristic.name}}_weight_option" value="custom" [(ngModel)]="characteristicWeightOption">Custom<br>
@@ -1550,10 +1483,6 @@
                     <br>
 
 
-                   <!--  <label for="{{category.name}}_{{characteristic.name}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp;
-                      &nbsp; &nbsp;</label>
-                    <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel
-                      placeholder="Score"> <br> <br> -->
 
                     <label for="{{category.name}}_{{characteristic.name}}_institution" >Institution for Characteristic Score &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</label>
                   <select [disabled]="isSubmitted"  (change)="onChangeInstitution($event)" ngModel
@@ -1652,12 +1581,6 @@
 
 
 
-
-                <!--   <label for="{{category.name}}_{{characteristic.name}}_score">Score: &nbsp; &nbsp; &nbsp; &nbsp;
-                      &nbsp; &nbsp;</label>
-                    <input type="number" name="{{category.name}}_{{characteristic.name}}_score" ngModel
-                      placeholder="Score"> <br> <br> -->
-
                   <label for="{{category.name}}_{{characteristic.name}}_institution" >Institution for Characteristic Score &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</label>
                       <select [disabled]="isSubmitted"  (change)="onChangeInstitution($event)" ngModel
                       name="{{category.name}}_{{characteristic.name}}_institution"
@@ -1699,15 +1622,6 @@
         </div>
       </div>
 
-<!-- Result loaded -->
-<!--     <div *ngIf="averageOutcome">
-      <h4>Results</h4> <br>
-      <h6>Average Process : {{ averageProcess }}</h6> <br>
-      <h6>Average Outcome : {{ averageOutcome }}</h6> <br>
-
-      <app-chart [averageOutcome]="averageOutcome" [averageProcess]="averageProcess"></app-chart>
-    </div>
- -->
 
       <div class="row">
       <div class="p-grid p-fluid col-md-6 col-sm-12">
@@ -1733,9 +1647,6 @@
                   <div class="col-12 col-md-8">
                     <div class="p-field">
 
-
-                      <!--      <p-multiSelect [options]="characAffectedByBarriers" [(ngModel)]="selectChaAffectByBarriers" (onChange)="onItemSelectcha($event)"
-                      defaultLabel= "Select Characteristics" optionLabel="name"></p-multiSelect> -->
 
                       <div *ngFor="let characteristic of selectChaAffectByBarriers"><br><br>
                         <input type="checkbox" name="{{characteristic.name}}_barrier" ngModel>&nbsp;

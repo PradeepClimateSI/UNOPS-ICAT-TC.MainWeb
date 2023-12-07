@@ -87,7 +87,6 @@ export class CASADashboardComponent implements OnInit {
   postIdLisst: number[] = new Array();
   ngOnInit(): void {
     this.onSearch1();
-    //this.loadgridData1();
     this.basicOptions = {
       plugins: {
         legend: {
@@ -122,7 +121,6 @@ export class CASADashboardComponent implements OnInit {
   }
 
   loadgridData = (event: LazyLoadEvent) => {
-    console.log('event Date', event);
     this.loading = true;
     this.totalRecords = 0;
 
@@ -130,27 +128,11 @@ export class CASADashboardComponent implements OnInit {
     let ndcId = this.searchBy.ndc ? this.searchBy.ndc.id : 0;
     let subNdcId = this.searchBy.subndc ? this.searchBy.subndc.id : 0;
     let projectApprovalStatusId = 1;
-    console.log('ffsectorId', sectorId)
-    console.log('fndcId', ndcId)
-    console.log('fsubNdcId', subNdcId)
     let pageNumber =
       event.first === 0 || event.first === undefined
         ? 1
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
-
-
-    // if(this.activeprojects.length!=0){
-    //   for(let em of this.activeprojects){
-    //     this.emi.push(em.erarchievment + em.ertarget);
-    //     this.prnames.push(em.name);
-    //     console.log('ttttttttttttttttt1',em)
-    //     console.log('ttttttttttttttttt2',this.emi)
-    //   }
-    // }  
-
-
-
 
   }
 
@@ -184,21 +166,15 @@ export class CASADashboardComponent implements OnInit {
   }
 
   testoneeeaa() {
-    // console.log('yr list..',this.yrList);
-    // console.log('yr list..1111',this.yrList[0]);
-    // console.log('total..',this.postYrList);
   }
 
 
 
   loadgridData1 = (event: LazyLoadEvent) => {
-    console.log('event Date', event);
     this.loading = true;
     this.totalRecords = 0;
 
     let sectorId = this.searchBy1.sector ? this.searchBy.sector.id : 0;
-
-    console.log('fsectorId', sectorId)
 
     let pageNumber =
       event.first === 0 || event.first === undefined

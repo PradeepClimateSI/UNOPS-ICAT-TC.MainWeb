@@ -8,10 +8,8 @@
     </div>
 
     <ng-container *ngIf="!load">
-      <!-- Loading action -->
       <div class="text-center">
         <h4>Loading...</h4>
-        <!-- You can add a loading spinner or any other loading animation here -->
       </div>
     </ng-container>
 
@@ -30,7 +28,6 @@
   [sortField]="'id'" 
   [sortOrder]="-1"
   [globalFilterFields]="['meth', 'method', 'approach', 'assessmentType', 'tool']">
-<!-- [globalFilterFields]="['meth', 'method', 'approach', 'assessmentType', 'tool'] -->
   <ng-template pTemplate="caption">
     <div class="d-flex justify-content-end">
         <span class="p-input-icon-left ml-auto">
@@ -43,10 +40,7 @@
 
   <ng-template pTemplate="header">
       <tr  style="height:4rem;">
-<!--         <th pSortableColumn="id" >Id <p-sortIcon field="meth"></p-sortIcon></th> -->
           <th style="width:30%" pSortableColumn="method" >Intervention <p-sortIcon field="meth"></p-sortIcon></th>
-       <!--    <th pSortableColumn="method" >Assessment Method <p-sortIcon field="method"></p-sortIcon></th> -->
-          <!-- <th style="width:15%" pSortableColumn="approach">Assessment Approach <p-sortIcon field="approach"></p-sortIcon></th> -->
           <th style="width:15%" pSortableColumn="assessmentType" >Assessment Type <p-sortIcon field="assessmentType"></p-sortIcon></th>
           <th style="width:25%" pSortableColumn="tool" >Tool <p-sortIcon field="tool"></p-sortIcon></th>
           <th style="width:15%">Action</th>
@@ -55,19 +49,11 @@
   <ng-template pTemplate="body" let-results>
       <tr>
         <td>{{results.assessment.climateAction.policyName}}</td>
-       <!-- <td>{{ results.assessment.assessment_approach.charAt(0).toUpperCase() + results.assessment.assessment_approach.slice(1).toLowerCase() }}</td> -->
         <td>{{results.assessment.assessmentType}}</td>
         <td>{{masterDataService.getToolName(results.assessment.tool)}}</td>
         <td >
           <button pButton pRipple class="btn btn-primary btn-block text-uppercase" type='submit' (click)="myFunction(results.assessment.id, results.averageProcess, results.averageOutcome, results.assessment.tool,results.assessment.assessment_method )"> View</button>
         </td>
-        <!-- <td>{{results.meth}}</td>
-       <td>{{ results.approach.charAt(0).toUpperCase() + results.approach.slice(1).toLowerCase() }}</td>
-        <td>{{results.assessmentType}}</td>
-        <td>{{masterDataService.getToolName(results.tool)}}</td>
-        <td >
-          <button pButton pRipple class="btn btn-primary btn-block text-uppercase" type='submit' (click)="myFunction(results.id, results.averageProcess, results.averageOutcome, results.tool,results.method )"> View</button>
-        </td> -->
 
       </tr>
   </ng-template>

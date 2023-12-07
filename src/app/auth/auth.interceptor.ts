@@ -33,7 +33,6 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(req)
       .pipe(catchError((err) => {
-        // this._loading.setLoading(false, req.url);
         return err;
       }))
       // @ts-ignore
@@ -44,6 +43,5 @@ export class AuthInterceptor implements HttpInterceptor {
         return evt;
       }));
 
-    // return next.handle(req);
   }
 }

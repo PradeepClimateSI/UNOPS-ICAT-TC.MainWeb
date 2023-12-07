@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { AuthControllerServiceProxy, RefreshReqRes } from './service-proxies/auth-service-proxies';
+import { RefreshReqRes } from './service-proxies/auth-service-proxies';
 import { ServiceProxy } from './service-proxies/service-proxies';
 
 import { UserIdleService } from "angular-user-idle";
@@ -24,7 +24,6 @@ export enum LoginRole {
   Verifier = "Verifier",
   Sector_Admin = "Sector Admin",
   MRV_Admin = "MRV Admin",
-  // Technical_Team = "Technical Team",
   Country_User = "Country_User",
   Data_Collection_Team = "Data Collection Team",
   QC_Team = "QC Team",
@@ -58,9 +57,7 @@ export enum ProfileStatus {
 export class AppService {
 
   loadingSub: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  /**
-   * Contains in-progress loading requests
-   */
+
   loadingMap: Map<string, boolean> = new Map<string, boolean>();
   
   private _isAuthenticated: boolean;
@@ -71,7 +68,6 @@ export class AppService {
     private confirmationService: ConfirmationService,
     private userIdle: UserIdleService, 
     private router: Router, 
-    // private authControllerServiceProxy: AuthControllerServiceProxy,
     private serviceProxy: ServiceProxy,
     private httpClient: HttpClient
   ) {
@@ -102,33 +98,12 @@ export class AppService {
     this.userIdle.stopWatching();
     this.userIdle.setConfigValues({idle: 900, timeout: 1, ping: 600, idleSensitivity: 10});
 
-    /*Session logout */
-    this.userIdle.startWatching(); //Start watching for user inactivity.
+    this.userIdle.startWatching(); 
     this.userIdle.onTimerStart().subscribe((count) => {});
-    // Start watch when time is up.
     this.userIdle.onTimeout().subscribe(() => {
-      console.log("ontimeout")
       this.userIdle.resetTimer();
       this.userIdle.stopWatching();
       this.logout();
-      // show dialog
-      // this.confirmationService.confirm({
-      //   message: 'Please login again ',
-      //   header: 'Session expired',
-      //   acceptIcon: 'icon-not-visible',
-      //   acceptLabel: 'Ok',
-      //   rejectVisible: false,
-      //   accept: () => {
-      //     this.userIdle.resetTimer();
-      //     this.userIdle.stopWatching();
-      //     this.logout();
-      //   },
-      //   reject: () => {
-      //     this.userIdle.resetTimer();
-      //     this.userIdle.stopWatching();
-      //     this.logout()
-      //   }
-      // });
     });
   }
 
@@ -146,18 +121,6 @@ export class AppService {
     }    
   }
 
-  // private refreshToken() {
-  //   let b = new RefreshReqRes();
-  //     let token = this.getRefreshToken()
-  //     if(token){
-  //       b.token =  `${token}`;
-  //     }
-  //     return this.authControllerServiceProxy.refresh(b)
-  //     .pipe(map(res => {
-  //       this.steToken(res.token);
-  //       this.startRefreshTokenTimer();
-  //     }))
-  // }
 
   private refreshToken2() {
     let url = environment.authBaseUrlAPI + '/auth/refresh'
@@ -175,7 +138,6 @@ export class AppService {
   getLoggedUserRole(){
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
-    console.log(tokenPayload)
     return tokenPayload.role[0]
   }
 
@@ -278,15 +240,6 @@ export class AppService {
   }
 
 
-  /**
-   * Sets the loadingSub property value based on the following:
-   * - If loading is true, add the provided url to the loadingMap with a true value, set loadingSub value to true
-   * - If loading is false, remove the loadingMap entry and only when the map is empty will we set loadingSub to false
-   * This pattern ensures if there are multiple requests awaiting completion, we don't set loading to false before
-   * other requests have completed. At the moment, this function is only called from the @link{HttpRequestInterceptor}
-   * @param loading {boolean}
-   * @param url {string}
-   */
    setLoading(loading: boolean, url: string): void {
     if (!url) {
       throw new Error('The request URL must be provided to the LoadingService.setLoading function');

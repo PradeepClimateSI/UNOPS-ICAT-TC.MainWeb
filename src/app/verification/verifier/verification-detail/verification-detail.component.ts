@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Assessment, AssessmentControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, MethodologyAssessmentParameters, ServiceProxy, UpdateAssessmentDto, VerificationControllerServiceProxy, VerificationDetail } from 'shared/service-proxies/service-proxies';
-import decode from 'jwt-decode';
+
 import { MessageService } from 'primeng/api';
 import * as moment from 'moment';
 import { AppService } from 'shared/AppService';
@@ -40,30 +40,25 @@ export class VerificationDetailComponent implements OnInit {
   ngOnInit(): void {
     this.loggedUserRole= this.appService.getLoggedUserRole()
 
-    console.log(this.loggedUserRole)
 
     this.route.queryParams.subscribe(async (params) => {
       this.assessmentId = params['id'];
       this.verificationStatus = params['verificationStatus'];
       this.flag = params['flag'];
 
-      // this.serviceProxy.getOneBase
-      this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
-      console.log(this.assessment)
+      this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise();
       this.card = [
         {title: 'Intervention', value: this.assessment.climateAction.policyName},
         {title: 'Assessment Type ', value: this.assessment.assessmentType},
         {title: 'Assessment Period ', value: this.assessment.from + '  to ' + this.assessment.to},
-        // {title: 'Barriers ', value: this.assessment.climateAction.barriers},
         {title: 'Methodology', value: this.assessment.methodology.methodology_name},
         {title: 'Assessment Method', value: 'Track 1'},
       ]
       
-      this.parameters = await this.methodologyAssessmentControllerServiceProxy.findAssessmentParameters(this.assessment.id).toPromise()
-      console.log(this.parameters)
+      this.parameters = await this.methodologyAssessmentControllerServiceProxy.findAssessmentParameters(this.assessment.id).toPromise();
       for (let para of this.parameters){
         if (para['isAcceptedByVerifier'] !== true){
-          this.isAccepted = false
+          this.isAccepted = false;
         }
       }
 
@@ -129,7 +124,6 @@ export class VerificationDetailComponent implements OnInit {
 
   sendForVerification() {
     this.assessment.verificationStatus = 2;
-    // this.assementYear.assessmentAssumption = this.assumption;
 
 
     let dto = new UpdateAssessmentDto()
@@ -147,12 +141,6 @@ export class VerificationDetailComponent implements OnInit {
   }
 
   checkboxCheck(event: any) {
-    // if (event.checked) {
-    //   this.selectedParameter.push(param);
-    // } else {
-    //   const index = this.selectedParameter.indexOf(param);
-    //   this.selectedParameter.splice(index, 1);
-    // }
   }
 
 }

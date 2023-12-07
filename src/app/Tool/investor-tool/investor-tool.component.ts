@@ -9,8 +9,6 @@ import { TabView } from 'primeng/tabview';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'environments/environment';
 import { HttpResponse } from '@angular/common/http';
-import { Type } from '@angular/compiler';
-// import { IndicatorDetails } from './IndicatorDetails';
 
 
 interface  CharacteristicWeight {
@@ -77,7 +75,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   geographicalAreasCoveredArr: any[] = []
   totalInvestments: TotalInvestment[] = []
 
-  //Newww
   
   sdgList : any[];
   selectedSDGs : SelectedSDG[] = [];
@@ -93,8 +90,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   description = '';
   levelofImplementation:number=0;
-
-  // yesNoAnswer: any[] = [{ id: 1, name: "Yes" }, { id: 2, name: "No" },  { id: 3, name: "Maybe" }];
   yesNoAnswer: any[] = [{ id: 1, name: "Yes" }, { id: 2, name: "No" }];
   investmentType: any[] = [{ id: 1, name: "Type 01" }, { id: 2, name: "Type 02" },  { id: 3, name: "Type 03" }];
  angle:string
@@ -117,7 +112,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     data: InvestorAssessment[]
     id:number
   }[] = [];
-  //class variable
   @ViewChild(TabView) tabView: TabView;
 
   tabName: string = '';
@@ -162,7 +156,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   investment_instruments_3: MasterDataDto[];
 abatement: any;
   barrierChList: any;
-  // isValidated:boolean;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -184,8 +177,7 @@ abatement: any;
 
   }
   async ngOnInit(): Promise<void> {
-    this.sectorList = await this.sectorProxy.findAllSector().toPromise()
-    console.log("sectors",this.sectorList)
+    this.sectorList = await this.sectorProxy.findAllSector().toPromise();
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;
     this.geographicalAreasCovered = this.masterDataService.level_of_implemetation;
     this.investment_instruments_1 = this.masterDataService.investment_instruments
@@ -194,8 +186,7 @@ abatement: any;
 
     this.activatedRoute.queryParams.subscribe( params => {
       params['isEdit']=='true'?(this.isEditMode =true ):false
-      this.assessmentId = params['id']
-      console.log("isEditMode",this.isEditMode,"assessmentId",this.assessmentId)
+      this.assessmentId = params['id'];
       if(!this.assessmentId && this.isEditMode ){
         window.location.reload()
       }
@@ -213,33 +204,11 @@ abatement: any;
         await this.getSavedAssessment()
       }
       catch (error) {
-        console.log(error)
       }
 
 
     } 
 
-   
-    //comment this
-        /* await this.getCharacteristics();
-        console.log(this.isEditMode,this.assessmentId)
-        this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
-        this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
-        this.outcomeData = await this.investorToolControllerproxy.getOutcomeData(this.assessmentId).toPromise();
-        this.sdgDataSendArray2 = await this.investorToolControllerproxy.getScaleSDGData(this.assessmentId).toPromise();
-        this.sdgDataSendArray4 = await this.investorToolControllerproxy.getSustainedSDGData(this.assessmentId).toPromise();
-        this.selectedSDGs = await this.investorToolControllerproxy.getSelectedSDGs(this.assessmentId).toPromise();
-        this.selectedSDGsWithAnswers = await this.investorToolControllerproxy.getSelectedSDGsWithAnswers(this.assessmentId).toPromise();
-
-        console.log("this.processData",this.processData,this.assessment)
-        console.log("this.outcomeData",this.outcomeData)
-        console.log("this.selectedSDGs", this.selectedSDGs)
-        console.log("this.selectedSDGsWithAnswers", this.selectedSDGsWithAnswers)
-        console.log("this.sdgDataSendArray2", this.sdgDataSendArray2)
-        console.log("this.sdgDataSendArray4", this.sdgDataSendArray4)
-        this.setFrom()
-        this.setTo()  */
-    //upto this
 
     this.visionExample = [
       { title: 'Transformational Vision', value: 'Decarbonized electricity sector with a high % of Solar PV energy which will enable economic growth and will lead the shift of the labour market towards green jobs.' },
@@ -249,9 +218,7 @@ abatement: any;
       { title: 'Phase of transformation', value: 'Acceleration. Solar PV is widely accepted in the society and its use is spreading increasingly fast. Fossil-fuel based energy production is being challenged as the only way to ensure a reliable energy supply. Changes have already occurred in the economy, institutions and society as a result of the spreading of Solar PV.' },
       { title: 'Intervention contribution to change the system to achieve the vision', value: 'The intervention being assessed will facilitate the spreading of Solar PV installations and thus contribute to increase the penetration of solar PV in the national electricity mix.' },
     ]
-
- // this.isSavedAssessment = true; this.tabLoading= true; // Need to remove  
-  // this.isSavedAssessment = true // Need to remove  
+ 
   this.tableData =  this.getProductsData();
     this.categoryTabIndex =0;
     this.approach=1
@@ -273,23 +240,14 @@ abatement: any;
 
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const countryId = token ? decode<any>(token).countryId : 0;
-    console.log("country", countryId)
     this.countryID = countryId;
-    console.log("tabName", this.tabName)
 
     let intTypeFilter: string[] = new Array();
 
     intTypeFilter.push('type.id||$eq||' + 3);
 
-    // this.instituionProxy.getInstituion(3,countryId,1000,0).subscribe((res: any) => {
-    //   this.instiTutionList = res;
-    //   console.log( "listtt",this.instiTutionList)
-    // });
-    // this.getSelectedHeader();
-
     this.investorToolControllerproxy.findAllSDGs().subscribe((res: any) => {
-      console.log("ressssSDGs", res)
-      this.sdgList = res
+      this.sdgList = res;
      });
 
   }
@@ -300,17 +258,15 @@ abatement: any;
   
   async getSavedAssessment(){
     await this.getCharacteristics();
-    console.log(this.isEditMode,this.assessmentId)
-    this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+    this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise();
     this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
     this.outcomeData = await this.investorToolControllerproxy.getOutcomeData(this.assessmentId).toPromise();
     this.sdgDataSendArray2 = await this.investorToolControllerproxy.getScaleSDGData(this.assessmentId).toPromise();
     this.sdgDataSendArray4 = await this.investorToolControllerproxy.getSustainedSDGData(this.assessmentId).toPromise();
     this.selectedSDGs = await this.investorToolControllerproxy.getSelectedSDGs(this.assessmentId).toPromise();
     this.selectedSDGsWithAnswers = await this.investorToolControllerproxy.getSelectedSDGsWithAnswers(this.assessmentId).toPromise();
-    this.investorAssessment = await this.investorToolControllerproxy.getResultByAssessment(this.assessmentId).toPromise()
+    this.investorAssessment = await this.investorToolControllerproxy.getResultByAssessment(this.assessmentId).toPromise();
 
-    console.log(this.processData)
     this.processData.forEach((d)=>{
       if(d.CategoryName == this.assessment.processDraftLocation){
         this.activeIndex = d.categoryID -1;
@@ -338,7 +294,6 @@ abatement: any;
     })
 
     this.investorAssessment.total_investements.map((tot, idx) => {
-      console.log("index", idx, this.totalInvestments)
       let inst 
       if (idx === 0) inst = this.investment_instruments_1.find(o => o.code === tot.instrument_code)
       else if (idx === 1) inst = this.investment_instruments_2.find(o => o.code === tot.instrument_code)
@@ -351,13 +306,6 @@ abatement: any;
       }
     })
 
-    console.log("this.processData",this.processData,this.assessment)
-    console.log("this.outcomeData",this.outcomeData)
-    console.log("this.selectedSDGs", this.selectedSDGs)
-    console.log("this.selectedSDGsWithAnswers", this.selectedSDGsWithAnswers)
-    console.log("this.sdgDataSendArray2", this.sdgDataSendArray2)
-    console.log("this.sdgDataSendArray4", this.sdgDataSendArray4)
-    console.log(this.isEditMode,this.assessmentId)
     this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
     this.policies.push(this.assessment.climateAction)
     this.finalBarrierList = this.assessment['policy_barrier']
@@ -369,22 +317,18 @@ abatement: any;
     }
     })
     this.geographicalAreasCoveredArr = areas
-    let sectors: any[] = []
-    // console.log(this.assessment['investor_sector'])
+    let sectors: any[] = [];
     this.assessment['sector'].map((sector: { name: any; }) => {
       sectors.push(this.sectorList.find(o => o.name === sector.name))
     })
     this.sectorArray = sectors
     this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
-    console.log("this.processData",this.processData,this.assessment)
     this.setFrom()
     this.setTo()
     this.draftLoading = true
   }
 
   onChangeSDGsAnswer(withAnswers:any , item : any){
-    console.log("withAnswers", withAnswers)
-console.log("itemmmm", item)
   }
 
   ngAfterContentChecked(): void {
@@ -422,27 +366,21 @@ console.log("itemmmm", item)
   async getCharacteristics() {
    
     this.investorToolControllerproxy.findAllSDGs().subscribe((res: any[]) => {
-      console.log("ressssSDGs", res)
       this.sdgList = res
      });
 
     try{
       this.investorQuestions= await this.investorToolControllerproxy.findAllIndicatorquestions().toPromise();
-       console.log("ressss3333",  this.investorQuestions)
-      console.log("1111")
 
-    // });
     this.characteristicsList = await this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().toPromise();
     this.barrierChList = [...this.characteristicsList]
     this.barrierChList = this.barrierChList.filter((ch: { category: { code: string; }; }) => {return !["SCALE_ADAPTATION", "SUSTAINED_ADAPTATION"].includes(ch.category.code)})
     this.barrierChList = this.barrierChList.filter((v: { code: any; }, i: any, a: any[]) => a.findIndex(v2 => (v2.code === v.code)) === i)
     this.characteristicsLoaded = true;
-    console.log("22222")
     this.methodologyAssessmentControllerServiceProxy.findAllCategories().toPromise().then((res2: any) => {
 
       const customOrder = [1, 2, 3, 4, 5, 7, 6, 8, 9, 10];
 
-      console.log("categoryList", res2)
 
       const sortedRes2 = res2.sort((a : any, b: any) => {
         const indexA = customOrder.indexOf(a.id);
@@ -450,24 +388,19 @@ console.log("itemmmm", item)
         return indexA - indexB;
       });
 
-      console.log("categoryList222", sortedRes2);
-
-      // console.log("categoryList", res2)
       for (let x of res2) {
         let categoryArray: InvestorAssessment[] =[];
         for (let z of this.characteristicsList) {
-          // console.log(z.category.name,x.name,z.category.name === x.name)
           if (z.category.name === x.name) {
-            // console.log("=========================",x.name)
             let newCharData = new InvestorAssessment();
             newCharData.characteristics = z;
 
             for(let q of this.investorQuestions){
               if(newCharData.characteristics.id ===q.characteristics.id){
-                let indicatorDetails =new IndicatorDetails()
+                let indicatorDetails =new IndicatorDetails();
                 indicatorDetails.type='question';
-                indicatorDetails.question = q
-                newCharData.indicator_details.push(indicatorDetails)
+                indicatorDetails.question = q;
+                newCharData.indicator_details.push(indicatorDetails);
 
               }
             }
@@ -478,7 +411,6 @@ console.log("itemmmm", item)
 
         }
 
-        //this.categotyList.push(x);
         if (x.type === 'process') {
           this.processData.push({
             type: 'process', CategoryName: x.name, categoryID: x.id,
@@ -520,15 +452,10 @@ console.log("itemmmm", item)
 
       if (this.characteristicsLoaded && this.categoriesLoaded) {
         this.tabLoading = true; 
-        console.log("33333")
       }
-      console.log("processdata", this.processData)
-      console.log("outcomeData", this.outcomeData)
-      console.log("this.sdgDataSendArray", this.sdgDataSendArray)
     });
     }
     catch (error) {
-      console.log(error)
     }
    
 
@@ -536,12 +463,8 @@ console.log("itemmmm", item)
   }
 
   save(form: NgForm) {
-    console.log("form", form)
     this.isStageDisble =true;
-    // this.showSections = true
-    //save assessment
 
-    console.log("totalInvestments", this.totalInvestments)
     this.assessment.tool = 'INVESTOR'
     this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
     if (!this.assessment.id) this.assessment.createdOn = moment(new Date())
@@ -550,7 +473,6 @@ console.log("itemmmm", item)
     if (form.valid) {
       this.methodologyAssessmentControllerServiceProxy.saveAssessment(this.assessment)
         .subscribe(res => {
-          console.log("res", res)
 
           if (res) {
 
@@ -592,12 +514,9 @@ console.log("itemmmm", item)
             this.createInvestorToolDto.investortool = this.investorAssessment;
              this.createInvestorToolDto.investortool = this.investorAssessment;
              this.createInvestorToolDto.geographicalAreas = this.geographicalAreasCoveredArr;
-            console.log("investorassessmet",this.createInvestorToolDto)
             this.investorToolControllerproxy.createinvestorToolAssessment(this.createInvestorToolDto)
               .subscribe(async _res => {
-                console.log("res final", _res)
                 if (_res) {
-                  console.log(_res)
                   this.investorAssessment = _res
                   let investDto = new TotalInvestmentDto()
                   this.totalInvestments = this.totalInvestments.map(invest => {
@@ -611,19 +530,11 @@ console.log("itemmmm", item)
                     return invest
                   })
                   investDto.totalInvestements = this.totalInvestments
-                  await this.investorToolControllerproxy.saveTotalInvestments(investDto).toPromise()
-                  // this.messageService.add({
-                  //   severity: 'success',
-                  //   summary: 'Success',
-                  //   detail: 'Assessment created successfully',
-                  //   closable: true,
-                  // })
+                  await this.investorToolControllerproxy.saveTotalInvestments(investDto).toPromise();
                   this.isSavedAssessment = true
 
                 }
-                // form.reset();
               }, error => {
-                console.log(error)
                 this.messageService.add({
                   severity: 'error',
                   summary: 'Error',
@@ -633,7 +544,6 @@ console.log("itemmmm", item)
               })
           }
         }, error => {
-          console.log(error)
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
@@ -654,14 +564,11 @@ console.log("itemmmm", item)
   async saveDraft(category:any,processDraftLocation:string,type:string){
     let finalArray = this.processData.concat(this.outcomeData)
     if(this.isEditMode ==true){
-      this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
-      console.log("assessment",this.assessment.id)
-      finalArray.map(x => x.data.map(y => y.assessment = this.assessment))
-      console.log("finalArray33", finalArray)
+      this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise();
+      finalArray.map(x => x.data.map(y => y.assessment = this.assessment));
     }
     else{
-      console.log("mainAssessment",this.mainAssessment.id)
-      finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
+      finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment));
     }
 
     for(let i=0; i< this.sdgDataSendArray2.length; i++){
@@ -697,14 +604,9 @@ console.log("itemmmm", item)
       sustainedSDGs : this.sdgDataSendArray4,
       sdgs : this.selectedSDGsWithAnswers
     }
-    // this.assessmentControllerServiceProxy.update
-    //@ts-ignore
-    console.log("data",data)
     this.investorToolControllerproxy.createFinalAssessment(data)
       .subscribe(async _res => {
-        console.log("res final", _res)
 
-        console.log(_res)
         this.messageService.add({
           severity: 'success',
           summary: 'Success',
@@ -714,22 +616,11 @@ console.log("itemmmm", item)
         this.setFrom()
         this.setTo()
         if(this.isEditMode ==false){
-          console.log("mainAssessment",this.mainAssessment.id)
           this.router.navigate(['app/investor-tool-new-edit'], {  
             queryParams: { id: this.mainAssessment.id,isEdit:true},  
             });
-          // window.location.reload();
         }
-       
-        
-        // this.showResults();
-        // this.isSavedAssessment = true
-        // this.onCategoryTabChange('', this.tabView);
-
-
-        // form.reset();
       }, error => {
-        console.log(error)
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
@@ -745,26 +636,15 @@ console.log("itemmmm", item)
   }
 
   onItemSelectSectors(event: any) {
-    // console.log("sector",this.sectorArray)
-    // this.createInvestorToolDto.impacts =[]
-    // this.createInvestorToolDto.impacts.push(event.value)
   }
   onItemSelectImpacts(event: any) {
-    // console.log("ipacts",this.impactArray,this.impactCovered)
 
   }
 
   onMainTabChange(event: any) {
     this.mainTabIndex =event.index;
-    // this.isValidated = true;
-    // if(this.mainTabIndex==1){
-    //   this.activeIndex2=0;
-    // }
-    console.log("main index", this.mainTabIndex)
   }
   onCategoryTabChange(event: any, tabview: TabView) {
-    console.log("mainTabIndexArray",this.mainTabIndexArray,this.activeIndex)
-    // this.isValidated=true
     this.categoryTabIndex =event.index;
     if(!this.failedLikelihoodArray.some(
       element  => element.tabIndex === this.categoryTabIndex
@@ -789,11 +669,10 @@ console.log("itemmmm", item)
       this.isRelavanceDisabled=false;
       this.initialRelevance=1
     }
-    console.log("category index", this.categoryTabIndex)
 
   }
   getSelectedHeader() {
-    console.log("tabnaaame", this.tabView.tabs[this.selectedIndex].header);
+    this.tabView.tabs[this.selectedIndex].header;
   }
 
   async onsubmit(form: NgForm) {
@@ -875,26 +754,16 @@ console.log("itemmmm", item)
       }
     }
 
-    console.log("assesssssssss", this.assessment)
-    console.log("finallsdgDataSendArray4", this.sdgDataSendArray4)
-    console.log("finallsdgDataSendArray2", this.sdgDataSendArray2)
 
     if(this.assessment.assessment_approach === 'Direct'){
-      console.log("Directttt")
       let finalArray = this.processData.concat(this.outcomeData)
       if(this.isEditMode ==true){
         this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
-        console.log("assessment",this.assessment.id)
-        finalArray.map(x => x.data.map(y => y.assessment = this.assessment))
-        // console.log("finalArray33", finalArray)
+        finalArray.map(x => x.data.map(y => y.assessment = this.assessment));
       }
       else{
-        console.log("mainAssessment",this.mainAssessment.id)
         finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
       }
-      // finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
-      // finalArray.map(x=>x.data.map(y=>y.investorTool=this.mainAssessment))
-      console.log("finalArray", finalArray)
 
       for(let i=0; i< this.sdgDataSendArray2.length; i++){
         for(let item of this.sdgDataSendArray2[i].data){
@@ -920,12 +789,9 @@ console.log("itemmmm", item)
 
       }
 
-      //@ts-ignore
       this.investorToolControllerproxy.createFinalAssessment(data)
         .subscribe(_res => {
-          console.log("res final", _res)
 
-          console.log(_res)
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
@@ -933,13 +799,7 @@ console.log("itemmmm", item)
             closable: true,
           })
           this.showResults();
-          // this.isSavedAssessment = true
-          // this.onCategoryTabChange('', this.tabView);
-
-
-          // form.reset();
         }, error => {
-          console.log(error)
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
@@ -948,33 +808,22 @@ console.log("itemmmm", item)
           })
         })
 
-
-     // console.log("+++++++++++", this.processData)
-     // console.log("-----------", this.outcomeData)
     }
     else{
-      console.log("Indirectttt")
       let finalArray = this.processData.concat(this.outcomeData)
-      finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
-      // finalArray.map(x=>x.data.map(y=>y.investorTool=this.mainAssessment))
-      console.log("finalArray", finalArray)
+      finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment));
       //@ts-ignore
       this.investorToolControllerproxy.createFinalAssessmentIndirect(finalArray)
         .subscribe(_res => {
-          console.log("res final", _res)
-
-          console.log(_res)
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
             detail: 'Successfully sent to Data Collection Team',
             closable: true,
           })
-          this.router.navigate(['/app/investor-tool-new'])
-        //  this.showResults();
+          this.router.navigate(['/app/investor-tool-new']);
 
         }, error => {
-          console.log(error)
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
@@ -993,80 +842,14 @@ console.log("itemmmm", item)
       setTimeout(() => {
         this.router.navigate(['../assessment-result-investor', this.assessment.id], { queryParams: { assessmentId: this.assessment.id }, relativeTo: this.activatedRoute });
       }, 2000);
-      console.log("assessment",this.assessment.id)
-      // console.log("finalArray33", finalArray)
     }
     else{
-      console.log("mainAssessment",this.mainAssessment.id)
       setTimeout(() => {
         this.router.navigate(['../assessment-result-investor', this.mainAssessment.id], { queryParams: { assessmentId: this.mainAssessment.id }, relativeTo: this.activatedRoute });
       }, 2000);
     }
   }
-  // next(data:any[],type:string){
-  // console.log("category",data)
-  // // data?.filter(investorAssessment => console.log(investorAssessment.likelihood_justification, investorAssessment.likelihood_justification !== undefined , investorAssessment.likelihood_justification !== ""))
-  // data?.filter(investorAssessment => console.log(investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
-  // (indicator_details.justification !==""))?.length === (investorAssessment.indicator_details?.length) && this.isEditMode == true
-  // ))
-  // data?.filter(investorAssessment => console.log(investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
-  // (indicator_details.justification !=="")),(investorAssessment.indicator_details?.length) , this.isEditMode 
-  // ))
-  // if((data?.filter(investorAssessment => 
-  //     (investorAssessment.relavance !== undefined) && 
-  //     (investorAssessment.likelihood !== undefined) && 
-  //     (investorAssessment.likelihood_justification !==undefined && investorAssessment.likelihood_justification !== "") &&
-  //     ((investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
-  //       (indicator_details.justification !== undefined))?.length === (investorAssessment.indicator_details?.length-1) && this.isEditMode == false
-  //     )||
-  //     (investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
-  //       (indicator_details.justification !== undefined && indicator_details.justification !== ""))?.length === (investorAssessment.indicator_details?.length) && this.isEditMode == true
-  //     ))||  
-  //     (investorAssessment.relavance == 0))?.length === data?.length && type=='process')||
-  //     (data?.filter(investorAssessment => 
-  //       (investorAssessment.justification !== undefined) 
-  //      )?.length === data?.data.length && type=='outcome')||
-  //     (data?.data.filter(sdg => 
-  //       (sdg.data?.filter((data: { justification: undefined; } ) =>
-  //         (data.justification!== undefined))?.length === (sdg.data?.length)
-  //       ))?.length === data?.data.length && type=='sdg')) {
-  //         data.isValidated = true;
-  //   if(this.activeIndexMain ===1 ){
-
-  //     this.activeIndex2 =this.activeIndex2+1;
-  //     console.log( "activeIndex2",this.activeIndex2)
-
-  //   }
-  //   if (this.activeIndex === 3 && this.activeIndexMain !== 1) {
-  //     this.activeIndexMain = 1;
-  //     this.activeIndex2=0;
-
-  //   }
-  //   if (this.activeIndex<=2 && this.activeIndex>=0 && this.activeIndexMain===0){
-  //     this.activeIndex =this.activeIndex +1;
-  //     console.log( this.activeIndex)
-
-  //   }
-  //   // return true
-  // }else{
-  //   this.messageService.add({
-  //     severity: 'error',
-  //     summary: 'Error',
-  //     detail: 'Please fill all mandatory fields',
-  //     closable: true,
-  //   });
-  // }
-  //   // if(!this.mainTabIndexArray.includes(this.activeIndex)){
-  //   //   console.log("mainTabIndexArray",this.mainTabIndexArray)
-  //   //   this.isLikelihoodDisabled=false;
-  //   //   this.isRelavanceDisabled=false;
-  //   // }
-  //   // if (this.mainTabIndexArray.includes(this.activeIndex)) {
-
-  //   //   this.isLikelihoodDisabled=true;
-  //   //   this.isRelavanceDisabled=true;
-  //   // }
-  // }
+ 
   next(data:{
     
     isValidated:boolean|null
@@ -1074,11 +857,6 @@ console.log("itemmmm", item)
 
   },type:string){
     data.isValidated = false;
-  console.log("category",data,type)
-  // data.data?.filter(investorAssessment => console.log(investorAssessment.likelihood,investorAssessment.likelihood !== undefined , investorAssessment.likelihood !== null , investorAssessment.likelihood !== ''))
-//   data.data?.filter(investorAssessment => console.log((investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
-//   (indicator_details.justification !== undefined && indicator_details.justification !== null))?.length
-// ), (investorAssessment.indicator_details?.length-1)))
   if((data.data?.filter(investorAssessment => 
       (investorAssessment.relavance !== undefined) && 
       (investorAssessment.likelihood !== undefined ) && 
@@ -1086,9 +864,6 @@ console.log("itemmmm", item)
       (investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
         (indicator_details.justification !== undefined && indicator_details.justification !== null && indicator_details.justification !== ''))?.length === (investorAssessment.indicator_details?.length-1)
       )||
-      // (investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
-      // (indicator_details.justification !== undefined))?.length === (investorAssessment.indicator_details?.length-1) && this.isEditMode==true
-      // )||
        (investorAssessment.relavance == 0))?.length === data?.data?.length && type=='process')||
       (data?.data.filter(investorAssessment => 
         ((investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '')&&
@@ -1102,7 +877,6 @@ console.log("itemmmm", item)
     if(this.activeIndexMain ===1 ){
 
       this.activeIndex2 =this.activeIndex2+1;
-      console.log( "activeIndex2",this.activeIndex2)
 
     }
     if (this.activeIndex === 3 && this.activeIndexMain !== 1) {
@@ -1112,10 +886,8 @@ console.log("itemmmm", item)
     }
     if (this.activeIndex<=2 && this.activeIndex>=0 && this.activeIndexMain===0){
       this.activeIndex =this.activeIndex +1;
-      console.log( this.activeIndex)
 
     }
-    // return true
   }else{
     this.messageService.add({
       severity: 'error',
@@ -1124,27 +896,14 @@ console.log("itemmmm", item)
       closable: true,
     });
   }
-    // if(!this.mainTabIndexArray.includes(this.activeIndex)){
-    //   console.log("mainTabIndexArray",this.mainTabIndexArray)
-    //   this.isLikelihoodDisabled=false;
-    //   this.isRelavanceDisabled=false;
-    // }
-    // if (this.mainTabIndexArray.includes(this.activeIndex)) {
-
-    //   this.isLikelihoodDisabled=true;
-    //   this.isRelavanceDisabled=true;
-    // }
   }
   nextSDG(data:any[],type:string){
-    console.log("category",data,type)
     if(type=='scaleSD'){
       this.isValidSCaleSD = false
     }
     if(type=='sustainedSD'){
       this.isValidSustainedSD = false
     }
-    console.log("category",this.isValidSCaleSD,this.isValidSustainedSD)
-    // this.isValidSustainedSD = false
     if((data?.filter(sdg => 
         (sdg.data?.filter((data: {
           score: undefined; justification: undefined; 
@@ -1152,7 +911,6 @@ console.log("itemmmm", item)
            (data.justification!== undefined && data.justification !== null && data.justification !== '') &&
            (data.score !== undefined && data.score !== null))?.length === (sdg.data?.length)
         ))?.length === data?.length )) {
-          // data.isValidated = true;
           this.isValidSCaleSD=true
           if(type=='scaleSD'){
             this.isValidSCaleSD = true
@@ -1163,7 +921,6 @@ console.log("itemmmm", item)
     if(this.activeIndexMain ===1 ){
 
       this.activeIndex2 =this.activeIndex2+1;
-      console.log( "activeIndex2",this.activeIndex2)
 
     }
     if (this.activeIndex === 3 && this.activeIndexMain !== 1) {
@@ -1173,10 +930,8 @@ console.log("itemmmm", item)
     }
     if (this.activeIndex<=2 && this.activeIndex>=0 && this.activeIndexMain===0){
       this.activeIndex =this.activeIndex +1;
-      console.log( this.activeIndex)
 
     }
-    // return true
   }else{
     this.messageService.add({
       severity: 'error',
@@ -1187,16 +942,13 @@ console.log("itemmmm", item)
   }
   }
   onLevelofImplementationChange(event:any){
-    console.log(event)
     if(event==='National')
     {
-      this.levelofImplementation =1
-      console.log("111")
+      this.levelofImplementation =1;
     }
     else if(event==='Sub-national')
     {
-      this.levelofImplementation =2
-      console.log("222")
+      this.levelofImplementation =2;
     }
     else{
       this.levelofImplementation =0
@@ -1237,20 +989,13 @@ console.log("itemmmm", item)
       this.chaCategoryLikelihoodWeightTotal[categoryName] =  this.chaCategoryLikelihoodWeightTotal[categoryName] + this.characteristicLikelihoodWeightScore[cha.name]
     }
 
-
-     console.log('Characteristicrrrrrrr:',  this.characteristicLikelihoodWeightScore[cha.name],isNaN(this.characteristicLikelihoodWeightScore[cha.name]));
   }
 
   if( this.chaCategoryLikelihoodWeightTotal[categoryName] == 100|| this.chaCategoryLikelihoodWeightTotal[categoryName] ==0){
    this.chaCategoryLikelihoodTotalEqualsTo1[categoryName] = true
    this.initialLikelihood=0
    this.isLikelihoodDisabled=true;
-    // if (!this.mainTabIndexArray.includes(this.activeIndex)) {
-    //   this.mainTabIndexArray.push(this.activeIndex);
-
-    // }
     this.failedLikelihoodArray= this.failedLikelihoodArray.filter((element) => element.category !== categoryName);
-      console.log("failedLikelihoodArray",this.failedLikelihoodArray)
 
 
 
@@ -1258,20 +1003,13 @@ console.log("itemmmm", item)
   else{
     if (!this.failedLikelihoodArray.some( (element) => element.category === categoryName)) {
       this.failedLikelihoodArray.push({category:categoryName,tabIndex:this.activeIndex});
-      console.log("failedLikelihoodArray",this.failedLikelihoodArray)
     }
 
   }
-  console.log("failedLikelihoodArray444",this.failedLikelihoodArray)
-  console.log('LL Characteristic Name:',categoryName ,  characteristicName, 'chaWeight:', chaWeight);
- console.log( 'LL category :',categoryName,' Total: ',  this.chaCategoryLikelihoodWeightTotal[categoryName]);
-
-
  }
 
 
  onRelevanceWeightChange(categoryName: string, characteristicName : string, chaWeight: number) {
-  // console.log('Characteristicrrrrrrr:',  chaWeight);
   this.isRelavanceDisabled=false;
   this.initialRelevance=1;
    this.characteristicWeightScore[characteristicName] = chaWeight
@@ -1283,8 +1021,6 @@ console.log("itemmmm", item)
     this.chaCategoryWeightTotal[categoryName] =  this.chaCategoryWeightTotal[categoryName] +  this.characteristicWeightScore[cha.name]
   }
 
-
-    console.log('Characteristicrrrrrrr:',  this.characteristicWeightScore[cha.name]);
  }
 
  if( this.chaCategoryWeightTotal[categoryName] == 100|| this.chaCategoryWeightTotal[categoryName] == 0){
@@ -1293,22 +1029,16 @@ console.log("itemmmm", item)
   this.initialRelevance=0
   this.isRelavanceDisabled=true
   this.failedRelevanceArray= this.failedRelevanceArray.filter((element) => element.category !== categoryName);
-      console.log("failedRelevanceArray",this.failedRelevanceArray)
  }
  else{
   if (!this.failedRelevanceArray.some( (element) => element.category === categoryName)) {
     this.failedRelevanceArray.push({category:categoryName,tabIndex:this.activeIndex});
-    console.log("failedRelevanceArray",this.failedRelevanceArray)
   }
 
 }
- console.log('Characteristic Name:',categoryName ,  characteristicName, 'chaWeight:', chaWeight);
-  console.log( 'category :',categoryName,' Total: ',  this.chaCategoryWeightTotal[categoryName]);
-  console.log("+++++++++",this.characteristicWeightScore );
 }
 
 onAssessmentApproachchange(approach:any){
-  console.log("approach",approach)
   if (approach==='Direct'){
     this.approach=1;
   }
@@ -1318,15 +1048,10 @@ onAssessmentApproachchange(approach:any){
 }
 
 onRelavanceChange(data:any,ins:any){
-  console.log("========",this.processData,data,ins)
-  // for (let i of object) {
-
-  // }
 
 }
 
 pushBarriers(barrier:any){
-  console.log("barrier",barrier)
   this.finalBarrierList.push(barrier)
   this.barrierSelected = new BarrierSelected()
 
@@ -1347,13 +1072,10 @@ toDownload() {
   
 }
 showDialog(){
-  this.barrierBox =true;
-  console.log(this.barrierBox)  
+  this.barrierBox =true; 
 }
 
 onChangeRelevance(relevance : any , data : any){
-  console.log("relevance", relevance)
-  console.log("data22", data)
 
   if(relevance == 0){
     data.likelihood_justification = null;
@@ -1380,82 +1102,20 @@ addNewline(text: any) {
   if (!text) {
     return '';
   }
-  // Replace three spaces with a line break
   return text.replace(/ {3}/g, '<br><br>');
 }
 
 assignSDG(sdg : any , data : any){
-  console.log("sdgs", sdg)
-  console.log("data", data)
 
-  data.portfolioSdg = sdg
-
-  console.log("data22", data)
+  data.portfolioSdg = sdg;
 }
 
-
-   /*  onItemSelectSDGs(event: any) {
-      console.log("rrr", this.selectedSDGs);
-      console.log("event", event);
-     /// this.selectedSDGsWithAnswers = this.selectedSDGs;
-     // console.log(" this.selectedSDGsWithAnswers", this.selectedSDGsWithAnswers);
-     const len1 =  this.sdgDataSendArray2.length;
-     const len2 =  this.sdgDataSendArray4.length;
-
-     console.log("lengthh", len1);
-     console.log("selectedSDGs.lengthh", this.selectedSDGs.length);
-    //  this.sdgDataSendArray2 = [];
-    //  this.sdgDataSendArray4 = [];
-
-      for (let index = len1; index < this.selectedSDGs.length; index++) {
-        const sdgData = JSON.parse(JSON.stringify(this.sdgDataSendArray[0]));
-
-        const newObj = {
-          CategoryName: sdgData.CategoryName,
-          categoryID: sdgData.categoryID,
-          type: sdgData.type,
-          data: sdgData.data,
-          index: index
-        };
-
-        this.sdgDataSendArray2.push(newObj);
-      }
-
-
-      for (let index = len2; index < this.selectedSDGs.length; index++) {
-        const sdgData = JSON.parse(JSON.stringify(this.sdgDataSendArray3[0]));
-
-        const newObj = {
-          CategoryName: sdgData.CategoryName,
-          categoryID: sdgData.categoryID,
-          type: sdgData.type,
-          data: sdgData.data,
-          index: index
-        };
-
-        this.sdgDataSendArray4.push(newObj);
-      }
-
-
-
-      console.log("this.sdgDataSendArray2", this.sdgDataSendArray2);
-      console.log("this.sdgDataSendArray4", this.sdgDataSendArray4);
-    }
- */
     onItemSelectSDGs(event: any) {
-      console.log("rrr", this.selectedSDGs);
-      console.log("event", event);
-    
-      // Create an array of indexes for selected items
       const selectedIndexes = this.selectedSDGs.map(sdg => sdg.id);
-    
-      // Remove items from sdgDataSendArray2 that are not in the selectedSDGs
       this.sdgDataSendArray2 = this.sdgDataSendArray2.filter((sdgData: { index: number; }) => selectedIndexes.includes(sdgData.index));
     
-      // Remove items from sdgDataSendArray4 that are not in the selectedSDGs
       this.sdgDataSendArray4 = this.sdgDataSendArray4.filter((sdgData: { index: number; }) => selectedIndexes.includes(sdgData.index));
     
-      // Find items in selectedSDGs that are not in sdgDataSendArray2 and add them
       this.selectedSDGs.forEach(selectedSdg => {
         if (!this.sdgDataSendArray2.some((sdgData: { index: number; }) => sdgData.index === selectedSdg.id)) {
           const sdgData = JSON.parse(JSON.stringify(this.sdgDataSendArray[0]));
@@ -1470,7 +1130,6 @@ assignSDG(sdg : any , data : any){
         }
       });
     
-      // Find items in selectedSDGs that are not in sdgDataSendArray4 and add them
       this.selectedSDGs.forEach(selectedSdg => {
         if (!this.sdgDataSendArray4.some((sdgData: { index: number; }) => sdgData.index === selectedSdg.id)) {
           const sdgData = JSON.parse(JSON.stringify(this.sdgDataSendArray3[0]));
@@ -1486,7 +1145,6 @@ assignSDG(sdg : any , data : any){
       });
 
 
-      // Update selectedSDGsWithAnswers based on the selectedSDGs
   this.selectedSDGsWithAnswers = this.selectedSDGs.map(selectedSdg => {
     const existingAnswer = this.selectedSDGsWithAnswers.find(
       sdgWithAnswer => sdgWithAnswer.id === selectedSdg.id
@@ -1495,15 +1153,10 @@ assignSDG(sdg : any , data : any){
     if (existingAnswer) {
       return { ...selectedSdg, answer: existingAnswer.answer };
     } else {
-      // If the selected item is not in selectedSDGsWithAnswers, initialize it with a default answer
       return { ...selectedSdg, answer: ""  };
     }
   });
 
-    
-      console.log("this.sdgDataSendArray2", this.sdgDataSendArray2);
-      console.log("this.sdgDataSendArray4", this.sdgDataSendArray4);
-      console.log("this.selectedSDGsWithAnswers", this.selectedSDGsWithAnswers);
     }
     
 
@@ -1540,7 +1193,6 @@ assignSDG(sdg : any , data : any){
   }
 
   onSelectInstrument(event: any, id: number) {
-    // this.investment_instruments.splice(this.investment_instruments.findIndex(item => item.code === event.value), 1)
     if (id === 0) {
       this.investment_instruments_2 = this.investment_instruments_2.filter(o => o.code !== event.value)
       this.investment_instruments_3 = this.investment_instruments_3.filter(o => o.code !== event.value)

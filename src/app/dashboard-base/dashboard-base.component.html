@@ -28,8 +28,6 @@
         <div class="sidebar-items flex-grow-1">
           <div data-ccs-admin-menu>
             <div class="sidebar-items--link align-items-start" [routerLink]="['/app/']" routerLinkActive="selected">
-              <!-- <div class=""></div> -->
-              <!-- Dashboard -->
               Overview
             </div>
             <div
@@ -84,36 +82,6 @@
               Manage SDGs
             </div>
 
-            <!--  <div class="sidebar-items--link align-items-start" [routerLink]="['/app/register/list']"
-              routerLinkActive="selected">
-
-              <div class=""></div>
-              Registration
-            </div> -->
-
-            <!-- <div *ngIf="userRole==loginRole.QC_Team || userRole==loginRole.MASTER_ADMIN" class="sidebar-items--link align-items-start" [routerLink]="['/app/quality-controller']"
-              routerLinkActive="selected">
-
-              <div class=""></div>
-              Quality Control
-            </div> -->
-
-
-            <!--  <div class="sidebar-items--link align-items-start" [routerLink]="['/app/methodology']"
-              routerLinkActive="selected">
-
-              <div class=""></div>
-              Methodology
-            </div> -->
-
-            <!-- <div
-                class="sidebar-items--link align-items-start"
-                [routerLink]="['/app/landing-page']"
-                routerLinkActive="selected"
-              >
-                <div class=""></div>
-                Landing Page
-              </div> -->
             <p-accordion>
               <div
                 *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin || userRole==loginRole.Country_User || userRole==loginRole.MRV_Admin||  userRole==loginRole.Data_Collection_Team ||  userRole==loginRole.Country_Admin ||  userRole==loginRole.External ">
@@ -137,13 +105,6 @@
                     <p class="mb-0 ml-20">Manage</p>
                   </div>
 
-                  <!-- <div *ngIf="userRole==loginRole.MRV_Admin || userRole==loginRole.Technical_Team ||  userRole==loginRole.Sector_Admin
-                  " class="sidebar-items--link d-flex flex-column align-items-start"
-                    [routerLink]="['/app/accepted-policies']"
-                    routerLinkActive="selected">
-                    <p class="mb-0 ml-20">Accepted interventions</p>
-                  </div> -->
-
                 </p-accordionTab>
               </div>
 
@@ -158,10 +119,6 @@
                       <p class="mb-2">Assess interventions</p>
                     </div>
                   </p-header>
-                  <!-- <div class="sidebar-items--link d-flex flex-column align-items-start"
-                    [routerLink]="['/app/portfolio-tool']" routerLinkActive="selected">
-                    <p class="mb-0 ml-20">Portfolio Tool</p>
-                  </div> -->
                   <div class="sidebar-items--link d-flex flex-column align-items-start" *ngIf="isPortfolioTool || userRole==loginRole.External"
                     [routerLink]="['/app/portfolio-tool']" routerLinkActive="selected">
                     <p class="mb-0 ml-20">{{masterDataService.getToolName('PORTFOLIO')}}</p>
@@ -170,15 +127,6 @@
                     [routerLink]="['/app/carbon-market-tool']" routerLinkActive="selected">
                     <p class="mb-0 ml-20">{{masterDataService.getToolName('CARBON_MARKET')}}</p>
                   </div>
-                  <!--  <div class="sidebar-items--link d-flex flex-column align-items-start"
-                    [routerLink]="['/app/carbon-market-tool-test']" routerLinkActive="selected">
-                    <p class="mb-0 ml-20">Portfolio Tool - New </p>
-                  </div> -->
-
-                  <!-- <div class="sidebar-items--link d-flex flex-column align-items-start"
-                    [routerLink]="['/app/investor-tool']" routerLinkActive="selected">
-                    <p class="mb-0 ml-20">Investor & Private Sector Tool</p>
-                  </div> -->
 
                   <div class="sidebar-items--link d-flex flex-column align-items-start" *ngIf="isInvesmentTool || userRole==loginRole.External"
                     [routerLink]="['/app/investor-tool-new']" routerLinkActive="selected">
@@ -226,173 +174,8 @@
             <div class="sidebar-items--link" (click)="logout()">
               <i class="pi pi-sign-out"></i> Logout
             </div>
-            <!-- <p-accordion>
-              <p-accordionTab data-assess>
-                <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
-                  <div [routerLink]="['/app/quality-controller']" routerLinkActive="selected">
-                    <p class="mb-2">Quality Control</p>
-                  </div>
-                </p-header>
-              </p-accordionTab>
-            </p-accordion>
-
-              <p-accordion>
-              <p-accordionTab data-assess>
-                <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
-                  <div [routerLink]="['/app/data-request']" routerLinkActive="selected">
-                    <p class="mb-2">Data request</p>
-                  </div>
-                </p-header>
-                <div *ngIf="userRole==loginRole.MASTER_ADMIN  || userRole==loginRole.Data_Collection_Team" class="sidebar-items--link d-flex flex-column align-items-start"
-                  [routerLink]="['/app/data-request']" routerLinkActive="selected">
-                  <p class="mb-0 ml-20">Manage</p>
-                </div>
-
-                <div *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Institution_Admin  || userRole==loginRole.Data_Collection_Team" class="sidebar-items--link d-flex flex-column align-items-start"
-                  [routerLink]="['/app/assign-data-request']" routerLinkActive="selected">
-                  <p class="mb-0 ml-20">assign-data-request</p>
-                </div>
-                <div *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Institution_Admin || userRole==loginRole.Data_Entry_Operator" class="sidebar-items--link d-flex flex-column align-items-start" [routerLink]="['/app/enter-data']"
-                  routerLinkActive="selected">
-                  <p class="mb-0 ml-20">Enter Data</p>
-                </div>
-                <div *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Institution_Admin" class="sidebar-items--link d-flex flex-column align-items-start" [routerLink]="['/app/view-data']"
-                  routerLinkActive="selected">
-                  <p class="mb-0 ml-20">Review Data</p>
-                </div>
-                <div   *ngIf="userRole==loginRole.MASTER_ADMIN  || userRole==loginRole.Data_Collection_Team"  class="sidebar-items--link d-flex flex-column align-items-start"
-                  [routerLink]="['/app/manage-data']" routerLinkActive="selected">
-                  <p class="mb-0 ml-20">Manage Data</p>
-                </div>
-                 <div class="sidebar-items--link d-flex flex-column align-items-start"
-                  [routerLink]="['/app/app-approve-data']" routerLinkActive="selected">
-                  <p class="mb-0 ml-20">Manage Data</p>
-                </div>  -->
-              <!-- </p-accordionTab>
-            </p-accordion> -->
-
-            <!-- <p-accordion>
-                <p-accordionTab data-assess>
-                  <p-header class="p-accordion-header-text d-flex flex-row align-items-left">
-                    <div routerLinkActive="selected">
-                      <p class="mb-2">Enter Data</p>
-                    </div>
-                  </p-header>
-                  <div class="sidebar-items--link d-flex flex-column align-items-start"
-                       [routerLink]="['/app/emission/electricity-list']"
-                       routerLinkActive="selected">
-                    <p class="mb-0 ml-20">Electricity</p>
-                  </div>
-                  <div class="sidebar-items--link d-flex flex-column align-items-start"
-                       [routerLink]="['/app/emission/fire-extinguisher-list']"
-                       routerLinkActive="selected">
-                    <p class="mb-0 ml-20">Fire Extinguisher</p>
-                  </div>
-
-                  <div class="sidebar-items--link d-flex flex-column align-items-start"
-                       [routerLink]="['/app/emission/generator-list']"
-                       routerLinkActive="selected">
-                    <p class="mb-0 ml-20">Generator</p>
-                  </div>
-                  <div class="sidebar-items--link d-flex flex-column align-items-start"
-                       [routerLink]="['/app/emission/refrigerant-list']"
-                       routerLinkActive="selected">
-                    <p class="mb-0 ml-20">Refrigerant Gas</p>
-                  </div>
-                  <div class="sidebar-items--link d-flex flex-column align-items-start"
-                       [routerLink]="['/app/emission/gas-biomass-list']"
-                       routerLinkActive="selected">
-                    <p class="mb-0 ml-20">Biomass Gas</p>
-                  </div>
-                  <div class="sidebar-items--link d-flex flex-column align-items-start"
-                       [routerLink]="['/app/emission/welding-es-list']"
-                       routerLinkActive="selected">
-                    <p class="mb-0 ml-20">Welding ES</p>
-                  </div>
-                  <div class="sidebar-items--link d-flex flex-column align-items-start"
-                       [routerLink]="['/app/emission/forklifts-list']"
-                       routerLinkActive="selected">
-                    <p class="mb-0 ml-20">Forklifts</p>
-                  </div>
-                  <div class="sidebar-items--link d-flex flex-column align-items-start"
-                       [routerLink]="['/app/emission/boilers-list']"
-                       routerLinkActive="selected">
-                    <p class="mb-0 ml-20">Boilers</p>
-                  </div>
-                  <div class="sidebar-items--link d-flex flex-column align-items-start"
-                       [routerLink]="['/app/emission/waste-water-treatment-list']"
-                       routerLinkActive="selected">
-                    <p class="mb-0 ml-20">Waste Water Treatment</p>
-                  </div>
-                  <div class="sidebar-items--link d-flex flex-column align-items-start"
-                       [routerLink]="['/app/emission/municipal-water-list']"
-                       routerLinkActive="selected">
-                    <p class="mb-0 ml-20">Municipal Water</p>
-                  </div>
-                </p-accordionTab>
-              </p-accordion> -->
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-            <!-- <div *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Verifier"class="sidebar-items--link align-items-start" [routerLink]="['/app/verification/list']"
-              routerLinkActive="selected">
-
-              <div class=""></div>
-              Verification
-            </div> -->
-
-
-            <!-- <div class="sidebar-items--link align-items-start" [routerLink]="['/app/assign-verifier']"
-              routerLinkActive="selected">
-
-              <div class=""></div>
-              Assign Verifier
-            </div> -->
-
-
-
-
-            <!--  <div class="sidebar-items--link align-items-start" [routerLink]="['/app/audit-log']" routerLinkActive="selected">
-              Audit Log
-            </div> -->
-
-            <!-- <div
-                class="sidebar-items--link align-items-start"
-                [routerLink]="['/app/verification/project-list']"
-                routerLinkActive="selected">
-
-                <div class=""></div>
-                Verification
-              </div>
-
-              <div
-                class="sidebar-items--link align-items-start"
-                [routerLink]="['/app/evidence-requested/request-list']"
-                routerLinkActive="selected">
-
-                <div class=""></div>
-                Evidence Requested
-              </div>
-
-              <div
-                class="sidebar-items--link align-items-start"
-                [routerLink]="['/app/evidence-requested/request-list-verifier']"
-                routerLinkActive="selected">
-
-                <div class=""></div>
-                Sent Evidence Requests
-              </div> -->
 
           </div>
         </div>
@@ -401,9 +184,6 @@
           <div></div>
           <div></div>
           <div></div>
-          <!--   <div class="sidebar-items--link" [routerLink]="['/app/user/setting']" routerLinkActive="router-link-active">
-            <i class="pi pi-cog"></i> Account Settings
-          </div> -->
 
         </div>
       </div>
@@ -412,15 +192,6 @@
           <div class="p-text-nowrap p-text-truncate m-0 pr-2 text-right">
             <div class="top-panel d-flex justify-content-end">
               <div class="d-flex mt-15 mr-20">
-                <!-- <span class="mr-10">
-                    <img
-                      src="https://github.com/mdo.png"
-                      alt="mdo"
-                      width="45"
-                      height="45"
-                      class="rounded-circle"
-                    />
-                  </span> -->
                 <span>
                   <div class="username">{{userName}}</div>
                   <div class="userrole">{{userRole}}</div>
@@ -441,7 +212,6 @@
             </div>
           </div>
           <div class="p-text-nowrap p-text-truncate m-0 mb-1 pr-2 text-right">
-            <!-- <small><b>Test</b></small> -->
           </div>
         </div>
 
@@ -466,7 +236,6 @@
                       (click)="detail(notification)"></i>
                     <i [hidden]="!notification.is_viewed" class="pi pi-eye-slash"
                       style="font-size: 1.5rem; border-color:transparent"></i>
-                    <!-- <p-tableCheckbox [value]="notification"> </p-tableCheckbox> -->
                   </td>
 
                   <td>{{ notification.massege! }}</td>
@@ -474,20 +243,6 @@
               </ng-template>
             </p-table>
 
-
-            <!-- <table>
-              <tr>
-                <td class="col-12 col-md-4">
-                  <div class="p-field mb-2">
-                <td>
-                </td>
-          </div>
-          </td>
-          <td class="col-12 col-md-6">
-            <div class="p-field mb-2">ggg</div>
-          </td>
-          </tr>
-          </table> -->
           </div>
         </p-dialog>
         <p-messages *ngIf="messages && isDeploying" [(value)]="messages" [enableService]="false" [closable]="false"></p-messages>
@@ -501,5 +256,3 @@
   </nb-layout-footer>
 </nb-layout>
 
-
-<!-- <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog> -->

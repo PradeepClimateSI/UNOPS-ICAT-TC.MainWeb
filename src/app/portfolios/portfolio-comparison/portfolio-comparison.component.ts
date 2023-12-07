@@ -107,22 +107,21 @@ export class PortfolioComparisonComponent implements OnInit {
     this.isDownloading = true
 
     setTimeout(() => {
-      let tabledetail = document.getElementById('one')
-      let tableComparison = document.getElementById('two')
-      let workSheettabledetai = XLSX.utils.table_to_sheet(tabledetail, {})
+      let tabledetail = document.getElementById('one');
+      let tableComparison = document.getElementById('two');
+      let workSheettabledetai = XLSX.utils.table_to_sheet(tabledetail, {});
       let workSheettableComparison = XLSX.utils.table_to_sheet(tableComparison, {});
 
-      // let workbook = XLSX.utils.table_to_book(table,{})
-      let workbook = XLSX.utils.book_new()
-      XLSX.utils.book_append_sheet(workbook, workSheettabledetai, 'Details')
-      XLSX.utils.book_append_sheet(workbook, workSheettableComparison, 'Comparison')
+      let workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, workSheettabledetai, 'Details');
+      XLSX.utils.book_append_sheet(workbook, workSheettableComparison, 'Comparison');
 
       let length = (XLSX.utils.sheet_to_json(workSheettableComparison, { raw: false, header: 1 })).length
       let alignment_position = length - this.alignment_data.interventions.length + 1
-      let col_count = this.alignment_data.col_set_1.length - 2
-      let cols = this.getNextLetters('E', col_count)
-      let row_count = this.alignment_data.interventions.length
-      let rows = []
+      let col_count = this.alignment_data.col_set_1.length - 2;
+      let cols = this.getNextLetters('E', col_count);
+      let row_count = this.alignment_data.interventions.length;
+      let rows = [];
       for (let i = 0; i < row_count; i++) {
         const nextInteger = alignment_position + i;
         rows.push(nextInteger);
@@ -141,15 +140,13 @@ export class PortfolioComparisonComponent implements OnInit {
   }
   confirm() {
     
-    let body = new CreateComparisonReportDto()
-    body.portfolioId = this.portfolioId
-    // body.climateAction = this.selectedClimateAction
-    body.tool = ""
-    body.type = 'Comparison'
-    body.reportName = this.reportName
-    body.reportTitle = this.portfolio.portfolioName
+    let body = new CreateComparisonReportDto();
+    body.portfolioId = this.portfolioId;
+    body.tool = "";
+    body.type = 'Comparison';
+    body.reportName = this.reportName;
+    body.reportTitle = this.portfolio.portfolioName;
     this.reportControllerServiceProxy.generateComparisonReport(body).subscribe(res => {
-      console.log("generated repotr", res)
       window.open(this.SERVER_URL +'/'+res.generateReportName, "_blank");
       if (res) {
         this.messageService.add({
@@ -172,31 +169,30 @@ export class PortfolioComparisonComponent implements OnInit {
   }
 
   createColorMap(_cols: any, _rows: any) {
-    let colorMap = []
-    let cols = _cols
-    let rows = _rows
+    let colorMap = [];
+    let cols = _cols;
+    let rows = _rows;
 
     for (let [index, col] of this.alignment_data.col_set_2.entries()) {
       for (let [idx, intervention] of this.alignment_data.interventions.entries()) {
         if (intervention[col.code]?.name) {
-          let obj = new ColorMap()
-          obj.cell = cols[index - 4] + rows[idx]
-          obj.color = this.getBackgroundColor(+intervention[col.code].value).replace('#', '')
-          colorMap.push(obj)
+          let obj = new ColorMap();
+          obj.cell = cols[index - 4] + rows[idx];
+          obj.color = this.getBackgroundColor(+intervention[col.code].value).replace('#', '');
+          colorMap.push(obj);
         }
       }
     }
-    return colorMap
+    return colorMap;
   }
 
 
   getNextLetters(letter: string, num: number) {
     if (typeof letter !== 'string' || letter.length !== 1 || !/^[A-Za-z]$/.test(letter)) {
-      // Check if the input is a single letter (A-Z or a-z)
       return 'Invalid input';
     }
 
-    const startCharCode = letter.toUpperCase().charCodeAt(0); // Convert to uppercase and get char code
+    const startCharCode = letter.toUpperCase().charCodeAt(0); 
     const nextLetters = [letter.toUpperCase()];
 
     for (let i = 1; i <= num; i++) {

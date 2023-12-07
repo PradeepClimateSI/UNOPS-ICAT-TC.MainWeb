@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Assessment, MethodologyAssessmentControllerServiceProxy, MethodologyAssessmentParameters, ParameterHistoryControllerServiceProxy, Results, ServiceProxy, UsersControllerServiceProxy, VerificationControllerServiceProxy, VerificationDetail } from 'shared/service-proxies/service-proxies';
-import decode from 'jwt-decode';
 import { AppService } from 'shared/AppService';
 @Component({
   selector: 'app-verify-parameter',
@@ -49,25 +48,20 @@ export class VerifyParameterComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    this.loggedUserRole= this.appService.getLoggedUserRole()
-    await this.loadUser()
-    await this.getResult()
-    console.log(this.result)
+    this.loggedUserRole= this.appService.getLoggedUserRole();
+    await this.loadUser();
+    await this.getResult();
   }
 
   getInfo(obj: any)
   {
-       console.log("dataRequestList...",obj)
        this.paraId = obj.id;
-       console.log("this.paraId...",this.paraId)
 
        this.prHistoryProxy
-       .getHistroyByid(this.paraId)  // this.paraId
+       .getHistroyByid(this.paraId) 
        .subscribe((res) => {
          
         this.requestHistoryList =res;
-         
-       console.log('this.requestHistoryList...', this.requestHistoryList);
        
        });
 
@@ -77,9 +71,8 @@ export class VerifyParameterComponent implements OnInit {
   async loadUser() {
     let userName = localStorage.getItem('USER_NAME')!;
 
-    let user = await this.usersControllerServiceProxy.findUserByEmail(userName).toPromise()
-    console.log("user", user)
-    this.loggedUser = user
+    let user = await this.usersControllerServiceProxy.findUserByEmail(userName).toPromise();
+    this.loggedUser = user;
   }
 
   async getResult(){
@@ -104,13 +97,11 @@ export class VerifyParameterComponent implements OnInit {
   }
 
   raiseConcern(event: any, parameter: MethodologyAssessmentParameters, type: string) {
-    // console.log("my para...",parameter);
-    console.log(parameter)
+   
     this.raiseConcernSection = parameter.category.name + ' - ' + parameter.characteristics.name
     this.isParameter = true;
     this.isValue = false;
 
-    console.log('gggggggggggggggggggg');
 
     if (this.verificationDetails) {
       this.concernVerificationDetails = this.verificationDetails.filter(
@@ -129,23 +120,10 @@ export class VerifyParameterComponent implements OnInit {
   }
 
   parameterAccept() {
-    // console.log("parameterAccept")
-    // this.confirmationService.confirm({
-    //   message: 'Are sure you want to accept the parameter(s) ?',
-    //   header: 'Accept Confirmation',
-    //   acceptIcon: 'icon-not-visible',
-    //   rejectIcon: 'icon-not-visible',
-    //   accept: () => {
-    //     this.acceptParametrs();
-
-    //   },
-    //   reject: () => {},
-    // });
     this.acceptParametrs();
   }
 
   async acceptParametrs() {
-    console.log("acceptParametrs")
     let verificationDetails: VerificationDetail[] = [];
 
     if (this.acceptResult){
@@ -187,10 +165,6 @@ export class VerifyParameterComponent implements OnInit {
           let param = new MethodologyAssessmentParameters();
           param.id = v.id;
           vd.parameter = param;
-  
-          // if (this.header == 'Baseline Parameter') {
-          //   vd.isBaseline = true;
-          // }
         }
   
         vd.editedOn = moment();
@@ -228,9 +202,7 @@ export class VerifyParameterComponent implements OnInit {
   }
 
   async acceptResultValue(){
-    this.result.isAcceptedByVerifier = true
-
-    console.log(this.result)
+    this.result.isAcceptedByVerifier = true;
 
     this.methodologyAssessmentControllerServiceProxy.updateResult(this.result.id, this.result)
       .subscribe(res => {

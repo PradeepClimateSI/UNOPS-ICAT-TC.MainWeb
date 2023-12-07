@@ -7,7 +7,6 @@ import jsPDF from 'jspdf';
 import { MasterDataDto, MasterDataService } from 'app/shared/master-data.service';
 import { environment } from 'environments/environment';
 import { SDG } from '../cm-section-three/cm-section-three.component';
-import { SelectedScoreDto } from 'app/shared/score.dto';
 import { HeatMapScore } from 'app/charts/heat-map/heat-map.component';
 import * as moment from 'moment';
 
@@ -82,11 +81,9 @@ export class CmResultComponent implements OnInit {
           { title: 'Intervention', data: this.intervention.policyName },
           { title: 'Scale of Activity', data: scale?.name },
           { title: 'Assessment Type', data: this.assessment.assessmentType },
-          // { title: 'Assessment Boundaries', data: this.assessmentCMDetail.boundraries },
           { title: 'Geographical Areas Covered', data: this.assessmentCMDetail.geographicalAreasCovered.map(a => a.name)},
           { title: 'Sectors Covered', data: this.assessmentCMDetail.sectorsCovered.map(a => a.sector.name)},
           { title: 'Opportunities for stakeholders to participate in the assessment', data: this.assessment.opportunities},
-          // { title: 'Principles on which the assessment is based', data: this.assessment.principles},
           { title: 'Assessment Period', data: moment(this.assessment.from).format('YYYY-MM-DD') + ' - ' + moment(this.assessment.to).format('YYYY-MM-DD')},
           { title: 'Assessment Boundaries (If different from the intervention boundary specified in the baseline methodology)', data: this.assessmentCMDetail.boundraries},
           { title: 'International Carbon Market Approach Used', data: cmApproache?.name},
@@ -160,14 +157,12 @@ export class CmResultComponent implements OnInit {
       this.heatMapScore = [{processScore: this.score.process_score, outcomeScore: this.score.outcome_score.outcome_score}]
       Object.keys(response.outcome_score.sdgs_score).map((key: any) => {
         this.selectedSdgs = this.selectedSdgs.map((sd: any) => {
-          console.log(key, sd.id)
           if (+key === sd.id) {
             sd['score'] = response.outcome_score.sdgs_score[key]
           }
           return sd
         })
       }) 
-      console.log(this.selectedSdgs) 
     }
   }
 
@@ -223,7 +218,7 @@ export class CmResultComponent implements OnInit {
     }, 1000)
   }
 
-  _toDownloadExcel(){ //Not using
+  _toDownloadExcel(){ 
     let length = 0
     let book_name = 'Results - ' + this.intervention.policyName
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.card, { skipHeader: true });
@@ -294,7 +289,7 @@ export class CmResultComponent implements OnInit {
     XLSX.writeFile(wb, book_name + '.xlsx');
   }
 
-  _mapProcessData(){ // Not using
+  _mapProcessData(){ 
     let data = new ProcessData()
     if (this.processData?.technology && this.processData?.technology?.length !== 0){
       data.technology = this.processData.technology.map((ele: { characteristic: string; question: string; score: number; justification: string; }) => {
