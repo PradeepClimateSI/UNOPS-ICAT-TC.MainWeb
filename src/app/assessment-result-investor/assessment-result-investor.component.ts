@@ -432,7 +432,8 @@ console.log(this.geographicalAreasList)
     }, 1000);
 
   }
-  getBackgroundColor(value: number): string {
+  getBackgroundColor(x: number, y: number): string {
+    let value = x + y
     switch (value) {
       case -3:
         return '#ec6665';
@@ -546,7 +547,7 @@ console.log(this.geographicalAreasList)
         let obj = new ColorMap()
         obj.cell = cols[index] + rows[idx]
         obj.value = row + col
-        obj.color = hasScore ? '0000ff' : this.getBackgroundColor(row + col).replace('#', '')
+        obj.color = hasScore ? '0000ff' : this.getBackgroundColor(col, row).replace('#', '')
         colorMap.push(obj)
       }
     }
@@ -583,7 +584,7 @@ console.log(this.geographicalAreasList)
     console.log("confirm")
     let body = new CreateReportDto()
     body.assessmentId = this.assessmentId
-    body.tool = this.tool=="PORTFOLIO"?"Other Interventions":"Investment"
+    body.tool = this.tool=="PORTFOLIO"?"General tool":"Investment"
     body.type = 'Result'
     body.climateAction = this.intervention
     body.reportName = this.reportName

@@ -41,7 +41,7 @@
             <label for="policy">Select Intervention *</label>
             <p-dropdown appendTo="body" name="policy" #policy="ngModel" placeholder="Select Intervention"
               [disabled]="isSavedAssessment|| isEditMode" [(ngModel)]="assessment.climateAction" appendTo="body" [options]="policies"
-              optionLabel="policyName" [required]="true"></p-dropdown>
+              optionLabel="policyName" [required]="true" (onChange)="onSelectIntervention($event)"></p-dropdown>
             <p class="info-message text-danger" *ngIf="
                                                   !assessment.climateAction &&
                                                   (fData.submitted || policy.touched)
@@ -117,7 +117,7 @@
           <div class="p-field p-2">
             <label for="opportunities">Opportunities for stakeholders to participate in the assessment *</label>
             <input pInputText type="text" #opportunities="ngModel" name="opportunities" ngModel
-              [disabled]="isSavedAssessment|| isEditMode" placeholder="Explain how different stakeholders if any will participate in the assessment" [(ngModel)]="assessment.opportunities"
+              [disabled]="isSavedAssessment|| isEditMode" placeholder="Describe if and how stakeholders will participate in the assessment" [(ngModel)]="assessment.opportunities"
               required />
             <p class="info-message text-danger"
               *ngIf="!opportunities.value && (fData.submitted || opportunities.touched)">This is a mandatory field</p>
@@ -152,7 +152,7 @@
                 <i class="pi pi-calendar"></i>
               </span>
               <p-calendar dateFormat="mm-dd-yy" inputId="date1" placeholder="From" [(ngModel)]="assessment.from"
-                name="date1" #date1="ngModel" [required]="true" appendTo="body" [disabled]="isSavedAssessment|| isEditMode">
+                name="date1" #date1="ngModel" [required]="true" appendTo="body" [minDate]="minDate" [disabled]="isSavedAssessment|| isEditMode">
               </p-calendar>
               <span class="p-inputgroup-addon">to</span>
               <p-calendar dateFormat="mm-dd-yy" inputId="date2" placeholder="To" [(ngModel)]="assessment.to"
@@ -756,31 +756,36 @@
                                       </div>
                                  <!--    </div> -->
                                   </div>
+                                  <div class="row p-2" *ngIf=" category.CategoryName ==='Adaptation Scale of the Outcome'">
+                                    <p *ngFor="let line of adaptation_info.split('\n')">{{ line }}<br></p>
+                                  </div>
 
                                   <!-- Newwwwwww -->
                                   <div class="row p-2"
                                     *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'International/global level'">
-                                    <p><b>Major:</b> Is the emissions reduction > 0.1% of global emissions?</p>
+                                    <!-- <p><b>Major:</b> Is the emissions reduction > 0.1% of global emissions?</p>
                                     <p><b>Moderate:</b> Is the emissions reduction > 0.05% of global emissions?</p>
                                     <p><b>Minor:</b> Is the emissions reduction > 0.01% of global emissions?</p>
                                     <p><b>None:</b> Is the emissions reduction < 0.01% of global emissions?</p>
-                                        <p><b>Negative:</b> Is there an emissions increase?</p>
+                                        <p><b>Negative:</b> Is there an emissions increase?</p> -->
+                                    <p *ngFor="let line of ghg_info.split('\n')">{{ line }}</p>
                                   </div>
 
                                   <div class="row p-2"
                                     *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'National/Sectorial level'">
-                                    <p><b>Major:</b> Is the emissions reduction > 1% of national/sectorial emissions?</p>
+                                    <!-- <p><b>Major:</b> Is the emissions reduction > 1% of national/sectorial emissions?</p>
                                     <p><b>Moderate:</b> Is the emissions reduction > 0.5-1% of national/sectorial emissions?
                                     </p>
                                     <p><b>Minor:</b> Is the emissions reduction > 0.1-0.5% of national/sectorial emissions?
                                     </p>
                                     <p><b>None:</b> Is the emissions reduction < 0.1% of national/sectorial emissions?</p>
-                                        <p><b>Negative:</b> Is there an emissions increase?</p>
+                                        <p><b>Negative:</b> Is there an emissions increase?</p> -->
+                                      <p *ngFor="let line of ghg_info.split('\n')">{{ line }}<br></p>
                                   </div>
 
                                   <div class="row p-2"
                                     *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level'">
-                                    <p><b>Major:</b> Is the emissions reduction > 5% of subnational/regional/municipal
+                                    <!-- <p><b>Major:</b> Is the emissions reduction > 5% of subnational/regional/municipal
                                       emissions?</p>
                                     <p><b>Moderate:</b> Is the emissions reduction > 1-5% of subnational/regional/municipal
                                       emissions?</p>
@@ -788,7 +793,8 @@
                                       emissions?</p>
                                     <p><b>None:</b> Is the emissions reduction < 0.5% of subnational/regional/municipal
                                         emissions?</p>
-                                        <p><b>Negative:</b> Is there an emissions increase?</p>
+                                        <p><b>Negative:</b> Is there an emissions increase?</p> -->
+                                      <p *ngFor="let line of ghg_info.split('\n')">{{ line }}<br></p>
                                   </div>
                                   <!-- Newwwwwww - Endddd -->
 
@@ -806,7 +812,8 @@
 
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
-                                        <label for="score">Score*</label>
+                                        <label for="score">Score* <i  *ngIf=" category.CategoryName ==='GHG Scale of the Outcome'" class="pi pi-info-circle" pTooltip="{{getTooltipData(data.characteristics.name)}}" tooltipPosition="bottom"
+                                          style="font-size: 1rem"></i></label>
                                         <div
                                           *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' ||  category.CategoryName ==='Adaptation Scale of the Outcome' ">
                                           <p-dropdown appendTo="body" name="{{cat}}_{{i}}_outcomeScaleScore_" #type="ngModel"
@@ -923,7 +930,7 @@
                       <div class="card" style="min-height: 300px;">
                       <h6 style="color: black;">SDG {{ selectedSDGs[i].number }} - {{ selectedSDGs[i].name }}</h6> <br>
 
-                      <div class="row">
+                      <!-- <div class="row">
                         <div class="col-8">
                           <h6 style="color: black; font-weight: normal; font-size: 17px;">Could the intervention have an impact on this particular SDG?</h6>
                         </div>
@@ -932,7 +939,7 @@
                             [(ngModel)]="selectedSDGsWithAnswers[i].answer" [options]="sdg_answers" optionLabel="name"
                             optionValue="name" ></p-dropdown>
                         </div>
-                      </div> <br>
+                      </div> <br> -->
 
                       <div class="characteristic-Topic" *ngFor="let data of item.data; index as j">
                         <h6>{{ j+1 }}.{{ data.characteristics.name }}</h6>
@@ -980,6 +987,9 @@
                                     <div class="row p-2">
                                     <!--   <div class="row" *ngFor="let question of data.portfolioQuestion_details"> -->
                                         <label style="font-size: 17px;" for="question">{{data.characteristics.portfolioQuestion}} </label>
+                                        <div class="row p-2">
+                                          <p *ngFor="let line of sdg_info.split('\n')">{{ line }}<br></p>
+                                        </div>
 
                                         <div class="tooltip-container">
                                           <div *ngIf="data.characteristics.portfolioHint">

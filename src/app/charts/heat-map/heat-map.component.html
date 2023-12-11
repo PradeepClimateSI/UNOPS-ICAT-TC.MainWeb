@@ -2,10 +2,10 @@
     <tbody>
         <tr>
             <td></td>
-            <td colspan="8">Outcome score</td>
+            <td colspan="8">​​Outcome: Extent and sustained nature of transformation</td>
         </tr>
         <tr>
-            <td class="vertical-text" [ngClass]="isSafari ? 'vertical-text-safari' : 'vertical-text-chrome'" rowspan="6">Process score</td>
+            <td class="vertical-text" [ngClass]="isSafari ? 'vertical-text-safari' : 'vertical-text-chrome'" rowspan="6">Process: Likelihood of transformation</td>
             <td></td>
             <ng-container *ngFor="let x of xData">
                 <td style="font-size: small;">{{x.label}}</td>
@@ -14,7 +14,7 @@
         <tr *ngFor="let y of yData">
             <td style="font-size: small;">{{y.label}}</td>
             <ng-container *ngFor="let x of xData">
-                <td class="charttd" [style.background-color]="getBackgroundColor(y.value+x.value)" [style.color]="getIntervention(x.value, y.value)?'blue':getBackgroundColor(y.value+x.value)">
+                <td class="charttd" [style.background-color]="getBackgroundColor(x.value, y.value)" [style.color]="getIntervention(x.value, y.value)?'blue':getBackgroundColor(x.value, y.value)">
                     <span (mouseenter)="enterHeatMapPoint(x.value, y.value,$event);"
                         (mouseleave)="leaveHeatMapPoint();op.hide()"
                         [ngClass]="getIntervention(x.value, y.value)? 'intervention':''">1</span>
@@ -23,17 +23,17 @@
         </tr>
     </tbody>
 </table>
-<p-overlayPanel [hidden]="pointTableDatas && pointTableDatas.length==0" #op>
-    <ng-template pTemplate="content">
-        <div *ngFor="let pointTableData of pointTableDatas" style=" border-style: solid;" class="m-3 p-1">
+<p-overlayPanel [style]="{'min-width': '200px'}" [hidden]="pointTableDatas && pointTableDatas.length==0" #op>
+    <ng-template  pTemplate="content">
+        <div *ngFor="let pointTableData of pointTableDatas" style=" border-style: solid;min-width: 500px !important;" class="m-3 p-1">
 
             <div class="row">
-                <div class="col-4">Intervation ID :</div>
+                <div class="col-4">Intervention ID :</div>
                 <div class="col-8">{{pointTableData?.interventionId}}</div>
 
             </div>
             <div class="row">
-                <div class="col-4">Intervation Name :</div>
+                <div class="col-4">Intervention Name :</div>
                 <div class="col-8">{{pointTableData?.interventionName}}</div>
             </div>
             <div class="row">
@@ -41,7 +41,7 @@
                 <div class="col-8">{{pointTableData.processScore}}</div>
             </div>
             <div class="row">
-                <div class="col-4">outcome score :</div>
+                <div class="col-4">Outcome score :</div>
                 <div class="col-8">{{pointTableData.outcomeScore}}</div>
             </div>
         </div>

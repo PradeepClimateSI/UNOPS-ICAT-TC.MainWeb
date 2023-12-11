@@ -20,10 +20,12 @@
                     <tr>
                         <td>{{ tableData.climateAction?.policyName }}</td>
                         <td>{{ masterDataService.getToolName(tableData.tool) }}</td>
-                        <td class="text-center">{{ tableData.process_score!=null && tableData.process_score!=undefined?
+                        <!-- <td class="text-center">{{ tableData.process_score!=null && tableData.process_score!=undefined?
                             tableData.process_score:'-' }}</td>
                         <td class="text-center">{{ tableData.outcome_score!=null &&
-                            tableData.outcome_score!=undefined?tableData.outcome_score:'-' }}</td>
+                            tableData.outcome_score!=undefined?tableData.outcome_score:'-' }}</td> -->
+                            <td>{{ mapProcessScores(tableData.process_score) }}</td>
+                            <td>{{ mapOutcomeScores(tableData.outcome_score) }}</td>
                     </tr>
                 </ng-template>
 
@@ -101,7 +103,7 @@
             <div class="row text-center">
                 <h3>Sectors represented</h3>
                 <div *ngIf="sectorCount" class="col-12 mt-20" [hidden]="sectorCount.length == 0">
-                    <canvas #investmentSectorCountPieChart>{{ pieChart2 }}</canvas>
+                    <canvas  height="450" #investmentSectorCountPieChart>{{ pieChart2 }}</canvas>
                 </div>
             </div>
             <div *ngIf="sectorCount" class="col-12" [hidden]="sectorCount.length != 0">

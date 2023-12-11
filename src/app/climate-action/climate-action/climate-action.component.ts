@@ -122,7 +122,7 @@ export class ClimateActionComponent implements OnInit  {
   category: BarriersCategory[];
   selectCategory: any;
   approachList: string[] = ['AR1', 'AR2', 'AR3', 'AR4', 'AR5'];
-  typeofAction: string[] = ['Investment','Carbon Market','Other Interventions']
+  typeofAction: string[] = ['Investment','Carbon Market','General tool']
   levelOfImplementation: any[] = [];
   characteristicsList: Characteristics[] = [];
   
@@ -217,7 +217,7 @@ export class ClimateActionComponent implements OnInit  {
       end_date: 'State the date the intervention ceases, such as the date a tax is no longer levied or the end date of an incentive scheme with a limited duration not the date that the policy/action no longer has an impact',
       entity: 'List the entities that implement the intervention, including the role of various local, subnational, national, international or any other entities',
       objectives: 'State the intended impacts the intervention intends to achieve (e.g., the purpose stated in the legislation or regulation), including specific goals for GHG emission reductions and sustainable development impacts where available',
-      related: 'List other policies or actions that may interact with the policy or action assessed',
+      related: 'List other Interventions or actions that may interact with the Intervention or action assessed',
       reference: 'Provide a link or full reference to access further, detailed information about the intevention',
       geo: 'Where is the policy applied?',
       objective: 'State the intended impacts the intervention intends to achieve (e.g., the purpose stated in the legislation or regulation), including specific goals for GHG emission reductions and sustainable development impacts where available)'

@@ -1,5 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { SelectedScoreDto } from 'app/shared/score.dto';
 import { environment } from 'environments/environment';
@@ -28,6 +29,15 @@ export class CmSectionThreeComponent implements OnInit {
   @Input() isEditMode: boolean
   @Input() assessment:Assessment;
   @Output() onSubmit = new EventEmitter()
+  // @ViewChild('scaleGHGData', { read: NgForm }) scale_ghg_form!: NgForm;
+  // @ViewChild('sustainGHGData', { read: NgForm }) sustaine_ghg_form!: NgForm;
+  // @ViewChild('fData', { read: NgForm }) scale_sdg_form!: NgForm;
+  // @ViewChild('fData', { read: NgForm }) sustaine_sdg_form!: NgForm;
+
+  @ViewChildren(NgForm) viewChildren!: QueryList<NgForm>;
+
+
+  clickedFormMap: {[key: number]: boolean}= {}
 
   comment: any;
   SDGs: SDG[]
@@ -49,6 +59,9 @@ export class CmSectionThreeComponent implements OnInit {
   sdgsToLoop: SDG[]
   uploadedFiles: any = [];
   uploadUrl: string;
+  GHG_scale_info: any
+  SD_scale_info: any
+  adaptation_scale_info: any
   GHG_scale_score_macro: ScoreDto[]
   GHG_scale_score_medium: ScoreDto[]
   GHG_scale_score_micro: ScoreDto[]
@@ -74,6 +87,8 @@ export class CmSectionThreeComponent implements OnInit {
   isDraftSaved: boolean = false
   nextClicked: boolean;
   savedData: boolean = false;
+  relevance_tooltip: string;
+  ghg_starting_situation_placeholder: any;
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -100,9 +115,19 @@ export class CmSectionThreeComponent implements OnInit {
       "- maintained/increased water availability despite a reduction in precipitation or increase in droughts\n" +
       "- Reduced/avoided loss of ecosystem services despite worsening climatic conditions";
 
-    this.starting_situation_tooltip = "Please describe the baseline scenario on the indicated scale for the intervention, including the current and expected climate risks and impacts in the project area."
-    this.expected_impact_tooltip = "Please describe the proposed technology/intervention (i.e. unit) in its technical parameters, e.g. size, volume, lifetime and its operational output that lead to adaptation co-benefit under the intervention on the indicated scale."
+    this.ghg_starting_situation_placeholder = {
+      international: 'Please describe the baseline emissions on the international/global level.',
+      national: 'Please describe the baseline emissions on the national or sectoral level',
+      subNational: 'Please describe the baseline emissions on the subnational/regional/municipal or subsectoral level'
+    }
 
+    this.starting_situation_tooltip = "Please describe the baseline scenario on the indicated scale for the intervention, including the current and expected climate risks and impacts in the project area."
+    this.expected_impact_tooltip = "Please describe the adaptation benefits on the indicated scale."
+    this.relevance_tooltip = "Does the process characteristic affects/impacts any of the identified barriers? does the intervention affects/impacts the process characteristic?"
+
+    this.GHG_scale_info = this.masterDataService.GHG_scale_info
+    this.SD_scale_info = this.masterDataService.SD_scale_info
+    this.adaptation_scale_info = this.masterDataService.adaptation_scale_info
     this.GHG_scale_score_macro = this.masterDataService.GHG_scale_score_macro
     this.GHG_scale_score_medium = this.masterDataService.GHG_scale_score_medium
     this.GHG_scale_score_micro = this.masterDataService.GHG_scale_score_micro
@@ -130,17 +155,17 @@ export class CmSectionThreeComponent implements OnInit {
   async setInitialState() {
     let int=0
 
-    this.categories['process'].forEach((d:any)=>{     
-      if(d.name == this.assessment.processDraftLocation){
+    this.categories['process'].forEach((d: any) => {
+      if (d.name == this.assessment.processDraftLocation) {
         this.activeIndex = int;
       }
-      int =int+1;
+      int = int + 1;
     })
-if(this.assessment.lastDraftLocation=="out"){
-  this.activeIndexMain =1;
-}
-    this.outcome.forEach((d:any)=>{
-      if(d.code == this.assessment.outcomeDraftLocation){
+    if (this.assessment.lastDraftLocation == "out") {
+      this.activeIndexMain = 1;
+    }
+    this.outcome.forEach((d: any) => {
+      if (d.code == this.assessment.outcomeDraftLocation) {
         this.activeIndex2 = d.order-1;
       }
     })
@@ -190,45 +215,47 @@ if(this.assessment.lastDraftLocation=="out"){
           }
         })
       )
-      await Promise.all(
-        this.selectedSDGs = this.selectedSDGs.map((sdl: any) => {
-          sdl.scaleResult = sdl.scaleResult.map((sc: any) => {
-            let assQ = this.assessmentquestions.find(o => (o.characteristic.id === sc.characteristic.id) && (o.selectedSdg.id === sc.selectedSdg.id) )
-            if (assQ) {
-              sc.sdgIndicator = assQ.sdgIndicator
-              sc.startingSituation = assQ.startingSituation
-              sc.expectedImpact = assQ.expectedImpact
-              sc.comment = assQ.comment
-              sc.assessmentQuestionId = assQ.id
-              sc.filePath = assQ.uploadedDocumentPath
-              sc.selectedSdg = assQ.selectedSdg
-              if (assQ.assessmentAnswers[0]) {
-                let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, sc.characteristic)
-                if (score) sc.selectedScore = score
-              }
-            }
-            return sc
-          })
-          sdl.sustainResult = sdl.sustainResult.map((sc: any) => {
-            let assQ = this.assessmentquestions.find(o => (o.characteristic.id === sc.characteristic.id) && (o.selectedSdg.id === sc.selectedSdg.id))
-            if (assQ) {
-              sc.comment = assQ.comment
-              sc.assessmentQuestionId = assQ.id
-              sc.filePath = assQ.uploadedDocumentPath
-              sc.selectedSdg = assQ.selectedSdg
-              if (assQ.assessmentAnswers[0]) {
-                let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, sc.characteristic)
-                if (score) {
-                  sc.selectedScore = score
-                  this.onSelectScore({}, sc, 2)
+      if (this.selectedSDGs?.length > 0) {
+        await Promise.all(
+          this.selectedSDGs = this.selectedSDGs.map((sdl: any) => {
+            sdl.scaleResult = sdl.scaleResult.map((sc: any) => {
+              let assQ = this.assessmentquestions.find(o => (o.characteristic.id === sc.characteristic.id) && (o.selectedSdg.id === sc.selectedSdg.id) )
+              if (assQ) {
+                sc.sdgIndicator = assQ.sdgIndicator
+                sc.startingSituation = assQ.startingSituation
+                sc.expectedImpact = assQ.expectedImpact
+                sc.comment = assQ.comment
+                sc.assessmentQuestionId = assQ.id
+                sc.filePath = assQ.uploadedDocumentPath
+                sc.selectedSdg = assQ.selectedSdg
+                if (assQ.assessmentAnswers[0]) {
+                  let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, sc.characteristic)
+                  if (score) sc.selectedScore = score
                 }
               }
-            }
-            return sc
+              return sc
+            })
+            sdl.sustainResult = sdl.sustainResult.map((sc: any) => {
+              let assQ = this.assessmentquestions.find(o => (o.characteristic.id === sc.characteristic.id) && (o.selectedSdg.id === sc.selectedSdg.id))
+              if (assQ) {
+                sc.comment = assQ.comment
+                sc.assessmentQuestionId = assQ.id
+                sc.filePath = assQ.uploadedDocumentPath
+                sc.selectedSdg = assQ.selectedSdg
+                if (assQ.assessmentAnswers[0]) {
+                  let score = this.getSelectedScoreFromOptions(assQ.assessmentAnswers[0].selectedScore, sc.characteristic)
+                  if (score) {
+                    sc.selectedScore = score
+                    this.onSelectScore({}, sc, 2)
+                  }
+                }
+              }
+              return sc
+            })
+            return sdl
           })
-          return sdl
-        })
-      )
+        )
+      }
     }
   }
 
@@ -334,26 +361,44 @@ if(this.assessment.lastDraftLocation=="out"){
 
   onCategoryTabChange2($event: any) {
     // throw new Error('Method not implemented.');
+    // this.nextClicked = false
   }
+
+  isFormValid() {
+    let form = this.viewChildren.filter((f, idx) => idx === this.activeIndex2)
+    return form[0].form.valid
+  }
+
 
   next(category: string, characteristics?: any[]) {
     this.nextClicked = true
+    if (this.activeIndexMain === 1) {
+      this.clickedFormMap[this.activeIndex2] = true
+      if (!this.isFormValid()) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Please fill all mandotory fields',
+          closable: true,
+        });
+      }
+    }
     if (!this.isDraftSaved) {
       this.categoriesToSave.push(category)
     } else this.isDraftSaved = !this.isDraftSaved
     if (characteristics?.filter(o => o.relevance !== undefined)?.length === characteristics?.length) {
-      if (this.activeIndexMain === 1) {
+      if (this.activeIndexMain === 1 && this.isFormValid()) {
         this.activeIndex2 = this.activeIndex2 + 1;
       }
-      if (this.activeIndex === this.categories.process.length - 1) {
+      if (this.activeIndex === this.categories.process.length - 1 ) {
         this.activeIndexMain = 1;
       }
-      if (this.activeIndex <= this.categories.process.length - 2 && this.activeIndex >= 0 && this.activeIndexMain === 0) {
+      if (this.activeIndex <= this.categories.process.length - 2 && this.activeIndex >= 0 && this.activeIndexMain === 0 ) {
         this.activeIndex = this.activeIndex + 1;
       }
       if (this.activeIndexMain === 0) {
         this.onCategoryTabChange({ index: this.activeIndex })
-      }
+      } 
     } else {
       this.messageService.add({
         severity: 'error',
@@ -630,10 +675,18 @@ if(this.assessment.lastDraftLocation=="out"){
       isValid = await this.checkMandotary()
     }
 
+    if (!isDraft) {
+      if (this.activeIndexMain === 1) {
+        this.clickedFormMap[this.activeIndex2] = true
+      }
+      isValid = this.isFormValid()
+    }
+
+
     if (isValid) {
       this.categoriesToSave = []
       this.isDraftSaved = true
-      this.savedData = true
+      if(!isDraft) this.savedData = true
       this.onSubmit.emit({result: this.results, isDraft: isDraft,name:name,type:type})
     } else {
       this.messageService.add({
