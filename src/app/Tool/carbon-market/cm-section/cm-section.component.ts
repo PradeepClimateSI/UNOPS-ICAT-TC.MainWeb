@@ -236,7 +236,6 @@ export class CmSectionComponent implements OnInit {
       this.sectionResult.sections.forEach(sec => {
         sec.criteria.forEach(cr => {
           cr.questions.forEach(q => {
-            console.log(q)
             if (this.isPassed) {this.isPassed = q.answer.isPassing}
             if (!this.isPassed) {
               notMetCriterias.push(cr.criteria.name)
