@@ -192,7 +192,8 @@ export class AssessmentResultInvestorComponent implements OnInit {
     }, 1000);
 
   }
-  getBackgroundColor(value: number): string {
+  getBackgroundColor(x: number, y: number): string {
+    let value = x + y
     switch (value) {
       case -3:
         return '#ec6665';
@@ -264,12 +265,12 @@ export class AssessmentResultInvestorComponent implements OnInit {
     let row_values = [4,3,2,1,0];
     for (let [idx,row] of row_values.entries()){
       for (let [index, col] of col_values.entries()){
-        let hasScore = this.getIntervention(col, row);
-        let obj = new ColorMap();
-        obj.cell = cols[index] + rows[idx];
-        obj.value = row + col;
-        obj.color = hasScore ? '0000ff' : this.getBackgroundColor(row + col).replace('#', '');
-        colorMap.push(obj);
+        let hasScore = this.getIntervention(col, row)
+        let obj = new ColorMap()
+        obj.cell = cols[index] + rows[idx]
+        obj.value = row + col
+        obj.color = hasScore ? '0000ff' : this.getBackgroundColor(col, row).replace('#', '')
+        colorMap.push(obj)
       }
     }
     return colorMap
@@ -302,12 +303,12 @@ export class AssessmentResultInvestorComponent implements OnInit {
 
   }
   confirm(){
-    let body = new CreateReportDto();
-    body.assessmentId = this.assessmentId;
-    body.tool = this.tool=="PORTFOLIO"?"Other Interventions":"Investment";
-    body.type = 'Result';
-    body.climateAction = this.intervention;
-    body.reportName = this.reportName;
+    let body = new CreateReportDto()
+    body.assessmentId = this.assessmentId
+    body.tool = this.tool=="PORTFOLIO"?"General tool":"Investment"
+    body.type = 'Result'
+    body.climateAction = this.intervention
+    body.reportName = this.reportName
     this.reportControllerServiceProxy.generateReport(body).subscribe(res => {
       if (res) {
         this.messageService.add({

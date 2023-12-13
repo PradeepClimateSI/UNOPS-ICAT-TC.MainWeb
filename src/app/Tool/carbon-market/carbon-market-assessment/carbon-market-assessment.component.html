@@ -11,7 +11,7 @@
                             <label for="policy">Select Intervention *</label>
                             <p-dropdown name="policy" #policy="ngModel" placeholder="Select intervention"
                                 [(ngModel)]="assessment.climateAction" appendTo="body" [options]="policies"
-                                optionLabel="policyName" [required]="true" [disabled]="isEditMode"></p-dropdown>
+                                optionLabel="policyName" [required]="true" [disabled]="isEditMode" (onChange)="onSelectIntervention($event)"></p-dropdown>
                             <p class="info-message text-danger" *ngIf="
                                 !assessment.climateAction &&
                                 (fData.submitted || policy.touched)
@@ -74,7 +74,7 @@
                             <label for="opportunities">Opportunities for stakeholders to participate in the assessment
                                 *</label>
                             <input pInputText type="text" #opportunities="ngModel" name="opportunities" ngModel
-                                [disabled]="isSavedAssessment" placeholder="Explain how different stakeholders if any will participate in the assessment"
+                                [disabled]="isSavedAssessment" placeholder="Describe if and how stakeholders will participate in the assessment"
                                 [(ngModel)]="assessment.opportunities" [disabled]="isEditMode" required />
                             <p class="info-message text-danger"
                                 *ngIf="!opportunities.value && (fData.submitted || opportunities.touched)">This is a
@@ -88,7 +88,7 @@
                                 </span>
                                 <p-calendar dateFormat="mm-dd-yy" inputId="date1" placeholder="From"
                                     [(ngModel)]="assessment.from" name="date1" #date1="ngModel" [required]="true"
-                                    appendTo="body" [disabled]="isSavedAssessment || isEditMode">
+                                    appendTo="body" [disabled]="isSavedAssessment || isEditMode" [minDate]="minDate">
                                 </p-calendar>
                                 <span class="p-inputgroup-addon">to</span>
                                 <p-calendar dateFormat="mm-dd-yy" inputId="date2" placeholder="To"

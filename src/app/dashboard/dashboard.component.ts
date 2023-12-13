@@ -208,7 +208,7 @@ export class DashboardComponent implements OnInit {
           },
           title: {
             display: true,
-            text: 'Number of Interventions', 
+            text: 'Number of assessments', 
             color: textColorSecondary,
             font: {
               weight: 'bold',

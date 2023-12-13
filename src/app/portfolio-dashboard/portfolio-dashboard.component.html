@@ -61,8 +61,8 @@
             
             <td>{{ tableData.climateAction?.policyName }}</td>
             <td  *ngIf="barChartData.length>0">{{ masterDataService.getToolName(tableData.tool) }}</td>
-            <td class="text-center">{{ tableData.processScore!=null && tableData.processScore!=undefined? tableData.processScore:'N/A' }}</td>
-            <td class="text-center">{{ tableData.outcomeScore!=null && tableData.outcomeScore!=undefined?tableData.outcomeScore:'N/A' }}</td>
+            <td class="text-center">{{ mapProcessScores(tableData.processScore) }}</td>
+            <td class="text-center">{{ mapOutcomeScores(tableData.outcomeScore) }}</td>
            
           </tr>
         </ng-template>
@@ -118,7 +118,7 @@
           class="col-12 mt-20"
           [hidden]="sdgDetailsList.length == 0"
         >
-          <canvas height="400" #portfolioSDGsPieChart >{{ portfolioSDGsPieChart }}</canvas>
+          <canvas height="450" #portfolioSDGsPieChart >{{ portfolioSDGsPieChart }}</canvas>
         </div>
       </div>
       <div
@@ -145,7 +145,7 @@
           class="col-12 mt-20"
           [hidden]="sectorCount.length == 0"
         >
-          <canvas #portfolioSectorCountPieChart >{{ sectorCountPieChart }}</canvas>
+          <canvas height="450" #portfolioSectorCountPieChart >{{ sectorCountPieChart }}</canvas>
         </div>
       </div>
       <div

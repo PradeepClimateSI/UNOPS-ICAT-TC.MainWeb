@@ -23,7 +23,7 @@ export class ReportComponent implements OnInit {
   assessmentTypes: any[]
  reportTypes=['Result','Comparison']
  selectedReportTypes:string='';
- tools=['Investment','Other Interventions']
+ tools=['Investment','General tool']
  selectedTool:string='';
   selectedClimateAction: ClimateAction
   selectedAssessment: Assessment

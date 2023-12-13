@@ -11,7 +11,7 @@
                             <label for="policy">Select Intervention *</label>
                             <p-dropdown name="policy" #policy="ngModel" placeholder="Select Intervention"
                                 [(ngModel)]="assessment.climateAction" appendTo="body" [options]="policies"
-                                optionLabel="policyName" [required]="true"
+                                optionLabel="policyName" [required]="true" (onChange)="onSelectIntervention($event)"
                                 [disabled]="isSavedAssessment || isEditMode"></p-dropdown>
                             <p class="info-message text-danger" *ngIf="
                                 !assessment.climateAction &&
@@ -98,13 +98,21 @@
                             </thead>
                             <tbody>
                               <tr>
-                                <th style="font-weight:normal">Proportion of total investment</th>
+                                <th style="font-weight:normal">Proportion of total investment (%)</th>
                                 <ng-container *ngFor="let tot of totalInvestments; let idx = index">
                                   <td>
-                                    <input pInputText type="number" #totInvestment="ngModel" [name]="'totInvestment'+idx" ngModel
+                                    <input pInputText type="number" (input)="onInputChange($event)"   #totInvestment="ngModel" [name]="'totInvestment'+idx" ngModel
                                     [(ngModel)]="tot.propotion" required [disabled]="isSavedAssessment|| isEditMode"/>
                                   </td>
                                 </ng-container>
+                              </tr>
+                              <tr>
+                                <td></td>
+                                <td colspan="3">
+                                  <p class="info-message text-danger" *ngIf="isExceeded">
+                                    The sum of three propotions need to be less than or equal 100
+                                  </p>
+                                </td>
                               </tr>
                             </tbody>
                           </table>
@@ -116,7 +124,7 @@
                                 <span class="p-inputgroup-addon">
                                     <i class="pi pi-calendar"></i>
                                 </span>
-                                <p-calendar dateFormat="mm-dd-yy" inputId="date1" placeholder="From"
+                                <p-calendar dateFormat="mm-dd-yy" inputId="date1" placeholder="From" [minDate]="minDate"
                                     [(ngModel)]="assessment.from" name="date1" #date1="ngModel"  [disabled]="isSavedAssessment|| isEditMode" [required]="true" appendTo="body"  [disabled]="isSavedAssessment">
                                    </p-calendar>
                                 <span class="p-inputgroup-addon">to</span>
@@ -135,7 +143,7 @@
                         <div class="p-field p-2">
                             <label for="opportunities">Opportunities for stakeholders to participate in the assessment *</label>
                             <input pInputText type="text" #opportunities="ngModel" name="opportunities" ngModel
-                            placeholder="Explain how different stakeholders if any will participate in the assessment" [(ngModel)]="assessment.opportunities" required [disabled]="isSavedAssessment|| isEditMode"/>
+                            placeholder="Describe if and how stakeholders will participate in the assessment" [(ngModel)]="assessment.opportunities" required [disabled]="isSavedAssessment|| isEditMode"/>
                             <p class="info-message text-danger" *ngIf="!opportunities.value && (fData.submitted || opportunities.touched)">This is a mandatory field</p>
                       </div>
 
@@ -520,7 +528,8 @@
 
 
                                                                 <div class="col-2">
-                                                                    <label for="Description">Relevance*</label>
+                                                                    <label for="Description">Relevance* <i class="pi pi-info-circle" pTooltip="{{relevance_tooltip}}" tooltipPosition="bottom"
+                                                                      style="font-size: 1rem"></i></label>
                                                                 </div>
                                                                 <div class="col-4">
                                                                     <p-dropdown  
@@ -738,12 +747,13 @@
                                     
                                 </div>
 
+                                <div class="row p-2" *ngIf=" category.CategoryName ==='Adaptation Scale of the Outcome'">
+                                  <p *ngFor="let line of adaptation_info.split('\n')">{{ line }}<br></p>
+                                </div>
                                 <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'International/global level'">
-                                  <p>3 - reduction in emissions > 0.1% of global emissions</p>
-                                  <p>2 - reduction in emissions > 0.05% of global emissions</p>
-                                  <p>1 - reduction in emissions > 0.01% of global emissions</p>
-                                  <p>0 - reduction in emissions < 0.01% of global emissions</p>
-                                  <p>minus 3 - any emissions increase</p><br><br>
+                                 
+                                  <p *ngFor="let line of ghg_info.split('\n')">{{ line }}<br></p>
+                                  <br><br>
                                   <p>Note: all reduction in emissions calculated as average reduction
                                      in emissions (tCO2e/yr calculated as total estimated reductions over
                                      lifetime of the project divided by project lifetime) and compared to global
@@ -751,11 +761,8 @@
                                 </div>
 
                                 <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'National/Sectorial level'">
-                                  <p>3 - reduction in emissions > 1% of national/sectoral emissions</p>
-                                  <p>2 - reduction in emissions equal to 0.5 - 1% of national/sectoral emissions</p>
-                                  <p>1 - reduction in emissions equal to 0.1 - 0.5% of national/sectoral emissions</p>
-                                  <p>0 - reduction in emissions less than 0.1% of national/sectoral emissions</p>
-                                  <p>minus 3 - any emissions increase</p><br><br>
+                                
+                                  <p *ngFor="let line of ghg_info.split('\n')">{{ line }}<br></p><br><br>
                                   <p>Note: all reduction in emissions calculated as average reduction in emissions
                                      (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided
                                       by project lifetime) and compared to national/sectoral emissions for the latest year for
@@ -763,11 +770,8 @@
                                 </div>
 
                                 <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level'">
-                                  <p>3 - reduction in emissions > 5% of subnational/regional/municipal emissions or subsectoral level</p>
-                                  <p>2 - reduction in emissions equal to 1 - 5% subnational/regional/municipal emissions or subsectoral level</p>
-                                  <p>1 - reduction in emissions equal to 0.5 - 1% of subnational/regional/municipal emissions or subsectoral level</p>
-                                  <p>0 - reduction in emissions less than 0.5% of subnational/regional/municipal emissions or subsectoral level</p>
-                                  <p>minus 3 - any emissions increase</p><br><br>
+                                  
+                                  <p *ngFor="let line of ghg_info.split('\n')">{{ line }}<br></p><br><br>
                                   <p>Note: all reduction in emissions calculated as average reduction in emissions (tCO2e/yr calculated
                                      as total estimated reductions over lifetime of the project divided by project lifetime) and
                                       compared to subnational/regional/municipal emissions or subsectoral level emissions for the
@@ -779,7 +783,8 @@
 
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
-                                        <label for="score">Score*</label>
+                                        <label for="score">Score* <i  *ngIf=" category.CategoryName ==='GHG Scale of the Outcome'" class="pi pi-info-circle" pTooltip="{{getTooltipData(data.characteristics.name)}}" tooltipPosition="bottom"
+                                          style="font-size: 1rem"></i></label>
                                         <div *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' ||  category.CategoryName ==='Adaptation Scale of the Outcome' ">
                                         <p-dropdown appendTo="body"  name="{{cat}}_{{i}}_outcomeScaleScore_" #type="ngModel"
                                           placeholder="Select Score" [(ngModel)]="data.score" (autoDisplayFirst) =false
@@ -904,17 +909,7 @@
                       <div class="card" style="min-height: 300px;">
                         <h6 style="color: black;">SDG {{ selectedSDGs[i].number }} - {{ selectedSDGs[i].name }}</h6> <br>
 
-                      <div class="row">
-                        <div class="col-8">
-                          <h6 style="color: black; font-weight: normal; font-size: 17px;">Could the intervention have an impact on this particular SDG?</h6>
-                        </div>
-                        <div class="col-4">
-                          <p-dropdown appendTo="body" [name]="selectedSDGs[i].name" #type="ngModel" placeholder="Select Answer"
-                          [(ngModel)]="selectedSDGsWithAnswers[i].answer" [options]="sdg_answers" optionLabel="name"
-                          (onChange)="onChangeSDGsAnswer(selectedSDGs[i],selectedSDGs[i])"
-                          optionValue="name"  ></p-dropdown>
-                        </div>
-                      </div>
+                      
 
                       <div class="characteristic-Topic" *ngFor="let data of item.data; index as j">
                         <h6>{{ j+1 }}.{{ data.characteristics.name }}</h6>
@@ -929,6 +924,9 @@
 
                                     <div class="row p-2">
                                        <label style="font-size: 17px;" for="question">{{data.characteristics.main_question}} </label>
+                                       <div class="row p-2">
+                                        <p *ngFor="let line of sdg_info.split('\n')">{{ line }}<br></p>
+                                      </div>
 
 
                                   </div>

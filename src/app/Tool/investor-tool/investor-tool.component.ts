@@ -154,8 +154,15 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   investment_instruments_1: MasterDataDto[];
   investment_instruments_2: MasterDataDto[];
   investment_instruments_3: MasterDataDto[];
-abatement: any;
+  abatement: any;
   barrierChList: any;
+  isExceeded: any;
+  minDate: Date;
+  relevance_tooltip: string;
+  ghg_info: any
+  sdg_info: any
+  adaptation_info: any
+  ghg_score_info: any
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -183,6 +190,12 @@ abatement: any;
     this.investment_instruments_1 = this.masterDataService.investment_instruments
     this.investment_instruments_2 = this.masterDataService.investment_instruments
     this.investment_instruments_3 = this.masterDataService.investment_instruments
+    this.ghg_info = this.masterDataService.other_invest_ghg_info
+    this.sdg_info = this.masterDataService.other_invest_sdg_info
+    this.adaptation_info = this.masterDataService.other_invest_adaptation_info
+    this.ghg_score_info = this.masterDataService.other_invest_ghg_score_info
+
+    this.relevance_tooltip = "Does the process characteristic affects/impacts any of the identified barriers? does the intervention affects/impacts the process characteristic?"
 
     this.activatedRoute.queryParams.subscribe( params => {
       params['isEdit']=='true'?(this.isEditMode =true ):false
@@ -374,8 +387,9 @@ abatement: any;
 
     this.characteristicsList = await this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().toPromise();
     this.barrierChList = [...this.characteristicsList]
-    this.barrierChList = this.barrierChList.filter((ch: { category: { code: string; }; }) => {return !["SCALE_ADAPTATION", "SUSTAINED_ADAPTATION"].includes(ch.category.code)})
-    this.barrierChList = this.barrierChList.filter((v: { code: any; }, i: any, a: any[]) => a.findIndex(v2 => (v2.code === v.code)) === i)
+    this.barrierChList = this.barrierChList.filter((ch: Characteristics) => {return ch.category.type === 'process' })
+    // this.barrierChList = this.barrierChList.filter((ch: { category: { code: string; }; }) => {return !["SCALE_ADAPTATION", "SUSTAINED_ADAPTATION"].includes(ch.category.code)})
+    // this.barrierChList = this.barrierChList.filter((v: { code: any; }, i: any, a: any[]) => a.findIndex(v2 => (v2.code === v.code)) === i)
     this.characteristicsLoaded = true;
     this.methodologyAssessmentControllerServiceProxy.findAllCategories().toPromise().then((res2: any) => {
 
@@ -1202,6 +1216,41 @@ assignSDG(sdg : any , data : any){
     } else if (id === 2) {
       this.investment_instruments_1 = this.investment_instruments_1.filter(o => o.code !== event.value)
       this.investment_instruments_2 = this.investment_instruments_2.filter(o => o.code !== event.value)
+    }
+  }
+
+  onInputChange(event: any) {
+    const inputValue = event.target.value;
+    const numericValue = parseFloat(inputValue);
+
+
+    if ( numericValue > 100) {
+      event.target.value = 100;
+    }
+
+    let tot = 0
+    this.totalInvestments.forEach(invest => {
+      if (invest.propotion) tot = tot + invest.propotion
+    })
+
+    if (tot > 100) this.isExceeded = true
+    else this.isExceeded = false
+  }
+
+  onSelectIntervention(event: any) {
+    this.minDate = new Date(event.value.dateOfImplementation)
+  }
+
+  getTooltipData(ch: string) {
+    switch (ch) {
+      case 'International/global level':
+        return this.ghg_score_info.macro
+      case 'National/Sectorial level':
+        return this.ghg_score_info.medium
+      case 'Subnational/regional/municipal or sub sectorial level':
+        return this.ghg_score_info.micro
+      default:
+        return ''
     }
   }
 

@@ -74,6 +74,28 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
   sdgDetailsList:any=[];
   heatMapScore: HeatMapScore[];
   heatMapData: TableData[];
+  sdgColorMap: any;
+  bgColors: any = []
+  defaulColors =[
+    'rgba(153, 102, 255, 1)',
+    'rgba(75, 192, 192,1)',
+    'rgba(54, 162, 235, 1)',
+    'rgba(123, 122, 125, 1)',
+    'rgba(255, 99, 132, 1)',
+    'rgba(255, 205, 86, 1)',
+    'rgba(70, 51, 102, 1)',
+    'rgba(40, 102, 102, 1)',
+    'rgba(27, 74, 107, 1)',
+    'rgba(75, 74, 77, 1)',
+    'rgba(121, 27, 53, 1)',
+    'rgba(121, 98, 20, 1)',
+    'rgba(51, 0, 51, 1)',
+    'rgba(25, 25, 112, 1)',
+    'rgba(139, 0, 0, 1)',
+    'rgba(0, 0, 139, 1)',
+    'rgba(47, 79, 79, 1)',
+    'rgba(139, 69, 19, 1)'
+  ]
   constructor(
     private projectProxy: ProjectControllerServiceProxy,
     private investorProxy: InvestorToolControllerServiceProxy,
@@ -87,7 +109,8 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.averageTCValue =75;
+    this.averageTCValue =75
+    this.sdgColorMap = this.masterDataService.SDG_color_map
 
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
@@ -123,6 +146,52 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
 
   
   };
+
+  mapOutcomeScores(value: number) {
+    
+    switch (value) {
+      case -1:
+        return 'Minor Negative';
+      case -2:
+        return 'Moderate Negative';
+      case -3:
+        return 'Major Negative';
+      case 0:
+        return 'None';
+      case 1:
+        return 'Minor';
+      case 2:
+        return 'Moderate';
+      case 3:
+        return 'Major';
+      
+      case null:
+        return 'N/A'
+      default:
+        return 'N/A';
+
+    }
+  }
+
+  mapProcessScores(value: number) {
+   
+    switch (value) {
+      case 0:
+        return 'Very unlikely (0-10%)';
+      case 1:
+        return 'Unlikely (10-30%)     ';
+      case 2:
+        return 'Possible (30-60%)';
+      case 3:
+        return 'Likely (60-90%)';
+      case 4:
+        return 'Very likely (90-100%)'
+      case null:
+        return 'N/A'
+      default:
+        return 'N/A';
+    }
+  }
   ngAfterViewInit(): void {
     this.cdr.detectChanges();
   }
@@ -165,6 +234,14 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
   viewFrequencyofSDGsChart(){
     let labels = this.sdgDetailsList.map((item:any) => 'SDG ' + item.number + ' - ' + item.sdg);
     let counts:number[] = this.sdgDetailsList.map((item:any) => item.count);
+    this.sdgDetailsList.forEach((sd: any) => {
+      let color = this.sdgColorMap.find((o:any) => o.sdgNumber === sd.number)
+      if (color) {
+        this.bgColors.push(color.color)
+      } else {
+        this.bgColors.push(this.defaulColors[sd.id])
+      }
+    })
     let total = counts.reduce((acc, val) => acc + val, 0);
     let percentages = counts.map(count => ((count / total) * 100).toFixed(2));
 
@@ -194,27 +271,7 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
         labels: labels,
         datasets: [{
           data: counts,
-          backgroundColor: [
-            'rgba(153, 102, 255, 1)',
-            'rgba(75, 192, 192,1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(123, 122, 125, 1)',
-            'rgba(255, 99, 132, 1)',
-            'rgba(255, 205, 86, 1)',
-            'rgba(70, 51, 102, 1)',
-            'rgba(40, 102, 102, 1)',
-            'rgba(27, 74, 107, 1)',
-            'rgba(75, 74, 77, 1)',
-            'rgba(121, 27, 53, 1)',
-            'rgba(121, 98, 20, 1)',
-            'rgba(51, 0, 51, 1)',
-            'rgba(25, 25, 112, 1)',
-            'rgba(139, 0, 0, 1)',
-            'rgba(0, 0, 139, 1)',
-            'rgba(47, 79, 79, 1)',
-            'rgba(139, 69, 19, 1)'
-
-          ],
+          backgroundColor: this.bgColors,
          
         }]
       },

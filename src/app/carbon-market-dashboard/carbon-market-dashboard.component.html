@@ -3,7 +3,7 @@
 
 <div class="row">
   <div  class="col-md-7 col-sm-7 col-12">
-      <div class="p-grid p-fluid card m-3">
+      <div class="p-grid p-fluid card m-3" style="height: 95.5%;">
           <div class="row text-center ">
               <h3>Recent Assessments Done</h3>
               <ng-container *ngIf="tableData.length==0; else elseBlock3">
@@ -38,17 +38,17 @@
               >
                   <ng-template pTemplate="header">
                       <tr>
-                          <th style="width:80%">Intervention Name</th>
-                          <th style="width:10%" style="line-height: 130%;">Process of Change Score</th>
-                          <th style="width:10%" style="line-height: 130%;">Outcome of Change Score</th>
+                          <th style="width:60%">Intervention Name</th>
+                          <th style="width:20%" style="line-height: 130%;">Process of Change Score</th>
+                          <th style="width:20%" style="line-height: 130%;">Outcome of Change Score</th>
 
                       </tr>
                   </ng-template>
                   <ng-template pTemplate="body" let-tableData>
                       <tr>
                           <td>{{ tableData?.intervention }}</td>
-                          <td>{{ tableData.process_score === null ? 'N/A' :  tableData.process_score}}</td>
-                          <td>{{ tableData.outcome_score }}</td>
+                          <td>{{ mapProcessScores(tableData.process_score) }}</td>
+                          <td>{{ mapOutcomeScores(tableData.outcome_score) }}</td>
                       </tr>
                   </ng-template>
               </p-table>
@@ -151,7 +151,7 @@
           class="col-12 mt-20"
         
         >
-          <canvas #cmSectorCountPieChart>{{ cmPieChartSectorCount }}</canvas>
+          <canvas height="450" #cmSectorCountPieChart>{{ cmPieChartSectorCount }}</canvas>
         </div>
       </div>
       <div

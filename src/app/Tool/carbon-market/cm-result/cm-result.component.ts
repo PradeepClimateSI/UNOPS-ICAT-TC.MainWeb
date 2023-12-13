@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Assessment, AssessmentCMDetail, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CMScoreDto, CalculateDto, Characteristics, ClimateAction, ScoreDto } from 'shared/service-proxies/service-proxies';
+import { Assessment, AssessmentCMDetail, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CMScoreDto, CalculateDto, Characteristics, ClimateAction, CreateReportDto, ReportControllerServiceProxy, ScoreDto } from 'shared/service-proxies/service-proxies';
 import * as XLSX from 'xlsx-js-style';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
@@ -9,6 +9,7 @@ import { environment } from 'environments/environment';
 import { SDG } from '../cm-section-three/cm-section-three.component';
 import { HeatMapScore } from 'app/charts/heat-map/heat-map.component';
 import * as moment from 'moment';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-cm-result',
@@ -16,7 +17,7 @@ import * as moment from 'moment';
   styleUrls: ['./cm-result.component.css']
 })
 export class CmResultComponent implements OnInit {
-
+  SERVER_URL = environment.baseUrlAPI;
   assessment: Assessment
   assessmentCMDetail: AssessmentCMDetail
   intervention: ClimateAction
@@ -44,13 +45,16 @@ export class CmResultComponent implements OnInit {
   heatMapScore: HeatMapScore[]
   scales: MasterDataDto[];
   selectedSdgs: any;
-
+  display:boolean 
+  reportName: string;
   constructor(
     private route: ActivatedRoute,
     private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
     private assessmentCMDetailControllerServiceProxy: AssessmentCMDetailControllerServiceProxy,
     private cMAssessmentQuestionControllerServiceProxy: CMAssessmentQuestionControllerServiceProxy,
-    public masterDataService: MasterDataService
+    public masterDataService: MasterDataService,
+    private reportControllerServiceProxy: ReportControllerServiceProxy,
+    private messageService: MessageService
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -155,7 +159,7 @@ export class CmResultComponent implements OnInit {
       let response = await this.cMAssessmentQuestionControllerServiceProxy.calculateResult(req).toPromise()
       this.score = response
       this.heatMapScore = [{processScore: this.score.process_score, outcomeScore: this.score.outcome_score.outcome_score}]
-      Object.keys(response.outcome_score.sdgs_score).map((key: any) => {
+      Object.keys(response.outcome_score.sdgs_score)?.map((key: any) => {
         this.selectedSdgs = this.selectedSdgs.map((sd: any) => {
           if (+key === sd.id) {
             sd['score'] = response.outcome_score.sdgs_score[key]
@@ -469,6 +473,59 @@ export class CmResultComponent implements OnInit {
 
   getRelevance(relevance: number) {
     return this.relevances.find((o: any) => o.value === +relevance)?.name
+  }
+
+
+  confirm(){
+    let body = new CreateReportDto()
+    body.assessmentId = this.assessment.id;
+    body.tool = "Carbon Market Tool"
+    body.type = 'Result'
+    body.climateAction = this.intervention
+    body.reportName = this.reportName
+    this.reportControllerServiceProxy.generateReport(body).subscribe(res => {
+      if (res) {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Report generated successfully',
+          closable: true,
+        })
+        this.display = false
+        window.open(this.SERVER_URL +'/'+res.generateReportName, "_blank");
+      }
+    }, error => {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to generate report',
+        closable: true,
+      })
+    })
+  }
+  generate(){
+    this.display = true;
+  }
+
+  async downloadFiles(documents: any[]) {
+    await Promise.all(
+      documents.map(async (doc) => {
+        try {
+          let response = await fetch(this.fileServerURL + '/' + doc);
+          let blob = await response.blob();
+          let link = document.createElement('a');
+          link.href = window.URL.createObjectURL(blob);
+          link.download = doc;
+          link.style.display = 'none';
+
+          document.body.appendChild(link);
+          link.click();
+  
+          document.body.removeChild(link);
+        } catch (error) {
+        }
+      })
+    );
   }
 }
 

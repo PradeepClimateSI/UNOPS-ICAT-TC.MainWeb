@@ -1,17 +1,17 @@
 <div class="card" style="min-height: 600px;">
     <div class="p-2" style="min-height: 600px;">
         <div class="p-grid p-fluid  col-sm-12">
+
             <p-accordion [activeIndex]="openAccordion" (onOpen)="onOpenTab($event)">
                 <ng-container *ngFor="let section of sections; let idxs = index;">
-                    <p-accordionTab *ngIf="shownSections[idxs]"   header="{{section.name}}">
-                        <p>{{section.description}}</p>
+                    <p-accordionTab  header="{{section.name}}"  *ngIf="idxs <= currentSection">
                         <ng-container *ngIf="section.code === 'SECTION_2'">
                             <ng-container *ngFor="let criteria of criterias[idxs]; let idxc = index;">
-                                <div class="row p-2" *ngIf="shownCriterias[idxs][idxc]">
+                                <div class="row p-2" *ngIf="idxc <= currentCriteria">
                                     <label >{{criteria.name}}</label>
-                                    <ng-container *ngFor="let question of criteria.questions;let idx=index;">
-                                        <app-cm-question [assessmentquestions]="assessmentQuestions" [question]="question" (prev_answer)="onAnswer($event, question.message, criteria,idxs, idxc, idx )"
-                                            *ngIf="shownQuestions[idxs][idxc][idx]" [approach]="approach" [isEditMode]="isEditMode"></app-cm-question>
+                                    <ng-container *ngFor="let question of criteria.questions;let idx=index; ">
+                                        <app-cm-question *ngIf="idx <= criteria.currentQuestion" [assessmentquestions]="assessmentQuestions" [question]="question" (prev_answer)="onAnswer2($event, question.message, question, criteria, section )"
+                                            [approach]="approach" [isEditMode]="isEditMode"></app-cm-question>
                                     </ng-container>
                                 </div>
                             </ng-container>
@@ -39,16 +39,33 @@
     </div>
 </div>
 
-<p-dialog [(visible)]="visible" [closable]="false" >
-    <p-header  class="caution" >
-        <i class="pi pi-exclamation-triangle" style="font-size: 2rem; margin-left: 171px; margin-top: -12px;"></i>
-    </p-header>
-    <div style="text-align: center;">
-        <br>
-        <h4>Caution!</h4>
-        <p [innerHTML]="message"></p>
-        <button style="background-color: #224373;" class="btn btn-primary text-uppercase" type="submit" (click)="okay()">
-            Close
-        </button>
-    </div>
-</p-dialog>
+<div>
+    <p-dialog [(visible)]="visible" [closable]="false" >
+        <p-header  class="caution" >
+            <i class="pi pi-exclamation-triangle" style="font-size: 2rem; margin-left: 171px; margin-top: -12px;"></i>
+        </p-header>
+        <div style="text-align: center;">
+            <br>
+            <h4>Caution!</h4>
+            <p [class]="showConditionDialog ? 'caution-dialog' : ''"  [innerHTML]="message"></p>
+            <p [class]="showConditionDialog ? 'caution-dialog' : ''" [innerHTML]="condition_message"></p>
+            <button style="background-color: #224373;" class="btn btn-primary text-uppercase" type="submit" (click)="okay()">
+                Close
+            </button>
+        </div>
+    </p-dialog>
+    
+    <p-dialog [(visible)]="visible_condition && isPassed" [closable]="false" >
+        <p-header  class="caution" >
+            <i *ngIf="!isPassed" class="pi pi-exclamation-triangle" style="font-size: 2rem; margin-left: 171px; margin-top: -12px;"></i>
+        </p-header>
+        <div style="text-align: center;">
+            <br>
+            <h4>{{isPassed ? 'Successful': 'Caution!'}}</h4>
+            <p [class]="showConditionDialog ? 'caution-dialog' : ''" [innerHTML]="condition_message"></p>
+            <button style="background-color: #224373;" class="btn btn-primary text-uppercase" type="submit" (click)="okayCondition()">
+                Close
+            </button>
+        </div>
+    </p-dialog>
+</div>

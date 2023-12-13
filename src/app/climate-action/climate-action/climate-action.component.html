@@ -100,7 +100,7 @@
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="nameClimate">Title of the intervention*</label>
+                  <label for="nameClimate">Title of the Intervention*</label>
                   <input [disabled]="editEntytyId > 0" [(ngModel)]="project.policyName"
                     [ngModelOptions]="{ standalone: false }" placeholder="Name" #nameClimate="ngModel" type="text"
                     name="nameClimate" class="p-inputtext" pInputText
@@ -153,7 +153,7 @@
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="projStatus">Current Status of the intervention*</label>
+                  <label for="projStatus">Current Status of the Intervention*</label>
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlockprojStatus">
                     <p-dropdown [disabled]="editEntytyId > 0" placeholder="Please Select Status" name="projStatus"
                       #projStatus="ngModel" [(ngModel)]="project.projectStatus" [ngModelOptions]="{ standalone: false }"
@@ -175,7 +175,7 @@
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="nameClimate">Country of the Specific Intervention*</label>
+                  <label for="nameClimate">Country of the Intervention*</label>
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocknameClimate">
                     <div>
                   <p-dropdown
@@ -288,10 +288,10 @@
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="projStatus">Geographical Area Covered* <i class="pi pi-info-circle" pTooltip="{{tooltips.geo}}" tooltipPosition="bottom"
+                  <label for="projStatus">Geographical Area Targeted* <i class="pi pi-info-circle" pTooltip="{{tooltips.geo}}" tooltipPosition="bottom"
                     style="font-size: 1rem"></i></label>
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlockGeoAreas">
-                    <p-dropdown [disabled]="editEntytyId > 0" placeholder="Please Select the Level of Implementation"
+                    <p-dropdown [disabled]="editEntytyId > 0" placeholder="Please Select the Geographical Area Targeted"
                       name="level_of_implemetation" #geographical_areas="ngModel" [(ngModel)]="project.geographicalAreaCovered"
                       [options]="levelOfImplementation" optionLabel="name" optionValue="name"
                       [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false"  appendTo="body"
@@ -317,7 +317,7 @@
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="description">Description of the intervention*</label>
+                  <label for="description">Description of the Intervention*</label>
                   <textarea [disabled]="editEntytyId > 0" name="description" placeholder="Description"
                     #description="ngModel" [(ngModel)]="project.description" rows="5" cols="130" pInputText [required]="true"
                     autoResize="autoResize" ></textarea>
@@ -330,7 +330,7 @@
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="objective">Objectives and intended impacts or benefits of the intervention* <i class="pi pi-info-circle" pTooltip="{{tooltips.objective}}" tooltipPosition="bottom"
+                  <label for="objective">Objectives and Intended Impacts or Benefits of the Intervention* <i class="pi pi-info-circle" pTooltip="{{tooltips.objective}}" tooltipPosition="bottom"
                     style="font-size: 1rem"></i></label>
                   <textarea [disabled]="editEntytyId > 0" name="objective" placeholder="Objective" #objective="ngModel"
                     [(ngModel)]="project.objective" rows="5" cols="130" pInputText autoResize="autoResize" [required]="true"></textarea>
@@ -348,7 +348,7 @@
 
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="impleDate"> Start date* <i class="pi pi-info-circle" pTooltip="{{tooltips.start_date}}" tooltipPosition="bottom"
+                  <label for="impleDate"> Start Date* <i class="pi pi-info-circle" pTooltip="{{tooltips.start_date}}" tooltipPosition="bottom"
                     style="font-size: 1rem"></i></label>
                   <div>
 
@@ -393,7 +393,7 @@
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="impEntity">Implementing entity or entities* <i class="pi pi-info-circle" pTooltip="{{tooltips.entity}}" tooltipPosition="bottom"
+                  <label for="impEntity">Implementing Entity or Entities* <i class="pi pi-info-circle" pTooltip="{{tooltips.entity}}" tooltipPosition="bottom"
                     style="font-size: 1rem"></i></label>
                   <input [disabled]="editEntytyId > 0" type="text" placeholder="Name of the Implementing Entity"
                     name="impEntity" #impEntity="ngModel" field="contatname" pInputText [required]="true"
@@ -411,7 +411,7 @@
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="relatedPolicies">Related Policies <i class="pi pi-info-circle" pTooltip="{{tooltips.related}}" tooltipPosition="bottom"
+                  <label for="relatedPolicies">Related Interventions <i class="pi pi-info-circle" pTooltip="{{tooltips.related}}" tooltipPosition="bottom"
                     style="font-size: 1rem"></i></label>
                   <textarea [disabled]="editEntytyId > 0" name="relatedPolicies" placeholder="Related interventions"
                     #relatedPolicies="ngModel" [(ngModel)]="project.related_policies" rows="1" cols="130" pInputText
@@ -485,7 +485,7 @@
 
                   <div class="col-12 col-md-4" [hidden]="isCity==0 || isCity==2">
                     <div class="p-field">
-                      <label for="subnatle1">Sub National level 1 </label>
+                      <label for="subnatle1">Sub National Level 1 </label>
                       <input [disabled]="editEntytyId > 0" name="subnatle1" #subnatle1="ngModel"
                         [(ngModel)]="project.subNationalLevl1" type="text" name="subnatle1" class="p-inputtext"
                         pInputText />
@@ -496,7 +496,7 @@
 
                   <div class="col-12 col-md-4" [hidden]="isCity==0 || isCity==2">
                     <div class="p-field">
-                      <label for="subnatle2">Sub National level 2</label>
+                      <label for="subnatle2">Sub National Level 2</label>
                       <input [disabled]="editEntytyId > 0" name="subnatle2" #subnatle2="ngModel"
                         [(ngModel)]="project.subNationalLevl2" type="text" class="p-inputtext" pInputText />
                     </div>
@@ -504,7 +504,7 @@
 
                   <div class="col-12 col-md-4" [hidden]="isCity==0 || isCity==2">
                     <div class="p-field">
-                      <label for="subnatle3">Sub National level 3</label>
+                      <label for="subnatle3">Sub National Level 3</label>
                       <input [disabled]="editEntytyId > 0" name="subnatle3" #subnatle3="ngModel"
                         [(ngModel)]="project.subNationalLevl3" type="text" class="p-inputtext" pInputText />
                     </div>
@@ -566,11 +566,11 @@
           </div>
 
 
-          <div class="row p-2" *ngIf="project.projectStatus?.name! == 'To be Started'">
+          <div class="row p-2" *ngIf="project.projectStatus?.name! == 'Planned'">
 
             <div class="col-12 col-md-6">
               <div class="p-field">
-                Political preference to implement
+                Political Preference to Implement
               </div>
             </div>
 
@@ -606,7 +606,7 @@
             </div>
           </div>
 
-          <div class="row p-2" *ngIf="project.projectStatus?.name! == 'To be Started'">
+          <div class="row p-2" *ngIf="project.projectStatus?.name! == 'Planned'">
 
             <div class="col-12 col-md-6">
               <div class="p-field">
@@ -648,7 +648,7 @@
 
           </div>
 
-          <div class="row p-2" *ngIf="project.projectStatus?.name! == 'To be Started'">
+          <div class="row p-2" *ngIf="project.projectStatus?.name! == 'Planned'">
 
             <div class="col-12 col-md-6">
               <div class="p-field">
@@ -684,7 +684,7 @@
           <div class="row p-2">
             <div class="col-12 col-md-6">
               <div class="p-field">
-                Indicate the likelihood of TC impact of this intervention
+                Indicate the Likelihood of TC Impact of this Intervention
               </div>
             </div>
 
@@ -741,7 +741,7 @@
 
             <div class="col-12 col-md-6">
               <div class="p-field">
-                <p>Justification for your action (Accept/ Reject)* </p>
+                <p>Justification for Your Action (Accept/ Reject)* </p>
               </div>
               <div type="button" class="pi pi-info-circle"
                 pTooltip="This is a mandatory field to enable accept and reject button"></div>
@@ -757,7 +757,7 @@
               <textarea
 
               name="justification"
-              placeholder="Please type a justification for your action"
+              placeholder="Please Type a Justification for Your Action"
               [(ngModel)]="project.actionJustification"
               #justification="ngModel"
               rows="5"

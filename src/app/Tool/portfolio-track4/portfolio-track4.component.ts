@@ -133,6 +133,11 @@ export class PortfolioTrack4Component implements OnInit {
   draftLoading: boolean=false;
   visionExample: { title: string; value: string; }[];
   barrierChList: any;
+  minDate: Date;
+  ghg_info: any
+  sdg_info: any
+  adaptation_info: any
+  ghg_score_info: any
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -175,6 +180,10 @@ export class PortfolioTrack4Component implements OnInit {
     this.sectorList = await this.sectorProxy.findAllSector().toPromise()
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;
     this.geographicalAreasCovered = this.masterDataService.level_of_implemetation;
+    this.ghg_info = this.masterDataService.other_invest_ghg_info
+    this.sdg_info = this.masterDataService.other_invest_sdg_info
+    this.adaptation_info = this.masterDataService.other_invest_adaptation_info
+    this.ghg_score_info = this.masterDataService.other_invest_ghg_score_info
     this.activatedRoute.queryParams.subscribe( params => {
       params['isEdit']=='true'?(this.isEditMode =true ):false
       this.assessmentId = params['id']
@@ -384,8 +393,9 @@ this.selectedSDGsWithAnswers = this.selectedSDGs.map(selectedSdg => {
   async getCharacteristics() {
     this.characteristicsList = await this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().toPromise();
     this.barrierChList = [...this.characteristicsList]
-    this.barrierChList = this.barrierChList.filter((ch: { category: { code: string; }; }) => {return !["SCALE_ADAPTATION", "SUSTAINED_ADAPTATION"].includes(ch.category.code)})
-    this.barrierChList = this.barrierChList.filter((v: { code: any; }, i: any, a: any[]) => a.findIndex(v2 => (v2.code === v.code)) === i)
+    this.barrierChList = this.barrierChList.filter((ch: Characteristics) => {return ch.category.type === 'process'})
+    // this.barrierChList = this.barrierChList.filter((ch: { category: { code: string; }; }) => {return !["SCALE_ADAPTATION", "SUSTAINED_ADAPTATION"].includes(ch.category.code)})
+    // this.barrierChList = this.barrierChList.filter((v: { code: any; }, i: any, a: any[]) => a.findIndex(v2 => (v2.code === v.code)) === i)
     this.characteristicsLoaded = true;
       this.methodologyAssessmentControllerServiceProxy.findAllCategories().toPromise().then((res2: any) => {
       const customOrder = [1, 2, 3, 4, 5, 7, 6, 8, 9, 10];
@@ -1127,6 +1137,22 @@ hideBarrierDialog() {
   this.barrierBox2 = false;
 }
 
+  onSelectIntervention(event: any) {
+    this.minDate = new Date(event.value.dateOfImplementation)
+  }
+
+  getTooltipData(ch: string) {
+    switch (ch) {
+      case 'International/global level':
+        return this.ghg_score_info.macro
+      case 'National/Sectorial level':
+        return this.ghg_score_info.medium
+      case 'Subnational/regional/municipal or sub sectorial level':
+        return this.ghg_score_info.micro
+      default:
+        return ''
+    }
+  }
 
 }
 
