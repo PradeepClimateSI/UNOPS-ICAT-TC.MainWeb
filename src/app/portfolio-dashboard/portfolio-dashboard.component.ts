@@ -199,12 +199,12 @@ this.selectPortfolio();
     this.rows = event.rows === undefined ? 10 : event.rows;
     this.portfolioServiceProxy.getDashboardData(this.selectedPortfolio?this.selectedPortfolio.id:0,pageNumber,this.rows).subscribe((res) => {
       this.dashboardData = res.items;
-      this.tableData = this.dashboardData.map(item => {return {climateAction: item.climateAction,tool:item.tool, processScore: item.result.averageOutcome, outcomeScore: item.result.averageProcess}}) 
+      this.tableData = this.dashboardData.map(item => {return {climateAction: item.climateAction,tool:item.tool, outcomeScore: item.result.averageOutcome, processScore: item.result.averageProcess}}) 
       
-      this.heatMapScore = this.dashboardData.map(item => {return {processScore: item.result.averageOutcome, outcomeScore: item.result.averageProcess,}})
-      this.heatMapData = this.dashboardData.map(item => {return {interventionId: item.climateAction?.intervention_id, interventionName: item.climateAction?.policyName, processScore: item.result.averageOutcome, outcomeScore: item.result.averageProcess}}) 
-    
-      this.totalRecords= res.meta.totalItems
+      this.heatMapScore = this.dashboardData.map(item => {return {outcomeScore: item.result.averageOutcome, processScore: item.result.averageProcess,}})
+      this.heatMapData = this.dashboardData.map(item => {return {interventionId: item.climateAction?.intervention_id, interventionName: item.climateAction?.policyName, outcomeScore: item.result.averageOutcome, processScore: item.result.averageProcess}}) 
+      
+      this.totalRecords= res.meta.totalItems 
       this.loading = false;
     }, err => {
       this.loading = false;});
