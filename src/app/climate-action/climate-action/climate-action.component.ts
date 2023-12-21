@@ -203,7 +203,7 @@ export class ClimateActionComponent implements OnInit  {
       entity: 'List the entities that implement the intervention, including the role of various local, subnational, national, international or any other entities',
       objectives: 'State the intended impacts the intervention intends to achieve (e.g., the purpose stated in the legislation or regulation), including specific goals for GHG emission reductions and sustainable development impacts where available',
       related: 'List other Interventions or actions that may interact with the Intervention or action assessed',
-      reference: 'Provide a link or full reference to access further, detailed information about the intevention',
+      reference: 'Provide a link or full reference to access further, detailed information about the intervention',
       geo: 'Where is the policy applied?',
       objective: 'State the intended impacts the intervention intends to achieve (e.g., the purpose stated in the legislation or regulation), including specific goals for GHG emission reductions and sustainable development impacts where available)'
     }

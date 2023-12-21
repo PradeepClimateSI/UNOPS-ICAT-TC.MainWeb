@@ -134,12 +134,12 @@
         <div class="row p-2">
           <div class="col-12 col-md-8">
             <div class="p-field">
-              <label for="institution">Landline *</label>
-              <input id="ftelephone" type="text" name="ftelephone" class="form-control" [disabled]="editUserId > 0" required
+              <label for="institution">Landline</label>
+              <input id="ftelephone" type="text" name="ftelephone" class="form-control" [disabled]="editUserId > 0"
               [(ngModel)]="user.landline" #ftelephone="ngModel" placeholder="+xxxxxxxxx" 
                />
 
-              <p
+              <!-- <p
                 class="info-message text-danger"
                 *ngIf="
                   (!user.landline) &&
@@ -147,7 +147,7 @@
                 "
               >
                 This is a mandatory field
-              </p>
+              </p> -->
             </div>
           </div>
         </div>

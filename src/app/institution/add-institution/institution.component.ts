@@ -204,24 +204,27 @@ async saveForm(formData: NgForm) {
 
 
   if (formData.valid) {
-    let secternew = new Sector();
     let country = new Country();
     country.id = this.countryId;
-    secternew.id = this.insector.id;
     let institution = new Institution();
+    if (this.insector) {
+      let secternew = new Sector();
+      secternew.id = this.insector.id;
+      institution.sector = secternew;
+    }
 
     institution.name = this.inname;
     institution.description = this.indescription;
     institution.category = this.incategory;
     institution.type = this.intype;
     institution.address = this.inaddress;
-    institution.sector = secternew;
+    // institution.sector = secternew;
     institution.country = country;
     institution.telephoneNumber = this.intelephoneNumber;
     institution.email = this.inmail;
 
 
-    if (institution.sector) {
+    if (institution.sector?.id) {
       let sector = new Sector();
       sector.id = this.insector.id;
       this.institution.sector = sector;

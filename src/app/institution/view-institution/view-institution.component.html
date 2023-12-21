@@ -34,14 +34,14 @@
                 <label for="sector">Sector</label>
                 <input
                 [disabled]="institutionId !==0"
-                placeholder={{institution.sector.name}}
+                [placeholder]="institution.sector? institution.sector.name : ''"
 
                   name="sector"
                   class="p-inputtext"
                   pInputText
 
 
-                >
+                />
 
               </div>
             </div>

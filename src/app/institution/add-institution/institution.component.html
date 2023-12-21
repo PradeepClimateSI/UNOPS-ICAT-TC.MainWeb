@@ -32,16 +32,16 @@
                 <div class="row p-2">
                     <div class="col-12 col-md-6">
                         <div class="p-field">
-                            <label for="sector">Sector*</label>
+                            <label for="sector">Sector</label>
                             <p-dropdown [disabled]="institutionId > 0" placeholder="Select" [(ngModel)]="insector"
                                 name="sector" [options]="sectorList" optionLabel="name" #inssec="ngModel">
                             </p-dropdown>
-                            <p class="info-message text-danger" *ngIf="
+                            <!-- <p class="info-message text-danger" *ngIf="
                   !insector &&
                   (fData.submitted || inssec.touched || inssec.dirty)
                 ">
                                 This is a mandatory field
-                            </p>
+                            </p> -->
 
                         </div>
                     </div>
@@ -146,17 +146,17 @@
                 <div class="row p-2">
                     <div class="col-12 col-md-12">
                         <div class="p-field">
-                            <label for="objective">Address*</label>
+                            <label for="objective">Address</label>
                             <textarea [disabled]="institutionId > 0" name="objective" placeholder=""
                                 [(ngModel)]="inaddress" rows="5" cols="130" pInputTextarea autoResize="autoResize"
                                 class="p-inputtext" #address="ngModel">
               </textarea>
-                            <p class="info-message text-danger" *ngIf="
+                            <!-- <p class="info-message text-danger" *ngIf="
                   !inaddress &&
                   (fData.submitted || address.touched || address.dirty)
                 ">
                                 This is a mandatory field
-                            </p>
+                            </p> -->
                         </div>
                     </div>
                 </div>

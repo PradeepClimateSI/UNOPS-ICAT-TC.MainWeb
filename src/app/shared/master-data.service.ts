@@ -296,17 +296,17 @@ export class MasterDataService {
 
 
     this.GHG_scale_info = {
-      macro: 'Quantitative impacts can also be entered here, using the following indicators as a guide: 3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.1% of global emissions in the sector in the latest year for which data is available\n' +
+      macro: 'Quantitative impacts can also be entered here, using the following indicators as a guide:\n 3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.1% of global emissions in the sector in the latest year for which data is available\n' +
         '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.05% of global emissions in the sector in the latest year for which data is available\n' +
         '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.01% of global emissions in the sector in the latest year for which data is available\n' +
         '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) <0.1% of global emissions in the sector in the latest year for which data is available\n' +
         '-3 - any emissions increase',
-      medium: 'Quantitative impacts can also be entered here, using the following indicators as a guide: 3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >1% of national/sectoral emissions in the latest year for which data is available\n' +
+      medium: 'Quantitative impacts can also be entered here, using the following indicators as a guide:\n 3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >1% of national/sectoral emissions in the latest year for which data is available\n' +
         '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.5-1% of national/sectoral emissions in the latest year for which data is available\n' +
         '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.1-0.5% of national/sectoral emissions in the latest year for which data is available\n' +
         '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) <0.1% of national/sectoral emissions in the latest year for which data is available\n' +
         '-3 - any emissions increase',
-      micro: 'Quantitative impacts can also be entered here, using the following indicators as a guide: 3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >5% of subnational/regional/municipal emissions in the latest year for which data is available\n' +
+      micro: 'Quantitative impacts can also be entered here, using the following indicators as a guide:\n 3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >5% of subnational/regional/municipal emissions in the latest year for which data is available\n' +
         '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 1-5% of subnational/regional/municipal emissions in the latest year for which data is available\n' +
         '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.5-1% of subnational/regional/municipal emissions in the latest year for which data is available\n' +
         '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) less than 0.5% of subnational/regional/municipal emissions in the latest year for which data is available\n' +
@@ -314,21 +314,21 @@ export class MasterDataService {
     }
 
     this.SD_scale_info = {
-      macro: 'Quantitative impacts can also be entered here, using the following indicators as a guide: 3 - Positive material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
+      macro: 'Quantitative impacts can also be entered here, using the following indicators as a guide:\n 3 - Positive material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
         '2 - Positive material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
         '1 - Positive material change of more than 5% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
         '0 - No material change of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
         '-1 - Negative material change of more than 5% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
         '-2 - Negative material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
         '-3 - Negative material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area',
-      medium: 'Quantitative impacts can also be entered here, using the following indicators as a guide: 3 - Positive material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
+      medium: 'Quantitative impacts can also be entered here, using the following indicators as a guide:\n 3 - Positive material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
         '2 - Positive material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
         '1 - Positive material change of more than 5% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
         '0 - No material change of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
         '-1 - Negative material change of more than 5% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
         '-2 - Negative material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
         '-3 - Negative material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area',
-      micro: 'Quantitative impacts can also be entered here, using the following indicators as a guide: 3 - Positive material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
+      micro: 'Quantitative impacts can also be entered here, using the following indicators as a guide: \n3 - Positive material change of more than 50% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
         '2 - Positive material change of more than 25% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
         '1 - Positive material change of more than 5% of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
         '0 - No material change of the baseline value of the indicator / set of indicators underpinning the SDG in the intervention area\n' +
@@ -338,21 +338,21 @@ export class MasterDataService {
     }
 
     this.adaptation_scale_info = {
-      macro: 'Quantitative impacts can also be entered here, using the following indicators as a guide: 3 - adaptation co-benefit identified and impact is material (indicator value change from baseline to project scenario is above 5%).\n' +
+      macro: 'Quantitative impacts can also be entered here, using the following indicators as a guide:\n 3 - adaptation co-benefit identified and impact is material (indicator value change from baseline to project scenario is above 5%).\n' +
         '2 - adaptation co benefit identified but impact is not material (indicator value change from baseline to project scenario is below 5%).\n' +
         '1 - adaptation co-benefit identified but not measured.\n' +
         '0 - no adaptation co-benefit\n' +
         '-1 - maladaptation identified but not measured.\n' +
         '-2 - maladaptation identified but impact is not material (indicator value change from baseline to project scenario is below 5%).\n' +
         '-3 - maladaptation identified and impact is material (indicator value change from baseline to project scenario is above 5%). ',
-      medium: 'Quantitative impacts can also be entered here, using the following indicators as a guide: 3 - adaptation co-benefit identified and impact is material (indicator value change from baseline to project scenario is above 5%).\n' +
+      medium: 'Quantitative impacts can also be entered here, using the following indicators as a guide:\n 3 - adaptation co-benefit identified and impact is material (indicator value change from baseline to project scenario is above 5%).\n' +
         '2 - adaptation co benefit identified but impact is not material (indicator value change from baseline to project scenario is below 5%).\n' +
         '1 - adaptation co-benefit identified but not measured.\n' +
         '0 - no adaptation co-benefit\n' +
         '-1 - maladaptation identified but not measured.\n' +
         '-2 - maladaptation identified but impact is not material (indicator value change from baseline to project scenario is below 5%).\n' +
         '-3 - maladaptation identified and impact is material (indicator value change from baseline to project scenario is above 5%). ',
-      micro: 'Quantitative impacts can also be entered here, using the following indicators as a guide: 3 - adaptation co-benefit identified and impact is material (indicator value change from baseline to project scenario is above 5%).\n' +
+      micro: 'Quantitative impacts can also be entered here, using the following indicators as a guide:\n 3 - adaptation co-benefit identified and impact is material (indicator value change from baseline to project scenario is above 5%).\n' +
         '2 - adaptation co benefit identified but impact is not material (indicator value change from baseline to project scenario is below 5%).\n' +
         '1 - adaptation co-benefit identified but not measured.\n' +
         '0 - no adaptation co-benefit\n' +

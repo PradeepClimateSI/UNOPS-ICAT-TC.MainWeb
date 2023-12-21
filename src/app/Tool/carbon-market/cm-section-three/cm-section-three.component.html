@@ -389,7 +389,7 @@
                                         <ng-container *ngFor="let char of SDG.scaleResult; let idx = index;">
                                             <h6>{{idx+1}}. {{char.characteristic.name}}</h6>
                                             <div class="row p-2">
-                                                <div class="col-4">SDG Indicator <i class="pi pi-info-circle" pTooltip="Please describe the indicator used to assess the contribution to the selected SDG(i.e. number of jobs created)." tooltipPosition="bottom" style="font-size: 1rem"></i></div>
+                                                <div class="col-4">SDG Indicator <i class="pi pi-info-circle" pTooltip="Please describe the indicator used to assess the contribution to the selected SDG (i.e. number of jobs created)." tooltipPosition="bottom" style="font-size: 1rem"></i></div>
                                                 <div class="col-8">
                                                     <input type="text" [name]="'indicator'+SDG.code+char.characteristic.id" [(ngModel)]="char.sdgIndicator" class="form-control" placeholder="" required />
                                                     <p class="info-message text-danger" *ngIf="
