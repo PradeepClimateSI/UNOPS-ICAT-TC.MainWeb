@@ -60,7 +60,11 @@ export class HeatMapComponent {
   }
 
   getIntervention(x: number, y: number) {
-    return this.score?.some(item => item.processScore === y && item.outcomeScore === x);
+    console.log("score",this.score)
+    // let a = this.score?.some(item => item.processScore === y && item.outcomeScore === x);
+    let a = this.score?.filter(item => item.processScore === y && item.outcomeScore === x).length
+    // console.log(a)
+    return a 
   }
 
   enterHeatMapPoint(x: number, y: number, event: any) {

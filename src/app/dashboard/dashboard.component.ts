@@ -181,6 +181,16 @@ export class DashboardComponent implements OnInit {
       indexAxis: 'y',
       maintainAspectRatio: false,
       aspectRatio: 1.1,
+      onClick: (event: any, elements: any) => {
+        if (elements.length > 0) {
+          // A bar was clicked
+          const clickedIndex = elements[0].index;
+          const clickedLabel = labels[clickedIndex];
+          const clickedCount = counts[clickedIndex];
+  
+          this.handleBarClick(clickedLabel, clickedCount);
+        }
+      },
       plugins: {
         legend: {
           display: false, 
@@ -230,7 +240,21 @@ export class DashboardComponent implements OnInit {
       },
     };
   }
-
+  handleBarClick(label: string, count: number) {
+    // Your custom logic based on the clicked bar
+    console.log(`Clicked bar: ${label}, Count: ${count}`);
+    if(label=='Carbon Market'){
+      this.goToCarbonMarket()
+    }
+    else if(label=='Investment'){
+      this.goToInvestment()
+    }
+    else if(label=='General'){
+      this.goToPortfolio()
+    }
+  
+    // Call your functions or perform other actions here
+  }
   viewPieChart() {
     const labels = this.typeofInterventionCount.map((item) => item.name);
     let counts: number[] = this.typeofInterventionCount.map((item) => item.count);
