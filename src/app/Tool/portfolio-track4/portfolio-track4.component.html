@@ -63,9 +63,10 @@
 
           <div class="p-field p-2">
             <label for="opportunities">Opportunities for stakeholders to participate in the assessment *</label>
-            <input pInputText type="text" #opportunities="ngModel" name="opportunities" ngModel
+            <textarea rows="5" pInputText type="text" #opportunities="ngModel" name="opportunities" ngModel
               [disabled]="isSavedAssessment|| isEditMode" placeholder="Describe if and how stakeholders will participate in the assessment" [(ngModel)]="assessment.opportunities"
-              required />
+              required [maxlength]="masterDataService.getFieldCharCount(fieldNames.ASSESSMENT_OPPORTUNITIES)"></textarea>
+              <span style="float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.ASSESSMENT_OPPORTUNITIES)}}</span>
             <p class="info-message text-danger"
               *ngIf="!opportunities.value && (fData.submitted || opportunities.touched)">This is a mandatory field</p>
           </div>
@@ -79,12 +80,12 @@
               <span class="p-inputgroup-addon">
                 <i class="pi pi-calendar"></i>
               </span>
-              <p-calendar dateFormat="mm-dd-yy" inputId="date1" placeholder="From" [(ngModel)]="assessment.from"
+              <p-calendar dateFormat="mm-dd-yy" inputId="date1" placeholder="From" [(ngModel)]="assessment.from" (ngModelChange)="onSelectFromDate($event)"
                 name="date1" #date1="ngModel" [required]="true" appendTo="body" [minDate]="minDate" [disabled]="isSavedAssessment|| isEditMode">
               </p-calendar>
               <span class="p-inputgroup-addon">to</span>
               <p-calendar dateFormat="mm-dd-yy" inputId="date2" placeholder="To" [(ngModel)]="assessment.to"
-                name="date2" #date2="ngModel" [required]="true" appendTo="body"
+                name="date2" #date2="ngModel" [required]="true" appendTo="body" [minDate]="minDateTo"
                 [disabled]="isSavedAssessment|| isEditMode"></p-calendar>
 
             </div>
@@ -110,8 +111,9 @@
               <div class="col-12 col-md-6">
                 <div class="p-field">
                   <textarea [disabled]="isSavedAssessment|| isEditMode" name="envisioned_change" placeholder="Enter an answer" #envisioned_change="ngModel"
-                    [(ngModel)]="assessment.envisioned_change" rows="1" cols="130" pInputText autoResize="autoResize" required
+                    [(ngModel)]="assessment.envisioned_change" rows="2" cols="130" pInputText autoResize="autoResize" [maxlength]="masterDataService.getFieldCharCount(fieldNames.VISION)" required
                     ></textarea>
+                    <span style="float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.VISION)}}</span>
                     <p class="info-message text-danger" *ngIf="  !envisioned_change.value &&                     
                       (fData.submitted || envisioned_change.touched || envisioned_change.dirty)
                     ">
@@ -129,8 +131,9 @@
                 <div class="p-field">
                   <label for="vision_short">Within 5 years? *</label>
                   <textarea [disabled]="isSavedAssessment|| isEditMode"  name="vision_short" placeholder="Short Term Vision" #vision_short="ngModel"
-                    [(ngModel)]="assessment.vision_short" rows="1" cols="130" pInputText autoResize="autoResize" required
-                    ></textarea>
+                    [(ngModel)]="assessment.vision_short" rows="2" cols="130" pInputText autoResize="autoResize" required
+                    [maxlength]="masterDataService.getFieldCharCount(fieldNames.VISION)"></textarea>
+                    <span style="float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.VISION)}}</span>
                     <p class="info-message text-danger" *ngIf="  !vision_short.value &&                     
                     (fData.submitted || vision_short.touched || vision_short.dirty)
                   ">
@@ -143,8 +146,9 @@
                 <div class="p-field">
                   <label for="vision_short">Between 5 and 15 years? *</label>
                   <textarea [disabled]="isSavedAssessment|| isEditMode"  name="vision_medium" placeholder="Medium Term Vision" #vision_medium="ngModel"
-                    [(ngModel)]="assessment.vision_medium" rows="1" cols="130" pInputText autoResize="autoResize" required
-                    ></textarea>
+                    [(ngModel)]="assessment.vision_medium" rows="2" cols="130" pInputText autoResize="autoResize" required
+                    [maxlength]="masterDataService.getFieldCharCount(fieldNames.VISION)"></textarea>
+                    <span style="float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.VISION)}}</span>
                     <p class="info-message text-danger" *ngIf="  !vision_medium.value &&                     
                     (fData.submitted || vision_medium.touched || vision_medium.dirty)
                   ">
@@ -156,8 +160,9 @@
                 <div class="p-field">
                   <label for="vision_short">After 15 years? *</label>
                   <textarea [disabled]="isSavedAssessment|| isEditMode" name="vision_long" placeholder="Long Term Vision"
-                    #vision_long="ngModel" [(ngModel)]="assessment.vision_long" rows="1" cols="130" pInputText required
-                    autoResize="autoResize"></textarea>
+                    #vision_long="ngModel" [(ngModel)]="assessment.vision_long" rows="2" cols="130" pInputText required
+                    autoResize="autoResize" [maxlength]="masterDataService.getFieldCharCount(fieldNames.VISION)"></textarea>
+                    <span style="float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.VISION)}}</span>
                     <p class="info-message text-danger" *ngIf="  !vision_long.value &&                     
                     (fData.submitted || vision_long.touched || vision_long.dirty)
                   ">
@@ -175,7 +180,8 @@
                 <div class="p-field">
                   <textarea [disabled]="isSavedAssessment|| isEditMode" name="phase_of_transformation" placeholder="See Chapter 6 of the ICAT Transformational Change Methodology" #phase_of_transformation="ngModel"
                     [(ngModel)]="assessment.phase_of_transformation" rows="2" cols="130" pInputText autoResize="autoResize" required
-                    ></textarea>
+                    [maxlength]="masterDataService.getFieldCharCount(fieldNames.VISION)"></textarea>
+                    <span style="float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.VISION)}}</span>
                     <p class="info-message text-danger" *ngIf="  !phase_of_transformation.value &&                     
                     (fData.submitted || phase_of_transformation.touched || phase_of_transformation.dirty)
                   ">
@@ -192,8 +198,9 @@
               <div class="col-12 col-md-6">
                 <div class="p-field">
                   <textarea [disabled]="isSavedAssessment|| isEditMode" name="change_in_system" placeholder="Enter an answer" #change_in_system="ngModel"
-                    [(ngModel)]="assessment.change_in_system" rows="1" cols="130" pInputText autoResize="autoResize" required
-                    ></textarea>
+                    [(ngModel)]="assessment.change_in_system" rows="2" cols="130" pInputText autoResize="autoResize" required
+                    [maxlength]="masterDataService.getFieldCharCount(fieldNames.VISION)"></textarea>
+                    <span style="float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.VISION)}}</span>
                     <p class="info-message text-danger" *ngIf="  !change_in_system.value &&                     
                     (fData.submitted || change_in_system.touched || change_in_system.dirty)
                   ">This is a mandatory field
@@ -248,9 +255,9 @@
                   <div class="p-field">
                     <label style="width:200px" for="impEntity">Barrier</label>
                     <input type="text" placeholder="Please add barrier"  name="category"
-                    #cat="ngModel" [(ngModel)]="barrierSelected.barrier" maxlength="300" class="p-inputtext custom-input"
+                    #cat="ngModel" [(ngModel)]="barrierSelected.barrier" [maxlength]="masterDataService.getFieldCharCount(fieldNames.BARRIER)" class="p-inputtext custom-input"
                     pInputText />
-                    
+                    <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.BARRIER)}}</span>
                   </div>
                 </div>
 
@@ -262,8 +269,9 @@
                     <label style="width:200px" for="impEntity">Explanation</label>
                     <textarea  type="text" placeholder="Please add explanation" name="explanation"
                       #explanation="ngModel" [(ngModel)]="barrierSelected.explanation" [ngModelOptions]="{ standalone: false }"
-                      class="p-inputtext custom-textarea" rows="3" cols="20" pInputText autoResize="autoResize"
+                      class="p-inputtext custom-textarea" rows="3" cols="20" pInputText autoResize="autoResize" [maxlength]="masterDataService.getFieldCharCount(fieldNames.BARRIER_EXPLANATION)"
                       ></textarea>
+                      <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.BARRIER_EXPLANATION)}}</span>
                   </div>
                 </div>
 
@@ -508,8 +516,10 @@
                                 <div class="col-12 col-lg-6">
                                   <div class="p-field">
                                     <label for="justification">Justification*</label>
-                                    <input type="text" pInputText [(ngModel)]="data.likelihood_justification" #just1="ngModel"
-                                      placeholder="Enter Justification" [name]="data.characteristics.name+ 'likelihood_justification'" />
+                                    <textarea rows="5" type="text" pInputText [(ngModel)]="data.likelihood_justification" #just1="ngModel"
+                                      placeholder="Enter Justification" [name]="data.characteristics.name+ 'likelihood_justification'" 
+                                      [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
+                                      <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                       <p class="info-message text-danger" *ngIf="!data.likelihood_justification  && (fData1.submitted || just1.touched) ||(category.isValidated==false && !data.likelihood_justification) ">
                                         This is a mandatory field </p>
 
@@ -666,8 +676,9 @@
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
                                         <label for="justification">Justification*</label>
-                                        <input type="text" pInputText [(ngModel)]="data.justification" #just2="ngModel"
-                                          placeholder="Enter Justification" name="justification" />
+                                        <textarea rows="5" type="text" pInputText [(ngModel)]="data.justification" #just2="ngModel"
+                                          placeholder="Enter Justification" name="justification" [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
+                                          <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                           <p class="info-message text-danger" *ngIf="!data.justification  && (fData1.submitted || just2.touched)|| (category.isValidated==false && !data.justification) ">
                                             This is a mandatory field </p>
                                             
@@ -801,9 +812,10 @@
                                       <div class="col-12 col-lg-6">
                                         <div class="p-field">
                                           <label for="justification">Justification*</label>
-                                          <input (ngModelChange)="assignSDG(selectedSDGs[i], data)" type="text"
+                                          <textarea rows="5" (ngModelChange)="assignSDG(selectedSDGs[i], data)" type="text"
                                             pInputText [(ngModel)]="data.justification" #just3="ngModel"
-                                            placeholder="Enter Justification" name="justification" />
+                                            placeholder="Enter Justification" name="justification" [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
+                                            <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                             <p class="info-message text-danger" *ngIf="!data.justification  && (fData1.submitted || just3.touched) || (isValidSCaleSD==false && !data.justification)">
                                               This is a mandatory field </p>
                                         </div>
@@ -900,9 +912,10 @@
                                       <div class="col-12 col-lg-6">
                                         <div class="p-field">
                                           <label for="justification">Justification*</label>
-                                          <input (ngModelChange)="assignSDG(selectedSDGs[i], data)" type="text"
+                                          <textarea rows="5" (ngModelChange)="assignSDG(selectedSDGs[i], data)" type="text"
                                             pInputText [(ngModel)]="data.justification" #just4="ngModel"
-                                            placeholder="Enter Justification" name="justification" />
+                                            placeholder="Enter Justification" name="justification" [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
+                                            <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                             <p class="info-message text-danger" *ngIf="!data.justification  && (fData1.submitted || just4.touched) || (isValidSustainedSD==false && !data.justification) ">
                                               This is a mandatory field </p>
                                         </div>
@@ -1095,8 +1108,9 @@
                                   <div class="col-12 col-lg-6">
                                     <div class="p-field">
                                       <label for="justification">Justification*</label>
-                                      <input type="text" pInputText [(ngModel)]="data.likelihood_justification"
-                                        placeholder="Enter Justification" name="data.charData.likelihood_justification" />
+                                      <textarea rows="5" type="text" pInputText [(ngModel)]="data.likelihood_justification"
+                                        placeholder="Enter Justification" name="data.charData.likelihood_justification" [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
+                                        <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
   
                                     </div>
                                   </div>

@@ -103,8 +103,9 @@
                   <label for="nameClimate">Title of the Intervention*</label>
                   <input [disabled]="editEntytyId > 0" [(ngModel)]="project.policyName"
                     [ngModelOptions]="{ standalone: false }" placeholder="Name" #nameClimate="ngModel" type="text"
-                    name="nameClimate" class="p-inputtext" pInputText
+                    name="nameClimate" class="p-inputtext" pInputText [maxlength]="masterDataService.getFieldCharCount(fieldNames.INTERVENTION_TITLE)"
                     required />
+                    <span style=" float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.INTERVENTION_TITLE)}}</span>
                   <p class="info-message text-danger" *ngIf="
                     !project.policyName &&
                     (fData.submitted || nameClimate.touched || nameClimate.dirty)
@@ -320,7 +321,8 @@
                   <label for="description">Description of the Intervention*</label>
                   <textarea [disabled]="editEntytyId > 0" name="description" placeholder="Description"
                     #description="ngModel" [(ngModel)]="project.description" rows="5" cols="130" pInputText [required]="true"
-                    autoResize="autoResize" ></textarea>
+                    autoResize="autoResize" [maxlength]="masterDataService.getFieldCharCount(fieldNames.INTERVENTION_DESCRIPTION)"></textarea>
+                    <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.INTERVENTION_DESCRIPTION)}}</span>
                     <p class="info-message text-danger" *ngIf="
                     !project.description &&
                     (fData.submitted || description.touched || description.dirty) ">
@@ -333,8 +335,8 @@
                   <label for="objective">Objectives and Intended Impacts or Benefits of the Intervention* <i class="pi pi-info-circle" pTooltip="{{tooltips.objective}}" tooltipPosition="bottom"
                     style="font-size: 1rem"></i></label>
                   <textarea [disabled]="editEntytyId > 0" name="objective" placeholder="Objective" #objective="ngModel"
-                    [(ngModel)]="project.objective" rows="5" cols="130" pInputText autoResize="autoResize" [required]="true"></textarea>
-                    
+                    [(ngModel)]="project.objective" rows="5" cols="130" pInputText autoResize="autoResize" [required]="true" [maxlength]="masterDataService.getFieldCharCount(fieldNames.INTERVENTION_OBJECTIVE)"></textarea>
+                    <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.INTERVENTION_OBJECTIVE)}}</span>
                     <p class="info-message text-danger" *ngIf="
                     !project.objective &&
                     (fData.submitted || objective.touched || objective.dirty) ">
@@ -397,7 +399,8 @@
                     style="font-size: 1rem"></i></label>
                   <input [disabled]="editEntytyId > 0" type="text" placeholder="Name of the Implementing Entity"
                     name="impEntity" #impEntity="ngModel" field="contatname" pInputText [required]="true"
-                    [(ngModel)]="project.implementingEntity" />
+                    [(ngModel)]="project.implementingEntity" [maxlength]="masterDataService.getFieldCharCount(fieldNames.IMPLEMENTING_ENTITY)"/>
+                    <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.IMPLEMENTING_ENTITY)}}</span>
                     <p class="info-message text-danger" *ngIf="
                     !project.implementingEntity &&
                     (fData.submitted || impEntity.touched || impEntity.dirty) ">
@@ -414,8 +417,9 @@
                   <label for="relatedPolicies">Related Interventions <i class="pi pi-info-circle" pTooltip="{{tooltips.related}}" tooltipPosition="bottom"
                     style="font-size: 1rem"></i></label>
                   <textarea [disabled]="editEntytyId > 0" name="relatedPolicies" placeholder="Related interventions"
-                    #relatedPolicies="ngModel" [(ngModel)]="project.related_policies" rows="1" cols="130" pInputText
-                    autoResize="autoResize" class="p-inputtext"></textarea>
+                    #relatedPolicies="ngModel" [(ngModel)]="project.related_policies" rows="5" cols="130" pInputText
+                    autoResize="autoResize" class="p-inputtext" [maxlength]="masterDataService.getFieldCharCount(fieldNames.RELATED_INTERVENTION)"></textarea>
+                    <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.RELATED_INTERVENTION)}}</span>
                 </div>
               </div>
               <div class="col-12 col-md-6">
@@ -423,8 +427,9 @@
                   <label for="reference">Reference <i class="pi pi-info-circle" pTooltip="{{tooltips.reference}}" tooltipPosition="bottom"
                     style="font-size: 1rem"></i></label>
                   <textarea [disabled]="editEntytyId > 0" name="reference" placeholder="Reference" #reference="ngModel"
-                    [(ngModel)]="project.reference" rows="1" cols="130" pInputText autoResize="autoResize"
-                    class="p-inputtext"></textarea>
+                    [(ngModel)]="project.reference" rows="5" cols="130" pInputText autoResize="autoResize"
+                    class="p-inputtext" [maxlength]="masterDataService.getFieldCharCount(fieldNames.REFERENCE)"></textarea>
+                    <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.REFERENCE)}}</span>
                 </div>
               </div>
             </div>

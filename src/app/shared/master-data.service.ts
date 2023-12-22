@@ -62,6 +62,7 @@ export class MasterDataService {
   private _scale_of_activity: MasterDataDto[] = []
   private _investment_instruments: MasterDataDto[] = []
   private _SDG_color_map: {id: number, sdgNumber: number, color: string}[] = []
+  private _word_limits: {field: string, count: number}[] = []
 
 
   constructor() {
@@ -565,7 +566,24 @@ export class MasterDataService {
       {id: 16, sdgNumber: 16, color: '#126a9f'},
       {id: 17, sdgNumber: 17, color: '#13496b'},
     ]
+
+    this.word_limits = [
+      {field: FieldNames.INTERVENTION_TITLE, count: 150},
+      {field: FieldNames.INTERVENTION_DESCRIPTION, count: 1500},
+      {field: FieldNames.INTERVENTION_OBJECTIVE, count: 1500},
+      {field: FieldNames.IMPLEMENTING_ENTITY, count: 500},
+      {field: FieldNames.RELATED_INTERVENTION, count: 1500},
+      {field: FieldNames.REFERENCE, count: 1500},
+      {field: FieldNames.ASSESSMENT_OPPORTUNITIES, count: 1500},
+      {field: FieldNames.BARRIER, count: 150},
+      {field: FieldNames.BARRIER_EXPLANATION, count: 1500},
+      {field: FieldNames.VISION, count: 1500},
+      {field: FieldNames.JUSTIFICATION, count: 1000},
+    ]
   }
+
+
+  
 
   set months(value: { name: string; value: number }[]) {
     this._months = value;
@@ -997,6 +1015,14 @@ export class MasterDataService {
     return this._SDG_color_map;
   }
 
+  set word_limits(value: {field: string; count: number;}[]) {
+    this._word_limits = value;
+  }
+
+  get word_limits (): {field: string; count: number;}[] {
+    return this._word_limits;
+  }
+
   getToolName(code: string) {
     let tool = this.tools.find(o => o.code === code)
     if (tool) {
@@ -1005,10 +1031,33 @@ export class MasterDataService {
       return ''
     }
   }
+
+  getFieldCharCount(field: FieldNames) {
+    let limit = this.word_limits.find(o => o.field === field);
+    if (limit) {
+      return limit.count;
+    } else {
+      return 255;
+    }
+  }
 }
 
 export class MasterDataDto{
   id: number
   name: string
   code: string
+}
+
+export enum FieldNames {
+  INTERVENTION_TITLE = "INTERVENTION_TITLE",
+  INTERVENTION_DESCRIPTION = "INTERVENTION_DESCRIPTION",
+  IMPLEMENTING_ENTITY = "IMPLEMENTING_ENTITY",
+  INTERVENTION_OBJECTIVE = "INTERVENTION_OBJECTIVE",
+  RELATED_INTERVENTION = "RELATED_INTERVENTION",
+  REFERENCE = "REFERENCE",
+  VISION = "VISION",
+  BARRIER = "BARRIER",
+  BARRIER_EXPLANATION = "BARRIER_EXPLANATION",
+  ASSESSMENT_OPPORTUNITIES = "ASSESSMENT_OPPORTUNITIES",
+  JUSTIFICATION = "JUSTIFICATION"
 }

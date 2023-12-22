@@ -1,5 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FieldNames, MasterDataService } from 'app/shared/master-data.service';
 import { environment } from 'environments/environment';
 import { MessageService } from 'primeng/api';
 import { CMAnswer, CMAssessmentAnswerControllerServiceProxy, CMAssessmentQuestion, CMQuestion, CMQuestionControllerServiceProxy, Institution, InstitutionControllerServiceProxy } from 'shared/service-proxies/service-proxies';
@@ -42,11 +43,13 @@ export class CmQuestionComponent implements OnInit {
   acceptedFiles: string = ".pdf, .jpg, .png, .doc, .docx, .xls, .xlsx, .csv";
   fileServerURL: string;
   selectedAnswer: CMAnswer
+  fieldNames = FieldNames
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
     private institutionControllerServiceProxy: InstitutionControllerServiceProxy,
     private messageService: MessageService,
+    public masterDataService: MasterDataService
   ) {
     this.uploadUrl = environment.baseUrlAPI + '/cm-assessment-question/upload-file'
     this.fileServerURL = environment.baseUrlAPI+'/uploads'

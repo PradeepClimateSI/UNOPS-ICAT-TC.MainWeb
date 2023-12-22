@@ -41,7 +41,7 @@ import * as moment from 'moment';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import decode from 'jwt-decode';
-import { MasterDataService } from 'app/shared/master-data.service';
+import { FieldNames, MasterDataService } from 'app/shared/master-data.service';
 import { GlobalArrayService } from 'app/shared/global-documents/global-documents.service';
 
 
@@ -163,6 +163,8 @@ export class ClimateActionComponent implements OnInit  {
   int_id_country='Country';
   tooltips: any = {}
 
+  fieldNames = FieldNames
+
   constructor(
     private serviceProxy: ServiceProxy,
     private countryProxy: CountryControllerServiceProxy,
@@ -176,7 +178,7 @@ export class ClimateActionComponent implements OnInit  {
     private ndcProxy: NdcControllerServiceProxy,
     private asses: MethodologyAssessmentControllerServiceProxy,
     private cdref: ChangeDetectorRef ,
-    private masterDataService: MasterDataService,
+    public masterDataService: MasterDataService,
     private docArrayforSave:GlobalArrayService,
     private docService: DocumentControllerServiceProxy,
     private userproxy:UsersControllerServiceProxy,

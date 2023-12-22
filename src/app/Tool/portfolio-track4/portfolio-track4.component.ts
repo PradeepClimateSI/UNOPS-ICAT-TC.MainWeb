@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { MasterDataDto, MasterDataService } from 'app/shared/master-data.service';
+import { FieldNames, MasterDataDto, MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
 import { AllBarriersSelected, Assessment, AssessmentControllerServiceProxy, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, PortfolioQuestionDetails, PortfolioQuestions, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
@@ -138,10 +138,12 @@ export class PortfolioTrack4Component implements OnInit {
   sdg_info: any
   adaptation_info: any
   ghg_score_info: any
+  fieldNames = FieldNames
+  minDateTo: Date;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
-    private masterDataService: MasterDataService,
+    public masterDataService: MasterDataService,
     private messageService: MessageService,
     private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
     private sectorProxy: SectorControllerServiceProxy,
@@ -1152,6 +1154,10 @@ hideBarrierDialog() {
       default:
         return ''
     }
+  }
+
+  onSelectFromDate(event: any) {
+    this.minDateTo = new Date(event) 
   }
 
 }
