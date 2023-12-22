@@ -5,7 +5,7 @@ import { MasterDataService } from 'app/shared/master-data.service';
 import { SelectedScoreDto } from 'app/shared/score.dto';
 import { environment } from 'environments/environment';
 import { MessageService } from 'primeng/api';
-import { Assessment, CMAnswer, CMAssessmentQuestion, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, ScoreDto } from 'shared/service-proxies/service-proxies';
+import { Assessment, CMAnswer, CMAssessmentQuestion, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Category, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, ScoreDto } from 'shared/service-proxies/service-proxies';
 
 
 interface UploadEvent {
@@ -38,6 +38,9 @@ export class CmSectionThreeComponent implements OnInit {
 
 
   clickedFormMap: {[key: number]: boolean}= {}
+  tabIsValid: {[key: number]: boolean}= {}
+  tab1IsValid: {[key: number]: boolean}= {}
+  maintabIsValid: {[key: number]: boolean}= {}
 
   comment: any;
   SDGs: SDG[]
@@ -89,6 +92,8 @@ export class CmSectionThreeComponent implements OnInit {
   savedData: boolean = false;
   relevance_tooltip: string;
   ghg_starting_situation_placeholder: any;
+  isFirstLoading0: boolean = true;
+  isFirstLoading1: boolean = true;
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -142,6 +147,7 @@ export class CmSectionThreeComponent implements OnInit {
     this.selectedCategory = this.categories[this.selectedType.code][0]
     this.onMainTabChange({ index: 0 })
     this.onCategoryTabChange({ index: 0 })
+    this.isFirstLoading0 = false
     this.outcome = await this.methodologyAssessmentControllerServiceProxy.getAllOutcomeCharacteristics().toPromise()
     this.outcome = this.outcome.sort((a: any, b: any) => a.order - b.order)
     this.institutionControllerServiceProxy.getAllInstitutions().subscribe((res: any) => {
@@ -288,11 +294,51 @@ export class CmSectionThreeComponent implements OnInit {
   onMainTabChange(event: any) {
     this.selectedType = this.types[event.index]
     this.mainTabIndex = event.index;
+    if (this.mainTabIndex == 0) {
+      if (!this.isFirstLoading0) {
+        this.checkTab1Mandatory(4)
+        this.maintabIsValid[event.index] = true
+        for (let k of Object.keys(this.tab1IsValid)) {
+          console.log(this.tab1IsValid[parseInt(k)])
+          if (!this.tab1IsValid[parseInt(k)]){
+            this.maintabIsValid[event.index] = false
+            break
+          }
+        }
+      }
+    } else {
+      if (!this.isFirstLoading1) {
+        this.checkTab2Mandatory(6)
+        this.maintabIsValid[event.index] = true
+        for (let k of Object.keys(this.tabIsValid)) {
+          if (!this.tabIsValid[parseInt(k)]){
+            this.maintabIsValid[event.index] = false
+            break
+          }
+        }
+      } else {
+        this.isFirstLoading1 = false
+      }
+    }
+
   }
 
   async onCategoryTabChange(event: any) {
+    console.log("oncategorytabchanged")
     this.nextClicked = false
     this.categoryTabIndex = event.index;
+    this.checkTab1Mandatory(event.index)
+  }
+
+  checkTab1Mandatory(idx: number) {
+    for (const [index, category] of this.categories['process'].entries()) {
+      console.log(index, idx)
+      if (index < idx) {
+        console.log("pased")
+        this.tab1IsValid[index] = category.characteristics?.filter((o:any) => o.relevance !== undefined)?.length === category.characteristics?.length
+        console.log(this.tab1IsValid)
+      }
+    }
   }
 
   onSelectSDG(event: any) {
@@ -360,6 +406,16 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   onCategoryTabChange2($event: any) {
+    this.checkTab2Mandatory(this.activeIndex2)
+  }
+
+  checkTab2Mandatory(idx: number) {
+    for (let i = 0; i < idx; i++) {
+      let form = this.viewChildren.filter((f, idx) => idx === i)
+      if (form) {
+        this.tabIsValid[i] = form[0].form.valid
+      }
+    }
   }
 
   isFormValid() {
@@ -387,6 +443,7 @@ export class CmSectionThreeComponent implements OnInit {
     if (characteristics?.filter(o => o.relevance !== undefined)?.length === characteristics?.length) {
       if (this.activeIndexMain === 1 && this.isFormValid()) {
         this.activeIndex2 = this.activeIndex2 + 1;
+        this.onCategoryTabChange2(this.activeIndex2)
       }
       if (this.activeIndex === this.categories.process.length - 1 ) {
         this.activeIndexMain = 1;
