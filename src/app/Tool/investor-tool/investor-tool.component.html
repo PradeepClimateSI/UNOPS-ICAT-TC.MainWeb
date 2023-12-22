@@ -102,10 +102,11 @@
                 <span class="p-inputgroup-addon">
                   <i class="pi pi-calendar"></i>
                 </span>
-                <p-calendar dateFormat="mm-dd-yy" inputId="date1" placeholder="From" [minDate]="minDate" [(ngModel)]="assessment.from" name="date1" #date1="ngModel" [disabled]="isSavedAssessment|| isEditMode" [required]="true" appendTo="body" [disabled]="isSavedAssessment">
+                <p-calendar dateFormat="mm-dd-yy" inputId="date1" placeholder="From" [minDate]="minDate" [(ngModel)]="assessment.from" name="date1" #date1="ngModel" [disabled]="isSavedAssessment|| isEditMode" [required]="true" appendTo="body" [disabled]="isSavedAssessment"
+                (ngModelChange)="onSelectFromDate($event)">
                 </p-calendar>
                 <span class="p-inputgroup-addon">to</span>
-                <p-calendar dateFormat="mm-dd-yy" inputId="date2" placeholder="To" [(ngModel)]="assessment.to" name="date2" #date2="ngModel" [disabled]="isSavedAssessment|| isEditMode" [required]="true" appendTo="body" [disabled]="isSavedAssessment"></p-calendar>
+                <p-calendar dateFormat="mm-dd-yy" inputId="date2" placeholder="To" [(ngModel)]="assessment.to" name="date2" #date2="ngModel" [disabled]="isSavedAssessment|| isEditMode" [required]="true" appendTo="body" [disabled]="isSavedAssessment" [minDate]="minDateTo"></p-calendar>
               </div>
               <div class="col-12">
                 <p class="info-message text-danger" *ngIf="(date1.invalid || date2.invalid) && (fData.submitted || date1.touched || date2.touched)">
@@ -247,7 +248,8 @@
                     <div class="col-12 col-md-6">
                       <div class="p-field">
                         <label style="width:200px" for="impEntity">Barrier</label>
-                        <input type="text" placeholder="Please add barrier" name="category" #cat="ngModel" [(ngModel)]="barrierSelected.barrier" maxlength="300" class="p-inputtext custom-input" pInputText />
+                        <input type="text" placeholder="Please add barrier" name="category" #cat="ngModel" [(ngModel)]="barrierSelected.barrier" [maxlength]="masterDataService.getFieldCharCount(fieldNames.BARRIER)"  class="p-inputtext custom-input" pInputText />
+                        <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.BARRIER)}}</span>
                       </div>
                     </div>
                   </div>
@@ -256,7 +258,8 @@
                       <div class="p-field">
                         <label style="width:200px" for="impEntity">Explanation</label>
                         <textarea type="text" placeholder="Please add explanation" name="explanation" #explanation="ngModel" [(ngModel)]="barrierSelected.explanation" [ngModelOptions]="{ standalone: false }" class="p-inputtext custom-textarea" rows="3" cols="20" pInputText
-                          autoResize="autoResize"></textarea>
+                          autoResize="autoResize" [maxlength]="masterDataService.getFieldCharCount(fieldNames.BARRIER_EXPLANATION)"></textarea>
+                          <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.BARRIER_EXPLANATION)}}</span>
                       </div>
                     </div>
                   </div>
@@ -391,8 +394,14 @@
     <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)">
       <p-tabView (onChange)="onMainTabChange($event) " [(activeIndex)]="activeIndexMain ">
         <p-tabPanel header="Process of Change">
-          <p-tabView #tabView (onChange)="onCategoryTabChange($event, tabView)" [(activeIndex)]="activeIndex ">
+          <ng-template pTemplate="header">
+            <span>Process of Change</span><i *ngIf="maintabIsValid[0] !== undefined && !maintabIsValid[0]"  pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
+          </ng-template>
+          <p-tabView #tabView (onChange)="onCategoryTabChange($event, tabView, 'process')" [(activeIndex)]="activeIndex ">
             <p-tabPanel [header]="category.CategoryName" [selected]="category.CategoryName==assessment.processDraftLocation" *ngFor="let category of processData; index as cat">
+              <ng-template pTemplate="header">
+                <span>{{category.CategoryName}}</span><i *ngIf="tab1IsValid[cat] !== undefined && !tab1IsValid[cat]"  pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
+              </ng-template>
               <div class="characteristic-Topic " *ngFor="let data of category.data; index as i">
                 <h6 *ngIf="data.characteristics.name!= 'Research and Development'">{{i+1}}.{{data.characteristics.name}}</h6>
                 <h6 *ngIf="data.characteristics.name === 'Research and Development'">{{i+1}}.{{data.characteristics.name}} (R&D)</h6>
@@ -446,7 +455,9 @@
                                     <p class="justifiaction" class="question">Justification*</p>
                                   </div>
                                   <div class="col-4 mb-20">
-                                    <input type="text" pInputText [(ngModel)]="question.justification" placeholder="Enter Justification" #questionJustification="ngModel" [name]="question.question.name+'question'" />
+                                    <textarea rows="5" type="text" pInputText [(ngModel)]="question.justification" placeholder="Enter Justification" #questionJustification="ngModel" [name]="question.question.name+'question'" 
+                                    [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
+                                    <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                     <p class="info-message text-danger" *ngIf="!question.justification  && (fData1.submitted || questionJustification.touched) || (category.isValidated==false && !question.justification)">
                                       This is a mandatory field </p>
                                   </div>
@@ -465,7 +476,9 @@
                               <div class="col-12 col-lg-6" *ngIf="approach===1">
                                 <div class="p-field">
                                   <label for="justification">Justification*</label>
-                                  <input type="text" pInputText [(ngModel)]="data.likelihood_justification" #just1="ngModel" placeholder="Enter Justification" [name]="data.characteristics.name+ 'likelihood_justification'" />
+                                  <textarea rows="5" type="text" pInputText [(ngModel)]="data.likelihood_justification" #just1="ngModel" placeholder="Enter Justification" [name]="data.characteristics.name+ 'likelihood_justification'"
+                                  [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" ></textarea>
+                                  <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                   <p class="info-message text-danger" *ngIf="!data.likelihood_justification  && (fData1.submitted || just1.touched) ||(category.isValidated==false && !data.likelihood_justification) ">
                                     This is a mandatory field </p>
                                 </div>
@@ -507,10 +520,14 @@
           </p-tabView>
         </p-tabPanel>
         <p-tabPanel header="Outcome of Change">
-          <p-tabView #tabView2 (onChange)="onCategoryTabChange($event, tabView2) " [(activeIndex)]="activeIndex2">
+          <ng-template pTemplate="header">
+            <span>Outcome of Change</span><i *ngIf="maintabIsValid[1] !== undefined && !maintabIsValid[1]"  pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
+          </ng-template>
+          <p-tabView #tabView2 (onChange)="onCategoryTabChange($event, tabView2, 'outcome') " [(activeIndex)]="activeIndex2">
             <p-tabPanel *ngFor="let category of outcomeData; index as cat" [selected]="category.CategoryName==assessment.outcomeDraftLocation">
               <ng-template pTemplate="header">
-                <div class="custom-tab-header">{{ category.CategoryName }}</div>
+                <span class="custom-tab-header">{{ category.CategoryName }}</span>
+                <i *ngIf="tabIsValid[cat] !== undefined && !tabIsValid[cat]"  pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
               </ng-template>
               <div *ngIf="category.CategoryName === 'SDG Scale of the Outcome' ">
                 <div class="row">
@@ -579,7 +596,9 @@
                                 <div class="col-12 col-lg-6">
                                   <div class="p-field">
                                     <label for="justification">Justification*</label>
-                                    <input type="text" pInputText [(ngModel)]="data.justification" #just2="ngModel" placeholder="Enter Justification" name="justification" />
+                                    <textarea rows="5" type="text" pInputText [(ngModel)]="data.justification" #just2="ngModel" placeholder="Enter Justification" name="justification" 
+                                    [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
+                                    <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                     <p class="info-message text-danger" *ngIf="!data.justification  && (fData1.submitted || just2.touched) || (category.isValidated==false && !data.justification)">
                                       This is a mandatory field </p>
                                   </div>
@@ -682,7 +701,9 @@
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
                                         <label for="justification">Justification*</label>
-                                        <input (ngModelChange)="assignSDG(selectedSDGs[i], data)" type="text" pInputText [(ngModel)]="data.justification" #just3="ngModel" placeholder="Enter Justification" name="justification" />
+                                        <textarea rows="5" (ngModelChange)="assignSDG(selectedSDGs[i], data)" type="text" pInputText [(ngModel)]="data.justification" #just3="ngModel" placeholder="Enter Justification" name="justification" 
+                                        [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
+                                        <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                         <p class="info-message text-danger" *ngIf="!data.justification  && (fData1.submitted || just3.touched) || (isValidSCaleSD==false && !data.justification)">
                                           This is a mandatory field </p>
                                       </div>
@@ -747,7 +768,9 @@
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
                                         <label for="justification">Justification*</label>
-                                        <input (ngModelChange)="assignSDG(selectedSDGs[i], data)" type="text" pInputText [(ngModel)]="data.justification" #just4="ngModel" placeholder="Enter Justification" name="justification" />
+                                        <textarea rows="5" (ngModelChange)="assignSDG(selectedSDGs[i], data)" type="text" pInputText [(ngModel)]="data.justification" #just4="ngModel" placeholder="Enter Justification" name="justification" 
+                                        [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
+                                        <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                         <p class="info-message text-danger" *ngIf="!data.justification  && (fData1.submitted || just4.touched) || (isValidSustainedSD==false && !data.justification)">
                                           This is a mandatory field </p>
                                       </div>

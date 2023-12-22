@@ -86,12 +86,12 @@
                                 <span class="p-inputgroup-addon">
                                     <i class="pi pi-calendar"></i>
                                 </span>
-                                <p-calendar dateFormat="mm-dd-yy" inputId="date1" placeholder="From"
+                                <p-calendar dateFormat="mm-dd-yy" inputId="date1" placeholder="From" (ngModelChange)="onSelectFromDate($event)"
                                     [(ngModel)]="assessment.from" name="date1" #date1="ngModel" [required]="true"
                                     appendTo="body" [disabled]="isSavedAssessment || isEditMode" [minDate]="minDate">
                                 </p-calendar>
                                 <span class="p-inputgroup-addon">to</span>
-                                <p-calendar dateFormat="mm-dd-yy" inputId="date2" placeholder="To"
+                                <p-calendar dateFormat="mm-dd-yy" inputId="date2" placeholder="To" [minDate]="minDateTo"
                                     [(ngModel)]="assessment.to" name="date2" #date2="ngModel" [required]="true"
                                     appendTo="body" [disabled]="isSavedAssessment || isEditMode"></p-calendar>
                             </div>
@@ -285,9 +285,9 @@
                                 <div class="p-field">
                                   <label style="width:200px" for="impEntity">Barrier</label>
                                   <input type="text" placeholder="Please add barrier"  name="category"
-                                  #cat="ngModel" [(ngModel)]="barrierSelected.barrier" maxlength="300" class="p-inputtext custom-input"
+                                  #cat="ngModel" [(ngModel)]="barrierSelected.barrier" [maxlength]="masterDataService.getFieldCharCount(fieldNames.BARRIER)" class="p-inputtext custom-input"
                                   pInputText />
-                                  
+                                  <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.BARRIER)}}</span>
                                 </div>
                               </div>
               
@@ -297,10 +297,11 @@
                               <div class="col-12 col-md-6">
                                 <div class="p-field">
                                   <label style="width:200px" for="impEntity">Explanation</label>
-                                  <textarea  type="text" placeholder="Please add explanation" name="explanation"
+                                  <textarea  type="text" placeholder="Please add explanation" name="explanation" [maxlength]="masterDataService.getFieldCharCount(fieldNames.BARRIER_EXPLANATION)"
                                   #explanation="ngModel" [(ngModel)]="barrierSelected.explanation" [ngModelOptions]="{ standalone: false }"
                                   class="p-inputtext custom-textarea" rows="3" cols="20" pInputText autoResize="autoResize"
                                   ></textarea>
+                                  <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.BARRIER_EXPLANATION)}}</span>
                                 </div>
                               </div>
               

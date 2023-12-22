@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { Assessment, CMAnswer, CMAssessmentQuestion, CMAssessmentQuestionControllerServiceProxy, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Criteria, Institution, SaveCMResultDto, ScoreDto, Section, ServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Assessment, CMAnswer, CMAssessmentQuestion, CMAssessmentQuestionControllerServiceProxy, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Category, Criteria, Institution, SaveCMResultDto, ScoreDto, Section, ServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-cm-section',
@@ -45,6 +45,7 @@ export class CmSectionComponent implements OnInit {
   showConditionDialog: boolean;
   visible_condition: boolean;
   condition_message: string;
+  notFilled: Category[] = [];
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -418,6 +419,9 @@ export class CmSectionComponent implements OnInit {
      if(event.type){
       this.shownSections.push(true);
      }
+    if (event.notFilled.length > 0) {
+      this.notFilled = event.notFilled
+    }
     let result: SaveCMResultDto = new SaveCMResultDto()
     result.result = []
     result.result = [...event.result]
@@ -502,6 +506,7 @@ export class SaveDto {
   isDraft: boolean = false
   name:string
   type:string
+  notFilled: Category[]
 }
 
 export class SectionResultDto{

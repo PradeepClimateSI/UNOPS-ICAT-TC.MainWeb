@@ -1,6 +1,6 @@
 import { AfterContentChecked, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { MasterDataDto, MasterDataService } from 'app/shared/master-data.service';
+import { FieldNames, MasterDataDto, MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
 import {Any, AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, AssessmentControllerServiceProxy, Category, PortfolioSdg, TotalInvestment, TotalInvestmentDto } from 'shared/service-proxies/service-proxies';
@@ -163,10 +163,17 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   sdg_info: any
   adaptation_info: any
   ghg_score_info: any
+  tabIsValid: {[key: number]: boolean}= {}
+  tab1IsValid: {[key: number]: boolean}= {}
+  maintabIsValid: {[key: number]: boolean}= {}
+  isFirstLoading0: boolean = true;
+  isFirstLoading1: boolean = true;
+  fieldNames = FieldNames
+  minDateTo: Date;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
-    private masterDataService: MasterDataService,
+    public masterDataService: MasterDataService,
     private messageService: MessageService,
     private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
     private sectorProxy: SectorControllerServiceProxy,
@@ -339,6 +346,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.setFrom()
     this.setTo()
     this.draftLoading = true
+    this.isFirstLoading0 = false
   }
 
   onChangeSDGsAnswer(withAnswers:any , item : any){
@@ -657,8 +665,37 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   onMainTabChange(event: any) {
     this.mainTabIndex =event.index;
+    for (let i = 0; i<2; i++) {
+      if (i == 0) {
+        if (!this.isFirstLoading0) {
+          this.checkTab1Mandatory(4)
+  
+          this.maintabIsValid[i] = true
+          for (let k of Object.keys(this.tab1IsValid)) {
+            if (!this.tab1IsValid[parseInt(k)]){
+              this.maintabIsValid[i] = false
+              break
+            }
+          }
+        }
+      } else {
+        if (!this.isFirstLoading1) {
+          this.checkTab2Mandatory(6)
+          this.maintabIsValid[i] = true
+          for (let k of Object.keys(this.tabIsValid)) {
+            if (!this.tabIsValid[parseInt(k)]){
+              this.maintabIsValid[i] = false
+              break
+            }
+          }
+        } else {
+          this.isFirstLoading1 = false
+        }
+      }
+    }
   }
-  onCategoryTabChange(event: any, tabview: TabView) {
+
+  onCategoryTabChange(event: any, tabview: TabView, type: string) {
     this.categoryTabIndex =event.index;
     if(!this.failedLikelihoodArray.some(
       element  => element.tabIndex === this.categoryTabIndex
@@ -683,8 +720,33 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       this.isRelavanceDisabled=false;
       this.initialRelevance=1
     }
-
+    if (type === 'process'){
+      this.checkTab1Mandatory(event.index)
+    } else {
+      this.checkTab2Mandatory(event.index)
+    }
   }
+
+  checkTab1Mandatory(idx: number) {
+    for (const [index, category] of this.processData.entries()) {
+      if (index < idx) {
+        this.tab1IsValid[index] = this.checkValidation(category.data, 'process')
+      }
+    }
+  }
+
+  checkTab2Mandatory(idx: number) {
+    for (const [index, category] of this.outcomeData.entries()) {
+      if (index < idx) {
+        if(category.CategoryName === 'SDG Scale of the Outcome' || category.CategoryName === 'SDG Time frame over which the outcome is sustained') {
+          this.tabIsValid[index] = this.sdgValidation(category.data)
+        } else {
+          this.tabIsValid[index] = this.checkValidation(category.data, 'outcome')
+        }
+      }
+    }
+  }
+
   getSelectedHeader() {
     this.tabView.tabs[this.selectedIndex].header;
   }
@@ -863,97 +925,108 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       }, 2000);
     }
   }
- 
-  next(data:{
-    
-    isValidated:boolean|null
-    data: any[],
 
-  },type:string){
-    data.isValidated = false;
-  if((data.data?.filter(investorAssessment => 
+  checkValidation(data: any[], type: string){
+    return (data?.filter(investorAssessment => 
       (investorAssessment.relavance !== undefined) && 
       (investorAssessment.likelihood !== undefined ) && 
       (investorAssessment.likelihood_justification !== undefined && investorAssessment.likelihood_justification !== null && investorAssessment.likelihood_justification !== '') &&
       (investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
         (indicator_details.justification !== undefined && indicator_details.justification !== null && indicator_details.justification !== ''))?.length === (investorAssessment.indicator_details?.length-1)
       )||
-       (investorAssessment.relavance == 0))?.length === data?.data?.length && type=='process')||
-      (data?.data.filter(investorAssessment => 
+       (investorAssessment.relavance == 0))?.length === data?.length && type=='process')||
+      (data.filter(investorAssessment => 
         ((investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '')&&
          (investorAssessment.score !== undefined && investorAssessment.score !== null )) 
-       )?.length === data?.data.length && type=='outcome')||
-      (data?.data.filter(sdg => 
+       )?.length === data.length && type=='outcome')||
+      (data.filter(sdg => 
         (sdg.data?.filter((data: { justification: undefined; } ) =>
           (data.justification!== undefined))?.length === (sdg.data?.length)
-        ))?.length === data?.data.length && type=='sdg')) {
-          data.isValidated = true;
-    if(this.activeIndexMain ===1 ){
-
-      this.activeIndex2 =this.activeIndex2+1;
-
-    }
-    if (this.activeIndex === 3 && this.activeIndexMain !== 1) {
-      this.activeIndexMain = 1;
-      this.activeIndex2=0;
-
-    }
-    if (this.activeIndex<=2 && this.activeIndex>=0 && this.activeIndexMain===0){
-      this.activeIndex =this.activeIndex +1;
-
-    }
-  }else{
-    this.messageService.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Please fill all mandatory fields',
-      closable: true,
-    });
+        ))?.length === data.length && type=='sdg')
   }
+
+  sdgValidation(data: any[]) {
+    return this.selectedSDGs.length > 0 && (data?.filter(sdg => 
+      (sdg.data?.filter((data: {
+        score: undefined; justification: undefined; 
+          } ) =>
+         (data.justification!== undefined && data.justification !== null && data.justification !== '') &&
+         (data.score !== undefined && data.score !== null))?.length === (sdg.data?.length)
+      ))?.length === data?.length )
   }
-  nextSDG(data:any[],type:string){
-    if(type=='scaleSD'){
+ 
+  next(data: {
+
+    isValidated: boolean | null
+    data: any[],
+
+  }, type: string) {
+    data.isValidated = false;
+    if (this.checkValidation(data.data, type)) {
+      data.isValidated = true;
+      if (this.activeIndexMain === 1) {
+        this.activeIndex2 = this.activeIndex2 + 1;
+        this.checkTab2Mandatory(this.activeIndex2)
+
+      }
+      if (this.activeIndex === 3 && this.activeIndexMain !== 1) {
+        this.activeIndexMain = 1;
+        this.activeIndex2 = 0;
+
+      }
+      if (this.activeIndex <= 2 && this.activeIndex >= 0 && this.activeIndexMain === 0) {
+        this.activeIndex = this.activeIndex + 1;
+        this.checkTab1Mandatory(this.activeIndex)
+      }
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Please fill all mandatory fields',
+        closable: true,
+      });
+    }
+  }
+  nextSDG(data: any[], type: string) {
+    if (type == 'scaleSD') {
       this.isValidSCaleSD = false
     }
-    if(type=='sustainedSD'){
+    if (type == 'sustainedSD') {
       this.isValidSustainedSD = false
     }
-    if((data?.filter(sdg => 
-        (sdg.data?.filter((data: {
-          score: undefined; justification: undefined; 
-            } ) =>
-           (data.justification!== undefined && data.justification !== null && data.justification !== '') &&
-           (data.score !== undefined && data.score !== null))?.length === (sdg.data?.length)
-        ))?.length === data?.length )) {
-          this.isValidSCaleSD=true
-          if(type=='scaleSD'){
-            this.isValidSCaleSD = true
-          }
-           if(type=='sustainedSD'){
-            this.isValidSustainedSD = true
-          }
-    if(this.activeIndexMain ===1 ){
+    
+    if (this.sdgValidation(data)) {
+      this.isValidSCaleSD = true
+      if (type == 'scaleSD') {
+        this.isValidSCaleSD = true
+      }
+      if (type == 'sustainedSD') {
+        this.isValidSustainedSD = true
+      }
+      if (this.activeIndexMain === 1) {
 
-      this.activeIndex2 =this.activeIndex2+1;
+        this.activeIndex2 = this.activeIndex2 + 1;
 
+        this.checkTab2Mandatory(this.activeIndex2)
+
+      }
+      if (this.activeIndex === 3 && this.activeIndexMain !== 1) {
+        this.activeIndexMain = 1;
+        this.activeIndex2 = 0;
+
+      }
+      if (this.activeIndex <= 2 && this.activeIndex >= 0 && this.activeIndexMain === 0) {
+        this.activeIndex = this.activeIndex + 1;
+
+      }
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Please fill all mandatory fields',
+        closable: true,
+      });
     }
-    if (this.activeIndex === 3 && this.activeIndexMain !== 1) {
-      this.activeIndexMain = 1;
-      this.activeIndex2=0;
-
-    }
-    if (this.activeIndex<=2 && this.activeIndex>=0 && this.activeIndexMain===0){
-      this.activeIndex =this.activeIndex +1;
-
-    }
-  }else{
-    this.messageService.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Please fill all mandatory fields',
-      closable: true,
-    });
-  }
   }
   onLevelofImplementationChange(event:any){
     if(event==='National')
@@ -1252,6 +1325,10 @@ assignSDG(sdg : any , data : any){
       default:
         return ''
     }
+  }
+
+  onSelectFromDate(event: any) {
+    this.minDateTo = new Date(event) 
   }
 
 }

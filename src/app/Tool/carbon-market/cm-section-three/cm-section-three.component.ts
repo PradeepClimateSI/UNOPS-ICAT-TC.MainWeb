@@ -1,7 +1,7 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { MasterDataService } from 'app/shared/master-data.service';
+import { FieldNames, MasterDataService } from 'app/shared/master-data.service';
 import { SelectedScoreDto } from 'app/shared/score.dto';
 import { environment } from 'environments/environment';
 import { MessageService } from 'primeng/api';
@@ -94,11 +94,13 @@ export class CmSectionThreeComponent implements OnInit {
   ghg_starting_situation_placeholder: any;
   isFirstLoading0: boolean = true;
   isFirstLoading1: boolean = true;
+  fieldNames = FieldNames
+  notFilledCategories: Category[] = []
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
     private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
-    private masterDataService: MasterDataService,
+    public masterDataService: MasterDataService,
     private messageService: MessageService,
     private institutionControllerServiceProxy: InstitutionControllerServiceProxy,
     private investorToolControllerServiceProxy: InvestorToolControllerServiceProxy
@@ -299,7 +301,6 @@ export class CmSectionThreeComponent implements OnInit {
         this.checkTab1Mandatory(4)
         this.maintabIsValid[event.index] = true
         for (let k of Object.keys(this.tab1IsValid)) {
-          console.log(this.tab1IsValid[parseInt(k)])
           if (!this.tab1IsValid[parseInt(k)]){
             this.maintabIsValid[event.index] = false
             break
@@ -324,7 +325,6 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   async onCategoryTabChange(event: any) {
-    console.log("oncategorytabchanged")
     this.nextClicked = false
     this.categoryTabIndex = event.index;
     this.checkTab1Mandatory(event.index)
@@ -332,13 +332,17 @@ export class CmSectionThreeComponent implements OnInit {
 
   checkTab1Mandatory(idx: number) {
     for (const [index, category] of this.categories['process'].entries()) {
-      console.log(index, idx)
       if (index < idx) {
-        console.log("pased")
-        this.tab1IsValid[index] = category.characteristics?.filter((o:any) => o.relevance !== undefined)?.length === category.characteristics?.length
-        console.log(this.tab1IsValid)
+        let validation = category.characteristics?.filter((o:any) => o.relevance !== undefined)?.length === category.characteristics?.length
+        this.tab1IsValid[index] = validation
+        if (!validation) {
+          this.notFilledCategories.push(category)
+        } else {
+          this.notFilledCategories = this.notFilledCategories.filter(o => o.code !== category.code)
+        }
       }
     }
+    console.log(this.notFilledCategories)
   }
 
   onSelectSDG(event: any) {
@@ -413,7 +417,13 @@ export class CmSectionThreeComponent implements OnInit {
     for (let i = 0; i < idx; i++) {
       let form = this.viewChildren.filter((f, idx) => idx === i)
       if (form) {
-        this.tabIsValid[i] = form[0].form.valid
+        let validation = form[0].form.valid
+        this.tabIsValid[i] = validation
+        if (validation) {
+          this.notFilledCategories = this.notFilledCategories.filter(o => o.code !== this.outcome[i].code)
+        } else {
+          this.notFilledCategories.push(this.outcome[i])
+        }
       }
     }
   }
@@ -740,7 +750,7 @@ export class CmSectionThreeComponent implements OnInit {
       this.categoriesToSave = []
       this.isDraftSaved = true
       if(!isDraft) this.savedData = true
-      this.onSubmit.emit({result: this.results, isDraft: isDraft,name:name,type:type})
+      this.onSubmit.emit({result: this.results, isDraft: isDraft,name:name,type:type, notfilled: this.notFilledCategories})
     } else {
       this.messageService.add({
         severity: 'error',
