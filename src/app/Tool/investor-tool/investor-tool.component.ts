@@ -665,38 +665,37 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   onMainTabChange(event: any) {
     this.mainTabIndex =event.index;
-    console.log(this.mainTabIndex)
-    if (this.mainTabIndex == 0) {
-      console.log("pases if")
-      if (!this.isFirstLoading0) {
-        this.checkTab1Mandatory(4)
-
-        this.maintabIsValid[event.index] = true
-        for (let k of Object.keys(this.tab1IsValid)) {
-          if (!this.tab1IsValid[parseInt(k)]){
-            this.maintabIsValid[event.index] = false
-            break
-          }
-        }
-      }
-    } else {
-      if (!this.isFirstLoading1) {
-        this.checkTab2Mandatory(6)
-        this.maintabIsValid[event.index] = true
-        for (let k of Object.keys(this.tabIsValid)) {
-          if (!this.tabIsValid[parseInt(k)]){
-            this.maintabIsValid[event.index] = false
-            break
+    for (let i = 0; i<2; i++) {
+      if (i == 0) {
+        if (!this.isFirstLoading0) {
+          this.checkTab1Mandatory(4)
+  
+          this.maintabIsValid[i] = true
+          for (let k of Object.keys(this.tab1IsValid)) {
+            if (!this.tab1IsValid[parseInt(k)]){
+              this.maintabIsValid[i] = false
+              break
+            }
           }
         }
       } else {
-        this.isFirstLoading1 = false
+        if (!this.isFirstLoading1) {
+          this.checkTab2Mandatory(6)
+          this.maintabIsValid[i] = true
+          for (let k of Object.keys(this.tabIsValid)) {
+            if (!this.tabIsValid[parseInt(k)]){
+              this.maintabIsValid[i] = false
+              break
+            }
+          }
+        } else {
+          this.isFirstLoading1 = false
+        }
       }
     }
   }
 
   onCategoryTabChange(event: any, tabview: TabView, type: string) {
-    console.log(this.tabView)
     this.categoryTabIndex =event.index;
     if(!this.failedLikelihoodArray.some(
       element  => element.tabIndex === this.categoryTabIndex
@@ -729,22 +728,20 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   }
 
   checkTab1Mandatory(idx: number) {
-    console.log(this.processData)
     for (const [index, category] of this.processData.entries()) {
       if (index < idx) {
-        this.tab1IsValid[index] = this.checkValidattion(category.data, 'process')
+        this.tab1IsValid[index] = this.checkValidation(category.data, 'process')
       }
     }
   }
 
   checkTab2Mandatory(idx: number) {
     for (const [index, category] of this.outcomeData.entries()) {
-      console.log(category)
       if (index < idx) {
         if(category.CategoryName === 'SDG Scale of the Outcome' || category.CategoryName === 'SDG Time frame over which the outcome is sustained') {
           this.tabIsValid[index] = this.sdgValidation(category.data)
         } else {
-          this.tabIsValid[index] = this.checkValidattion(category.data, 'outcome')
+          this.tabIsValid[index] = this.checkValidation(category.data, 'outcome')
         }
       }
     }
@@ -929,7 +926,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     }
   }
 
-  checkValidattion(data: any[], type: string){
+  checkValidation(data: any[], type: string){
     return (data?.filter(investorAssessment => 
       (investorAssessment.relavance !== undefined) && 
       (investorAssessment.likelihood !== undefined ) && 
@@ -965,7 +962,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   }, type: string) {
     data.isValidated = false;
-    if (this.checkValidattion(data.data, type)) {
+    if (this.checkValidation(data.data, type)) {
       data.isValidated = true;
       if (this.activeIndexMain === 1) {
         this.activeIndex2 = this.activeIndex2 + 1;

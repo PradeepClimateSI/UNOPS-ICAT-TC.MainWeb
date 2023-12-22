@@ -401,7 +401,7 @@
             <p-tabPanel [header]="category.CategoryName" [selected]="category.CategoryName==assessment.processDraftLocation" *ngFor="let category of processData; index as cat">
               <ng-template pTemplate="header">
                 <span>{{category.CategoryName}}</span><i *ngIf="tab1IsValid[cat] !== undefined && !tab1IsValid[cat]"  pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
-            </ng-template>
+              </ng-template>
               <div class="characteristic-Topic " *ngFor="let data of category.data; index as i">
                 <h6 *ngIf="data.characteristics.name!= 'Research and Development'">{{i+1}}.{{data.characteristics.name}}</h6>
                 <h6 *ngIf="data.characteristics.name === 'Research and Development'">{{i+1}}.{{data.characteristics.name}} (R&D)</h6>

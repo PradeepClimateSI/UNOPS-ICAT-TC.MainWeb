@@ -95,6 +95,7 @@ export class CmSectionThreeComponent implements OnInit {
   isFirstLoading0: boolean = true;
   isFirstLoading1: boolean = true;
   fieldNames = FieldNames
+  notFilledCategories: Category[] = []
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -332,9 +333,16 @@ export class CmSectionThreeComponent implements OnInit {
   checkTab1Mandatory(idx: number) {
     for (const [index, category] of this.categories['process'].entries()) {
       if (index < idx) {
-        this.tab1IsValid[index] = category.characteristics?.filter((o:any) => o.relevance !== undefined)?.length === category.characteristics?.length
+        let validation = category.characteristics?.filter((o:any) => o.relevance !== undefined)?.length === category.characteristics?.length
+        this.tab1IsValid[index] = validation
+        if (!validation) {
+          this.notFilledCategories.push(category)
+        } else {
+          this.notFilledCategories = this.notFilledCategories.filter(o => o.code !== category.code)
+        }
       }
     }
+    console.log(this.notFilledCategories)
   }
 
   onSelectSDG(event: any) {
@@ -409,7 +417,13 @@ export class CmSectionThreeComponent implements OnInit {
     for (let i = 0; i < idx; i++) {
       let form = this.viewChildren.filter((f, idx) => idx === i)
       if (form) {
-        this.tabIsValid[i] = form[0].form.valid
+        let validation = form[0].form.valid
+        this.tabIsValid[i] = validation
+        if (validation) {
+          this.notFilledCategories = this.notFilledCategories.filter(o => o.code !== this.outcome[i].code)
+        } else {
+          this.notFilledCategories.push(this.outcome[i])
+        }
       }
     }
   }
@@ -736,7 +750,7 @@ export class CmSectionThreeComponent implements OnInit {
       this.categoriesToSave = []
       this.isDraftSaved = true
       if(!isDraft) this.savedData = true
-      this.onSubmit.emit({result: this.results, isDraft: isDraft,name:name,type:type})
+      this.onSubmit.emit({result: this.results, isDraft: isDraft,name:name,type:type, notfilled: this.notFilledCategories})
     } else {
       this.messageService.add({
         severity: 'error',
