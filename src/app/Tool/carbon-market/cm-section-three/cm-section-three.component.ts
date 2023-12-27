@@ -812,7 +812,7 @@ export class CmSectionThreeComponent implements OnInit {
   onRelevanceChange(event: any, characteristic: any) {
   }
 
-  getNotFilledCaused(): string {
+  getNotFilledCaution(): string {
     let str: string = 'Please fill '
     let sections: string[] = []
     for (let notFilled of this.notFilledCategories) {
