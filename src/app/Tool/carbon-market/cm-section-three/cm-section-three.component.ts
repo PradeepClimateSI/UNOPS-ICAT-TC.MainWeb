@@ -428,6 +428,7 @@ export class CmSectionThreeComponent implements OnInit {
     let form = this.viewChildren.filter((f, idx) => idx === i)
     if (this.outcome[i].type === 'SD' && this.outcome[i].method === 'SCALE' && this.selectedSDGsList.length === 0) {
       this.tabIsValid[i] = false
+      this.notFilledCategories.push(this.outcome[i])
     } else {
       if (form) {
         let validation = form[0].form.valid
@@ -818,7 +819,7 @@ export class CmSectionThreeComponent implements OnInit {
     for (let notFilled of this.notFilledCategories) {
       if (notFilled.name.includes('<br>')) {
         if (notFilled.method === "SUSTAINED") {
-          sections.push(notFilled.type + ' - ' + notFilled.name.replace('<br>', '')  )
+          sections.push(this.mapType(notFilled.type) + ' - ' + notFilled.name.replace('<br>', '')  )
         } else {
           sections.push(notFilled.name.replace('<br>', ' - '))
         }
@@ -829,6 +830,19 @@ export class CmSectionThreeComponent implements OnInit {
     sections = [... new Set(sections)]
     str = str + sections.join(', ') + ' sections before continue.'
     return str
+  }
+
+  mapType(type: string) {
+    switch(type) {
+      case 'GHG':
+        return 'GHGs'
+      case 'SD':
+        return 'SDGs'
+      case 'ADAPTATION':
+        return 'Adaptation co-benifits'
+      default:
+        return type
+    }
   }
 
   adaptationJustificationChange(){
