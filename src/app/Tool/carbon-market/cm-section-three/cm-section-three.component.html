@@ -339,7 +339,7 @@
                                     <div class="col-4">Justification</div>
                                     <div class="col-6">
                                         <textarea rows="5" type="text" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" placeholder="Enter Justification" required 
-                                        [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
+                                        [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (ngModelChange)="adaptationJustificationChange()"></textarea>
                                         <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                         <p class="info-message text-danger" *ngIf="
                                             (fData.form.controls['justification'+char.characteristic.id]?.touched ? 
@@ -578,9 +578,12 @@
                     <div>
                         <div class="d-flex flex-row-reverse mt-20 ">
                             <button [disabled]="savedData" class="btn btn-primary text-uppercase" (click)="submit('',false,'','')">
-                                {{ approach === 'INDIRECT' ? 'Send to Data Collection Team' : 'Calculate & CheckResults'
+                                {{ approach === 'INDIRECT' ? 'Send to Data Collection Team' : 'Calculate & Check Results'
                                 }}
                             </button>
+                        </div>
+                        <div class="d-flex flex-row-reverse mt-20 ">
+                            <span style="color: brown;" *ngIf="notFilledCategories.length > 0">{{getNotFilledCaused()}}</span>
                         </div>
                     </div>
                 </div>

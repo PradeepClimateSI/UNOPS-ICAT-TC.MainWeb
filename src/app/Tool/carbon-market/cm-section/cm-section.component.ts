@@ -45,7 +45,6 @@ export class CmSectionComponent implements OnInit {
   showConditionDialog: boolean;
   visible_condition: boolean;
   condition_message: string;
-  notFilled: Category[] = [];
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -419,9 +418,6 @@ export class CmSectionComponent implements OnInit {
      if(event.type){
       this.shownSections.push(true);
      }
-    if (event.notFilled.length > 0) {
-      this.notFilled = event.notFilled
-    }
     let result: SaveCMResultDto = new SaveCMResultDto()
     result.result = []
     result.result = [...event.result]
@@ -506,7 +502,6 @@ export class SaveDto {
   isDraft: boolean = false
   name:string
   type:string
-  notFilled: Category[]
 }
 
 export class SectionResultDto{
