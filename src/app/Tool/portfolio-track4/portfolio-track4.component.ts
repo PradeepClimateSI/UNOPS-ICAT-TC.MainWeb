@@ -146,6 +146,7 @@ export class PortfolioTrack4Component implements OnInit {
   maintabIsValid: {[key: number]: boolean}= {}
   isFirstLoading0: boolean = true;
   isFirstLoading1: boolean = true;
+  notFilledCategories: any[] = []
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -687,18 +688,31 @@ export class PortfolioTrack4Component implements OnInit {
   checkTab1Mandatory(idx: number) {
     for (const [index, category] of this.processData.entries()) {
       if (index < idx) {
-        this.tab1IsValid[index] = this.checkValidation(category.data, 'process')
+        let validation = this.tab1IsValid[index]
+        validation = this.checkValidation(category.data, 'process')
+        if (!validation) {
+          this.notFilledCategories.push(category)
+        } else {
+          this.notFilledCategories = this.notFilledCategories.filter(o => o.name !== category.CategoryName)
+        }
       }
     }
   }
 
   checkTab2Mandatory(idx: number) {
     for (const [index, category] of this.outcomeData.entries()) {
-      if (index < idx) {
+      if ((category.CategoryName ==='Adaptation Time frame over which the outcome is sustained' && index <= idx) || index < idx) {
+        let validation = false
         if(category.CategoryName === 'SDG Scale of the Outcome' || category.CategoryName === 'SDG Time frame over which the outcome is sustained') {
-          this.tabIsValid[index] = this.sdgValidation(category.data)
+          validation = this.sdgValidation(category.data)
         } else {
-          this.tabIsValid[index] = this.checkValidation(category.data, 'outcome')
+          validation = this.checkValidation(category.data, 'outcome')
+        }
+        this.tabIsValid[index] = validation
+        if (validation) {
+          this.notFilledCategories = this.notFilledCategories.filter(o => o.categoryID !== category.categoryID)
+        } else {
+          this.notFilledCategories.push(category)
         }
       }
     }
@@ -1225,6 +1239,22 @@ export class PortfolioTrack4Component implements OnInit {
   onSelectFromDate(event: any) {
     this.minDateTo = new Date(event)
   }
+
+  getNotFilledCaution(): string {
+    let str: string = 'Please fill '
+    let sections: string[] = []
+    for (let notFilled of this.notFilledCategories) {
+      sections.push(notFilled.CategoryName)
+    }
+    sections = [... new Set(sections)]
+    str = str + sections.join(', ') + ' sections before continue.'
+    return str
+  }
+
+  adaptationJustificationChange(){
+    this.checkTab2Mandatory(6)
+  }
+
 
 }
 

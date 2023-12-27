@@ -597,7 +597,7 @@
                                   <div class="p-field">
                                     <label for="justification">Justification*</label>
                                     <textarea rows="5" type="text" pInputText [(ngModel)]="data.justification" #just2="ngModel" placeholder="Enter Justification" name="justification" 
-                                    [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
+                                    [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (ngModelChange)="adaptationJustificationChange()"></textarea>
                                     <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                     <p class="info-message text-danger" *ngIf="!data.justification  && (fData1.submitted || just2.touched) || (category.isValidated==false && !data.justification)">
                                       This is a mandatory field </p>
@@ -818,6 +818,9 @@
             <button class="btn btn-primary text-uppercase" type="submit" [disabled]="failedLikelihoodArray.length!=0 ||failedRelevanceArray.length!=0 || !fData1.valid">
               {{approach==1 ?'Calculate & Check results': (approach==2 ?'Send to Data Collection Team':'')}}
             </button>
+          </div>
+          <div class="d-flex flex-row-reverse mt-20 ">
+            <span style="color: brown;" *ngIf="notFilledCategories.length > 0">{{getNotFilledCaution()}}</span>
           </div>
         </div>
       </div>

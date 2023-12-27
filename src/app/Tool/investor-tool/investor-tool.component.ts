@@ -89,10 +89,10 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   draftLoading: boolean=false;
 
   description = '';
-  levelofImplementation:number=0;
+  levelofImplementation: number = 0;
   yesNoAnswer: any[] = [{ id: 1, name: "Yes" }, { id: 2, name: "No" }];
-  investmentType: any[] = [{ id: 1, name: "Type 01" }, { id: 2, name: "Type 02" },  { id: 3, name: "Type 03" }];
- angle:string
+  investmentType: any[] = [{ id: 1, name: "Type 01" }, { id: 2, name: "Type 02" }, { id: 3, name: "Type 03" }];
+  angle: string
 
   processData: {
     type: string,
@@ -170,6 +170,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   isFirstLoading1: boolean = true;
   fieldNames = FieldNames
   minDateTo: Date;
+  notFilledCategories: any[] = []
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -730,18 +731,31 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   checkTab1Mandatory(idx: number) {
     for (const [index, category] of this.processData.entries()) {
       if (index < idx) {
-        this.tab1IsValid[index] = this.checkValidation(category.data, 'process')
+        let validation = this.checkValidation(category.data, 'process')
+        this.tab1IsValid[index] = validation
+        if (!validation) {
+          this.notFilledCategories.push(category)
+        } else {
+          this.notFilledCategories = this.notFilledCategories.filter(o => o.name !== category.CategoryName)
+        }
       }
     }
   }
 
   checkTab2Mandatory(idx: number) {
     for (const [index, category] of this.outcomeData.entries()) {
-      if (index < idx) {
+      let validation = false
+      if ((category.CategoryName ==='Adaptation Time frame over which the outcome is sustained' && index <= idx) || index < idx) {
         if(category.CategoryName === 'SDG Scale of the Outcome' || category.CategoryName === 'SDG Time frame over which the outcome is sustained') {
-          this.tabIsValid[index] = this.sdgValidation(category.data)
+          validation = this.sdgValidation(category.data)
         } else {
-          this.tabIsValid[index] = this.checkValidation(category.data, 'outcome')
+          validation = this.checkValidation(category.data, 'outcome')
+        }
+        this.tabIsValid[index] = validation
+        if (validation) {
+          this.notFilledCategories = this.notFilledCategories.filter(o => o.categoryID !== category.categoryID)
+        } else {
+          this.notFilledCategories.push(category)
         }
       }
     }
@@ -1329,6 +1343,21 @@ assignSDG(sdg : any , data : any){
 
   onSelectFromDate(event: any) {
     this.minDateTo = new Date(event) 
+  }
+
+  getNotFilledCaution(): string {
+    let str: string = 'Please fill '
+    let sections: string[] = []
+    for (let notFilled of this.notFilledCategories) {
+      sections.push(notFilled.CategoryName)
+    }
+    sections = [... new Set(sections)]
+    str = str + sections.join(', ') + ' sections before continue.'
+    return str
+  }
+
+  adaptationJustificationChange(){
+    this.checkTab2Mandatory(6)
   }
 
 }
