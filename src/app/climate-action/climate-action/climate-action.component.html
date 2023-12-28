@@ -521,7 +521,8 @@
                       <textarea [disabled]="editEntytyId > 0" name="geographicCoverage"
                         placeholder="Geographic Coverage" #geographicCoverage="ngModel"
                         [(ngModel)]="project.geographicCoverage" rows="5" cols="130" pInputText
-                        autoResize="autoResize" ></textarea>
+                        autoResize="autoResize" [maxlength]="masterDataService.getFieldCharCount(fieldNames.GEOGRAPHICAL_COVERAGE)"></textarea>
+                        <span style=" float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.GEOGRAPHICAL_COVERAGE)}}</span>
                     </div>
                   </div>
 

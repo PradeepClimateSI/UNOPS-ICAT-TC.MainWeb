@@ -150,7 +150,8 @@
                             <div class="p-field">
                               <textarea  name="envisioned_change" placeholder="Enter an answer" #envisioned_change="ngModel" [disabled]="isSavedAssessment"
                                 [(ngModel)]="assessment.envisioned_change" rows="1" cols="130" pInputText autoResize="autoResize" required
-                                [disabled]="isEditMode"></textarea>
+                                [disabled]="isEditMode" [maxlength]="masterDataService.getFieldCharCount(fieldNames.VISION)"></textarea>
+                                <span style="float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.VISION)}}</span>
                                 <p class="info-message text-danger" *ngIf="  !envisioned_change.value &&                     
                                   (fData.submitted || envisioned_change.touched || envisioned_change.dirty)
                                 ">
@@ -169,7 +170,8 @@
                               <label for="vision_short">Within 5 years? *</label>
                               <textarea name="vision_short" placeholder="Short Term Vision" #vision_short="ngModel" [disabled]="isSavedAssessment"
                                 [(ngModel)]="assessment.vision_short" rows="1" cols="130" pInputText autoResize="autoResize" required
-                                [disabled]="isEditMode"></textarea>
+                                [disabled]="isEditMode" [maxlength]="masterDataService.getFieldCharCount(fieldNames.VISION)"></textarea>
+                                <span style="float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.VISION)}}</span>
                                 <p class="info-message text-danger" *ngIf="  !vision_short.value &&                     
                                 (fData.submitted || vision_short.touched || vision_short.dirty)
                               ">
@@ -183,7 +185,8 @@
                               <label for="vision_short">Between 5 and 15 years? *</label>
                               <textarea name="vision_medium" placeholder="Medium Term Vision" #vision_medium="ngModel" [disabled]="isSavedAssessment"
                                 [(ngModel)]="assessment.vision_medium" rows="1" cols="130" pInputText autoResize="autoResize" required
-                                [disabled]="isEditMode"></textarea>
+                                [disabled]="isEditMode" [maxlength]="masterDataService.getFieldCharCount(fieldNames.VISION)"></textarea>
+                                <span style="float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.VISION)}}</span>
                                 <p class="info-message text-danger" *ngIf="  !vision_medium.value &&                     
                                 (fData.submitted || vision_medium.touched || vision_medium.dirty)
                               ">
@@ -196,7 +199,8 @@
                               <label for="vision_short">After 15 years? *</label>
                               <textarea name="vision_long" placeholder="Long Term Vision" [disabled]="isSavedAssessment"
                                 #vision_long="ngModel" [(ngModel)]="assessment.vision_long" rows="1" cols="130" pInputText
-                                autoResize="autoResize" required [disabled]="isEditMode"></textarea>
+                                autoResize="autoResize" required [maxlength]="masterDataService.getFieldCharCount(fieldNames.VISION)" [disabled]="isEditMode"></textarea>
+                                <span style="float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.VISION)}}</span>
                                 <p class="info-message text-danger" *ngIf="  !vision_long.value &&                     
                                 (fData.submitted || vision_long.touched || vision_long.dirty)
                               ">
@@ -214,7 +218,8 @@
                             <div class="p-field">
                               <textarea name="phase_of_transformation" placeholder="See Chapter 6 of the ICAT Transformational Change Methodology" #phase_of_transformation="ngModel" [disabled]="isSavedAssessment"
                                 [(ngModel)]="assessment.phase_of_transformation" rows="2" cols="130" pInputText autoResize="autoResize" required
-                                [disabled]="isEditMode"></textarea>
+                                [disabled]="isEditMode" [maxlength]="masterDataService.getFieldCharCount(fieldNames.VISION)"></textarea>
+                                <span style="float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.VISION)}}</span>
                                 <p class="info-message text-danger" *ngIf="  !phase_of_transformation.value &&                     
                                 (fData.submitted || phase_of_transformation.touched || phase_of_transformation.dirty)
                               ">
@@ -232,7 +237,8 @@
                             <div class="p-field">
                               <textarea name="change_in_system" placeholder="Enter an answer" #change_in_system="ngModel" [disabled]="isSavedAssessment"
                                 [(ngModel)]="assessment.change_in_system" rows="1" cols="130" pInputText autoResize="autoResize" required
-                                [disabled]="isEditMode"></textarea>
+                                [disabled]="isEditMode" [maxlength]="masterDataService.getFieldCharCount(fieldNames.VISION)"></textarea>
+                                <span style="float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.VISION)}}</span>
                                 <p class="info-message text-danger" *ngIf="  !change_in_system.value &&                     
                                 (fData.submitted || change_in_system.touched || change_in_system.dirty)
                               ">This is a mandatory field
