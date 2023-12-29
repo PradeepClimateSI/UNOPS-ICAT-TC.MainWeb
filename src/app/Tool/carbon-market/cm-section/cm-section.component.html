@@ -27,11 +27,10 @@
             <div class="row p-grid p-fluid col-sm-12">
                 <div class="col-10"></div>
                 <div class="d-flex flex-row-reverse mt-20 ">
-                    <span *ngIf="notFilled.length > 0">There are not filled</span>
-                    <button class="btn btn-primary text-uppercase" type="submit" (click)="save({result: [], isDraft: false,name:'',type:'', notFilled:[]})">
+                    <button class="btn btn-primary text-uppercase" type="submit" (click)="save({result: [], isDraft: false,name:'',type:''})">
                       {{ (assessment && assessment.assessment_approach=== 'INDIRECT') ? 'Send to Data Collection Team' : 'Calculate & Check Results' }}
                     </button>
-                    <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="save({result: [], isDraft: true,name:'',type:'', notFilled: []})">
+                    <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="save({result: [], isDraft: true,name:'',type:''})">
                         Save
                     </div>
                 </div>

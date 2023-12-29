@@ -5,7 +5,7 @@ import { FieldNames, MasterDataService } from 'app/shared/master-data.service';
 import { SelectedScoreDto } from 'app/shared/score.dto';
 import { environment } from 'environments/environment';
 import { MessageService } from 'primeng/api';
-import { Assessment, CMAnswer, CMAssessmentQuestion, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Category, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, ScoreDto } from 'shared/service-proxies/service-proxies';
+import { Assessment, CMAnswer, CMAssessmentQuestion, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Category, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, ScoreDto, UniqueCategory } from 'shared/service-proxies/service-proxies';
 
 
 interface UploadEvent {
@@ -85,7 +85,7 @@ export class CmSectionThreeComponent implements OnInit {
   starting_situation_tooltip: string
   expected_impact_tooltip: string
   sdgList: any;
-  selectedSDGsList: PortfolioSdg[];
+  selectedSDGsList: PortfolioSdg[] = [];
   categoriesToSave: string[] = []
   isDraftSaved: boolean = false
   nextClicked: boolean;
@@ -95,7 +95,7 @@ export class CmSectionThreeComponent implements OnInit {
   isFirstLoading0: boolean = true;
   isFirstLoading1: boolean = true;
   fieldNames = FieldNames
-  notFilledCategories: Category[] = []
+  notFilledCategories: (OutcomeCategory | UniqueCategory)[] = []
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -342,7 +342,6 @@ export class CmSectionThreeComponent implements OnInit {
         }
       }
     }
-    console.log(this.notFilledCategories)
   }
 
   onSelectSDG(event: any) {
@@ -414,8 +413,23 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   checkTab2Mandatory(idx: number) {
-    for (let i = 0; i < idx; i++) {
-      let form = this.viewChildren.filter((f, idx) => idx === i)
+    if (idx + 1 === this.outcome.length) {
+      for (let i = 0; i <= idx; i++) {
+        this.validate(i)
+      }
+    } else {
+      for (let i = 0; i < idx; i++) {
+        this.validate(i)
+      }
+    }
+  }
+
+  validate(i: number) {
+    let form = this.viewChildren.filter((f, idx) => idx === i)
+    if (this.outcome[i].type === 'SD' && this.outcome[i].method === 'SCALE' && this.selectedSDGsList.length === 0) {
+      this.tabIsValid[i] = false
+      this.notFilledCategories.push(this.outcome[i])
+    } else {
       if (form) {
         let validation = form[0].form.valid
         this.tabIsValid[i] = validation
@@ -750,7 +764,7 @@ export class CmSectionThreeComponent implements OnInit {
       this.categoriesToSave = []
       this.isDraftSaved = true
       if(!isDraft) this.savedData = true
-      this.onSubmit.emit({result: this.results, isDraft: isDraft,name:name,type:type, notfilled: this.notFilledCategories})
+      this.onSubmit.emit({result: this.results, isDraft: isDraft,name:name,type:type})
     } else {
       this.messageService.add({
         severity: 'error',
@@ -797,6 +811,42 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   onRelevanceChange(event: any, characteristic: any) {
+  }
+
+  getNotFilledCaution(): string {
+    let str: string = 'Please fill '
+    let sections: string[] = []
+    for (let notFilled of this.notFilledCategories) {
+      if (notFilled.name.includes('<br>')) {
+        if (notFilled.method === "SUSTAINED") {
+          sections.push(this.mapType(notFilled.type) + ' - ' + notFilled.name.replace('<br>', '')  )
+        } else {
+          sections.push(notFilled.name.replace('<br>', ' - '))
+        }
+      } else {
+        sections.push(notFilled.name)
+      }
+    }
+    sections = [... new Set(sections)]
+    str = str + sections.join(', ') + ' sections before continue.'
+    return str
+  }
+
+  mapType(type: string) {
+    switch(type) {
+      case 'GHG':
+        return 'GHGs'
+      case 'SD':
+        return 'SDGs'
+      case 'ADAPTATION':
+        return 'Adaptation co-benifits'
+      default:
+        return type
+    }
+  }
+
+  adaptationJustificationChange(){
+    this.checkTab2Mandatory(this.outcome.length - 1)
   }
 }
 
