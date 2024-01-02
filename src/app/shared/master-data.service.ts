@@ -62,6 +62,7 @@ export class MasterDataService {
   private _scale_of_activity: MasterDataDto[] = []
   private _investment_instruments: MasterDataDto[] = []
   private _SDG_color_map: {id: number, sdgNumber: number, color: string}[] = []
+  private _Sector_color_map: {id: number, sectorNumber: number, color: string}[] = []
   private _word_limits: {field: string, count: number}[] = []
 
 
@@ -567,6 +568,17 @@ export class MasterDataService {
       {id: 17, sdgNumber: 17, color: '#13496b'},
     ]
 
+    this.Sector_color_map = [
+      {id: 1, sectorNumber: 1, color: '#003360'},
+      {id: 2, sectorNumber: 3, color: '#A52A2A'},
+      {id: 3, sectorNumber: 2, color: '#C0C0C0'},
+      {id: 4, sectorNumber: 5, color: '#8B4513'},
+      {id: 5, sectorNumber: 4, color: '#808080'},
+      {id: 6, sectorNumber: 6, color: '#008000'},
+      {id: 7, sectorNumber: 7, color: '#007BA7'},
+      {id: 8, sectorNumber: 8, color: '#'},
+    ]
+
     this.word_limits = [
       {field: FieldNames.INTERVENTION_TITLE, count: 150},
       {field: FieldNames.INTERVENTION_DESCRIPTION, count: 1500},
@@ -1014,6 +1026,14 @@ export class MasterDataService {
 
   get SDG_color_map (): {id: number; sdgNumber: number; color: string;}[] {
     return this._SDG_color_map;
+  }
+
+  set Sector_color_map(value: {id: number; sectorNumber: number; color: string;}[]) {
+    this._Sector_color_map = value;
+  }
+
+  get Sector_color_map (): {id: number; sectorNumber: number; color: string;}[] {
+    return this._Sector_color_map;
   }
 
   set word_limits(value: {field: string; count: number;}[]) {

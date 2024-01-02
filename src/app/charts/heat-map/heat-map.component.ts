@@ -60,10 +60,8 @@ export class HeatMapComponent {
   }
 
   getIntervention(x: number, y: number) {
-    console.log("score",this.score)
-    // let a = this.score?.some(item => item.processScore === y && item.outcomeScore === x);
     let a = this.score?.filter(item => item.processScore === y && item.outcomeScore === x).length
-    // console.log(a)
+   
     return a 
   }
 
