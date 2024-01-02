@@ -13,6 +13,7 @@
     border-radius: 50%;
     text-align: center;
     line-height: 25px;
+    margin: auto;
 }
 .intervention-large {
     background-color: #404040;
@@ -22,6 +23,7 @@
     border-radius: 50%;
     text-align: center;
     line-height: 25px;
+    margin: auto;
 }
 .vertical-text-chrome {
     writing-mode: vertical-rl;
