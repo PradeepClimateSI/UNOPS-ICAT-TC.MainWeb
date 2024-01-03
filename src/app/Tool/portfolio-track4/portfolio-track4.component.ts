@@ -688,12 +688,12 @@ export class PortfolioTrack4Component implements OnInit {
   checkTab1Mandatory(idx: number) {
     for (const [index, category] of this.processData.entries()) {
       if (index < idx) {
-        let validation = this.tab1IsValid[index]
-        validation = this.checkValidation(category.data, 'process')
+        let validation = this.checkValidation(category.data, 'process')
+        this.tab1IsValid[index] = validation
         if (!validation) {
           this.notFilledCategories.push(category)
         } else {
-          this.notFilledCategories = this.notFilledCategories.filter(o => o.name !== category.CategoryName)
+          this.notFilledCategories = this.notFilledCategories.filter(o => o.CategoryName !== category.CategoryName)
         }
       }
     }
@@ -703,8 +703,10 @@ export class PortfolioTrack4Component implements OnInit {
     for (const [index, category] of this.outcomeData.entries()) {
       if ((category.CategoryName ==='Adaptation Time frame over which the outcome is sustained' && index <= idx) || index < idx) {
         let validation = false
-        if(category.CategoryName === 'SDG Scale of the Outcome' || category.CategoryName === 'SDG Time frame over which the outcome is sustained') {
-          validation = this.sdgValidation(category.data)
+        if(category.CategoryName === 'SDG Scale of the Outcome') {
+          validation = this.sdgValidation(this.sdgDataSendArray2)
+        } else if (category.CategoryName === 'SDG Time frame over which the outcome is sustained') {
+          validation = this.sdgValidation(this.sdgDataSendArray4)
         } else {
           validation = this.checkValidation(category.data, 'outcome')
         }

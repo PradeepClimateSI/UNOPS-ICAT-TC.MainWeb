@@ -746,8 +746,10 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     for (const [index, category] of this.outcomeData.entries()) {
       let validation = false
       if ((category.CategoryName ==='Adaptation Time frame over which the outcome is sustained' && index <= idx) || index < idx) {
-        if(category.CategoryName === 'SDG Scale of the Outcome' || category.CategoryName === 'SDG Time frame over which the outcome is sustained') {
-          validation = this.sdgValidation(category.data)
+        if(category.CategoryName === 'SDG Scale of the Outcome' ) {
+          validation = this.sdgValidation(this.sdgDataSendArray2)
+        } else if (category.CategoryName === 'SDG Time frame over which the outcome is sustained') {
+          validation = this.sdgValidation(this.sdgDataSendArray4)
         } else {
           validation = this.checkValidation(category.data, 'outcome')
         }
