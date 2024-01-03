@@ -75,6 +75,8 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
   heatMapScore: HeatMapScore[];
   heatMapData: TableData[];
   sdgColorMap: any;
+  sectorColorMap: {id: number; sectorNumber: number; color: string;}[]
+  secbgColors : string[] = [];
   bgColors: any = []
   defaulColors =[
     'rgba(153, 102, 255, 1)',
@@ -111,6 +113,7 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
   ngOnInit(): void {
     this.averageTCValue =75
     this.sdgColorMap = this.masterDataService.SDG_color_map
+    this.sectorColorMap = this.masterDataService.Sector_color_map
 
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
@@ -209,8 +212,8 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
 
   sectorCountResult(){
     let tool ='INVESTOR'
-    this.investorProxy.findSectorCount(tool).subscribe((res: any) => {
-      this.sectorCount = res;
+    this.investorProxy.getSectorCountByTool(tool).subscribe((res: any) => {
+      this.sectorCount = res.sort(this.compareByAge);
       setTimeout(() => {
        
         this.viewSecterTargetedPieChart();
@@ -232,6 +235,7 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
   }
 
   viewFrequencyofSDGsChart(){
+    this.sdgDetailsList.sort((a: any, b: any) => b.count - a.count)
     let labels = this.sdgDetailsList.map((item:any) => 'SDG ' + item.number + ' - ' + item.sdg);
     let counts:number[] = this.sdgDetailsList.map((item:any) => item.count);
     this.sdgDetailsList.forEach((sd: any) => {
@@ -341,6 +345,15 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
     let counts:number[] = this.sectorCount.map((item) => item.count);
     const total = counts.reduce((acc, val) => acc + val, 0);
     const percentages = counts.map(count => ((count / total) * 100).toFixed(2));
+    this.sectorCount.forEach((sd: any) => {
+      let color = this.sectorColorMap.find(o => o.sectorNumber === sd.id)
+      if (color) {
+        this.secbgColors.push(color.color)
+      } else {
+        this.secbgColors.push(this.defaulColors[sd.id])
+      }
+    })
+
     if (!this.canvasRefSectorCountPieChart) {
       return;
     }
@@ -365,22 +378,23 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
         labels: labels,
         datasets: [{
           data: counts,
-          backgroundColor: [
-            'rgb(250,227,114)',
-              'rgb(51,51,51)',
-              'rgb(0,170,187)',
-              'rgb(227,120,42)',
-              'rgb(150,131,141)',
-              'rgb(42,61,227)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(75, 192, 192,1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(123, 122, 125, 1)',
-              'rgba(255, 99, 132, 1)',
-              'rgba(255, 205, 86, 1)',
-              'rgba(255, 99, 132, 1)',
+          backgroundColor: this.secbgColors,
+          // backgroundColor: [
+          //   'rgb(250,227,114)',
+          //     'rgb(51,51,51)',
+          //     'rgb(0,170,187)',
+          //     'rgb(227,120,42)',
+          //     'rgb(150,131,141)',
+          //     'rgb(42,61,227)',
+          //     'rgba(153, 102, 255, 1)',
+          //     'rgba(75, 192, 192,1)',
+          //     'rgba(54, 162, 235, 1)',
+          //     'rgba(123, 122, 125, 1)',
+          //     'rgba(255, 99, 132, 1)',
+          //     'rgba(255, 205, 86, 1)',
+          //     'rgba(255, 99, 132, 1)',
 
-          ],
+          // ],
          
         }]
       },
@@ -529,6 +543,10 @@ enterHeatMapPoint(x:number, y: number,event:any){
  
      this.pointTableDatas=[];
 
+  }
+
+  compareByAge(a:any, b:any) {
+    return b.count - a.count;
   }
 
 }
