@@ -4,9 +4,9 @@
             <span>{{type.name}}</span><i *ngIf="maintabIsValid[idx] !== undefined && !maintabIsValid[idx]"  pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
         </ng-template>
         <p-tabView #tabView (onChange)="onCategoryTabChange($event)" [(activeIndex)]="activeIndex" *ngIf="type.code === 'process'">
-            <p-tabPanel *ngFor="let category of categories[type.code]; let idx = index" [header]="category.name" [selected]="category.name==assessment.processDraftLocation">
+            <p-tabPanel *ngFor="let category of categories[type.code]; let catidx = index" [header]="category.name" [selected]="category.name==assessment.processDraftLocation">
                 <ng-template pTemplate="header">
-                    <span>{{category.name}}</span><i *ngIf="tab1IsValid[idx] !== undefined && !tab1IsValid[idx]"  pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
+                    <span>{{category.name}}</span><i *ngIf="tab1IsValid[catidx] !== undefined && !tab1IsValid[catidx]"  pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
                 </ng-template>
                 <br>
                 <p style="font-size: large;">{{category.description}}</p>
@@ -25,7 +25,7 @@
                         </div>
                         <p class="info-message text-danger" *ngIf="
                                 char.relevance === undefined &&
-                                (nextClicked || data_charData_relavance.touched)
+                                ((nextClicked || data_charData_relavance.touched) || (tab1IsValid[catidx] !== undefined && !tab1IsValid[catidx]))
                               ">
                             This is a mandatory field
                         </p>
@@ -55,9 +55,9 @@
             </p-tabPanel>
         </p-tabView>
         <p-tabView #tabView (onChange)="onCategoryTabChange2($event)" [(activeIndex)]="activeIndex2" *ngIf="type.code === 'outcome'">
-            <p-tabPanel *ngFor="let category of outcome; let idx = index" [selected]="category.name==assessment.outcomeDraftLocation">
+            <p-tabPanel *ngFor="let category of outcome; let catidx = index" [selected]="category.name==assessment.outcomeDraftLocation">
                 <ng-template pTemplate="header">
-                    <span [innerHTML]="category.name"></span><i *ngIf="tabIsValid[idx] !== undefined && !tabIsValid[idx]"  pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
+                    <span [innerHTML]="category.name"></span><i *ngIf="tabIsValid[catidx] !== undefined && !tabIsValid[catidx]"  pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
                 </ng-template>
                 <form #fData="ngForm">
                     <ng-container *ngIf="category.type === 'GHG'">
@@ -71,7 +71,7 @@
                                         <p class="info-message text-danger" *ngIf="
                                             (fData.form.controls['stSituation'+char.characteristic.id]?.touched ? 
                                                 (char.startingSituation === undefined || char.startingSituation === '')
-                                             : char.startingSituation === undefined && clickedFormMap[activeIndex2])
+                                             : char.startingSituation === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
                                             ">
                                             This is a mandatory field
                                         </p>
@@ -85,7 +85,7 @@
                                         <p class="info-message text-danger" *ngIf="
                                                 (fData.form.controls['impact'+char.characteristic.id]?.touched ? 
                                                     (char.expectedImpact === undefined || char.expectedImpact === '')
-                                                : char.expectedImpact === undefined && clickedFormMap[activeIndex2])
+                                                : char.expectedImpact === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
                                                 ">
                                             This is a mandatory field
                                         </p>
@@ -107,7 +107,7 @@
                                         <p class="info-message text-danger" *ngIf="
                                             (fData.form.controls['score'+char.characteristic.id]?.touched ? 
                                                 (char.selectedScore.code === undefined || char.selectedScore.code === '')
-                                            : char.selectedScore.code === undefined && clickedFormMap[activeIndex2])
+                                            : char.selectedScore.code === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
                                             ">
                                             This is a mandatory field
                                         </p>
@@ -123,7 +123,7 @@
                                         <p class="info-message text-danger" *ngIf="
                                                 (fData.form.controls['justification'+char.characteristic.id]?.touched ? 
                                                     (char.comment === undefined || char.comment === '')
-                                                : char.comment === undefined && clickedFormMap[activeIndex2])
+                                                : char.comment === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
                                                 ">
                                             This is a mandatory field
                                         </p>
@@ -159,7 +159,7 @@
                                         <p class="info-message text-danger" *ngIf="
                                             (fData.form.controls['score'+char.characteristic.id]?.touched ? 
                                                 (char.selectedScore.code === undefined || char.selectedScore.code === '')
-                                            : char.selectedScore.code === undefined && clickedFormMap[activeIndex2])
+                                            : char.selectedScore.code === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
                                             ">
                                             This is a mandatory field
                                         </p>
@@ -175,7 +175,7 @@
                                         <p class="info-message text-danger" *ngIf="
                                                 (fData.form.controls['justification'+char.characteristic.id]?.touched ? 
                                                     (char.comment === undefined || char.comment === '')
-                                                : char.comment === undefined && clickedFormMap[activeIndex2])
+                                                : char.comment === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
                                                 ">
                                             This is a mandatory field
                                         </p>
@@ -229,7 +229,7 @@
                                         <p class="info-message text-danger" *ngIf="
                                             (fData.form.controls['benifit'+char.characteristic.id]?.touched ? 
                                                 (char.adaptationCoBenifit === undefined || char.adaptationCoBenifit === '')
-                                            : char.adaptationCoBenifit === undefined && clickedFormMap[activeIndex2])
+                                            : char.adaptationCoBenifit === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
                                             ">
                                             This is a mandatory field
                                         </p>
@@ -242,7 +242,7 @@
                                         <p class="info-message text-danger" *ngIf="
                                             (fData.form.controls['stSituation'+char.characteristic.id]?.touched ? 
                                                 (char.startingSituation === undefined || char.startingSituation === '')
-                                            : char.startingSituation === undefined && clickedFormMap[activeIndex2])
+                                            : char.startingSituation === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
                                             ">
                                             This is a mandatory field
                                         </p>
@@ -255,7 +255,7 @@
                                         <p class="info-message text-danger" *ngIf="
                                             (fData.form.controls['impact'+char.characteristic.id]?.touched ? 
                                                 (char.expectedImpact === undefined || char.expectedImpact === '')
-                                            : char.expectedImpact === undefined && clickedFormMap[activeIndex2])
+                                            : char.expectedImpact === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
                                             ">
                                             This is a mandatory field
                                         </p>
@@ -276,7 +276,7 @@
                                         <p class="info-message text-danger" *ngIf="
                                             (fData.form.controls['score'+char.characteristic.id]?.touched ? 
                                                 (char.selectedScore.code === undefined || char.selectedScore.code === '')
-                                            : char.selectedScore.code === undefined && clickedFormMap[activeIndex2])
+                                            : char.selectedScore.code === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
                                             ">
                                             This is a mandatory field
                                         </p>
@@ -292,7 +292,7 @@
                                         <p class="info-message text-danger" *ngIf="
                                             (fData.form.controls['justification'+char.characteristic.id]?.touched ? 
                                                 (char.comment === undefined || char.comment === '')
-                                            : char.comment === undefined && clickedFormMap[activeIndex2])
+                                            : char.comment === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
                                             ">
                                             This is a mandatory field
                                         </p>
@@ -328,7 +328,7 @@
                                         <p class="info-message text-danger" *ngIf="
                                         (fData.form.controls['score'+char.characteristic.id]?.touched ? 
                                             (char.selectedScore.code === undefined || char.selectedScore.code === '')
-                                        : char.selectedScore.code === undefined && clickedFormMap[activeIndex2])
+                                        : char.selectedScore.code === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
                                         ">
                                             This is a mandatory field
                                         </p>
@@ -344,7 +344,7 @@
                                         <p class="info-message text-danger" *ngIf="
                                             (fData.form.controls['justification'+char.characteristic.id]?.touched ? 
                                                 (char.comment === undefined || char.comment === '')
-                                            : char.comment === undefined && clickedFormMap[activeIndex2])
+                                            : char.comment === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
                                             ">
                                             This is a mandatory field
                                         </p>
@@ -409,7 +409,7 @@
                                                     <p class="info-message text-danger" *ngIf="
                                                         (fData.form.controls['indicator'+SDG.code+char.characteristic.id]?.touched ? 
                                                             (char.sdgIndicator === undefined || char.sdgIndicator === '')
-                                                        : char.sdgIndicator === undefined && clickedFormMap[activeIndex2])
+                                                        : char.sdgIndicator === undefined && clickedFormMap[activeIndex2]  || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
                                                         ">
                                                         This is a mandatory field
                                                     </p>
@@ -422,7 +422,7 @@
                                                     <p class="info-message text-danger" *ngIf="
                                                         (fData.form.controls['stSituation'+SDG.code+char.characteristic.id]?.touched ? 
                                                             (char.startingSituation === undefined || char.startingSituation === '')
-                                                        : char.startingSituation === undefined && clickedFormMap[activeIndex2])
+                                                        : char.startingSituation === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
                                                         ">
                                                         This is a mandatory field
                                                     </p>
@@ -435,7 +435,7 @@
                                                     <p class="info-message text-danger" *ngIf="
                                                         (fData.form.controls['impact'+SDG.code+char.characteristic.id]?.touched ? 
                                                             (char.expectedImpact === undefined || char.expectedImpact === '')
-                                                        : char.expectedImpact === undefined && clickedFormMap[activeIndex2])
+                                                        : char.expectedImpact === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
                                                         ">
                                                         This is a mandatory field
                                                     </p>
@@ -456,7 +456,7 @@
                                                     <p class="info-message text-danger" *ngIf="
                                                         (fData.form.controls['score'+SDG.code+char.characteristic.id]?.touched ? 
                                                             (char.selectedScore.code === undefined || char.selectedScore.code === '')
-                                                        : char.selectedScore.code === undefined && clickedFormMap[activeIndex2])
+                                                        : char.selectedScore.code === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
                                                         ">
                                                         This is a mandatory field
                                                     </p>
@@ -472,7 +472,7 @@
                                                     <p class="info-message text-danger" *ngIf="
                                                         (fData.form.controls['justification'+SDG.code+char.characteristic.id]?.touched ? 
                                                             (char.comment === undefined || char.comment === '')
-                                                        : char.comment === undefined && clickedFormMap[activeIndex2])
+                                                        : char.comment === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
                                                         ">
                                                         This is a mandatory field
                                                     </p>
@@ -511,7 +511,7 @@
                                                     <p class="info-message text-danger" *ngIf="
                                                         (fData.form.controls['susScore'+SDG.code+chSus.characteristic.id]?.touched ? 
                                                             (chSus.selectedScore.code === undefined || chSus.selectedScore.code === '')
-                                                        : chSus.selectedScore.code === undefined && clickedFormMap[activeIndex2])
+                                                        : chSus.selectedScore.code === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
                                                         ">
                                                         This is a mandatory field
                                                     </p>
@@ -527,7 +527,7 @@
                                                     <p class="info-message text-danger" *ngIf="
                                                         (fData.form.controls['susJustification'+SDG.code+chSus.characteristic.id]?.touched ? 
                                                             (chSus.comment === undefined || chSus.comment === '')
-                                                        : chSus.comment === undefined && clickedFormMap[activeIndex2])
+                                                        : chSus.comment === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
                                                         ">
                                                         This is a mandatory field
                                                     </p>
