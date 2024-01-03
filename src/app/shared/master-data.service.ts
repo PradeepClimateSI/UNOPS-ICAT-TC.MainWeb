@@ -576,7 +576,7 @@ export class MasterDataService {
       {id: 5, sectorNumber: 4, color: '#808080'},
       {id: 6, sectorNumber: 6, color: '#008000'},
       {id: 7, sectorNumber: 7, color: '#007BA7'},
-      {id: 8, sectorNumber: 8, color: '#'},
+      {id: 8, sectorNumber: 8, color: '#483C32'},
     ]
 
     this.word_limits = [
