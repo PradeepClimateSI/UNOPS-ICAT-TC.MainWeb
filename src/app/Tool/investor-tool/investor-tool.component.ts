@@ -736,7 +736,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
         if (!validation) {
           this.notFilledCategories.push(category)
         } else {
-          this.notFilledCategories = this.notFilledCategories.filter(o => o.name !== category.CategoryName)
+          this.notFilledCategories = this.notFilledCategories.filter(o => o.CategoryName !== category.CategoryName)
         }
       }
     }
