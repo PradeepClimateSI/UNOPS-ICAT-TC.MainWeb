@@ -226,7 +226,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       }
       catch (error) {
       }
-
+      this.isFirstLoading0 = false
 
     } 
 
