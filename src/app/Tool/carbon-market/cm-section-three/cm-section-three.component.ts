@@ -147,7 +147,7 @@ export class CmSectionThreeComponent implements OnInit {
     this.categories = await this.cMQuestionControllerServiceProxy.getUniqueCharacterisctics().toPromise()
     this.selectedType = this.types[0]
     this.selectedCategory = this.categories[this.selectedType.code][0]
-    this.onMainTabChange({ index: 0 })
+    // this.onMainTabChange({ index: 0 })
     this.onCategoryTabChange({ index: 0 })
     this.isFirstLoading0 = false
     this.outcome = await this.methodologyAssessmentControllerServiceProxy.getAllOutcomeCharacteristics().toPromise()
@@ -296,29 +296,58 @@ export class CmSectionThreeComponent implements OnInit {
   onMainTabChange(event: any) {
     this.selectedType = this.types[event.index]
     this.mainTabIndex = event.index;
-    if (this.mainTabIndex == 0) {
-      if (!this.isFirstLoading0) {
-        this.checkTab1Mandatory(4)
-        this.maintabIsValid[event.index] = true
-        for (let k of Object.keys(this.tab1IsValid)) {
-          if (!this.tab1IsValid[parseInt(k)]){
-            this.maintabIsValid[event.index] = false
-            break
-          }
-        }
-      }
-    } else {
-      if (!this.isFirstLoading1) {
-        this.checkTab2Mandatory(6)
-        this.maintabIsValid[event.index] = true
-        for (let k of Object.keys(this.tabIsValid)) {
-          if (!this.tabIsValid[parseInt(k)]){
-            this.maintabIsValid[event.index] = false
-            break
+    // if (this.mainTabIndex == 0) {
+    //   if (!this.isFirstLoading0) {
+    //     this.checkTab1Mandatory(4)
+    //     this.maintabIsValid[event.index] = true
+    //     for (let k of Object.keys(this.tab1IsValid)) {
+    //       if (!this.tab1IsValid[parseInt(k)]){
+    //         this.maintabIsValid[event.index] = false
+    //         break
+    //       }
+    //     }
+    //   }
+    // } else {
+    //   if (!this.isFirstLoading1) {
+    //     this.checkTab2Mandatory(6)
+    //     this.maintabIsValid[event.index] = true
+    //     for (let k of Object.keys(this.tabIsValid)) {
+    //       if (!this.tabIsValid[parseInt(k)]){
+    //         this.maintabIsValid[event.index] = false
+    //         break
+    //       }
+    //     }
+    //   } else {
+    //     this.isFirstLoading1 = false
+    //   }
+    // }
+
+    for (let i = 0; i<2; i++) {
+      if (i == 0) {
+        if (!this.isFirstLoading0) {
+          this.checkTab1Mandatory(4)
+  
+          this.maintabIsValid[i] = true
+          for (let k of Object.keys(this.tab1IsValid)) {
+            if (!this.tab1IsValid[parseInt(k)]){
+              this.maintabIsValid[i] = false
+              break
+            }
           }
         }
       } else {
-        this.isFirstLoading1 = false
+        if (!this.isFirstLoading1) {
+          this.checkTab2Mandatory(6)
+          this.maintabIsValid[i] = true
+          for (let k of Object.keys(this.tabIsValid)) {
+            if (!this.tabIsValid[parseInt(k)]){
+              this.maintabIsValid[i] = false
+              break
+            }
+          }
+        } else {
+          this.isFirstLoading1 = false
+        }
       }
     }
 
