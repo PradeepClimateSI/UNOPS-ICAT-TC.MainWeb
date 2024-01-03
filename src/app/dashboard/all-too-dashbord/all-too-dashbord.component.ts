@@ -46,6 +46,9 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
   heatMapScore: HeatMapScore[];
   heatMapData: TableData[];
 
+  secbgColors : string[] = [];
+  sectorColorMap: {id: number; sectorNumber: number; color: string;}[]
+
   sdgColorMap: any;
   bgColors: any = []
   defaulColors =[
@@ -81,7 +84,7 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
     const tokenPayload = decode<any>(token);
     this.userRole = tokenPayload.role.code;
     this.sdgColorMap = this.masterDataService.SDG_color_map
-
+    this.sectorColorMap = this.masterDataService.Sector_color_map
 
     this.xData = this.masterDataService.xData;
     this.yData = this.masterDataService.yData;
@@ -108,7 +111,7 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
   sectorCountResult(){
     let tool = 'All Option'
     this.investorProxy.findSectorCount(tool).subscribe((res: any) => {
-      this.sectorCount = res;
+      this.sectorCount = res.sort(this.compareByAge);
       setTimeout(() => {
 
         this.viewSecterTargetedPieChart();
@@ -119,7 +122,9 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
     });
    }
 
-
+   compareByAge(a:any, b:any) {
+    return b.count - a.count;
+  }
   viewSecterTargetedPieChart() {
     const labels = this.sectorCount.map((item) => item.sector);
     let counts: number[] = this.sectorCount.map((item) => item.count);
@@ -128,6 +133,15 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
     if (!this.canvasRefSectorCountPieChart) {
       return;
     }
+
+    this.sectorCount.forEach((sd: any) => {
+      let color = this.sectorColorMap.find(o => o.sectorNumber === sd.sector_id)
+      if (color) {
+        this.secbgColors.push(color.color)
+      } else {
+        this.secbgColors.push(this.defaulColors[sd.id])
+      }
+    })
 
     const canvas = this.canvasRefSectorCountPieChart.nativeElement;
     const ctx = canvas.getContext('2d');
@@ -149,22 +163,23 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
           labels: labels,
           datasets: [{
             data: counts,
-            backgroundColor: [
-              'rgb(250,227,114)',
-              'rgb(51,51,51)',
-              'rgb(0,170,187)',
-              'rgb(227,120,42)',
-              'rgb(150,131,141)',
-              'rgb(42,61,227)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(75, 192, 192,1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(123, 122, 125, 1)',
-              'rgba(255, 99, 132, 1)',
-              'rgba(255, 205, 86, 1)',
-              'rgba(255, 99, 132, 1)',
+            backgroundColor: this.secbgColors,
+            // backgroundColor: [
+            //   'rgb(250,227,114)',
+            //   'rgb(51,51,51)',
+            //   'rgb(0,170,187)',
+            //   'rgb(227,120,42)',
+            //   'rgb(150,131,141)',
+            //   'rgb(42,61,227)',
+            //   'rgba(153, 102, 255, 1)',
+            //   'rgba(75, 192, 192,1)',
+            //   'rgba(54, 162, 235, 1)',
+            //   'rgba(123, 122, 125, 1)',
+            //   'rgba(255, 99, 132, 1)',
+            //   'rgba(255, 205, 86, 1)',
+            //   'rgba(255, 99, 132, 1)',
 
-            ],
+            // ],
 
           }]
         },
@@ -380,6 +395,7 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
   }
 
   viewFrequencyofSDGsChart() {
+    this.sdgDetailsList.sort((a: any, b: any) => b.count - a.count)
     let labels = this.sdgDetailsList.map((item: any) => item.sdg);
     let counts: number[] = this.sdgDetailsList.map((item: any) => item.count);
     let total = counts.reduce((acc, val) => acc + val, 0);
