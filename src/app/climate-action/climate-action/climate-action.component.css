@@ -16,12 +16,6 @@
     max-width: 100% !important;
   }
   
- 
-/* ::ng-deep .p-dialog  .col-6 {
-    flex: 0 0 50% !important;
-    max-width: 50% !important;
-  } */
-
 
   ::ng-deep .p-dialog  .p-field {
     margin-bottom: 1rem;
@@ -73,7 +67,7 @@
   border-radius: 5px;
   z-index: 1;
   left: 30px;
-  top: -150%; /* Adjust the distance above the icon */
+  top: -150%; 
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease-in-out;

@@ -171,8 +171,6 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     this.characteristicsList = await this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().toPromise();
     this.barrierChList = [...this.characteristicsList]
     this.barrierChList = this.barrierChList.filter(ch => {return ch.category.type === 'process'})
-    // this.barrierChList = this.barrierChList.filter(ch => {return !["SCALE_ADAPTATION", "SUSTAINED_ADAPTATION"].includes(ch.category.code)})
-    // this.barrierChList = this.barrierChList.filter((v, i, a) => a.findIndex(v2 => (v2.code === v.code)) === i)
   }
 
   save(form: NgForm) {

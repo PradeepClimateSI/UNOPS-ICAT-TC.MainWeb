@@ -218,7 +218,6 @@ async saveForm(formData: NgForm) {
     institution.category = this.incategory;
     institution.type = this.intype;
     institution.address = this.inaddress;
-    // institution.sector = secternew;
     institution.country = country;
     institution.telephoneNumber = this.intelephoneNumber;
     institution.email = this.inmail;

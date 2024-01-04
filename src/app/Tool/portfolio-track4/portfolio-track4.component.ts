@@ -402,10 +402,8 @@ export class PortfolioTrack4Component implements OnInit {
 
   async getCharacteristics() {
     this.characteristicsList = await this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().toPromise();
-    this.barrierChList = [...this.characteristicsList]
-    this.barrierChList = this.barrierChList.filter((ch: Characteristics) => { return ch.category.type === 'process' })
-    // this.barrierChList = this.barrierChList.filter((ch: { category: { code: string; }; }) => {return !["SCALE_ADAPTATION", "SUSTAINED_ADAPTATION"].includes(ch.category.code)})
-    // this.barrierChList = this.barrierChList.filter((v: { code: any; }, i: any, a: any[]) => a.findIndex(v2 => (v2.code === v.code)) === i)
+    this.barrierChList = [...this.characteristicsList];
+    this.barrierChList = this.barrierChList.filter((ch: Characteristics) => { return ch.category.type === 'process' });
     this.characteristicsLoaded = true;
     this.methodologyAssessmentControllerServiceProxy.findAllCategories().toPromise().then((res2: any) => {
       const customOrder = [1, 2, 3, 4, 5, 7, 6, 8, 9, 10];
