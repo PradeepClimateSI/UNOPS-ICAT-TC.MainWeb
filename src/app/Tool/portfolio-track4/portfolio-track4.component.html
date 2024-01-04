@@ -1,7 +1,9 @@
 <div class="container pl-20 pr-20">
   <div>
     <div class="mb-12">
-      <h4 class="mt-4">Assessment Information</h4>
+      <h4 class="mt-4">Assessment Information
+        <span (click)="watchVideo()" pTooltip="Click to watch guidance video"  class="infor-video" ><i class="pi pi-video" style=" font-size: 1em ;  margin-left: 1em;"></i></span>
+      </h4>
     </div>
     <form #fData="ngForm" (ngSubmit)="save(fData)">
       <div class="card" style="min-height: 600px;">

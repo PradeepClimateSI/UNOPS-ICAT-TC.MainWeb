@@ -1,6 +1,8 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
 import { LazyLoadEvent } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
 import { Institution, InstitutionControllerServiceProxy, ServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
@@ -36,7 +38,8 @@ export class InstitutionListComponent implements OnInit {
     private router: Router,
     private serviceProxy: ServiceProxy,
     private institutionProxy: InstitutionControllerServiceProxy,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    protected dialogService: DialogService,
   ) { }
 
   ngAfterViewInit(): void {
@@ -56,6 +59,22 @@ export class InstitutionListComponent implements OnInit {
     event.first = 0;
 
     this.loadgridData(event);
+  }
+
+  watchVideo(){
+    let ref = this.dialogService.open(GuidanceVideoComponent, {
+      header: 'Guidance Video',
+      width: '60%',
+      contentStyle: {"overflow": "auto"},
+      baseZIndex: 10000,
+      data: {
+        sourceName: 'institution',
+      },
+    });
+
+    ref.onClose.subscribe(() => {
+      
+    })
   }
 
   

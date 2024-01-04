@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { environment } from 'environments/environment';
 import { MessageService } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
 import { Assessment, ClimateAction, CreateReportDto, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, ReportControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
@@ -37,7 +39,8 @@ export class ReportComponent implements OnInit {
     private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
     private reportControllerServiceProxy: ReportControllerServiceProxy,
     private masterDataService: MasterDataService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    protected dialogService: DialogService,
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -65,6 +68,22 @@ export class ReportComponent implements OnInit {
    this.selectedTool='';
    this.searchBy.climateAction =''
    this.filterReportData();
+  }
+
+  watchVideo(){
+    let ref = this.dialogService.open(GuidanceVideoComponent, {
+      header: 'Guidance Video',
+      width: '60%',
+      contentStyle: {"overflow": "auto"},
+      baseZIndex: 10000,
+      data: {
+        sourceName: 'Reports',
+      },
+    });
+
+    ref.onClose.subscribe(() => {
+      
+    })
   }
 
   onSelectTool(e: any){

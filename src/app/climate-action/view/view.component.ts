@@ -17,6 +17,8 @@ import {
   User,
 } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-view',
@@ -74,7 +76,8 @@ export class ViewComponent implements OnInit, AfterViewInit {
     private serviceProxy: ServiceProxy,
     private projectProxy: ProjectControllerServiceProxy,
     private sectorProxy: CountryControllerServiceProxy,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    protected dialogService: DialogService,
   ) {}
   ngAfterViewInit(): void {
     this.cdr.detectChanges();
@@ -126,6 +129,22 @@ export class ViewComponent implements OnInit, AfterViewInit {
 
   onSectorChange(event: any) {
     this.onSearch();
+  }
+
+  watchVideo(){
+    let ref = this.dialogService.open(GuidanceVideoComponent, {
+      header: 'Guidance Video',
+      width: '60%',
+      contentStyle: {"overflow": "auto"},
+      baseZIndex: 10000,
+      data: {
+        sourceName: 'Interventions',
+      },
+    });
+
+    ref.onClose.subscribe(() => {
+      
+    })
   }
 
   onStatusChange(event: any) {

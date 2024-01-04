@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { LazyLoadEvent } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
 import { Table } from 'primeng/table';
 import { MethodologyAssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
@@ -28,7 +30,8 @@ export class AssessmentComponent implements OnInit {
     private methassess: MethodologyAssessmentControllerServiceProxy,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    public masterDataService: MasterDataService
+    public masterDataService: MasterDataService,
+    protected dialogService: DialogService,
   ) { }
 
 
@@ -45,6 +48,22 @@ export class AssessmentComponent implements OnInit {
     table.clear();
   }
 
+  watchVideo(){
+    let ref = this.dialogService.open(GuidanceVideoComponent, {
+      header: 'Guidance Video',
+      width: '60%',
+      contentStyle: {"overflow": "auto"},
+      baseZIndex: 10000,
+      data: {
+        sourceName: 'Assessmentresults',
+      },
+    });
+
+    ref.onClose.subscribe(() => {
+      
+    })
+  }
+  
   onInput(event: any, dt: any) {
     this.filterText = event.target.value;
     this.loadData({})

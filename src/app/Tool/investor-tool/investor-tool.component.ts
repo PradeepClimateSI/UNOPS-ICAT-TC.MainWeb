@@ -9,6 +9,8 @@ import { TabView } from 'primeng/tabview';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'environments/environment';
 import { HttpResponse } from '@angular/common/http';
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
+import { DialogService } from 'primeng/dynamicdialog';
 
 
 interface  CharacteristicWeight {
@@ -184,7 +186,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     private changeDetector: ChangeDetectorRef,
     private activatedRoute: ActivatedRoute,
     private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
-
+    protected dialogService: DialogService,
 
   ) {
      this.uploadUrl = environment.baseUrlAPI + '/investor-tool/upload-file-investment'
@@ -372,7 +374,21 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   }
 
- 
+  watchVideo(){
+    let ref = this.dialogService.open(GuidanceVideoComponent, {
+      header: 'Guidance Video',
+      width: '60%',
+      contentStyle: {"overflow": "auto"},
+      baseZIndex: 10000,
+      data: {
+        sourceName: 'Incestment',
+      },
+    });
+
+    ref.onClose.subscribe(() => {
+      
+    })
+  }
 
   setTo(){
     if(this.assessment.to){

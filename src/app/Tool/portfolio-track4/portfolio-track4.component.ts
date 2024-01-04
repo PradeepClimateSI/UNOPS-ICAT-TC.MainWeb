@@ -11,6 +11,8 @@ import { environment } from 'environments/environment';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
+import { DialogService } from 'primeng/dynamicdialog';
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
 
 
 interface CharacteristicWeight {
@@ -160,6 +162,7 @@ export class PortfolioTrack4Component implements OnInit {
     private activatedRoute: ActivatedRoute,
     public sanitizer: DomSanitizer,
     private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
+    protected dialogService: DialogService,
 
   ) {
     this.uploadUrl = environment.baseUrlAPI + '/investor-tool/upload-file'
@@ -270,6 +273,23 @@ export class PortfolioTrack4Component implements OnInit {
     this.isFirstLoading0 = false
 
   }
+
+  watchVideo(){
+    let ref = this.dialogService.open(GuidanceVideoComponent, {
+      header: 'Guidance Video',
+      width: '60%',
+      contentStyle: {"overflow": "auto"},
+      baseZIndex: 10000,
+      data: {
+        sourceName: 'General',
+      },
+    });
+
+    ref.onClose.subscribe(() => {
+      
+    })
+  }
+
   async getSavedAssessment() {
     await this.getCharacteristics();
     this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()

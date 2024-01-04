@@ -3,6 +3,8 @@ import { MasterDataService } from 'app/shared/master-data.service';
 import { Country, InvestorToolControllerServiceProxy, PortfolioSdg, SdgPriority, SdgPriorityDto, ServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { MessageService } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
 
 @Component({
   selector: 'app-sdg-priority',
@@ -22,7 +24,8 @@ export class SdgPriorityComponent implements OnInit{
     private investorToolControllerServiceProxy: InvestorToolControllerServiceProxy,
     private masterDataService: MasterDataService,
     private serviceProxy: ServiceProxy,
-    private messageService: MessageService
+    private messageService: MessageService,
+    protected dialogService: DialogService,
   ){
 
   }
@@ -38,6 +41,21 @@ export class SdgPriorityComponent implements OnInit{
 
   async getCountry(){
     this.country = await this.serviceProxy.getOneBaseCountryControllerCountry(this.countryId, undefined, undefined, 0).toPromise()
+  }
+  watchVideo(){
+    let ref = this.dialogService.open(GuidanceVideoComponent, {
+      header: 'Guidance Video',
+      width: '60%',
+      contentStyle: {"overflow": "auto"},
+      baseZIndex: 10000,
+      data: {
+        sourceName: 'AddSDG',
+      },
+    });
+
+    ref.onClose.subscribe(() => {
+      
+    })
   }
 
   async getAllSdgs() {

@@ -6,6 +6,8 @@ import { CountryControllerServiceProxy, ProjectControllerServiceProxy } from 'sh
 import decode from 'jwt-decode';
 import { LoginRole } from 'shared/AppService';
 import { MasterDataService } from 'app/shared/master-data.service';
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
+import { DialogService } from 'primeng/dynamicdialog';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -73,7 +75,8 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private projectProxy: ProjectControllerServiceProxy,
     private countryProxy: CountryControllerServiceProxy,
-    public masterDataService: MasterDataService
+    public masterDataService: MasterDataService,
+    protected dialogService: DialogService,
   ) {}
 
   ngOnInit(): void {
@@ -251,6 +254,22 @@ export class DashboardComponent implements OnInit {
     }
   
   }
+  watchVideo(){
+    let ref = this.dialogService.open(GuidanceVideoComponent, {
+      header: 'Guidance Video',
+      width: '60%',
+      contentStyle: {"overflow": "auto"},
+      baseZIndex: 10000,
+      data: {
+        sourceName: 'Overview',
+      },
+    });
+
+    ref.onClose.subscribe(() => {
+      
+    })
+  }
+  
   viewPieChart() {
     const labels = this.typeofInterventionCount.map((item) => item.name);
     let counts: number[] = this.typeofInterventionCount.map((item) => item.count);

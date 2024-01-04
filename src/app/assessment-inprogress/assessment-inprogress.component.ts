@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { LazyLoadEvent } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
 import { Assessment, AssessmentControllerServiceProxy, ServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
@@ -32,6 +34,7 @@ export class AssessmentInprogressComponent implements OnInit {
     private serviceProxy: ServiceProxy,
     private assessmentProxy: AssessmentControllerServiceProxy,
     public masterDataService: MasterDataService,
+    protected dialogService: DialogService,
   ) { }
 
 
@@ -41,6 +44,22 @@ export class AssessmentInprogressComponent implements OnInit {
     event.first = 0;
 
     this.loadgridData(event);
+  }
+
+  watchVideo(){
+    let ref = this.dialogService.open(GuidanceVideoComponent, {
+      header: 'Guidance Video',
+      width: '60%',
+      contentStyle: {"overflow": "auto"},
+      baseZIndex: 10000,
+      data: {
+        sourceName: 'assesmentInprogreass',
+      },
+    });
+
+    ref.onClose.subscribe(() => {
+      
+    })
   }
 
   loadgridData = (event: LazyLoadEvent) => {
