@@ -205,10 +205,10 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
     this.relevance_tooltip = "Does the process characteristic affects/impacts any of the identified barriers? does the intervention affects/impacts the process characteristic?"
 
-    this.activatedRoute.queryParams.subscribe( params => {
-      params['isEdit']=='true'?(this.isEditMode =true ):false
+    this.activatedRoute.queryParams.subscribe(params => {
+      params['isEdit'] == 'true' ? (this.isEditMode = true) : false
       this.assessmentId = params['id'];
-      if(!this.assessmentId && this.isEditMode ){
+      if (!this.assessmentId && this.isEditMode) {
         window.location.reload()
       }
     })
@@ -226,9 +226,9 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       }
       catch (error) {
       }
-      this.isFirstLoading0 = false
 
-    } 
+    }
+    this.isFirstLoading0 = false
 
 
     this.visionExample = [
@@ -239,25 +239,25 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       { title: 'Phase of transformation', value: 'Acceleration. Solar PV is widely accepted in the society and its use is spreading increasingly fast. Fossil-fuel based energy production is being challenged as the only way to ensure a reliable energy supply. Changes have already occurred in the economy, institutions and society as a result of the spreading of Solar PV.' },
       { title: 'Intervention contribution to change the system to achieve the vision', value: 'The intervention being assessed will facilitate the spreading of Solar PV installations and thus contribute to increase the penetration of solar PV in the national electricity mix.' },
     ]
- 
-  this.tableData =  this.getProductsData();
-    this.categoryTabIndex =0;
-    this.approach=1
+
+    this.tableData = this.getProductsData();
+    this.categoryTabIndex = 0;
+    this.approach = 1
     this.assessment.assessment_approach = 'Direct'
-    this.isLikelihoodDisabled=true;
-    this.isRelavanceDisabled=true;
+    this.isLikelihoodDisabled = true;
+    this.isRelavanceDisabled = true;
     this.assessment_types = this.masterDataService.assessment_type;
-  
-   
+
+
     this.likelihood = this.masterDataService.likelihood;
     this.relevance = this.masterDataService.relevance;
     this.score = this.masterDataService.score;
     this.outcomeScaleScore = this.masterDataService.outcomeScaleScore;
-    this.outcomeSustainedScore= this.masterDataService.outcomeSustainedScore;
+    this.outcomeSustainedScore = this.masterDataService.outcomeSustainedScore;
     this.sdg_answers = this.masterDataService.sdg_answers;
 
     this.assessmentMethods = this.masterDataService.assessment_method;
-    this.assessmentApproach =this.masterDataService.assessment_approach2;
+    this.assessmentApproach = this.masterDataService.assessment_approach2;
 
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const countryId = token ? decode<any>(token).countryId : 0;
@@ -269,7 +269,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
     this.investorToolControllerproxy.findAllSDGs().subscribe((res: any) => {
       this.sdgList = res;
-     });
+    });
 
   }
   
@@ -347,7 +347,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.setFrom()
     this.setTo()
     this.draftLoading = true
-    this.isFirstLoading0 = false
+    // this.isFirstLoading0 = false
   }
 
   onChangeSDGsAnswer(withAnswers:any , item : any){
