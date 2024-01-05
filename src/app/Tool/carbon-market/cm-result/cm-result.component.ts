@@ -479,7 +479,7 @@ export class CmResultComponent implements OnInit {
   confirm(){
     let body = new CreateReportDto()
     body.assessmentId = this.assessment.id;
-    body.tool = "Carbon Market Tool"
+    body.tool = this.masterDataService.getToolName('CARBON_MARKET')
     body.type = 'Result'
     body.climateAction = this.intervention
     body.reportName = this.reportName
