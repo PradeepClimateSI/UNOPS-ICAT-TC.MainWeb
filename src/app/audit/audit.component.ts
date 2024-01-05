@@ -44,6 +44,7 @@ export class AuditComponent implements OnInit {
   activities: audit[];
   dateList: Date[] = [];
   institutionId: number;
+  loggeduserType: any;
 
   constructor(
     private router: Router,
@@ -69,6 +70,7 @@ export class AuditComponent implements OnInit {
     filters.push('username||$eq||' + username);
 
     this.institutionId = tokenPayload.insId;
+    this.loggeduserType = tokenPayload.role.name
 
     await this.serviceProxy.getManyBaseUserTypeControllerUserType(
       undefined,
@@ -115,6 +117,7 @@ export class AuditComponent implements OnInit {
       else if (userTypeId == 12) {
         this.userTypes = res.data.filter((a) => (a.id == 12));
       }
+      console.log(this.userTypes)
     });
 
   }
@@ -147,6 +150,16 @@ export class AuditComponent implements OnInit {
     let action = this.searchBy.activity ? this.searchBy.activity : '';
     let filtertext = this.searchBy.text ? this.searchBy.text : '';
 
+    console.log(this.searchBy)
+    if (this.searchBy.usertype) {
+      let type = UserTypes.find(o => o.name === this.searchBy.usertype.name)
+      if (type) {
+        usertype = type.code
+      } else {
+        usertype = this.searchBy.usertype.name
+      }
+    }
+
 
     let editedOn = this.searchBy.editedOn
       ? moment(this.searchBy.editedOn).format('YYYY-MM-DD')
@@ -169,7 +182,7 @@ export class AuditComponent implements OnInit {
           filtertext,
           this.institutionId,
           this.countryId,
-          "Country Admin"
+          this.loggeduserType
         )
 
         .subscribe((a) => {
@@ -180,8 +193,8 @@ export class AuditComponent implements OnInit {
           this.loading = false;
 
           for (let d of a.items) {
-            if (!this.status.includes(d.actionStatus)) {
-              this.status.push(d.actionStatus);
+            if (!this.status.includes(d.description)) {
+              this.status.push(d.description);
             }
 
             if (!this.userTypeList.includes(d.userType)) {
@@ -192,4 +205,26 @@ export class AuditComponent implements OnInit {
         });
     }, 1000);
   };
+
+  getUserTypeName(code: string) {
+    let type = UserTypes.find(o => o.code === code)
+    if (type) {
+      return type.name
+    } else {
+      return code
+    }
+  }
 }
+
+export enum UserTypesEnum {
+  COUNTRY_ADMIN = "COUNTRY_ADMIN",
+  COUNTRY_USER = "COUNTRY_USER",
+  MASTER_ADMIN = "MASTER_ADMIN",
+  EXTERNAL = "EXTERNAL"
+}
+export const UserTypes =  [
+  {name: "Country Admin", code: UserTypesEnum.COUNTRY_ADMIN},
+  {name: "Country User", code: UserTypesEnum.COUNTRY_USER},
+  {name: "Master Admin", code: UserTypesEnum.MASTER_ADMIN},
+  {name: "External", code: UserTypesEnum.EXTERNAL}
+]
