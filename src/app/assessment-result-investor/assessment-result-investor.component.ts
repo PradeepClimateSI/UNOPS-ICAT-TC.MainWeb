@@ -305,7 +305,7 @@ export class AssessmentResultInvestorComponent implements OnInit {
   confirm(){
     let body = new CreateReportDto()
     body.assessmentId = this.assessmentId
-    body.tool = this.tool=="PORTFOLIO"?"General tool":"Investment"
+    body.tool = this.masterDataService.getToolName(this.tool)
     body.type = 'Result'
     body.climateAction = this.intervention
     body.reportName = this.reportName
