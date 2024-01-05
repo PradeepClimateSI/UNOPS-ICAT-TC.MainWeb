@@ -7,6 +7,8 @@ import { AllBarriersSelected, Assessment, AssessmentCMDetail, AssessmentCMDetail
 import decode from 'jwt-decode';
 import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
+import { DialogService } from 'primeng/dynamicdialog';
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
 
 @Component({
   selector: 'app-carbon-market-assessment',
@@ -77,7 +79,8 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     private investorToolControllerServiceProxy: InvestorToolControllerServiceProxy,
     private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
     private assessmentCMDetailControllerServiceProxy: AssessmentCMDetailControllerServiceProxy,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    protected dialogService: DialogService,
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -109,6 +112,21 @@ export class CarbonMarketAssessmentComponent implements OnInit {
 
     this.international_tooltip = 'Name of international or private carbon market standard under which the intervention is registered.'
     await this.getCharacteristics();
+  }
+  watchVideo(){
+    let ref = this.dialogService.open(GuidanceVideoComponent, {
+      header: 'Guidance Video',
+      width: '60%',
+      contentStyle: {"overflow": "auto"},
+      baseZIndex: 10000,
+      data: {
+        sourceName: 'CMtool',
+      },
+    });
+
+    ref.onClose.subscribe(() => {
+      
+    })
   }
 
   async setInitialStates() {
@@ -171,8 +189,6 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     this.characteristicsList = await this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().toPromise();
     this.barrierChList = [...this.characteristicsList]
     this.barrierChList = this.barrierChList.filter(ch => {return ch.category.type === 'process'})
-    // this.barrierChList = this.barrierChList.filter(ch => {return !["SCALE_ADAPTATION", "SUSTAINED_ADAPTATION"].includes(ch.category.code)})
-    // this.barrierChList = this.barrierChList.filter((v, i, a) => a.findIndex(v2 => (v2.code === v.code)) === i)
   }
 
   save(form: NgForm) {

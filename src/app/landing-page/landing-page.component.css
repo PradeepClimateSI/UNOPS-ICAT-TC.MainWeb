@@ -21,17 +21,12 @@ a.link{
     background: transparent;
 }
 .bg-text {
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0, 0.4); /* Black w/opacity/see-through */
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0, 0.4); 
     color: white;
-    /* font-weight: bold;*/
-    /* border: 3px solid #f1f1f1; */
-    /* position: center;  */
     top: 75%;
     left: 50%;
     transform: translate(-50%, -60%);
-    /* z-index: 2;
-    width: 80%; */
     padding-top: 80px;
     padding-left: 20px;
  padding-right: 20px;
@@ -42,7 +37,6 @@ a.link{
   }
 .contact-us{
     position: relative;
-    /* background-size: 75% 100%;   */
     background-position: center;
     background-position: 45% 55%;
     background-repeat: no-repeat;
@@ -69,7 +63,6 @@ a.link{
 
 .case-studies{
     position: relative;
-    /* background-size: 100% 100%;   */
     background-position: center;
     background-position: 45% 55%;
     background-repeat: no-repeat;
@@ -92,7 +85,6 @@ a.link{
             border-color: rgb(76, 196, 67);
             background: transparent;
 }
-/* common styles start */
 .w-100{
     width:100%;
 }

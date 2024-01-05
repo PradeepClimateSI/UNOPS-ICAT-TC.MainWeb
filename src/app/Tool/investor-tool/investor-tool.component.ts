@@ -9,6 +9,8 @@ import { TabView } from 'primeng/tabview';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'environments/environment';
 import { HttpResponse } from '@angular/common/http';
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
+import { DialogService } from 'primeng/dynamicdialog';
 
 
 interface  CharacteristicWeight {
@@ -184,7 +186,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     private changeDetector: ChangeDetectorRef,
     private activatedRoute: ActivatedRoute,
     private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
-
+    protected dialogService: DialogService,
 
   ) {
      this.uploadUrl = environment.baseUrlAPI + '/investor-tool/upload-file-investment'
@@ -327,27 +329,26 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       }
     })
 
-    this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
-    this.policies.push(this.assessment.climateAction)
-    this.finalBarrierList = this.assessment['policy_barrier']
+    this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise();
+    this.policies.push(this.assessment.climateAction);
+    this.finalBarrierList = this.assessment['policy_barrier'];
     let areas: MasterDataDto[] = []
     this.assessment['geographicalAreasCovered'].map((area: { code: any; }) => {
-    let level = this.levelOfImplementation.find(o => o.code === area.code)
+    let level = this.levelOfImplementation.find(o => o.code === area.code);
     if (level) {
-      areas.push(level)
+      areas.push(level);
     }
     })
-    this.geographicalAreasCoveredArr = areas
+    this.geographicalAreasCoveredArr = areas;
     let sectors: any[] = [];
     this.assessment['sector'].map((sector: { name: any; }) => {
-      sectors.push(this.sectorList.find(o => o.name === sector.name))
+      sectors.push(this.sectorList.find(o => o.name === sector.name));
     })
-    this.sectorArray = sectors
+    this.sectorArray = sectors;
     this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
-    this.setFrom()
-    this.setTo()
-    this.draftLoading = true
-    // this.isFirstLoading0 = false
+    this.setFrom();
+    this.setTo();
+    this.draftLoading = true;
   }
 
   onChangeSDGsAnswer(withAnswers:any , item : any){
@@ -357,10 +358,10 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.changeDetector.detectChanges();
   }
   async getPolicies() {
-    this.policies = await this.projectControllerServiceProxy.findAllPolicies().toPromise()
+    this.policies = await this.projectControllerServiceProxy.findAllPolicies().toPromise();
   }
   async getAllImpactsCovered() {
-    this.impactCovered = await this.investorToolControllerproxy.findAllImpactCovered().toPromise()
+    this.impactCovered = await this.investorToolControllerproxy.findAllImpactCovered().toPromise();
   }
 
   setFrom(){
@@ -373,7 +374,21 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   }
 
- 
+  watchVideo(){
+    let ref = this.dialogService.open(GuidanceVideoComponent, {
+      header: 'Guidance Video',
+      width: '60%',
+      contentStyle: {"overflow": "auto"},
+      baseZIndex: 10000,
+      data: {
+        sourceName: 'Incestment',
+      },
+    });
+
+    ref.onClose.subscribe(() => {
+      
+    })
+  }
 
   setTo(){
     if(this.assessment.to){
@@ -395,10 +410,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       this.investorQuestions= await this.investorToolControllerproxy.findAllIndicatorquestions().toPromise();
 
     this.characteristicsList = await this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().toPromise();
-    this.barrierChList = [...this.characteristicsList]
-    this.barrierChList = this.barrierChList.filter((ch: Characteristics) => {return ch.category.type === 'process' })
-    // this.barrierChList = this.barrierChList.filter((ch: { category: { code: string; }; }) => {return !["SCALE_ADAPTATION", "SUSTAINED_ADAPTATION"].includes(ch.category.code)})
-    // this.barrierChList = this.barrierChList.filter((v: { code: any; }, i: any, a: any[]) => a.findIndex(v2 => (v2.code === v.code)) === i)
+    this.barrierChList = [...this.characteristicsList];
+    this.barrierChList = this.barrierChList.filter((ch: Characteristics) => {return ch.category.type === 'process' });
     this.characteristicsLoaded = true;
     this.methodologyAssessmentControllerServiceProxy.findAllCategories().toPromise().then((res2: any) => {
 

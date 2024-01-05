@@ -126,6 +126,7 @@ import { PortfolioAlignmentComponent } from './portfolios/portfolio-alignment/po
 import { SdgPriorityComponent } from './sdg-priority/sdg-priority.component';
 import { AssessmentInprogressComponent } from './assessment-inprogress/assessment-inprogress.component';
 import { LandingPageComponent } from "./landing-page/landing-page.component";
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
 
 
 
@@ -212,7 +213,8 @@ export function getAuditRemoteServiceBaseUrl(): string {
     PortfolioAlignmentComponent,
     SdgPriorityComponent,
     AssessmentInprogressComponent,
-    LandingPageComponent
+    LandingPageComponent,
+    GuidanceVideoComponent
   ],
 
 

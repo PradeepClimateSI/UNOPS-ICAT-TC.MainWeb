@@ -172,31 +172,30 @@ export class CmSectionComponent implements OnInit {
       })
     } else {
       if (e.type === 'INDIRECT') {
-        questionDto.institution = e.answer
+        questionDto.institution = e.answer;
       } else {
         if (e.answer.label === 'Unsure') {
           this.message = 'You are allowed to continue with the assessment, but we are strongly encouraged to evaluate all preconditions to ensure that they are met to enable transformational change.'
           if (!e.isLoading) {
-            this.visible = true
+            this.visible = true;
           } 
         }
         if (!e.answer.isPassing) {
           if (!this.isFirstLoading) {
-            this.visible = true
+            this.visible = true;
           } else {
-            this.isFirstLoading = false
+            this.isFirstLoading = false;
           }
           if (message) {
-            this.message = message
+            this.message = message;
           } else {
-            this.message = this.defaultMessage
+            this.message = this.defaultMessage;
           }
         }
-        questionDto.answer = e.answer
-        // if (this.isPassed) this.isPassed = e.answer.isPassed
+        questionDto.answer = e.answer;
       }
-      questionDto.question = question
-      questionDto.type = e.type
+      questionDto.question = question;
+      questionDto.type = e.type;
     }
 
     this.sectionResult.sections.map(sec => {
@@ -205,17 +204,17 @@ export class CmSectionComponent implements OnInit {
           if (cr.criteria.id === criteria.id) {
             cr.questions.map(q => {
               if (q.question.id === question.id) {
-                q.answer = questionDto.answer
-                q.comment = questionDto.comment
-                q.file = questionDto.file
-                q.institution = questionDto.institution
-                q.question = questionDto.question
-                q.type = questionDto.type
+                q.answer = questionDto.answer;
+                q.comment = questionDto.comment;
+                q.file = questionDto.file;
+                q.institution = questionDto.institution;
+                q.question = questionDto.question;
+                q.type = questionDto.type;
               } 
               return q
             })
             if (!cr.questions.find(_q => _q.question?.id === question.id)) {
-              cr.questions.push(questionDto)
+              cr.questions.push(questionDto);
             }
           }
           return cr

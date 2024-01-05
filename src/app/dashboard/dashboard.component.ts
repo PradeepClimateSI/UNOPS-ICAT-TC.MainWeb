@@ -6,6 +6,8 @@ import { CountryControllerServiceProxy, ProjectControllerServiceProxy } from 'sh
 import decode from 'jwt-decode';
 import { LoginRole } from 'shared/AppService';
 import { MasterDataService } from 'app/shared/master-data.service';
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
+import { DialogService } from 'primeng/dynamicdialog';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -73,7 +75,8 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private projectProxy: ProjectControllerServiceProxy,
     private countryProxy: CountryControllerServiceProxy,
-    public masterDataService: MasterDataService
+    public masterDataService: MasterDataService,
+    protected dialogService: DialogService,
   ) {}
 
   ngOnInit(): void {
@@ -183,7 +186,6 @@ export class DashboardComponent implements OnInit {
       aspectRatio: 1.1,
       onClick: (event: any, elements: any) => {
         if (elements.length > 0) {
-          // A bar was clicked
           const clickedIndex = elements[0].index;
           const clickedLabel = labels[clickedIndex];
           const clickedCount = counts[clickedIndex];
@@ -241,20 +243,33 @@ export class DashboardComponent implements OnInit {
     };
   }
   handleBarClick(label: string, count: number) {
-    // Your custom logic based on the clicked bar
-    console.log(`Clicked bar: ${label}, Count: ${count}`);
     if(label=='Carbon Market'){
-      this.goToCarbonMarket()
+      this.goToCarbonMarket();
     }
     else if(label=='Investment'){
-      this.goToInvestment()
+      this.goToInvestment();
     }
     else if(label=='General'){
-      this.goToPortfolio()
+      this.goToPortfolio();
     }
   
-    // Call your functions or perform other actions here
   }
+  watchVideo(){
+    let ref = this.dialogService.open(GuidanceVideoComponent, {
+      header: 'Guidance Video',
+      width: '60%',
+      contentStyle: {"overflow": "auto"},
+      baseZIndex: 10000,
+      data: {
+        sourceName: 'Overview',
+      },
+    });
+
+    ref.onClose.subscribe(() => {
+      
+    })
+  }
+  
   viewPieChart() {
     const labels = this.typeofInterventionCount.map((item) => item.name);
     let counts: number[] = this.typeofInterventionCount.map((item) => item.count);

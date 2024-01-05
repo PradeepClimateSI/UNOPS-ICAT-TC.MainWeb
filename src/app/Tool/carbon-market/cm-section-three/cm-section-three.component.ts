@@ -28,11 +28,7 @@ export class CmSectionThreeComponent implements OnInit {
   @Input() assessmentquestions: CMAssessmentQuestion[]
   @Input() isEditMode: boolean
   @Input() assessment:Assessment;
-  @Output() onSubmit = new EventEmitter()
-  // @ViewChild('scaleGHGData', { read: NgForm }) scale_ghg_form!: NgForm;
-  // @ViewChild('sustainGHGData', { read: NgForm }) sustaine_ghg_form!: NgForm;
-  // @ViewChild('fData', { read: NgForm }) scale_sdg_form!: NgForm;
-  // @ViewChild('fData', { read: NgForm }) sustaine_sdg_form!: NgForm;
+  @Output() onSubmit = new EventEmitter();
 
   @ViewChildren(NgForm) viewChildren!: QueryList<NgForm>;
 
@@ -50,29 +46,29 @@ export class CmSectionThreeComponent implements OnInit {
   activeIndexMain: number = 0;
   mainTabIndex: any;
   categoryTabIndex: any;
-  categories: any = {}
-  types: any
-  selectedType: any
-  selectedCategory: any
-  questions: any = {}
-  outcome: any = []
+  categories: any = {};
+  types: any;
+  selectedType: any;
+  selectedCategory: any;
+  questions: any = {};
+  outcome: any = [];
   selectedSDGs: SDG[];
-  results: CMResultDto[] = []
+  results: CMResultDto[] = [];
   activeIndex2: number = 0;
-  sdgsToLoop: SDG[]
+  sdgsToLoop: SDG[];
   uploadedFiles: any = [];
   uploadUrl: string;
-  GHG_scale_info: any
-  SD_scale_info: any
-  adaptation_scale_info: any
-  GHG_scale_score_macro: ScoreDto[]
-  GHG_scale_score_medium: ScoreDto[]
-  GHG_scale_score_micro: ScoreDto[]
-  GHG_sustained_score: ScoreDto[]
-  SDG_scale_score: ScoreDto[]
-  SDG_sustained_score: ScoreDto[]
-  adaptation_scale_score: ScoreDto[]
-  adaptation_sustained_score: ScoreDto[]
+  GHG_scale_info: any;
+  SD_scale_info: any;
+  adaptation_scale_info: any;
+  GHG_scale_score_macro: ScoreDto[];
+  GHG_scale_score_medium: ScoreDto[];
+  GHG_scale_score_micro: ScoreDto[];
+  GHG_sustained_score: ScoreDto[];
+  SDG_scale_score: ScoreDto[];
+  SDG_sustained_score: ScoreDto[];
+  adaptation_scale_score: ScoreDto[];
+  adaptation_sustained_score: ScoreDto[];
   SDGScore: any = 0;
   adaptationScore: any = 0;
   SDGWeight: any = '10%';
@@ -81,21 +77,21 @@ export class CmSectionThreeComponent implements OnInit {
   fileServerURL: string;
   institutions: Institution[] = [];
   relevance: any[];
-  adaptation_tooltip: string
-  starting_situation_tooltip: string
-  expected_impact_tooltip: string
+  adaptation_tooltip: string;
+  starting_situation_tooltip: string;
+  expected_impact_tooltip: string;
   sdgList: any;
   selectedSDGsList: PortfolioSdg[] = [];
-  categoriesToSave: string[] = []
-  isDraftSaved: boolean = false
+  categoriesToSave: string[] = [];
+  isDraftSaved: boolean = false;
   nextClicked: boolean;
   savedData: boolean = false;
   relevance_tooltip: string;
   ghg_starting_situation_placeholder: any;
   isFirstLoading0: boolean = true;
   isFirstLoading1: boolean = true;
-  fieldNames = FieldNames
-  notFilledCategories: (OutcomeCategory | UniqueCategory)[] = []
+  fieldNames = FieldNames;
+  notFilledCategories: (OutcomeCategory | UniqueCategory)[] = [];
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -132,36 +128,35 @@ export class CmSectionThreeComponent implements OnInit {
     this.expected_impact_tooltip = "Please describe the adaptation benefits on the indicated scale."
     this.relevance_tooltip = "Does the process characteristic affects/impacts any of the identified barriers? does the intervention affects/impacts the process characteristic?"
 
-    this.GHG_scale_info = this.masterDataService.GHG_scale_info
-    this.SD_scale_info = this.masterDataService.SD_scale_info
-    this.adaptation_scale_info = this.masterDataService.adaptation_scale_info
-    this.GHG_scale_score_macro = this.masterDataService.GHG_scale_score_macro
-    this.GHG_scale_score_medium = this.masterDataService.GHG_scale_score_medium
-    this.GHG_scale_score_micro = this.masterDataService.GHG_scale_score_micro
-    this.GHG_sustained_score = this.masterDataService.GHG_sustained_score
-    this.SDG_scale_score = this.masterDataService.SDG_scale_score
-    this.SDG_sustained_score = this.masterDataService.SDG_sustained_score
-    this.adaptation_scale_score = this.masterDataService.adaptation_scale_score
-    this.adaptation_sustained_score = this.masterDataService.adaptation_sustained_score
-    this.SDGs = this.masterDataService.SDGs
-    this.categories = await this.cMQuestionControllerServiceProxy.getUniqueCharacterisctics().toPromise()
-    this.selectedType = this.types[0]
-    this.selectedCategory = this.categories[this.selectedType.code][0]
-    // this.onMainTabChange({ index: 0 })
-    this.onCategoryTabChange({ index: 0 })
-    this.isFirstLoading0 = false
-    this.outcome = await this.methodologyAssessmentControllerServiceProxy.getAllOutcomeCharacteristics().toPromise()
-    this.outcome = this.outcome.sort((a: any, b: any) => a.order - b.order)
+    this.GHG_scale_info = this.masterDataService.GHG_scale_info;
+    this.SD_scale_info = this.masterDataService.SD_scale_info;
+    this.adaptation_scale_info = this.masterDataService.adaptation_scale_info;
+    this.GHG_scale_score_macro = this.masterDataService.GHG_scale_score_macro;
+    this.GHG_scale_score_medium = this.masterDataService.GHG_scale_score_medium;
+    this.GHG_scale_score_micro = this.masterDataService.GHG_scale_score_micro;
+    this.GHG_sustained_score = this.masterDataService.GHG_sustained_score;
+    this.SDG_scale_score = this.masterDataService.SDG_scale_score;
+    this.SDG_sustained_score = this.masterDataService.SDG_sustained_score;
+    this.adaptation_scale_score = this.masterDataService.adaptation_scale_score;
+    this.adaptation_sustained_score = this.masterDataService.adaptation_sustained_score;
+    this.SDGs = this.masterDataService.SDGs;
+    this.categories = await this.cMQuestionControllerServiceProxy.getUniqueCharacterisctics().toPromise();
+    this.selectedType = this.types[0];
+    this.selectedCategory = this.categories[this.selectedType.code][0];
+    this.onCategoryTabChange({ index: 0 });
+    this.isFirstLoading0 = false;
+    this.outcome = await this.methodologyAssessmentControllerServiceProxy.getAllOutcomeCharacteristics().toPromise();
+    this.outcome = this.outcome.sort((a: any, b: any) => a.order - b.order);
     this.institutionControllerServiceProxy.getAllInstitutions().subscribe((res: any) => {
       this.institutions = res;
     });
     this.relevance = this.masterDataService.relevance;
-    await this.getSDGList()
-    await this.setInitialState()
+    await this.getSDGList();
+    await this.setInitialState();
   }
 
   async setInitialState() {
-    let int=0
+    let int=0;
 
     this.categories['process'].forEach((d: any) => {
       if (d.name == this.assessment.processDraftLocation) {
@@ -296,42 +291,17 @@ export class CmSectionThreeComponent implements OnInit {
   onMainTabChange(event: any) {
     this.selectedType = this.types[event.index]
     this.mainTabIndex = event.index;
-    // if (this.mainTabIndex == 0) {
-    //   if (!this.isFirstLoading0) {
-    //     this.checkTab1Mandatory(4)
-    //     this.maintabIsValid[event.index] = true
-    //     for (let k of Object.keys(this.tab1IsValid)) {
-    //       if (!this.tab1IsValid[parseInt(k)]){
-    //         this.maintabIsValid[event.index] = false
-    //         break
-    //       }
-    //     }
-    //   }
-    // } else {
-    //   if (!this.isFirstLoading1) {
-    //     this.checkTab2Mandatory(6)
-    //     this.maintabIsValid[event.index] = true
-    //     for (let k of Object.keys(this.tabIsValid)) {
-    //       if (!this.tabIsValid[parseInt(k)]){
-    //         this.maintabIsValid[event.index] = false
-    //         break
-    //       }
-    //     }
-    //   } else {
-    //     this.isFirstLoading1 = false
-    //   }
-    // }
 
     for (let i = 0; i<2; i++) {
       if (i == 0) {
         if (!this.isFirstLoading0) {
-          this.checkTab1Mandatory(4)
+          this.checkTab1Mandatory(4);
   
           this.maintabIsValid[i] = true
           for (let k of Object.keys(this.tab1IsValid)) {
             if (!this.tab1IsValid[parseInt(k)]){
-              this.maintabIsValid[i] = false
-              break
+              this.maintabIsValid[i] = false;
+              break;
             }
           }
         }
@@ -341,12 +311,12 @@ export class CmSectionThreeComponent implements OnInit {
           this.maintabIsValid[i] = true
           for (let k of Object.keys(this.tabIsValid)) {
             if (!this.tabIsValid[parseInt(k)]){
-              this.maintabIsValid[i] = false
-              break
+              this.maintabIsValid[i] = false;
+              break;
             }
           }
         } else {
-          this.isFirstLoading1 = false
+          this.isFirstLoading1 = false;
         }
       }
     }
@@ -354,9 +324,9 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   async onCategoryTabChange(event: any) {
-    this.nextClicked = false
+    this.nextClicked = false;
     this.categoryTabIndex = event.index;
-    this.checkTab1Mandatory(event.index)
+    this.checkTab1Mandatory(event.index);
   }
 
   checkTab1Mandatory(idx: number) {

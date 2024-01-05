@@ -6,6 +6,8 @@ import decode from 'jwt-decode';
 import { AppService } from 'shared/AppService';
 import { AuthControllerServiceProxy, AuthCredentialDto, ServiceProxy } from 'shared/service-proxies/auth-service-proxies';
 import { UsersControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-login',
@@ -27,9 +29,26 @@ export class LoginComponent implements OnInit {
     private appService: AppService,
     private activatedRoute:ActivatedRoute,
     private userControllerService: UsersControllerServiceProxy,
+    protected dialogService: DialogService,
   ) { }
 
   ngOnInit(): void {
+  }
+
+  watchVideo(){
+    let ref = this.dialogService.open(GuidanceVideoComponent, {
+      header: 'Guidance Video',
+      width: '60%',
+      contentStyle: {"overflow": "auto"},
+      baseZIndex: 10000,
+      data: {
+        sourceName: 'Landing',
+      },
+    });
+
+    ref.onClose.subscribe(() => {
+      
+    })
   }
 
   togglePassword(){

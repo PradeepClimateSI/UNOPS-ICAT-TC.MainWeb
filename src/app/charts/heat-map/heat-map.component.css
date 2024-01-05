@@ -1,6 +1,5 @@
-/* th, */
+
 .charttd {
-    /* border: 1px solid black; */
     width: 125px;
     height: 70px;
 }
@@ -41,5 +40,4 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* height: 100vh; */
 }
