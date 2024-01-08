@@ -84,8 +84,8 @@ export class AuditComponent implements OnInit {
       1,
       0
     ).subscribe((res) => {
-      if (userTypeId == 1) {
-        this.userTypes = res.data.filter((a) => (a.id == 1 || a.id == 2 || a.id == 3 || a.id == 5 || a.id == 6 || a.id == 7 || a.id == 8 || a.id == 9 || a.id == 11));
+      if (userTypeId == 1) { //country admin
+        this.userTypes = res.data.filter((a) => (a.id == 1 || a.id == 5));
       }
       else if (userTypeId == 2) {
         this.userTypes = res.data.filter((a) => (a.id == 2));
@@ -93,8 +93,8 @@ export class AuditComponent implements OnInit {
       else if (userTypeId == 3) {
         this.userTypes = res.data.filter((a) => (a.id == 2 || a.id == 3 || a.id == 5 || a.id == 6 || a.id == 7 || a.id == 8 || a.id == 9 || a.id == 11));
       }
-      else if (userTypeId == 5) {
-        this.userTypes = res.data.filter((a) => (a.id == 2 || a.id == 5 || a.id == 6 || a.id == 7 || a.id == 9 || a.id == 11));
+      else if (userTypeId == 5) {//country user
+        this.userTypes = res.data.filter((a) => (a.id == 5));
       }
       else if (userTypeId == 6) {
         this.userTypes = res.data.filter((a) => (a.id == 2 || a.id == 6 || a.id == 7 || a.id == 8 || a.id == 9 || a.id == 11));
@@ -108,8 +108,8 @@ export class AuditComponent implements OnInit {
       else if (userTypeId == 9) {
         this.userTypes = res.data.filter((a) => (a.id == 9));
       }
-      else if (userTypeId == 10) {
-        this.userTypes = res.data.filter((a) => (a.id == 1 || a.id == 2 || a.id == 3 || a.id == 5 || a.id == 6 || a.id == 7 || a.id == 8 || a.id == 9 || a.id == 10 || a.id == 11));
+      else if (userTypeId == 10) { // master admin
+        this.userTypes = res.data.filter((a) => (a.id == 1 || a.id == 5 || a.id == 10));
       }
       else if (userTypeId == 11) {
         this.userTypes = res.data.filter((a) => (a.id == 11));
