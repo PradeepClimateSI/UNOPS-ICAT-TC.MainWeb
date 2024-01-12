@@ -45,6 +45,7 @@ export class AuditComponent implements OnInit {
   dateList: Date[] = [];
   institutionId: number;
   loggeduserType: any;
+  username: any;
 
   constructor(
     private router: Router,
@@ -61,13 +62,13 @@ export class AuditComponent implements OnInit {
 
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
-    const username = tokenPayload.usr;
+    this.username = tokenPayload.username;
     this.countryId = tokenPayload.countryId;
    this.userType = tokenPayload.role.code;
     const userTypeId = tokenPayload.role.id;
 
     let filters: string[] = [];
-    filters.push('username||$eq||' + username);
+    filters.push('username||$eq||' + this.username);
 
     this.institutionId = tokenPayload.insId;
     this.loggeduserType = tokenPayload.role.name
@@ -170,7 +171,6 @@ export class AuditComponent implements OnInit {
         ? 1
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
-
     setTimeout(() => {
       this.auditserviceproxy
         .getAuditDetailsCountry(
@@ -182,16 +182,17 @@ export class AuditComponent implements OnInit {
           filtertext,
           this.institutionId,
           this.countryId,
-          this.loggeduserType
+          this.loggeduserType,
+          this.username
         )
 
         .subscribe((a) => {
-
+          //@ts-ignore
           this.activities = a.items;
-
+          //@ts-ignore
           this.totalRecords = a.meta.totalItems;
           this.loading = false;
-
+          //@ts-ignore
           for (let d of a.items) {
             if (!this.status.includes(d.description)) {
               this.status.push(d.description);
@@ -202,6 +203,8 @@ export class AuditComponent implements OnInit {
             }
 
           }
+        }, error => {
+          console.log(error, "error occured")
         });
     }, 1000);
   };
