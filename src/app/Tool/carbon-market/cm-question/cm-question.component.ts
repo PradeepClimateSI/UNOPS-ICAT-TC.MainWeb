@@ -48,8 +48,8 @@ export class CmQuestionComponent implements OnInit {
     private institutionControllerServiceProxy: InstitutionControllerServiceProxy,
     private messageService: MessageService,
   ) {
-    this.uploadUrl = environment.baseUrlAPI + '/cm-assessment-question/upload-file'
-    this.fileServerURL = environment.baseUrlAPI+'/uploads'
+    this.uploadUrl = environment.baseUrlUploadByNamaAPI ;
+    this.fileServerURL = environment.baseUrlDownloadByNamaAPI+'/uploads';
    }
 
   async ngOnInit(): Promise<void> {

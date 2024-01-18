@@ -179,8 +179,8 @@ abatement: any;
 
 
   ) {
-     this.uploadUrl = environment.baseUrlAPI + '/investor-tool/upload-file-investment'
-    this.fileServerURL = environment.baseUrlAPI+'/uploads'
+    this.uploadUrl = environment.baseUrlUploadByNamaAPI ;
+    this.fileServerURL = environment.baseUrlDownloadByNamaAPI+'/uploads';
 
   }
   async ngOnInit(): Promise<void> {

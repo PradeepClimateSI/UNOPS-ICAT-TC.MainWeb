@@ -16,6 +16,8 @@ export const environment = {
 // authBaseUrlAPI: 'http://localhost:7090',
 // authBaseUrlAPI: 'http://localhost:7090',
   baseUrlAPIDocUploadAPI: 'http://localhost:7080/document/upload2',
+  baseUrlUploadByNamaAPI: 'http://localhost:7080/document/upload-file-by-name',
+  baseUrlDownloadByNamaAPI: 'http://localhost:7080/document/downloadDocumentsFromFileName',
   baseUrlJsonFile: 'http://35.154.205.109:3600/filename',
   baseUrlAPIDocUploadAnonymousAPI: 'http://localhost:7080/document/upload2',
   baseUrlAuditlog :  'http://localhost:7000',

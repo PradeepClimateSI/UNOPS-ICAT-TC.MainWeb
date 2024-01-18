@@ -153,8 +153,8 @@ export class PortfolioTrack4Component implements OnInit {
     private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
 
   ) {
-    this.uploadUrl = environment.baseUrlAPI + '/investor-tool/upload-file'
-    this.fileServerURL = environment.baseUrlAPI+'/uploads'
+    this.uploadUrl = environment.baseUrlUploadByNamaAPI ;
+    this.fileServerURL = environment.baseUrlDownloadByNamaAPI+'/uploads';
 
   }
 
