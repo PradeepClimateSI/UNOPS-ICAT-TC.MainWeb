@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^16.1.6",
-    "@angular/cli": "^16.1.6",
+    "@angular/cli": "^17.0.1",
     "@angular/compiler-cli": "^16.1.7",
     "@schematics/angular": "^13.0.2",
     "@types/googlemaps": "^3.43.3",
