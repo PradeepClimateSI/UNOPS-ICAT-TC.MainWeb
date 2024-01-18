@@ -4,6 +4,8 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ConfirmationService, LazyLoadEvent, MessageService, SelectItem } from "primeng/api";
 import { RecordStatus } from 'shared/AppService';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DialogService } from 'primeng/dynamicdialog';
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
@@ -45,11 +47,28 @@ export class UserListComponent implements OnInit {
     private messageService: MessageService,
     private activatedRoute: ActivatedRoute,
     private userControllerService: UsersControllerServiceProxy,
+    protected dialogService: DialogService,
 
   ) { }
 
   ngAfterViewInit(): void {
     this.cdr.detectChanges();
+  }
+
+  watchVideo(){
+    let ref = this.dialogService.open(GuidanceVideoComponent, {
+      header: 'Guidance Video',
+      width: '60%',
+      contentStyle: {"overflow": "auto"},
+      baseZIndex: 10000,
+      data: {
+        sourceName: 'User',
+      },
+    });
+
+    ref.onClose.subscribe(() => {
+      
+    })
   }
 
   ngOnInit(): void {

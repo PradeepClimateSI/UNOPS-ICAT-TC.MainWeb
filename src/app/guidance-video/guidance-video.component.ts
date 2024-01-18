@@ -69,6 +69,10 @@ export class GuidanceVideoComponent implements OnInit {
             this.link =  this.root + "TC-Incestment tool.m4v";
             break
           } 
+          case 'User': {
+            this.link =  this.root + "User.mp4";
+            break
+          } 
         }
       }
     }
