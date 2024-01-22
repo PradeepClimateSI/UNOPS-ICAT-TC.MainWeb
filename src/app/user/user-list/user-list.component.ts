@@ -215,7 +215,6 @@ export class UserListComponent implements OnInit {
   }
 
   deleteLoginProfile(id: string) {
-    //@ts-ignore
     this.loginProfileControllerServiceProxy.remove(id)
       .subscribe((res: any) => {
       })

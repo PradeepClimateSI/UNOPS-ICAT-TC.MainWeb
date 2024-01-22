@@ -186,13 +186,10 @@ export class AuditComponent implements OnInit {
           this.username
         )
 
-        .subscribe((a) => {
-          //@ts-ignore
+        .subscribe((a:any) => {
           this.activities = a.items;
-          //@ts-ignore
           this.totalRecords = a.meta.totalItems;
           this.loading = false;
-          //@ts-ignore
           for (let d of a.items) {
             if (!this.status.includes(d.description)) {
               this.status.push(d.description);

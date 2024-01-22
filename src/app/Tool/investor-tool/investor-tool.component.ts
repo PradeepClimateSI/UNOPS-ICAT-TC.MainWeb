@@ -913,11 +913,10 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
     }
     else{
-      let finalArray = this.processData.concat(this.outcomeData)
-      finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment));
-      //@ts-ignore
+      let finalArray:any = this.processData.concat(this.outcomeData)
+      finalArray.map((x: { data: any[]; }) => x.data.map(y => y.assessment = this.mainAssessment));
       this.investorToolControllerproxy.createFinalAssessmentIndirect(finalArray)
-        .subscribe(_res => {
+        .subscribe((_res:any) => {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
