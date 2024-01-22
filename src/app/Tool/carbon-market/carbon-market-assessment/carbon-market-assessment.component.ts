@@ -160,8 +160,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   setFrom(){
     if(this.assessment.from){  
       let convertTime = moment(this.assessment.from).format("YYYY-MM-DD HH:mm:ss");
-      let convertTimeObject = new Date(convertTime);
-      //@ts-ignore
+      let convertTimeObject = new Date(convertTime);      
       this.assessment.from = convertTimeObject;
     }
   }
@@ -170,7 +169,6 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     if(this.assessment.to){
       let convertTime = moment(this.assessment.to).format("YYYY-MM-DD HH:mm:ss");
       let convertTimeObject = new Date(convertTime);
-      //@ts-ignore
       this.assessment.to = convertTimeObject;
     }
   }

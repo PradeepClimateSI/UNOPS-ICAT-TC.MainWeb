@@ -210,8 +210,7 @@ export class ApproveDataComponent implements OnInit {
 
   onClickQC() {
     this.isHideRejectButton = true;
-    let dto = new UpdateAssessmentDto();
-    //@ts-ignore
+    let dto = new UpdateAssessmentDto();    
     dto.deadline = this.selectedQCDeadline;
     this.assessmentProxy.update(this.assessmentYear.id,dto)
       .subscribe((res) => {

@@ -368,7 +368,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     if(this.assessment.from){  
       let convertTime = moment(this.assessment.from).format("YYYY-MM-DD HH:mm:ss");
       let convertTimeObject = new Date(convertTime);
-      //@ts-ignore
       this.assessment.from = convertTimeObject;
     }
 
@@ -394,7 +393,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     if(this.assessment.to){
       let convertTime = moment(this.assessment.to).format("YYYY-MM-DD HH:mm:ss");
       let convertTimeObject = new Date(convertTime);
-      //@ts-ignore
       this.assessment.to = convertTimeObject;
     }
 
