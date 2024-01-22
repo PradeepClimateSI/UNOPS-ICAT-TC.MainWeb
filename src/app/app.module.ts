@@ -134,9 +134,6 @@ import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.compon
 export function getRemoteServiceBaseUrl(): string {
   return environment.baseUrlAPI;
 }
-export function getRemoteServiceESBaseUrl(): string {
-  return environment.esbaseUrlAPI;
-}
 export function getAuthRemoteServiceBaseUrl(): string {
   return environment.authBaseUrlAPI;
 }
