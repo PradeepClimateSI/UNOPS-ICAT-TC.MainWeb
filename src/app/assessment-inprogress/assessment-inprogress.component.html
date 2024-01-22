@@ -11,7 +11,7 @@
         </div>
 
 
-        <p-table #dt2 [value]="assesments" [paginator]="true" [rows]="rows" [totalRecords]="totalRecords"
+        <p-table #dt2 [value]="assessments" [paginator]="true" [rows]="rows" [totalRecords]="totalRecords"
             [sortField]="'id'" [sortOrder]="-1" [lazy]="true" (onLazyLoad)="loadgridData($event)"
             [showCurrentPageReport]="true"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Entries"

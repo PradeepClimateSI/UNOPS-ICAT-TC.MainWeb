@@ -21,7 +21,7 @@ export class GuidanceVideoComponent implements OnInit {
       if (this.config.data.sourceName) {
         this.sourceName = this.config.data.sourceName;
         switch(this.sourceName){
-          case 'assesmentInprogreass': {
+          case 'assessmentInprogreass': {
             this.link =  this.root + "Assessment inprogress.mp4";
             break
           } 

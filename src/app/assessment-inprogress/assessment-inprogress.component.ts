@@ -4,7 +4,7 @@ import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.compon
 import { MasterDataService } from 'app/shared/master-data.service';
 import { LazyLoadEvent } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
-import { Assessment, AssessmentControllerServiceProxy, ServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Assessment, AssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-assessment-inprogress',
@@ -26,12 +26,11 @@ export class AssessmentInprogressComponent implements OnInit {
     editedOn: null,
   };
 
-  assesments: Assessment[];
+  assessments: Assessment[];
 
 
   constructor(
     private router: Router,
-    private serviceProxy: ServiceProxy,
     private assessmentProxy: AssessmentControllerServiceProxy,
     public masterDataService: MasterDataService,
     protected dialogService: DialogService,
@@ -53,7 +52,7 @@ export class AssessmentInprogressComponent implements OnInit {
       contentStyle: {"overflow": "auto"},
       baseZIndex: 10000,
       data: {
-        sourceName: 'assesmentInprogreass',
+        sourceName: 'assessmentInprogreass',
       },
     });
 
@@ -68,7 +67,7 @@ export class AssessmentInprogressComponent implements OnInit {
     this.rows = event.rows === undefined ? 10 : event.rows;
 
     this.assessmentProxy.assessmentInprogress(pageNumber,this.rows,filterText).subscribe(res => {
-        this.assesments=res[1];
+        this.assessments=res[1];
         this.totalRecords= res[0];
       }
       )
