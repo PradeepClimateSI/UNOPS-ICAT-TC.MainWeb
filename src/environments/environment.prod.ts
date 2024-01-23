@@ -7,6 +7,7 @@ export const environment = {
   
   baseUrlAuditlog :  '',
   baseUrlPMU: '',
-  videoURL: ''
+  videoURL: '',
+  baseUrlExcelUpload:''
 
 };

@@ -6,6 +6,7 @@ import { RecordStatus } from 'shared/AppService';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from 'primeng/dynamicdialog';
 import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
+import { LoginProfileControllerServiceProxy } from 'shared/service-proxies/auth-service-proxies';
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
@@ -48,6 +49,7 @@ export class UserListComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private userControllerService: UsersControllerServiceProxy,
     protected dialogService: DialogService,
+    private loginProfileControllerServiceProxy: LoginProfileControllerServiceProxy
 
   ) { }
 
@@ -215,6 +217,7 @@ export class UserListComponent implements OnInit {
   }
 
   deleteLoginProfile(id: string) {
+    
     this.loginProfileControllerServiceProxy.remove(id)
       .subscribe((res: any) => {
       })

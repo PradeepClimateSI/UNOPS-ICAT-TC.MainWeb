@@ -949,6 +949,7 @@ export class PortfolioTrack4Component implements OnInit {
     else {
       let finalArray = this.processData.concat(this.outcomeData)
       finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment));
+      //@ts-ignore - We are accepting Array in back-end
       this.investorToolControllerproxy.createFinalAssessmentIndirect(finalArray)
         .subscribe(_res => {
           this.messageService.add({
