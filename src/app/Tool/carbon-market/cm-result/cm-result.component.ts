@@ -163,15 +163,17 @@ export class CmResultComponent implements OnInit {
 
       let response = await this.cMAssessmentQuestionControllerServiceProxy.calculateResult(req).toPromise()
       this.score = response
-      this.heatMapScore = [{processScore: this.score.process_score, outcomeScore: this.score.outcome_score.outcome_score}]
-      Object.keys(response.outcome_score.sdgs_score)?.map((key: any) => {
-        this.selectedSdgs = this.selectedSdgs.map((sd: any) => {
-          if (+key === sd.id) {
-            sd['score'] = response.outcome_score.sdgs_score[key]
-          }
-          return sd
+      this.heatMapScore = [{ processScore: this.score.process_score, outcomeScore: this.score.outcome_score.outcome_score }]
+      if (response?.outcome_score?.sdgs_score) {
+        Object.keys(response.outcome_score.sdgs_score)?.map((key: any) => {
+          this.selectedSdgs = this.selectedSdgs.map((sd: any) => {
+            if (+key === sd.id) {
+              sd['score'] = response.outcome_score.sdgs_score[key]
+            }
+            return sd
+          })
         })
-      }) 
+      }
     }
   }
 
@@ -206,18 +208,20 @@ export class CmResultComponent implements OnInit {
       let worksheet = XLSX.utils.table_to_sheet(table,{})
       this.isDownloading = false
       setTimeout(() => {
-        let heatmap = XLSX.utils.table_to_sheet(document.getElementById('heatmap'),{})
-        
         XLSX.utils.book_append_sheet(workbook, ws, 'Assessment Info');
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Assessment Results');
-        XLSX.utils.book_append_sheet(workbook, heatmap, 'Score map');
-
-        for (const itm of colorMap) {
-          if (heatmap[itm.cell]) {
-            heatmap[itm.cell].s = {
-              fill: { fgColor: { rgb: itm.color } },
-              font: { color: { rgb: itm.color } }
-            };
+        let doc = document.getElementById('heatmap')
+        let heatmap
+        if (doc){ 
+          heatmap = XLSX.utils.table_to_sheet(doc,{})
+          XLSX.utils.book_append_sheet(workbook, heatmap, 'Score map');
+          for (const itm of colorMap) {
+            if (heatmap[itm.cell]) {
+              heatmap[itm.cell].s = {
+                fill: { fgColor: { rgb: itm.color } },
+                font: { color: { rgb: itm.color } }
+              };
+            }
           }
         }
 
