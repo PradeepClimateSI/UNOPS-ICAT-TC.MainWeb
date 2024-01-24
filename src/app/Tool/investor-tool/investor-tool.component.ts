@@ -189,8 +189,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     protected dialogService: DialogService,
 
   ) {
-     this.uploadUrl = environment.baseUrlAPI + '/investor-tool/upload-file-investment'
-    this.fileServerURL = environment.baseUrlAPI+'/uploads'
+    this.uploadUrl = environment.baseUrlAPI + "/document/upload-file-by-name" ; 
+    this.fileServerURL = environment.baseUrlAPI+'/document/downloadDocumentsFromFileName/uploads';
 
   }
   async ngOnInit(): Promise<void> {

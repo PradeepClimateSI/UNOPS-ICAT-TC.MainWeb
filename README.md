@@ -82,7 +82,6 @@ The environment variables should be declared in the files `environment.prod.ts` 
 | `baseUrlPMU`                          | PMU Portal Web Aplication URL                                    |
 | `videoURL`                            | Video source URL                                                 |
 | `authBaseUrlAPI`                      | Auth Service API URL                                             |
-| `baseUrlAPIDocUploadAPI`              | Documnet upload URL                                              |
 
 
 ## Dependencies

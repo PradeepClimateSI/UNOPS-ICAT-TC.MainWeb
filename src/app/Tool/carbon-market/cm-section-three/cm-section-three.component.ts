@@ -101,8 +101,8 @@ export class CmSectionThreeComponent implements OnInit {
     private institutionControllerServiceProxy: InstitutionControllerServiceProxy,
     private investorToolControllerServiceProxy: InvestorToolControllerServiceProxy
   ) {
-    this.uploadUrl = environment.baseUrlAPI + '/cm-assessment-question/upload-file'
-    this.fileServerURL = environment.baseUrlAPI + '/uploads'
+    this.uploadUrl = environment.baseUrlAPI + "/document/upload-file-by-name" ; 
+    this.fileServerURL = environment.baseUrlAPI+'/document/downloadDocumentsFromFileName/uploads';
   }
 
   async ngOnInit(): Promise<void> {

@@ -165,8 +165,8 @@ export class PortfolioTrack4Component implements OnInit {
     protected dialogService: DialogService,
 
   ) {
-    this.uploadUrl = environment.baseUrlAPI + '/investor-tool/upload-file'
-    this.fileServerURL = environment.baseUrlAPI + '/uploads'
+    this.uploadUrl = environment.baseUrlAPI + "/document/upload-file-by-name" ;
+    this.fileServerURL = environment.baseUrlAPI+'/document/downloadDocumentsFromFileName/uploads';
 
   }
 
