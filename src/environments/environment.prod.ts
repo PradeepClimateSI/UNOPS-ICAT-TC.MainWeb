@@ -5,8 +5,6 @@ export const environment = {
   baseUrlAPIDocUploadAPI: '',
   
   baseUrlAuditlog :  '',
-  baseUrlAPIDocUploadAnonymousAPI: '',
-  baseUrlExcelUpload:  '',
   baseUrlPMU: '',
   videoURL: ''
 
