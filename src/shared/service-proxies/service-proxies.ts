@@ -30908,7 +30908,6 @@ export enum DocumentsDocumentOwner {
     CountryNDC = <any>"CountryNDC",
     CountryGHG = <any>"CountryGHG",
 }
-
 export interface IParameterRequest {
     createdBy: string;
     createdOn: moment.Moment;
