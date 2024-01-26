@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  baseUrlAPI: 'htts://tc-main.climatesi.com',
+  baseUrlAPI: 'https://tc-main.climatesi.com',
   authBaseUrlAPI: 'https://tc-auth.climatesi.com',
   
   baseUrlAuditlog :  'https://tc-audit.climatesi.com',
