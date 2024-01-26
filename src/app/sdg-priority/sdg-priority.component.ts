@@ -42,7 +42,6 @@ export class SdgPriorityComponent implements OnInit{
   async getCountry(){
     this.countryServiceProxy.getCountry(this.countryId).subscribe((res) => {
       this.country = (res)});
-    // this.country = await this.serviceProxy.getOneBaseCountryControllerCountry(this.countryId, undefined, undefined, 0).toPromise()
   }
   watchVideo(){
     let ref = this.dialogService.open(GuidanceVideoComponent, {

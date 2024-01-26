@@ -335,7 +335,6 @@ export class ClimateActionComponent implements OnInit  {
           this.showDeleteButton=false;
           this.projectProxy.getIntervention(this.editEntytyId)
             .subscribe(async (res1) => {
-              console.log("project",res1)
               this.project = res1;
               this.loadProjectStatus= true
               this.loadingCountry= true
@@ -408,9 +407,6 @@ export class ClimateActionComponent implements OnInit  {
                  this.sectorsJoined=this.sectornames.join(', ')
                  })
               setTimeout(() => {
-                // need to add after implementing google map. so don't remove
-                // let map = this.gmap.getMap();
-                // this.updateMapBoundaries(map, longitude, latitude);
               }, 3000);
               
 
@@ -432,7 +428,6 @@ export class ClimateActionComponent implements OnInit  {
       this.docService.getDocuments(this.editEntytyId,1)
         .subscribe((res: any) => {
           this.selectedDocuments = res;
-          console.log( " this.selectedDocuments ",this.selectedDocuments )
         });
     }
 
@@ -957,8 +952,7 @@ updateStatus(project: Project, aprovalStatus: number) {
   project.projectApprovalStatus = updateProjectApprovalStatus;
   let savingCountry = new Country()
   savingCountry.id = project.country.id;
-  project.country = savingCountry
-  console.log("project",project,aprovalStatus)
+  project.country = savingCountry;
   this.projectProxy
     .createNewCA(project)
   .subscribe(
