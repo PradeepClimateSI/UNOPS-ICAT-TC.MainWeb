@@ -55,7 +55,7 @@ import { CarouselModule } from 'primeng/carousel';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ConfirmationService } from "primeng/api";
-import { API_BASE_URL, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, AuthControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CMQuestionControllerServiceProxy, CountryControllerServiceProxy, DocumentControllerServiceProxy, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, NdcControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequestControllerServiceProxy, ProjectControllerServiceProxy, QualityCheckControllerServiceProxy, SectorControllerServiceProxy, ServiceProxy, UserTypeControllerServiceProxy, VerificationControllerServiceProxy, ReportControllerServiceProxy, NotificationControllerServiceProxy, InvestorToolControllerServiceProxy, PortfolioControllerServiceProxy, SystemStatusControllerServiceProxy, InstitutionTypeControllerServiceProxy, InstitutionCategoryControllerServiceProxy } from "shared/service-proxies/service-proxies";
+import { API_BASE_URL, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, AuthControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CMQuestionControllerServiceProxy, CountryControllerServiceProxy, DocumentControllerServiceProxy, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, NdcControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequestControllerServiceProxy, ProjectControllerServiceProxy, QualityCheckControllerServiceProxy, SectorControllerServiceProxy, ServiceProxy, UserTypeControllerServiceProxy, VerificationControllerServiceProxy, ReportControllerServiceProxy, NotificationControllerServiceProxy, InvestorToolControllerServiceProxy, PortfolioControllerServiceProxy, SystemStatusControllerServiceProxy, InstitutionTypeControllerServiceProxy, InstitutionCategoryControllerServiceProxy, ProjectApprovalStatusControllerServiceProxy, ProjectStatusControllerServiceProxy } from "shared/service-proxies/service-proxies";
 import { AUTH_API_BASE_URL, ServiceProxy as AuthServiceProxy, } from 'shared/service-proxies/auth-service-proxies';
 import { BadgeModule } from 'primeng/badge';
 import { RoleGuardService } from "./auth/role-guard.service";
@@ -294,6 +294,9 @@ export function getAuditRemoteServiceBaseUrl(): string {
     SystemStatusControllerServiceProxy,
     InstitutionTypeControllerServiceProxy,
     InstitutionCategoryControllerServiceProxy,
+    ProjectApprovalStatusControllerServiceProxy,
+    ProjectStatusControllerServiceProxy,
+
 
     DatePipe,
     { provide: API_BASE_URL, useFactory: getRemoteServiceBaseUrl },

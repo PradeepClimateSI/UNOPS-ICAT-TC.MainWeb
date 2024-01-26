@@ -9317,6 +9317,170 @@ export class ServiceProxy {
     }
 
     /**
+     * Create a single AssessmentCMDetail
+     */
+    createOneBaseAssessmentCMDetailControllerAssessmentCMDetail(body: AssessmentCMDetail): Observable<AssessmentCMDetail> {
+        let url_ = this.baseUrl + "/assessment-cm-detail";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateOneBaseAssessmentCMDetailControllerAssessmentCMDetail(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateOneBaseAssessmentCMDetailControllerAssessmentCMDetail(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<AssessmentCMDetail>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<AssessmentCMDetail>;
+        }));
+    }
+
+    protected processCreateOneBaseAssessmentCMDetailControllerAssessmentCMDetail(response: HttpResponseBase): Observable<AssessmentCMDetail> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = AssessmentCMDetail.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status === 201) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result201: any = null;
+            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result201 = AssessmentCMDetail.fromJS(resultData201);
+            return _observableOf(result201);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * Retrieve multiple AssessmentCMDetails
+     * @param fields (optional) Selects resource fields. <a href="https://github.com/nestjsx/crud/wiki/Requests#select" target="_blank">Docs</a>
+     * @param s (optional) Adds search condition. <a href="https://github.com/nestjsx/crud/wiki/Requests#search" target="_blank">Docs</a>
+     * @param filter (optional) Adds filter condition. <a href="https://github.com/nestjsx/crud/wiki/Requests#filter" target="_blank">Docs</a>
+     * @param or (optional) Adds OR condition. <a href="https://github.com/nestjsx/crud/wiki/Requests#or" target="_blank">Docs</a>
+     * @param sort (optional) Adds sort by field. <a href="https://github.com/nestjsx/crud/wiki/Requests#sort" target="_blank">Docs</a>
+     * @param join (optional) Adds relational resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#join" target="_blank">Docs</a>
+     * @param limit (optional) Limit amount of resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#limit" target="_blank">Docs</a>
+     * @param offset (optional) Offset amount of resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#offset" target="_blank">Docs</a>
+     * @param page (optional) Page portion of resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#page" target="_blank">Docs</a>
+     * @param cache (optional) Reset cache (if was enabled). <a href="https://github.com/nestjsx/crud/wiki/Requests#cache" target="_blank">Docs</a>
+     * @return Get many base response
+     */
+    getManyBaseAssessmentCMDetailControllerAssessmentCMDetail(fields: string[] | undefined, s: string | undefined, filter: string[] | undefined, or: string[] | undefined, sort: string[] | undefined, join: string[] | undefined, limit: number | undefined, offset: number | undefined, page: number | undefined, cache: number | undefined): Observable<GetManyAssessmentCMDetailResponseDto> {
+        let url_ = this.baseUrl + "/assessment-cm-detail?";
+        if (fields === null)
+            throw new Error("The parameter 'fields' cannot be null.");
+        else if (fields !== undefined)
+            fields && fields.forEach(item => { url_ += "fields=" + encodeURIComponent("" + item) + "&"; });
+        if (s === null)
+            throw new Error("The parameter 's' cannot be null.");
+        else if (s !== undefined)
+            url_ += "s=" + encodeURIComponent("" + s) + "&";
+        if (filter === null)
+            throw new Error("The parameter 'filter' cannot be null.");
+        else if (filter !== undefined)
+            filter && filter.forEach(item => { url_ += "filter=" + encodeURIComponent("" + item) + "&"; });
+        if (or === null)
+            throw new Error("The parameter 'or' cannot be null.");
+        else if (or !== undefined)
+            or && or.forEach(item => { url_ += "or=" + encodeURIComponent("" + item) + "&"; });
+        if (sort === null)
+            throw new Error("The parameter 'sort' cannot be null.");
+        else if (sort !== undefined)
+            sort && sort.forEach(item => { url_ += "sort=" + encodeURIComponent("" + item) + "&"; });
+        if (join === null)
+            throw new Error("The parameter 'join' cannot be null.");
+        else if (join !== undefined)
+            join && join.forEach(item => { url_ += "join=" + encodeURIComponent("" + item) + "&"; });
+        if (limit === null)
+            throw new Error("The parameter 'limit' cannot be null.");
+        else if (limit !== undefined)
+            url_ += "limit=" + encodeURIComponent("" + limit) + "&";
+        if (offset === null)
+            throw new Error("The parameter 'offset' cannot be null.");
+        else if (offset !== undefined)
+            url_ += "offset=" + encodeURIComponent("" + offset) + "&";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "page=" + encodeURIComponent("" + page) + "&";
+        if (cache === null)
+            throw new Error("The parameter 'cache' cannot be null.");
+        else if (cache !== undefined)
+            url_ += "cache=" + encodeURIComponent("" + cache) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetManyBaseAssessmentCMDetailControllerAssessmentCMDetail(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetManyBaseAssessmentCMDetailControllerAssessmentCMDetail(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetManyAssessmentCMDetailResponseDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetManyAssessmentCMDetailResponseDto>;
+        }));
+    }
+
+    protected processGetManyBaseAssessmentCMDetailControllerAssessmentCMDetail(response: HttpResponseBase): Observable<GetManyAssessmentCMDetailResponseDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetManyAssessmentCMDetailResponseDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
      * Retrieve a single AssessmentCMDetail
      * @param fields (optional) Selects resource fields. <a href="https://github.com/nestjsx/crud/wiki/Requests#select" target="_blank">Docs</a>
      * @param join (optional) Adds relational resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#join" target="_blank">Docs</a>
@@ -9546,164 +9710,6 @@ export class ServiceProxy {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return _observableOf(null as any);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf(null as any);
-    }
-
-    /**
-     * Retrieve multiple AssessmentCMDetails
-     * @param fields (optional) Selects resource fields. <a href="https://github.com/nestjsx/crud/wiki/Requests#select" target="_blank">Docs</a>
-     * @param s (optional) Adds search condition. <a href="https://github.com/nestjsx/crud/wiki/Requests#search" target="_blank">Docs</a>
-     * @param filter (optional) Adds filter condition. <a href="https://github.com/nestjsx/crud/wiki/Requests#filter" target="_blank">Docs</a>
-     * @param or (optional) Adds OR condition. <a href="https://github.com/nestjsx/crud/wiki/Requests#or" target="_blank">Docs</a>
-     * @param sort (optional) Adds sort by field. <a href="https://github.com/nestjsx/crud/wiki/Requests#sort" target="_blank">Docs</a>
-     * @param join (optional) Adds relational resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#join" target="_blank">Docs</a>
-     * @param limit (optional) Limit amount of resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#limit" target="_blank">Docs</a>
-     * @param offset (optional) Offset amount of resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#offset" target="_blank">Docs</a>
-     * @param page (optional) Page portion of resources. <a href="https://github.com/nestjsx/crud/wiki/Requests#page" target="_blank">Docs</a>
-     * @param cache (optional) Reset cache (if was enabled). <a href="https://github.com/nestjsx/crud/wiki/Requests#cache" target="_blank">Docs</a>
-     * @return Get many base response
-     */
-    getManyBaseAssessmentCMDetailControllerAssessmentCMDetail(fields: string[] | undefined, s: string | undefined, filter: string[] | undefined, or: string[] | undefined, sort: string[] | undefined, join: string[] | undefined, limit: number | undefined, offset: number | undefined, page: number | undefined, cache: number | undefined): Observable<GetManyAssessmentCMDetailResponseDto> {
-        let url_ = this.baseUrl + "/assessment-cm-detail?";
-        if (fields === null)
-            throw new Error("The parameter 'fields' cannot be null.");
-        else if (fields !== undefined)
-            fields && fields.forEach(item => { url_ += "fields=" + encodeURIComponent("" + item) + "&"; });
-        if (s === null)
-            throw new Error("The parameter 's' cannot be null.");
-        else if (s !== undefined)
-            url_ += "s=" + encodeURIComponent("" + s) + "&";
-        if (filter === null)
-            throw new Error("The parameter 'filter' cannot be null.");
-        else if (filter !== undefined)
-            filter && filter.forEach(item => { url_ += "filter=" + encodeURIComponent("" + item) + "&"; });
-        if (or === null)
-            throw new Error("The parameter 'or' cannot be null.");
-        else if (or !== undefined)
-            or && or.forEach(item => { url_ += "or=" + encodeURIComponent("" + item) + "&"; });
-        if (sort === null)
-            throw new Error("The parameter 'sort' cannot be null.");
-        else if (sort !== undefined)
-            sort && sort.forEach(item => { url_ += "sort=" + encodeURIComponent("" + item) + "&"; });
-        if (join === null)
-            throw new Error("The parameter 'join' cannot be null.");
-        else if (join !== undefined)
-            join && join.forEach(item => { url_ += "join=" + encodeURIComponent("" + item) + "&"; });
-        if (limit === null)
-            throw new Error("The parameter 'limit' cannot be null.");
-        else if (limit !== undefined)
-            url_ += "limit=" + encodeURIComponent("" + limit) + "&";
-        if (offset === null)
-            throw new Error("The parameter 'offset' cannot be null.");
-        else if (offset !== undefined)
-            url_ += "offset=" + encodeURIComponent("" + offset) + "&";
-        if (page === null)
-            throw new Error("The parameter 'page' cannot be null.");
-        else if (page !== undefined)
-            url_ += "page=" + encodeURIComponent("" + page) + "&";
-        if (cache === null)
-            throw new Error("The parameter 'cache' cannot be null.");
-        else if (cache !== undefined)
-            url_ += "cache=" + encodeURIComponent("" + cache) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetManyBaseAssessmentCMDetailControllerAssessmentCMDetail(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetManyBaseAssessmentCMDetailControllerAssessmentCMDetail(response_ as any);
-                } catch (e) {
-                    return _observableThrow(e) as any as Observable<GetManyAssessmentCMDetailResponseDto>;
-                }
-            } else
-                return _observableThrow(response_) as any as Observable<GetManyAssessmentCMDetailResponseDto>;
-        }));
-    }
-
-    protected processGetManyBaseAssessmentCMDetailControllerAssessmentCMDetail(response: HttpResponseBase): Observable<GetManyAssessmentCMDetailResponseDto> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (response as any).error instanceof Blob ? (response as any).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = GetManyAssessmentCMDetailResponseDto.fromJS(resultData200);
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf(null as any);
-    }
-
-    /**
-     * Create a single AssessmentCMDetail
-     * @return Get create one base response
-     */
-    createOneBaseAssessmentCMDetailControllerAssessmentCMDetail(body: AssessmentCMDetail): Observable<AssessmentCMDetail> {
-        let url_ = this.baseUrl + "/assessment-cm-detail";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_ : any = {
-            body: content_,
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processCreateOneBaseAssessmentCMDetailControllerAssessmentCMDetail(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processCreateOneBaseAssessmentCMDetailControllerAssessmentCMDetail(response_ as any);
-                } catch (e) {
-                    return _observableThrow(e) as any as Observable<AssessmentCMDetail>;
-                }
-            } else
-                return _observableThrow(response_) as any as Observable<AssessmentCMDetail>;
-        }));
-    }
-
-    protected processCreateOneBaseAssessmentCMDetailControllerAssessmentCMDetail(response: HttpResponseBase): Observable<AssessmentCMDetail> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (response as any).error instanceof Blob ? (response as any).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 201) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result201: any = null;
-            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result201 = AssessmentCMDetail.fromJS(resultData201);
-            return _observableOf(result201);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -15940,6 +15946,58 @@ export class UsersControllerServiceProxy {
         return _observableOf(null as any);
     }
 
+    update(body: User): Observable<User> {
+        let url_ = this.baseUrl + "/users/updateUser";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<User>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<User>;
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<User> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 201) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result201: any = null;
+            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result201 = User.fromJS(resultData201);
+            return _observableOf(result201);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
     createExternalUser(body: User): Observable<User> {
         let url_ = this.baseUrl + "/users/createExternalUser";
         url_ = url_.replace(/[?&]$/, "");
@@ -18217,6 +18275,73 @@ export class CountryControllerServiceProxy {
 }
 
 @Injectable()
+export class ProjectStatusControllerServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    getAllProjectStatus(): Observable<ProjectStatus[]> {
+        let url_ = this.baseUrl + "/project-status/get-all-project-status";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllProjectStatus(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllProjectStatus(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ProjectStatus[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ProjectStatus[]>;
+        }));
+    }
+
+    protected processGetAllProjectStatus(response: HttpResponseBase): Observable<ProjectStatus[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200.push(ProjectStatus.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+@Injectable()
 export class DocumentControllerServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -18832,6 +18957,67 @@ export class AuthControllerServiceProxy {
                 result201 = resultData201 !== undefined ? resultData201 : <any>null;
     
             return _observableOf(result201);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+@Injectable()
+export class ProjectApprovalStatusControllerServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    getAllProjectApprovalStatus(): Observable<any> {
+        let url_ = this.baseUrl + "/project-approval-status/get-all-project-approval-status";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllProjectApprovalStatus(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllProjectApprovalStatus(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<any>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<any>;
+        }));
+    }
+
+    protected processGetAllProjectApprovalStatus(response: HttpResponseBase): Observable<any> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -28512,7 +28698,6 @@ export class ClimateAction implements IClimateAction {
     status: number;
     id: number;
     policyName: string;
-    policyName_new: string;
     description: string;
     contactPersoFullName: string;
     email: string;
@@ -28598,7 +28783,6 @@ export class ClimateAction implements IClimateAction {
             this.status = _data["status"];
             this.id = _data["id"];
             this.policyName = _data["policyName"];
-            this.policyName_new = _data["policyName_new"];
             this.description = _data["description"];
             this.contactPersoFullName = _data["contactPersoFullName"];
             this.email = _data["email"];
@@ -28684,7 +28868,6 @@ export class ClimateAction implements IClimateAction {
         data["status"] = this.status;
         data["id"] = this.id;
         data["policyName"] = this.policyName;
-        data["policyName_new"] = this.policyName_new;
         data["description"] = this.description;
         data["contactPersoFullName"] = this.contactPersoFullName;
         data["email"] = this.email;
@@ -28766,7 +28949,6 @@ export interface IClimateAction {
     status: number;
     id: number;
     policyName: string;
-    policyName_new: string;
     description: string;
     contactPersoFullName: string;
     email: string;
@@ -28954,6 +29136,15 @@ export class Category implements ICategory {
     }
 }
 
+export enum DocumentsDocumentOwner {
+    Project = <any>"Project",
+    Country = <any>"Country",
+    CountryNC = <any>"CountryNC",
+    CountryBUR = <any>"CountryBUR",
+    CountryBTR = <any>"CountryBTR",
+    CountryNDC = <any>"CountryNDC",
+    CountryGHG = <any>"CountryGHG",
+}
 export interface ICategory {
     id: number;
     name: string;
@@ -34131,15 +34322,7 @@ export class CreateUserDto implements ICreateUserDto {
         return result;
     }
 }
-export enum DocumentsDocumentOwner {
-    Project = <any>"Project",
-    Country = <any>"Country",
-    CountryNC = <any>"CountryNC",
-    CountryBUR = <any>"CountryBUR",
-    CountryBTR = <any>"CountryBTR",
-    CountryNDC = <any>"CountryNDC", 
-    CountryGHG = <any>"CountryGHG",
-}
+
 export interface ICreateUserDto {
     userType: number;
     firstName: string;
