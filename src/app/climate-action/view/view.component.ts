@@ -103,24 +103,6 @@ export class ViewComponent implements OnInit, AfterViewInit {
       this.sectorList =res;
     });
 
-
-    this.serviceProxy
-      .getManyBaseProjectStatusControllerProjectStatus(
-        ['name'],
-        undefined,
-        undefined,
-        undefined,
-        ['name,ASC'],
-        undefined,
-        1000,
-        0,
-        0,
-        0
-      )
-      .subscribe((res: any) => {
-        this.projectStatusList = res.data;
-      });
-
   }
 
   onMAChange(event: any) {

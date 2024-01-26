@@ -32,7 +32,9 @@ import {
   DocumentControllerServiceProxy,
   AllBarriersSelected,
   BarrierSelected,
-  AllPolicySectors
+  AllPolicySectors,
+  ProjectApprovalStatusControllerServiceProxy,
+  ProjectStatusControllerServiceProxy
 
 } from 'shared/service-proxies/service-proxies';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -182,6 +184,8 @@ export class ClimateActionComponent implements OnInit  {
     private docArrayforSave:GlobalArrayService,
     private docService: DocumentControllerServiceProxy,
     private userproxy:UsersControllerServiceProxy,
+    private projectApprovalStatusControllerServiceProxy: ProjectApprovalStatusControllerServiceProxy,
+    private projectStatusControllerServiceProxy: ProjectStatusControllerServiceProxy,
     
   ) 
   { }
@@ -263,14 +267,8 @@ export class ClimateActionComponent implements OnInit  {
         this.project=new Project();
         this.showUpload=true
         this.showDeleteButton=true
-        this.serviceProxy
-        .getOneBaseCountryControllerCountry(
-          countryId,
-          undefined,
-          undefined,
-          undefined
-        )
-        .subscribe((res) => {
+        this.countryProxy
+        .getCountry(countryId).subscribe((res) => {
           this.countryList.push(res)
           if(this.userRole=='External'){
             this.isExternalUser=true;
@@ -294,13 +292,8 @@ export class ClimateActionComponent implements OnInit  {
     });
 
     if (countryId) {
-      this.serviceProxy
-        .getOneBaseCountryControllerCountry(
-          countryId,
-          undefined,
-          undefined,
-          undefined
-        )
+      this.countryProxy
+        .getCountry(countryId)
         .subscribe((res) => {
           if(this.userRole=='External'){
             this.isExternalUser=true;
@@ -331,53 +324,18 @@ export class ClimateActionComponent implements OnInit  {
 
     countryaFilter.push('country.id||$eq||' + 1);
 
-
-    this.serviceProxy
-      .getManyBaseProjectOwnerControllerProjectOwner(
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        ['name,ASC'],
-        undefined,
-        1000,
-        0,
-        0,
-        0
-      )
+    this.projectStatusControllerServiceProxy.getAllProjectStatus()
       .subscribe((res: any) => {
-        this.projectOwnerList = res.data;
-      });
-
-    this.serviceProxy
-      .getManyBaseProjectStatusControllerProjectStatus(
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        ['name,ASC'],
-        undefined,
-        1000,
-        0,
-        0,
-        0
-      )
-      .subscribe((res: any) => {
-        this.projectStatusList = res.data;
+        this.projectStatusList = res;
       });
 
 
         if (this.editEntytyId && this.editEntytyId > 0) {
           this.showUpload=false;
           this.showDeleteButton=false;
-          this.serviceProxy
-            .getOneBaseProjectControllerClimateAction(
-              this.editEntytyId,
-              undefined,
-              undefined,
-              0
-            )
+          this.projectProxy.getIntervention(this.editEntytyId)
             .subscribe(async (res1) => {
+              console.log("project",res1)
               this.project = res1;
               this.loadProjectStatus= true
               this.loadingCountry= true
@@ -450,8 +408,9 @@ export class ClimateActionComponent implements OnInit  {
                  this.sectorsJoined=this.sectornames.join(', ')
                  })
               setTimeout(() => {
-                let map = this.gmap.getMap();
-                this.updateMapBoundaries(map, longitude, latitude);
+                // need to add after implementing google map. so don't remove
+                // let map = this.gmap.getMap();
+                // this.updateMapBoundaries(map, longitude, latitude);
               }, 3000);
               
 
@@ -462,46 +421,18 @@ export class ClimateActionComponent implements OnInit  {
    
         }
 
-    this.serviceProxy
-      .getManyBaseProjectApprovalStatusControllerProjectApprovalStatus(
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        1000,
-        0,
-        0,
-        0
-      )
-      .subscribe((res: any) => {
-        this.projectApprovalStatus = res.data;
-
-
+    this.projectApprovalStatusControllerServiceProxy.getAllProjectApprovalStatus().subscribe((res: any) => {
+        this.projectApprovalStatus = res;
       });
-
-
 
     if (this.editEntytyId && this.editEntytyId !== 0) {
       let docFilter: string[] = new Array();
 
       docFilter.push('documentOwnerId||$eq||' + this.editEntytyId);
-      this.serviceProxy
-        .getManyBaseDocumentControllerDocuments(
-          undefined,
-          undefined,
-          docFilter,
-          undefined,
-          undefined,
-          undefined,
-          1000,
-          0,
-          0,
-          0
-        )
+      this.docService.getDocuments(this.editEntytyId,1)
         .subscribe((res: any) => {
-          this.selectedDocuments = res.data;
+          this.selectedDocuments = res;
+          console.log( " this.selectedDocuments ",this.selectedDocuments )
         });
     }
 
@@ -627,7 +558,10 @@ export class ClimateActionComponent implements OnInit  {
         this.project.isCity =this.isCity
         this.project.user = new User()
         this.project.user.id =this.proposingUser.id;
-          this.serviceProxy.createOneBaseProjectControllerClimateAction(this.project)
+        let savingCountry = new Country()
+        savingCountry.id = this.project.country.id;
+        this.project.country = savingCountry
+          this.projectProxy.createNewCA(this.project)
           .subscribe(
             (res) => {
               let docUpdate:any={
@@ -1017,9 +951,16 @@ updateStatus(project: Project, aprovalStatus: number) {
   project.likelyhood = this.likelyHood;
   project.availabilityOfTechnology = this.isAvailabiltyOfTEch;
   project.financialFecialbility = this.isFinancialFeciability;
-
-  this.serviceProxy
-    .updateOneBaseProjectControllerClimateAction(project.id, project)
+  
+  let updateProjectApprovalStatus = new ProjectApprovalStatus()
+  updateProjectApprovalStatus.id = aprovalStatus;
+  project.projectApprovalStatus = updateProjectApprovalStatus;
+  let savingCountry = new Country()
+  savingCountry.id = project.country.id;
+  project.country = savingCountry
+  console.log("project",project,aprovalStatus)
+  this.projectProxy
+    .createNewCA(project)
   .subscribe(
     (res) => {
 
