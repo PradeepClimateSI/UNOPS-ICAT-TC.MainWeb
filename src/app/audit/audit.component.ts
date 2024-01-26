@@ -118,7 +118,6 @@ export class AuditComponent implements OnInit {
       else if (userTypeId == 12) {
         this.userTypes = res.data.filter((a) => (a.id == 12));
       }
-      console.log(this.userTypes)
     });
 
   }
@@ -151,7 +150,6 @@ export class AuditComponent implements OnInit {
     let action = this.searchBy.activity ? this.searchBy.activity : '';
     let filtertext = this.searchBy.text ? this.searchBy.text : '';
 
-    console.log(this.searchBy)
     if (this.searchBy.usertype) {
       let type = UserTypes.find(o => o.name === this.searchBy.usertype.name)
       if (type) {
@@ -201,7 +199,6 @@ export class AuditComponent implements OnInit {
 
           }
         }, error => {
-          console.log(error, "error occured")
         });
     }, 1000);
   };

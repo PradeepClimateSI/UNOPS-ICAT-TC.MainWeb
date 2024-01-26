@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MasterDataService } from 'app/shared/master-data.service';
-import { Country, InvestorToolControllerServiceProxy, PortfolioSdg, SdgPriority, SdgPriorityDto, ServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Country, CountryControllerServiceProxy, InvestorToolControllerServiceProxy, PortfolioSdg, SdgPriority, SdgPriorityDto } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
@@ -22,8 +22,8 @@ export class SdgPriorityComponent implements OnInit{
 
   constructor(
     private investorToolControllerServiceProxy: InvestorToolControllerServiceProxy,
+    private countryServiceProxy: CountryControllerServiceProxy,
     private masterDataService: MasterDataService,
-    private serviceProxy: ServiceProxy,
     private messageService: MessageService,
     protected dialogService: DialogService,
   ){
@@ -40,7 +40,9 @@ export class SdgPriorityComponent implements OnInit{
   }
 
   async getCountry(){
-    this.country = await this.serviceProxy.getOneBaseCountryControllerCountry(this.countryId, undefined, undefined, 0).toPromise()
+    this.countryServiceProxy.getCountry(this.countryId).subscribe((res) => {
+      this.country = (res)});
+    // this.country = await this.serviceProxy.getOneBaseCountryControllerCountry(this.countryId, undefined, undefined, 0).toPromise()
   }
   watchVideo(){
     let ref = this.dialogService.open(GuidanceVideoComponent, {
