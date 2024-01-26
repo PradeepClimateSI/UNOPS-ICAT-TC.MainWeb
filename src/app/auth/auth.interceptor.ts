@@ -35,6 +35,7 @@ export class AuthInterceptor implements HttpInterceptor {
       .pipe(catchError((err) => {
         return err;
       }))
+      // this is ignore type
       // @ts-ignore
       .pipe(map<HttpEvent<any>, any>((evt: HttpEvent<any>) => {
         if (evt instanceof HttpResponse) {

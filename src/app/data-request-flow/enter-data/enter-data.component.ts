@@ -89,7 +89,7 @@ export class EnterDataComponent implements OnInit, AfterViewInit {
   requestHistoryList: any[] = [];
   displayHistory: boolean = false;
   public fileData: File;
-  SERVER_URL = environment.baseUrlExcelUpload;
+  SERVER_URL = environment.baseUrlAPI;
   isOpen: boolean = false;
   userCountryId:number = 0;
   userSectorId:number = 0;

@@ -53,10 +53,14 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
     ];
 
     const token = localStorage.getItem('ACCESS_TOKEN')!;
+   
     const tokenPayload = decode<any>(token);
     this.userName = tokenPayload.username;
+    
     this.userName = `${this.appService.getUserName()}`;
     this.userRole = tokenPayload.role.code;;
+
+    console.log("=================",   this.userName,this.userRole)
 
     this.countryProxy.getCountry(tokenPayload.countryId).subscribe((res:any)=>{
          this.isCarbonMarketTool = res.carboneMarketTool;

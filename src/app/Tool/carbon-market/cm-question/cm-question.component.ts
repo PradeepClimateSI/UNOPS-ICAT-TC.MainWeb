@@ -51,8 +51,8 @@ export class CmQuestionComponent implements OnInit {
     private messageService: MessageService,
     public masterDataService: MasterDataService
   ) {
-    this.uploadUrl = environment.baseUrlAPI + '/cm-assessment-question/upload-file'
-    this.fileServerURL = environment.baseUrlAPI+'/uploads'
+    this.uploadUrl = environment.baseUrlAPI + "/document/upload-file-by-name" ;
+    this.fileServerURL = environment.baseUrlAPI+'/document/downloadDocumentsFromFileName/uploads';
    }
 
   async ngOnInit(): Promise<void> {

@@ -81,11 +81,14 @@ export class LoginComponent implements OnInit {
       a.username = this.userName;
       try{
         const res = await this.authControllerServiceProxy.login(a).toPromise();
+       
         if(res.isEmailConfirmed){
-          this.appService.steToken(res.accessToken);
+
+        this.appService.steToken(res.accessToken);
         this.appService.steRefreshToken(res.refreshToken);
         this.appService.steProfileId(res.loginProfileId);
         this.appService.steUserName(this.userName);
+        this.appService.steRole(res.roles)
         this.appService.startRefreshTokenTimer();
         this.appService.startIdleTimer();
         this.router.navigate(['../../app'], {});

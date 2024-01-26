@@ -184,7 +184,6 @@ export class AppService {
   steToken(tocken: string): void {
     localStorage.setItem(AuthData.ACCESS_TOKEN, tocken)
     const token = this.getToken();
-
     this._isAuthenticated = token!==null;
   }
 
