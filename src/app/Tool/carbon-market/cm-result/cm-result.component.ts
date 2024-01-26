@@ -101,32 +101,37 @@ export class CmResultComponent implements OnInit {
 
   }
 
-  getBackgroundColor(value: number): string {
-    switch (value) {
-      case -3:
-        return '#ec6665';
-      case -2:
-        return '#ed816c';
-      case -1:
-        return '#f19f70';
-      case 0:
-        return '#f4b979';
-      case 1:
-        return '#f9d57f';
-      case 2:
-        return '#fcf084';
-      case 3:
-        return '#e0e885';
-      case 4:
-        return '#c1e083';
-      case 5:
-        return '#a3d481';
-      case 6:
-        return '#84cc80';
-      case 7:
-        return '#65c17e';
-      default:
-        return 'white';
+  getBackgroundColor(x: number, y: number): string {
+    if ((x <= -1) || (x === 1 && y === 0) || (x === 0 && y === 1) || (x === 0 && y === 0)) {
+      return '#ec6665'
+    } else {
+      let value = x + y
+      switch (value) {
+        case -3:
+          return '#ec6665';
+        case -2:
+          return '#ed816c';
+        case -1:
+          return '#f19f70';
+        case 0:
+          return '#f4b979';
+        case 1:
+          return '#f9d57f';
+        case 2:
+          return '#f98570';
+        case 3:
+          return '#fdbf7b';
+        case 4:
+          return '#fedc82';
+        case 5:
+          return '#a9d27f';
+        case 6:
+          return '#86c97d';
+        case 7:
+          return '#63be7b';
+        default:
+          return 'white';
+      }
     }
   }
 
@@ -158,15 +163,17 @@ export class CmResultComponent implements OnInit {
 
       let response = await this.cMAssessmentQuestionControllerServiceProxy.calculateResult(req).toPromise()
       this.score = response
-      this.heatMapScore = [{processScore: this.score.process_score, outcomeScore: this.score.outcome_score.outcome_score}]
-      Object.keys(response.outcome_score.sdgs_score)?.map((key: any) => {
-        this.selectedSdgs = this.selectedSdgs.map((sd: any) => {
-          if (+key === sd.id) {
-            sd['score'] = response.outcome_score.sdgs_score[key]
-          }
-          return sd
+      this.heatMapScore = [{ processScore: this.score.process_score, outcomeScore: this.score.outcome_score.outcome_score }]
+      if (response?.outcome_score?.sdgs_score) {
+        Object.keys(response.outcome_score.sdgs_score)?.map((key: any) => {
+          this.selectedSdgs = this.selectedSdgs.map((sd: any) => {
+            if (+key === sd.id) {
+              sd['score'] = response.outcome_score.sdgs_score[key]
+            }
+            return sd
+          })
         })
-      }) 
+      }
     }
   }
 
@@ -182,7 +189,7 @@ export class CmResultComponent implements OnInit {
         let obj = new ColorMap()
         obj.cell = cols[index] + rows[idx]
         obj.value = row + col
-        obj.color = hasScore ? '0000ff' : this.getBackgroundColor(row + col).replace('#', '')
+        obj.color = hasScore ? '0000ff' : this.getBackgroundColor(col, row).replace('#', '')
         colorMap.push(obj)
       }
     }
@@ -201,18 +208,20 @@ export class CmResultComponent implements OnInit {
       let worksheet = XLSX.utils.table_to_sheet(table,{})
       this.isDownloading = false
       setTimeout(() => {
-        let heatmap = XLSX.utils.table_to_sheet(document.getElementById('heatmap'),{})
-        
         XLSX.utils.book_append_sheet(workbook, ws, 'Assessment Info');
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Assessment Results');
-        XLSX.utils.book_append_sheet(workbook, heatmap, 'Score map');
-
-        for (const itm of colorMap) {
-          if (heatmap[itm.cell]) {
-            heatmap[itm.cell].s = {
-              fill: { fgColor: { rgb: itm.color } },
-              font: { color: { rgb: itm.color } }
-            };
+        let doc = document.getElementById('heatmap')
+        let heatmap
+        if (doc){ 
+          heatmap = XLSX.utils.table_to_sheet(doc,{})
+          XLSX.utils.book_append_sheet(workbook, heatmap, 'Score map');
+          for (const itm of colorMap) {
+            if (heatmap[itm.cell]) {
+              heatmap[itm.cell].s = {
+                fill: { fgColor: { rgb: itm.color } },
+                font: { color: { rgb: itm.color } }
+              };
+            }
           }
         }
 
