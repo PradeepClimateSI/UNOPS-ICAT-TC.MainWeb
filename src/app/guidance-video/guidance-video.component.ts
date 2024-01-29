@@ -10,7 +10,7 @@ import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 export class GuidanceVideoComponent implements OnInit {
   sourceName: any;
   isNetZero: boolean=false;
-  root: string = environment.videoURL
+  root: string = environment.videoURL +"/"
   link:string = "";
   constructor(
     public config: DynamicDialogConfig,
@@ -46,7 +46,7 @@ export class GuidanceVideoComponent implements OnInit {
             break
           } 
           case 'AddSDG': {
-            this.link =  this.root + "TTC - Add SDG Priorities.m4v";
+            this.link =  this.root + "TC - Add SDG Priorities.m4v";
             break
           } 
           case 'Reports': {
