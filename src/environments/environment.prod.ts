@@ -5,5 +5,5 @@ export const environment = {
   
   baseUrlAuditlog :  'https://tc-audit.climatesi.com',
   baseUrlPMU: 'https://tc-pmu-be.climatesi.com',
-  videoURL: '',
+  videoURL: 'https://sccv2.s3.ap-south-1.amazonaws.com/videos',
 };
