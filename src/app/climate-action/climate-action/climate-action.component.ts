@@ -189,10 +189,6 @@ export class ClimateActionComponent implements OnInit  {
     
   ) 
   { }
-  ngAfterContentChecked() {
-    
-    this.cdref.detectChanges();
- }
 
   async ngOnInit(): Promise<void> {
 
@@ -201,6 +197,9 @@ export class ClimateActionComponent implements OnInit  {
     this.userRole =decode<any>(token).role?.code;
     const countryId = token ? decode<any>(token).countryId : 0;
     this.counID = countryId;
+    if(this.userRole =='External'){
+      this.getCountryList()
+    }
 
     this.tooltips = {
       id: 'To be assigned by the tool',
@@ -267,18 +266,20 @@ export class ClimateActionComponent implements OnInit  {
         this.project=new Project();
         this.showUpload=true
         this.showDeleteButton=true
+        
         this.countryProxy
         .getCountry(countryId).subscribe((res) => {
-          this.countryList.push(res)
+         
           if(this.userRole=='External'){
             this.isExternalUser=true;
-           this.countryProxy.findall().subscribe((res) => {
-            this.countryList=res;
-            this.project.country= new Country();
+            this.project.country= res
+            this.loadingCountry = true
             this.project.projectApprovalStatus = new ProjectApprovalStatus();
-            this.loadingCountry =true;
-          })
+            this.makeInterventionID()
+            
+
           }else{
+            this.countryList.push(res)
             this.project.country =res;
             this.isSector = true;
             this.loadingCountry =true;
@@ -290,7 +291,8 @@ export class ClimateActionComponent implements OnInit  {
         this.dateOfCompletion =''
       }
     });
-
+    
+    
     if (countryId) {
       this.countryProxy
         .getCountry(countryId)
@@ -309,7 +311,6 @@ export class ClimateActionComponent implements OnInit  {
           
         });
     } else {
-      this.project.country = new Country();
     }
 
     this.options = {
@@ -453,13 +454,23 @@ export class ClimateActionComponent implements OnInit  {
         });
     }
   }
+
+  async getCountryList(){
+    await this.countryProxy.findall().subscribe((res2) => {
+      this.countryList =[]
+      this.countryList=res2;
+    })
+  }
   onImplementatonYearChange(date:Date){
     this.int_id_year=date.getFullYear().toString()
     this.makeInterventionID()
   }
    makeInterventionID(){
-    if(!this.editEntytyId){
-      this.int_id_country=this.project.country.code;
+    if(!this.editEntytyId && this.loadingCountry){
+      if(!this.isExternalUser){
+        this.int_id_country=this.project.country.code;
+      }
+      
       if(this.finalSectors.length==1){
         this.int_id_sectors=this.finalSectors[0].name;
       }
@@ -694,7 +705,6 @@ export class ClimateActionComponent implements OnInit  {
  
   onCountryChnage() {
     this.getUserEnterdCountry = this.project.country;
-
     this.onSectorChange(event);
 
     this.sectorProxy.getCountrySector(this.project.country.id).subscribe((res: any) => {
