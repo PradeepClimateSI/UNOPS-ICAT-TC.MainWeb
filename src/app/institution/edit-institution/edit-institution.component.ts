@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { Institution, InstitutionCategory, InstitutionType, Sector, SectorControllerServiceProxy, ServiceProxy } from 'shared/service-proxies/service-proxies';
+import {  MessageService } from 'primeng/api';
+import { Institution, InstitutionCategory, InstitutionCategoryControllerServiceProxy, InstitutionControllerServiceProxy, InstitutionType, InstitutionTypeControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-edit-institution',
@@ -24,10 +24,12 @@ export class EditInstitutionComponent implements OnInit {
   selectedProject: Institution;
   @ViewChild('op') overlay: any;
 
-  constructor(private serviceProxy: ServiceProxy,
-    private confirmationService: ConfirmationService,
+  constructor(
     private route: ActivatedRoute,
+    private institutionTypeProxy: InstitutionTypeControllerServiceProxy,
+    private institutionCatProxy: InstitutionCategoryControllerServiceProxy,
     private router: Router,
+    private institutionProxy: InstitutionControllerServiceProxy,
     private messageService: MessageService,
     private sectorProxy:SectorControllerServiceProxy) { }
 
@@ -39,37 +41,15 @@ export class EditInstitutionComponent implements OnInit {
 
   ngOnInit(): void {
 
-
-    this.serviceProxy
-    .getManyBaseInstitutionTypeControllerInstitutionType(
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      ['name,ASC'],
-      undefined,
-      1000,
-      0,
-      0,
-      0
-    ).subscribe((res: any) => {
+    this.institutionTypeProxy
+    .getInstitutionType( 0)
+    .subscribe((res: any) => {
       this.typeList = res.data;
     });
 
-    this.serviceProxy
-    .getManyBaseInstitutionCategoryControllerInstitutionCategory(
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      1000,
-      0,
-      0,
-      0
-    ).subscribe((res: any) => {
-      this.categoryList = res.data;
+    this.institutionCatProxy
+    .getInstitutionType().subscribe((res: any) => {
+      this.categoryList = res;
     });
 
     this.sectorProxy
@@ -81,14 +61,12 @@ export class EditInstitutionComponent implements OnInit {
 
   this.route.queryParams.subscribe((params) => {
     this.institutionId = params['id'];
-    this.serviceProxy
-    .getOneBaseInstitutionControllerInstitution(
+    this.institutionProxy.getInstituionById(
       this.institutionId,
-      undefined,
-      undefined,
-      0
-    ).subscribe((res) => {
+    ).subscribe((res) => {      
       this.institution = res;
+      this.typeList=[];
+      this.typeList.push(res.type)
     })
   })
 
@@ -117,8 +95,8 @@ export class EditInstitutionComponent implements OnInit {
     }
 
     if (this.institution.id > 0) {
-      this.serviceProxy
-        .updateOneBaseInstitutionControllerInstitution(this.institution.id, this.institution)
+      this.institutionProxy.update(
+        this.institution)
         .subscribe(
           (res) => {
             this.messageService.add({

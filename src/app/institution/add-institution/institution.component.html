@@ -22,7 +22,8 @@
                                 #instype="ngModel" (ngModelChange)="onInstitutionChange($event)">
 
                             </p-dropdown>
-                            <p class="info-message text-danger" *ngIf=" !intype && (fData.submitted || instype.touched || instype.dirty)">
+                            <p class="info-message text-danger"
+                                *ngIf=" !intype && (fData.submitted || instype.touched || instype.dirty)">
                                 This is a mandatory field
                             </p>
 
@@ -36,12 +37,6 @@
                             <p-dropdown [disabled]="institutionId > 0" placeholder="Select" [(ngModel)]="insector"
                                 name="sector" [options]="sectorList" optionLabel="name" #inssec="ngModel">
                             </p-dropdown>
-                            <!-- <p class="info-message text-danger" *ngIf="
-                  !insector &&
-                  (fData.submitted || inssec.touched || inssec.dirty)
-                ">
-                                This is a mandatory field
-                            </p> -->
 
                         </div>
                     </div>
@@ -68,9 +63,9 @@
                     <div class="col-12 col-md-6">
                         <div class="p-field">
                             <label for="name">Name*</label>
-                            <input [disabled]="institutionId > 0" type="text" placeholder="Enter Institution Name" name="insname"
-                                [(ngModel)]="inname" class="p-inputtext" #insname="ngModel" pInputText required
-                                (ngModelChange)="onInstitutionNameChange($event)" />
+                            <input [disabled]="institutionId > 0" type="text" placeholder="Enter Institution Name"
+                                name="insname" [(ngModel)]="inname" class="p-inputtext" #insname="ngModel" pInputText
+                                required (ngModelChange)="onInstitutionNameChange($event)" />
 
                             <p class="info-message text-danger" *ngIf="
                     !inname &&
@@ -91,9 +86,9 @@
                     <div class="col-12 col-md-6">
                         <div class="p-field">
                             <label for="emailin">Email*</label>
-                            <input [disabled]="institutionId > 0"  type="email"
-                                maxlength="30" placeholder="Email" name="email" #emailin="ngModel" class="p-inputtext"
-                                pInputText [(ngModel)]="inmail" pattern="[\w-\.]+@([\w-]+\.)+[\w-]{1,20}$" required />
+                            <input [disabled]="institutionId > 0" type="email" maxlength="30" placeholder="Email"
+                                name="email" #emailin="ngModel" class="p-inputtext" pInputText [(ngModel)]="inmail"
+                                pattern="[\w-\.]+@([\w-]+\.)+[\w-]{1,20}$" required />
 
                             <p class="info-message text-danger" *ngIf="
                   !inmail &&
@@ -112,9 +107,8 @@
                         <div class="p-field">
                             <label for="objective">Contact Number*</label>
 
-                            <input id="telephoneNumber" type="text" name="telephone" class="form-control" required 
-                [(ngModel)]="intelephoneNumber" #telephoneNumber="ngModel" placeholder="+xxxxxxxxx" 
-                 />
+                            <input id="telephoneNumber" type="text" name="telephone" class="form-control" required
+                                [(ngModel)]="intelephoneNumber" #telephoneNumber="ngModel" placeholder="+xxxxxxxxx" />
                             <p class="info-message text-danger" *ngIf="
               !intelephoneNumber &&
               (fData.submitted || telephoneNumber.touched || telephoneNumber.dirty)
