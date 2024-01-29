@@ -73,9 +73,9 @@ export class UserFormComponent implements OnInit, AfterViewInit {
     private instProxy: InstitutionControllerServiceProxy,
     private userController: UsersControllerServiceProxy,
     private authUser: LoginProfileControllerServiceProxy,
-    private authServiceProxy: authServiceProxy,
     private countryProxy: CountryControllerServiceProxy,
-    private ref: ChangeDetectorRef
+    private ref: ChangeDetectorRef,
+    private logProxy : LoginProfileControllerServiceProxy,
   ) { }
   ngAfterViewInit(): void {
     this.ref.detectChanges();
@@ -200,8 +200,7 @@ export class UserFormComponent implements OnInit, AfterViewInit {
         authUser.coutryId = this.countryId;
         authUser.insId = this.user.institution.id;
 
-
-        this.authServiceProxy.createOneBaseLoginProfileControllerLoginProfile(authUser).subscribe(
+        this.logProxy.create(authUser).subscribe(
           (res) => {
             let sa
             this.authUser.getById(res.id).subscribe((res) => {
@@ -247,8 +246,7 @@ export class UserFormComponent implements OnInit, AfterViewInit {
         let institute = new Institution;
         institute.init(this.userInstitution)
         this.user.institution = institute;
-        this.serviceProxy
-          .updateOneBaseUsersControllerUser(this.user.id, this.user)
+        this.userController.update(this.user)
           .subscribe(
             (res) => {
               this.messageService.add({

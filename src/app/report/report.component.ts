@@ -136,7 +136,6 @@ export class ReportComponent implements OnInit {
   }
 
   view(path: string){
-    console.log(path)
     window.open(this.DOWNLOAD_BY_NAMA_URL +"/"+ path, "_blank");
   }
 
