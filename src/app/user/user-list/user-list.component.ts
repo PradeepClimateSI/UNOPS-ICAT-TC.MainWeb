@@ -1,4 +1,4 @@
-import { ServiceProxy, User, Institution, UsersControllerServiceProxy, UserType } from 'shared/service-proxies/service-proxies';
+import { ServiceProxy, User, Institution, UsersControllerServiceProxy, UserType, UserTypeControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ConfirmationService, LazyLoadEvent, MessageService, SelectItem } from "primeng/api";
@@ -49,7 +49,8 @@ export class UserListComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private userControllerService: UsersControllerServiceProxy,
     protected dialogService: DialogService,
-    private loginProfileControllerServiceProxy: LoginProfileControllerServiceProxy
+    private loginProfileControllerServiceProxy: LoginProfileControllerServiceProxy,
+    private UserTypeServiceProxy: UserTypeControllerServiceProxy,
 
   ) { }
 
@@ -96,52 +97,39 @@ export class UserListComponent implements OnInit {
         this.instuitutionList = res.data;
       });
 
-    this.serviceProxy
-      .getManyBaseUserTypeControllerUserType(
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        ['name,ASC'],
-        undefined,
-        1000,
-        0,
-        0,
-        0
-      )
-      .subscribe((res) => {
+      this.UserTypeServiceProxy.getUserTypes().subscribe((res: any) => {
         if (userTypeId == 1) {
-          this.userTypes = res.data.filter((a) => (a.id == 5 ));
+          this.userTypes = res.filter((a:any) => (a.id == 5 ));
         }
         else if (userTypeId == 2) {
-          this.userTypes = res.data.filter((a) => (a.id == 2));
+          this.userTypes = res.filter((a:any) => (a.id == 2));
         }
         else if (userTypeId == 3) {
-          this.userTypes = res.data.filter((a) => (a.id == 2 || a.id == 3 || a.id == 5 || a.id == 6 || a.id == 7 || a.id == 8 || a.id == 9 || a.id == 11));
+          this.userTypes = res.filter((a:any) => (a.id == 2 || a.id == 3 || a.id == 5 || a.id == 6 || a.id == 7 || a.id == 8 || a.id == 9 || a.id == 11));
         }
         else if (userTypeId == 5) {
-          this.userTypes = res.data.filter((a) => (a.id == 5 || a.id == 6 || a.id == 7 || a.id == 9 || a.id == 11));
+          this.userTypes = res.filter((a:any) => (a.id == 5 || a.id == 6 || a.id == 7 || a.id == 9 || a.id == 11));
         }
         else if (userTypeId == 6) {
-          this.userTypes = res.data.filter((a) => (a.id == 6 || a.id == 8 || a.id == 9 ));
+          this.userTypes = res.filter((a:any) => (a.id == 6 || a.id == 8 || a.id == 9 ));
         }
         else if (userTypeId == 7) {
-          this.userTypes = res.data.filter((a) => (a.id == 7));
+          this.userTypes = res.filter((a:any) => (a.id == 7));
         }
         else if (userTypeId == 8) {
-          this.userTypes = res.data.filter((a) => (a.id == 8 || a.id == 9));
+          this.userTypes = res.filter((a:any) => (a.id == 8 || a.id == 9));
         }
         else if (userTypeId == 9) {
-          this.userTypes = res.data.filter((a) => (a.id == 9));
+          this.userTypes = res.filter((a:any) => (a.id == 9));
         }
         else if (userTypeId == 10) {
-          this.userTypes = res.data.filter((a) => (a.id ==1 || a.id == 2 || a.id == 3 || a.id == 5 || a.id == 6 || a.id == 7 || a.id == 8 || a.id == 9 || a.id == 10 || a.id == 11));
+          this.userTypes = res.filter((a:any) => (a.id ==1 || a.id == 2 || a.id == 3 || a.id == 5 || a.id == 6 || a.id == 7 || a.id == 8 || a.id == 9 || a.id == 10 || a.id == 11));
         }
         else if (userTypeId == 11) {
-          this.userTypes = res.data.filter((a) => (a.id == 11));
+          this.userTypes = res.filter((a:any) => (a.id == 11));
         }
         else if (userTypeId == 12) {
-          this.userTypes = res.data.filter((a) => (a.id == 12));
+          this.userTypes = res.filter((a:any) => (a.id == 12));
         }
       });
 
