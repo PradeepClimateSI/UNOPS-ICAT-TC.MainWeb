@@ -494,14 +494,18 @@ export class CmResultComponent implements OnInit {
     body.reportName = this.reportName
     this.reportControllerServiceProxy.generateReport(body).subscribe(res => {
       if (res) {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Report generated successfully',
-          closable: true,
-        })
-        this.display = false
-        window.open(this.SERVER_URL +'/report/downloadReport/inline/'+res.id, "_blank")
+       
+        this.display = false;
+        setTimeout(() => {
+          window.open(this.SERVER_URL +'/report/downloadReport/inline/'+res.id, "_blank")
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Report generated successfully',
+            closable: true,
+          })
+        },5000)
+       
       }
     }, error => {
       this.messageService.add({
