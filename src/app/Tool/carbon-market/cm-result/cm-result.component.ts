@@ -501,7 +501,7 @@ export class CmResultComponent implements OnInit {
           closable: true,
         })
         this.display = false
-        window.open(this.SERVER_URL +'/'+res.generateReportName, "_blank");
+        window.open(this.SERVER_URL +'/report/downloadReport/inline/'+res.id, "_blank")
       }
     }, error => {
       this.messageService.add({
