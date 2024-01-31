@@ -8,6 +8,7 @@ import decode from 'jwt-decode';
 import {
   ServiceProxy,
   UserType,
+  UserTypeControllerServiceProxy,
 } from 'shared/service-proxies/service-proxies';
 
 import { Audit as audit, AuditControllerServiceProxy as auditControllerServiceProxy } from 'shared/service-proxies-auditlog/service-proxies'
@@ -51,6 +52,7 @@ export class AuditComponent implements OnInit {
     private router: Router,
     private serviceProxy: ServiceProxy,
     private auditserviceproxy: auditControllerServiceProxy,
+    private UserTypeServiceProxy: UserTypeControllerServiceProxy,
     private cdr: ChangeDetectorRef,
     private http: HttpClient
   ) { }
@@ -73,52 +75,40 @@ export class AuditComponent implements OnInit {
     this.institutionId = tokenPayload.insId;
     this.loggeduserType = tokenPayload.role.name
 
-    await this.serviceProxy.getManyBaseUserTypeControllerUserType(
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      ['name,ASC'],
-      undefined,
-      1000,
-      0,
-      1,
-      0
-    ).subscribe((res) => {
+    this.UserTypeServiceProxy.getUserTypes().subscribe((res: any) => {
       if (userTypeId == 1) { //country admin
-        this.userTypes = res.data.filter((a) => (a.id == 1 || a.id == 5));
+        this.userTypes = res.filter((a:any) => (a.id == 1 || a.id == 5));
       }
       else if (userTypeId == 2) {
-        this.userTypes = res.data.filter((a) => (a.id == 2));
+        this.userTypes = res.data.filter((a:any) => (a.id == 2));
       }
       else if (userTypeId == 3) {
-        this.userTypes = res.data.filter((a) => (a.id == 2 || a.id == 3 || a.id == 5 || a.id == 6 || a.id == 7 || a.id == 8 || a.id == 9 || a.id == 11));
+        this.userTypes = res.data.filter((a:any) => (a.id == 2 || a.id == 3 || a.id == 5 || a.id == 6 || a.id == 7 || a.id == 8 || a.id == 9 || a.id == 11));
       }
       else if (userTypeId == 5) {//country user
-        this.userTypes = res.data.filter((a) => (a.id == 5));
+        this.userTypes = res.data.filter((a:any) => (a.id == 5));
       }
       else if (userTypeId == 6) {
-        this.userTypes = res.data.filter((a) => (a.id == 2 || a.id == 6 || a.id == 7 || a.id == 8 || a.id == 9 || a.id == 11));
+        this.userTypes = res.data.filter((a:any) => (a.id == 2 || a.id == 6 || a.id == 7 || a.id == 8 || a.id == 9 || a.id == 11));
       }
       else if (userTypeId == 7) {
-        this.userTypes = res.data.filter((a) => (a.id == 7));
+        this.userTypes = res.data.filter((a:any) => (a.id == 7));
       }
       else if (userTypeId == 8) {
-        this.userTypes = res.data.filter((a) => (a.id == 8 || a.id == 9));
+        this.userTypes = res.data.filter((a:any) => (a.id == 8 || a.id == 9));
       }
       else if (userTypeId == 9) {
-        this.userTypes = res.data.filter((a) => (a.id == 9));
+        this.userTypes = res.data.filter((a:any) => (a.id == 9));
       }
       else if (userTypeId == 10) { // master admin
-        this.userTypes = res.data.filter((a) => (a.id == 1 || a.id == 5 || a.id == 10));
+        this.userTypes = res.data.filter((a:any) => (a.id == 1 || a.id == 5 || a.id == 10));
       }
       else if (userTypeId == 11) {
-        this.userTypes = res.data.filter((a) => (a.id == 11));
+        this.userTypes = res.data.filter((a:any) => (a.id == 11));
       }
       else if (userTypeId == 12) {
-        this.userTypes = res.data.filter((a) => (a.id == 12));
+        this.userTypes = res.data.filter((a:any) => (a.id == 12));
       }
-      console.log(this.userTypes)
     });
 
   }
@@ -151,7 +141,6 @@ export class AuditComponent implements OnInit {
     let action = this.searchBy.activity ? this.searchBy.activity : '';
     let filtertext = this.searchBy.text ? this.searchBy.text : '';
 
-    console.log(this.searchBy)
     if (this.searchBy.usertype) {
       let type = UserTypes.find(o => o.name === this.searchBy.usertype.name)
       if (type) {
@@ -201,7 +190,6 @@ export class AuditComponent implements OnInit {
 
           }
         }, error => {
-          console.log(error, "error occured")
         });
     }, 1000);
   };
