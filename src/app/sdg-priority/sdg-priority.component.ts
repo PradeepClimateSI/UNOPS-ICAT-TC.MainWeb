@@ -42,7 +42,6 @@ export class SdgPriorityComponent implements OnInit{
   async getCountry(){
     this.countryServiceProxy.getCountry(this.countryId).subscribe((res) => {
       this.country = (res);
-      console.log(this.country)
     });
   }
   watchVideo(){
@@ -97,9 +96,7 @@ export class SdgPriorityComponent implements OnInit{
       co.id= p.country.id;
       p.country=co;
     }
-    console.log(priority)
     let res = await this.investorToolControllerServiceProxy.saveSdgPriorities(priority).toPromise();
-    console.log(priority)
     if (res){
       this.messageService.add({
         severity: 'success',
