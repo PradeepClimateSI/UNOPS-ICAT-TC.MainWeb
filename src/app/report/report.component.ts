@@ -33,7 +33,7 @@ export class ReportComponent implements OnInit {
   assessments: Assessment[] = []
   pdfFiles: any;
   SERVER_URL = environment.baseUrlAPI;
-  DOWNLOAD_BY_NAMA_URL = environment.baseUrlAPI + "document/downloadDocumentsFromFileName";
+  DOWNLOAD_BY_NAMA_URL = environment.baseUrlAPI + "/document/downloadDocumentsFromFileName";
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,

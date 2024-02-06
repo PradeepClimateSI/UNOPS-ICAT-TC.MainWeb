@@ -1,9 +1,9 @@
 export const environment = {
   production: true,
-  baseUrlPMU: 'https://tc.climatesi.com/pmu/login',
-  baseUrlAPI: 'https://tc.climatesi.com/web-api',
-  authBaseUrlAPI: 'https://tc.climatesi.com/auth-api',
+  baseUrlAPI: 'https://tc-main.climatesi.com',
+  authBaseUrlAPI: 'https://tc-auth.climatesi.com',
   baseUrlAPIDocUploadAPI: 'https://localhost/web/api/document/upload2',
-  baseUrlAuditlog: 'https://tc.climatesi.com/audit-api',
-  videoURL: ''
+  baseUrlAuditlog :  'https://tc-audit.climatesi.com',
+  baseUrlPMU: 'https://tc-pmu.climatesi.com',
+  videoURL: 'https://sccv2.s3.ap-south-1.amazonaws.com/videos',
 };
