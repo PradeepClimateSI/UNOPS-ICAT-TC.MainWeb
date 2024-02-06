@@ -147,14 +147,17 @@ export class PortfolioComparisonComponent implements OnInit {
     body.reportName = this.reportName;
     body.reportTitle = this.portfolio.portfolioName;
     this.reportControllerServiceProxy.generateComparisonReport(body).subscribe(res => {
-      window.open(this.SERVER_URL +'/'+res.generateReportName, "_blank");
+   
       if (res) {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Report generated successfully',
-          closable: true,
-        })
+        setTimeout(() => {
+          window.open(this.SERVER_URL +'/report/downloadReport/inline/'+res.id, "_blank")
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Report generated successfully',
+            closable: true,
+          })
+        },5000)
         
       }
       this.display = false
