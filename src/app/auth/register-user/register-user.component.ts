@@ -66,7 +66,7 @@ export class RegisterUserComponent implements OnInit {
     newProfile.coutryId =0;
     newProfile.insId=0;
  
-      const b = await this.service.createOneBaseLoginProfileControllerLoginProfile(newProfile).subscribe(async (res) => {
+      const b = await this.loginprofileControllerServiceProxy.create(newProfile).subscribe(async (res) => {
 
         try {
           newUser.loginProfile=res.id;
