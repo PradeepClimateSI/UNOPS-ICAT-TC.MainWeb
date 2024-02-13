@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { VerificationStatus } from 'app/Model/VerificationStatus.enum';
 import * as moment from 'moment';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
-import { Assessment, AssessmentControllerServiceProxy, DataVerifierDto, MethodologyAssessmentControllerServiceProxy, UsersControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Assessment, DataVerifierDto, MethodologyAssessmentControllerServiceProxy, UsersControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-assign-verifier',
@@ -33,7 +33,6 @@ export class AssignVerifierComponent implements OnInit {
   };
 
   constructor(
-    private assesmentProxy: AssessmentControllerServiceProxy,
     private MethodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
     private messageService: MessageService,
     private usersControllerServiceProxy: UsersControllerServiceProxy

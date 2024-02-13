@@ -232,7 +232,7 @@ export class EnterDataInvestmentComponent implements OnInit {
       this.selectedParameters.map((e) => {
         let id = e.investmentParameter.id;
         let intervention = e.investmentParameter.assessment.climateAction.policyName;
-        let assesmentType = e.investmentParameter.assessment.assessmentType;
+        let assessmentType = e.investmentParameter.assessment.assessmentType;
         let assessmentPeriod = moment(e.investmentParameter.assessment.from).format('yy-MM-DD') + " - " + moment(e.investmentParameter.assessment.to).format('yy-MM-DD')
         let process_outcome = e.investmentParameter.type
         let category = e.investmentParameter.category.name
@@ -243,7 +243,7 @@ export class EnterDataInvestmentComponent implements OnInit {
         let obj = {
           id,
           intervention,
-          assesmentType,
+          assessmentType,
           assessmentPeriod,
           process_outcome,
           category,

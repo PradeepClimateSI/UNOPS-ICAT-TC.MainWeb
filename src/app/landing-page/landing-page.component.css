@@ -40,8 +40,8 @@ a.link{
     background-position: center;
     background-position: 45% 55%;
     background-repeat: no-repeat;
-    
-    background-image: url('../../assets/images/land002.jpg');
+    background-size: cover;
+    background-image: url('../../assets/images/land002.png');
 }
 
 .contact-us:before{
@@ -66,13 +66,14 @@ a.link{
     background-position: center;
     background-position: 45% 55%;
     background-repeat: no-repeat;
-    
-    background-image: url('../../assets/images/land003.jpg');
+    background-size: cover;
+    height: 50vh;
+    background-image: url('../../assets/images/land003.png');
 }
 
 .case-studies:before{
 
-        background: rgb(41, 38, 38);
+        /* background: rgb(41, 38, 38); */
         opacity: 0.4;
         top: 50;
         content: "";
@@ -104,6 +105,11 @@ hr{
 h2, h5, h6 {
     font-weight: 800;
     backdrop-filter: brightness(150%);
+    margin-bottom: 1em;
+}
+.customh2{
+    font-weight: 800;
+  font-size: 56px;
     margin-bottom: 1em;
 }
 /* common styles end */

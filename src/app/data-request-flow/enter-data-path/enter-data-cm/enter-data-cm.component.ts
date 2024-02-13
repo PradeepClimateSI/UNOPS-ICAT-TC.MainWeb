@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
-import { CMAnswer, CMAssessmentAnswer, CMAssessmentQuestion, CMQuestionControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequest, ParameterRequestControllerServiceProxy, ParameterRequestTool, ScoreDto, ServiceProxy, UpdateDeadlineDto, UpdateDeadlineDtoTool, UpdateValueEnterData } from 'shared/service-proxies/service-proxies';
+import { CMAnswer, CMAssessmentAnswer, CMAssessmentQuestion, CMQuestionControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequest, ParameterRequestControllerServiceProxy, ParameterRequestTool, ScoreDto, ServiceProxy, UpdateDeadlineDto, UpdateDeadlineDtoTool } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { DataRequestStatus } from 'app/Model/DataRequestStatus.enum';
 import * as XLSX from 'xlsx';
@@ -262,7 +262,7 @@ export class EnterDataCmComponent implements OnInit {
         let answer
         let id = e.cmAssessmentAnswer.id;
         let intervention = e.cmAssessmentAnswer.assessment_question.assessment.climateAction.policyName;
-        let assesmentType = e.cmAssessmentAnswer.assessment_question.assessment.assessmentType;
+        let assessmentType = e.cmAssessmentAnswer.assessment_question.assessment.assessmentType;
         let process_outcome = e.cmAssessmentAnswer.assessment_question.characteristic.category.type;
         let category = e.cmAssessmentAnswer.assessment_question.characteristic.category.name;
         let category_code = e.cmAssessmentAnswer.assessment_question.characteristic.category.code;
@@ -270,7 +270,7 @@ export class EnterDataCmComponent implements OnInit {
         let obj = {
           id,
           intervention,
-          assesmentType,
+          assessmentType,
           process_outcome,
           category,
           category_code,

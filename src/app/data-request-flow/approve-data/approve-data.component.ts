@@ -24,9 +24,9 @@ import {
   styleUrls: ['./approve-data.component.css'],
 })
 export class ApproveDataComponent implements OnInit {
-  assesmentYearId: number = 0;
-  assementYear: any;
-  assementYearDetails: Assessment = new Assessment();
+  assessmentYearId: number = 0;
+  assessmentYear: any;
+  assessmentYearDetails: Assessment = new Assessment();
   parameters: Parameter[] = [];
   baselineParameters: Parameter[] = [];
   projectParameters: Parameter[] = [];
@@ -66,11 +66,9 @@ export class ApproveDataComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private proxy: ServiceProxy,
-    private assesmentProxy: AssessmentControllerServiceProxy,
+    private assessmentProxy: AssessmentControllerServiceProxy,
     private parameterProxy: ParameterRequestControllerServiceProxy,
     private messageService: MessageService,
-    private serviceProxy: ServiceProxy,
     private parameterControlProxy: ParameterControllerServiceProxy,
     private prHistoryProxy: ParameterHistoryControllerServiceProxy,
     private instProxy: InstitutionControllerServiceProxy
@@ -81,10 +79,10 @@ export class ApproveDataComponent implements OnInit {
     const tokenPayload = decode<any>(token);
     this.userName =tokenPayload.username;
     this.route.queryParams.subscribe((params) => {
-      this.assesmentYearId = params['id'];
+      this.assessmentYearId = params['id'];
     });
 
-    this.assesmentProxy.findOne( this.assesmentYearId)
+    this.assessmentProxy.findOne( this.assessmentYearId)
       .subscribe((res: any) => {
         this.finalQC = res;
         this.headerlcimateActionName = res.climateAction?.policyName;
@@ -99,7 +97,7 @@ export class ApproveDataComponent implements OnInit {
           }
         }
       });
-      this.parameterControlProxy.findByAssemeId(this.assesmentYearId)
+      this.parameterControlProxy.findByAssemeId(this.assessmentYearId)
       .subscribe((res)=>{
         this.baselineParameters  =res;
         if (this.finalQC?.qaStatus == null) {
@@ -119,21 +117,21 @@ export class ApproveDataComponent implements OnInit {
 
 
   getAssesment() {
-    this.assesmentProxy
+    this.assessmentProxy
       .getAssessmentsForApproveData(
         this.finalQC.id,
         this.userName
       )
       .subscribe((res) => {
-        this.assementYearDetails = res;
+        this.assessmentYearDetails = res;
       });
   }
 
   checkQC() {
-    this.assesmentProxy
+    this.assessmentProxy
       .checkAssessmentReadyForQC(
-        this.assementYear.id,
-        this.assementYear.assessmentYear
+        this.assessmentYear.id,
+        this.assessmentYear.assessmentYear
       )
       .subscribe((r) => {
         if (r) {
@@ -212,20 +210,20 @@ export class ApproveDataComponent implements OnInit {
 
   onClickQC() {
     this.isHideRejectButton = true;
-    let dto = new UpdateAssessmentDto();
-    //@ts-ignore
+    let dto = new UpdateAssessmentDto();   
+    //@ts-ignore - We are accepting Date object in front-end
     dto.deadline = this.selectedQCDeadline;
-    this.assesmentProxy.update(this.assementYear.id,dto)
+    this.assessmentProxy.update(this.assessmentYear.id,dto)
       .subscribe((res) => {
       });
 
     let inputParameters = new DataVerifierDto();
-    inputParameters.ids = [this.assesmentYearId];
+    inputParameters.ids = [this.assessmentYearId];
     inputParameters.status = 1;
     this.buttonLabel = 'Sent';
     this.enableQCButton = false;
     this.isRejectButtonDisable = false;
-    this.assesmentProxy.acceptQC(inputParameters).subscribe(
+    this.assessmentProxy.acceptQC(inputParameters).subscribe(
       (res) => {
         this.messageService.add({
           severity: 'success',

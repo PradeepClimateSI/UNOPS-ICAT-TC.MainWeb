@@ -39,11 +39,11 @@
             <span class="p-input-icon-right" style="width: 400px">
               <i *ngIf="passwordType=='password'" class="pi pi-eye pass-icon" (click)="togglePassword()"></i>
               <i *ngIf="passwordType=='text'" class="pi pi-eye-slash pass-icon" (click)="togglePassword()"></i>
-              <input required pInputText [type]="passwordType" #fpassowrd="ngModel" name="password" [(ngModel)]="password" placeholder="Password" class="form-control"/>
+              <input required pInputText [type]="passwordType" #fpassword="ngModel" name="password" [(ngModel)]="password" placeholder="Password" class="form-control"/>
             </span>
             <p class="info-message text-danger" *ngIf="
-                (fpassowrd.errors?.['required'] && (fpassowrd.touched || fpassowrd.dirty)) ||
-                (fpassowrd.errors?.['required'] && isSubmitted  )">
+                (fpassword.errors?.['required'] && (fpassword.touched || fpassword.dirty)) ||
+                (fpassword.errors?.['required'] && isSubmitted  )">
                 Password is required
             </p>
           </div>

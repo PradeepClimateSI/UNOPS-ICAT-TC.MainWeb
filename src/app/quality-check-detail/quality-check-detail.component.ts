@@ -14,7 +14,7 @@ import {
   styleUrls: ['./quality-check-detail.component.css']
 })
 export class QualityCheckDetailComponent implements OnInit {
-  assesmentId: number = 0;
+  assessmentId: number = 0;
   param: Parameters[] = [];
   loading: boolean = false;
   commentRequried: boolean = false;
@@ -40,8 +40,8 @@ export class QualityCheckDetailComponent implements OnInit {
   ngOnInit(): void {
 
     this.route.queryParams.subscribe((params) => {
-      this.assesmentId = params['id'];
-      this.metAssesment.findByAssemeId(this.assesmentId).subscribe((res) => {
+      this.assessmentId = params['id'];
+      this.metAssesment.findByAssemeId(this.assessmentId).subscribe((res) => {
         this.param = res;
         this.headerlcimateActionName = res[0].assessment.climateAction.policyName;
         this.headerAssessmentType = res[0].assessment.assessmentType;

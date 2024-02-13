@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { Country, Institution, InstitutionCategory, InstitutionControllerServiceProxy, InstitutionType, Sector, SectorControllerServiceProxy, ServiceProxy, User, UserType } from 'shared/service-proxies/service-proxies';
+import { Country, Institution, InstitutionCategory, InstitutionCategoryControllerServiceProxy, InstitutionControllerServiceProxy, InstitutionType, InstitutionTypeControllerServiceProxy, Sector, SectorControllerServiceProxy, ServiceProxy, User, UserType } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { NgForm } from '@angular/forms';
 
@@ -61,6 +61,8 @@ export class InstitutionComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute,
     private institutionProxy: InstitutionControllerServiceProxy,
+    private institutionTypeProxy: InstitutionTypeControllerServiceProxy,
+    private institutionCatProxy: InstitutionCategoryControllerServiceProxy,
     private router: Router,
     private messageService: MessageService,
     private sectorProxy: SectorControllerServiceProxy,
@@ -96,12 +98,8 @@ export class InstitutionComponent implements OnInit {
 
       if (this.institutionId && this.institutionId > 0) {
         this.isNew = false;
-        this.serviceProxy
-          .getOneBaseInstitutionControllerInstitution(
-            this.institutionId,
-            undefined,
-            undefined,
-            0
+        this.institutionProxy.getInstituionById(
+            this.institutionId
           ).subscribe((res) => {
             this.institution = res;
 
@@ -113,20 +111,11 @@ export class InstitutionComponent implements OnInit {
     let fil : string[] = new Array()
     fil.push(('id||$eq||' + 4))
 
-    this.serviceProxy
-    .getManyBaseInstitutionTypeControllerInstitutionType(
-      undefined,
-      undefined,
-      fil,
-      undefined,
-      ['name,ASC'],
-      undefined,
-      1000,
-      0,    
-      0,
-      0
-    ).subscribe((res: any) => {
-      this.selectedTypeList = res.data;
+    this.institutionTypeProxy
+    .getInstitutionType( 4)
+    .subscribe((res: any) => {
+    
+      this.selectedTypeList = res;
         if (this.usrrole == "Country User") {
 
         this.selectedTypeList1 = this.selectedTypeList.filter((o: any) => o.name != "UNFCCC Focal Point" && o.name != "NDC Unit" && o.name != "National Institution" && o.name != "Data Collection Team" && o.name != "QC Team");
@@ -144,20 +133,10 @@ export class InstitutionComponent implements OnInit {
     });
 
 
-    this.serviceProxy
-    .getManyBaseInstitutionCategoryControllerInstitutionCategory(
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      1000,
-      0,
-      0,
-      0
-    ).subscribe((res: any) => {
-      this.categoryList = res.data;
+    this.institutionCatProxy
+    .getInstitutionType()
+    .subscribe((res: any) => {
+      this.categoryList = res;
     });
 
 
@@ -177,7 +156,6 @@ export class InstitutionComponent implements OnInit {
 
   onInstitutionChange(event:any)
 {
-
   if(['Data Collection Team','QC Team','National Institution'].includes(event.name)){
 
   }
@@ -215,10 +193,16 @@ async saveForm(formData: NgForm) {
 
     institution.name = this.inname;
     institution.description = this.indescription;
-    institution.category = this.incategory;
-    institution.type = this.intype;
+    let inscat = new InstitutionCategory
+    inscat.id =this.incategory.id;
+    institution.category = inscat;
+    let instype = new InstitutionType
+    instype.id =this.intype.id;
+    institution.type = instype;
     institution.address = this.inaddress;
-    institution.country = country;
+    let inscountry = new Country
+    inscountry.id =country.id;
+    institution.country = inscountry;
     institution.telephoneNumber = this.intelephoneNumber;
     institution.email = this.inmail;
 
@@ -246,27 +230,26 @@ async saveForm(formData: NgForm) {
     if (institution.id !== 0) {
 
 
-      await this.serviceProxy
-        .createOneBaseInstitutionControllerInstitution(institution)
+      await this.institutionProxy.create(institution)
         .subscribe(
           (re) => {
             
+            this.messageService.add({
+              severity:'success', 
+              summary:'Success', 
+              detail:institution.name +' has saved successfully',  
+              closable: true,});
+           
             
+          },
+
+          (err) => {
             this.messageService.add({
               severity: 'error',
               summary: 'Error.',
               detail: 'Internal server error, please try again.',
               sticky: true,
             });
-            
-          },
-
-          (err) => {
-            this.messageService.add({
-              severity:'success', 
-              summary:'Success', 
-              detail:institution.name +' has saved successfully',  
-              closable: true,});
           }
           
         );
@@ -330,9 +313,7 @@ updateStatus(institution: Institution) {
     this.institution.category = category;
   }
 
-  this.serviceProxy
-
-    .updateOneBaseInstitutionControllerInstitution(institution.id, institution)
+  this.institutionProxy.update( institution)
     .subscribe((res) => {
         this.messageService.add({
           severity: 'success',
@@ -384,9 +365,7 @@ activateInstitution(institution: Institution) {
   }
 
 
-  this.serviceProxy
-
-    .updateOneBaseInstitutionControllerInstitution(institution.id, institution)
+  this.institutionProxy.update( institution)
     .subscribe((res) => {
         this.messageService.add({
           severity: 'success',

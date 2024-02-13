@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { Institution, InstitutionCategory, InstitutionControllerServiceProxy, InstitutionType, Sector, ServiceProxy, User, UsersControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Institution, InstitutionCategory, InstitutionCategoryControllerServiceProxy, InstitutionControllerServiceProxy, InstitutionType, Sector, User, UsersControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 
 @Component({
@@ -13,11 +13,8 @@ export class ViewInstitutionComponent implements OnInit {
 
   userId: number = 0;
   user: User = new User();
-  userTypeId: number = 0;
-  typeList: InstitutionType[] = [];
   selectedTypeList: InstitutionType[] = [];
   categoryList: InstitutionCategory[] = [];
-  sectorList: Sector[] = [];
   institutionId: number = 0;
   title: string;
   institution: Institution = new Institution();
@@ -30,15 +27,14 @@ export class ViewInstitutionComponent implements OnInit {
   userName: string;
 
   constructor(
-    private serviceProxy: ServiceProxy,
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute,
     private institutionProxy: InstitutionControllerServiceProxy,
     private router: Router,
     private messageService: MessageService,
     private cdr: ChangeDetectorRef,
-    private userProxy: UsersControllerServiceProxy
-
+    private userProxy: UsersControllerServiceProxy,
+    private institutionCatProxy: InstitutionCategoryControllerServiceProxy,
   ) { }
 
 
@@ -69,82 +65,19 @@ export class ViewInstitutionComponent implements OnInit {
 
       this.userId = 4;
 
-    this.serviceProxy
-    .getOneBaseUsersControllerUser(
-      this.userId,
-      undefined,
-      undefined,
-      0,
-    ).subscribe((res: any) => {
-      this.userTypeId = this.user.userType?.id;
+   
 
-      this.serviceProxy
-    .getManyBaseInstitutionTypeControllerInstitutionType(
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      ['name,ASC'],
-      undefined,
-      1000,
-      0,
-      0,
-      0
-    ).subscribe((res: any) => {
-      this.selectedTypeList = res.data;
-
-      if(this.userTypeId == 1){ 
-        this.typeList.push(this.selectedTypeList[0]);
-      }
-      if(this.userTypeId == 2){
-        this.typeList.push(this.selectedTypeList[1]);
-        this.typeList.push(this.selectedTypeList[2]);
-      }
-    });
-
-
+    this.institutionCatProxy
+    .getInstitutionType().subscribe((res: any) => {
+      this.categoryList = res;
     })
 
-    this.serviceProxy
-    .getManyBaseInstitutionCategoryControllerInstitutionCategory(
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      1000,
-      0,
-      0,
-      0
-    ).subscribe((res: any) => {
-      this.categoryList = res.data;
-    })
-
-    this.serviceProxy
-    .getManyBaseSectorControllerSector(
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      ['name,ASC'],
-      undefined,
-      1000,
-      0,
-      0,
-      0
-    ).subscribe((res: any) => {
-      this.sectorList = res?.data;
-    });
+   
 
     this.route.queryParams.subscribe((params) => {
       this.institutionId = params['id'];
-      this.serviceProxy
-      .getOneBaseInstitutionControllerInstitution(
+      this.institutionProxy.getInstituionById(
         this.institutionId,
-        undefined,
-        undefined,
-        0
       ).subscribe((res) => {
         this.institution = res;
       })
@@ -208,9 +141,7 @@ export class ViewInstitutionComponent implements OnInit {
         }
 
 
-          this.serviceProxy
-
-          .updateOneBaseInstitutionControllerInstitution(institution.id, institution)
+          this.institutionProxy.update( institution)
           .subscribe((res) => {
             this.messageService.add({
               severity: 'success',
@@ -278,9 +209,7 @@ export class ViewInstitutionComponent implements OnInit {
           this.institution.category = category;
         }
 
-          this.serviceProxy
-
-          .updateOneBaseInstitutionControllerInstitution(institution.id, institution)
+          this.institutionProxy.update(institution)
           .subscribe((res) => {
             this.messageService.add({
               severity: 'success',

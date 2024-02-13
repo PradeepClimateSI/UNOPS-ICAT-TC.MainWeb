@@ -7,7 +7,6 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { Router } from '@angular/router';
 import { environment } from 'environments/environment.prod';
 import * as moment from 'moment';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
@@ -90,7 +89,7 @@ export class EnterDataComponent implements OnInit, AfterViewInit {
   requestHistoryList: any[] = [];
   displayHistory: boolean = false;
   public fileData: File;
-  SERVER_URL = environment.baseUrlExcelUpload;
+  SERVER_URL = environment.baseUrlAPI;
   isOpen: boolean = false;
   userCountryId:number = 0;
   userSectorId:number = 0;
@@ -479,7 +478,7 @@ export class EnterDataComponent implements OnInit, AfterViewInit {
       this.selectedParameters.map((e) => {
         let id = e.parameterId.id;
         let climateAction = e.parameterId.Assessment?.Prject?.climateActionName;
-        let assesmentApproch = e.parameterId.Assessment?.assessmentType;
+        let assessmentApproch = e.parameterId.Assessment?.assessmentType;
         let year = e.parameterId.AssessmentYear;
         let scenario = e.parameterId.isAlternative
           ? 'Alternative'
@@ -500,7 +499,7 @@ export class EnterDataComponent implements OnInit, AfterViewInit {
         let obj = {
           id,
           climateAction,
-          assesmentApproch,
+          assessmentApproch,
           year,
           scenario,
           parameter,
@@ -518,7 +517,7 @@ export class EnterDataComponent implements OnInit, AfterViewInit {
       this.parameterList.map((e) => {
         let id = e.parameterId.id;
         let climateAction = e.parameterId.Assessment?.Prject?.climateActionName;
-        let assesmentApproch = e.parameterId.Assessment?.assessmentType;
+        let assessmentApproch = e.parameterId.Assessment?.assessmentType;
         let year = e.parameterId.AssessmentYear;
         let scenario = e.parameterId.isAlternative
           ? 'Alternative'
@@ -559,7 +558,7 @@ export class EnterDataComponent implements OnInit, AfterViewInit {
         let obj = {
           id,
           climateAction,
-          assesmentApproch,
+          assessmentApproch,
           year,
           scenario,
           parameter,

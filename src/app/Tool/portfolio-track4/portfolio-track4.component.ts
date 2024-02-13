@@ -3,16 +3,16 @@ import { NgForm } from '@angular/forms';
 import { FieldNames, MasterDataDto, MasterDataService } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
-import { AllBarriersSelected, Assessment, AssessmentControllerServiceProxy, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, PortfolioQuestionDetails, PortfolioQuestions, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { AllBarriersSelected, Assessment, AssessmentControllerServiceProxy, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, PortfolioQuestionDetails, PortfolioQuestions,  Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
-import { Dropdown } from 'primeng/dropdown';
 import { environment } from 'environments/environment';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { DialogService } from 'primeng/dynamicdialog';
 import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
+import { ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 
 interface CharacteristicWeight {
@@ -165,8 +165,8 @@ export class PortfolioTrack4Component implements OnInit {
     protected dialogService: DialogService,
 
   ) {
-    this.uploadUrl = environment.baseUrlAPI + '/investor-tool/upload-file'
-    this.fileServerURL = environment.baseUrlAPI + '/uploads'
+    this.uploadUrl = environment.baseUrlAPI + "/document/upload-file-by-name" ;
+    this.fileServerURL = environment.baseUrlAPI+'/document/downloadDocumentsFromFileName/uploads';
 
   }
 
@@ -337,8 +337,7 @@ export class PortfolioTrack4Component implements OnInit {
     if (this.assessment.from) {
       let convertTime = moment(this.assessment.from).format("YYYY-MM-DD HH:mm:ss");
       let convertTimeObject = new Date(convertTime);
-      //@ts-ignore
-      this.assessment.from = convertTimeObject;
+      this.assessment.from = moment(convertTimeObject);
     }
 
   }
@@ -347,8 +346,7 @@ export class PortfolioTrack4Component implements OnInit {
     if (this.assessment.to) {
       let convertTime = moment(this.assessment.to).format("YYYY-MM-DD HH:mm:ss");
       let convertTimeObject = new Date(convertTime);
-      //@ts-ignore
-      this.assessment.to = convertTimeObject;
+      this.assessment.to = moment(convertTimeObject);
     }
   }
 
@@ -951,7 +949,7 @@ export class PortfolioTrack4Component implements OnInit {
     else {
       let finalArray = this.processData.concat(this.outcomeData)
       finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment));
-      //@ts-ignore
+      //@ts-ignore - We are accepting Array in back-end
       this.investorToolControllerproxy.createFinalAssessmentIndirect(finalArray)
         .subscribe(_res => {
           this.messageService.add({

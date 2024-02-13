@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { LazyLoadEvent } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { AssessmentControllerServiceProxy, ClimateAction, ParameterRequestControllerServiceProxy, ProjectControllerServiceProxy, ServiceProxy } from 'shared/service-proxies/service-proxies';
+import { AssessmentControllerServiceProxy, ClimateAction, ParameterRequestControllerServiceProxy, } from 'shared/service-proxies/service-proxies';
 @Component({
   selector: 'app-managedatastatus',
   templateUrl: './managedatastatus.component.html',
@@ -30,12 +30,11 @@ export class ManagedatastatusComponent implements OnInit {
   sectorId: number = 1;
 
 
-  constructor(private serviceProxy: ServiceProxy,
-    private assesmentProxy: AssessmentControllerServiceProxy,
+  constructor(
+    private assessmentProxy: AssessmentControllerServiceProxy,
     private parameterProxy: ParameterRequestControllerServiceProxy,
     private cdr: ChangeDetectorRef,
-    private router: Router,
-    private climateactionserviceproxy: ProjectControllerServiceProxy) { }
+    private router: Router,) { }
   ngAfterViewInit(): void {
     this.cdr.detectChanges();
   }
@@ -88,7 +87,7 @@ export class ManagedatastatusComponent implements OnInit {
         : (event.first / (event.rows === undefined ? 10 : event.rows)) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
 
-    this.assesmentProxy.assessmentYearForManageDataStatus(
+    this.assessmentProxy.assessmentYearForManageDataStatus(
       pageNumber,
       this.rows,
       filterText,
@@ -98,7 +97,7 @@ export class ManagedatastatusComponent implements OnInit {
         this.loading = false;
         this.totalRecords = res.meta.totalItems;
         this.datarequests = [];
-        for (let assement of res.items) {
+        for (let assessment of res.items) {
           let datarequests1: datarequest = {
             name: "",
             tool: "",
@@ -111,13 +110,13 @@ export class ManagedatastatusComponent implements OnInit {
             recieved: 0,
             qaStatus: 0
           };
-          datarequests1.name = assement.climateAction.policyName;
-          datarequests1.tool = assement.tool;
-          datarequests1.year = assement.assessmentYear ? assement.year : "";
-          datarequests1.type = assement.assessmentType;
-          datarequests1.assenmentYearId = assement.id;
+          datarequests1.name = assessment.climateAction.policyName;
+          datarequests1.tool = assessment.tool;
+          datarequests1.year = assessment.assessmentYear ? assessment.year : "";
+          datarequests1.type = assessment.assessmentType;
+          datarequests1.assenmentYearId = assessment.id;
           this.parameterProxy
-            .getDateRequestToManageDataStatus(assement.id, 1, assement.tool)
+            .getDateRequestToManageDataStatus(assessment.id, 1, assessment.tool)
             .subscribe(re => {
               datarequests1.totalreqCount = re.length;
 

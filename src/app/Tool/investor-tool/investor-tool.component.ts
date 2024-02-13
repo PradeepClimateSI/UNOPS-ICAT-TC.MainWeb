@@ -189,8 +189,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     protected dialogService: DialogService,
 
   ) {
-     this.uploadUrl = environment.baseUrlAPI + '/investor-tool/upload-file-investment'
-    this.fileServerURL = environment.baseUrlAPI+'/uploads'
+    this.uploadUrl = environment.baseUrlAPI + "/document/upload-file-by-name" ; 
+    this.fileServerURL = environment.baseUrlAPI+'/document/downloadDocumentsFromFileName/uploads';
 
   }
   async ngOnInit(): Promise<void> {
@@ -368,7 +368,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     if(this.assessment.from){  
       let convertTime = moment(this.assessment.from).format("YYYY-MM-DD HH:mm:ss");
       let convertTimeObject = new Date(convertTime);
-      //@ts-ignore
+      //@ts-ignore - We are accepting Date object in front-end
       this.assessment.from = convertTimeObject;
     }
 
@@ -394,7 +394,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     if(this.assessment.to){
       let convertTime = moment(this.assessment.to).format("YYYY-MM-DD HH:mm:ss");
       let convertTimeObject = new Date(convertTime);
-      //@ts-ignore
+      //@ts-ignore - We are accepting Date object in front-end
       this.assessment.to = convertTimeObject;
     }
 
@@ -915,11 +915,10 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
     }
     else{
-      let finalArray = this.processData.concat(this.outcomeData)
-      finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment));
-      //@ts-ignore
+      let finalArray:any = this.processData.concat(this.outcomeData)
+      finalArray.map((x: { data: any[]; }) => x.data.map(y => y.assessment = this.mainAssessment));
       this.investorToolControllerproxy.createFinalAssessmentIndirect(finalArray)
-        .subscribe(_res => {
+        .subscribe((_res:any) => {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
