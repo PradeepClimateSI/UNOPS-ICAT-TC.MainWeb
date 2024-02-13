@@ -41,7 +41,8 @@ export class SdgPriorityComponent implements OnInit{
 
   async getCountry(){
     this.countryServiceProxy.getCountry(this.countryId).subscribe((res) => {
-      this.country = (res)});
+      this.country = (res);
+    });
   }
   watchVideo(){
     let ref = this.dialogService.open(GuidanceVideoComponent, {
@@ -88,8 +89,14 @@ export class SdgPriorityComponent implements OnInit{
 
   async save(){
     let priority = new SdgPriorityDto()
-    priority.priorities = this.sdgPriorities
-    let res = await this.investorToolControllerServiceProxy.saveSdgPriorities(priority).toPromise()
+    priority.priorities = this.sdgPriorities;
+
+    for(let p of priority.priorities){
+      let  co = new Country();
+      co.id= p.country.id;
+      p.country=co;
+    }
+    let res = await this.investorToolControllerServiceProxy.saveSdgPriorities(priority).toPromise();
     if (res){
       this.messageService.add({
         severity: 'success',
