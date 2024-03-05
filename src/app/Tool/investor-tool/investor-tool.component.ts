@@ -1,6 +1,6 @@
 import { AfterContentChecked, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { FieldNames, MasterDataDto, MasterDataService } from 'app/shared/master-data.service';
+import { FieldNames, MasterDataDto, MasterDataService, chapter6_url } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
 import {Any, AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, AssessmentControllerServiceProxy, Category, PortfolioSdg, TotalInvestment, TotalInvestmentDto } from 'shared/service-proxies/service-proxies';
@@ -173,6 +173,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   fieldNames = FieldNames
   minDateTo: Date;
   notFilledCategories: any[] = []
+  chapter6_url = chapter6_url
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,

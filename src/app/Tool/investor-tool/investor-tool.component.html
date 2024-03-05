@@ -197,10 +197,11 @@
                   <div class="p-field">
                     <textarea [disabled]="isSavedAssessment|| isEditMode" name="phase_of_transformation" placeholder="See Chapter 6 of the ICAT Transformational Change Methodology" #phase_of_transformation="ngModel" [(ngModel)]="assessment.phase_of_transformation" rows="2" cols="130" pInputText
                       autoResize="autoResize" [maxlength]="masterDataService.getFieldCharCount(fieldNames.VISION)" required></textarea>
+                    <label style="font-size: 12px;"><i>See <a [href]="chapter6_url" target="_blank">Chapter 6 </a>of the ICAT Transformational Change Methodology</i></label>
                     <span style="float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.VISION)}}</span>
                     <p class="info-message text-danger" *ngIf="  !phase_of_transformation.value &&                     
-                                (fData.submitted || phase_of_transformation.touched || phase_of_transformation.dirty)
-                              ">
+                                                                (fData.submitted || phase_of_transformation.touched || phase_of_transformation.dirty)
+                                                              ">
                       This is a mandatory field
                     </p>
                   </div>
@@ -228,6 +229,7 @@
             <div class="p-grid p-fluid col-sm-12">
               <div class="p-2">
                 <h6>Barriers &nbsp; <p-button [hidden]="isSavedAssessment || isEditMode" icon="pi pi-plus " styleClass="p-button-sm p-button-rounded" (click)="showDialog()"></p-button></h6>
+                <label><i>Add a barrier by clicking the “+” button. To add multiple barriers, click the “+” button again after saving your inputs.</i></label>
               </div>
               <p-dialog header="Add Barrier" [(visible)]="barrierBox" [modal]="true" appendTo="body" [style]="{width: '50vw'}">
                 <div class="tooltip2-container">

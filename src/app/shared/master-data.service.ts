@@ -1083,3 +1083,5 @@ export enum FieldNames {
   ASSESSMENT_OPPORTUNITIES = "ASSESSMENT_OPPORTUNITIES",
   JUSTIFICATION = "JUSTIFICATION"
 }
+
+export const chapter6_url = 'https://storage.googleapis.com/public-bucket-kh/Transformational-Change-Methodology_ch6.pdf'

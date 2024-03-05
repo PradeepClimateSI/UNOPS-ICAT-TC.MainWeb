@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { FieldNames, MasterDataDto, MasterDataService } from 'app/shared/master-data.service';
+import { FieldNames, MasterDataDto, MasterDataService, chapter6_url } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
 import { AllBarriersSelected, Assessment, AssessmentCMDetail, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, BarrierSelected, Category, Characteristics, ClimateAction, GeographicalAreasCovered, InvestorSector, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, ServiceProxy, ToolsMultiselectDto } from 'shared/service-proxies/service-proxies';
@@ -68,6 +68,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   minDate: Date;
   minDateTo: Date;
   fieldNames = FieldNames
+  chapter6_url = chapter6_url
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
