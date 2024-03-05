@@ -14546,6 +14546,56 @@ export class ReportControllerServiceProxy {
         }
         return _observableOf(null as any);
     }
+
+    downloadReport(id: number, state: string): Observable<void> {
+        let url_ = this.baseUrl + "/report/downloadReport/{state}/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (state === undefined || state === null)
+            throw new Error("The parameter 'state' must be defined.");
+        url_ = url_.replace("{state}", encodeURIComponent("" + state));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDownloadReport(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDownloadReport(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDownloadReport(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
 }
 
 @Injectable()
@@ -24620,7 +24670,7 @@ export class CMAssessmentQuestionControllerServiceProxy {
         return _observableOf(null as any);
     }
 
-    getDashboardData(page: number, limit: number): Observable<any> {
+    getDashboardData(page: number, limit: number, intervention_ids: string[]): Observable<any> {
         let url_ = this.baseUrl + "/cm-assessment-question/dashboard-data?";
         if (page === undefined || page === null)
             throw new Error("The parameter 'page' must be defined and cannot be null.");
@@ -24630,6 +24680,10 @@ export class CMAssessmentQuestionControllerServiceProxy {
             throw new Error("The parameter 'limit' must be defined and cannot be null.");
         else
             url_ += "limit=" + encodeURIComponent("" + limit) + "&";
+        if (intervention_ids === undefined || intervention_ids === null)
+            throw new Error("The parameter 'intervention_ids' must be defined and cannot be null.");
+        else
+            intervention_ids && intervention_ids.forEach(item => { url_ += "intervention_ids=" + encodeURIComponent("" + item) + "&"; });
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -29136,15 +29190,6 @@ export class Category implements ICategory {
     }
 }
 
-export enum DocumentsDocumentOwner {
-    Project = <any>"Project",
-    Country = <any>"Country",
-    CountryNC = <any>"CountryNC",
-    CountryBUR = <any>"CountryBUR",
-    CountryBTR = <any>"CountryBTR",
-    CountryNDC = <any>"CountryNDC",
-    CountryGHG = <any>"CountryGHG",
-}
 export interface ICategory {
     id: number;
     name: string;
@@ -39001,6 +39046,16 @@ export interface ICreateManyCMAssessmentAnswerDto {
     bulk: CMAssessmentAnswer[];
 
     [key: string]: any;
+}
+
+export enum DocumentsDocumentOwner {
+    Project = <any>"Project",
+    Country = <any>"Country",
+    CountryNC = <any>"CountryNC",
+    CountryBUR = <any>"CountryBUR",
+    CountryBTR = <any>"CountryBTR",
+    CountryNDC = <any>"CountryNDC",
+    CountryGHG = <any>"CountryGHG",
 }
 
 export enum CountryStatus {
