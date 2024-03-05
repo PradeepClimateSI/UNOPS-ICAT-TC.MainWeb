@@ -39048,6 +39048,10 @@ export interface ICreateManyCMAssessmentAnswerDto {
     [key: string]: any;
 }
 
+export enum CountryStatus {
+    Active = <any>"Active",
+    Deactivated = <any>"Deactivated",
+}
 export enum DocumentsDocumentOwner {
     Project = <any>"Project",
     Country = <any>"Country",
@@ -39056,11 +39060,6 @@ export enum DocumentsDocumentOwner {
     CountryBTR = <any>"CountryBTR",
     CountryNDC = <any>"CountryNDC",
     CountryGHG = <any>"CountryGHG",
-}
-
-export enum CountryStatus {
-    Active = <any>"Active",
-    Deactivated = <any>"Deactivated",
 }
 
 export enum ParameterRequestTool {

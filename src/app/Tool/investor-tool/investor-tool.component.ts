@@ -11,6 +11,8 @@ import { environment } from 'environments/environment';
 import { HttpResponse } from '@angular/common/http';
 import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
 import { DialogService } from 'primeng/dynamicdialog';
+import { of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 
 interface  CharacteristicWeight {
@@ -153,6 +155,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   isValidSustainedSD: boolean;
   visionExample: { title: string; value: string; }[];
   invest1: any;
+  investment_instruments: MasterDataDto[];
   investment_instruments_1: MasterDataDto[];
   investment_instruments_2: MasterDataDto[];
   investment_instruments_3: MasterDataDto[];
@@ -174,6 +177,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   minDateTo: Date;
   notFilledCategories: any[] = []
   chapter6_url = chapter6_url
+  selectedInstruments: any[]
+  show_less_message: boolean;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -198,9 +203,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.sectorList = await this.sectorProxy.findAllSector().toPromise();
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;
     this.geographicalAreasCovered = this.masterDataService.level_of_implemetation;
-    this.investment_instruments_1 = this.masterDataService.investment_instruments
-    this.investment_instruments_2 = this.masterDataService.investment_instruments
-    this.investment_instruments_3 = this.masterDataService.investment_instruments
+    this.investment_instruments = this.masterDataService.investment_instruments
     this.ghg_info = this.masterDataService.other_invest_ghg_info
     this.sdg_info = this.masterDataService.other_invest_sdg_info
     this.adaptation_info = this.masterDataService.other_invest_adaptation_info
@@ -219,9 +222,9 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       await this.getPolicies();
       await this.getAllImpactsCovered();
       await this.getCharacteristics();
-      for (let i = 0; i < 3; i++) {
-        this.totalInvestments.push(new TotalInvestment)
-      }
+      // for (let i = 0; i < 3; i++) {
+      //   this.totalInvestments.push(new TotalInvestment)
+      // }
 
     } else {
       try {
@@ -317,18 +320,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       return d
     })
 
-    this.investorAssessment.total_investements.map((tot, idx) => {
-      let inst 
-      if (idx === 0) inst = this.investment_instruments_1.find(o => o.code === tot.instrument_code)
-      else if (idx === 1) inst = this.investment_instruments_2.find(o => o.code === tot.instrument_code)
-      else if (idx === 2) inst = this.investment_instruments_3.find(o => o.code === tot.instrument_code)
-      if (inst) {
-        let instObj = new TotalInvestment()
-        instObj.instrument_code = inst.code
-        instObj.propotion = tot.propotion
-        this.totalInvestments.push(instObj)
-      }
-    })
+    this.totalInvestments = this.investorAssessment.total_investements
 
     this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise();
     this.policies.push(this.assessment.climateAction);
@@ -1308,23 +1300,40 @@ assignSDG(sdg : any , data : any){
     }
   }
 
-  onSelectInstrument(event: any, id: number) {
-    if (id === 0) {
-      this.investment_instruments_2 = this.investment_instruments_2.filter(o => o.code !== event.value)
-      this.investment_instruments_3 = this.investment_instruments_3.filter(o => o.code !== event.value)
-    } else if (id == 1) {
-      this.investment_instruments_1 = this.investment_instruments_1.filter(o => o.code !== event.value)
-      this.investment_instruments_3 = this.investment_instruments_3.filter(o => o.code !== event.value)
-    } else if (id === 2) {
-      this.investment_instruments_1 = this.investment_instruments_1.filter(o => o.code !== event.value)
-      this.investment_instruments_2 = this.investment_instruments_2.filter(o => o.code !== event.value)
+  onSelectInstrument(event: any) {
+    console.log(event)
+    console.log(this.selectedInstruments)
+
+    this.show_less_message = false
+    this.selectedInstruments.map(_inst => {
+      let investment = new TotalInvestment()
+      investment.instrument_name = _inst.name
+      investment.instrument_code = _inst.code
+      if (!this.totalInvestments.find(o => o.instrument_code === _inst.code)) {
+        this.totalInvestments.push(investment)
+      }
+    })
+    if (this.totalInvestments.length > this.selectedInstruments.length) {
+      this.totalInvestments = this.totalInvestments.filter(item => (this.selectedInstruments.map(ins => ins.code)).includes(item.instrument_code))
     }
+    this.onInputChange({target: {value: 0}}) 
+    console.log(this.totalInvestments)
+    
   }
 
   onInputChange(event: any) {
+    console.log("onInputChange")
+    this.show_less_message = false
     const inputValue = event.target.value;
     const numericValue = parseFloat(inputValue);
 
+    this.totalInvestments = this.totalInvestments.map(inv => {
+      if (inv.instrument_code === 'OTHER') {
+        //@ts-ignore
+        inv.propotion = undefined
+      }
+      return inv
+    })
 
     if ( numericValue > 100) {
       event.target.value = 100;
@@ -1335,8 +1344,26 @@ assignSDG(sdg : any , data : any){
       if (invest.propotion) tot = tot + invest.propotion
     })
 
+    let inst_to_check = [...this.totalInvestments.filter(o => o.instrument_code !== 'OTHER')]
+
+    let all_proportion_filled = inst_to_check.every(i => i.propotion !== undefined)
+    console.log(all_proportion_filled)
+
     if (tot > 100) this.isExceeded = true
     else this.isExceeded = false
+
+    if (all_proportion_filled && !this.isExceeded) {
+      this.show_less_message = true
+        this.totalInvestments = this.totalInvestments.map(inv => {
+          if (inv.instrument_code === 'OTHER') {
+            inv.propotion = 100 - tot
+            this.show_less_message = false
+          }
+          return inv
+        })
+    } else {
+      this.show_less_message = false
+    }
   }
 
   onSelectIntervention(event: any) {
