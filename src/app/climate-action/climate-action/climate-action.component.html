@@ -9,10 +9,10 @@
         <div class="p-grid p-fluid col-sm-12">
           <div *ngIf="project.projectApprovalStatus ; else elseblock" class="mb-12">
             <h4 class="mt-4">{{ project.projectApprovalStatus.id == 1 ?'Accepted':project.projectApprovalStatus.id
-              == 5 ?'Accepted':editEntytyId > 0?'View ':'Propose an '}} Intervention</h4>
+              == 5 ?'Accepted':editEntytyId > 0?'View ':'Create an '}} Intervention</h4>
           </div>
           <ng-template #elseblock>
-           <h4>Propose an Intervention</h4>
+           <h4>Create an Intervention</h4>
           </ng-template>
           <div class="p-2">
             <h6>Contact Details</h6>
@@ -261,32 +261,6 @@
             </div>
 
             <div class="row p-2">
-
-              <div class="col-12 col-md-6">
-                <div class="p-field">
-                  <label for="projStatus">Level of Implementation*</label><div type="button" class="pi pi-info-circle ml-10"
-                  pTooltip="Who does implement the policy?"></div>
-                  <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocklevelofIpml">
-                    <p-dropdown [disabled]="editEntytyId > 0" placeholder="Please Select the Level of Implementation"
-                      name="level_of_implemetation" #level_of_implemetation="ngModel" [(ngModel)]="project.levelofImplemenation"
-                      [options]="levelOfImplementation" optionLabel="name" optionValue="name"
-                      [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false"  appendTo="body"
-                      [required]="true"></p-dropdown>
-                    <p class="info-message text-danger" *ngIf="
-                    !project.levelofImplemenation &&
-                    (fData.submitted || level_of_implemetation.touched || level_of_implemetation.dirty)
-                  ">
-                      This is a mandatory field
-                    </p>
-                  </ng-container>
-                  <ng-template #elseBlocklevelofIpml>
-                    <input [disabled]="editEntytyId > 0" type="text" maxlength="50" name="level_of_implemetation"
-                      #level_of_implemetation="ngModel" class="p-inputtext" [(ngModel)]="project.levelofImplemenation"
-                      [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
-                  </ng-template>
-
-                </div>
-              </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
                   <label for="projStatus">Geographical Area Targeted* <i class="pi pi-info-circle" pTooltip="{{tooltips.geo}}" tooltipPosition="bottom"
@@ -312,8 +286,46 @@
 
                 </div>
               </div>
+              <div class="col-12 col-md-6">
+                <div class="p-field">
+                  <label for="projStatus">Level of Implementation*</label><div type="button" class="pi pi-info-circle ml-10"
+                  pTooltip="Who does implement the policy?"></div>
+                  <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocklevelofIpml">
+                    <p-dropdown [disabled]="editEntytyId > 0" placeholder="Please Select the Level of Implementation"
+                      name="level_of_implemetation" #level_of_implemetation="ngModel" [(ngModel)]="project.levelofImplemenation"
+                      [options]="levelOfImplementation" optionLabel="name" optionValue="name"
+                      [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false"  appendTo="body"
+                      [required]="true"></p-dropdown>
+                    <p class="info-message text-danger" *ngIf="
+                    !project.levelofImplemenation &&
+                    (fData.submitted || level_of_implemetation.touched || level_of_implemetation.dirty)
+                  ">
+                      This is a mandatory field
+                    </p>
+                  </ng-container>
+                  <ng-template #elseBlocklevelofIpml>
+                    <input [disabled]="editEntytyId > 0" type="text" maxlength="50" name="level_of_implemetation"
+                      #level_of_implemetation="ngModel" class="p-inputtext" [(ngModel)]="project.levelofImplemenation"
+                      [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
+                  </ng-template>
+
+                </div>
+              </div>
+             
 
 
+            </div>
+            <div class="row p-2">
+              <div class="col-12 col-md-6">
+                <div class="p-field">
+                  <label for="geographicCoverage">Geographic Coverage</label>
+                  <textarea [disabled]="editEntytyId > 0" name="geographicCoverage"
+                    placeholder="Geographic Coverage" #geographicCoverage="ngModel"
+                    [(ngModel)]="project.geographicCoverage" rows="5" cols="130" pInputText
+                    autoResize="autoResize" [maxlength]="masterDataService.getFieldCharCount(fieldNames.GEOGRAPHICAL_COVERAGE)"></textarea>
+                    <span style=" float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.GEOGRAPHICAL_COVERAGE)}}</span>
+                </div>
+              </div>
             </div>
             <div class="row p-2">
               <div class="col-12 col-md-6">
@@ -444,7 +456,7 @@
           </div>
         </div>
 
-        <div class="mt-2" style="z-index: 0;">
+        <!-- <div class="mt-2" style="z-index: 0;">
           <div class="p-grid p-fluid col-sm-12">
             <div class="row p-2">
               <h6>Location</h6>
@@ -534,7 +546,7 @@
 
 
           </div>
-        </div>
+        </div> -->
        
         <div class=" mt-2  overflow-visible" style="z-index: 1;">
           <div class="p-grid p-fluid col-sm-12">
@@ -565,7 +577,7 @@
 
 
 
-      <div class="card mt-2" *ngIf="flag == 1">
+      <!-- <div class="card mt-2" *ngIf="flag == 1">
         <div class="p-grid p-fluid col-sm-12">
          <div class="p-2">
             <h6>Approval Check List</h6>
@@ -863,7 +875,7 @@
 
 
         </div>
-      </div>
+      </div> -->
 
       <div class="card mt-2" *ngIf="flag ==1">
         <div class="p-grid p-fluid col-sm-12">
