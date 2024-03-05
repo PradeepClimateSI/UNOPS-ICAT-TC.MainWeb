@@ -1,222 +1,327 @@
 <!DOCTYPE html>
 <html lang="en">
-<title>TC Toolkit</title>
-<meta charset="UTF-8" />
+  <title>TC Toolkit</title>
+  <meta charset="UTF-8" />
 
-
-<body style="background-color: #fff">
+  <body style="background-color: #fff">
     <header>
-        <div class="nav-bar py-2">
-            <div class="container">
-                <div class="row">
-                    <div class="row">
-                        <div class="col-8">
-                            <div class="row mb-2">
-                                <div class="logo_img_w">
-                                    <img class="logo_img active_mod"
-                                        src="https://climateactiontransparency.org/wp-content/themes/custom/assets/i/logo/logo_yellow.svg"
-                                        alt="logo" height="45px" style="padding-right: 2%;" />
-                                    <img class="logo_img active_mod"
-                                        src="https://climateactiontransparency.org/wp-content/themes/custom/assets/i/logo/logo_text.svg"
-                                        alt="logo text" height="40px" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-1"></div>
-                        <div class="col-3 d-flex justify-content-end align-items-center">
-                            <button class="btn btn-primary mx-2" style="font-size: medium" type="button"
-                                (click)="toRegister()">
-                                Register New User
-                            </button>
-                            <button class="btn btn-primary mx-2" style="font-size: medium" type="button"
-                                (click)="toLogin()">
-                                User Login
-                            </button>
-                            <button class="btn btn-primary mx-2" style="font-size: medium" type="button"
-                                (click)="toPMU()">
-                                TC PMU Login
-                            </button>
-                        </div>
-                    </div>
+      <div class="nav-bar py-2">
+        <div class="container">
+          <div class="row">
+            <div class="row">
+              <div class="col-8">
+                <div class="row mb-2">
+                  <div class="logo_img_w">
+                    <img
+                      class="logo_img active_mod"
+                      src="https://climateactiontransparency.org/wp-content/themes/custom/assets/i/logo/logo_yellow.svg"
+                      alt="logo"
+                      height="45px"
+                      style="padding-right: 2%"
+                    />
+                    <img
+                      class="logo_img active_mod"
+                      src="https://climateactiontransparency.org/wp-content/themes/custom/assets/i/logo/logo_text.svg"
+                      alt="logo text"
+                      height="40px"
+                    />
+                  </div>
                 </div>
+              </div>
+              <div class="col-1"></div>
+              <div class="col-3 d-flex justify-content-end align-items-center">
+                <button
+                  class="btn btn-primary mx-2"
+                  style="font-size: medium"
+                  type="button"
+                  (click)="toRegister()"
+                >
+                  Register New User
+                </button>
+                <button
+                  class="btn btn-primary mx-2"
+                  style="font-size: medium"
+                  type="button"
+                  (click)="toLogin()"
+                >
+                  User Login
+                </button>
+                <button
+                  class="btn btn-primary mx-2"
+                  style="font-size: medium"
+                  type="button"
+                  (click)="toPMU()"
+                >
+                  TC PMU Login
+                </button>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </header>
 
     <main>
-        <section id="contact-us" class="contact-us">
-            <div>
-                <div class="container row col-xxl-8 px-4 py-5 align-items-center m-auto">
-                    <h2 class="text-center" style="color:white; background-color: rgba(0,0,0, 0.4); ">
-                       
-                        Transformational Change Toolkit <br>
-                        (TC Toolkit)
-                    </h2>
-                </div>
-            </div>
-
-        </section>
-        <section class="py-5" id="about-tool">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6 card card-about">
-                        <h2 class="text-center"><b>About the TC toolkit</b></h2>
-                        <h3 class="text-center" style="color:black">The TC toolkit is
-                            a digital solution
-                            that aids users in evaluating the potential or realized effects of
-                            policies and actions (interventions) on Transformational Change.
-                        </h3>
-                    </div>
-                    <div class="col-md-6">
-                        <div>
-                            <img src="./assets/images/home_new.png" class="d-block mx-lg-auto img-fluid"
-                                alt="Bootstrap Themes" width="700" height="300" loading="lazy" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-        </section>
-        <section class="section-heighlight py-5" id="tool"
-            style=" background-image: url('../../assets/images/land001.png'); background-repeat: no-repeat;  background-size: cover;">
-            <div class="container">
-                <div class="row">
-                    <div>
-                        <div class="text-center customh2" style="color:black;">There are three main tools in TC Toolkit</div>
-                    </div>
-                    <br /><br><br>
-                    <div style="padding: 50px;  border: 2px solid black; margin-top: 15px;">
-                        <div class="text-center customh2" style="color:black;">Carbon Market Tool</div>
-                        <h3 style="color:black;">Assess Transformational Change impact of the Carbon Market
-                            interventions</h3>
-                    </div>
-                    <br /><br><br>
-                    <div style="padding: 50px;  border: 2px solid black;margin-top: 15px;">
-                        <div class="text-center customh2" style="color:black;">Investor & Private Sector Tool</div>
-                        <h3 style="color:black;">Assess Transformational Change impact of the investment interventions
-                        </h3>
-                    </div>
-                    <br>
-                    <div style="padding: 50px;  border: 2px solid black;margin-top: 15px;">
-                        <div class="text-center customh2" style="color:black;">General Tool</div>
-                        <h3 style="color:black;">Assess Transformational Change impact of the other types of
-                            interventions</h3>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="case-studies " id="case-studies">
-            <div style="padding-top: 5%;" class="container">
-                <div  class="row" >
-                    <div class="col-md-12">
-                        <h2 class="text-center" style="color:white; background-color: rgba(0,0,0, 0.4);">Get started with TC Toolkit</h2>
-                        <h5 class="text-center" style="color:white; background-color: rgba(0,0,0, 0.4);line-height: 1.5; ">TC Toolkit is a free software.If you are
-                            interested in using TC
-                            Toolkit and wish to learn more about the tool and its potential application, please contact
-                            the ICAT Secretariat:
-                            <a href="mailto:icat@unops.org">icat&#64;unops.org</a>
-                            <a href="mailto:icat@unops.org">icat&#64;unops.org</a>
-                        </h5>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-</body>
-<footer class="main-footer py-3">
+      <section id="first-section" class="first-section">
         <div class="row">
-
-            <div class="col-md-7 mb-3" style=" border: 2px solid rgba(0,0,0, 0.4); border-right-color: white;">
-                <h5 class="text-center" style=" background-color: rgba(0,0,0, 0.4);"> Technical Partners</h5>
-                <div class="row">
-                <div  class="col-1 mb-2">
-
-                </div>
-                    <div class="col-3 mb-2">
-                        <a href="https://climatesi.com/" target="_blank">
-                            <img src="./assets/images/climateSILogo.png" class="developed-logo" />
-                        </a>
-                    </div>
-                    <div class="col-2 mb-2">
-                        <a href="https://unepccc.org" target="_blank">
-                            <img src="./assets/images/logo22.png" class="developed-logo" />
-                        </a>
-                    </div>
-                    <div class="col-2 mb-2">
-                        <a href="https://perspectives.cc" target="_blank">
-                            <img src="./assets/images/logo33.png" class="developed-logo" />
-                        </a>
-                    </div>
-                    <div class="col-2 mb-2">
-                        <a href="https://www.carbonlimits.no" target="_blank">
-                            <img src="./assets/images/logo11.png" class="developed-logo" />
-                        </a>
-                    </div>
-                </div>
-                <div class="row">
-                    <div  class="col-1 mb-2">
-
-                    </div>
-                    <div class="col-11">
-                        <p style="color: white; font-size: small;">
-                            The development of TC Toolkit <br> was supported by
-                            <a href="https://www.climatesi.com/index.php" target="_blank"><u>Climate SI</u></a>
-                        </p>
-                    </div>
-                </div>
+          <div class="col-7 col-md-7 col-sm-12">
+            <div class="first-section-h2">
+              <p>ICAT Transformational Change Assessemnt Tool</p>
+              <p>(ICAT TC Toolkit)</p>
             </div>
-            <div class="col-md-5 mb-8">
-                <div class="row">
-                    <div class="col-md-7">
-                        <h5 style=" background-color: rgba(0,0,0, 0.4);"> Contact Us</h5>
-                        <div class="row" >
-                            <div class="col-12">
-                                <a href="mailto:icat@unops.org"><small>Email : </small></a>
-                                <a href="mailto:icat@unops.org"><small>icat&#64;unops.org</small> </a>
-                            </div>
-                            <div class="col-12">
-                                <a href="mailto:icat@unops.org"><small>Telephone :</small></a>
-                                <a href="mailto:icat@unops.org"><small>+49 228 815 0317 </small></a>
-                            </div>
-                            <div class="col-12">
-                                <a href="mailto:icat@unops.org"><small>Address :</small></a>
-                                <a href="mailto:icat@unops.org"><small>Platz der Vareinten Nationen 1, Bonn 53113,
-                                        Germany </small></a>
-                            </div>
-                        </div>
-                        <div class="mb-8"></div>
-                        <h5 style=" background-color: rgba(0,0,0, 0.4);"> <small>ICAT TC &#64; 2023 All right reserved</small></h5>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="row" style="background-color: #fff">
-                            <div class="col-md-4">
-                                <div class="logo_img_w">
-                                    <img class="logo_img active_mod"
-                                        src="https://climateactiontransparency.org/wp-content/themes/custom/assets/i/logo/logo_yellow.svg"
-                                        alt="logo" height="30px" style="padding-right: 1%;" />
-                                </div>
-                            </div>
-                            <div class="col-md-7">
-                                <div class="logo_img_w">
-                                    <img class="logo_img active_mod" style="background-color: #fff"
-                                        src="https://climateactiontransparency.org/wp-content/themes/custom/assets/i/logo/logo_text.svg"
-                                        alt="logo text" height="30px" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-8">
-                                <div class="row mb-2" style="background-color: #fff">
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <p class="first-section-h6">
+              Calculate the Transformational Change Potential of Interventions
+            </p>
+          </div>
+          <div class="col-5 col-md-5 col-sm-12">
+            <img class="first-section-img" src="./assets/images/section-one.png" />
+          </div>
+        </div>
+      </section>
 
-                </div>
+
+      <section class="second-section" id="second-section">
+        <div class="row">
+          <div class="col-12 second-section-header">
+            <p>About the TC toolkit</p>
+          </div>
+          <div class="col-12 second-section-body">
+            <p>
+              The ICAT Transformational Change Assessment Tool is a digital
+              solution that aids users in evaluating the potential or realized
+              effects of policies and actions (Interventions) on
+              Transformational Change.
+            </p>
+          </div>
+        </div>
+      </section>
+ 
+      <section class="third-section" id="third-section">
+        <div class="row third-section-header">
+          <p>Why do we need to calculate Transformational Change?</p>
+        </div>
+        <div class="row third-section-body">
+          <div class="col-4 col-md-4 col-sm-12 third-section-circle-base">
+            <div class="third-section-circle">
+              <p>
+                To help users assess the extent of transformation expected or
+                achieved by policies
+              </p>
             </div>
+          </div>
+          <div class="col-4 col-md-4 col-sm-12 third-section-circle-base">
+            <div class="third-section-circle">
+              <p>
+                To help decision makers develop effective strategies for
+                transformational change
+              </p>
+            </div>
+          </div>
+          <div class="col-4 col-md-4 col-sm-12 third-section-circle-base">
+            <div class="third-section-circle">
+              <p>
+                To support transparent and consistent monitoring and reporting
+                of transformational impacts
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="fourth-section">
+        <div class="fourth-section-header">
+          <p>
+            The Toolkit includes a set of tools, which operationalises and
+            adapts the ICAT Transformational Change Methodology
+          </p>
+        </div>
+        <div class="fourth-section-body">
+          <div class="row" style=" 
+          height: 100%;
+          ">
+            <div class="col-6 col-md-6 col-sm-12" style="
+            height: 100%;
+           ">
+              <img class="fourth-section-image fourth-section-image-1" src="./assets/images/section-four-image1.png" alt="">
+              <img class="fourth-section-image fourth-section-image-2" src="./assets/images/section-four-image2.png" alt="">
+              <img class="fourth-section-image fourth-section-image-3" src="./assets/images/section-four-image3.png" alt="">
+            </div>
+
+
+            <div class="col-6 col-md-6 col-sm-12" style="
+            height: 100%;
+           ">
+              <div class="fourth-section-body-list">
+                <div class="fourth-section-body-list-header"><p>Carbon Market Tool</p></div>
+                <div class="fourth-section-body-list-body"><p>To assess the transformational impact of interventions with a
+                    carbon market component</p></div>
+              </div>
+              <div class="fourth-section-body-list">
+                <div class="fourth-section-body-list-header"><p>Investor & Private Sector Tool</p></div>
+                <div class="fourth-section-body-list-body"><p>To assess the transformational impact of investments by funds or
+                    private companies</p></div>
+              </div>
+              <div class="fourth-section-body-list">
+                <div class="fourth-section-body-list-header"><p>Other Intervention Tool</p></div>
+                <div class="fourth-section-body-list-body"><p>To the other tools and is intended to assess the transformational
+                    impact of all those interventions that do not fall under any of the
+                    two other tools</p></div>
+              </div>
+              <div class="fourth-section-body-list">
+                <div class="fourth-section-body-list-header"><p>Portfolio Tool</p></div>
+                <div class="fourth-section-body-list-body"><p>To assess the aggregation and comparison of the transformational
+                    impacts of several single interventions grouped under a portfolio of
+                    interventions</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+   
+      <section class="case-studies" id="case-studies">
+        <div style="padding-top: 5%" class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <h2
+                class="text-center"
+                style="color: white; background-color: rgba(0, 0, 0, 0.4)"
+              >
+                Get started with TC Toolkit
+              </h2>
+              <h5
+                class="text-center"
+                style="
+                  color: white;
+                  background-color: rgba(0, 0, 0, 0.4);
+                  line-height: 1.5;
+                "
+              >
+                TC Toolkit is a free software.If you are interested in using TC
+                Toolkit and wish to learn more about the tool and its potential
+                application, please contact the ICAT Secretariat:
+                <a href="mailto:icat@unops.org">icat&#64;unops.org</a>
+                <a href="mailto:icat@unops.org">icat&#64;unops.org</a>
+              </h5>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+  <footer class="main-footer py-3">
+    <div class="row">
+      <div
+        class="col-md-7 mb-3"
+        style="border: 2px solid rgba(0, 0, 0, 0.4); border-right-color: white"
+      >
+        <h5 class="text-center" style="background-color: rgba(0, 0, 0, 0.4)">
+          Technical Partners
+        </h5>
+        <div class="row">
+          <div class="col-1 mb-2"></div>
+          <div class="col-3 mb-2">
+            <a href="https://climatesi.com/" target="_blank">
+              <img
+                src="./assets/images/climateSILogo.png"
+                class="developed-logo"
+              />
+            </a>
+          </div>
+          <div class="col-2 mb-2">
+            <a href="https://unepccc.org" target="_blank">
+              <img src="./assets/images/logo22.png" class="developed-logo" />
+            </a>
+          </div>
+          <div class="col-2 mb-2">
+            <a href="https://perspectives.cc" target="_blank">
+              <img src="./assets/images/logo33.png" class="developed-logo" />
+            </a>
+          </div>
+          <div class="col-2 mb-2">
+            <a href="https://www.carbonlimits.no" target="_blank">
+              <img src="./assets/images/logo11.png" class="developed-logo" />
+            </a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-1 mb-2"></div>
+          <div class="col-11">
+            <p style="color: white; font-size: small">
+              The development of TC Toolkit <br />
+              was supported by
+              <a href="https://www.climatesi.com/index.php" target="_blank"
+                ><u>Climate SI</u></a
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5 mb-8">
+        <div class="row">
+          <div class="col-md-7">
+            <h5 style="background-color: rgba(0, 0, 0, 0.4)">Contact Us</h5>
+            <div class="row">
+              <div class="col-12">
+                <a href="mailto:icat@unops.org"><small>Email : </small></a>
+                <a href="mailto:icat@unops.org"
+                  ><small>icat&#64;unops.org</small>
+                </a>
+              </div>
+              <div class="col-12">
+                <a href="mailto:icat@unops.org"><small>Telephone :</small></a>
+                <a href="mailto:icat@unops.org"
+                  ><small>+49 228 815 0317 </small></a
+                >
+              </div>
+              <div class="col-12">
+                <a href="mailto:icat@unops.org"><small>Address :</small></a>
+                <a href="mailto:icat@unops.org"
+                  ><small
+                    >Platz der Vareinten Nationen 1, Bonn 53113, Germany
+                  </small></a
+                >
+              </div>
+            </div>
+            <div class="mb-8"></div>
+            <h5 style="background-color: rgba(0, 0, 0, 0.4)">
+              <small>ICAT TC &#64; 2023 All right reserved</small>
+            </h5>
+          </div>
+          <div class="col-md-4">
+            <div class="row" style="background-color: #fff">
+              <div class="col-md-4">
+                <div class="logo_img_w">
+                  <img
+                    class="logo_img active_mod"
+                    src="https://climateactiontransparency.org/wp-content/themes/custom/assets/i/logo/logo_yellow.svg"
+                    alt="logo"
+                    height="30px"
+                    style="padding-right: 1%"
+                  />
+                </div>
+              </div>
+              <div class="col-md-7">
+                <div class="logo_img_w">
+                  <img
+                    class="logo_img active_mod"
+                    style="background-color: #fff"
+                    src="https://climateactiontransparency.org/wp-content/themes/custom/assets/i/logo/logo_text.svg"
+                    alt="logo text"
+                    height="30px"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-8">
+                <div class="row mb-2" style="background-color: #fff"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-</footer>
-
+  </footer>
 </html>
