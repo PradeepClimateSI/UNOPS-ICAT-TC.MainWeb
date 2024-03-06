@@ -2,6 +2,7 @@
 .charttd {
     width: 125px;
     height: 70px;
+    user-select: none;
 }
 
 .intervention {

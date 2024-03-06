@@ -530,17 +530,17 @@ export class MasterDataService {
     this.investment_instruments = [
       { id: 1, name: 'Own capital', code: 'OWN_CAPITAL'},
       { id: 2, name: 'National/subnational budget', code: 'NATIONAL_SUBNATIONAL_BUDGET'},
-      { id: 2, name: 'Capital markets', code: 'CAPITAL_MARKETS'},
-      { id: 2, name: 'Private Funding/venture capital (national)', code: 'PRIVATE_FUNDING_VENTURE_CAPITAL_NATIONAL'},
-      { id: 2, name: 'Private funding/venture capital (inter.)', code: 'PRIVATE_FUNDING_VENTURE_CAPITAL_INTER'},
-      { id: 2, name: 'Senior debt', code: 'SENIOR_DEBT'},
-      { id: 2, name: 'Green bonds', code: 'GREEN_BONDS'},
-      { id: 2, name: 'Blended finance', code: 'BLENDED_FINANCE'},
-      { id: 2, name: 'Grants (ODA)', code: 'GRANTS_ODA'},
-      { id: 2, name: 'Concesional loans (ODA)', code: 'CONCESIONAL_LOANS_ODA'},
-      { id: 2, name: 'Investment loans', code: 'INVESTMENT_LOANS'},
-      { id: 2, name: 'Credit lines', code: 'CREDIT_LINES'},
-      { id: 2, name: 'Other', code: 'OTHER'},
+      { id: 3, name: 'Capital markets', code: 'CAPITAL_MARKETS'},
+      { id: 4, name: 'Private Funding/venture capital (national)', code: 'PRIVATE_FUNDING_VENTURE_CAPITAL_NATIONAL'},
+      { id: 5, name: 'Private funding/venture capital (inter.)', code: 'PRIVATE_FUNDING_VENTURE_CAPITAL_INTER'},
+      { id: 6, name: 'Senior debt', code: 'SENIOR_DEBT'},
+      { id: 7, name: 'Green bonds', code: 'GREEN_BONDS'},
+      { id: 8, name: 'Blended finance', code: 'BLENDED_FINANCE'},
+      { id: 9, name: 'Grants (ODA)', code: 'GRANTS_ODA'},
+      { id: 10, name: 'Concesional loans (ODA)', code: 'CONCESIONAL_LOANS_ODA'},
+      { id: 11, name: 'Investment loans', code: 'INVESTMENT_LOANS'},
+      { id: 12, name: 'Credit lines', code: 'CREDIT_LINES'},
+      { id: 13, name: 'Other', code: 'OTHER'},
     ]
 
     this.scale_of_activity = [
@@ -1083,3 +1083,5 @@ export enum FieldNames {
   ASSESSMENT_OPPORTUNITIES = "ASSESSMENT_OPPORTUNITIES",
   JUSTIFICATION = "JUSTIFICATION"
 }
+
+export const chapter6_url = 'https://storage.googleapis.com/public-bucket-kh/Transformational-Change-Methodology_ch6.pdf'

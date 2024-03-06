@@ -32,6 +32,8 @@ export class CarbonMarketDashboardComponent implements OnInit,AfterViewInit {
   sectorColorMap: {id: number; sectorNumber: number; color: string;}[]
   bgColors: string[] = [];
   secbgColors : string[] = [];
+  interventions_to_filter: any[] = [];
+  selected_interventions: string[] = [];
 
   constructor(
     private assessmentCMProxy:AssessmentCMDetailControllerServiceProxy,
@@ -156,9 +158,11 @@ CMPrerequiste: {
       event.first === 0 || event.first === undefined
         ? 1
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
-    this.rows = event.rows === undefined ? 10 : event.rows;
-    this.cmAssessmentQuestionProxy.getDashboardData(pageNumber,this.rows).subscribe((res) => {
+    this.rows = event.rows === undefined ? 5 : event.rows;
+    this.cmAssessmentQuestionProxy.getDashboardData(pageNumber,this.rows, this.selected_interventions).subscribe((res_) => {
+      let res = res_.assessments
       this.tableData=res.items;
+      this.interventions_to_filter = res_.interventions
       this.heatMapScore = this.tableData.map(item => {return {processScore: item.process_score, outcomeScore: item.outcome_score}});
       this.heatMapData = this.tableData.map(item => {return {interventionId: item.intervention_id, interventionName: item.intervention, processScore: item.process_score, outcomeScore: item.outcome_score}}) 
       
@@ -168,6 +172,7 @@ CMPrerequiste: {
       this.loading = false;});
 
   };
+
   mapOutcomeScores(value: number) {
     
     switch (value) {

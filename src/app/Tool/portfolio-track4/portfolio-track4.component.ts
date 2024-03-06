@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { FieldNames, MasterDataDto, MasterDataService } from 'app/shared/master-data.service';
+import { FieldNames, MasterDataDto, MasterDataService, chapter6_url } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
 import { AllBarriersSelected, Assessment, AssessmentControllerServiceProxy, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, PortfolioQuestionDetails, PortfolioQuestions,  Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
@@ -149,6 +149,7 @@ export class PortfolioTrack4Component implements OnInit {
   isFirstLoading0: boolean = true;
   isFirstLoading1: boolean = true;
   notFilledCategories: any[] = []
+  chapter6_url = chapter6_url
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,

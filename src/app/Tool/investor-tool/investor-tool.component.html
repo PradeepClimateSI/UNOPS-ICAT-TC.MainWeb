@@ -54,7 +54,7 @@
                 This is a mandatory field
               </p>
             </div>
-            <div class="p-field p-2">
+            <!-- <div class="p-field p-2">
               <label for="Sectors Covered">Total Investement (in USD)*</label>
               <input pInputText type="number" #totInvestment="ngModel" name="totInvestment" ngModel placeholder="Enter total investment" [(ngModel)]="investorAssessment.total_investment" required [disabled]="isSavedAssessment|| isEditMode" />
               <p class="info-message text-danger" *ngIf="
@@ -97,6 +97,26 @@
                   </tr>
                 </tbody>
               </table>
+            </div> -->
+            <div class="p-field p-2">
+              <label for="totalInvenstement">Investment Intruments</label>
+              <p-multiSelect name="investorAssessment.investmentInstruments" #gac="ngModel" placeholder="Select Investment Instrument" [(ngModel)]="selectedInstruments" [options]="investment_instruments" optionLabel="name" [required]="true"
+                [disabled]="isSavedAssessment|| isEditMode" appendTo="body" (onChange)="onSelectInstrument($event)">
+              </p-multiSelect>
+            </div>
+            <div class="p-field p-2">
+              <ng-container *ngFor="let investment of totalInvestments; let idx = index">
+                <div class="row">
+                  <label class="col">{{investment.instrument_name}}</label>
+                  <input class="col" pInputText type="number" (input)="onInputChange($event)" #totInvestment="ngModel" [name]="'totInvestment'+idx" ngModel [(ngModel)]="investment.propotion" required [disabled]="isSavedAssessment|| isEditMode" />
+                </div>
+              </ng-container>
+              <p class="info-message text-danger" *ngIf="isExceeded">
+                The sum of all propotions need to be less than or equal 100
+              </p>
+              <p class="info-message text-warning" *ngIf="show_less_message">
+                The proportions do not amount to 100% percent. If there is uncertainty about some components of the investment, please add the residual share by including them under "Other"
+              </p>
             </div>
             <div class="p-field p-2">
               <label for="date1">Assessment Period*</label>
@@ -197,10 +217,11 @@
                   <div class="p-field">
                     <textarea [disabled]="isSavedAssessment|| isEditMode" name="phase_of_transformation" placeholder="See Chapter 6 of the ICAT Transformational Change Methodology" #phase_of_transformation="ngModel" [(ngModel)]="assessment.phase_of_transformation" rows="2" cols="130" pInputText
                       autoResize="autoResize" [maxlength]="masterDataService.getFieldCharCount(fieldNames.VISION)" required></textarea>
+                    <label style="font-size: 12px;"><i>See <a [href]="chapter6_url" target="_blank">Chapter 6 </a>of the ICAT Transformational Change Methodology</i></label>
                     <span style="float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.VISION)}}</span>
                     <p class="info-message text-danger" *ngIf="  !phase_of_transformation.value &&                     
-                                (fData.submitted || phase_of_transformation.touched || phase_of_transformation.dirty)
-                              ">
+                                                                (fData.submitted || phase_of_transformation.touched || phase_of_transformation.dirty)
+                                                              ">
                       This is a mandatory field
                     </p>
                   </div>
@@ -228,6 +249,7 @@
             <div class="p-grid p-fluid col-sm-12">
               <div class="p-2">
                 <h6>Barriers &nbsp; <p-button [hidden]="isSavedAssessment || isEditMode" icon="pi pi-plus " styleClass="p-button-sm p-button-rounded" (click)="showDialog()"></p-button></h6>
+                <label><i>Add a barrier by clicking the “+” button. To add multiple barriers, click the “+” button again after saving your inputs.</i></label>
               </div>
               <p-dialog header="Add Barrier" [(visible)]="barrierBox" [modal]="true" appendTo="body" [style]="{width: '50vw'}">
                 <div class="tooltip2-container">

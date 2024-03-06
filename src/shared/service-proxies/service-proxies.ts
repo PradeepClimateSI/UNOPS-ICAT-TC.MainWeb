@@ -24678,7 +24678,7 @@ export class CMAssessmentQuestionControllerServiceProxy {
         return _observableOf(null as any);
     }
 
-    getDashboardData(page: number, limit: number): Observable<any> {
+    getDashboardData(page: number, limit: number, intervention_ids: string[]): Observable<any> {
         let url_ = this.baseUrl + "/cm-assessment-question/dashboard-data?";
         if (page === undefined || page === null)
             throw new Error("The parameter 'page' must be defined and cannot be null.");
@@ -24688,6 +24688,10 @@ export class CMAssessmentQuestionControllerServiceProxy {
             throw new Error("The parameter 'limit' must be defined and cannot be null.");
         else
             url_ += "limit=" + encodeURIComponent("" + limit) + "&";
+        if (intervention_ids === undefined || intervention_ids === null)
+            throw new Error("The parameter 'intervention_ids' must be defined and cannot be null.");
+        else
+            intervention_ids && intervention_ids.forEach(item => { url_ += "intervention_ids=" + encodeURIComponent("" + item) + "&"; });
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -39064,6 +39068,15 @@ export interface ICreateManyCMAssessmentAnswerDto {
 export enum CountryStatus {
     Active = <any>"Active",
     Deactivated = <any>"Deactivated",
+}
+export enum DocumentsDocumentOwner {
+    Project = <any>"Project",
+    Country = <any>"Country",
+    CountryNC = <any>"CountryNC",
+    CountryBUR = <any>"CountryBUR",
+    CountryBTR = <any>"CountryBTR",
+    CountryNDC = <any>"CountryNDC",
+    CountryGHG = <any>"CountryGHG",
 }
 
 export enum ParameterRequestTool {

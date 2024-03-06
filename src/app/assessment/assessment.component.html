@@ -45,6 +45,7 @@
           <th style="width:30%" pSortableColumn="method" >Intervention <p-sortIcon field="meth"></p-sortIcon></th>
           <th style="width:15%" pSortableColumn="assessmentType" >Assessment Type <p-sortIcon field="assessmentType"></p-sortIcon></th>
           <th style="width:25%" pSortableColumn="tool" >Tool <p-sortIcon field="tool"></p-sortIcon></th>
+          <th style="width:25%" pSortableColumn="tool" >Created Date <p-sortIcon field="tool"></p-sortIcon></th>
           <th style="width:15%">Action</th>
       </tr>
   </ng-template>
@@ -53,6 +54,7 @@
         <td>{{results.assessment.climateAction.policyName}}</td>
         <td>{{results.assessment.assessmentType}}</td>
         <td>{{masterDataService.getToolName(results.assessment.tool)}}</td>
+        <td>{{results.assessment.createdOn | date: 'dd/MM/YYYY'}}</td>
         <td >
           <button pButton pRipple class="btn btn-primary btn-block text-uppercase" type='submit' (click)="myFunction(results.assessment.id, results.averageProcess, results.averageOutcome, results.assessment.tool,results.assessment.assessment_method )"> View</button>
         </td>

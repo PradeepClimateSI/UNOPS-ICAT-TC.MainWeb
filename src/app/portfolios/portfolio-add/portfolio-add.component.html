@@ -85,15 +85,16 @@
 
               <label for="date">Date* <i class="pi pi-info-circle" pTooltip="Date of the assessment" tooltipPosition="bottom"
                 style="font-size: 1rem"></i></label>
-              <div class="p-inputgroup">
-                <span class="p-inputgroup-addon">
+              <!-- <div class="p-inputgroup"> -->
+                <!-- <span class="p-inputgroup-addon">
                   <i class="pi pi-calendar"></i>
-                </span>
-                <p-calendar dateFormat="mm-dd-yy" inputId="date" placeholder="Date" [(ngModel)]="portfolio.date"
+                </span> -->
+                <p-calendar [disabled]="true" inputId="date"  [(ngModel)]="portfolio.date" 
                   name="date" #date="ngModel" [required]="true" appendTo="body">
                 </p-calendar>
+                <!-- <input disabled="true" type="date" #date="ngModel" name="date" [(ngModel)]="portfolio.date" required /> -->
   
-              </div>
+              <!-- </div> -->
               <div class="col-12">
                 <p class="info-message text-danger"
                   *ngIf="(date.invalid) && (fData.submitted || date.touched)">

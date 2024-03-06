@@ -40,8 +40,8 @@
           <th style="width:15%">Action</th>
           <th style="width:20%">Portfolio ID</th>
           <th style="width:30%">Name of the Portfolio</th>
-          <th style="width:35%">Person(s) / Organization(s)</th>
-
+          <th style="width:30%">Created Date</th>
+          <th style="width:30%">Person(s) / Organization(s)</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-portfolioList>
@@ -52,6 +52,7 @@
           </td>
           <td>{{ portfolioList.portfolioId }}</td>
           <td>{{ portfolioList.portfolioName }}</td>
+          <td>{{portfolioList.date|date: 'dd/MM/YYYY'}}</td>
           <td>{{ portfolioList.person }}</td>
         </tr>
       </ng-template>
