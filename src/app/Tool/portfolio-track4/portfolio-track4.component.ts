@@ -150,6 +150,8 @@ export class PortfolioTrack4Component implements OnInit {
   isFirstLoading1: boolean = true;
   notFilledCategories: any[] = []
   chapter6_url = chapter6_url
+  from_date:Date
+  to_date: Date
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -300,6 +302,16 @@ export class PortfolioTrack4Component implements OnInit {
     this.sdgDataSendArray4 = await this.investorToolControllerproxy.getSustainedSDGData(this.assessmentId).toPromise();
     this.selectedSDGs = await this.investorToolControllerproxy.getSelectedSDGs(this.assessmentId).toPromise();
     this.selectedSDGsWithAnswers = await this.investorToolControllerproxy.getSelectedSDGsWithAnswers(this.assessmentId).toPromise();
+    this.from_date= new Date(
+      this.assessment.from?.year(),
+      this.assessment.from?.month(),
+      this.assessment.from?.date()
+    );
+    this.to_date= new Date(
+      this.assessment.to?.year(),
+      this.assessment.to?.month(),
+      this.assessment.to?.date()
+    );
 
     this.processData.forEach((d) => {
       if (d.CategoryName == this.assessment.processDraftLocation) {

@@ -88,13 +88,13 @@
                                 <span class="p-inputgroup-addon">
                                     <i class="pi pi-calendar"></i>
                                 </span>
-                                <p-calendar dateFormat="dd/mm/yy" inputId="date1" placeholder="From" (ngModelChange)="onSelectFromDate($event)"
-                                    [(ngModel)]="assessment.from" name="date1" #date1="ngModel" [required]="true"
+                                <p-calendar dateFormat="dd/mm/yy" inputId="date1" placeholder="From" (onSelect)="onSelectFromDate($event)"
+                                    [(ngModel)]="from_date" name="date1" #date1="ngModel" [required]="true"
                                     appendTo="body" [disabled]="isSavedAssessment || isEditMode" [minDate]="minDate">
                                 </p-calendar>
                                 <span class="p-inputgroup-addon">to</span>
                                 <p-calendar dateFormat="dd/mm/yy" inputId="date2" placeholder="To" [minDate]="minDateTo"
-                                    [(ngModel)]="assessment.to" name="date2" #date2="ngModel" [required]="true"
+                                    [(ngModel)]="to_date" name="date2" #date2="ngModel" [required]="true"
                                     appendTo="body" [disabled]="isSavedAssessment || isEditMode"></p-calendar>
                             </div>
                             <div class="col-12">

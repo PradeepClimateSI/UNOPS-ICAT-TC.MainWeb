@@ -70,6 +70,8 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   fieldNames = FieldNames
   chapter6_url = chapter6_url
   expected_ghg_mitigation: number
+  from_date:Date
+  to_date: Date
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -134,6 +136,16 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   async setInitialStates() {
     if (this.isEditMode) {
       this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+      this.from_date= new Date(
+        this.assessment.from?.year(),
+        this.assessment.from?.month(),
+        this.assessment.from?.date()
+      );
+      this.to_date= new Date(
+        this.assessment.to?.year(),
+        this.assessment.to?.month(),
+        this.assessment.to?.date()
+      );
       this.finalBarrierList = this.assessment['policy_barrier']
       let policy = this.policies.find(o => o.id === this.assessment.climateAction.id)
       if (policy) this.assessment.climateAction = policy
@@ -201,6 +213,8 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     this.assessment.editedOn = moment(new Date())
 
     if (form.valid) {
+      this.assessment.from = moment(this.from_date)
+      this.assessment.to = moment(this.to_date)
       this.methodologyAssessmentControllerServiceProxy.saveAssessment(this.assessment)
         .subscribe(res => {
           if (res) {

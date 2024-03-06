@@ -421,7 +421,7 @@ export class CmSectionComponent implements OnInit {
      }
     let result: SaveCMResultDto = new SaveCMResultDto()
     result.result = []
-    result.result = [...event.result]
+    result.result = [...event?.result]
     this.sectionResult.sections.forEach((section: any) => {
       section.criteria.forEach((cr: any) => {
         cr.questions.forEach((q: any) => {
@@ -500,11 +500,11 @@ export class CmSectionComponent implements OnInit {
 }
 
 export class SaveDto {
-  result: CMResultDto[]
+  result: CMResultDto[] = []
   isDraft: boolean = false
-  name:string
-  type:string
-  expected_ghg_mitigation: number
+  name:string = ''
+  type:string = ''
+  expected_ghg_mitigation: number = 0
 }
 
 export class SectionResultDto{

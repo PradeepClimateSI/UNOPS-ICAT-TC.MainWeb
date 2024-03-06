@@ -65,10 +65,10 @@
               <span class="p-inputgroup-addon">
                 <i class="pi pi-calendar"></i>
               </span>
-              <p-calendar dateFormat="dd/mm/yy" inputId="date1" placeholder="From" [(ngModel)]="assessment.from" (ngModelChange)="onSelectFromDate($event)" name="date1" #date1="ngModel" [required]="true" appendTo="body" [minDate]="minDate" [disabled]="isSavedAssessment|| isEditMode">
+              <p-calendar dateFormat="dd/mm/yy" inputId="date1" placeholder="From" [(ngModel)]="from_date" (ngModelChange)="onSelectFromDate($event)" name="date1" #date1="ngModel" [required]="true" appendTo="body" [minDate]="minDate" [disabled]="isSavedAssessment|| isEditMode">
               </p-calendar>
               <span class="p-inputgroup-addon">to</span>
-              <p-calendar dateFormat="dd/mm/yy" inputId="date2" placeholder="To" [(ngModel)]="assessment.to" name="date2" #date2="ngModel" [required]="true" appendTo="body" [minDate]="minDateTo" [disabled]="isSavedAssessment|| isEditMode"></p-calendar>
+              <p-calendar dateFormat="dd/mm/yy" inputId="date2" placeholder="To" [(ngModel)]="to_date" name="date2" #date2="ngModel" [required]="true" appendTo="body" [minDate]="minDateTo" [disabled]="isSavedAssessment|| isEditMode"></p-calendar>
             </div>
             <div class="col-12">
               <p class="info-message text-danger" *ngIf="(date1.invalid || date2.invalid) && (fData.submitted || date1.touched || date2.touched)">

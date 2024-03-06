@@ -179,6 +179,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   chapter6_url = chapter6_url
   selectedInstruments: any[]
   show_less_message: boolean;
+  from_date:Date
+  to_date: Date
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -293,6 +295,16 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.selectedSDGs = await this.investorToolControllerproxy.getSelectedSDGs(this.assessmentId).toPromise();
     this.selectedSDGsWithAnswers = await this.investorToolControllerproxy.getSelectedSDGsWithAnswers(this.assessmentId).toPromise();
     this.investorAssessment = await this.investorToolControllerproxy.getResultByAssessment(this.assessmentId).toPromise();
+    this.from_date= new Date(
+      this.assessment.from?.year(),
+      this.assessment.from?.month(),
+      this.assessment.from?.date()
+    );
+    this.to_date= new Date(
+      this.assessment.to?.year(),
+      this.assessment.to?.month(),
+      this.assessment.to?.date()
+    );
 
     this.processData.forEach((d)=>{
       if(d.CategoryName == this.assessment.processDraftLocation){
