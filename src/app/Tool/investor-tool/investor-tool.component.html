@@ -32,24 +32,25 @@
               </p>
             </div>
             <div class="p-field p-2">
-              <label for="gac">Geographical Areas Covered*</label>
-              <p-multiSelect name="investorAssessment.geographical_areas_covered" #gac="ngModel" placeholder="Select Geographical Areas Covered" [(ngModel)]="geographicalAreasCoveredArr" [options]="levelOfImplementation" optionLabel="name" [required]="true"
-                [disabled]="isSavedAssessment|| isEditMode" appendTo="body">
-              </p-multiSelect>
+              <label for="Level of implementation">Geographical Area Covered *</label>
+              <p-confirmDialog key="geoConfirm"  icon="pi pi-exclamation-triangle" position="top" [style]="{width: '50vw'}" [baseZIndex]="10000"></p-confirmDialog>
+              <p-dropdown appendTo="body" name="investorAssessment.geographical_areas_covered" #type="ngModel" placeholder="Select Geographical Areas Covered" [disabled]="isSavedAssessment|| isEditMode" [(ngModel)]="geographicalArea" [options]="levelOfImplementation" optionLabel="name"
+              (onChange)="onChangeGeoAreaCovered()" [required]="true"></p-dropdown>
               <p class="info-message text-danger" *ngIf="
-                                  geographicalAreasCoveredArr.length===0 &&
-                                  (fData.submitted || sectors.touched)
+                                  !geographicalArea &&
+                                  (fData.submitted || type.touched)
                                 ">
                 This is a mandatory field
               </p>
             </div>
             <div class="p-field p-2">
-              <label for="Sectors Covered">Sectors Covered*</label>
-              <p-multiSelect name="sectors" #sectors="ngModel" placeholder="Select Sectors Covered" [(ngModel)]="sectorArray" [options]="sectorList" (ngModelChange)="onItemSelectSectors($event)" optionLabel="name" [required]="true" [disabled]="isSavedAssessment|| isEditMode" appendTo="body">
-              </p-multiSelect>
+              <label for="Sectors Covered">Sectors Covered *</label>
+              <p-confirmDialog key="sectorConfirm"  icon="pi pi-exclamation-triangle" position="top" [style]="{width: '50vw'}" [baseZIndex]="10000"></p-confirmDialog>
+              <p-multiSelect #multiSelectComponent appendTo="body" name="sectors" #type="ngModel" placeholder="Select Sectors Covered" [(ngModel)]="sectorArray" [options]="sectorList" (ngModelChange)="onItemSelectSectors($event)" [disabled]="isSavedAssessment|| isEditMode" optionLabel="name"
+                [required]="true"></p-multiSelect>
               <p class="info-message text-danger" *ngIf="
                                 sectorArray.length===0 &&
-                                (fData.submitted || sectors.touched)
+                                (fData.submitted || type.touched)
                               ">
                 This is a mandatory field
               </p>

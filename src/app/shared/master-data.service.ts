@@ -64,7 +64,8 @@ export class MasterDataService {
   private _SDG_color_map: {id: number, sdgNumber: number, color: string}[] = []
   private _Sector_color_map: {id: number, sectorNumber: number, color: string}[] = []
   private _word_limits: {field: string, count: number}[] = []
-
+  public phase_transfrom:{title: string,value:string}[]=[]
+    
 
   constructor() {
     this.months = [
@@ -593,6 +594,13 @@ export class MasterDataService {
       {field: FieldNames.VISION, count: 1500},
       {field: FieldNames.JUSTIFICATION, count: 1000},
     ]
+
+    this.phase_transfrom =[
+      { title: 'Pre-development', value: 'The pre-development phase is characterized by, on the one hand, visible and increasing pressure to make moves towards low-carbon and sustainable development and, on the other hand, by stability and a status quo, in which predominant paradigms are rarely challenged, and institutions are stagnant.' },
+      { title: 'Take-off', value: 'In the take-off phase, there are observable moves to change the system towards more openness and acceptance of new ideas and concepts that question or challenge existing high-carbon paradigms.' },
+      { title: 'Acceleration', value: 'In the acceleration phase, new solutions or innovations gain momentum and challenge the status quo. Alternative solutions have become widespread, and are accepted and acknowledged.' },
+      { title: 'Stabilization or relapse', value: 'In the stabilization phase, the system is fully transformed, and the new pathways are embraced broadly in society and the economy. However, the risk of relapse is high if the interests of the high-carbon regime remain active, and continued efforts may be needed to maintain momentum' },
+    ]
   }
 
 
@@ -1043,6 +1051,7 @@ export class MasterDataService {
   get word_limits (): {field: string; count: number;}[] {
     return this._word_limits;
   }
+  
 
   getToolName(code: string) {
     let tool = this.tools.find(o => o.code === code)
