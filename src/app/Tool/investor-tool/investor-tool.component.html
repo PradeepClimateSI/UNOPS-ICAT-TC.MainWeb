@@ -212,7 +212,7 @@
               </div>
               <div class="row p-2">
                 <div class="  col-12">
-                  <label>In which phase of transformation is the system currently at? *</label>
+                  <label>In which phase of transformation is the system currently at? * <i class="pi pi-info-circle" (mouseover)="opTransform.toggle($event)" (mouseout)="opTransform.toggle($event)" style="font-size: 1rem"></i></label>
                 </div>
                 <div class="col-12 col-md-6">
                   <div class="p-field">
@@ -869,6 +869,19 @@
     <div class="row p-2" *ngFor="let item of visionExample">
       <div class="col-3">{{item.title}} : </div>
       <div class="col-9">{{item.value}}</div>
+      <br>
+    </div>
+  </div>
+</p-overlayPanel>
+
+<p-overlayPanel #opTransform [style]="{'width': '600px'}">
+  <div class="p-grid p-fluid col-md-12 col-sm-12 text-title">
+    <p><b>The phase of transformation refers to the economic, social, institutional and political context in which the intervention is being planned or implemented. This contextual understanding is important, to enable 
+      users to choose and assess process and outcome characteristics in subsequent steps. A system undergoing transformation can be described as being in any of the following four phases</b>
+      </p>
+    <div class="row p-2" *ngFor="let item of phaseTransformExapmle">
+      <div class="col-12"><strong>{{item.title}} </strong></div>
+      <div class="col-12">{{item.value}}</div>
       <br>
     </div>
   </div>

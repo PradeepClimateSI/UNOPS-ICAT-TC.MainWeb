@@ -192,8 +192,10 @@ export class PortfolioTrack4Component implements OnInit {
 
   assessmentId: number;
   isEditMode: boolean = false;
-
+  phaseTransformExapmle: any[] = []
+  
   async ngOnInit(): Promise<void> {
+    this.phaseTransformExapmle = this.masterDataService.phase_transfrom
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;
     this.geographicalAreasCovered = this.masterDataService.level_of_implemetation;
     this.ghg_info = this.masterDataService.other_invest_ghg_info

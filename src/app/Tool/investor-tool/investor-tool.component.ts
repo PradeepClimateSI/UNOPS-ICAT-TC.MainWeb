@@ -181,7 +181,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   chapter6_url = chapter6_url
   selectedInstruments: any[]
   show_less_message: boolean;
-
+  phaseTransformExapmle: any[] = []
+ 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
     public masterDataService: MasterDataService,
@@ -203,6 +204,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   }
   async ngOnInit(): Promise<void> {
+    this.phaseTransformExapmle = this.masterDataService.phase_transfrom
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;
     this.geographicalAreasCovered = this.masterDataService.level_of_implemetation;
     this.investment_instruments = this.masterDataService.investment_instruments
