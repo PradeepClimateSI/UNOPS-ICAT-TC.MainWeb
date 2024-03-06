@@ -164,7 +164,7 @@ export class ClimateActionComponent implements OnInit  {
   int_id_year='YYYY';
   int_id_country='Country';
   tooltips: any = {}
-
+  editMode:boolean = false
   fieldNames = FieldNames
 
   constructor(
@@ -403,6 +403,7 @@ export class ClimateActionComponent implements OnInit  {
               this.projectProxy.findPolicySectorData(this.editEntytyId ).subscribe( (res) => {
                 this.policySectorArray =res;
                 for(let x of res){
+                  this.finalSectors.push(x.sector)
                   this.sectornames.push(x.sector.name)
                 }
                  this.sectorsJoined=this.sectornames.join(', ')
@@ -820,6 +821,54 @@ export class ClimateActionComponent implements OnInit  {
   back() {
     this.location.back();
   }
+  edit(label: string){
+    console.log(label)
+    if (label === 'Edit') {
+      this.editMode =true;
+
+    }
+    else {
+      this.editMode =false;
+      this.project.dateOfCompletion= this.dateOfCompletion
+      this.project.dateOfImplementation =this.dateOfImplementation;
+      // for (let sec of this.finalSectors) {
+      //   let ps = new PolicySector();
+      //   ps.intervention = this.project
+      //   ps.sector =sec;        
+      //   this.policySectorArray.push(ps);
+      // }
+      
+      // let allSectors= new AllPolicySectors();
+      //         allSectors.allSectors =this.policySectorArray;
+      // console.log(allSectors);
+      // this.projectProxy.policySectors(allSectors).subscribe((res) => {              
+      // })
+
+      this.projectProxy.updateOneClimateAction(this.project)
+      .subscribe(
+        (res) => {
+
+
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Intervention update successfully.',
+            closable: true,
+          });
+        },
+        (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error.',
+            detail: 'Internal server error, please try again.',
+            sticky: true,
+          });
+        }
+      )
+
+    }
+  }
+
   confirmBack(label: string) {
     if (label === 'back') {
       this.location.back();

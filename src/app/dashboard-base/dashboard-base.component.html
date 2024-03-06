@@ -95,8 +95,8 @@
                   <div
                     *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin || userRole==loginRole.Country_User || userRole==loginRole.MRV_Admin||  userRole==loginRole.Data_Collection_Team ||   userRole==loginRole.External ||  userRole==loginRole.Country_Admin"
                     class="sidebar-items--link d-flex flex-column align-items-start"
-                    [routerLink]="['/app/add-polocies']" routerLinkActive="selected">
-                    <p class="mb-0 ml-20">Propose</p>
+                    [routerLink]="['/app/add-policies']" routerLinkActive="selected">
+                    <p class="mb-0 ml-20">Create</p>
                   </div>
                   <div
                     *ngIf="userRole==loginRole.MASTER_ADMIN || userRole==loginRole.Sector_Admin || userRole==loginRole.Country_User ||  userRole==loginRole.External || userRole==loginRole.MRV_Admin||  userRole==loginRole.Data_Collection_Team||  userRole==loginRole.Country_Admin"

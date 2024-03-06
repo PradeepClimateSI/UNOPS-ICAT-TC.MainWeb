@@ -17274,14 +17274,18 @@ export class ProjectControllerServiceProxy {
         return _observableOf(null as any);
     }
 
-    updateOneClimateAction(): Observable<any> {
+    updateOneClimateAction(body: ClimateAction): Observable<any> {
         let url_ = this.baseUrl + "/climateAction/updateOneClimateAction";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_ : any = {
+            body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
+                "Content-Type": "application/json",
                 "Accept": "application/json"
             })
         };
@@ -20749,7 +20753,7 @@ export class InvestorToolControllerServiceProxy {
         return _observableOf(null as any);
     }
 
-    getDashboardData(page: number, limit: number): Observable<any> {
+    getDashboardData(page: number, limit: number, selectedAssessIds: string[]): Observable<any> {
         let url_ = this.baseUrl + "/investor-tool/dashboard-data?";
         if (page === undefined || page === null)
             throw new Error("The parameter 'page' must be defined and cannot be null.");
@@ -20759,6 +20763,10 @@ export class InvestorToolControllerServiceProxy {
             throw new Error("The parameter 'limit' must be defined and cannot be null.");
         else
             url_ += "limit=" + encodeURIComponent("" + limit) + "&";
+        if (selectedAssessIds === undefined || selectedAssessIds === null)
+            throw new Error("The parameter 'selectedAssessIds' must be defined and cannot be null.");
+        else
+            selectedAssessIds && selectedAssessIds.forEach(item => { url_ += "selectedAssessIds=" + encodeURIComponent("" + item) + "&"; });
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -21857,7 +21865,7 @@ export class PortfolioControllerServiceProxy {
         return _observableOf(null as any);
     }
 
-    getDashboardData(portfolioID: number, page: number, limit: number): Observable<any> {
+    getDashboardData(portfolioID: number, page: number, limit: number, selectedAssessIds: string[]): Observable<any> {
         let url_ = this.baseUrl + "/portfolio/dashboard-data?";
         if (portfolioID === undefined || portfolioID === null)
             throw new Error("The parameter 'portfolioID' must be defined and cannot be null.");
@@ -21871,6 +21879,10 @@ export class PortfolioControllerServiceProxy {
             throw new Error("The parameter 'limit' must be defined and cannot be null.");
         else
             url_ += "limit=" + encodeURIComponent("" + limit) + "&";
+        if (selectedAssessIds === undefined || selectedAssessIds === null)
+            throw new Error("The parameter 'selectedAssessIds' must be defined and cannot be null.");
+        else
+            selectedAssessIds && selectedAssessIds.forEach(item => { url_ += "selectedAssessIds=" + encodeURIComponent("" + item) + "&"; });
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -24786,7 +24798,7 @@ export class CMAssessmentQuestionControllerServiceProxy {
         return _observableOf(null as any);
     }
 
-    getDashboardData(page: number, limit: number): Observable<any> {
+    getDashboardData(page: number, limit: number, intervention_ids: string[]): Observable<any> {
         let url_ = this.baseUrl + "/cm-assessment-question/dashboard-data?";
         if (page === undefined || page === null)
             throw new Error("The parameter 'page' must be defined and cannot be null.");
@@ -24796,6 +24808,10 @@ export class CMAssessmentQuestionControllerServiceProxy {
             throw new Error("The parameter 'limit' must be defined and cannot be null.");
         else
             url_ += "limit=" + encodeURIComponent("" + limit) + "&";
+        if (intervention_ids === undefined || intervention_ids === null)
+            throw new Error("The parameter 'intervention_ids' must be defined and cannot be null.");
+        else
+            intervention_ids && intervention_ids.forEach(item => { url_ += "intervention_ids=" + encodeURIComponent("" + item) + "&"; });
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -29396,15 +29412,7 @@ export class Characteristics implements ICharacteristics {
         return result;
     }
 }
-export enum DocumentsDocumentOwner {
-    Project = <any>"Project",
-    Country = <any>"Country",
-    CountryNC = <any>"CountryNC",
-    CountryBUR = <any>"CountryBUR",
-    CountryBTR = <any>"CountryBTR",
-    CountryNDC = <any>"CountryNDC",
-    CountryGHG = <any>"CountryGHG",
-}
+
 export interface ICharacteristics {
     id: number;
     name: string;
@@ -33339,6 +33347,15 @@ export interface IUpdateMethodologyAssessmentDto {
     [key: string]: any;
 }
 
+export enum DocumentsDocumentOwner {
+    Project = <any>"Project",
+    Country = <any>"Country",
+    CountryNC = <any>"CountryNC",
+    CountryBUR = <any>"CountryBUR",
+    CountryBTR = <any>"CountryBTR",
+    CountryNDC = <any>"CountryNDC",
+    CountryGHG = <any>"CountryGHG",
+}
 export class DataVerifierDto implements IDataVerifierDto {
     ids: number[];
     deadline: moment.Moment;
