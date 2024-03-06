@@ -38,10 +38,14 @@
 
     <ng-template pTemplate="header">
         <tr  >
-            <th>Intervention</th>
-            <th>Current status</th>
-            <th>Status of approval</th>
-            <th>Actions</th>
+            <th rowspan="2">Intervention</th>
+            <th rowspan="2">Current status</th>
+            <th rowspan="2">Status of approval</th>
+            <th  class="text-center" colspan="2">Actions</th>
+        </tr>
+        <tr>
+          <th></th>
+          <th></th>
         </tr>
     </ng-template>
     <ng-template  pTemplate="body" let-climateactions >
@@ -60,6 +64,9 @@
           <td>
             <i class="pi pi-eye" style="font-size: 1.5rem; color: #000; margin-left: 17%"
               (click)="detail(climateactions)"></i>
+          </td>
+          <td>
+            <p-button  icon="pi pi-trash" severity="danger" (click)="delete(climateactions)"></p-button>
           </td>
 
         </tr>
