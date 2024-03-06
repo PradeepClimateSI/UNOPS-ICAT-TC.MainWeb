@@ -561,16 +561,15 @@
                                   <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level' ">
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
-                                        <label for="expected_ghg_mitigation">Expected GHG reductions over intervention lifetime (Mt CO2-eq)</label>
+                                        <label for="expected_ghg_mitigation">Expected average GHG reductions or removals (mitigation outcomes) (tCO₂e/year)</label>
                                         <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation" name="expected_ghg_mitigation" placeholder="Expected GHG reductions over intervention lifetime" inputId="locale-us" mode="decimal" locale="en-US" [minFractionDigits]="2">
                                         </p-inputNumber>
                                       </div>
                                     </div>
                                     <div *ngIf="category.CategoryName ==='GHG Scale of the Outcome'" style="text-align: justify;">
                                       <p> <br><br>
-                                        Note: All emissions reductions shall be calculated as annual average (tCO2e/yr. calculated as total estimated reductions over
-                                        lifetime of the project divided by project lifetime) and compared respectively to global, national/sectoral or
-                                        subnational and sub sectorial emissions for the latest year for which those emissions data is available.
+                                        Note: All GHG impacts should be calculated as average reductions in emissions in tCO2e/year (over the intervention's lifetime) and compared
+                                         to subnational/regional/municipal emissions or subsectoral level emissions for the latest year for which those emissions data is available.
                                       </p>
                                     </div>
                                   </div>
@@ -905,7 +904,7 @@
                                      (category.CategoryName ==='Adaptation Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level') ">
                                   <div class="col-12 col-lg-6">
                                     <div class="p-field">
-                                      <label for="expected_ghg_mitigation">Expected GHG reductions over intervention lifetime (Mt CO2-eq)</label>
+                                      <label for="expected_ghg_mitigation">Expected average GHG reductions or removals (mitigation outcomes) (tCO₂e/year)   </label>
                                       <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation" name="expected_ghg_mitigation" placeholder="Expected GHG reductions over intervention lifetime" inputId="locale-us" mode="decimal" locale="en-US" [minFractionDigits]="2">
                                       </p-inputNumber>
                                     </div>

@@ -69,6 +69,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   minDateTo: Date;
   fieldNames = FieldNames
   chapter6_url = chapter6_url
+  expected_ghg_mitigation: number
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -137,6 +138,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
       let policy = this.policies.find(o => o.id === this.assessment.climateAction.id)
       if (policy) this.assessment.climateAction = policy
       this.cm_detail = await this.assessmentCMDetailControllerServiceProxy.getAssessmentCMDetailByAssessmentId(this.assessmentId).toPromise()
+      this.expected_ghg_mitigation = this.cm_detail.expected_ghg_mitigation
       let areas: MasterDataDto[] = []
       this.cm_detail.geographicalAreasCovered.map(area => {
         let level = this.levelOfImplementation.find(o => o.code === area.code)

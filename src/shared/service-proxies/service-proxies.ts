@@ -30450,6 +30450,17 @@ export class CMAssessmentAnswer implements ICMAssessmentAnswer {
     }
 }
 
+export enum DocumentsDocumentOwner {
+    Project = <any>"Project",
+    Country = <any>"Country",
+    CountryNC = <any>"CountryNC",
+    CountryBUR = <any>"CountryBUR",
+    CountryBTR = <any>"CountryBTR",
+    CountryNDC = <any>"CountryNDC",
+    CountryGHG = <any>"CountryGHG",
+}
+
+
 export interface ICMAssessmentAnswer {
     createdBy: string;
     createdOn: moment.Moment;
@@ -36289,6 +36300,7 @@ export class AssessmentCMDetail implements IAssessmentCMDetail {
     cmassessment: Assessment;
     sectoral_boundary: string;
     scale: string;
+    expected_ghg_mitigation: number;
     geographicalAreasCovered: GeographicalAreasCovered[];
     sectorsCovered: InvestorSector[];
 
@@ -36327,6 +36339,7 @@ export class AssessmentCMDetail implements IAssessmentCMDetail {
             this.cmassessment = _data["cmassessment"] ? Assessment.fromJS(_data["cmassessment"]) : new Assessment();
             this.sectoral_boundary = _data["sectoral_boundary"];
             this.scale = _data["scale"];
+            this.expected_ghg_mitigation = _data["expected_ghg_mitigation"];
             if (Array.isArray(_data["geographicalAreasCovered"])) {
                 this.geographicalAreasCovered = [] as any;
                 for (let item of _data["geographicalAreasCovered"])
@@ -36366,6 +36379,7 @@ export class AssessmentCMDetail implements IAssessmentCMDetail {
         data["cmassessment"] = this.cmassessment ? this.cmassessment.toJSON() : <any>undefined;
         data["sectoral_boundary"] = this.sectoral_boundary;
         data["scale"] = this.scale;
+        data["expected_ghg_mitigation"] = this.expected_ghg_mitigation;
         if (Array.isArray(this.geographicalAreasCovered)) {
             data["geographicalAreasCovered"] = [];
             for (let item of this.geographicalAreasCovered)
@@ -36401,6 +36415,7 @@ export interface IAssessmentCMDetail {
     cmassessment: Assessment;
     sectoral_boundary: string;
     scale: string;
+    expected_ghg_mitigation: number;
     geographicalAreasCovered: GeographicalAreasCovered[];
     sectorsCovered: InvestorSector[];
 
@@ -38623,6 +38638,7 @@ export class SaveCMResultDto implements ISaveCMResultDto {
     isDraft: boolean;
     type: string;
     name: string;
+    expectedGHGMitigation: number;
 
     [key: string]: any;
 
@@ -38654,6 +38670,7 @@ export class SaveCMResultDto implements ISaveCMResultDto {
             this.isDraft = _data["isDraft"];
             this.type = _data["type"];
             this.name = _data["name"];
+            this.expectedGHGMitigation = _data["expectedGHGMitigation"];
         }
     }
 
@@ -38679,6 +38696,7 @@ export class SaveCMResultDto implements ISaveCMResultDto {
         data["isDraft"] = this.isDraft;
         data["type"] = this.type;
         data["name"] = this.name;
+        data["expectedGHGMitigation"] = this.expectedGHGMitigation;
         return data;
     }
 
@@ -38696,6 +38714,7 @@ export interface ISaveCMResultDto {
     isDraft: boolean;
     type: string;
     name: string;
+    expectedGHGMitigation: number;
 
     [key: string]: any;
 }
@@ -39051,15 +39070,6 @@ export interface ICreateManyCMAssessmentAnswerDto {
 export enum CountryStatus {
     Active = <any>"Active",
     Deactivated = <any>"Deactivated",
-}
-export enum DocumentsDocumentOwner {
-    Project = <any>"Project",
-    Country = <any>"Country",
-    CountryNC = <any>"CountryNC",
-    CountryBUR = <any>"CountryBUR",
-    CountryBTR = <any>"CountryBTR",
-    CountryNDC = <any>"CountryNDC",
-    CountryGHG = <any>"CountryGHG",
 }
 
 export enum ParameterRequestTool {

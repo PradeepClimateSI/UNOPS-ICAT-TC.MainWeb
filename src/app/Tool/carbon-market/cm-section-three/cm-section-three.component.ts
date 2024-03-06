@@ -28,6 +28,7 @@ export class CmSectionThreeComponent implements OnInit {
   @Input() assessmentquestions: CMAssessmentQuestion[]
   @Input() isEditMode: boolean
   @Input() assessment:Assessment;
+  @Input() expected_ghg_mitigation: number
   @Output() onSubmit = new EventEmitter();
 
   @ViewChildren(NgForm) viewChildren!: QueryList<NgForm>;
@@ -763,7 +764,7 @@ export class CmSectionThreeComponent implements OnInit {
       this.categoriesToSave = []
       this.isDraftSaved = true
       if(!isDraft) this.savedData = true
-      this.onSubmit.emit({result: this.results, isDraft: isDraft,name:name,type:type})
+      this.onSubmit.emit({result: this.results, isDraft: isDraft,name:name,type:type, expected_ghg_mitigation: this.expected_ghg_mitigation})
     } else {
       this.messageService.add({
         severity: 'error',

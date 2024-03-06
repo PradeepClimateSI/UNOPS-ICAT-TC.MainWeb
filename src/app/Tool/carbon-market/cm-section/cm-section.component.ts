@@ -13,6 +13,7 @@ export class CmSectionComponent implements OnInit {
   @Input() assessment: Assessment
   @Input() approach: string
   @Input() isEditMode: boolean;
+  @Input() expectedGhgMitigation: number;
  
   openAccordion = 0
 
@@ -45,6 +46,7 @@ export class CmSectionComponent implements OnInit {
   showConditionDialog: boolean;
   visible_condition: boolean;
   condition_message: string;
+  emptySaveDto = new SaveDto()
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -447,6 +449,7 @@ export class CmSectionComponent implements OnInit {
     result.isDraft = event.isDraft;
     result.type =event.type;
     result.name=event.name;
+    result.expectedGHGMitigation = event.expected_ghg_mitigation
     this.cMAssessmentQuestionControllerServiceProxy.saveResult(result)
       .subscribe(res => {
         if (res) {
@@ -501,6 +504,7 @@ export class SaveDto {
   isDraft: boolean = false
   name:string
   type:string
+  expected_ghg_mitigation: number
 }
 
 export class SectionResultDto{
