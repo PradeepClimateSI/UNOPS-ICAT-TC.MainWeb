@@ -128,7 +128,7 @@ export class EnterDataCmComponent implements OnInit {
     let filtertext = this.searchBy.text ? this.searchBy.text : '';
 
     let editedOn = this.searchBy.editedOn
-      ? moment(this.searchBy.editedOn).format('YYYY-MM-DD')
+      ? moment(this.searchBy.editedOn).format('DD/MM/YYYY')
       : '';
 
     let pageNumber =

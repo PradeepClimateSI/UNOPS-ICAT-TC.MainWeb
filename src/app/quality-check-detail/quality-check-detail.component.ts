@@ -45,8 +45,8 @@ export class QualityCheckDetailComponent implements OnInit {
         this.param = res;
         this.headerlcimateActionName = res[0].assessment.climateAction.policyName;
         this.headerAssessmentType = res[0].assessment.assessmentType;
-        this.from =  moment(res[0].assessment.from).format('YYYY-MM-DD');
-        this.fromTo = moment(res[0].assessment.to).format('YYYY-MM-DD');
+        this.from =  moment(res[0].assessment.from).format('DD/MM/YYYY');
+        this.fromTo = moment(res[0].assessment.to).format('DD/MM/YYYY');
 
       })
 

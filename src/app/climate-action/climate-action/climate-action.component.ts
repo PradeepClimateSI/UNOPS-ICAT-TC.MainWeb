@@ -154,7 +154,7 @@ export class ClimateActionComponent implements OnInit  {
   title = 'htmltopdf';
   wid: number;
   hgt: number;
-  textdlod: any = 'Downloaded date ' + moment().format('YYYY-MM-DD HH:mm:ss');
+  textdlod: any = 'Downloaded date ' + moment().format('DD/MM/YYYY HH:mm:ss');
 
   getUserEnterdCountry: any = '';
   disbaleNdcmappedFromDB: number;

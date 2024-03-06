@@ -124,11 +124,11 @@
                 <span class="p-inputgroup-addon">
                   <i class="pi pi-calendar"></i>
                 </span>
-                <p-calendar dateFormat="mm-dd-yy" inputId="date1" placeholder="From" [minDate]="minDate" [(ngModel)]="assessment.from" name="date1" #date1="ngModel" [disabled]="isSavedAssessment|| isEditMode" [required]="true" appendTo="body" [disabled]="isSavedAssessment"
+                <p-calendar dateFormat="dd/mm/yy" inputId="date1" placeholder="From" [minDate]="minDate" [(ngModel)]="assessment.from" name="date1" #date1="ngModel" [disabled]="isSavedAssessment|| isEditMode" [required]="true" appendTo="body" [disabled]="isSavedAssessment"
                 (ngModelChange)="onSelectFromDate($event)">
                 </p-calendar>
                 <span class="p-inputgroup-addon">to</span>
-                <p-calendar dateFormat="mm-dd-yy" inputId="date2" placeholder="To" [(ngModel)]="assessment.to" name="date2" #date2="ngModel" [disabled]="isSavedAssessment|| isEditMode" [required]="true" appendTo="body" [disabled]="isSavedAssessment" [minDate]="minDateTo"></p-calendar>
+                <p-calendar dateFormat="dd/mm/yy" inputId="date2" placeholder="To" [(ngModel)]="assessment.to" name="date2" #date2="ngModel" [disabled]="isSavedAssessment|| isEditMode" [required]="true" appendTo="body" [disabled]="isSavedAssessment" [minDate]="minDateTo"></p-calendar>
               </div>
               <div class="col-12">
                 <p class="info-message text-danger" *ngIf="(date1.invalid || date2.invalid) && (fData.submitted || date1.touched || date2.touched)">

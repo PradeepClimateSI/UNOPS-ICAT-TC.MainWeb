@@ -336,7 +336,7 @@ export class PortfolioTrack4Component implements OnInit {
   }
   setFrom() {
     if (this.assessment.from) {
-      let convertTime = moment(this.assessment.from).format("YYYY-MM-DD HH:mm:ss");
+      let convertTime = moment(this.assessment.from).format("DD/MM/YYYY HH:mm:ss");
       let convertTimeObject = new Date(convertTime);
       this.assessment.from = moment(convertTimeObject);
     }
@@ -345,7 +345,7 @@ export class PortfolioTrack4Component implements OnInit {
 
   setTo() {
     if (this.assessment.to) {
-      let convertTime = moment(this.assessment.to).format("YYYY-MM-DD HH:mm:ss");
+      let convertTime = moment(this.assessment.to).format("DD/MM/YYYY HH:mm:ss");
       let convertTimeObject = new Date(convertTime);
       this.assessment.to = moment(convertTimeObject);
     }
@@ -509,7 +509,7 @@ export class PortfolioTrack4Component implements OnInit {
     this.isStageDisble = true;
 
     this.assessment.tool = 'PORTFOLIO'
-    this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
+    this.assessment.year = moment(new Date()).format("DD/MM/YYYY")
     if (!this.assessment.id) this.assessment.createdOn = moment(new Date())
     this.assessment.editedOn = moment(new Date())
 

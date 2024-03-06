@@ -359,7 +359,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   setFrom(){
     if(this.assessment.from){  
-      let convertTime = moment(this.assessment.from).format("YYYY-MM-DD HH:mm:ss");
+      let convertTime = moment(this.assessment.from).format("DD/MM/YYYY HH:mm:ss");
       let convertTimeObject = new Date(convertTime);
       //@ts-ignore - We are accepting Date object in front-end
       this.assessment.from = convertTimeObject;
@@ -385,7 +385,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   setTo(){
     if(this.assessment.to){
-      let convertTime = moment(this.assessment.to).format("YYYY-MM-DD HH:mm:ss");
+      let convertTime = moment(this.assessment.to).format(" HH:mm:ss");
       let convertTimeObject = new Date(convertTime);
       //@ts-ignore - We are accepting Date object in front-end
       this.assessment.to = convertTimeObject;
@@ -495,7 +495,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.isStageDisble =true;
 
     this.assessment.tool = 'INVESTOR'
-    this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
+    this.assessment.year = moment(new Date()).format("DD/MM/YYYY")
     if (!this.assessment.id) this.assessment.createdOn = moment(new Date())
     this.assessment.editedOn = moment(new Date())
 

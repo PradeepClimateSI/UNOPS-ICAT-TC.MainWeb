@@ -132,7 +132,7 @@
             <td>{{ climateactions.sector?.name }}</td>
             <td>{{ climateactions.projectStatus?.name }}</td>
             <td>{{ climateactions.contactPersoFullName }}</td>
-            <td>{{ climateactions.editedOn | date: "yyyy-MM-dd" }}</td>
+            <td>{{ climateactions.editedOn | date: "dd/MM/yyyy" }}</td>
             <ng-container *ngIf="this.loggedUser?.userType!?.id! == 1">
               <td
               (mouseenter) ="showDialog(climateactions)"
