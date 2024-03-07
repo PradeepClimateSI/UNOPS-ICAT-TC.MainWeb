@@ -153,6 +153,8 @@ export class PortfolioTrack4Component implements OnInit {
   isFirstLoading1: boolean = true;
   notFilledCategories: any[] = []
   chapter6_url = chapter6_url
+  from_date:Date
+  to_date: Date
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -304,6 +306,16 @@ export class PortfolioTrack4Component implements OnInit {
     this.sdgDataSendArray4 = await this.investorToolControllerproxy.getSustainedSDGData(this.assessmentId).toPromise();
     this.selectedSDGs = await this.investorToolControllerproxy.getSelectedSDGs(this.assessmentId).toPromise();
     this.selectedSDGsWithAnswers = await this.investorToolControllerproxy.getSelectedSDGsWithAnswers(this.assessmentId).toPromise();
+    this.from_date= new Date(
+      this.assessment.from?.year(),
+      this.assessment.from?.month(),
+      this.assessment.from?.date()
+    );
+    this.to_date= new Date(
+      this.assessment.to?.year(),
+      this.assessment.to?.month(),
+      this.assessment.to?.date()
+    );
 
     this.processData.forEach((d) => {
       if (d.CategoryName == this.assessment.processDraftLocation) {
@@ -343,7 +355,7 @@ export class PortfolioTrack4Component implements OnInit {
   }
   setFrom() {
     if (this.assessment.from) {
-      let convertTime = moment(this.assessment.from).format("YYYY-MM-DD HH:mm:ss");
+      let convertTime = moment(this.assessment.from).format("DD/MM/YYYY HH:mm:ss");
       let convertTimeObject = new Date(convertTime);
       this.assessment.from = moment(convertTimeObject);
     }
@@ -352,7 +364,7 @@ export class PortfolioTrack4Component implements OnInit {
 
   setTo() {
     if (this.assessment.to) {
-      let convertTime = moment(this.assessment.to).format("YYYY-MM-DD HH:mm:ss");
+      let convertTime = moment(this.assessment.to).format("DD/MM/YYYY HH:mm:ss");
       let convertTimeObject = new Date(convertTime);
       this.assessment.to = moment(convertTimeObject);
     }
@@ -516,7 +528,7 @@ export class PortfolioTrack4Component implements OnInit {
     this.isStageDisble = true;
 
     this.assessment.tool = 'PORTFOLIO'
-    this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
+    this.assessment.year = moment(new Date()).format("DD/MM/YYYY")
     if (!this.assessment.id) this.assessment.createdOn = moment(new Date())
     this.assessment.editedOn = moment(new Date())
 

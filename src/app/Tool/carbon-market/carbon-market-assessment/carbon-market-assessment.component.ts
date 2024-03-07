@@ -72,6 +72,9 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   fieldNames = FieldNames
   chapter6_url = chapter6_url
   geographicalAreasCovered: any[] = [];
+  expected_ghg_mitigation: number
+  from_date:Date
+  to_date: Date
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -138,10 +141,21 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   async setInitialStates() {
     if (this.isEditMode) {
       this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+      this.from_date= new Date(
+        this.assessment.from?.year(),
+        this.assessment.from?.month(),
+        this.assessment.from?.date()
+      );
+      this.to_date= new Date(
+        this.assessment.to?.year(),
+        this.assessment.to?.month(),
+        this.assessment.to?.date()
+      );
       this.finalBarrierList = this.assessment['policy_barrier']
       let policy = this.policies.find(o => o.id === this.assessment.climateAction.id)
       if (policy) this.assessment.climateAction = policy
       this.cm_detail = await this.assessmentCMDetailControllerServiceProxy.getAssessmentCMDetailByAssessmentId(this.assessmentId).toPromise()
+      this.expected_ghg_mitigation = this.cm_detail.expected_ghg_mitigation
       let areas: MasterDataDto[] = []
       this.cm_detail.geographicalAreasCovered.map(area => {
         let level = this.levelOfImplementation.find(o => o.code === area.code)
@@ -168,7 +182,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
 
   setFrom(){
     if(this.assessment.from){  
-      let convertTime = moment(this.assessment.from).format("YYYY-MM-DD HH:mm:ss");
+      let convertTime = moment(this.assessment.from).format("DD/MM/YYYY HH:mm:ss");
       let convertTimeObject = new Date(convertTime);      
       this.assessment.from = moment(convertTimeObject) 
     }
@@ -176,7 +190,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
 
   setTo(){
     if(this.assessment.to){
-      let convertTime = moment(this.assessment.to).format("YYYY-MM-DD HH:mm:ss");
+      let convertTime = moment(this.assessment.to).format("DD/MM/YYYY HH:mm:ss");
       let convertTimeObject = new Date(convertTime);
       this.assessment.to = moment(convertTimeObject)
     }
@@ -200,13 +214,15 @@ export class CarbonMarketAssessmentComponent implements OnInit {
 
   save(form: NgForm) {
     this.assessment.tool = 'CARBON_MARKET'
-    this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
+    this.assessment.year = moment(new Date()).format("DD/MM/YYYY")
     this.assessment.assessment_approach = 'DIRECT'
     this.isStageDisble =true;
     if (!this.assessment.id) this.assessment.createdOn = moment(new Date())
     this.assessment.editedOn = moment(new Date())
 
     if (form.valid) {
+      this.assessment.from = moment(this.from_date)
+      this.assessment.to = moment(this.to_date)
       this.methodologyAssessmentControllerServiceProxy.saveAssessment(this.assessment)
         .subscribe(res => {
           if (res) {

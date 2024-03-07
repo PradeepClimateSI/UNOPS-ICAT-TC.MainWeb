@@ -182,7 +182,9 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   selectedInstruments: any[]
   show_less_message: boolean;
   phaseTransformExapmle: any[] = []
- 
+   from_date:Date
+  to_date: Date
+
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
     public masterDataService: MasterDataService,
@@ -297,6 +299,16 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.selectedSDGs = await this.investorToolControllerproxy.getSelectedSDGs(this.assessmentId).toPromise();
     this.selectedSDGsWithAnswers = await this.investorToolControllerproxy.getSelectedSDGsWithAnswers(this.assessmentId).toPromise();
     this.investorAssessment = await this.investorToolControllerproxy.getResultByAssessment(this.assessmentId).toPromise();
+    this.from_date= new Date(
+      this.assessment.from?.year(),
+      this.assessment.from?.month(),
+      this.assessment.from?.date()
+    );
+    this.to_date= new Date(
+      this.assessment.to?.year(),
+      this.assessment.to?.month(),
+      this.assessment.to?.date()
+    );
 
     this.processData.forEach((d)=>{
       if(d.CategoryName == this.assessment.processDraftLocation){
@@ -367,7 +379,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   setFrom(){
     if(this.assessment.from){  
-      let convertTime = moment(this.assessment.from).format("YYYY-MM-DD HH:mm:ss");
+      let convertTime = moment(this.assessment.from).format("DD/MM/YYYY HH:mm:ss");
       let convertTimeObject = new Date(convertTime);
       //@ts-ignore - We are accepting Date object in front-end
       this.assessment.from = convertTimeObject;
@@ -393,7 +405,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   setTo(){
     if(this.assessment.to){
-      let convertTime = moment(this.assessment.to).format("YYYY-MM-DD HH:mm:ss");
+      let convertTime = moment(this.assessment.to).format(" HH:mm:ss");
       let convertTimeObject = new Date(convertTime);
       //@ts-ignore - We are accepting Date object in front-end
       this.assessment.to = convertTimeObject;
@@ -503,7 +515,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.isStageDisble =true;
 
     this.assessment.tool = 'INVESTOR'
-    this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
+    this.assessment.year = moment(new Date()).format("DD/MM/YYYY")
     if (!this.assessment.id) this.assessment.createdOn = moment(new Date())
     this.assessment.editedOn = moment(new Date())
 

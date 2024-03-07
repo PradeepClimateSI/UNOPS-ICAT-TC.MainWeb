@@ -667,7 +667,7 @@ this.selectPortfolio();
               beginAtZero: true,
               title: {
                 display: true,
-                text: 'Expected GHG reductions over intervention lifetime (Mt CO2-eq)',
+                text: 'Expected average GHG reductions or removals (mitigation outcomes) (tCO₂e/year) ',
                 font: {
                   size: 10,
                   weight: 'bold',

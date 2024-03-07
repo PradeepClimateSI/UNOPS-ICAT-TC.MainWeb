@@ -89,8 +89,8 @@
                 {{ assignDataRequestList?.investmentParameter?.assessment?.assessmentType}}
               </td>
               <td>
-                {{ assignDataRequestList?.investmentParameter?.assessment?.from | date: "dd-MM-yyyy " }} - {{
-                assignDataRequestList?.investmentParameter?.assessment?.to | date: "dd-MM-yyyy "}}
+                {{ assignDataRequestList?.investmentParameter?.assessment?.from | date: "dd/MM/yyyy " }} - {{
+                assignDataRequestList?.investmentParameter?.assessment?.to | date: "dd/MM/yyyy "}}
               </td>
               <td>{{ assignDataRequestList?.investmentParameter?.type}}</td>
               <td>{{ assignDataRequestList?.investmentParameter?.category?.name}}</td>
@@ -139,7 +139,7 @@
 
               }}
             </td>
-            <td>{{ assignDataRequestList.deadlineDataEntry | date: "dd-MM-yyyy " }}</td>
+            <td>{{ assignDataRequestList.deadlineDataEntry | date: "dd/MM/yyyy " }}</td>
             <td>
               {{
               assignDataRequestList.dataRequestStatus == 2
