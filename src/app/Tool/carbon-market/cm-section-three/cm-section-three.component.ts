@@ -497,6 +497,11 @@ export class CmSectionThreeComponent implements OnInit {
               let score = score_array.find(o => o.code === '-99')
               if (score) result.selectedScore = score
               result.comment = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.'
+              result.startingSituation = 'N/A'
+              result.expectedImpact = 'N/A'
+              if (['SCALE_ADAPTATION', 'SUSTAINED_ADAPTATION'].includes(category_code)) {
+                result.adaptationCoBenifit = 'N/A'
+              }
             }
             return result;
           })
@@ -556,6 +561,9 @@ export class CmSectionThreeComponent implements OnInit {
                 let score = this.masterDataService.SDG_scale_score.find(o => o.code === '-99')
                 if(score) result.selectedScore = score
                 result.comment = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.'
+                result.startingSituation = 'N/A'
+                result.expectedImpact = 'N/A'
+                result.sdgIndicator = 'N/A'
               }
               return result
             })
@@ -565,6 +573,9 @@ export class CmSectionThreeComponent implements OnInit {
                 let score = this.masterDataService.SDG_sustained_score.find(o => o.code === '-99')
                 if(score) result.selectedScore = score
                 result.comment = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.'
+                result.startingSituation = 'N/A'
+                result.expectedImpact = 'N/A'
+                result.sdgIndicator ='N/A'
               }
               return result
             })
