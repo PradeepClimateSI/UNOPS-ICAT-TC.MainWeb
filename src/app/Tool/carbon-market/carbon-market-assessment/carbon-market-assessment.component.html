@@ -1,6 +1,7 @@
 <div class="container pl-20 pr-20">
     <div class="mb-12">
-        <h4 class="mt-4"> Assessment Information
+        <h4 class="mt-4"> Assessment
+          <span class="infor-video" ><i class="pi pi-info-circle" (mouseover)="opAssessment.toggle($event)" (mouseout)="opAssessment.toggle($event)" style="font-size: 1em ;  margin-left: 1em;"></i></span>
           <span (click)="watchVideo()" pTooltip="Click to watch guidance video"  class="infor-video" ><i class="pi pi-video" style=" font-size: 1em ;  margin-left: 1em;"></i></span>
         </h4>
     </div>
@@ -519,5 +520,11 @@
       <div class="col-12">{{item.value}}</div>
       <br>
     </div>
+  </div>
+</p-overlayPanel>      
+
+<p-overlayPanel #opAssessment [style]="{'width': '800px'}">
+  <div class="p-grid p-fluid col-md-12 col-sm-12 text-title">
+    <img src="../../../assets/images/assessment/assessment_flow.png" alt="Assessment Flow"  width="780px" >
   </div>
 </p-overlayPanel>
