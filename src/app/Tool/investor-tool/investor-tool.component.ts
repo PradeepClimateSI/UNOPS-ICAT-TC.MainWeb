@@ -1373,7 +1373,7 @@ assignSDG(sdg : any , data : any){
 
   calculateAbatement(value: number, data: any) {
     if (this.investorAssessment?.total_investment) {
-      data['abatement']= value * Math.pow(10, 3) / this.investorAssessment.total_investment 
+      data['abatement']= value  / this.investorAssessment.total_investment 
     } else {
       data['abatement'] = 0
     }
