@@ -1313,8 +1313,6 @@ assignSDG(sdg : any , data : any){
   }
 
   onSelectInstrument(event: any) {
-    console.log(event)
-    console.log(this.selectedInstruments)
 
     this.show_less_message = false
     this.selectedInstruments.map(_inst => {
@@ -1329,12 +1327,10 @@ assignSDG(sdg : any , data : any){
       this.totalInvestments = this.totalInvestments.filter(item => (this.selectedInstruments.map(ins => ins.code)).includes(item.instrument_code))
     }
     this.onInputChange({target: {value: 0}}) 
-    console.log(this.totalInvestments)
     
   }
 
   onInputChange(event: any) {
-    console.log("onInputChange")
     this.show_less_message = false
     const inputValue = event.target.value;
     const numericValue = parseFloat(inputValue);
@@ -1359,12 +1355,14 @@ assignSDG(sdg : any , data : any){
     let inst_to_check = [...this.totalInvestments.filter(o => o.instrument_code !== 'OTHER')]
 
     let all_proportion_filled = inst_to_check.every(i => i.propotion !== undefined)
-    console.log(all_proportion_filled)
 
     if (tot > 100) this.isExceeded = true
-    else this.isExceeded = false
+    else {
+      this.isExceeded = false; 
+      this.show_less_message = false;
+    }
 
-    if (all_proportion_filled && !this.isExceeded) {
+    if (all_proportion_filled && !this.isExceeded && tot !== 100) {
       this.show_less_message = true
         this.totalInvestments = this.totalInvestments.map(inv => {
           if (inv.instrument_code === 'OTHER') {

@@ -493,36 +493,56 @@ export class CmSectionThreeComponent implements OnInit {
     let score = new ScoreDto()
 
       if (char.characteristic.category.code === 'SUSTAINED_GHG') {
-        let score = 0
+        let score: number|null = null
         this.outcome.forEach((category: OutcomeCategory) => {
           if (['SUSTAINED_GHG', 'SCALE_GHG'].includes(category.code)) {
-            category.results.forEach((result) => {
-              if (result.selectedScore.value) score = score + result.selectedScore.value
+            if (category.results.every(result => result.selectedScore.value === -99)) {
+              score = score !== null ? score : null
+            } else {
+              category.results.forEach((result) => {
+                score = score === null ? 0: score = score
+                if (result.selectedScore.value) score = score + (result.selectedScore.value === -99 ? 0 : result.selectedScore.value)
+              })
+            }
+          }
+        })
+        this.GHGScore = score === null ? 'N/A' : Math.round(score / 6)
+      } else if (char.characteristic.category.code === 'SUSTAINED_SD') {
+        let score: number|null = null
+        this.selectedSDGs.forEach(sdg => {
+          if (sdg.scaleResult.every(sr => sr.selectedScore.value)) {
+            score = score !== null ? score : null
+          } else {
+            sdg.scaleResult.forEach(sr => {
+              score = score === null ? 0: score = score
+              if (sr.selectedScore.value) score = score + (sr.selectedScore.value === -99 ? 0 : sr.selectedScore.value)
+            })
+          }
+          if (sdg.sustainResult.every(sr => sr.selectedScore.value)) {
+            score = score !== null ? score : null
+          } else {
+            sdg.sustainResult.forEach(susr => {
+              score = score === null ? 0: score = score
+              if (susr.selectedScore.value) score = score + (susr.selectedScore.value === -99 ? 0 : susr.selectedScore.value)
             })
           }
         })
-        this.GHGScore = Math.round(score / 6)
-      } else if (char.characteristic.category.code === 'SUSTAINED_SD') {
-        let score = 0
-        this.selectedSDGs.forEach(sdg => {
-          sdg.scaleResult.forEach(sr => {
-            if (sr.selectedScore.value) score = score + sr.selectedScore.value
-          })
-          sdg.sustainResult.forEach(susr => {
-            if (susr.selectedScore.value) score = score + susr.selectedScore.value
-          })
-        })
-        this.SDGScore = Math.round(score / 6 / this.selectedSDGs.length)
+        this.SDGScore = score === null ? 'N/A' : Math.round(score / 6 / this.selectedSDGs.length)
       } else if (char.characteristic.category.code === 'SUSTAINED_ADAPTATION') {
-        let score = 0
+        let score: number|null = null
         this.outcome.forEach((category: OutcomeCategory) => {
           if (['SUSTAINED_ADAPTATION', 'SCALE_ADAPTATION'].includes(category.code)) {
-            category.results.forEach((result) => {
-              if (result.selectedScore.value) score = score + result.selectedScore.value
-            })
+            if (category.results.every(sr => sr.selectedScore.value)) {
+              score = score !== null ? score : null
+            } else {
+              category.results.forEach((result) => {
+                score = score === null ? 0 : score = score
+                if (result.selectedScore.value) score = score + (result.selectedScore.value === -99 ? 0 : result.selectedScore.value)
+              })
+            }
           }
         })
-        this.adaptationScore = Math.round(score / 6);
+        this.adaptationScore = score === null ? 'N/A' :  Math.round(score / 6);
       }
   }
 

@@ -436,26 +436,30 @@ export class CmResultComponent implements OnInit {
 
   getOutcomeScores(code: any, category: string, characteristic: Characteristics) {
     if (code) {
-      if (category == 'scale_GHGs') {
-        if (characteristic.code === 'MACRO_LEVEL') {
-          return (this.scale_GHG_score_macro.find(o => o.code === code))?.value
-        } else if (characteristic.code === 'MEDIUM_LEVEL') {
-          return (this.scale_GHG_score_medium.find(o => o.code === code))?.value
-        } else {
-          return (this.scale_GHG_score_micro.find(o => o.code === code))?.value
+      if (code === '-99') {
+        return (this.scale_GHG_score_micro.find(o => o.code === code))?.name
+      } else {
+        if (category == 'scale_GHGs') {
+          if (characteristic.code === 'MACRO_LEVEL') {
+            return (this.scale_GHG_score_macro.find(o => o.code === code))?.value
+          } else if (characteristic.code === 'MEDIUM_LEVEL') {
+            return (this.scale_GHG_score_medium.find(o => o.code === code))?.value
+          } else {
+            return (this.scale_GHG_score_micro.find(o => o.code === code))?.value
+          }
         }
-      }
-      else if (category == 'sustained_GHGs') {
-        return (this.sustained_GHG_score.find(o => o.code === code))?.value
-      }
-      else if (category == 'scale_SDs') {
-        return (this.scale_SD_score.find(o => o.code === code))?.value
-      }
-      else if (category == 'sustained_SDs') {
-        return (this.sustained_SD_score.find(o => o.code === code))?.value
-      }
-      else {
-        return '-'
+        else if (category == 'sustained_GHGs') {
+          return (this.sustained_GHG_score.find(o => o.code === code))?.value
+        }
+        else if (category == 'scale_SDs') {
+          return (this.scale_SD_score.find(o => o.code === code))?.value
+        }
+        else if (category == 'sustained_SDs') {
+          return (this.sustained_SD_score.find(o => o.code === code))?.value
+        }
+        else {
+          return '-'
+        }
       }
     } else {
       return '-'
