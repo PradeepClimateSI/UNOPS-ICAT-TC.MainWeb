@@ -131,7 +131,6 @@ export class PortfolioAddComponent implements OnInit {
 
     data.portfolioId = this.portfolio.portfolioId
     data.date = this.portfolio.date
-    console.log(data)
 
     if(this.selectedValues.length < 2){
       this.messageService.add({

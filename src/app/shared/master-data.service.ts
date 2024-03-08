@@ -413,7 +413,8 @@ export class MasterDataService {
       new ScoreDto({ name: '0 - The intervention will not result in GHG impacts relative to the starting situation at the level of assessment targeted.', code: '0', value: 0 }),
       new ScoreDto({name: '-1  - The intervention will result in GHG impacts that represent a minor increase in emissions, relative to the starting situation, at the level of assessment targeted.', code: '-1', value: -1}),
       new ScoreDto({name: '-2 - The intervention will result in GHG impacts that represent moderate emissions increasing, relative to the starting situation, at the level of assessment targeted.', code: '-2', value: -2}),
-      new ScoreDto({name: '-3 - The intervention will result in GHG impacts that represent a large increase in emissions, relative to the starting situation, at the level of assessment targeted.', code: '-3', value: -3})
+      new ScoreDto({name: '-3 - The intervention will result in GHG impacts that represent a large increase in emissions, relative to the starting situation, at the level of assessment targeted.', code: '-3', value: -3}),
+      new ScoreDto({name: 'Outside assessment boundaries', code: '-99', value: -99})
     ]
 
     this.GHG_scale_score_medium = [
@@ -423,7 +424,8 @@ export class MasterDataService {
       new ScoreDto({name: '0 - The intervention will not result in GHG impacts relative to the starting situation at the level of assessment targeted.', code: '0', value: 0}),
       new ScoreDto({name: '-1  - The intervention will result in GHG impacts that represent a minor increase in emissions, relative to the starting situation, at the level of assessment targeted.', code: '-1', value: -1}),
       new ScoreDto({name: '-2 - The intervention will result in GHG impacts that represent moderate emissions increasing, relative to the starting situation, at the level of assessment targeted.', code: '-2', value: -2}),
-      new ScoreDto({name: '-3 - The intervention will result in GHG impacts that represent a large increase in emissions, relative to the starting situation, at the level of assessment targeted.', code: '-3', value: -3})
+      new ScoreDto({name: '-3 - The intervention will result in GHG impacts that represent a large increase in emissions, relative to the starting situation, at the level of assessment targeted.', code: '-3', value: -3}),
+      new ScoreDto({name: 'Outside assessment boundaries', code: '-99', value: -99})
     ]
     this.GHG_scale_score_micro = [
       new ScoreDto({name: '3 - The intervention will result in GHG impacts that represent large emissions reductions, relative to the starting situation, at the level of assessment targeted.', code: '3', value: 3}),
@@ -432,14 +434,16 @@ export class MasterDataService {
       new ScoreDto({name: '0 - The intervention will not result in GHG impacts relative to the starting situation at the level of assessment targeted.', code: '0', value: 0}),
       new ScoreDto({name: '-1  - The intervention will result in GHG impacts that represent a minor increase in emissions, relative to the starting situation, at the level of assessment targeted.', code: '-1', value: -1}),
       new ScoreDto({name: '-2 - The intervention will result in GHG impacts that represent moderate emissions increasing, relative to the starting situation, at the level of assessment targeted.', code: '-2', value: -2}),
-      new ScoreDto({name: '-3 - The intervention will result in GHG impacts that represent a large increase in emissions, relative to the starting situation, at the level of assessment targeted.', code: '-3', value: -3})
+      new ScoreDto({name: '-3 - The intervention will result in GHG impacts that represent a large increase in emissions, relative to the starting situation, at the level of assessment targeted.', code: '-3', value: -3}),
+      new ScoreDto({name: 'Outside assessment boundaries', code: '-99', value: -99})
     ]
     this.GHG_sustained_score = [
       new ScoreDto({name: '3 - Expected positive impact of over 20 years on the selected scale', code: '3', value: 3}),
       new ScoreDto({name: '2 - Expected positive impact of 11-20 years on the selected scale', code: '2', value: 2}),
       new ScoreDto({name: '1 - Expected positive impact of 0-10 years on the selected scale', code: '1', value: 1}),
       new ScoreDto({name: '0 - No expected impact on the selected scale', code: '0', value: 0}),
-      new ScoreDto({name: '-1 - Expected negative impact', code: '-1', value: -1})
+      new ScoreDto({name: '-1 - Expected negative impact', code: '-1', value: -1}),
+      new ScoreDto({name: 'Outside assessment boundaries', code: '-99', value: -99})
     ]
 
     this.SDG_scale_score = [
@@ -450,6 +454,7 @@ export class MasterDataService {
       new ScoreDto({name: '-1 - The intervention will result in minor net negative sustainable development impacts, relative to the starting situation, at the level of assessment targeted.', code: '-1', value: -1}),
       new ScoreDto({name: '-2 - The intervention will result in moderate net negative sustainable development impacts, relative to the starting situation, at the level of assessment targeted.', code: '-2', value: -2}),
       new ScoreDto({name: '-3 - The intervention will result in large net negative sustainable development impacts, relative to the starting situation, at the level of assessment targeted.', code: '-3', value: -3}),
+      new ScoreDto({name: 'Outside assessment boundaries', code: '-99', value: -99})
     ]
     this.SDG_sustained_score = [
       new ScoreDto({name: '3 - Expected positive impact of over 20 years on the selected scale', code: '3', value: 3}),
@@ -457,6 +462,7 @@ export class MasterDataService {
       new ScoreDto({name: '1 - Expected positive impact of 0-10 years on the selected scale', code: '1', value: 1}),
       new ScoreDto({name: '0 - No expected impact on the selected scale', code: '0', value: 0}),
       new ScoreDto({name: '-1 - Expected negative impact', code: '-1', value: -1}),
+      new ScoreDto({name: 'Outside assessment boundaries', code: '-99', value: -99})
     ]
 
     this.adaptation_scale_score = [
@@ -467,6 +473,7 @@ export class MasterDataService {
       new ScoreDto({name: '-1 - The intervention will result in minor net negative climate change adaptation impacts, relative to the starting situation, at the level of assessment targeted.', code: '-1', value: -1}),
       new ScoreDto({name: '-2 - The intervention will result in moderate net negative climate change adaptation impacts, relative to the starting situation, at the level of assessment targeted.', code: '-2', value: -2}),
       new ScoreDto({name: '-3 - The intervention will result in large net negative climate change adaptation impacts, relative to the starting situation, at the level of assessment targeted.', code: '-3', value: -3}),
+      new ScoreDto({name: 'Outside assessment boundaries', code: '-99', value: -99})
     ]
 
     this.adaptation_sustained_score = [
@@ -475,6 +482,7 @@ export class MasterDataService {
       new ScoreDto({name: '1 - Expected positive impact of 0-10 years on the selected scale', code: '1', value: 1}),
       new ScoreDto({name: '0 - No expected impact on the selected scale', code: '0', value: 0}),
       new ScoreDto({name: '-1 - Expected negative impact', code: '-1', value: -1}),
+      new ScoreDto({name: 'Outside assessment boundaries', code: '-99', value: -99})
     ]
 
     this.xData = [

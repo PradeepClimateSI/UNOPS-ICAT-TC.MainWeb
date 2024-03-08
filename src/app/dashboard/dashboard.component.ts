@@ -56,10 +56,10 @@ export class DashboardComponent implements OnInit {
   userName: string = "";
   userRole: string = "";
   loginRole = LoginRole;
-  typeofInterventionCount:  {
-    name:string,
-    count:number
-    }[];
+  typeofInterventionCount: {
+    name: string,
+    count: number
+  }[];
 
     chart: any = [];
     pieChart:any=[];
