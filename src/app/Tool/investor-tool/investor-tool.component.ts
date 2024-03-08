@@ -1515,7 +1515,7 @@ interface FileDocument {
   fileName: string
 }
 
-class OutcomDataDto {
+export class OutcomDataDto {
   type: string
   CategoryName: string
   categoryID: number
