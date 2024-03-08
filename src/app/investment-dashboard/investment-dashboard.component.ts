@@ -7,6 +7,7 @@ import { MasterDataService } from 'app/shared/master-data.service';
 import { LazyLoadEvent } from 'primeng/api';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { HeatMapScore, TableData } from 'app/charts/heat-map/heat-map.component';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-investment-dashboard',
@@ -108,7 +109,9 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
     private assessmentCMProxy:AssessmentCMDetailControllerServiceProxy,
     public masterDataService: MasterDataService,
     private cdr: ChangeDetectorRef,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
   ) {
     Chart.register(...registerables);
   
@@ -155,6 +158,10 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
 
   
   };
+
+  goToResult(id: number) {
+    this.router.navigate(['assessment-result-investor', id], { queryParams: { assessmentId:id }, relativeTo: this.activatedRoute });
+  }
   onSelectAssessment() {
      this.selectedIds = this.selectedAssessments.map((item: any)=> item.id)
      this.callTable()

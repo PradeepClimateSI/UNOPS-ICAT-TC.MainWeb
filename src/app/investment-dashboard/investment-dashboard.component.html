@@ -35,7 +35,7 @@
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-tableData>
-          <tr>
+          <tr (click)="goToResult(tableData.id)">
                           <td>{{ tableData.climateAction?.policyName }}</td>
                           <td class="text-center">{{ mapProcessScores(tableData.process_score) }}</td>
                           <td class="text-center">{{ mapOutcomeScores(tableData.outcome_score) }}</td>

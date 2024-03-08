@@ -57,7 +57,7 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-tableData>
-                    <tr>
+                    <tr (click)="goToResult(tableData.id, tableData.tool)">
                         <td>{{ tableData.climateAction?.policyName }}</td>
                         <td>{{ masterDataService.getToolName(tableData.tool) }}</td>
                             <td>{{ mapProcessScores(tableData.process_score) }}</td>

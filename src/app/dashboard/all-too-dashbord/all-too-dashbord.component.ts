@@ -6,7 +6,7 @@ import { Assessment, InvestorToolControllerServiceProxy, PortfolioControllerServ
 import decode from 'jwt-decode';
 import { Chart, ChartType } from 'chart.js';
 import { HeatMapScore, TableData } from 'app/charts/heat-map/heat-map.component';
-
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-all-too-dashbord',
   templateUrl: './all-too-dashbord.component.html',
@@ -86,6 +86,8 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
     private renderer: Renderer2,
     private projectProxy: ProjectControllerServiceProxy,
     private portfolioServiceProxy : PortfolioControllerServiceProxy,
+     private activatedRoute: ActivatedRoute,
+    private router: Router,
   ) {
   }
   ngOnInit(): void {
@@ -318,6 +320,14 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
 
   
   };
+  goToResult(id: number,tool:string) {
+    if(tool=='CARBON_MARKET'){
+      this.router.navigate(['carbon-market-tool-result'], { queryParams: { id: id }, relativeTo: this.activatedRoute })
+    }else{
+      this.router.navigate(['assessment-result-investor', id], { queryParams: { assessmentId:id }, relativeTo: this.activatedRoute });
+    }
+    
+  }
 
   mapOutcomeScores(value: number) {
     
@@ -440,7 +450,6 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
     this.sdgDetailsList = []
     this.investorProxy.sdgSumAllCalculate(this.selectedPortfolio?this.selectedPortfolio.id:0).subscribe(async (res: any) => {
       this.sdgDetailsList = res;
-      console.log( "sdg",res)
       setTimeout(() => {
         this.viewPortfolioSDGsPieChart();
         
@@ -473,12 +482,10 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
     if (!ctx) {
       return;
     }
-    console.log("ctx",ctx,"canvas",canvas)
     if (this.portfolioSDGsPieChart) {
       this.portfolioSDGsPieChart.data.datasets[0].data = counts;
       this.portfolioSDGsPieChart.data.labels=labels
       this.portfolioSDGsPieChart.update();
-      console.log("portfolioSDGsPieChart",this.portfolioSDGsPieChart,this.portfolioSDGsPieChart.data)
     }
     else{
       this.portfolioSDGsPieChart =new Chart(ctx, {

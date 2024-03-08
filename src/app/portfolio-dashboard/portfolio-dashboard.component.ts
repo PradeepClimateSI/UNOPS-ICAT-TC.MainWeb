@@ -5,7 +5,7 @@ import { Chart, ChartType } from 'chart.js';
 import { LazyLoadEvent } from 'primeng/api';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { Assessment, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PortfolioControllerServiceProxy } from 'shared/service-proxies/service-proxies';
-
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-portfolio-dashboard',
   templateUrl: './portfolio-dashboard.component.html',
@@ -24,7 +24,9 @@ export class PortfolioDashboardComponent implements OnInit,AfterViewInit {
     private portfolioServiceProxy : PortfolioControllerServiceProxy,
     public masterDataService: MasterDataService,
     private cdr: ChangeDetectorRef,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
   ) {
     this.test= [{data: 'AAA', x:2,y:3}, {data: 'BBB', x:3,y:3},{data: 'CCC', x:4,y:4}]
   }
@@ -226,7 +228,7 @@ this.selectPortfolio();
     this.rows = event.rows === undefined ? 10 : event.rows;
     this.portfolioServiceProxy.getDashboardData(this.selectedPortfolio?this.selectedPortfolio.id:0,pageNumber,this.rows,this.selectedIds).subscribe((res) => {
       this.dashboardData = res.items;
-      this.tableData = this.dashboardData.map(item => {return {climateAction: item.climateAction,tool:item.tool, outcomeScore: item.result.averageOutcome, processScore: item.result.averageProcess}}) 
+      this.tableData = this.dashboardData.map(item => {return {climateAction: item.climateAction,tool:item.tool, outcomeScore: item.result.averageOutcome, processScore: item.result.averageProcess,assessId:item.id}}) 
       
       this.heatMapScore = this.dashboardData.map(item => {return {outcomeScore: item.result.averageOutcome, processScore: item.result.averageProcess,}})
       this.heatMapData = this.dashboardData.map(item => {return {interventionId: item.climateAction?.intervention_id, interventionName: item.climateAction?.policyName, outcomeScore: item.result.averageOutcome, processScore: item.result.averageProcess}}) 
@@ -238,6 +240,9 @@ this.selectPortfolio();
 
   
   };
+  goToResult(id: number) {
+    this.router.navigate(['assessment-result-investor', id], { queryParams: { assessmentId:id }, relativeTo: this.activatedRoute });
+  }
   mapOutcomeScores(value: number) {
     
     switch (value) {
