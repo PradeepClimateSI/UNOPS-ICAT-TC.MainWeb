@@ -430,6 +430,7 @@ export class ClimateActionComponent implements OnInit  {
       this.docService.getDocuments(this.editEntytyId,1)
         .subscribe((res: any) => {
           this.selectedDocuments = res;
+          console.log(this.selectedDocuments.length)
         });
     }
 
