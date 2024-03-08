@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, 
 import { MasterDataService } from 'app/shared/master-data.service';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { LazyLoadEvent } from 'primeng/api';
-import { Assessment, InvestorToolControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Assessment, InvestorToolControllerServiceProxy, PortfolioControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { Chart, ChartType } from 'chart.js';
 import { HeatMapScore, TableData } from 'app/charts/heat-map/heat-map.component';
@@ -75,6 +75,9 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
     'rgba(47, 79, 79, 1)',
     'rgba(139, 69, 19, 1)'
   ]
+  selectedPortfolio : any;
+  portfolioList : any[]= [];
+  allAssessments: any[] = [];
 
   constructor(
     private investorProxy: InvestorToolControllerServiceProxy,
@@ -82,6 +85,7 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
     private cdr: ChangeDetectorRef,
     private renderer: Renderer2,
     private projectProxy: ProjectControllerServiceProxy,
+    private portfolioServiceProxy : PortfolioControllerServiceProxy,
   ) {
   }
   ngOnInit(): void {
@@ -91,6 +95,7 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
     this.countryId =tokenPayload.countryId
     this.sdgColorMap = this.masterDataService.SDG_color_map
     this.sectorColorMap = this.masterDataService.Sector_color_map;
+    this.getPortfolioList()
 
     setTimeout(() => {
       this.projectProxy
@@ -110,6 +115,58 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
     this.sectorCountResult();
 
   }
+
+  getPortfolioList(){
+    this.portfolioServiceProxy.getAll().subscribe(async (res: any) => {
+      this.portfolioList = res;
+     });
+  }
+
+  goToFunction(){
+    this.selectedPortfolio = ''
+    this.setAlldata()
+    //  this.getSectorCount(this.tool);
+    this.selectPortfolio();
+      }
+    
+      setAlldata(){
+        // this.portfolioServiceProxy.getDashboardData(this.selectedPortfolio?this.selectedPortfolio.id:0,1,this.rows,this.selectedIds).subscribe((res) => {
+        //   this.allAssessments = res.meta.allData
+        // });
+      }
+    
+      selectPortfolio(){
+    
+        this.sdgDetailsList=[];
+        // this.barChartData=[];
+    
+    
+        let event: any = {};
+        event.rows = this.rows;
+        event.first = 0;
+        this.setAlldata()
+        this.loadgridData(event);
+    
+        
+       
+       if(this.selectedPortfolio){
+        this.portfolioServiceProxy.assessmentsDataByAssessmentId(this.selectedPortfolio?this.selectedPortfolio.id:0).subscribe(async (res: any) => {
+          // this.barChartData=res;
+          setTimeout(() => {
+          // this.viewPortfolioBarChart();
+          this.updateSourceDivHeight()
+       this.sdgResults()
+        },300)
+       
+    
+    
+        });
+       }
+    
+    
+      }
+
+
   ngAfterViewInit(): void {
     this.cdr.detectChanges();
   }
