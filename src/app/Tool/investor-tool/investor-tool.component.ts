@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { FieldNames, MasterDataDto, MasterDataService, chapter6_url } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { ConfirmationService,MessageService } from 'primeng/api';
-import {Any, AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, AssessmentControllerServiceProxy, Category, PortfolioSdg, TotalInvestment, TotalInvestmentDto } from 'shared/service-proxies/service-proxies';
+import { Any, AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, AssessmentControllerServiceProxy, Category, PortfolioSdg, TotalInvestment, TotalInvestmentDto } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,7 +16,7 @@ import { map } from 'rxjs/operators';
 import { MultiSelect } from 'primeng/multiselect';
 
 
-interface  CharacteristicWeight {
+interface CharacteristicWeight {
   [key: string]: number;
 }
 
@@ -31,10 +31,10 @@ interface SelectedSDG {
   number: number;
 }
 
-interface SelectItem<T = any>{
-  label?:string;
+interface SelectItem<T = any> {
+  label?: string;
   value: T;
-  icon?:string;
+  icon?: string;
 }
 interface ChaCategoryTotalEqualsTo1 {
   [key: string]: boolean;
@@ -53,14 +53,14 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   sectorArray: Sector[] = [];
   impactArray: ImpactCovered[] = [];
   assessment_types: any[];
-  policies: ClimateAction[]=[];
+  policies: ClimateAction[] = [];
   isSavedAssessment: boolean = false;
   levelOfImplementation: any[] = [];
   geographicalAreasCovered: any[] = [];
   sectorsCovered: any[] = [];
   impactCovered: any[] = [];
   assessmentMethods: any[] = [];
-  assessmentApproach:any[] =[];
+  assessmentApproach: any[] = [];
   countryID: number;
   sectorList: any[] = [];
   createInvestorToolDto: CreateInvestorToolDto = new CreateInvestorToolDto();
@@ -70,29 +70,29 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   characteristicsArray: Characteristics[] = [];
   selectedIndex = 0;
   activeIndex = 0;
-  activeIndexMain =0;
-  activeIndex2 :number=0;
+  activeIndexMain = 0;
+  activeIndex2: number = 0;
   likelihood: any[] = [];
   relevance: any[] = [];
   score: any[] = [];
-  approach:number=0;
-  instiTutionList : any = []
-  investorQuestions:InvestorQuestions[]=[];
+  approach: number = 0;
+  instiTutionList: any = []
+  investorQuestions: InvestorQuestions[] = [];
   geographicalAreasCoveredArr: any[] = []
   totalInvestments: TotalInvestment[] = []
 
-  
-  sdgList : any[];
-  selectedSDGs : SelectedSDG[] = [];
-  selectedSDGsWithAnswers : SelectedSDG[] = [];
+
+  sdgList: any[];
+  selectedSDGs: SelectedSDG[] = [];
+  selectedSDGsWithAnswers: SelectedSDG[] = [];
   sdgDataSendArray: any = [];
-  sdgDataSendArray3: any= [];
+  sdgDataSendArray3: any = [];
   sdgDataSendArray4: any = [];
   sdgDataSendArray2: any = [];
   outcomeScaleScore: any[] = [];
-  outcomeSustainedScore : any[] = [];
-  sdg_answers: any[]= [];
-  draftLoading: boolean=false;
+  outcomeSustainedScore: any[] = [];
+  sdg_answers: any[] = [];
+  draftLoading: boolean = false;
 
   description = '';
   levelofImplementation: number = 0;
@@ -104,20 +104,13 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     type: string,
     CategoryName: string,
     categoryID: number,
-    isValidated:boolean|null
+    isValidated: boolean | null
     data: InvestorAssessment[],
-    id:number
+    id: number
 
   }[] = [];
 
-  outcomeData: {
-    type: string,
-    CategoryName: string,
-    categoryID: number,
-    isValidated:boolean|null
-    data: InvestorAssessment[]
-    id:number
-  }[] = [];
+  outcomeData: OutcomDataDto[] = [];
   @ViewChild(TabView) tabView: TabView;
 
   tabName: string = '';
@@ -125,34 +118,34 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   mainTabIndex: any;
   categoryTabIndex: any;
 
-  barrierBox:boolean=false;
-  barrierSelected:BarrierSelected= new BarrierSelected();
-  finalBarrierList :BarrierSelected[]=[];
-  barrierArray:PolicyBarriers[];
+  barrierBox: boolean = false;
+  barrierSelected: BarrierSelected = new BarrierSelected();
+  finalBarrierList: BarrierSelected[] = [];
+  barrierArray: PolicyBarriers[];
   isDownloading: boolean = true;
   isDownloadMode: number = 0;
-  sectorsJoined :string='';
-  finalSectors:Sector[]=[]
+  sectorsJoined: string = '';
+  finalSectors: Sector[] = []
 
 
-  isLikelihoodDisabled:boolean=false;
-  isRelavanceDisabled:boolean=false;
-  mainTabIndexArray:number[]=[];
-  initialLikelihood:number=0;
-  initialRelevance:number=0;
-  failedLikelihoodArray:{category:string,tabIndex:number}[]=[]
-  failedRelevanceArray:{category:string,tabIndex:number}[]=[]
+  isLikelihoodDisabled: boolean = false;
+  isRelavanceDisabled: boolean = false;
+  mainTabIndexArray: number[] = [];
+  initialLikelihood: number = 0;
+  initialRelevance: number = 0;
+  failedLikelihoodArray: { category: string, tabIndex: number }[] = []
+  failedRelevanceArray: { category: string, tabIndex: number }[] = []
 
   uploadUrl: string;
   fileServerURL: string;
   acceptedFiles: string = ".pdf, .jpg, .png, .doc, .docx, .xls, .xlsx, .csv";
-  tabLoading: boolean=false;
-  characteristicsLoaded:boolean = false;
-  categoriesLoaded:boolean = false;
-  isStageDisble:boolean=false;
-  tableData : any;
-  assessmentId:number;
-  isEditMode:boolean=false;
+  tabLoading: boolean = false;
+  characteristicsLoaded: boolean = false;
+  categoriesLoaded: boolean = false;
+  isStageDisble: boolean = false;
+  tableData: any;
+  assessmentId: number;
+  isEditMode: boolean = false;
   isValidSCaleSD: boolean;
   isValidSustainedSD: boolean;
   visionExample: { title: string; value: string; }[];
@@ -170,9 +163,9 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   sdg_info: any
   adaptation_info: any
   ghg_score_info: any
-  tabIsValid: {[key: number]: boolean}= {}
-  tab1IsValid: {[key: number]: boolean}= {}
-  maintabIsValid: {[key: number]: boolean}= {}
+  tabIsValid: { [key: number]: boolean } = {}
+  tab1IsValid: { [key: number]: boolean } = {}
+  maintabIsValid: { [key: number]: boolean } = {}
   isFirstLoading0: boolean = true;
   isFirstLoading1: boolean = true;
   fieldNames = FieldNames
@@ -182,7 +175,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   selectedInstruments: any[]
   show_less_message: boolean;
   phaseTransformExapmle: any[] = []
-   from_date:Date
+   from_date: Date
   to_date: Date
 
   constructor(
@@ -201,8 +194,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     private confirmationService: ConfirmationService,
 
   ) {
-    this.uploadUrl = environment.baseUrlAPI + "/document/upload-file-by-name" ; 
-    this.fileServerURL = environment.baseUrlAPI+'/document/downloadDocumentsFromFileName/uploads';
+    this.uploadUrl = environment.baseUrlAPI + "/document/upload-file-by-name";
+    this.fileServerURL = environment.baseUrlAPI + '/document/downloadDocumentsFromFileName/uploads';
 
   }
   async ngOnInit(): Promise<void> {
@@ -284,12 +277,12 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     });
 
   }
-  
-     
-    
-    
-  
-  async getSavedAssessment(){
+
+
+
+
+
+  async getSavedAssessment() {
     await this.getCharacteristics();
     this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise();
     this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
@@ -299,36 +292,36 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.selectedSDGs = await this.investorToolControllerproxy.getSelectedSDGs(this.assessmentId).toPromise();
     this.selectedSDGsWithAnswers = await this.investorToolControllerproxy.getSelectedSDGsWithAnswers(this.assessmentId).toPromise();
     this.investorAssessment = await this.investorToolControllerproxy.getResultByAssessment(this.assessmentId).toPromise();
-    this.from_date= new Date(
+    this.from_date = new Date(
       this.assessment.from?.year(),
       this.assessment.from?.month(),
       this.assessment.from?.date()
     );
-    this.to_date= new Date(
+    this.to_date = new Date(
       this.assessment.to?.year(),
       this.assessment.to?.month(),
       this.assessment.to?.date()
     );
 
-    this.processData.forEach((d)=>{
-      if(d.CategoryName == this.assessment.processDraftLocation){
-        this.activeIndex = d.categoryID -1;
+    this.processData.forEach((d) => {
+      if (d.CategoryName == this.assessment.processDraftLocation) {
+        this.activeIndex = d.categoryID - 1;
       }
     })
-    this.outcomeData.forEach((d)=>{
-      if(d.CategoryName == this.assessment.outcomeDraftLocation){
-        this.activeIndex2 = d.id ;
+    this.outcomeData.forEach((d) => {
+      if (d.CategoryName == this.assessment.outcomeDraftLocation) {
+        this.activeIndex2 = d.id;
       }
     })
-    if(this.assessment.lastDraftLocation =='out'){
-      this.activeIndexMain =1;
+    if (this.assessment.lastDraftLocation == 'out') {
+      this.activeIndexMain = 1;
     }
 
     this.outcomeData = this.outcomeData.map((d) => {
       if (d.CategoryName === 'GHG Scale of the Outcome') {
-        d.data =  d.data.map(_d => {
+        d.data = d.data.map(_d => {
           if (_d.characteristics.code === 'MICRO_LEVEL') {
-            _d['abatement'] = _d.expected_ghg_mitigation * Math.pow(10, 3) / this.investorAssessment.total_investment 
+            _d['abatement'] = _d.expected_ghg_mitigation * Math.pow(10, 3) / this.investorAssessment.total_investment
           }
           return _d
         })
@@ -343,10 +336,10 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.finalBarrierList = this.assessment['policy_barrier'];
     let areas: MasterDataDto[] = []
     this.assessment['geographicalAreasCovered'].map((area: { code: any; }) => {
-    let level = this.levelOfImplementation.find(o => o.code === area.code);
-    if (level) {
-      areas.push(level);
-    }
+      let level = this.levelOfImplementation.find(o => o.code === area.code);
+      if (level) {
+        areas.push(level);
+      }
     })
     this.geographicalAreasCoveredArr = areas;
 
@@ -364,7 +357,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.draftLoading = true;
   }
 
-  onChangeSDGsAnswer(withAnswers:any , item : any){
+  onChangeSDGsAnswer(withAnswers: any, item: any) {
   }
 
   ngAfterContentChecked(): void {
@@ -377,8 +370,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.impactCovered = await this.investorToolControllerproxy.findAllImpactCovered().toPromise();
   }
 
-  setFrom(){
-    if(this.assessment.from){  
+  setFrom() {
+    if (this.assessment.from) {
       let convertTime = moment(this.assessment.from).format("DD/MM/YYYY HH:mm:ss");
       let convertTimeObject = new Date(convertTime);
       //@ts-ignore - We are accepting Date object in front-end
@@ -387,11 +380,11 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   }
 
-  watchVideo(){
+  watchVideo() {
     let ref = this.dialogService.open(GuidanceVideoComponent, {
       header: 'Guidance Video',
       width: '60%',
-      contentStyle: {"overflow": "auto"},
+      contentStyle: { "overflow": "auto" },
       baseZIndex: 10000,
       data: {
         sourceName: 'Incestment',
@@ -399,12 +392,12 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     });
 
     ref.onClose.subscribe(() => {
-      
+
     })
   }
 
-  setTo(){
-    if(this.assessment.to){
+  setTo() {
+    if (this.assessment.to) {
       let convertTime = moment(this.assessment.to).format(" HH:mm:ss");
       let convertTimeObject = new Date(convertTime);
       //@ts-ignore - We are accepting Date object in front-end
@@ -414,105 +407,106 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   }
 
   async getCharacteristics() {
-   
+
     this.investorToolControllerproxy.findAllSDGs().subscribe((res: any[]) => {
       this.sdgList = res
-     });
+    });
 
-    try{
-      this.investorQuestions= await this.investorToolControllerproxy.findAllIndicatorquestions().toPromise();
+    try {
+      this.investorQuestions = await this.investorToolControllerproxy.findAllIndicatorquestions().toPromise();
 
-    this.characteristicsList = await this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().toPromise();
-    this.barrierChList = [...this.characteristicsList];
-    this.barrierChList = this.barrierChList.filter((ch: Characteristics) => {return ch.category.type === 'process' });
-    this.characteristicsLoaded = true;
-    this.methodologyAssessmentControllerServiceProxy.findAllCategories().toPromise().then((res2: any) => {
+      this.characteristicsList = await this.methodologyAssessmentControllerServiceProxy.findAllCharacteristics().toPromise();
+      this.barrierChList = [...this.characteristicsList];
+      this.barrierChList = this.barrierChList.filter((ch: Characteristics) => { return ch.category.type === 'process' });
+      this.characteristicsLoaded = true;
+      this.methodologyAssessmentControllerServiceProxy.findAllCategories().toPromise().then((res2: any) => {
 
-      const customOrder = [1, 2, 3, 4, 5, 7, 6, 8, 9, 10];
+        const customOrder = [1, 2, 3, 4, 5, 7, 6, 8, 9, 10];
 
 
-      const sortedRes2 = res2.sort((a : any, b: any) => {
-        const indexA = customOrder.indexOf(a.id);
-        const indexB = customOrder.indexOf(b.id);
-        return indexA - indexB;
-      });
+        const sortedRes2 = res2.sort((a: any, b: any) => {
+          const indexA = customOrder.indexOf(a.id);
+          const indexB = customOrder.indexOf(b.id);
+          return indexA - indexB;
+        });
 
-      for (let x of res2) {
-        let categoryArray: InvestorAssessment[] =[];
-        for (let z of this.characteristicsList) {
-          if (z.category.name === x.name) {
-            let newCharData = new InvestorAssessment();
-            newCharData.characteristics = z;
+        for (let x of res2) {
+          let categoryArray: InvestorAssessment[] = [];
+          for (let z of this.characteristicsList) {
+            if (z.category.name === x.name) {
+              let newCharData = new InvestorAssessment();
+              newCharData.characteristics = z;
 
-            for(let q of this.investorQuestions){
-              if(newCharData.characteristics.id ===q.characteristics.id){
-                let indicatorDetails =new IndicatorDetails();
-                indicatorDetails.type='question';
-                indicatorDetails.question = q;
-                newCharData.indicator_details.push(indicatorDetails);
+              for (let q of this.investorQuestions) {
+                if (newCharData.characteristics.id === q.characteristics.id) {
+                  let indicatorDetails = new IndicatorDetails();
+                  indicatorDetails.type = 'question';
+                  indicatorDetails.question = q;
+                  newCharData.indicator_details.push(indicatorDetails);
 
+                }
               }
+
+              categoryArray.push(newCharData);
+
             }
 
-            categoryArray.push(newCharData);
-
           }
 
-        }
-
-        if (x.type === 'process') {
-          this.processData.push({
-            type: 'process', CategoryName: x.name, categoryID: x.id,
-            data: categoryArray,
-            isValidated: null,
-            id: 0
-          })
-
-
-        }
-        if (x.type === 'outcome') {
-          this.meth1Outcomes.push(x);
-
-          this.outcomeData.push({
-            type: 'outcome', CategoryName: x.name, categoryID: x.id,
-            data: categoryArray,
-            isValidated: null,
-            id: 0
-          })
-
-          if(x.name === 'SDG Scale of the Outcome'){
-            this.sdgDataSendArray.push({
-              type: 'outcome', CategoryName: x.name, categoryID: x.id,
-              data: categoryArray
+          if (x.type === 'process') {
+            this.processData.push({
+              type: 'process', CategoryName: x.name, categoryID: x.id,
+              data: categoryArray,
+              isValidated: null,
+              id: 0
             })
-          }
 
-          if(x.name === 'SDG Time frame over which the outcome is sustained'){
-            this.sdgDataSendArray3.push({
+
+          }
+          if (x.type === 'outcome') {
+            this.meth1Outcomes.push(x);
+
+            this.outcomeData.push({
               type: 'outcome', CategoryName: x.name, categoryID: x.id,
-              data: categoryArray
+              categoryCode: x.code,
+              data: categoryArray,
+              isValidated: null,
+              id: 0
             })
+
+            if (x.name === 'SDG Scale of the Outcome') {
+              this.sdgDataSendArray.push({
+                type: 'outcome', CategoryName: x.name, categoryID: x.id,
+                categoryCode: x.code,
+                data: categoryArray
+              })
+            }
+
+            if (x.name === 'SDG Time frame over which the outcome is sustained') {
+              this.sdgDataSendArray3.push({
+                type: 'outcome', CategoryName: x.name, categoryID: x.id,
+                categoryCode: x.code,
+                data: categoryArray
+              })
+            }
+
           }
 
         }
+        this.categoriesLoaded = true;
 
-      }
-      this.categoriesLoaded = true;
+        if (this.characteristicsLoaded && this.categoriesLoaded) {
+          this.tabLoading = true;
+        }
+      });
 
-      if (this.characteristicsLoaded && this.categoriesLoaded) {
-        this.tabLoading = true; 
-      }
-    });
     }
     catch (error) {
     }
-   
-
-   
   }
 
   save(form: NgForm) {
-    this.isStageDisble =true;
+    this.isStageDisble = true;
 
     this.assessment.tool = 'INVESTOR'
     this.assessment.year = moment(new Date()).format("DD/MM/YYYY")
@@ -526,9 +520,9 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
           if (res) {
 
             let allBarriersSelected = new AllBarriersSelected()
-            allBarriersSelected.allBarriers =this.finalBarrierList
-            allBarriersSelected.climateAction =res.climateAction
-            allBarriersSelected.assessment =res;
+            allBarriersSelected.allBarriers = this.finalBarrierList
+            allBarriersSelected.climateAction = res.climateAction
+            allBarriersSelected.assessment = res;
 
           this.projectControllerServiceProxy.policyBar(allBarriersSelected).subscribe((res) => {
             this.messageService.add({
@@ -556,12 +550,12 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
             this.geographicalAreasCoveredArr.push(_a) 
 
             this.investorAssessment.assessment = res;
-            this.mainAssessment =res
+            this.mainAssessment = res
             this.createInvestorToolDto.sectors = this.sectorArray;
             this.createInvestorToolDto.impacts = this.impactArray;
             this.createInvestorToolDto.investortool = this.investorAssessment;
-             this.createInvestorToolDto.investortool = this.investorAssessment;
-             this.createInvestorToolDto.geographicalAreas = this.geographicalAreasCoveredArr;
+            this.createInvestorToolDto.investortool = this.investorAssessment;
+            this.createInvestorToolDto.geographicalAreas = this.geographicalAreasCoveredArr;
             this.investorToolControllerproxy.createinvestorToolAssessment(this.createInvestorToolDto)
               .subscribe(async _res => {
                 if (_res) {
@@ -578,7 +572,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
                     return invest
                   })
                   investDto.totalInvestements = this.totalInvestments
-                  await this.investorToolControllerproxy.saveTotalInvestments(investDto).toPromise();
+                  // await this.investorToolControllerproxy.saveTotalInvestments(investDto).toPromise();
                   this.isSavedAssessment = true
 
                 }
@@ -609,48 +603,48 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     }
 
   }
-  async saveDraft(category:any,processDraftLocation:string,type:string){
+  async saveDraft(category: any, processDraftLocation: string, type: string) {
     let finalArray = this.processData.concat(this.outcomeData)
-    if(this.isEditMode ==true){
+    if (this.isEditMode == true) {
       this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise();
       finalArray.map(x => x.data.map(y => y.assessment = this.assessment));
     }
-    else{
+    else {
       finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment));
     }
 
-    for(let i=0; i< this.sdgDataSendArray2.length; i++){
-      for(let item of this.sdgDataSendArray2[i].data){
+    for (let i = 0; i < this.sdgDataSendArray2.length; i++) {
+      for (let item of this.sdgDataSendArray2[i].data) {
         item.portfolioSdg = this.selectedSDGs[i];
       }
-      
+
     }
 
-    for(let i=0; i< this.sdgDataSendArray4.length; i++){
-      for(let item of this.sdgDataSendArray4[i].data){
+    for (let i = 0; i < this.sdgDataSendArray4.length; i++) {
+      for (let item of this.sdgDataSendArray4[i].data) {
         item.portfolioSdg = this.selectedSDGs[i];
       }
     }
-    let proDraftLocation =this.assessment.processDraftLocation;
+    let proDraftLocation = this.assessment.processDraftLocation;
     let outDraftLocation = this.assessment.outcomeDraftLocation;
 
-    if(type =='pro'){
-      proDraftLocation= processDraftLocation
+    if (type == 'pro') {
+      proDraftLocation = processDraftLocation
     }
-   if(type =='out'){
-    outDraftLocation= processDraftLocation
+    if (type == 'out') {
+      outDraftLocation = processDraftLocation
     }
 
-    let data : any ={
-      finalArray : finalArray,
-      isDraft : true,
+    let data: any = {
+      finalArray: finalArray,
+      isDraft: true,
       proDraftLocation: proDraftLocation,
       outDraftLocation: outDraftLocation,
-      lastDraftLocation:type,
-      isEdit : this.isEditMode,
-      scaleSDGs : this.sdgDataSendArray2,
-      sustainedSDGs : this.sdgDataSendArray4,
-      sdgs : this.selectedSDGsWithAnswers
+      lastDraftLocation: type,
+      isEdit: this.isEditMode,
+      scaleSDGs: this.sdgDataSendArray2,
+      sustainedSDGs: this.sdgDataSendArray4,
+      sdgs: this.selectedSDGsWithAnswers
     }
     this.investorToolControllerproxy.createFinalAssessment(data)
       .subscribe(async _res => {
@@ -663,10 +657,10 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
         })
         this.setFrom()
         this.setTo()
-        if(this.isEditMode ==false){
-          this.router.navigate(['app/investor-tool-new-edit'], {  
-            queryParams: { id: this.mainAssessment.id,isEdit:true},  
-            });
+        if (this.isEditMode == false) {
+          this.router.navigate(['app/investor-tool-new-edit'], {
+            queryParams: { id: this.mainAssessment.id, isEdit: true },
+          });
         }
       }, error => {
         this.messageService.add({
@@ -750,15 +744,15 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   }
 
   onMainTabChange(event: any) {
-    this.mainTabIndex =event.index;
-    for (let i = 0; i<2; i++) {
+    this.mainTabIndex = event.index;
+    for (let i = 0; i < 2; i++) {
       if (i == 0) {
         if (!this.isFirstLoading0) {
           this.checkTab1Mandatory(4)
-  
+
           this.maintabIsValid[i] = true
           for (let k of Object.keys(this.tab1IsValid)) {
-            if (!this.tab1IsValid[parseInt(k)]){
+            if (!this.tab1IsValid[parseInt(k)]) {
               this.maintabIsValid[i] = false
               break
             }
@@ -769,7 +763,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
           this.checkTab2Mandatory(6)
           this.maintabIsValid[i] = true
           for (let k of Object.keys(this.tabIsValid)) {
-            if (!this.tabIsValid[parseInt(k)]){
+            if (!this.tabIsValid[parseInt(k)]) {
               this.maintabIsValid[i] = false
               break
             }
@@ -782,31 +776,31 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   }
 
   onCategoryTabChange(event: any, tabview: TabView, type: string) {
-    this.categoryTabIndex =event.index;
-    if(!this.failedLikelihoodArray.some(
-      element  => element.tabIndex === this.categoryTabIndex
-    )){
-      this.isLikelihoodDisabled=true;
-      this.initialLikelihood=0
+    this.categoryTabIndex = event.index;
+    if (!this.failedLikelihoodArray.some(
+      element => element.tabIndex === this.categoryTabIndex
+    )) {
+      this.isLikelihoodDisabled = true;
+      this.initialLikelihood = 0
 
     }
-    else{
-      this.isLikelihoodDisabled=false;
-      this.initialLikelihood=1
+    else {
+      this.isLikelihoodDisabled = false;
+      this.initialLikelihood = 1
     }
 
-    if(!this.failedRelevanceArray.some(
-      element  => element.tabIndex === this.categoryTabIndex
-    )){
-      this.isRelavanceDisabled=true;
-      this.initialRelevance=0
+    if (!this.failedRelevanceArray.some(
+      element => element.tabIndex === this.categoryTabIndex
+    )) {
+      this.isRelavanceDisabled = true;
+      this.initialRelevance = 0
 
     }
-    else{
-      this.isRelavanceDisabled=false;
-      this.initialRelevance=1
+    else {
+      this.isRelavanceDisabled = false;
+      this.initialRelevance = 1
     }
-    if (type === 'process'){
+    if (type === 'process') {
       this.checkTab1Mandatory(event.index)
     } else {
       this.checkTab2Mandatory(event.index)
@@ -830,8 +824,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   checkTab2Mandatory(idx: number) {
     for (const [index, category] of this.outcomeData.entries()) {
       let validation = false
-      if ((category.CategoryName ==='Adaptation Time frame over which the outcome is sustained' && index <= idx) || index < idx) {
-        if(category.CategoryName === 'SDG Scale of the Outcome' ) {
+      if ((category.CategoryName === 'Adaptation Time frame over which the outcome is sustained' && index <= idx) || index < idx) {
+        if (category.CategoryName === 'SDG Scale of the Outcome') {
           validation = this.sdgValidation(this.sdgDataSendArray2)
         } else if (category.CategoryName === 'SDG Time frame over which the outcome is sustained') {
           validation = this.sdgValidation(this.sdgDataSendArray4)
@@ -853,9 +847,9 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   }
 
   async onsubmit(form: NgForm) {
-    for(let item of this.processData){
-      for(let item2 of item.data){
-        if((item2.likelihood == null || item2.relavance == null) && item2.relavance != 0){
+    for (let item of this.processData) {
+      for (let item2 of item.data) {
+        if ((item2.likelihood == null || item2.relavance == null) && item2.relavance != 0) {
           this.messageService.add({
             severity: 'error',
             summary: 'Warning',
@@ -868,101 +862,86 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       }
     }
 
-    for(let item of this.processData){
-      for(let item2 of item.data){
-        if((item2.likelihood_justification == null || item2.likelihood_justification === "") &&  item2.relavance != 0){
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Warning',
-            detail: 'Fill all mandatory justification fields',
-            closable: true,
-          })
-
-          return
-        }
+    for (let item of this.processData) {
+      if (!this.checkValidation(item.data, 'process')) {
+        console.log("Process invalid")
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Warning',
+          detail: 'Fill all mandatory justification fields',
+          closable: true,
+        })
+        return
       }
     }
 
-    for(let item of this.outcomeData){
-      if(item.categoryID == 5 || item.categoryID ==7 || item.categoryID ==9 || item.categoryID ==10){
-
-        for(let item2 of item.data){
-          if(item2.justification == null || item2.justification === "" || item2.score == null || item2.score == undefined){
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Warning',
-              detail: 'Fill all mandatory justification fields',
-              closable: true,
-            })
-  
-            return
-          }
-        }
-      }
-    }
-    
-    for(let item of this.sdgDataSendArray2){
-      for(let item2 of item.data){
-        if(item2.justification == null || item2.justification === ""|| item2.score == null || item2.score == undefined){
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Warning',
-            detail: 'Fill all mandatory justification fields',
-            closable: true,
-          })
-
-          return
-        }
+    for (let item of this.outcomeData) {
+      if (!this.checkValidation(item.data, 'outcome')) {
+        console.log("outcome invalid")
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Warning',
+          detail: 'Fill all mandatory justification fields',
+          closable: true,
+        })
+        return
       }
     }
 
-    for(let item of this.sdgDataSendArray4){
-      for(let item2 of item.data){
-        if(item2.justification == null || item2.justification === "" || item2.score == null || item2.score == undefined){
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Warning',
-            detail: 'Fill all mandatory justification fields',
-            closable: true,
-          })
+    if (!this.sdgValidation(this.sdgDataSendArray2)) {
+      console.log("sdg invalid")
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Warning',
+        detail: 'Fill all mandatory justification fields',
+        closable: true,
+      })
+      return
+    }
 
-          return
-        }
-      }
+    if (!this.sdgValidation(this.sdgDataSendArray4)) {
+      console.log("sdg invalid")
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Warning',
+        detail: 'Fill all mandatory justification fields',
+        closable: true,
+      })
+      return
     }
 
 
-    if(this.assessment.assessment_approach === 'Direct'){
+    if (this.assessment.assessment_approach === 'Direct') {
       let finalArray = this.processData.concat(this.outcomeData)
-      if(this.isEditMode ==true){
+      if (this.isEditMode == true) {
         this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
         finalArray.map(x => x.data.map(y => y.assessment = this.assessment));
       }
-      else{
+      else {
         finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
       }
 
-      for(let i=0; i< this.sdgDataSendArray2.length; i++){
-        for(let item of this.sdgDataSendArray2[i].data){
+      for (let i = 0; i < this.sdgDataSendArray2.length; i++) {
+        for (let item of this.sdgDataSendArray2[i].data) {
           item.portfolioSdg = this.selectedSDGs[i];
         }
-        
+
       }
 
-      for(let i=0; i< this.sdgDataSendArray4.length; i++){
-        for(let item of this.sdgDataSendArray4[i].data){
+      for (let i = 0; i < this.sdgDataSendArray4.length; i++) {
+        for (let item of this.sdgDataSendArray4[i].data) {
           item.portfolioSdg = this.selectedSDGs[i];
         }
-        
+
       }
 
-      let data : any ={
-        finalArray : finalArray,
-        scaleSDGs : this.sdgDataSendArray2,
-        sustainedSDGs : this.sdgDataSendArray4,
-        sdgs : this.selectedSDGsWithAnswers,
-        isEdit:this.isEditMode,
-        isDraft : false,
+      let data: any = {
+        finalArray: finalArray,
+        scaleSDGs: this.sdgDataSendArray2,
+        sustainedSDGs: this.sdgDataSendArray4,
+        sdgs: this.selectedSDGsWithAnswers,
+        isEdit: this.isEditMode,
+        isDraft: false,
 
       }
 
@@ -986,11 +965,11 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
         })
 
     }
-    else{
-      let finalArray:any = this.processData.concat(this.outcomeData)
+    else {
+      let finalArray: any = this.processData.concat(this.outcomeData)
       finalArray.map((x: { data: any[]; }) => x.data.map(y => y.assessment = this.mainAssessment));
       this.investorToolControllerproxy.createFinalAssessmentIndirect(finalArray)
-        .subscribe((_res:any) => {
+        .subscribe((_res: any) => {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
@@ -1012,49 +991,132 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   }
 
-  async showResults(){
-    if(this.isEditMode ==true){
+  async showResults() {
+    if (this.isEditMode == true) {
       this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
       setTimeout(() => {
         this.router.navigate(['../assessment-result-investor', this.assessment.id], { queryParams: { assessmentId: this.assessment.id }, relativeTo: this.activatedRoute });
       }, 2000);
     }
-    else{
+    else {
       setTimeout(() => {
         this.router.navigate(['../assessment-result-investor', this.mainAssessment.id], { queryParams: { assessmentId: this.mainAssessment.id }, relativeTo: this.activatedRoute });
       }, 2000);
     }
   }
 
-  checkValidation(data: any[], type: string){
-    return (data?.filter(investorAssessment => 
-      (investorAssessment.relavance !== undefined) && 
-      (investorAssessment.likelihood !== undefined ) && 
-      (investorAssessment.likelihood_justification !== undefined && investorAssessment.likelihood_justification !== null && investorAssessment.likelihood_justification !== '') &&
-      (investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails ) =>
-        (indicator_details.justification !== undefined && indicator_details.justification !== null && indicator_details.justification !== ''))?.length === (investorAssessment.indicator_details?.length-1)
-      )||
-       (investorAssessment.relavance == 0))?.length === data?.length && type=='process')||
-      (data.filter(investorAssessment => 
-        ((investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '')&&
-         (investorAssessment.score !== undefined && investorAssessment.score !== null )) 
-       )?.length === data.length && type=='outcome')||
-      (data.filter(sdg => 
-        (sdg.data?.filter((data: { justification: undefined; } ) =>
-          (data.justification!== undefined))?.length === (sdg.data?.length)
-        ))?.length === data.length && type=='sdg')
+  checkValidation(data: any[], type: string) {
+    // return (data?.filter(investorAssessment =>
+    //   (investorAssessment.relavance !== undefined) &&
+    //   (investorAssessment.likelihood !== undefined) &&
+    //   (investorAssessment.likelihood_justification !== undefined && investorAssessment.likelihood_justification !== null && investorAssessment.likelihood_justification !== '') &&
+    //   (investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails) =>
+    //     (indicator_details.justification !== undefined && indicator_details.justification !== null && indicator_details.justification !== ''))?.length === (investorAssessment.indicator_details?.length - 1)
+    //   ) ||
+    //   (investorAssessment.relavance == 0))?.length === data?.length && type == 'process') ||
+    //   (data.filter(investorAssessment =>
+    //   ((['MACRO_LEVEL', 'INTERNATIONAL'].includes(investorAssessment.characteristics.code)) && (investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '') &&
+    //     (investorAssessment.score !== undefined && investorAssessment.score !== null))
+    //   )?.length === data.length && type == 'outcome') ||
+    //   (data.filter(sdg =>
+    //   (sdg.data?.filter((data: { justification: undefined; }) =>
+    //     (data.justification !== undefined))?.length === (sdg.data?.length)
+    //   ))?.length === data.length && type == 'sdg')
+    let isValid: boolean = false
+    for (let investorAssessment of data) {
+      if (type === 'process' ) {
+        if (investorAssessment.relavance === 0) {
+          isValid = true;
+        } else {
+          if (
+            (investorAssessment.relavance !== undefined) &&
+            (investorAssessment.likelihood !== undefined) &&
+            (investorAssessment.likelihood_justification !== undefined && investorAssessment.likelihood_justification !== null && investorAssessment.likelihood_justification !== '') 
+          ) {
+            for (let indicator_details of investorAssessment.indicator_details) {
+              if (!indicator_details.question.isMain && (indicator_details.justification !== undefined && indicator_details.justification !== null && indicator_details.justification !== '')) {
+                isValid = true
+              } else if (indicator_details.question.isMain) {
+                isValid = true
+              } else {
+                isValid = false
+                break;
+              }
+            }
+          } else {
+            isValid = false
+            break;
+          }
+        }
+      } else {
+        for (let investorAssessment of data) {
+          if (["SUSTAINED_GHG", "SUSTAINED_ADAPTATION"].includes(investorAssessment.category.code)) {
+            if (
+              (investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '') &&
+              (investorAssessment.score !== undefined && investorAssessment.score !== null)
+            ) {
+              isValid = true
+            } else {
+              console.log("sustained invalid")
+              isValid = false
+              break;
+            }
+          } else {
+            if (['MACRO_LEVEL', 'INTERNATIONAL'].includes(investorAssessment.characteristics.code)) {
+              if (
+                (investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '') &&
+                (investorAssessment.score !== undefined && investorAssessment.score !== null)
+              ) {
+                isValid = true
+              } else {
+                console.log("scale invalid")
+                isValid = false
+                break;
+              }
+            } else {
+              isValid = true
+            }
+          }
+        }
+      }
+    }
+    return isValid;
   }
 
   sdgValidation(data: any[]) {
-    return this.selectedSDGs.length > 0 && (data?.filter(sdg => 
-      (sdg.data?.filter((data: {
-        score: undefined; justification: undefined; 
-          } ) =>
-         (data.justification!== undefined && data.justification !== null && data.justification !== '') &&
-         (data.score !== undefined && data.score !== null))?.length === (sdg.data?.length)
-      ))?.length === data?.length )
+    if (this.selectedSDGs.length < 0) {
+      return false
+    } else {
+      let isValid: boolean = false;
+      data.forEach(sdg => {
+        console.log(sdg)
+        for (let data of sdg.data) {
+          console.log(data)
+          if (data.category.code === "SUSTAINED_SD") {
+            if ((data.justification !== undefined && data.justification !== null && data.justification !== '') && (data.score !== undefined && data.score !== null)) {
+              isValid = true
+            } else {
+              isValid = false
+              break;
+            }
+          } else {
+            if (data.characteristics.code === 'MACRO_LEVEL') {
+              if ((data.justification !== undefined && data.justification !== null && data.justification !== '') && (data.score !== undefined && data.score !== null)) {
+                isValid = true
+              } else {
+                isValid = false
+                break;
+              }
+            } else {
+              isValid = true
+            }
+          }
+        }
+      })
+      return isValid
+    }
   }
- 
+
   next(data: {
 
     isValidated: boolean | null
@@ -1094,7 +1156,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     if (type == 'sustainedSD') {
       this.isValidSustainedSD = false
     }
-    
+
     if (this.sdgValidation(data)) {
       this.isValidSCaleSD = true
       if (type == 'scaleSD') {
@@ -1128,17 +1190,15 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       });
     }
   }
-  onLevelofImplementationChange(event:any){
-    if(event==='National')
-    {
-      this.levelofImplementation =1;
+  onLevelofImplementationChange(event: any) {
+    if (event === 'National') {
+      this.levelofImplementation = 1;
     }
-    else if(event==='Sub-national')
-    {
-      this.levelofImplementation =2;
+    else if (event === 'Sub-national') {
+      this.levelofImplementation = 2;
     }
-    else{
-      this.levelofImplementation =0
+    else {
+      this.levelofImplementation = 0
     }
 
   }
@@ -1153,222 +1213,224 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     return this.characteristicsArray
   }
 
-  characteristicWeightScore :CharacteristicWeight = {};
-  chaCategoryWeightTotal : ChaCategoryWeightTotal = {};
-  chaCategoryTotalEqualsTo1 : ChaCategoryTotalEqualsTo1 = {};
+  characteristicWeightScore: CharacteristicWeight = {};
+  chaCategoryWeightTotal: ChaCategoryWeightTotal = {};
+  chaCategoryTotalEqualsTo1: ChaCategoryTotalEqualsTo1 = {};
 
-  characteristicLikelihoodWeightScore :CharacteristicWeight = {};
-  chaCategoryLikelihoodWeightTotal : ChaCategoryWeightTotal = {};
-  chaCategoryLikelihoodTotalEqualsTo1 : ChaCategoryTotalEqualsTo1 = {};
+  characteristicLikelihoodWeightScore: CharacteristicWeight = {};
+  chaCategoryLikelihoodWeightTotal: ChaCategoryWeightTotal = {};
+  chaCategoryLikelihoodTotalEqualsTo1: ChaCategoryTotalEqualsTo1 = {};
 
 
 
-  onLikelihoodWeightChange(categoryName: string, characteristicName : string, chaWeight: number) {
-    this.isLikelihoodDisabled=false;
-    this.initialLikelihood=1
+  onLikelihoodWeightChange(categoryName: string, characteristicName: string, chaWeight: number) {
+    this.isLikelihoodDisabled = false;
+    this.initialLikelihood = 1
     this.characteristicLikelihoodWeightScore[characteristicName] = chaWeight
-   this.chaCategoryLikelihoodWeightTotal[categoryName] = 0
-   this.chaCategoryLikelihoodTotalEqualsTo1[categoryName] = false
+    this.chaCategoryLikelihoodWeightTotal[categoryName] = 0
+    this.chaCategoryLikelihoodTotalEqualsTo1[categoryName] = false
 
 
-  for(let cha of  this.getCategory(characteristicName, categoryName)) {
-    if(!isNaN(this.characteristicLikelihoodWeightScore[cha.name])){
-      this.chaCategoryLikelihoodWeightTotal[categoryName] =  this.chaCategoryLikelihoodWeightTotal[categoryName] + this.characteristicLikelihoodWeightScore[cha.name]
+    for (let cha of this.getCategory(characteristicName, categoryName)) {
+      if (!isNaN(this.characteristicLikelihoodWeightScore[cha.name])) {
+        this.chaCategoryLikelihoodWeightTotal[categoryName] = this.chaCategoryLikelihoodWeightTotal[categoryName] + this.characteristicLikelihoodWeightScore[cha.name]
+      }
+
+    }
+
+    if (this.chaCategoryLikelihoodWeightTotal[categoryName] == 100 || this.chaCategoryLikelihoodWeightTotal[categoryName] == 0) {
+      this.chaCategoryLikelihoodTotalEqualsTo1[categoryName] = true
+      this.initialLikelihood = 0
+      this.isLikelihoodDisabled = true;
+      this.failedLikelihoodArray = this.failedLikelihoodArray.filter((element) => element.category !== categoryName);
+
+
+
+    }
+    else {
+      if (!this.failedLikelihoodArray.some((element) => element.category === categoryName)) {
+        this.failedLikelihoodArray.push({ category: categoryName, tabIndex: this.activeIndex });
+      }
+
+    }
+  }
+
+
+  onRelevanceWeightChange(categoryName: string, characteristicName: string, chaWeight: number) {
+    this.isRelavanceDisabled = false;
+    this.initialRelevance = 1;
+    this.characteristicWeightScore[characteristicName] = chaWeight
+    this.chaCategoryWeightTotal[categoryName] = 0
+    this.chaCategoryTotalEqualsTo1[categoryName] = false
+
+    for (let cha of this.getCategory(characteristicName, categoryName)) {
+      if (!isNaN(this.characteristicWeightScore[cha.name])) {
+        this.chaCategoryWeightTotal[categoryName] = this.chaCategoryWeightTotal[categoryName] + this.characteristicWeightScore[cha.name]
+      }
+
+    }
+
+    if (this.chaCategoryWeightTotal[categoryName] == 100 || this.chaCategoryWeightTotal[categoryName] == 0) {
+      this.chaCategoryTotalEqualsTo1[categoryName] = true
+
+      this.initialRelevance = 0
+      this.isRelavanceDisabled = true
+      this.failedRelevanceArray = this.failedRelevanceArray.filter((element) => element.category !== categoryName);
+    }
+    else {
+      if (!this.failedRelevanceArray.some((element) => element.category === categoryName)) {
+        this.failedRelevanceArray.push({ category: categoryName, tabIndex: this.activeIndex });
+      }
+
+    }
+  }
+
+  onAssessmentApproachchange(approach: any) {
+    if (approach === 'Direct') {
+      this.approach = 1;
+    }
+    if (approach === 'Indirect') {
+      this.approach = 2;
+    }
+  }
+
+  onRelavanceChange(data: any, ins: any) {
+
+  }
+
+  pushBarriers(barrier: any) {
+    this.finalBarrierList.push(barrier)
+    this.barrierSelected = new BarrierSelected()
+
+  }
+  barriersNameArray(Characteristics: any[]) {
+    if (Characteristics?.length > 0) {
+      let charArray = Characteristics.map(x => { return x.name });
+      return charArray.join(", ")
+    }
+    else {
+      return "-"
     }
 
   }
 
-  if( this.chaCategoryLikelihoodWeightTotal[categoryName] == 100|| this.chaCategoryLikelihoodWeightTotal[categoryName] ==0){
-   this.chaCategoryLikelihoodTotalEqualsTo1[categoryName] = true
-   this.initialLikelihood=0
-   this.isLikelihoodDisabled=true;
-    this.failedLikelihoodArray= this.failedLikelihoodArray.filter((element) => element.category !== categoryName);
-
-
+  toDownload() {
+    this.isDownloadMode = 1;
 
   }
-  else{
-    if (!this.failedLikelihoodArray.some( (element) => element.category === categoryName)) {
-      this.failedLikelihoodArray.push({category:categoryName,tabIndex:this.activeIndex});
-    }
-
-  }
- }
-
-
- onRelevanceWeightChange(categoryName: string, characteristicName : string, chaWeight: number) {
-  this.isRelavanceDisabled=false;
-  this.initialRelevance=1;
-   this.characteristicWeightScore[characteristicName] = chaWeight
-  this.chaCategoryWeightTotal[categoryName] = 0
-  this.chaCategoryTotalEqualsTo1[categoryName] = false
-
- for(let cha of  this.getCategory(characteristicName, categoryName)) {
-  if(!isNaN(this.characteristicWeightScore[cha.name])){
-    this.chaCategoryWeightTotal[categoryName] =  this.chaCategoryWeightTotal[categoryName] +  this.characteristicWeightScore[cha.name]
+  showDialog() {
+    this.barrierBox = true;
   }
 
- }
+  onChangeRelevance(relevance: any, data: any) {
 
- if( this.chaCategoryWeightTotal[categoryName] == 100|| this.chaCategoryWeightTotal[categoryName] == 0){
-  this.chaCategoryTotalEqualsTo1[categoryName] = true
+    if (relevance == 0) {
+      data.likelihood_justification = null;
+      data.likelihood = null;
+      data.uploadedDocumentPath = null;
 
-  this.initialRelevance=0
-  this.isRelavanceDisabled=true
-  this.failedRelevanceArray= this.failedRelevanceArray.filter((element) => element.category !== categoryName);
- }
- else{
-  if (!this.failedRelevanceArray.some( (element) => element.category === categoryName)) {
-    this.failedRelevanceArray.push({category:categoryName,tabIndex:this.activeIndex});
-  }
-
-}
-}
-
-onAssessmentApproachchange(approach:any){
-  if (approach==='Direct'){
-    this.approach=1;
-  }
-  if (approach==='Indirect'){
-    this.approach=2;
-  }
-}
-
-onRelavanceChange(data:any,ins:any){
-
-}
-
-pushBarriers(barrier:any){
-  this.finalBarrierList.push(barrier)
-  this.barrierSelected = new BarrierSelected()
-
-}
-barriersNameArray(Characteristics:any[]){
-  if (Characteristics?.length>0){
-    let charArray = Characteristics.map(x=>{return x.name});
-    return charArray.join(", ")
-  }
-  else{
-    return "-"
-  }   
-
-}
-
-toDownload() {
-  this.isDownloadMode = 1;
-  
-}
-showDialog(){
-  this.barrierBox =true; 
-}
-
-onChangeRelevance(relevance : any , data : any){
-
-  if(relevance == 0){
-    data.likelihood_justification = null;
-    data.likelihood = null;
-    data.uploadedDocumentPath = null;
-
-    for(let item of data.indicator_details){
-      item.value = null;
-      item.justification = null;
-    }
-
-  }
-}
-onUpload(event:UploadEvent, data : InvestorAssessment) {
-  if(event.originalEvent.body){
-    data.uploadedDocumentPath = event.originalEvent.body.fileName
-  }
-
-  this.messageService.add({severity: 'info', summary: 'File Uploaded', detail: ''});
-
-}
-
-addNewline(text: any) {
-  if (!text) {
-    return '';
-  }
-  return text.replace(/ {3}/g, '<br><br>');
-}
-
-assignSDG(sdg : any , data : any){
-
-  data.portfolioSdg = sdg;
-}
-
-    onItemSelectSDGs(event: any) {
-      const selectedIndexes = this.selectedSDGs.map(sdg => sdg.id);
-      this.sdgDataSendArray2 = this.sdgDataSendArray2.filter((sdgData: { index: number; }) => selectedIndexes.includes(sdgData.index));
-    
-      this.sdgDataSendArray4 = this.sdgDataSendArray4.filter((sdgData: { index: number; }) => selectedIndexes.includes(sdgData.index));
-    
-      this.selectedSDGs.forEach(selectedSdg => {
-        if (!this.sdgDataSendArray2.some((sdgData: { index: number; }) => sdgData.index === selectedSdg.id)) {
-          const sdgData = JSON.parse(JSON.stringify(this.sdgDataSendArray[0]));
-          const newObj = {
-            CategoryName: sdgData.CategoryName,
-            categoryID: sdgData.categoryID,
-            type: sdgData.type,
-            data: sdgData.data,
-            index: selectedSdg.id
-          };
-          this.sdgDataSendArray2.push(newObj);
-        }
-      });
-    
-      this.selectedSDGs.forEach(selectedSdg => {
-        if (!this.sdgDataSendArray4.some((sdgData: { index: number; }) => sdgData.index === selectedSdg.id)) {
-          const sdgData = JSON.parse(JSON.stringify(this.sdgDataSendArray3[0]));
-          const newObj = {
-            CategoryName: sdgData.CategoryName,
-            categoryID: sdgData.categoryID,
-            type: sdgData.type,
-            data: sdgData.data,
-            index: selectedSdg.id
-          };
-          this.sdgDataSendArray4.push(newObj);
-        }
-      });
-
-
-  this.selectedSDGsWithAnswers = this.selectedSDGs.map(selectedSdg => {
-    const existingAnswer = this.selectedSDGsWithAnswers.find(
-      sdgWithAnswer => sdgWithAnswer.id === selectedSdg.id
-    );
-
-    if (existingAnswer) {
-      return { ...selectedSdg, answer: existingAnswer.answer };
-    } else {
-      return { ...selectedSdg, answer: ""  };
-    }
-  });
+      for (let item of data.indicator_details) {
+        item.value = null;
+        item.justification = null;
+      }
 
     }
-    
+  }
+  onUpload(event: UploadEvent, data: InvestorAssessment) {
+    if (event.originalEvent.body) {
+      data.uploadedDocumentPath = event.originalEvent.body.fileName
+    }
 
-    
-    getProductsData() {
-      return [
-          {
-              barrier: 'Lack of financial capacity',
-              explanation: 'Some plant operators simply do not have the financial capacity to introduce the technology or to train staff adequately',
-              cha: 'Scale up, Beneficiaries',
-              ans: 'No',
-          },
-          {
-            barrier: 'Lack of public awareness of environmental and private economy benefits of EE measures and conservation',
-            explanation: 'Lack of awareness may also lead to reluctance to introduce low-carbon technologies, such as EV or HEV, which may disrupt conventional technologies',
-            cha: 'Awareness, Behaviour',
-            ans: 'Yes',
-        },
-        {
-          barrier: 'Lack of institutional support',
-          explanation: 'Insufficient support from municipal government authorities hinder the adoption and proper implementation of the initiative',
-          cha: 'Institutional and regulatory',
-          ans: 'No',
+    this.messageService.add({ severity: 'info', summary: 'File Uploaded', detail: '' });
+
+  }
+
+  addNewline(text: any) {
+    if (!text) {
+      return '';
+    }
+    return text.replace(/ {3}/g, '<br><br>');
+  }
+
+  assignSDG(sdg: any, data: any) {
+
+    data.portfolioSdg = sdg;
+  }
+
+  onItemSelectSDGs(event: any) {
+    const selectedIndexes = this.selectedSDGs.map(sdg => sdg.id);
+    this.sdgDataSendArray2 = this.sdgDataSendArray2.filter((sdgData: { index: number; }) => selectedIndexes.includes(sdgData.index));
+
+    this.sdgDataSendArray4 = this.sdgDataSendArray4.filter((sdgData: { index: number; }) => selectedIndexes.includes(sdgData.index));
+
+    this.selectedSDGs.forEach(selectedSdg => {
+      if (!this.sdgDataSendArray2.some((sdgData: { index: number; }) => sdgData.index === selectedSdg.id)) {
+        const sdgData = JSON.parse(JSON.stringify(this.sdgDataSendArray[0]));
+        const newObj = {
+          CategoryName: sdgData.CategoryName,
+          categoryID: sdgData.categoryID,
+          categoryCode: sdgData.categoryCode,
+          type: sdgData.type,
+          data: sdgData.data,
+          index: selectedSdg.id
+        };
+        this.sdgDataSendArray2.push(newObj);
+      }
+    });
+
+    this.selectedSDGs.forEach(selectedSdg => {
+      if (!this.sdgDataSendArray4.some((sdgData: { index: number; }) => sdgData.index === selectedSdg.id)) {
+        const sdgData = JSON.parse(JSON.stringify(this.sdgDataSendArray3[0]));
+        const newObj = {
+          CategoryName: sdgData.CategoryName,
+          categoryID: sdgData.categoryID,
+          categoryCode: sdgData.categoryCode,
+          type: sdgData.type,
+          data: sdgData.data,
+          index: selectedSdg.id
+        };
+        this.sdgDataSendArray4.push(newObj);
+      }
+    });
+
+
+    this.selectedSDGsWithAnswers = this.selectedSDGs.map(selectedSdg => {
+      const existingAnswer = this.selectedSDGsWithAnswers.find(
+        sdgWithAnswer => sdgWithAnswer.id === selectedSdg.id
+      );
+
+      if (existingAnswer) {
+        return { ...selectedSdg, answer: existingAnswer.answer };
+      } else {
+        return { ...selectedSdg, answer: "" };
+      }
+    });
+
+  }
+
+
+
+  getProductsData() {
+    return [
+      {
+        barrier: 'Lack of financial capacity',
+        explanation: 'Some plant operators simply do not have the financial capacity to introduce the technology or to train staff adequately',
+        cha: 'Scale up, Beneficiaries',
+        ans: 'No',
       },
-      ]
+      {
+        barrier: 'Lack of public awareness of environmental and private economy benefits of EE measures and conservation',
+        explanation: 'Lack of awareness may also lead to reluctance to introduce low-carbon technologies, such as EV or HEV, which may disrupt conventional technologies',
+        cha: 'Awareness, Behaviour',
+        ans: 'Yes',
+      },
+      {
+        barrier: 'Lack of institutional support',
+        explanation: 'Insufficient support from municipal government authorities hinder the adoption and proper implementation of the initiative',
+        cha: 'Institutional and regulatory',
+        ans: 'No',
+      },
+    ]
   }
 
   calculateAbatement(value: number, data: any) {
@@ -1393,8 +1455,8 @@ assignSDG(sdg : any , data : any){
     if (this.totalInvestments.length > this.selectedInstruments.length) {
       this.totalInvestments = this.totalInvestments.filter(item => (this.selectedInstruments.map(ins => ins.code)).includes(item.instrument_code))
     }
-    this.onInputChange({target: {value: 0}}) 
-    
+    this.onInputChange({ target: { value: 0 } })
+
   }
 
   onInputChange(event: any) {
@@ -1410,7 +1472,7 @@ assignSDG(sdg : any , data : any){
       return inv
     })
 
-    if ( numericValue > 100) {
+    if (numericValue > 100) {
       event.target.value = 100;
     }
 
@@ -1425,19 +1487,19 @@ assignSDG(sdg : any , data : any){
 
     if (tot > 100) this.isExceeded = true
     else {
-      this.isExceeded = false; 
+      this.isExceeded = false;
       this.show_less_message = false;
     }
 
     if (all_proportion_filled && !this.isExceeded && tot !== 100) {
       this.show_less_message = true
-        this.totalInvestments = this.totalInvestments.map(inv => {
-          if (inv.instrument_code === 'OTHER') {
-            inv.propotion = 100 - tot
-            this.show_less_message = false
-          }
-          return inv
-        })
+      this.totalInvestments = this.totalInvestments.map(inv => {
+        if (inv.instrument_code === 'OTHER') {
+          inv.propotion = 100 - tot
+          this.show_less_message = false
+        }
+        return inv
+      })
     } else {
       this.show_less_message = false
     }
@@ -1458,7 +1520,7 @@ assignSDG(sdg : any , data : any){
   }
 
   onSelectFromDate(event: any) {
-    this.minDateTo = new Date(event) 
+    this.minDateTo = new Date(event)
   }
 
   getNotFilledCaution(): string {
@@ -1472,17 +1534,58 @@ assignSDG(sdg : any , data : any){
     return str
   }
 
-  adaptationJustificationChange(){
+  adaptationJustificationChange() {
     this.checkTab2Mandatory(6)
+  }
+
+  onSelectScore(category: OutcomDataDto, characteristicCode: string, sdgIndex?:number) {
+    let score = this.masterDataService.outcomeScaleScore.find(s => s.value === 99)
+    if (['SCALE_GHG'].includes(category.categoryCode) && (["MEDIUM_LEVEL", "MICRO_LEVEL"].includes(characteristicCode))){
+      category.data = category.data.map(data => {
+        if (data.characteristics.code === "MACRO_LEVEL") {
+          if (score?.value) {data.score = score.value}
+          data.justification = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.';
+        }
+        return data;
+      })
+    } else if (category.categoryCode === "SCALE_SD" && (["MEDIUM_LEVEL", "MICRO_LEVEL"].includes(characteristicCode))) {
+      if (sdgIndex !== undefined) {
+        this.sdgDataSendArray2.data = this.sdgDataSendArray2[sdgIndex].data.map((data: any) => {
+          if (data.characteristics.code === "MACRO_LEVEL") {
+            if (score?.value) {data.score = score.value}
+            data.justification = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.';
+          }
+          return data;
+        })
+      }
+    } else if (category.categoryCode === 'SCALE_ADAPTATION' && ["NATIONAL", "SUBNATIONAL"].includes(characteristicCode)) {
+      category.data = category.data.map(data => {
+        if (data.characteristics.code === "INTERNATIONAL") {
+          if (score?.value) {data.score = score.value}
+          data.justification = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.';
+        }
+        return data;
+      })
+    }
   }
 
 }
 interface UploadEvent {
   originalEvent: HttpResponse<FileDocument>;
   files: File[];
-  }
+}
 
-  interface FileDocument {
+interface FileDocument {
   fileName: string
-  }
+}
+
+class OutcomDataDto {
+  type: string
+  CategoryName: string
+  categoryID: number
+  categoryCode: string
+  isValidated: boolean | null
+  data: InvestorAssessment[]
+  id: number
+}
 
