@@ -9,6 +9,7 @@ import { Paginator } from 'primeng/paginator';
 import { LazyLoadEvent } from 'primeng/api';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { HeatMapScore, TableData } from 'app/charts/heat-map/heat-map.component';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-carbon-market-dashboard',
   templateUrl: './carbon-market-dashboard.component.html',
@@ -41,7 +42,9 @@ export class CarbonMarketDashboardComponent implements OnInit,AfterViewInit {
     private cmAssessmentQuestionProxy : CMAssessmentQuestionControllerServiceProxy,
     public masterDataService: MasterDataService,
     private cdr: ChangeDetectorRef,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
   ) { 
   }
 
@@ -647,6 +650,10 @@ sectorCountResult(){
   }
   compareByAge(a:any, b:any) {
     return b.count - a.count;
+  }
+
+  goToResult(id: number) {
+    this.router.navigate(['carbon-market-tool-result'], { queryParams: { id: id }, relativeTo: this.activatedRoute })
   }
   
 }
