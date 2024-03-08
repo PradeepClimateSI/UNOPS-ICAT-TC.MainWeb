@@ -89,8 +89,8 @@
         <div #sourceDiv class="p-grid p-fluid card m-3">
             <div  class="row text-center">
                 <h3>SDGs impacted by the assessed interventions</h3>
-                <div *ngIf="sdgDetailsList.length != 0" class="col-12 mt-20" >
-                    <canvas height="450" #investmentSDGsPieChart2>{{ pieChart1 }}</canvas>
+                <div [hidden]="sdgDetailsList.length == 0" class="col-12 mt-20" >
+                    <canvas height="450" #portfolioSDGsPieChart>{{ portfolioSDGsPieChart }}</canvas>
                 </div>
             </div>
             <div *ngIf="sdgDetailsList.length == 0" class="col-12" >

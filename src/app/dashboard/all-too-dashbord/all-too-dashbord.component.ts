@@ -15,7 +15,7 @@ import { HeatMapScore, TableData } from 'app/charts/heat-map/heat-map.component'
 export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
   calResults: any;
 
-  @ViewChild('investmentSDGsPieChart2')
+  @ViewChild('portfolioSDGsPieChart')
   canvasRefSDGsPieChart: ElementRef<HTMLCanvasElement>;
   @ViewChild('sourceDiv', { read: ElementRef }) sourceDiv: ElementRef;
   @ViewChild('targetDiv', { read: ElementRef }) targetDiv: ElementRef;
@@ -38,7 +38,7 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
     count: number
   }[];
 
-  pieChart1: Chart;
+  portfolioSDGsPieChart: Chart;
   pieChart2: Chart;
   tool: string;
   tableData: any[] = []
@@ -136,34 +136,24 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
       }
     
       selectPortfolio(){
-    
         this.sdgDetailsList=[];
-        // this.barChartData=[];
-    
-    
         let event: any = {};
         event.rows = this.rows;
         event.first = 0;
         this.setAlldata()
         this.loadgridData(event);
-    
-        
-       
-       if(this.selectedPortfolio){
-        this.portfolioServiceProxy.assessmentsDataByAssessmentId(this.selectedPortfolio?this.selectedPortfolio.id:0).subscribe(async (res: any) => {
-          // this.barChartData=res;
-          setTimeout(() => {
-          // this.viewPortfolioBarChart();
-          this.updateSourceDivHeight()
-       this.sdgResults()
-        },300)
-       
-    
-    
-        });
-       }
-    
-    
+        if (this.selectedPortfolio) {
+          this.portfolioServiceProxy.assessmentsDataByAssessmentId(this.selectedPortfolio ? this.selectedPortfolio.id : 0).subscribe(async (res: any) => {
+            // this.barChartData=res;
+            setTimeout(() => {
+              // this.viewPortfolioBarChart();
+              // this.updateSourceDivHeight()
+              this.sdgResults()
+            }, 300)
+          });
+        }
+
+
       }
 
 
@@ -172,14 +162,14 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
   }
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
-    this.updateSourceDivHeight();
+    // this.updateSourceDivHeight();
   }
-  updateSourceDivHeight(): void {
-    this.targetDivHeight = this.targetDiv.nativeElement.offsetHeight;
-    this.renderer.setStyle(this.sourceDiv.nativeElement, 'height', `${this.targetDivHeight}px`);
-    this.renderer.setStyle(this.sourceDiv.nativeElement, 'overflow-y', 'auto');
-    this.cdr.detectChanges();
-  }
+  // updateSourceDivHeight(): void {
+  //   this.targetDivHeight = this.targetDiv.nativeElement.offsetHeight;
+  //   this.renderer.setStyle(this.sourceDiv.nativeElement, 'height', `${this.targetDivHeight}px`);
+  //   this.renderer.setStyle(this.sourceDiv.nativeElement, 'overflow-y', 'auto');
+  //   this.cdr.detectChanges();
+  // }
   sectorCountResult(){
     let tool = 'All Option'
     this.investorProxy.findSectorCount(tool).subscribe((res: any) => {
@@ -187,7 +177,7 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
       setTimeout(() => {
 
         this.viewSecterTargetedPieChart();
-        this.updateSourceDivHeight();
+        // this.updateSourceDivHeight();
       }, 20);
       this.sdgResults()
 
@@ -317,7 +307,7 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
         ? 1
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
-    this.investorProxy.getDashboardAllData(pageNumber,this.rows,this.projectName).subscribe((res) => {
+    this.investorProxy.getDashboardAllData(pageNumber,this.rows,this.projectName,this.selectedPortfolio?this.selectedPortfolio.id:0).subscribe((res) => {
       this.tableData=res.items;
       this.heatMapScore = this.tableData.map(item => {return {processScore: item.process_score, outcomeScore: item.outcome_score}})
       this.heatMapData = this.tableData.map(item => {return {interventionId: item.climateAction?.intervention_id, interventionName: item.climateAction?.policyName, processScore: item.process_score, outcomeScore: item.outcome_score}}) 
@@ -448,21 +438,20 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
 
   sdgResults() {
     this.sdgDetailsList = []
-    this.investorProxy.sdgSumAllCalculate().subscribe(async (res: any) => {
+    this.investorProxy.sdgSumAllCalculate(this.selectedPortfolio?this.selectedPortfolio.id:0).subscribe(async (res: any) => {
       this.sdgDetailsList = res;
+      console.log( "sdg",res)
       setTimeout(() => {
-        this.viewFrequencyofSDGsChart();
+        this.viewPortfolioSDGsPieChart();
         
       }, 200);
     });
   }
 
-  viewFrequencyofSDGsChart() {
+  viewPortfolioSDGsPieChart(){
     this.sdgDetailsList.sort((a: any, b: any) => b.count - a.count)
     let labels = this.sdgDetailsList.map((item:any) => 'SDG ' + item.number + ' - ' + item.sdg);
-    let counts: number[] = this.sdgDetailsList.map((item: any) => item.count);
-    let total = counts.reduce((acc, val) => acc + val, 0);
-    let percentages = counts.map(count => ((count / total) * 100).toFixed(2));
+    let counts:number[] = this.sdgDetailsList.map((item:any) => item.count);
     this.sdgDetailsList.forEach((sd: any) => {
       let color = this.sdgColorMap.find((o:any) => o.sdgNumber === sd.number)
       if (color) {
@@ -471,6 +460,8 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
         this.bgColors.push(this.defaulColors[sd.id])
       }
     })
+    let total = counts.reduce((acc, val) => acc + val, 0);
+    let percentages = counts.map(count => ((count / total) * 100).toFixed(2));
 
     if (!this.canvasRefSDGsPieChart) {
       return;
@@ -482,17 +473,16 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
     if (!ctx) {
       return;
     }
-
-    if (this.pieChart1) {
-      this.pieChart1.data.datasets[0].data = counts;
-      this.pieChart1.data.labels = labels
-      this.pieChart1.update();
+    console.log("ctx",ctx,"canvas",canvas)
+    if (this.portfolioSDGsPieChart) {
+      this.portfolioSDGsPieChart.data.datasets[0].data = counts;
+      this.portfolioSDGsPieChart.data.labels=labels
+      this.portfolioSDGsPieChart.update();
+      console.log("portfolioSDGsPieChart",this.portfolioSDGsPieChart,this.portfolioSDGsPieChart.data)
     }
-    else {
-
-
-      this.pieChart1 = new Chart(ctx, {
-        type: 'pie' as ChartType,
+    else{
+      this.portfolioSDGsPieChart =new Chart(ctx, {
+        type: 'pie'as ChartType,
 
         data: {
           labels: labels,
@@ -505,8 +495,8 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: {
-            legend: {
+          plugins:{
+            legend:{
               position: 'bottom',
               labels: {
                 padding: 20
@@ -518,49 +508,53 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
                 size: 12
               },
               formatter: (value, ctx) => {
+              console.log(value)
                 const label = ctx.chart.data.labels![ctx.dataIndex];
                 const percentage = percentages[ctx.dataIndex];
                 return `${label}: ${value} (${percentage}%)`;
               },
 
             },
-            tooltip: {
-              position: 'average',
-              boxWidth: 10,
-              callbacks: {
+            tooltip:{
+              position:'average',
+              boxWidth:10,
+              callbacks:{
 
-                label: (ctx) => {
+                label:(ctx)=>{
+                 
                   let sum = 0;
-                  let array = counts
+                  let array =ctx.dataset.data
                   array.forEach((number) => {
                     sum += Number(number);
                   });
-                  let percentage = (counts[ctx.dataIndex] * 100 / sum).toFixed(2) + "%";
+              
+                  let percentage = (ctx.parsed/ sum*100).toFixed(2)+"%";
 
-                  return [
-                    `SDG: ${labels[ctx.dataIndex]}`,
-                    `Count: ${counts[ctx.dataIndex]}`,
+                  return[
+                    `SDG: ${ctx.label}`,
+                    `Count: ${ctx.raw}`,
                     `Percentage: ${percentage}`
                   ];
-                }
+                 }
               },
               backgroundColor: 'rgba(0, 0, 0, 0.8)', 
-              titleFont: {
-                size: 14,
-                weight: 'bold'
-              },
-              bodyFont: {
-                size: 14
-              },
-              displayColors: true, 
-              bodyAlign: 'left'
+                titleFont: {
+                  size: 14,
+                  weight: 'bold'
+                },
+                bodyFont: {
+                  size: 14
+                },
+                displayColors: true, 
+                bodyAlign: 'left'
             }
-          }
+         }
 
         },
 
-      });
+    });
     }
+
 
   }
 

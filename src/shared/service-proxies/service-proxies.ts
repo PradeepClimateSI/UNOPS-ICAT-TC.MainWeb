@@ -16,7 +16,15 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 import * as moment from 'moment';
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
-
+export enum DocumentsDocumentOwner {
+    Project = <any>"Project",
+    Country = <any>"Country",
+    CountryNC = <any>"CountryNC",
+    CountryBUR = <any>"CountryBUR",
+    CountryBTR = <any>"CountryBTR",
+    CountryNDC = <any>"CountryNDC",
+    CountryGHG = <any>"CountryGHG",
+}
 @Injectable()
 export class AppControllerServiceProxy {
     private http: HttpClient;
@@ -20747,8 +20755,12 @@ export class InvestorToolControllerServiceProxy {
         return _observableOf(null as any);
     }
 
-    sdgSumAllCalculate(): Observable<any[]> {
-        let url_ = this.baseUrl + "/investor-tool/sdgSumAllCalculateInvester";
+    sdgSumAllCalculate(portfolioId: number): Observable<any[]> {
+        let url_ = this.baseUrl + "/investor-tool/sdgSumAllCalculateInvester?";
+        if (portfolioId === undefined || portfolioId === null)
+            throw new Error("The parameter 'portfolioId' must be defined and cannot be null.");
+        else
+            url_ += "portfolioId=" + encodeURIComponent("" + portfolioId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -20916,7 +20928,7 @@ export class InvestorToolControllerServiceProxy {
         return _observableOf(null as any);
     }
 
-    getDashboardAllData(page: number, limit: number, filterText: string[]): Observable<any> {
+    getDashboardAllData(page: number, limit: number, filterText: string[], portfolioID: number): Observable<any> {
         let url_ = this.baseUrl + "/investor-tool/dashboard-all-data?";
         if (page === undefined || page === null)
             throw new Error("The parameter 'page' must be defined and cannot be null.");
@@ -20930,6 +20942,10 @@ export class InvestorToolControllerServiceProxy {
             throw new Error("The parameter 'filterText' must be defined and cannot be null.");
         else
             filterText && filterText.forEach(item => { url_ += "filterText=" + encodeURIComponent("" + item) + "&"; });
+        if (portfolioID === undefined || portfolioID === null)
+            throw new Error("The parameter 'portfolioID' must be defined and cannot be null.");
+        else
+            url_ += "PortfolioID=" + encodeURIComponent("" + portfolioID) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -33544,15 +33560,7 @@ export interface IUpdateIndicatorDto {
 
     [key: string]: any;
 }
-export enum DocumentsDocumentOwner {
-    Project = <any>"Project",
-    Country = <any>"Country",
-    CountryNC = <any>"CountryNC",
-    CountryBUR = <any>"CountryBUR",
-    CountryBTR = <any>"CountryBTR",
-    CountryNDC = <any>"CountryNDC",
-    CountryGHG = <any>"CountryGHG",
-}
+
 export class CreateReportDto implements ICreateReportDto {
     assessmentId: number;
     type: string;
