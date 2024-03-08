@@ -459,7 +459,7 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
 
   viewFrequencyofSDGsChart() {
     this.sdgDetailsList.sort((a: any, b: any) => b.count - a.count)
-    let labels = this.sdgDetailsList.map((item: any) => item.sdg);
+    let labels = this.sdgDetailsList.map((item:any) => 'SDG ' + item.number + ' - ' + item.sdg);
     let counts: number[] = this.sdgDetailsList.map((item: any) => item.count);
     let total = counts.reduce((acc, val) => acc + val, 0);
     let percentages = counts.map(count => ((count / total) * 100).toFixed(2));

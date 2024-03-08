@@ -478,7 +478,11 @@
                 <div *ngFor="let item of selectedDocuments">
                   <p>{{item.fileName}}</p>
                 </div>
+                
               </ng-template>
+              <div *ngIf="selectedDocuments.length ==0">
+                <p>Documents not uploaded</p>
+              </div>
             </div>
           </div>
         </div>

@@ -174,7 +174,7 @@ export class DashboardComponent implements OnInit {
       datasets: [
         {
           label: 'Type of Interventions',
-          backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#66BB6A', '#FF7043', '#9575CD'],
+          backgroundColor: ['#222b46', '#222b46', '#222b46', '#222b46', '#222b46', '#222b46'],
           data: counts,
         },
       ],
