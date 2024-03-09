@@ -620,7 +620,7 @@
                                     <label for="score">Score* <i *ngIf=" category.CategoryName ==='GHG Scale of the Outcome'" class="pi pi-info-circle" pTooltip="{{getTooltipData(data.characteristics.name)}}" tooltipPosition="bottom" style="font-size: 1rem"></i></label>
                                     <div *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' ||  category.CategoryName ==='Adaptation Scale of the Outcome' ">
                                       <p-dropdown appendTo="body" name="{{cat}}_{{i}}_outcomeScaleScore_" #type="ngModel" placeholder="Select Score" [(ngModel)]="data.score" (autoDisplayFirst)=false [options]="outcomeScaleScore" optionLabel="id" optionValue="value" (onChange)="onSelectScore(category, data.characteristics.code)"></p-dropdown>
-                                      <p class="info-message text-danger" *ngIf="data.score==undefined  && ((fData1.submitted || type.touched) || (category.isValidated==false && data.score==undefined) ||tabIsValid[cat] !== undefined && !tabIsValid[cat])">
+                                      <p class="info-message text-danger" *ngIf="['MACRO_LEVEL', 'INTERNATIONAL'].includes(data.characteristics.code) && data.score==undefined  && ((fData1.submitted || type.touched) || (category.isValidated==false && data.score==undefined) ||tabIsValid[cat] !== undefined && !tabIsValid[cat])">
                                         This is a mandatory field </p>
                                     </div>
                                     <div *ngIf=" category.CategoryName ==='GHG Time frame over which the outcome is sustained' ||  category.CategoryName ==='Adaptation Time frame over which the outcome is sustained' ">
@@ -633,10 +633,10 @@
                                 <div class="col-12 col-lg-6">
                                   <div class="p-field">
                                     <label for="justification">Justification*</label>
-                                    <textarea rows="5" type="text" pInputText [(ngModel)]="data.justification" #just2="ngModel" placeholder="Enter Justification" name="justification" 
+                                    <textarea rows="5" type="text" pInputText [(ngModel)]="data.justification" #just2="ngModel" placeholder="Enter Justification" name="{{cat}}_{{i}}justification" 
                                     [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (ngModelChange)="adaptationJustificationChange()"></textarea>
                                     <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
-                                    <p class="info-message text-danger" *ngIf="!data.justification  && ((fData1.submitted || just2.touched) || (category.isValidated==false && !data.justification) ||tabIsValid[cat] !== undefined && !tabIsValid[cat])">
+                                    <p class="info-message text-danger" *ngIf="['MACRO_LEVEL', 'INTERNATIONAL'].includes(data.characteristics.code) &&  !data.justification  && ((fData1.submitted || just2.touched) || (category.isValidated==false && !data.justification) ||tabIsValid[cat] !== undefined && !tabIsValid[cat])">
                                       This is a mandatory field </p>
                                   </div>
                                 </div>
@@ -731,7 +731,7 @@
                                       <div class="p-field">
                                         <label for="score">Score*</label>
                                         <p-dropdown appendTo="body" name="score" #type="ngModel" placeholder="Select Score" [(ngModel)]="data.score" (ngModelChange)="assignSDG(selectedSDGs[i], data)" [options]="outcomeScaleScore" optionLabel="id" optionValue="value" (onChange)="onSelectScore(category, data.characteristics.code, i)"></p-dropdown>
-                                        <p class="info-message text-danger" *ngIf="data.score==undefined  && ((fData1.submitted || type.touched) || (isValidSCaleSD==false && data.score==undefined) || tabIsValid[cat] !== undefined && !tabIsValid[cat])">
+                                        <p class="info-message text-danger" *ngIf="['MACRO_LEVEL'].includes(data.characteristics.code) && data.score==undefined  && ((fData1.submitted || type.touched) || (isValidSCaleSD==false && data.score==undefined) || tabIsValid[cat] !== undefined && !tabIsValid[cat])">
                                           This is a mandatory field </p>
                                       </div>
                                     </div>
@@ -741,7 +741,7 @@
                                         <textarea rows="5" (ngModelChange)="assignSDG(selectedSDGs[i], data)" type="text" pInputText [(ngModel)]="data.justification" #just3="ngModel" placeholder="Enter Justification" name="justification" 
                                         [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
                                         <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
-                                        <p class="info-message text-danger" *ngIf="!data.justification  && ((fData1.submitted || just3.touched) || (isValidSCaleSD==false && !data.justification) || tabIsValid[cat] !== undefined && !tabIsValid[cat])">
+                                        <p class="info-message text-danger" *ngIf="['MACRO_LEVEL'].includes(data.characteristics.code) && !data.justification  && ((fData1.submitted || just3.touched) || (isValidSCaleSD==false && !data.justification) || tabIsValid[cat] !== undefined && !tabIsValid[cat])">
                                           This is a mandatory field </p>
                                       </div>
                                     </div>

@@ -14,6 +14,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
 import { ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import { MultiSelect } from 'primeng/multiselect';
+import { OutcomDataDto } from '../investor-tool/investor-tool.component';
 
 
 interface CharacteristicWeight {
@@ -98,14 +99,7 @@ export class PortfolioTrack4Component implements OnInit {
     data: InvestorAssessment[]
   }[] = [];
 
-  outcomeData: {
-    type: string,
-    CategoryName: string,
-    categoryID: number,
-    isValidated: boolean | null
-    data: InvestorAssessment[],
-    id: number,
-  }[] = [];
+  outcomeData: OutcomDataDto[] = [];
   @ViewChild(TabView) tabView: TabView;
 
   tabName: string = '';
@@ -493,6 +487,7 @@ export class PortfolioTrack4Component implements OnInit {
 
           this.outcomeData.push({
             type: 'outcome', CategoryName: x.name, categoryID: x.id,
+            categoryCode: x.code,
             data: categoryArray,
             isValidated: null,
             id: 0
@@ -501,6 +496,7 @@ export class PortfolioTrack4Component implements OnInit {
           if (x.name === 'SDG Scale of the Outcome') {
             this.sdgDataSendArray.push({
               type: 'outcome', CategoryName: x.name, categoryID: x.id,
+              categoryCode: x.code,
               data: categoryArray
             })
           }
@@ -508,6 +504,7 @@ export class PortfolioTrack4Component implements OnInit {
           if (x.name === 'SDG Time frame over which the outcome is sustained') {
             this.sdgDataSendArray3.push({
               type: 'outcome', CategoryName: x.name, categoryID: x.id,
+              categoryCode: x.code,
               data: categoryArray
             })
           }
@@ -848,68 +845,48 @@ export class PortfolioTrack4Component implements OnInit {
     }
 
     for (let item of this.processData) {
-      for (let item2 of item.data) {
-        if ((item2.likelihood_justification == null || item2.likelihood_justification === "") && item2.relavance != 0) {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Warning',
-            detail: 'Fill all mandatory justification fields',
-            closable: true,
-          })
-
-          return
-        }
+      if (!this.checkValidation(item.data, 'process')) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Warning',
+          detail: 'Fill all mandatory justification fields',
+          closable: true,
+        })
+        return
       }
     }
 
     for (let item of this.outcomeData) {
-      if (item.categoryID == 5 || item.categoryID == 7 || item.categoryID == 9 || item.categoryID == 10) {
-
-        for (let item2 of item.data) {
-          if (item2.justification == null || item2.justification === "" || item2.score === null || item2.score === undefined) {
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Warning',
-              detail: 'Fill all mandatory justification fields',
-              closable: true,
-            })
-
-            return
-          }
-        }
+      if (!this.checkValidation(item.data, 'outcome')) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Warning',
+          detail: 'Fill all mandatory justification fields',
+          closable: true,
+        })
+        return
       }
     }
 
-    for (let item of this.sdgDataSendArray2) {
-      for (let item2 of item.data) {
-        if (item2.justification == null || item2.justification === "" || item2.score === null || item2.score === undefined) {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Warning',
-            detail: 'Fill all mandatory justification fields',
-            closable: true,
-          })
-
-          return
-        }
-      }
+    if (!this.sdgValidation(this.sdgDataSendArray2)) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Warning',
+        detail: 'Fill all mandatory justification fields',
+        closable: true,
+      })
+      return
     }
 
-    for (let item of this.sdgDataSendArray4) {
-      for (let item2 of item.data) {
-        if (item2.justification == null || item2.justification === "" || item2.score === null || item2.score === undefined) {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Warning',
-            detail: 'Fill all mandatory justification fields',
-            closable: true,
-          })
-
-          return
-        }
-      }
+    if (!this.sdgValidation(this.sdgDataSendArray4)) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Warning',
+        detail: 'Fill all mandatory justification fields',
+        closable: true,
+      })
+      return
     }
-
 
     if (this.assessment.assessment_approach === 'Direct') {
       let finalArray = this.processData.concat(this.outcomeData)
@@ -1006,29 +983,111 @@ export class PortfolioTrack4Component implements OnInit {
   }
 
   checkValidation(data: any[], type: string){
-    return (data?.filter(investorAssessment =>
-      (investorAssessment.relavance !== undefined) &&
-      (investorAssessment.likelihood !== undefined) &&
-      (investorAssessment.likelihood_justification !== undefined && investorAssessment.likelihood_justification !== null && investorAssessment.likelihood_justification !== '') ||
-      (investorAssessment.relavance == 0))?.length === data?.length && type == 'process') ||
-      (data.filter(investorAssessment =>
-      ((investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '') &&
-        (investorAssessment.score !== undefined && investorAssessment.score !== null))
-      )?.length === data.length && type == 'outcome') ||
-      (data.filter(sdg =>
-      (sdg.data?.filter((data: { justification: undefined; }) =>
-        (data.justification !== undefined))?.length === (sdg.data?.length)
-      ))?.length === data.length && type == 'sdg')
+    // return (data?.filter(investorAssessment =>
+    //   (investorAssessment.relavance !== undefined) &&
+    //   (investorAssessment.likelihood !== undefined) &&
+    //   (investorAssessment.likelihood_justification !== undefined && investorAssessment.likelihood_justification !== null && investorAssessment.likelihood_justification !== '') ||
+    //   (investorAssessment.relavance == 0))?.length === data?.length && type == 'process') ||
+    //   (data.filter(investorAssessment =>
+    //   ((investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '') &&
+    //     (investorAssessment.score !== undefined && investorAssessment.score !== null))
+    //   )?.length === data.length && type == 'outcome') ||
+    //   (data.filter(sdg =>
+    //   (sdg.data?.filter((data: { justification: undefined; }) =>
+    //     (data.justification !== undefined))?.length === (sdg.data?.length)
+    //   ))?.length === data.length && type == 'sdg')
+    let isValid: boolean = false
+    for (let investorAssessment of data) {
+      if (type === 'process' ) {
+        if (investorAssessment.relavance === 0) {
+          isValid = true;
+        } else {
+          if (
+            (investorAssessment.relavance !== undefined) &&
+            (investorAssessment.likelihood !== undefined) &&
+            (investorAssessment.likelihood_justification !== undefined && investorAssessment.likelihood_justification !== null && investorAssessment.likelihood_justification !== '') 
+          ) {
+            for (let indicator_details of investorAssessment.indicator_details) {
+              if (!indicator_details.question.isMain && (indicator_details.justification !== undefined && indicator_details.justification !== null && indicator_details.justification !== '')) {
+                isValid = true
+              } else if (indicator_details.question.isMain) {
+                isValid = true
+              } else {
+                isValid = false
+                break;
+              }
+            }
+          } else {
+            isValid = false
+            break;
+          }
+        }
+      } else {
+        for (let investorAssessment of data) {
+          if (["SUSTAINED_GHG", "SUSTAINED_ADAPTATION"].includes(investorAssessment.category.code)) {
+            if (
+              (investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '') &&
+              (investorAssessment.score !== undefined && investorAssessment.score !== null)
+            ) {
+              isValid = true
+            } else {
+              isValid = false
+              break;
+            }
+          } else if (['SCALE_SD', 'SUSTAINED_SD'].includes(investorAssessment.characteristics.category.code)) {
+            isValid = true
+            continue;
+          } else {
+            if (['MACRO_LEVEL', 'INTERNATIONAL'].includes(investorAssessment.characteristics.code)) {
+              if (
+                (investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '') &&
+                (investorAssessment.score !== undefined && investorAssessment.score !== null)
+              ) {
+                isValid = true
+              } else {
+                isValid = false
+                break;
+              }
+            } else {
+              isValid = true
+            }
+          }
+        }
+      }
+    }
+    return isValid;
   }
 
   sdgValidation(data: any[]) {
-    return this.selectedSDGs.length > 0 && (data?.filter(sdg =>
-      (sdg.data?.filter((data: {
-        score: null; justification: undefined;
-      }) =>
-        (data.justification !== undefined && data.justification !== null && data.justification !== '') &&
-        (data.score !== undefined && data.score !== null))?.length === (sdg.data?.length)
-      ))?.length === data?.length)
+    if (this.selectedSDGs.length < 0) {
+      return false
+    } else {
+      let isValid: boolean = false;
+      data.forEach(sdg => {
+        for (let data of sdg.data) {
+          if (data.category.code === "SUSTAINED_SD") {
+            if ((data.justification !== undefined && data.justification !== null && data.justification !== '') && (data.score !== undefined && data.score !== null)) {
+              isValid = true
+            } else {
+              isValid = false
+              break;
+            }
+          } else {
+            if (data.characteristics.code === 'MACRO_LEVEL') {
+              if ((data.justification !== undefined && data.justification !== null && data.justification !== '') && (data.score !== undefined && data.score !== null)) {
+                isValid = true
+              } else {
+                isValid = false
+                break;
+              }
+            } else {
+              isValid = true
+            }
+          }
+        }
+      })
+      return isValid
+    }
   }
 
   next(data: {
@@ -1347,6 +1406,37 @@ export class PortfolioTrack4Component implements OnInit {
 
   adaptationJustificationChange(){
     this.checkTab2Mandatory(6)
+  }
+
+  onSelectScore(category: OutcomDataDto, characteristicCode: string, sdgIndex?:number) {
+    let score = this.masterDataService.outcomeScaleScore.find(s => s.value === 99)
+    if (['SCALE_GHG'].includes(category.categoryCode) && (["MEDIUM_LEVEL", "MICRO_LEVEL"].includes(characteristicCode))){
+      category.data = category.data.map(data => {
+        if (data.characteristics.code === "MACRO_LEVEL") {
+          if (score?.value) {data.score = score.value}
+          data.justification = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.';
+        }
+        return data;
+      })
+    } else if (category.categoryCode === "SCALE_SD" && (["MEDIUM_LEVEL", "MICRO_LEVEL"].includes(characteristicCode))) {
+      if (sdgIndex !== undefined) {
+        this.sdgDataSendArray2.data = this.sdgDataSendArray2[sdgIndex].data.map((data: any) => {
+          if (data.characteristics.code === "MACRO_LEVEL") {
+            if (score?.value) {data.score = score.value}
+            data.justification = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.';
+          }
+          return data;
+        })
+      }
+    } else if (category.categoryCode === 'SCALE_ADAPTATION' && ["NATIONAL", "SUBNATIONAL"].includes(characteristicCode)) {
+      category.data = category.data.map(data => {
+        if (data.characteristics.code === "INTERNATIONAL") {
+          if (score?.value) {data.score = score.value}
+          data.justification = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.';
+        }
+        return data;
+      })
+    }
   }
 
 

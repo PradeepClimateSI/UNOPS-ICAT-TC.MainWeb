@@ -572,7 +572,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
                     return invest
                   })
                   investDto.totalInvestements = this.totalInvestments
-                  // await this.investorToolControllerproxy.saveTotalInvestments(investDto).toPromise();
+                  await this.investorToolControllerproxy.saveTotalInvestments(investDto).toPromise();
                   this.isSavedAssessment = true
 
                 }
@@ -864,7 +864,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
     for (let item of this.processData) {
       if (!this.checkValidation(item.data, 'process')) {
-        console.log("Process invalid")
         this.messageService.add({
           severity: 'error',
           summary: 'Warning',
@@ -877,7 +876,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
     for (let item of this.outcomeData) {
       if (!this.checkValidation(item.data, 'outcome')) {
-        console.log("outcome invalid")
         this.messageService.add({
           severity: 'error',
           summary: 'Warning',
@@ -889,7 +887,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     }
 
     if (!this.sdgValidation(this.sdgDataSendArray2)) {
-      console.log("sdg invalid")
       this.messageService.add({
         severity: 'error',
         summary: 'Warning',
@@ -900,7 +897,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     }
 
     if (!this.sdgValidation(this.sdgDataSendArray4)) {
-      console.log("sdg invalid")
       this.messageService.add({
         severity: 'error',
         summary: 'Warning',
@@ -1006,22 +1002,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   }
 
   checkValidation(data: any[], type: string) {
-    // return (data?.filter(investorAssessment =>
-    //   (investorAssessment.relavance !== undefined) &&
-    //   (investorAssessment.likelihood !== undefined) &&
-    //   (investorAssessment.likelihood_justification !== undefined && investorAssessment.likelihood_justification !== null && investorAssessment.likelihood_justification !== '') &&
-    //   (investorAssessment.indicator_details?.filter((indicator_details: IndicatorDetails) =>
-    //     (indicator_details.justification !== undefined && indicator_details.justification !== null && indicator_details.justification !== ''))?.length === (investorAssessment.indicator_details?.length - 1)
-    //   ) ||
-    //   (investorAssessment.relavance == 0))?.length === data?.length && type == 'process') ||
-    //   (data.filter(investorAssessment =>
-    //   ((['MACRO_LEVEL', 'INTERNATIONAL'].includes(investorAssessment.characteristics.code)) && (investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '') &&
-    //     (investorAssessment.score !== undefined && investorAssessment.score !== null))
-    //   )?.length === data.length && type == 'outcome') ||
-    //   (data.filter(sdg =>
-    //   (sdg.data?.filter((data: { justification: undefined; }) =>
-    //     (data.justification !== undefined))?.length === (sdg.data?.length)
-    //   ))?.length === data.length && type == 'sdg')
     let isValid: boolean = false
     for (let investorAssessment of data) {
       if (type === 'process' ) {
@@ -1057,10 +1037,12 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
             ) {
               isValid = true
             } else {
-              console.log("sustained invalid")
               isValid = false
               break;
             }
+          } else if (['SCALE_SD', 'SUSTAINED_SD'].includes(investorAssessment.characteristics.category.code)) {
+            isValid = true
+            continue;
           } else {
             if (['MACRO_LEVEL', 'INTERNATIONAL'].includes(investorAssessment.characteristics.code)) {
               if (
@@ -1069,7 +1051,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
               ) {
                 isValid = true
               } else {
-                console.log("scale invalid")
                 isValid = false
                 break;
               }
@@ -1089,9 +1070,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     } else {
       let isValid: boolean = false;
       data.forEach(sdg => {
-        console.log(sdg)
         for (let data of sdg.data) {
-          console.log(data)
           if (data.category.code === "SUSTAINED_SD") {
             if ((data.justification !== undefined && data.justification !== null && data.justification !== '') && (data.score !== undefined && data.score !== null)) {
               isValid = true
@@ -1579,7 +1558,7 @@ interface FileDocument {
   fileName: string
 }
 
-class OutcomDataDto {
+export class OutcomDataDto {
   type: string
   CategoryName: string
   categoryID: number
