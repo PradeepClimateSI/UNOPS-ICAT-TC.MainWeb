@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
 import { MasterDataService } from 'app/shared/master-data.service';
-import { LazyLoadEvent } from 'primeng/api';
+import { LazyLoadEvent, MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Table } from 'primeng/table';
-import { MethodologyAssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { AssessmentControllerServiceProxy, MethodologyAssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-assessment',
@@ -32,6 +32,8 @@ export class AssessmentComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     public masterDataService: MasterDataService,
     protected dialogService: DialogService,
+    public assessmentServiceControllerProxy: AssessmentControllerServiceProxy,
+    private messageService: MessageService
   ) { }
 
 
@@ -114,6 +116,26 @@ export class AssessmentComponent implements OnInit {
         }
       });
     }
+  }
+
+  async deleteAssessment(id:number, tool:string){
+    await this.assessmentServiceControllerProxy.deleteAssessment(id,tool).subscribe(res => {
+      if (res){
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Assessment deleted successfully',
+          closable: true,
+        })
+      }
+    },error => {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to delete assessment',
+        closable: true,
+      })
+    })
   }
 
 
