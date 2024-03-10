@@ -120,6 +120,7 @@ export class AssessmentComponent implements OnInit {
 
   async deleteAssessment(id:number, tool:string){
     await this.assessmentServiceControllerProxy.deleteAssessment(id,tool).subscribe(res => {
+      console.log(res)
       if (res){
         this.messageService.add({
           severity: 'success',
@@ -127,14 +128,15 @@ export class AssessmentComponent implements OnInit {
           detail: 'Assessment deleted successfully',
           closable: true,
         })
+        this.loadData({})
+      }else{
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to delete assessment',
+          closable: true,
+        })
       }
-    },error => {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Failed to delete assessment',
-        closable: true,
-      })
     })
   }
 
