@@ -147,6 +147,7 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
         if (this.selectedPortfolio) {
           this.portfolioServiceProxy.assessmentsDataByAssessmentId(this.selectedPortfolio ? this.selectedPortfolio.id : 0).subscribe(async (res: any) => {
             // this.barChartData=res;
+            this.sectorCountResult()
             setTimeout(() => {
               // this.viewPortfolioBarChart();
               // this.updateSourceDivHeight()
@@ -173,8 +174,7 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
   //   this.cdr.detectChanges();
   // }
   sectorCountResult(){
-    let tool = 'All Option'
-    this.investorProxy.findSectorCount(tool).subscribe((res: any) => {
+    this.investorProxy.findSectorCountAllTool(this.selectedPortfolio?this.selectedPortfolio.id:0).subscribe((res: any) => {
       this.sectorCount = res.sort(this.compareByAge);
       setTimeout(() => {
 
