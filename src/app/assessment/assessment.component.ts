@@ -5,7 +5,7 @@ import { MasterDataService } from 'app/shared/master-data.service';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Table } from 'primeng/table';
-import { AssessmentControllerServiceProxy, MethodologyAssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Assessment, AssessmentControllerServiceProxy, MethodologyAssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-assessment',
@@ -81,6 +81,7 @@ export class AssessmentComponent implements OnInit {
     let res = await this.methassess.getResultPageData(skip, this.rows, this.filterText, '', '').toPromise();
 
     this.results = res[0];
+    console.log("this.results",this.results)
     this.totalRecords = res[1];
    
     if (this.results){
@@ -120,7 +121,6 @@ export class AssessmentComponent implements OnInit {
 
   async deleteAssessment(id:number, tool:string){
     await this.assessmentServiceControllerProxy.deleteAssessment(id,tool).subscribe(res => {
-      console.log(res)
       if (res){
         this.messageService.add({
           severity: 'success',
@@ -138,6 +138,27 @@ export class AssessmentComponent implements OnInit {
         })
       }
     })
+  }
+
+  detail(assessment: Assessment) {
+    if(assessment.tool =="CARBON_MARKET"){
+      this.router.navigate(['app/carbon-market-tool-edit'], {  
+      queryParams: { id: assessment.id, isEdit: true,},  
+      });
+    }
+    if(assessment.tool =="PORTFOLIO"){
+      this.router.navigate(['app/portfolio-tool'], {  
+      queryParams: { id: assessment.id, isEdit: true},  
+      });
+    }
+
+    if(assessment.tool =="INVESTOR"){
+      this.router.navigate(['app/investor-tool-new'], {  
+      queryParams: { id: assessment.id, isEdit: true, iscompleted:true},  
+      });
+    }
+    
+
   }
 
 

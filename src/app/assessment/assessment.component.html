@@ -57,7 +57,8 @@
         <td>{{results.assessment.createdOn | date: 'dd/MM/YYYY'}}</td>
         <td >
           <button pButton pRipple class="btn btn-primary btn-block text-uppercase" type='submit' (click)="myFunction(results.assessment.id, results.averageProcess, results.averageOutcome, results.assessment.tool,results.assessment.assessment_method )"> View</button>
-          <button pButton pRipple class="ml-20 btn btn-delete btn-block text-uppercase" type='submit' (click)="deleteAssessment(results.assessment.id,results.assessment.tool)" > Delete</button>
+          <button pButton pRipple class="ml-10 btn btn-delete btn-block text-uppercase" type='submit' (click)="deleteAssessment(results.assessment.id,results.assessment.tool)" > Delete</button>
+          <button pButton pRipple class="ml-10 btn btn-primary btn-block text-uppercase" type='submit' (click)="detail(results.assessment)"> Edit</button>
         </td>
 
       </tr>

@@ -177,6 +177,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   phaseTransformExapmle: any[] = []
    from_date: Date
   to_date: Date
+  isCompleted: boolean = false;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -211,7 +212,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.relevance_tooltip = "Does the process characteristic affects/impacts any of the identified barriers? does the intervention affects/impacts the process characteristic?"
 
     this.activatedRoute.queryParams.subscribe(params => {
-      params['isEdit'] == 'true' ? (this.isEditMode = true) : false
+      params['isEdit'] == 'true' ? (this.isEditMode = true) : false;
+      params['iscompleted'] == 'true' ? (this.isCompleted = true) : false
       this.assessmentId = params['id'];
       if (!this.assessmentId && this.isEditMode) {
         window.location.reload()
@@ -333,7 +335,20 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
     this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise();
     this.policies.push(this.assessment.climateAction);
-    this.finalBarrierList = this.assessment['policy_barrier'];
+    this.finalBarrierList = this.assessment['policy_barrier'].map((i: { is_affected: boolean; characteristics: Characteristics[]; explanation: string; barrier: string; })=> {
+      let p =  new BarrierSelected()
+      p.affectedbyIntervention = i.is_affected
+      p.characteristics = i.characteristics.map( char =>{
+        let characteristic = new Characteristics()
+        characteristic.id = char.id
+        characteristic.name = char.name
+        return characteristic
+      })
+      p.explanation = i.explanation
+      p.barrier = i.barrier
+      return p
+      
+     });
     let areas: MasterDataDto[] = []
     this.assessment['geographicalAreasCovered'].map((area: { code: any; }) => {
       let level = this.levelOfImplementation.find(o => o.code === area.code);
@@ -512,18 +527,25 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.assessment.year = moment(new Date()).format("DD/MM/YYYY")
     if (!this.assessment.id) this.assessment.createdOn = moment(new Date())
     this.assessment.editedOn = moment(new Date())
+    let invalidControls: string[] = [];
 
+    Object.keys(form.controls).forEach(controlName => {
+      const control = form.controls[controlName];
+
+      if (control.invalid) {
+        invalidControls.push(controlName);
+      }
+    });
     if (form.valid) {
       this.methodologyAssessmentControllerServiceProxy.saveAssessment(this.assessment)
         .subscribe(res => {
-
+          
           if (res) {
 
             let allBarriersSelected = new AllBarriersSelected()
             allBarriersSelected.allBarriers = this.finalBarrierList
             allBarriersSelected.climateAction = res.climateAction
             allBarriersSelected.assessment = res;
-
           this.projectControllerServiceProxy.policyBar(allBarriersSelected).subscribe((res) => {
             this.messageService.add({
               severity: 'success',
@@ -574,6 +596,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
                   investDto.totalInvestements = this.totalInvestments
                   await this.investorToolControllerproxy.saveTotalInvestments(investDto).toPromise();
                   this.isSavedAssessment = true
+                  this.isCompleted = false
 
                 }
               }, error => {
@@ -1002,6 +1025,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   }
 
   checkValidation(data: any[], type: string) {
+    
     let isValid: boolean = false
     for (let investorAssessment of data) {
       if (type === 'process' ) {
@@ -1040,7 +1064,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
               isValid = false
               break;
             }
-          } else if (['SCALE_SD', 'SUSTAINED_SD'].includes(investorAssessment.characteristics.category.code)) {
+          } else if (['SCALE_SD', 'SUSTAINED_SD'].includes(investorAssessment.characteristics.category?.code) || ['SCALE_SD', 'SUSTAINED_SD'].includes(investorAssessment.category?.code)) {
             isValid = true
             continue;
           } else {
