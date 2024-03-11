@@ -78,6 +78,9 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
   selectedPortfolio : any;
   portfolioList : any[]= [];
   allAssessments: any[] = [];
+  selectedAssessments: any[]=[];
+  selectedIds:string[] = [];
+  selectionLimit:number = 10;
 
   constructor(
     private investorProxy: InvestorToolControllerServiceProxy,
@@ -98,6 +101,7 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
     this.sdgColorMap = this.masterDataService.SDG_color_map
     this.sectorColorMap = this.masterDataService.Sector_color_map;
     this.getPortfolioList()
+    this.setAlldata()
 
     setTimeout(() => {
       this.projectProxy
@@ -126,38 +130,27 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
 
   goToFunction(){
     this.selectedPortfolio = ''
+    this.selectPortfolio()
     this.setAlldata()
-    //  this.getSectorCount(this.tool);
-    this.selectPortfolio();
-      }
-    
-      setAlldata(){
-        // this.portfolioServiceProxy.getDashboardData(this.selectedPortfolio?this.selectedPortfolio.id:0,1,this.rows,this.selectedIds).subscribe((res) => {
-        //   this.allAssessments = res.meta.allData
-        // });
-      }
-    
-      selectPortfolio(){
-        this.sdgDetailsList=[];
-        let event: any = {};
-        event.rows = this.rows;
-        event.first = 0;
-        this.setAlldata()
-        this.loadgridData(event);
-        if (this.selectedPortfolio) {
-          this.portfolioServiceProxy.assessmentsDataByAssessmentId(this.selectedPortfolio ? this.selectedPortfolio.id : 0).subscribe(async (res: any) => {
-            // this.barChartData=res;
-            this.sectorCountResult()
-            setTimeout(() => {
-              // this.viewPortfolioBarChart();
-              // this.updateSourceDivHeight()
-              this.sdgResults()
-            }, 300)
-          });
-        }
+  }
 
+  setAlldata() {
+    let tool ='ALL_OPTION'
+    this.portfolioServiceProxy.getAlltoolDashboardData(this.selectedPortfolio ? this.selectedPortfolio.id : 0, 1, this.rows, this.selectedIds,tool).subscribe((res) => {
+      this.allAssessments = res.meta.allData
+    });
+  }
 
-      }
+  selectPortfolio() {
+    this.sdgDetailsList = [];
+    this.setAlldata()
+    this.sectorCountResult()
+    this.sdgResults()
+    let event: any = {};
+    event.rows = this.rows;
+    event.first = 0;
+    this.loadgridData(event);
+  }
 
 
   ngAfterViewInit(): void {
@@ -292,13 +285,23 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
     }
 
   }
+  onSelectAssessment() {
+    this.selectedIds = this.selectedAssessments.map((item: any)=> item.id)
+    this.callTable()
+ }
 
-  onPlicyChange(event: any){
-    this.projectName =[];
+ onClear() {
+   this.selectedIds = []
+    this.selectedAssessments = []
+    this.callTable()
+ }
 
- event.forEach((a:any)=>{this.projectName.push(a.policyName)})
- this.loadgridData(event);
-  }
+ callTable(){
+   let event: any = {};
+     event.rows = this.rows;
+     event.first = 0;
+     this.loadgridData(event);
+ }
 
   loadgridData = (event: LazyLoadEvent) => {
     this.loading = true;
