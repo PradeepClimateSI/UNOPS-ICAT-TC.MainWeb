@@ -1,11 +1,10 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { FieldNames, MasterDataService } from 'app/shared/master-data.service';
-import { SelectedScoreDto } from 'app/shared/score.dto';
 import { environment } from 'environments/environment';
 import { MessageService } from 'primeng/api';
-import { Assessment, CMAnswer, CMAssessmentQuestion, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Category, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, ScoreDto, UniqueCategory } from 'shared/service-proxies/service-proxies';
+import { Assessment, CMAssessmentQuestion, CMAssessmentQuestionControllerServiceProxy, CMDefaultValue, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, ScoreDto, UniqueCategory } from 'shared/service-proxies/service-proxies';
 
 
 interface UploadEvent {
@@ -93,6 +92,12 @@ export class CmSectionThreeComponent implements OnInit {
   isFirstLoading1: boolean = true;
   fieldNames = FieldNames;
   notFilledCategories: (OutcomeCategory | UniqueCategory)[] = [];
+  st_default: boolean = false
+  ex_default: boolean = false
+  default_values: {[key: string]: {st_default_values: CMDefaultValue[], ex_default_values: CMDefaultValue[]}} = {}
+  useDefault: {[key: string]: {st_default: boolean, ex_default: boolean}} = {}
+  useDefaultSDG: {[key: string]: {st_default: boolean, ex_default: boolean}} = {}
+  source = 'IPCC, 2023: Summary for Policymakers. In: Climate Change 2023: Synthesis Report. Contribution of Working Groups I, II and III to the Sixth Assessment Report of the Intergovernmental Panel on Climate Change [Core Writing Team, H. Lee and J. Romero (eds.)]. IPCC, Geneva, Switzerland, pp. 1-34, doi: 10.59327/IPCC/AR6-9789291691647.001'
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -100,7 +105,8 @@ export class CmSectionThreeComponent implements OnInit {
     public masterDataService: MasterDataService,
     private messageService: MessageService,
     private institutionControllerServiceProxy: InstitutionControllerServiceProxy,
-    private investorToolControllerServiceProxy: InvestorToolControllerServiceProxy
+    private investorToolControllerServiceProxy: InvestorToolControllerServiceProxy,
+    private cMAssessmentQuestionControllerServiceProxy: CMAssessmentQuestionControllerServiceProxy
   ) {
     this.uploadUrl = environment.baseUrlAPI + "/document/upload-file-by-name" ; 
     this.fileServerURL = environment.baseUrlAPI+'/document/downloadDocumentsFromFileName/uploads';
@@ -154,6 +160,7 @@ export class CmSectionThreeComponent implements OnInit {
     this.relevance = this.masterDataService.relevance;
     await this.getSDGList();
     await this.setInitialState();
+    this.initializeDefaultStatus()
   }
 
   async setInitialState() {
@@ -261,6 +268,16 @@ export class CmSectionThreeComponent implements OnInit {
         )
       }
     }
+  }
+
+  initializeDefaultStatus() {
+    this.outcome.map((_outcome: OutcomeCategory) => {
+      if (this.outcome.type !== 'SD') {
+        _outcome.results.map(res => {
+          if (!this.useDefault[res.characteristic.id]) this.useDefault[res.characteristic.id] = {st_default: false, ex_default: false}
+        })
+      }
+    })
   }
 
   getSelectedScoreFromOptions (selectedScore: string, characteristic: Characteristics) {
@@ -371,6 +388,7 @@ export class CmSectionThreeComponent implements OnInit {
 
     if (newSdgs && newSdgs.length > 0) {
       let mappedSdgs = newSdgs.map(sdg => {
+        if (!this.useDefaultSDG[sdg.id]) this.useDefaultSDG[sdg.id] = {st_default: false, ex_default: false}
         let pSdg = new PortfolioSdg()
         pSdg.id = sdg.id
         pSdg.name = sdg.name
@@ -928,6 +946,20 @@ export class CmSectionThreeComponent implements OnInit {
 
   adaptationJustificationChange(){
     this.checkTab2Mandatory(this.outcome.length - 1)
+  }
+
+  async loadDefaults(ch_id: number, code: string) {
+    let res = await this.cMAssessmentQuestionControllerServiceProxy.getCMDefaultValues(ch_id).toPromise()
+    if (res) {
+      if (code === 'STARTING_SITUATION') {
+        if (!this.default_values[ch_id]) this.default_values[ch_id] = {st_default_values: [], ex_default_values: []}
+        this.default_values[ch_id].st_default_values = res;
+        this.default_values[ch_id].st_default_values = this.default_values[ch_id].st_default_values.map(val => {val['label'] = val.starting_situation_value + ' ' + val.unit; return val})
+      } else {
+        this.default_values[ch_id].ex_default_values = res;
+        this.default_values[ch_id].ex_default_values = this.default_values[ch_id].ex_default_values.map(val => {val['label'] = val.expected_impact_value + ' ' + val.unit; return val})
+      }
+    }
   }
 }
 

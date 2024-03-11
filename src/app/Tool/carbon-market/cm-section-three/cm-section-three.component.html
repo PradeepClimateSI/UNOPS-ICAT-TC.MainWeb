@@ -67,28 +67,57 @@
                                 <div class="row p-2">
                                     <div class="col-4">Starting Situation</div>
                                     <div class="col-8">
-                                        <input type="text" [name]="'stSituation'+char.characteristic.id" #tboundrary="ngModel" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)" [(ngModel)]="char.startingSituation" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" />
-                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
-                                            ((fData.form.controls['stSituation'+char.characteristic.id]?.touched ? 
-                                                (char.startingSituation === undefined || char.startingSituation === '')
-                                             : char.startingSituation === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
-                                            ">
-                                            This is a mandatory field
-                                        </p>
+                                        <div class="row">
+                                            <div [ngClass]="char.characteristic.code === 'INTERNATIONAL' ? 'col-9' : 'col-12'">
+                                                <ng-container *ngIf="!(useDefault[char.characteristic.id] && useDefault[char.characteristic.id].st_default) || char.characteristic.code !== 'INTERNATIONAL'">
+                                                    <input type="text" [name]="'stSituation'+char.characteristic.id" #tboundrary="ngModel" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)" [(ngModel)]="char.startingSituation" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" />
+                                                    <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
+                                                        ((fData.form.controls['stSituation'+char.characteristic.id]?.touched ? 
+                                                            (char.startingSituation === undefined || char.startingSituation === '')
+                                                        : char.startingSituation === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
+                                                        ">
+                                                        This is a mandatory field
+                                                    </p>
+                                                </ng-container>
+                                                <ng-container *ngIf="(useDefault[char.characteristic.id] && useDefault[char.characteristic.id].st_default) && char.characteristic.code === 'INTERNATIONAL'">
+                                                    <p-dropdown [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)"
+                                                    [options]="default_values[char.characteristic.id]? default_values[char.characteristic.id].st_default_values : []" [name]="'st_default_values'+char.characteristic.code" [required]="char.characteristic.code === 'INTERNATIONAL'" [(ngModel)]="char.startingSituation" optionLabel="label" optionValue="starting_situation_value">
+                                                    </p-dropdown>
+                                                </ng-container>
+                                            </div>
+                                            <div class="col-3" *ngIf="char.characteristic.code === 'INTERNATIONAL' && useDefault[char.characteristic.id]" >
+                                                <p-checkbox [name]="'st-checkbox' + char.characteristic.code" [(ngModel)]="useDefault[char.characteristic.id].st_default" [binary]="true" inputId="binary" label="Default Values" (onChange)="loadDefaults(char.characteristic.id, 'STARTING_SITUATION')"></p-checkbox>
+                                                <i class="pi pi-info-circle" [pTooltip]="source" tooltipPosition="bottom" style="font-size: 1rem"></i>
+                                            </div>
+                                        </div>
                                     </div>
-
                                 </div>
                                 <div class="row p-2">
                                     <div class="col-4">Expected Impact</div>
                                     <div class="col-8">
-                                        <input type="text" [name]="'impact'+char.characteristic.id" #tboundrary="ngModel" placeholder="Please describe the expected emissions reductions on the indicated scale." [(ngModel)]="char.expectedImpact" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" />
-                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
-                                                ((fData.form.controls['impact'+char.characteristic.id]?.touched ? 
-                                                    (char.expectedImpact === undefined || char.expectedImpact === '')
-                                                : char.expectedImpact === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
-                                                ">
-                                            This is a mandatory field
-                                        </p>
+                                        <div class="row">
+                                            <div [ngClass]="char.characteristic.code === 'INTERNATIONAL' ? 'col-9' : 'col-12'">
+                                                <ng-container *ngIf="!(useDefault[char.characteristic.id] && useDefault[char.characteristic.id].ex_default) || char.characteristic.code !== 'INTERNATIONAL'">
+                                                    <input type="text" [name]="'impact'+char.characteristic.id" #tboundrary="ngModel" placeholder="Please describe the expected emissions reductions on the indicated scale." [(ngModel)]="char.expectedImpact" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" />
+                                                    <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
+                                                            ((fData.form.controls['impact'+char.characteristic.id]?.touched ? 
+                                                                (char.expectedImpact === undefined || char.expectedImpact === '')
+                                                            : char.expectedImpact === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
+                                                            ">
+                                                        This is a mandatory field
+                                                    </p>
+                                                </ng-container>
+                                                <ng-container *ngIf="(useDefault[char.characteristic.id] && useDefault[char.characteristic.id].ex_default) && char.characteristic.code === 'INTERNATIONAL'">
+                                                    <p-dropdown placeholder="Please describe the expected emissions reductions on the indicated scale."
+                                                    [options]="default_values[char.characteristic.id] ? default_values[char.characteristic.id].ex_default_values : []" [name]="'ex_default_values'+char.characteristic.code" [required]="char.characteristic.code === 'INTERNATIONAL'" [(ngModel)]="char.expectedImpact" optionLabel="label" optionValue="starting_situation_value">
+                                                    </p-dropdown>
+                                                </ng-container>
+                                            </div>
+                                            <div class="col-3" *ngIf="char.characteristic.code === 'INTERNATIONAL' && useDefault[char.characteristic.id]" >
+                                                <p-checkbox [name]="'ex-checkbox' + char.characteristic.code" [(ngModel)]="useDefault[char.characteristic.id].ex_default" [binary]="true" inputId="binary" label="Default Values" (onChange)="loadDefaults(char.characteristic.id, 'EXPECTED_IMPACT')"></p-checkbox>
+                                                <i class="pi pi-info-circle" [pTooltip]="source" tooltipPosition="bottom" style="font-size: 1rem"></i>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row p-2">
@@ -247,27 +276,57 @@
                                 <div class="row p-2">
                                     <div class="col-4">Starting Situation <i class="pi pi-info-circle" pTooltip="{{starting_situation_tooltip}}" tooltipPosition="bottom" style="font-size: 1rem"></i></div>
                                     <div class="col-8">
-                                        <input type="text" [name]="'stSituation'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.startingSituation" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" />
-                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
-                                            ((fData.form.controls['stSituation'+char.characteristic.id]?.touched ? 
-                                                (char.startingSituation === undefined || char.startingSituation === '')
-                                            : char.startingSituation === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
-                                            ">
-                                            This is a mandatory field
-                                        </p>
+                                        <div class="row">
+                                            <div [ngClass]="char.characteristic.code === 'INTERNATIONAL' ? 'col-9' : 'col-12'">
+                                                <ng-container *ngIf="!(useDefault[char.characteristic.id] && useDefault[char.characteristic.id].st_default) || char.characteristic.code !== 'INTERNATIONAL'">
+                                                    <input type="text" [name]="'stSituation'+char.characteristic.id" #tboundrary="ngModel" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)" [(ngModel)]="char.startingSituation" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" />
+                                                    <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
+                                                        ((fData.form.controls['stSituation'+char.characteristic.id]?.touched ? 
+                                                            (char.startingSituation === undefined || char.startingSituation === '')
+                                                        : char.startingSituation === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
+                                                        ">
+                                                        This is a mandatory field
+                                                    </p>
+                                                </ng-container>
+                                                <ng-container *ngIf="(useDefault[char.characteristic.id] && useDefault[char.characteristic.id].st_default) && char.characteristic.code === 'INTERNATIONAL'">
+                                                    <p-dropdown [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)"
+                                                    [options]="default_values[char.characteristic.id]? default_values[char.characteristic.id].st_default_values : []" [name]="'st_default_values'+char.characteristic.code" [required]="char.characteristic.code === 'INTERNATIONAL'" [(ngModel)]="char.startingSituation" optionLabel="label" optionValue="starting_situation_value">
+                                                    </p-dropdown>
+                                                </ng-container>
+                                            </div>
+                                            <div class="col-3" *ngIf="char.characteristic.code === 'INTERNATIONAL' && useDefault[char.characteristic.id]" >
+                                                <p-checkbox [name]="'st-checkbox' + char.characteristic.code" [(ngModel)]="useDefault[char.characteristic.id].st_default" [binary]="true" inputId="binary" label="Default Values" (onChange)="loadDefaults(char.characteristic.id, 'STARTING_SITUATION')"></p-checkbox>
+                                                <i class="pi pi-info-circle" [pTooltip]="source" tooltipPosition="bottom" style="font-size: 1rem"></i>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row p-2">
                                     <div class="col-4">Expected Impact <i class="pi pi-info-circle" pTooltip="{{expected_impact_tooltip}}" tooltipPosition="bottom" style="font-size: 1rem"></i></div>
                                     <div class="col-8">
-                                        <input type="text" [name]="'impact'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.expectedImpact" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" />
-                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
-                                            ((fData.form.controls['impact'+char.characteristic.id]?.touched ? 
-                                                (char.expectedImpact === undefined || char.expectedImpact === '')
-                                            : char.expectedImpact === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
-                                            ">
-                                            This is a mandatory field
-                                        </p>
+                                        <div class="row">
+                                            <div [ngClass]="char.characteristic.code === 'INTERNATIONAL' ? 'col-9' : 'col-12'">
+                                                <ng-container *ngIf="!(useDefault[char.characteristic.id] && useDefault[char.characteristic.id].ex_default) || char.characteristic.code !== 'INTERNATIONAL'">
+                                                    <input type="text" [name]="'impact'+char.characteristic.id" #tboundrary="ngModel" placeholder="Please describe the expected emissions reductions on the indicated scale." [(ngModel)]="char.expectedImpact" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" />
+                                                    <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
+                                                            ((fData.form.controls['impact'+char.characteristic.id]?.touched ? 
+                                                                (char.expectedImpact === undefined || char.expectedImpact === '')
+                                                            : char.expectedImpact === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
+                                                            ">
+                                                        This is a mandatory field
+                                                    </p>
+                                                </ng-container>
+                                                <ng-container *ngIf="useDefault[char.characteristic.id] && useDefault[char.characteristic.id].ex_default && char.characteristic.code === 'INTERNATIONAL'">
+                                                    <p-dropdown placeholder="Please describe the expected emissions reductions on the indicated scale."
+                                                    [options]="default_values[char.characteristic.id] ? default_values[char.characteristic.id].ex_default_values : []" [name]="'ex_default_values'+char.characteristic.code" [required]="char.characteristic.code === 'INTERNATIONAL'" [(ngModel)]="char.expectedImpact" optionLabel="label" optionValue="starting_situation_value">
+                                                    </p-dropdown>
+                                                </ng-container>
+                                            </div>
+                                            <div class="col-3" *ngIf="char.characteristic.code === 'INTERNATIONAL' && useDefault[char.characteristic.id]" >
+                                                <p-checkbox [name]="'ex-checkbox' + char.characteristic.code" [(ngModel)]="useDefault[char.characteristic.id].ex_default" [binary]="true" inputId="binary" label="Default Values" (onChange)="loadDefaults(char.characteristic.id, 'EXPECTED_IMPACT')"></p-checkbox>
+                                                <i class="pi pi-info-circle" [pTooltip]="source" tooltipPosition="bottom" style="font-size: 1rem"></i>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row p-2">
@@ -427,27 +486,57 @@
                                             <div class="row p-2">
                                                 <div class="col-4">Starting Situation <i class="pi pi-info-circle" pTooltip="Please describe the value of the indicator before intervention implementation." tooltipPosition="bottom" style="font-size: 1rem"></i></div>
                                                 <div class="col-8">
-                                                    <input type="text" [name]="'stSituation'+SDG.code+char.characteristic.id" [(ngModel)]="char.startingSituation" class="form-control" placeholder="" [required]="char.characteristic.code === 'INTERNATIONAL'" />
-                                                    <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
-                                                        ((fData.form.controls['stSituation'+SDG.code+char.characteristic.id]?.touched ? 
-                                                            (char.startingSituation === undefined || char.startingSituation === '')
-                                                        : char.startingSituation === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
-                                                        ">
-                                                        This is a mandatory field
-                                                    </p>
+                                                    <div class="row">
+                                                        <div [ngClass]="char.characteristic.code === 'INTERNATIONAL' ? 'col-9' : 'col-12'">
+                                                            <ng-container *ngIf="!useDefaultSDG[SDG.id].st_default || char.characteristic.code !== 'INTERNATIONAL'">
+                                                                <input type="text" [name]="'stSituation'+char.characteristic.id" #tboundrary="ngModel" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)" [(ngModel)]="char.startingSituation" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" />
+                                                                <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
+                                                                    ((fData.form.controls['stSituation'+char.characteristic.id]?.touched ? 
+                                                                        (char.startingSituation === undefined || char.startingSituation === '')
+                                                                    : char.startingSituation === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
+                                                                    ">
+                                                                    This is a mandatory field
+                                                                </p>
+                                                            </ng-container>
+                                                            <ng-container *ngIf="useDefaultSDG[SDG.id].st_default && char.characteristic.code === 'INTERNATIONAL'">
+                                                                <p-dropdown [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)"
+                                                                [options]="default_values[char.characteristic.id]? default_values[char.characteristic.id].st_default_values : []" [name]="'st_default_values'+char.characteristic.code" [required]="char.characteristic.code === 'INTERNATIONAL'" [(ngModel)]="char.startingSituation" optionLabel="label" optionValue="starting_situation_value">
+                                                                </p-dropdown>
+                                                            </ng-container>
+                                                        </div>
+                                                        <div class="col-3" *ngIf="char.characteristic.code === 'INTERNATIONAL'" >
+                                                            <p-checkbox [name]="'st-checkbox' + char.characteristic.code" [(ngModel)]="useDefaultSDG[SDG.id].st_default" [binary]="true" inputId="binary" label="Default Values" (onChange)="loadDefaults(char.characteristic.id, 'STARTING_SITUATION')"></p-checkbox>
+                                                            <i class="pi pi-info-circle" [pTooltip]="source" tooltipPosition="bottom" style="font-size: 1rem"></i>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="row p-2">
                                                 <div class="col-4">Expected Impact <i class="pi pi-info-circle" pTooltip="Please describe the value of the indicator after intervention implementation." tooltipPosition="bottom" style="font-size: 1rem"></i></div>
                                                 <div class="col-8">
-                                                    <input type="text" [name]="'impact'+SDG.code+char.characteristic.id" [(ngModel)]="char.expectedImpact" class="form-control" placeholder="" [required]="char.characteristic.code === 'INTERNATIONAL'" />
-                                                    <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
-                                                        ((fData.form.controls['impact'+SDG.code+char.characteristic.id]?.touched ? 
-                                                            (char.expectedImpact === undefined || char.expectedImpact === '')
-                                                        : char.expectedImpact === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
-                                                        ">
-                                                        This is a mandatory field
-                                                    </p>
+                                                    <div class="row">
+                                                        <div [ngClass]="char.characteristic.code === 'INTERNATIONAL' ? 'col-9' : 'col-12'">
+                                                            <ng-container *ngIf="!useDefaultSDG[SDG.id].ex_default || char.characteristic.code !== 'INTERNATIONAL'">
+                                                                <input type="text" [name]="'impact'+char.characteristic.id" #tboundrary="ngModel" placeholder="Please describe the expected emissions reductions on the indicated scale." [(ngModel)]="char.expectedImpact" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" />
+                                                                <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
+                                                                        ((fData.form.controls['impact'+char.characteristic.id]?.touched ? 
+                                                                            (char.expectedImpact === undefined || char.expectedImpact === '')
+                                                                        : char.expectedImpact === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
+                                                                        ">
+                                                                    This is a mandatory field
+                                                                </p>
+                                                            </ng-container>
+                                                            <ng-container *ngIf="useDefaultSDG[SDG.id].ex_default && char.characteristic.code === 'INTERNATIONAL'">
+                                                                <p-dropdown placeholder="Please describe the expected emissions reductions on the indicated scale."
+                                                                [options]="default_values[char.characteristic.id] ? default_values[char.characteristic.id].ex_default_values : []" [name]="'ex_default_values'+char.characteristic.code" [required]="char.characteristic.code === 'INTERNATIONAL'" [(ngModel)]="char.expectedImpact" optionLabel="label" optionValue="starting_situation_value">
+                                                                </p-dropdown>
+                                                            </ng-container>
+                                                        </div>
+                                                        <div class="col-3" *ngIf="char.characteristic.code === 'INTERNATIONAL'" >
+                                                            <p-checkbox [name]="'ex-checkbox' + char.characteristic.code" [(ngModel)]="useDefaultSDG[SDG.id].ex_default" [binary]="true" inputId="binary" label="Default Values" (onChange)="loadDefaults(char.characteristic.id, 'EXPECTED_IMPACT')"></p-checkbox>
+                                                            <i class="pi pi-info-circle" [pTooltip]="source" tooltipPosition="bottom" style="font-size: 1rem"></i>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="row p-2">
