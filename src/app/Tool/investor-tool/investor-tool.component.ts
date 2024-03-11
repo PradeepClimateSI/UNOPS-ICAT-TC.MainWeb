@@ -800,7 +800,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
         this.messageService.add({
           severity: 'error',
           summary: 'Warning',
-          detail: 'Fill all mandatory justification fields',
+          detail: 'Fill all mandatory justification fields in process of change',
           closable: true,
         })
         return
@@ -812,7 +812,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
         this.messageService.add({
           severity: 'error',
           summary: 'Warning',
-          detail: 'Fill all mandatory justification fields',
+          detail: 'Fill all mandatory justification fields in outcome of change',
           closable: true,
         })
         return
@@ -823,7 +823,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       this.messageService.add({
         severity: 'error',
         summary: 'Warning',
-        detail: 'Fill all mandatory justification fields',
+        detail: 'Fill all mandatory justification fields in scale sdg',
         closable: true,
       })
       return
@@ -833,7 +833,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       this.messageService.add({
         severity: 'error',
         summary: 'Warning',
-        detail: 'Fill all mandatory justification fields',
+        detail: 'Fill all mandatory justification fields in sustained sdg',
         closable: true,
       })
       return
@@ -973,7 +973,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
               isValid = false
               break;
             }
-          } else if (['SCALE_SD', 'SUSTAINED_SD'].includes(investorAssessment.characteristics.category.code)) {
+          } else if (['SCALE_SD', 'SUSTAINED_SD'].includes(investorAssessment.characteristics.category?.code) || ['SCALE_SD', 'SUSTAINED_SD'].includes(investorAssessment.category.code)) {
             isValid = true
             continue;
           } else {
@@ -1425,9 +1425,9 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     switch (ch) {
       case 'International/global level':
         return this.ghg_score_info.macro
-      case 'National/Sectorial level':
+      case 'National/Sectoral level':
         return this.ghg_score_info.medium
-      case 'Subnational/regional/municipal or sub sectorial level':
+      case 'Subnational/regional/municipal or sub sectoral level':
         return this.ghg_score_info.micro
       default:
         return ''

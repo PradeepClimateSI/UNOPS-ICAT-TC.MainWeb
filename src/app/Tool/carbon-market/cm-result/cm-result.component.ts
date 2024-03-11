@@ -472,13 +472,13 @@ export class CmResultComponent implements OnInit {
     } else if (name == 'Medium term (5-15 years)') {
       return 'National/Sector Level'
     } else if (name == 'Short term (<5 years)') {
-      return 'Subnational/ subsectorial'
+      return 'Subnational/ subsectoral'
     } else if (name === 'Macro Level') {
       return 'International Level';
     } else if (name === 'Medium Level') {
       return 'National/Sector Level'
     } else if (name === 'Micro Level') {
-      return 'Subnational/ subsectorial'
+      return 'Subnational/ subsectoral'
     } else {
       return name;
     }

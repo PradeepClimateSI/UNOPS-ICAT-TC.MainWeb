@@ -63,6 +63,20 @@
                     <ng-container *ngIf="category.type === 'GHG'">
                         <ng-container *ngFor="let char of category.results; let idx = index">
                             <h6>{{idx+1}}. {{char.characteristic.name}}</h6>
+                            <p *ngIf="category.method === 'SCALE' && char.characteristic.code === 'INTERNATIONAL'">
+                                <i [innerText]="GHG_scale_info.macro"></i>
+                            </p>
+                            <ng-container *ngIf="category.method === 'SCALE' && char.characteristic.code === 'NATIONAL'">
+                                <p><i [innerText]="sectoral_description"></i></p>
+                                <p><a target="_blank" href="https://www.ipcc-nggip.iges.or.jp/public/2006gl/pdf/1_Volume1/V1_4_Ch4_MethodChoice.pdf">Chapter 4 - Methodological Choice And Identification Of Key Categories </a></p>
+                                <p><a target="_blank" href="https://unfccc.int/process-and-meetings/transparency-and-reporting/reporting-and-review/reporting-and-review-under-the-paris-agreement/national-inventory-reports">National Inventory Reports</a></p>
+                                <p><a target="_blank" href="https://unfccc.int/non-annex-I-NCs?psafe_param=1&gad_source=1&gclid=CjwKCAiAlJKuBhAdEiwAnZb7ld5rCNwYr_3YUGFNjcZVY8belZMnWpNOggJZePrFCqaJ-RVnD8H66BoCGQIQAvD_BwE">National Communication submissions from Non-Annex I Parties</a></p>
+                                <p><a target="_blank" href="https://unfccc.int/process-and-meetings/transparency-and-reporting/preparing-for-the-ETF">Preparing for the Enhanced Transparency Framework</a></p>
+                            </ng-container>
+                            <ng-container *ngIf="category.method === 'SCALE' && char.characteristic.code === 'SUBNATIONAL'">
+                                <p><i [innerText]="sectoral_description"></i></p>
+                                <p><a target="_blank" href="https://www.ipcc-nggip.iges.or.jp/public/2006gl/pdf/1_Volume1/V1_4_Ch4_MethodChoice.pdf">Chapter 4 - Methodological Choice And Identification Of Key Categories </a></p>
+                            </ng-container>
                             <ng-container *ngIf="category.method === 'SCALE'">
                                 <div class="row p-2">
                                     <div class="col-4">Starting Situation</div>
@@ -121,8 +135,7 @@
                                     </div>
                                 </div>
                                 <div class="row p-2">
-                                    <div class="col-4">Score <i class="pi pi-info-circle" pTooltip="{{char.characteristic.code === 'INTERNATIONAL' ? GHG_scale_info.macro : (char.characteristic.code === 'NATIONAL' ? GHG_scale_info.medium : GHG_scale_info.micro)}}" tooltipPosition="bottom"
-                                            style="font-size: 1rem"></i></div>
+                                    <div class="col-4">Score</div>
                                     <div class="col-6">
                                         <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.characteristic.id" #type="ngModel" placeholder="Select Score" [(ngModel)]="char.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
                                             [options]="char.characteristic.code === 'INTERNATIONAL' ? GHG_scale_score_macro : (char.characteristic.code === 'NATIONAL' ? GHG_scale_score_medium : GHG_scale_score_micro)" [required]="char.characteristic.code === 'INTERNATIONAL'" appendTo="body"
@@ -144,9 +157,10 @@
                                     </div>
                                 </div>
                                 <div class="row p-2">
-                                    <div class="col-4">Justification</div>
+                                    <div class="col-4">Justification  <i *ngIf="['NATIONAL', 'SUBNATIONAL'].includes(char.characteristic.code)" class="pi pi-info-circle" pTooltip="{{char.characteristic.code === 'NATIONAL' ? sectoral_placeholder : subsectoral_placeholder}}" tooltipPosition="bottom"
+                                        style="font-size: 1rem"></i></div>
                                     <div class="col-6">
-                                        <textarea type="text" rows="5" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" placeholder="Enter Justification" [required]="char.characteristic.code === 'INTERNATIONAL'" 
+                                        <textarea type="text" rows="5" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? 'Enter Justification' : ''" [required]="char.characteristic.code === 'INTERNATIONAL'" 
                                         [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
                                         <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                         <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
@@ -259,6 +273,20 @@
                     <ng-container *ngIf="category.type === 'ADAPTATION'">
                         <ng-container *ngFor="let char of category.results; let idx = index">
                             <h6>{{idx+1}}. {{char.characteristic.name}}</h6>
+                            <p *ngIf="category.method === 'SCALE' && char.characteristic.code === 'INTERNATIONAL'">
+                                <i [innerText]="adaptation_scale_info.macro"></i>
+                            </p>
+                            <ng-container *ngIf="category.method === 'SCALE' && char.characteristic.code === 'NATIONAL'">
+                                <p><i [innerText]="sectoral_description"></i></p>
+                                <p><a target="_blank" href="https://www.ipcc-nggip.iges.or.jp/public/2006gl/pdf/1_Volume1/V1_4_Ch4_MethodChoice.pdf">Chapter 4 - Methodological Choice And Identification Of Key Categories </a></p>
+                                <p><a target="_blank" href="https://unfccc.int/process-and-meetings/transparency-and-reporting/reporting-and-review/reporting-and-review-under-the-paris-agreement/national-inventory-reports">National Inventory Reports</a></p>
+                                <p><a target="_blank" href="https://unfccc.int/non-annex-I-NCs?psafe_param=1&gad_source=1&gclid=CjwKCAiAlJKuBhAdEiwAnZb7ld5rCNwYr_3YUGFNjcZVY8belZMnWpNOggJZePrFCqaJ-RVnD8H66BoCGQIQAvD_BwE">National Communication submissions from Non-Annex I Parties</a></p>
+                                <p><a target="_blank" href="https://unfccc.int/process-and-meetings/transparency-and-reporting/preparing-for-the-ETF">Preparing for the Enhanced Transparency Framework</a></p>
+                            </ng-container>
+                            <ng-container *ngIf="category.method === 'SCALE' && char.characteristic.code === 'SUBNATIONAL'">
+                                <p><i [innerText]="sectoral_description"></i></p>
+                                <p><a target="_blank" href="https://www.ipcc-nggip.iges.or.jp/public/2006gl/pdf/1_Volume1/V1_4_Ch4_MethodChoice.pdf">Chapter 4 - Methodological Choice And Identification Of Key Categories </a></p>
+                            </ng-container>
                             <ng-container *ngIf="category.method === 'SCALE'">
                                 <div class="row p-2">
                                     <div class="col-4">Adaptation Co-benifit <i class="pi pi-info-circle" pTooltip="{{adaptation_tooltip}}" tooltipPosition="bottom" style="font-size: 1rem"></i></div>
@@ -330,8 +358,7 @@
                                     </div>
                                 </div>
                                 <div class="row p-2">
-                                    <div class="col-4">Score <i class="pi pi-info-circle" pTooltip="{{char.characteristic.code === 'INTERNATIONAL' ? adaptation_scale_info.macro : (char.characteristic.code === 'NATIONAL' ? adaptation_scale_info.medium : adaptation_scale_info.micro)}}"
-                                            tooltipPosition="bottom" style="font-size: 1rem"></i></div>
+                                    <div class="col-4">Score</div>
                                     <div class="col-6">
                                         <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.characteristic.id" #type="ngModel" placeholder="Select Score" [(ngModel)]="char.selectedScore" [options]="adaptation_scale_score" [virtualScroll]="true" [virtualScrollItemSize]="20"
                                             [style]="{'width': '100%'}" optionLabel="name" [required]="char.characteristic.code === 'INTERNATIONAL'" appendTo="body" (onChange)="onSelectScore($event, char, idx, category.type)">
@@ -352,9 +379,10 @@
                                     </div>
                                 </div>
                                 <div class="row p-2">
-                                    <div class="col-4">Justification</div>
+                                    <div class="col-4">Justification <i *ngIf="['NATIONAL', 'SUBNATIONAL'].includes(char.characteristic.code)" class="pi pi-info-circle" pTooltip="{{char.characteristic.code === 'NATIONAL' ? sectoral_placeholder : subsectoral_placeholder}}" tooltipPosition="bottom"
+                                        style="font-size: 1rem"></i></div>
                                     <div class="col-6">
-                                        <textarea rows="5" type="text" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" placeholder="Enter Justification" [required]="char.characteristic.code === 'INTERNATIONAL'" 
+                                        <textarea rows="5" type="text" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? 'Enter Justification' : ''" [required]="char.characteristic.code === 'INTERNATIONAL'" 
                                         [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
                                         <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                         <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
@@ -470,6 +498,20 @@
                                     <ng-container *ngIf="category.method === 'SCALE'">
                                         <ng-container *ngFor="let char of SDG.scaleResult; let idx = index;">
                                             <h6>{{idx+1}}. {{char.characteristic.name}}</h6>
+                                            <p *ngIf="char.characteristic.code === 'INTERNATIONAL'">
+                                                <i [innerText]="SD_scale_info.macro"></i>
+                                            </p>
+                                            <ng-container *ngIf="category.method === 'SCALE' && char.characteristic.code === 'NATIONAL'">
+                                                <p><i [innerText]="sectoral_description"></i></p>
+                                                <p><a target="_blank" href="https://www.ipcc-nggip.iges.or.jp/public/2006gl/pdf/1_Volume1/V1_4_Ch4_MethodChoice.pdf">Chapter 4 - Methodological Choice And Identification Of Key Categories </a></p>
+                                                <p><a target="_blank" href="https://unfccc.int/process-and-meetings/transparency-and-reporting/reporting-and-review/reporting-and-review-under-the-paris-agreement/national-inventory-reports">National Inventory Reports</a></p>
+                                                <p><a target="_blank" href="https://unfccc.int/non-annex-I-NCs?psafe_param=1&gad_source=1&gclid=CjwKCAiAlJKuBhAdEiwAnZb7ld5rCNwYr_3YUGFNjcZVY8belZMnWpNOggJZePrFCqaJ-RVnD8H66BoCGQIQAvD_BwE">National Communication submissions from Non-Annex I Parties</a></p>
+                                                <p><a target="_blank" href="https://unfccc.int/process-and-meetings/transparency-and-reporting/preparing-for-the-ETF">Preparing for the Enhanced Transparency Framework</a></p>
+                                            </ng-container>
+                                            <ng-container *ngIf="category.method === 'SCALE' && char.characteristic.code === 'SUBNATIONAL'">
+                                                <p><i [innerText]="sectoral_description"></i></p>
+                                                <p><a target="_blank" href="https://www.ipcc-nggip.iges.or.jp/public/2006gl/pdf/1_Volume1/V1_4_Ch4_MethodChoice.pdf">Chapter 4 - Methodological Choice And Identification Of Key Categories </a></p>
+                                            </ng-container>
                                             <div class="row p-2">
                                                 <div class="col-4">SDG Indicator <i class="pi pi-info-circle" pTooltip="Please describe the indicator used to assess the contribution to the selected SDG (i.e. number of jobs created)." tooltipPosition="bottom" style="font-size: 1rem"></i></div>
                                                 <div class="col-8">
@@ -540,8 +582,7 @@
                                                 </div>
                                             </div>
                                             <div class="row p-2">
-                                                <div class="col-4">Score <i class="pi pi-info-circle" pTooltip="{{char.characteristic.code === 'INTERNATIONAL' ? SD_scale_info.macro : (char.characteristic.code === 'NATIONAL' ? SD_scale_info.medium : SD_scale_info.micro)}}" tooltipPosition="bottom"
-                                                        style="font-size: 1rem"></i></div>
+                                                <div class="col-4">Score</div>
                                                 <div class="col-8">
                                                     <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+SDG.code+char.characteristic.id" #type="ngModel" placeholder="Select Score" [(ngModel)]="char.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
                                                         (onChange)="onSelectScore($event, char, idx, category.type)" [options]="SDG_scale_score" optionLabel="name" [required]="char.characteristic.code === 'INTERNATIONAL'" appendTo="body">
@@ -562,9 +603,10 @@
                                                 </div>
                                             </div>
                                             <div class="row p-2">
-                                                <div class="col-4">Justification</div>
+                                                <div class="col-4">Justification <i *ngIf="['NATIONAL', 'SUBNATIONAL'].includes(char.characteristic.code)" class="pi pi-info-circle" pTooltip="{{char.characteristic.code === 'NATIONAL' ? sectoral_placeholder : subsectoral_placeholder}}" tooltipPosition="bottom"
+                                                    style="font-size: 1rem"></i></div>
                                                 <div class="col-6">
-                                                    <textarea rows="5" type="text" [name]="'justification'+SDG.code+char.characteristic.id" [(ngModel)]="char.comment" class="form-control" placeholder="Enter Justification" [required]="char.characteristic.code === 'INTERNATIONAL'" 
+                                                    <textarea rows="5" type="text" [name]="'justification'+SDG.code+char.characteristic.id" [(ngModel)]="char.comment" class="form-control" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? 'Enter Justification' : ''" [required]="char.characteristic.code === 'INTERNATIONAL'" 
                                                     [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
                                                     <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                                     <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&

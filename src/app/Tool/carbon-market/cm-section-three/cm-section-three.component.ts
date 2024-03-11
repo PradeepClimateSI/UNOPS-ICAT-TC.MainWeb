@@ -97,7 +97,22 @@ export class CmSectionThreeComponent implements OnInit {
   default_values: {[key: string]: {st_default_values: CMDefaultValue[], ex_default_values: CMDefaultValue[]}} = {}
   useDefault: {[key: string]: {st_default: boolean, ex_default: boolean}} = {}
   useDefaultSDG: {[key: string]: {st_default: boolean, ex_default: boolean}} = {}
-  source = 'IPCC, 2023: Summary for Policymakers. In: Climate Change 2023: Synthesis Report. Contribution of Working Groups I, II and III to the Sixth Assessment Report of the Intergovernmental Panel on Climate Change [Core Writing Team, H. Lee and J. Romero (eds.)]. IPCC, Geneva, Switzerland, pp. 1-34, doi: 10.59327/IPCC/AR6-9789291691647.001'
+  source = 'IPCC, 2023: Summary for Policymakers. In: Climate Change 2023: Synthesis Report. Contribution of Working Groups I, II and III to the Sixth Assessment Report of the Intergovernmental Panel on Climate Change [Core Writing Team, H. Lee and J. Romero (eds.)]. IPCC, Geneva, Switzerland, pp. 1-34, doi: 10.59327/IPCC/AR6-9789291691647.001';
+
+  sectoral_description = "Sectoral data should be used when possible. If sectoral data is unavailable, national data can be used. Data on national or sectoral level emissions can "+
+  "be found in countries’ National Inventory Reports. If a National Inventory Report has not been submitted, National Communications or Biennial Transparency Reports (BTRs) may "+
+  "also contain such information. At this level, the four applicable sectors would be Energy, IPPU, AFOLU and Waste, based on the 2006 IPCC Guidelines for National Greenhouse Gas "+
+  "Inventories."
+  sectoral_placeholder = 'Please enter justification, including source of data and scope of the assessment (i.e. sectoral or national level).\n\n'+
+  'E.g.:In case of an intervention focusing on increasing the blend in cement production, the relevant sector is “Industrial Processes and Product Use”. And in case of an intervention focusing on increasing the share or renewables, the relevant sector is “Energy”.'
+  subsectoral_description = "Subsectoral data should be used when possible. Subsectors can be identified using the categories listed in the 2006 IPCC Guidelines for National "+ 
+  "Greenhouse Gas Inventories (e.g. 1A1. Fuel Combustion Activities – Energy Industries, 2B1. Chemical Industry – Ammonia Production). If subsectoral data is unavailable, "+
+  "subnational data can be used. Please provide further information on the subnational reference emissions in the justification box below."
+  subsectoral_placeholder = "Enter justification, including source of data and scope of the assessment (i.e. definition of the sub-sector or subnational boundary – for example, City of Jakarta).\n\n"+
+  "E.g.: Enter below the preceding text an example: “In case of an intervention focusing on increasing the blend in cement production, the relevant subsector is “Mineral industry "+
+  "– cement production (2A1)”. And in case of an intervention focusing on increasing the share or renewables, the relevant sector is “Fuel combustion activities – energy industries "+
+  "(1A1)”."
+
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,

@@ -598,14 +598,14 @@
                                   lifetime of the project divided by project lifetime) and compared to global
                                   emissions for the latest year for which those emissions data is available </p>
                               </div>
-                              <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'National/Sectorial level'">
+                              <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'National/Sectoral level'">
                                 <p *ngFor="let line of ghg_info.split('\n')">{{ line }}<br></p><br><br>
                                 <p>Note: all reduction in emissions calculated as average reduction in emissions
                                   (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided
                                   by project lifetime) and compared to national/sectoral emissions for the latest year for
                                   which those emissions data is available </p>
                               </div>
-                              <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level'">
+                              <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectoral level'">
                                 <p *ngFor="let line of ghg_info.split('\n')">{{ line }}<br></p><br><br>
                                 <p>Note: all reduction in emissions calculated as average reduction in emissions (tCO2e/yr calculated
                                   as total estimated reductions over lifetime of the project divided by project lifetime) and
@@ -631,7 +631,7 @@
                                 <div class="col-12 col-lg-6">
                                   <div class="p-field">
                                     <label for="justification">Justification*</label>
-                                    <textarea rows="5" type="text" pInputText [(ngModel)]="data.justification" #just2="ngModel" placeholder="Enter Justification" name="{{cat}}_{{i}}justification" 
+                                    <textarea rows="5" type="text" pInputText [(ngModel)]="data.justification" #just2="ngModel" placeholder="Enter Justification" [name]="cat+'_'+data.characteristics.code+'justification'" 
                                     [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (ngModelChange)="adaptationJustificationChange()"></textarea>
                                     <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                     <p class="info-message text-danger" *ngIf="['MACRO_LEVEL', 'INTERNATIONAL'].includes(data.characteristics.code) &&  !data.justification  && ((fData1.submitted || just2.touched) || (category.isValidated==false && !data.justification) ||tabIsValid[cat] !== undefined && !tabIsValid[cat])">
@@ -651,7 +651,7 @@
                                   <a target="_blank" [href]="fileServerURL+'/'+data.uploadedDocumentPath"><i class="pi pi-download download"></i></a>
                                 </div>
                               </div>
-                              <div *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level' ">
+                              <div *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectoral level' ">
                                 <div class="row p-2">
                                   <div class="col-12 col-lg-6">
                                     <div class="p-field">
