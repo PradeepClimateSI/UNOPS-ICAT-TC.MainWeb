@@ -506,6 +506,9 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.assessment.editedOn = moment(new Date())
 
     if (form.valid) {
+
+      this.assessment.from = moment(this.from_date)
+      this.assessment.to = moment(this.to_date)
       this.methodologyAssessmentControllerServiceProxy.saveAssessment(this.assessment)
         .subscribe(res => {
 
