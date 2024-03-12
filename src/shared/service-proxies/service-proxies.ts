@@ -24834,15 +24834,7 @@ export class CMQuestionControllerServiceProxy {
         return _observableOf(null as any);
     }
 }
-export enum DocumentsDocumentOwner {
-    Project = <any>"Project",
-    Country = <any>"Country",
-    CountryNC = <any>"CountryNC",
-    CountryBUR = <any>"CountryBUR",
-    CountryBTR = <any>"CountryBTR",
-    CountryNDC = <any>"CountryNDC",
-    CountryGHG = <any>"CountryGHG",
-}
+
 
 
 @Injectable()

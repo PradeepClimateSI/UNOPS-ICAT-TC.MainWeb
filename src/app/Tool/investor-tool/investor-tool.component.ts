@@ -519,23 +519,14 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     catch (error) {
     }
   }
-
+  
   save(form: NgForm) {
     this.isStageDisble = true;
-
     this.assessment.tool = 'INVESTOR'
     this.assessment.year = moment(new Date()).format("DD/MM/YYYY")
     if (!this.assessment.id) this.assessment.createdOn = moment(new Date())
     this.assessment.editedOn = moment(new Date())
-    let invalidControls: string[] = [];
-
-    Object.keys(form.controls).forEach(controlName => {
-      const control = form.controls[controlName];
-
-      if (control.invalid) {
-        invalidControls.push(controlName);
-      }
-    });
+    
     if (form.valid) {
 
       this.assessment.from = moment(this.from_date)
@@ -715,7 +706,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   }
 
   onChangeGeoAreaCovered(){
-    if(this.assessment.climateAction.geographicalAreaCovered && this.geographicalArea.name !==this.assessment.climateAction.geographicalAreaCovered){
+    if(this.assessment.climateAction.geographicalAreaCovered && this.geographicalArea.name !==this.assessment.climateAction.geographicalAreaCovered && !this.isCompleted){
       this.confirmationService.confirm({
         message: `You selected a geographical scope that deviates from the one that was assigned to this intervention- ${this.assessment.climateAction.geographicalAreaCovered }. Are you sure you want to continue with this selection?`,
         header: 'Confirmation',
@@ -739,7 +730,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   onItemSelectSectors(event: any) {
     if(this.assessment.climateAction.policySector){
-      if(this.assessment.climateAction.policySector.length !=  this.sectorArray.length){
+      if(this.assessment.climateAction.policySector.length !=  this.sectorArray.length && !this.isCompleted){
         this.closeMultiSelect();
         this.confirmationService.confirm({
           message: `You selected sectors that deviates from the one that was assigned to this intervention- ${ this.assessment.climateAction.policySector.map(i=> i.sector.name).join(",")}. Are you sure you want to continue with this selection?`,
