@@ -526,6 +526,9 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.assessment.year = moment(new Date()).format("DD/MM/YYYY")
     if (!this.assessment.id) this.assessment.createdOn = moment(new Date())
     this.assessment.editedOn = moment(new Date())
+    if(this.isCompleted){
+      form.controls['sectors'].setValue(this.sectorArray)
+    }
     
     if (form.valid) {
 
