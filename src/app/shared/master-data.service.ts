@@ -1102,3 +1102,8 @@ export enum FieldNames {
 }
 
 export const chapter6_url = 'https://storage.googleapis.com/public-bucket-kh/Transformational-Change-Methodology_ch6.pdf'
+export const assessment_period_info = 'This refers to the timeframe, for which the intervention\'s impact is assessed - NOT when the assessment is conducted.\n' +
+  'The period cannot begin earlier than the start date that was selected for the intervention. It can be different from the implementation period and should include the full range ' +
+  'of relevant impacts.\n' +
+  'System changes usually unfold over a longer period of time than individual impacts. Hence, users are encouraged to select a long assessment period (e.g. 15 years or more, with ' +
+  'an end date such as 2040 or 2050) to align with longer term plans and goals.'

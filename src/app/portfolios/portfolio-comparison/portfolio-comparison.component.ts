@@ -65,7 +65,6 @@ export class PortfolioComparisonComponent implements OnInit {
         { title: 'Portfolio ID', data: this.portfolio.portfolioId },
         { title: 'Name of the Portfolio', data: this.portfolio.portfolioName },
         { title: 'Description', data: this.portfolio.description },
-        { title: 'Person(s)/ organization(s) doing the assessment', data: this.portfolio.person },
         { title: 'Date', data: this.portfolio.date },
         { title: 'Is this assessment an update of a previous assessment?', data: this.portfolio.IsPreviousAssessment },
         { title: 'Link to previous assessment', data: this.portfolio.link },
