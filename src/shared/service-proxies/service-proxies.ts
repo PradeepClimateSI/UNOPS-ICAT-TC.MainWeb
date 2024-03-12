@@ -24466,7 +24466,6 @@ export enum DocumentsDocumentOwner {
     CountryGHG = <any>"CountryGHG",
 }
 
-
 @Injectable()
 export class CMAssessmentQuestionControllerServiceProxy {
     private http: HttpClient;
@@ -30136,6 +30135,7 @@ export class CMQuestion implements ICMQuestion {
     message: string;
     short_label: string;
     related_questions: string;
+    description: string;
     criteria: Criteria;
     characteristic: Characteristics;
 
@@ -30173,6 +30173,7 @@ export class CMQuestion implements ICMQuestion {
             this.message = _data["message"];
             this.short_label = _data["short_label"];
             this.related_questions = _data["related_questions"];
+            this.description = _data["description"];
             this.criteria = _data["criteria"] ? Criteria.fromJS(_data["criteria"]) : new Criteria();
             this.characteristic = _data["characteristic"] ? Characteristics.fromJS(_data["characteristic"]) : new Characteristics();
         }
@@ -30204,6 +30205,7 @@ export class CMQuestion implements ICMQuestion {
         data["message"] = this.message;
         data["short_label"] = this.short_label;
         data["related_questions"] = this.related_questions;
+        data["description"] = this.description;
         data["criteria"] = this.criteria ? this.criteria.toJSON() : <any>undefined;
         data["characteristic"] = this.characteristic ? this.characteristic.toJSON() : <any>undefined;
         return data;
@@ -30231,6 +30233,7 @@ export interface ICMQuestion {
     message: string;
     short_label: string;
     related_questions: string;
+    description: string;
     criteria: Criteria;
     characteristic: Characteristics;
 
