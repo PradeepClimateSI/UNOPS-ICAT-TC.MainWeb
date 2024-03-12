@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
 import { MasterDataService } from 'app/shared/master-data.service';
-import { LazyLoadEvent } from 'primeng/api';
+import { LazyLoadEvent, MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Table } from 'primeng/table';
-import { MethodologyAssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Assessment, AssessmentControllerServiceProxy, MethodologyAssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-assessment',
@@ -32,6 +32,8 @@ export class AssessmentComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     public masterDataService: MasterDataService,
     protected dialogService: DialogService,
+    public assessmentServiceControllerProxy: AssessmentControllerServiceProxy,
+    private messageService: MessageService
   ) { }
 
 
@@ -79,6 +81,7 @@ export class AssessmentComponent implements OnInit {
     let res = await this.methassess.getResultPageData(skip, this.rows, this.filterText, '', '').toPromise();
 
     this.results = res[0];
+    console.log("this.results",this.results)
     this.totalRecords = res[1];
    
     if (this.results){
@@ -114,6 +117,48 @@ export class AssessmentComponent implements OnInit {
         }
       });
     }
+  }
+
+  async deleteAssessment(id:number, tool:string){
+    await this.assessmentServiceControllerProxy.deleteAssessment(id,tool).subscribe(res => {
+      if (res){
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Assessment deleted successfully',
+          closable: true,
+        })
+        this.loadData({})
+      }else{
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to delete assessment',
+          closable: true,
+        })
+      }
+    })
+  }
+
+  detail(assessment: Assessment) {
+    if(assessment.tool =="CARBON_MARKET"){
+      this.router.navigate(['app/carbon-market-tool-edit'], {  
+      queryParams: { id: assessment.id, isEdit: true,iscompleted:true},  
+      });
+    }
+    if(assessment.tool =="PORTFOLIO"){
+      this.router.navigate(['app/portfolio-tool'], {  
+      queryParams: { id: assessment.id, isEdit: true, iscompleted:true},  
+      });
+    }
+
+    if(assessment.tool =="INVESTOR"){
+      this.router.navigate(['app/investor-tool-new'], {  
+      queryParams: { id: assessment.id, isEdit: true, iscompleted:true},  
+      });
+    }
+    
+
   }
 
 

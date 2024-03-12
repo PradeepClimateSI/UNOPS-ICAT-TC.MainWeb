@@ -67,6 +67,7 @@ import { PortfolioTrack4Component } from 'app/Tool/portfolio-track4/portfolio-tr
 import { PortfolioComparisonComponent } from 'app/portfolios/portfolio-comparison/portfolio-comparison.component';
 import { SdgPriorityComponent } from 'app/sdg-priority/sdg-priority.component';
 import { AssessmentInprogressComponent } from 'app/assessment-inprogress/assessment-inprogress.component';
+import { AssessmentFlowComponent } from 'app/Tool/assessment-flow/assessment-flow.component';
 
 
 const routes: Routes = [
@@ -114,7 +115,7 @@ const routes: Routes = [
     data: {}
   },
   {
-    path: 'add-polocies',
+    path: 'add-policies',
     component: ClimateActionComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
@@ -369,6 +370,13 @@ const routes: Routes = [
   {
     path: 'manage-sdgs',
     component: SdgPriorityComponent,
+    loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
+    canActivate: [],
+    data: {}
+  },
+  {
+    path: 'assessment-flow',
+    component: AssessmentFlowComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}

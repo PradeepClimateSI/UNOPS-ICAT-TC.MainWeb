@@ -2,11 +2,11 @@ import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, 
 import { MasterDataService } from 'app/shared/master-data.service';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { LazyLoadEvent } from 'primeng/api';
-import { Assessment, InvestorToolControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Assessment, InvestorToolControllerServiceProxy, PortfolioControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { Chart, ChartType } from 'chart.js';
 import { HeatMapScore, TableData } from 'app/charts/heat-map/heat-map.component';
-
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-all-too-dashbord',
   templateUrl: './all-too-dashbord.component.html',
@@ -15,7 +15,7 @@ import { HeatMapScore, TableData } from 'app/charts/heat-map/heat-map.component'
 export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
   calResults: any;
 
-  @ViewChild('investmentSDGsPieChart2')
+  @ViewChild('portfolioSDGsPieChart')
   canvasRefSDGsPieChart: ElementRef<HTMLCanvasElement>;
   @ViewChild('sourceDiv', { read: ElementRef }) sourceDiv: ElementRef;
   @ViewChild('targetDiv', { read: ElementRef }) targetDiv: ElementRef;
@@ -29,16 +29,20 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
   totalRecords: number;
   pointTableDatas: Assessment[] = []
   userRole: string = "";
+  policies:any;
+  selectPolicy:any;
+  countryId:number;
 
   sectorCount: {
     sector: string,
     count: number
   }[];
 
-  pieChart1: Chart;
+  portfolioSDGsPieChart: Chart;
   pieChart2: Chart;
   tool: string;
   tableData: any[] = []
+  projectName: any[] = []
   xData: { label: string; value: number }[]
   yData: { label: string; value: number }[]
   rows: number = 5;
@@ -71,20 +75,42 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
     'rgba(47, 79, 79, 1)',
     'rgba(139, 69, 19, 1)'
   ]
+  selectedPortfolio : any;
+  portfolioList : any[]= [];
+  allAssessments: any[] = [];
+  selectedAssessments: any[]=[];
+  selectedIds:string[] = [];
+  selectionLimit:number = 10;
 
   constructor(
     private investorProxy: InvestorToolControllerServiceProxy,
     public masterDataService: MasterDataService,
     private cdr: ChangeDetectorRef,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private projectProxy: ProjectControllerServiceProxy,
+    private portfolioServiceProxy : PortfolioControllerServiceProxy,
+     private activatedRoute: ActivatedRoute,
+    private router: Router,
   ) {
   }
   ngOnInit(): void {
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
     this.userRole = tokenPayload.role.code;
+    this.countryId =tokenPayload.countryId
     this.sdgColorMap = this.masterDataService.SDG_color_map
-    this.sectorColorMap = this.masterDataService.Sector_color_map
+    this.sectorColorMap = this.masterDataService.Sector_color_map;
+    this.getPortfolioList()
+    this.setAlldata()
+
+    setTimeout(() => {
+      this.projectProxy
+        .getProjectName(this.countryId)
+
+        .subscribe((a) => {
+         this.policies = a.filter((obj:any) => obj !== null);
+        }, err => {this.loading = false;});
+    }, 1000);
 
     this.xData = this.masterDataService.xData;
     this.yData = this.masterDataService.yData;
@@ -95,27 +121,58 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
     this.sectorCountResult();
 
   }
+
+  getPortfolioList(){
+    this.portfolioServiceProxy.getAll().subscribe(async (res: any) => {
+      this.portfolioList = res;
+     });
+  }
+
+  goToFunction(){
+    this.selectedPortfolio = ''
+    this.selectPortfolio()
+    this.setAlldata()
+  }
+
+  setAlldata() {
+    let tool ='ALL_OPTION'
+    this.portfolioServiceProxy.getAlltoolDashboardData(this.selectedPortfolio ? this.selectedPortfolio.id : 0, 1, this.rows, this.selectedIds,tool).subscribe((res) => {
+      this.allAssessments = res.meta.allData
+    });
+  }
+
+  selectPortfolio() {
+    this.sdgDetailsList = [];
+    this.setAlldata()
+    this.sectorCountResult()
+    this.sdgResults()
+    let event: any = {};
+    event.rows = this.rows;
+    event.first = 0;
+    this.loadgridData(event);
+  }
+
+
   ngAfterViewInit(): void {
     this.cdr.detectChanges();
   }
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
-    this.updateSourceDivHeight();
+    // this.updateSourceDivHeight();
   }
-  updateSourceDivHeight(): void {
-    this.targetDivHeight = this.targetDiv.nativeElement.offsetHeight;
-    this.renderer.setStyle(this.sourceDiv.nativeElement, 'height', `${this.targetDivHeight}px`);
-    this.renderer.setStyle(this.sourceDiv.nativeElement, 'overflow-y', 'auto');
-    this.cdr.detectChanges();
-  }
+  // updateSourceDivHeight(): void {
+  //   this.targetDivHeight = this.targetDiv.nativeElement.offsetHeight;
+  //   this.renderer.setStyle(this.sourceDiv.nativeElement, 'height', `${this.targetDivHeight}px`);
+  //   this.renderer.setStyle(this.sourceDiv.nativeElement, 'overflow-y', 'auto');
+  //   this.cdr.detectChanges();
+  // }
   sectorCountResult(){
-    let tool = 'All Option'
-    this.investorProxy.findSectorCount(tool).subscribe((res: any) => {
+    this.investorProxy.findSectorCountAllTool(this.selectedPortfolio?this.selectedPortfolio.id:0).subscribe((res: any) => {
       this.sectorCount = res.sort(this.compareByAge);
       setTimeout(() => {
 
         this.viewSecterTargetedPieChart();
-        this.updateSourceDivHeight();
+        // this.updateSourceDivHeight();
       }, 20);
       this.sdgResults()
 
@@ -228,6 +285,23 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
     }
 
   }
+  onSelectAssessment() {
+    this.selectedIds = this.selectedAssessments.map((item: any)=> item.id)
+    this.callTable()
+ }
+
+ onClear() {
+   this.selectedIds = []
+    this.selectedAssessments = []
+    this.callTable()
+ }
+
+ callTable(){
+   let event: any = {};
+     event.rows = this.rows;
+     event.first = 0;
+     this.loadgridData(event);
+ }
 
   loadgridData = (event: LazyLoadEvent) => {
     this.loading = true;
@@ -238,7 +312,7 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
         ? 1
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
-    this.investorProxy.getDashboardAllData(pageNumber,this.rows).subscribe((res) => {
+    this.investorProxy.getDashboardAllData(pageNumber,this.rows,this.projectName,this.selectedPortfolio?this.selectedPortfolio.id:0).subscribe((res) => {
       this.tableData=res.items;
       this.heatMapScore = this.tableData.map(item => {return {processScore: item.process_score, outcomeScore: item.outcome_score}})
       this.heatMapData = this.tableData.map(item => {return {interventionId: item.climateAction?.intervention_id, interventionName: item.climateAction?.policyName, processScore: item.process_score, outcomeScore: item.outcome_score}}) 
@@ -249,6 +323,14 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
 
   
   };
+  goToResult(id: number,tool:string) {
+    if(tool=='CARBON_MARKET'){
+      this.router.navigate(['carbon-market-tool-result'], { queryParams: { id: id }, relativeTo: this.activatedRoute })
+    }else{
+      this.router.navigate(['assessment-result-investor', id], { queryParams: { assessmentId:id }, relativeTo: this.activatedRoute });
+    }
+    
+  }
 
   mapOutcomeScores(value: number) {
     
@@ -369,21 +451,19 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
 
   sdgResults() {
     this.sdgDetailsList = []
-    this.investorProxy.sdgSumAllCalculate().subscribe(async (res: any) => {
+    this.investorProxy.sdgSumAllCalculate(this.selectedPortfolio?this.selectedPortfolio.id:0).subscribe(async (res: any) => {
       this.sdgDetailsList = res;
       setTimeout(() => {
-        this.viewFrequencyofSDGsChart();
+        this.viewPortfolioSDGsPieChart();
         
       }, 200);
     });
   }
 
-  viewFrequencyofSDGsChart() {
+  viewPortfolioSDGsPieChart(){
     this.sdgDetailsList.sort((a: any, b: any) => b.count - a.count)
-    let labels = this.sdgDetailsList.map((item: any) => item.sdg);
-    let counts: number[] = this.sdgDetailsList.map((item: any) => item.count);
-    let total = counts.reduce((acc, val) => acc + val, 0);
-    let percentages = counts.map(count => ((count / total) * 100).toFixed(2));
+    let labels = this.sdgDetailsList.map((item:any) => 'SDG ' + item.number + ' - ' + item.sdg);
+    let counts:number[] = this.sdgDetailsList.map((item:any) => item.count);
     this.sdgDetailsList.forEach((sd: any) => {
       let color = this.sdgColorMap.find((o:any) => o.sdgNumber === sd.number)
       if (color) {
@@ -392,6 +472,8 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
         this.bgColors.push(this.defaulColors[sd.id])
       }
     })
+    let total = counts.reduce((acc, val) => acc + val, 0);
+    let percentages = counts.map(count => ((count / total) * 100).toFixed(2));
 
     if (!this.canvasRefSDGsPieChart) {
       return;
@@ -403,17 +485,14 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
     if (!ctx) {
       return;
     }
-
-    if (this.pieChart1) {
-      this.pieChart1.data.datasets[0].data = counts;
-      this.pieChart1.data.labels = labels
-      this.pieChart1.update();
+    if (this.portfolioSDGsPieChart) {
+      this.portfolioSDGsPieChart.data.datasets[0].data = counts;
+      this.portfolioSDGsPieChart.data.labels=labels
+      this.portfolioSDGsPieChart.update();
     }
-    else {
-
-
-      this.pieChart1 = new Chart(ctx, {
-        type: 'pie' as ChartType,
+    else{
+      this.portfolioSDGsPieChart =new Chart(ctx, {
+        type: 'pie'as ChartType,
 
         data: {
           labels: labels,
@@ -426,8 +505,8 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: {
-            legend: {
+          plugins:{
+            legend:{
               position: 'bottom',
               labels: {
                 padding: 20
@@ -439,49 +518,53 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
                 size: 12
               },
               formatter: (value, ctx) => {
+              console.log(value)
                 const label = ctx.chart.data.labels![ctx.dataIndex];
                 const percentage = percentages[ctx.dataIndex];
                 return `${label}: ${value} (${percentage}%)`;
               },
 
             },
-            tooltip: {
-              position: 'average',
-              boxWidth: 10,
-              callbacks: {
+            tooltip:{
+              position:'average',
+              boxWidth:10,
+              callbacks:{
 
-                label: (ctx) => {
+                label:(ctx)=>{
+                 
                   let sum = 0;
-                  let array = counts
+                  let array =ctx.dataset.data
                   array.forEach((number) => {
                     sum += Number(number);
                   });
-                  let percentage = (counts[ctx.dataIndex] * 100 / sum).toFixed(2) + "%";
+              
+                  let percentage = (ctx.parsed/ sum*100).toFixed(2)+"%";
 
-                  return [
-                    `SDG: ${labels[ctx.dataIndex]}`,
-                    `Count: ${counts[ctx.dataIndex]}`,
+                  return[
+                    `SDG: ${ctx.label}`,
+                    `Count: ${ctx.raw}`,
                     `Percentage: ${percentage}`
                   ];
-                }
+                 }
               },
               backgroundColor: 'rgba(0, 0, 0, 0.8)', 
-              titleFont: {
-                size: 14,
-                weight: 'bold'
-              },
-              bodyFont: {
-                size: 14
-              },
-              displayColors: true, 
-              bodyAlign: 'left'
+                titleFont: {
+                  size: 14,
+                  weight: 'bold'
+                },
+                bodyFont: {
+                  size: 14
+                },
+                displayColors: true, 
+                bodyAlign: 'left'
             }
-          }
+         }
 
         },
 
-      });
+    });
     }
+
 
   }
 

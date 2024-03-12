@@ -2,7 +2,7 @@ import { AfterContentChecked, ChangeDetectorRef, Component, OnInit, ViewChild } 
 import { NgForm } from '@angular/forms';
 import { FieldNames, MasterDataDto, MasterDataService, chapter6_url } from 'app/shared/master-data.service';
 import * as moment from 'moment';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService,MessageService } from 'primeng/api';
 import { Any, AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, AssessmentControllerServiceProxy, Category, PortfolioSdg, TotalInvestment, TotalInvestmentDto } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
@@ -13,6 +13,7 @@ import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.compon
 import { DialogService } from 'primeng/dynamicdialog';
 import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { MultiSelect } from 'primeng/multiselect';
 
 
 interface CharacteristicWeight {
@@ -45,7 +46,8 @@ interface ChaCategoryTotalEqualsTo1 {
 })
 export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
-
+  @ViewChild('multiSelectComponent') multiSelectComponent: MultiSelect;
+  geographicalArea:MasterDataDto = new MasterDataDto()
   assessment: Assessment = new Assessment();
   investorAssessment: InvestorTool = new InvestorTool();
   sectorArray: Sector[] = [];
@@ -172,8 +174,10 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   chapter6_url = chapter6_url
   selectedInstruments: any[]
   show_less_message: boolean;
-  from_date: Date
+  phaseTransformExapmle: any[] = []
+   from_date: Date
   to_date: Date
+  isCompleted: boolean = false;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -188,6 +192,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     private activatedRoute: ActivatedRoute,
     private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
     protected dialogService: DialogService,
+    private confirmationService: ConfirmationService,
 
   ) {
     this.uploadUrl = environment.baseUrlAPI + "/document/upload-file-by-name";
@@ -195,7 +200,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   }
   async ngOnInit(): Promise<void> {
-    this.sectorList = await this.sectorProxy.findAllSector().toPromise();
+    this.phaseTransformExapmle = this.masterDataService.phase_transfrom
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;
     this.geographicalAreasCovered = this.masterDataService.level_of_implemetation;
     this.investment_instruments = this.masterDataService.investment_instruments
@@ -207,7 +212,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.relevance_tooltip = "Does the process characteristic affects/impacts any of the identified barriers? does the intervention affects/impacts the process characteristic?"
 
     this.activatedRoute.queryParams.subscribe(params => {
-      params['isEdit'] == 'true' ? (this.isEditMode = true) : false
+      params['isEdit'] == 'true' ? (this.isEditMode = true) : false;
+      params['iscompleted'] == 'true' ? (this.isCompleted = true) : false
       this.assessmentId = params['id'];
       if (!this.assessmentId && this.isEditMode) {
         window.location.reload()
@@ -329,7 +335,20 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
     this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise();
     this.policies.push(this.assessment.climateAction);
-    this.finalBarrierList = this.assessment['policy_barrier'];
+    this.finalBarrierList = this.assessment['policy_barrier'].map((i: { is_affected: boolean; characteristics: Characteristics[]; explanation: string; barrier: string; })=> {
+      let p =  new BarrierSelected()
+      p.affectedbyIntervention = i.is_affected
+      p.characteristics = i.characteristics.map( char =>{
+        let characteristic = new Characteristics()
+        characteristic.id = char.id
+        characteristic.name = char.name
+        return characteristic
+      })
+      p.explanation = i.explanation
+      p.barrier = i.barrier
+      return p
+      
+     });
     let areas: MasterDataDto[] = []
     this.assessment['geographicalAreasCovered'].map((area: { code: any; }) => {
       let level = this.levelOfImplementation.find(o => o.code === area.code);
@@ -338,11 +357,15 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       }
     })
     this.geographicalAreasCoveredArr = areas;
-    let sectors: any[] = [];
-    this.assessment['sector'].map((sector: { name: any; }) => {
-      sectors.push(this.sectorList.find(o => o.name === sector.name));
+
+    this.geographicalArea = this.geographicalAreasCoveredArr[0]
+    this.assessment['sector'].map((sector: Sector) => {
+      let sec = new Sector()
+      sec.id = sector.id
+      sec.name = sector.name
+      this.sectorArray.push(sec)
     })
-    this.sectorArray = sectors;
+    this.sectorList = this.sectorArray
     this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
     this.setFrom();
     this.setTo();
@@ -496,54 +519,54 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     catch (error) {
     }
   }
-
+  
   save(form: NgForm) {
     this.isStageDisble = true;
-
     this.assessment.tool = 'INVESTOR'
     this.assessment.year = moment(new Date()).format("DD/MM/YYYY")
     if (!this.assessment.id) this.assessment.createdOn = moment(new Date())
     this.assessment.editedOn = moment(new Date())
-
+    if(this.isCompleted){
+      form.controls['sectors'].setValue(this.sectorArray)
+    }
+    
     if (form.valid) {
 
       this.assessment.from = moment(this.from_date)
       this.assessment.to = moment(this.to_date)
       this.methodologyAssessmentControllerServiceProxy.saveAssessment(this.assessment)
         .subscribe(res => {
-
+          
           if (res) {
 
             let allBarriersSelected = new AllBarriersSelected()
             allBarriersSelected.allBarriers = this.finalBarrierList
             allBarriersSelected.climateAction = res.climateAction
             allBarriersSelected.assessment = res;
-
-            this.projectControllerServiceProxy.policyBar(allBarriersSelected).subscribe((res) => {
-              this.messageService.add({
-                severity: 'success',
-                summary: 'Success',
-                detail: 'Assessment has been created successfully',
-                closable: true,
-              },
-
-              );
-            },
-              (err) => {
-                this.messageService.add({
-                  severity: 'error',
-                  summary: 'Error.',
-                  detail: 'Internal server error in policy barriers',
-                  sticky: true,
-                });
-              })
-            this.geographicalAreasCoveredArr = this.geographicalAreasCoveredArr.map(a => {
-              let _a = new GeographicalAreasCoveredDto()
-              _a.id = a.id
-              _a.name = a.name
-              _a.code = a.code
-              return _a
-            })
+          this.projectControllerServiceProxy.policyBar(allBarriersSelected).subscribe((res) => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Assessment has been created successfully',
+              closable: true,
+            },            
+            
+            );
+          },
+          (err) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error.',
+              detail: 'Internal server error in policy barriers',
+              sticky: true,
+            });
+          })
+            this.geographicalAreasCoveredArr = []
+            let _a = new GeographicalAreasCoveredDto()
+            _a.id = this.geographicalArea.id
+            _a.name = this.geographicalArea.name
+            _a.code = this.geographicalArea.code
+            this.geographicalAreasCoveredArr.push(_a) 
 
             this.investorAssessment.assessment = res;
             this.mainAssessment = res
@@ -570,6 +593,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
                   investDto.totalInvestements = this.totalInvestments
                   await this.investorToolControllerproxy.saveTotalInvestments(investDto).toPromise();
                   this.isSavedAssessment = true
+                  this.isCompleted = false
 
                 }
               }, error => {
@@ -673,7 +697,67 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   }
 
+  onSelectIntervention(event: any) {
+    this.minDate = new Date(event.value.dateOfImplementation)
+    this.geographicalArea = this.geographicalAreasCovered.find(item=>{
+      if (item.name==this.assessment.climateAction.geographicalAreaCovered){
+        return item
+      }
+    })
+    this.sectorList = this.assessment.climateAction.policySector.map(i=> i.sector)
+    this.sectorArray = this.sectorList
+  }
+
+  onChangeGeoAreaCovered(){
+    if(this.assessment.climateAction.geographicalAreaCovered && this.geographicalArea.name !==this.assessment.climateAction.geographicalAreaCovered && !this.isCompleted){
+      this.confirmationService.confirm({
+        message: `You selected a geographical scope that deviates from the one that was assigned to this intervention- ${this.assessment.climateAction.geographicalAreaCovered }. Are you sure you want to continue with this selection?`,
+        header: 'Confirmation',
+        acceptIcon: 'icon-not-visible',
+        rejectIcon: 'icon-not-visible',
+        acceptLabel: 'Continue',
+        rejectLabel: 'Go back',
+        key: 'geoConfirm',
+        accept: () => {
+        },
+        reject: () => { 
+          this.geographicalArea = this.geographicalAreasCovered.find(item=>{
+            if (item.name==this.assessment.climateAction.geographicalAreaCovered){
+              return item
+            }
+          })
+        },
+      });
+    }
+  }
+
   onItemSelectSectors(event: any) {
+    if(this.assessment.climateAction.policySector){
+      if(this.assessment.climateAction.policySector.length !=  this.sectorArray.length && !this.isCompleted){
+        this.closeMultiSelect();
+        this.confirmationService.confirm({
+          message: `You selected sectors that deviates from the one that was assigned to this intervention- ${ this.assessment.climateAction.policySector.map(i=> i.sector.name).join(",")}. Are you sure you want to continue with this selection?`,
+          header: 'Confirmation',
+          acceptIcon: 'icon-not-visible',
+          rejectIcon: 'icon-not-visible',
+          acceptLabel: 'Continue',
+          rejectLabel: 'Go back',
+          key: 'sectorConfirm',
+          accept: () => {
+          },
+          reject: () => { 
+            this.sectorArray = this.sectorList
+          },
+        });
+      }
+      
+    }
+    
+  }
+  closeMultiSelect() {
+    if (this.multiSelectComponent) {
+      this.multiSelectComponent.overlayVisible = false;
+    }
   }
   onItemSelectImpacts(event: any) {
 
@@ -938,6 +1022,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   }
 
   checkValidation(data: any[], type: string) {
+    
     let isValid: boolean = false
     for (let investorAssessment of data) {
       if (type === 'process' ) {
@@ -1350,7 +1435,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   calculateAbatement(value: number, data: any) {
     if (this.investorAssessment?.total_investment) {
-      data['abatement'] = value * Math.pow(10, 3) / this.investorAssessment.total_investment
+      data['abatement']= value  / this.investorAssessment.total_investment 
     } else {
       data['abatement'] = 0
     }
@@ -1420,9 +1505,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     }
   }
 
-  onSelectIntervention(event: any) {
-    this.minDate = new Date(event.value.dateOfImplementation)
-  }
 
   getTooltipData(ch: string) {
     switch (ch) {

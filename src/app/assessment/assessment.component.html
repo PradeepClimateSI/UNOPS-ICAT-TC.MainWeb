@@ -44,9 +44,9 @@
       <tr  style="height:4rem;">
           <th style="width:30%" pSortableColumn="method" >Intervention <p-sortIcon field="meth"></p-sortIcon></th>
           <th style="width:15%" pSortableColumn="assessmentType" >Assessment Type <p-sortIcon field="assessmentType"></p-sortIcon></th>
-          <th style="width:25%" pSortableColumn="tool" >Tool <p-sortIcon field="tool"></p-sortIcon></th>
-          <th style="width:25%" pSortableColumn="tool" >Created Date <p-sortIcon field="tool"></p-sortIcon></th>
-          <th style="width:15%">Action</th>
+          <th style="width:20%" pSortableColumn="tool" >Tool <p-sortIcon field="tool"></p-sortIcon></th>
+          <th style="width:15%" pSortableColumn="tool" >Created Date <p-sortIcon field="tool"></p-sortIcon></th>
+          <th style="width:20%">Action</th>
       </tr>
   </ng-template>
   <ng-template pTemplate="body" let-results>
@@ -57,6 +57,8 @@
         <td>{{results.assessment.createdOn | date: 'dd/MM/YYYY'}}</td>
         <td >
           <button pButton pRipple class="btn btn-primary btn-block text-uppercase" type='submit' (click)="myFunction(results.assessment.id, results.averageProcess, results.averageOutcome, results.assessment.tool,results.assessment.assessment_method )"> View</button>
+          <button pButton pRipple class="ml-10 btn btn-delete btn-block text-uppercase" type='submit' (click)="deleteAssessment(results.assessment.id,results.assessment.tool)" > Delete</button>
+          <button pButton pRipple class="ml-10 btn btn-primary btn-block text-uppercase" type='submit' (click)="detail(results.assessment)"> Edit</button>
         </td>
 
       </tr>

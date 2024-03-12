@@ -96,7 +96,7 @@ export class AppService {
   public startIdleTimer() {
     this.userIdle.resetTimer();
     this.userIdle.stopWatching();
-    this.userIdle.setConfigValues({idle: 900, timeout: 1, ping: 600, idleSensitivity: 10});
+    this.userIdle.setConfigValues({idle: 3600, timeout: 1, ping: 600, idleSensitivity: 10});
 
     this.userIdle.startWatching(); 
     this.userIdle.onTimerStart().subscribe((count) => {});
