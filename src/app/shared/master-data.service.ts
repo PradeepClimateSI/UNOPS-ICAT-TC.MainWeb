@@ -225,8 +225,8 @@ export class MasterDataService {
 
     this.level_of_implemetation = [
       { id: 1, name: "International", code: "INTERNATIONAL" },
-      { id: 2, name: "National/sectorial", code: "NATIONAL" },
-      { id: 3, name: "Sub-national/sub-sectorial", code: "SUBNATIONAL" },
+      { id: 2, name: "National/sectoral", code: "NATIONAL" },
+      { id: 3, name: "Sub-national/sub-sectoral", code: "SUBNATIONAL" },
 
     ]
 
@@ -302,12 +302,12 @@ export class MasterDataService {
       macro: 'Quantitative impacts can also be entered here, using the following indicators as a guide:\n 3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.1% of global emissions in the sector in the latest year for which data is available\n' +
         '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.05% of global emissions in the sector in the latest year for which data is available\n' +
         '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.01% of global emissions in the sector in the latest year for which data is available\n' +
-        '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) <0.1% of global emissions in the sector in the latest year for which data is available\n' +
+        '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) <0.01% of global emissions in the sector in the latest year for which data is available\n' +
         '-3 - any emissions increase',
       medium: 'Quantitative impacts can also be entered here, using the following indicators as a guide:\n 3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >1% of national/sectoral emissions in the latest year for which data is available\n' +
         '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.5-1% of national/sectoral emissions in the latest year for which data is available\n' +
         '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.1-0.5% of national/sectoral emissions in the latest year for which data is available\n' +
-        '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) <0.1% of national/sectoral emissions in the latest year for which data is available\n' +
+        '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) <0.01% of national/sectoral emissions in the latest year for which data is available\n' +
         '-3 - any emissions increase',
       micro: 'Quantitative impacts can also be entered here, using the following indicators as a guide:\n 3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >5% of subnational/regional/municipal emissions in the latest year for which data is available\n' +
         '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 1-5% of subnational/regional/municipal emissions in the latest year for which data is available\n' +

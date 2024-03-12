@@ -1,11 +1,10 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { FieldNames, MasterDataService } from 'app/shared/master-data.service';
-import { SelectedScoreDto } from 'app/shared/score.dto';
 import { environment } from 'environments/environment';
 import { MessageService } from 'primeng/api';
-import { Assessment, CMAnswer, CMAssessmentQuestion, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Category, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, ScoreDto, UniqueCategory } from 'shared/service-proxies/service-proxies';
+import { Assessment, CMAssessmentQuestion, CMAssessmentQuestionControllerServiceProxy, CMDefaultValue, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, ScoreDto, UniqueCategory } from 'shared/service-proxies/service-proxies';
 
 
 interface UploadEvent {
@@ -93,6 +92,27 @@ export class CmSectionThreeComponent implements OnInit {
   isFirstLoading1: boolean = true;
   fieldNames = FieldNames;
   notFilledCategories: (OutcomeCategory | UniqueCategory)[] = [];
+  st_default: boolean = false
+  ex_default: boolean = false
+  default_values: {[key: string]: {st_default_values: CMDefaultValue[], ex_default_values: CMDefaultValue[]}} = {}
+  useDefault: {[key: string]: {st_default: boolean, ex_default: boolean}} = {}
+  useDefaultSDG: {[key: string]: {st_default: boolean, ex_default: boolean}} = {}
+  source = 'IPCC, 2023: Summary for Policymakers. In: Climate Change 2023: Synthesis Report. Contribution of Working Groups I, II and III to the Sixth Assessment Report of the Intergovernmental Panel on Climate Change [Core Writing Team, H. Lee and J. Romero (eds.)]. IPCC, Geneva, Switzerland, pp. 1-34, doi: 10.59327/IPCC/AR6-9789291691647.001';
+
+  sectoral_description = "Sectoral data should be used when possible. If sectoral data is unavailable, national data can be used. Data on national or sectoral level emissions can "+
+  "be found in countries’ National Inventory Reports. If a National Inventory Report has not been submitted, National Communications or Biennial Transparency Reports (BTRs) may "+
+  "also contain such information. At this level, the four applicable sectors would be Energy, IPPU, AFOLU and Waste, based on the 2006 IPCC Guidelines for National Greenhouse Gas "+
+  "Inventories."
+  sectoral_placeholder = 'Please enter justification, including source of data and scope of the assessment (i.e. sectoral or national level).\n\n'+
+  'E.g.:In case of an intervention focusing on increasing the blend in cement production, the relevant sector is “Industrial Processes and Product Use”. And in case of an intervention focusing on increasing the share or renewables, the relevant sector is “Energy”.'
+  subsectoral_description = "Subsectoral data should be used when possible. Subsectors can be identified using the categories listed in the 2006 IPCC Guidelines for National "+ 
+  "Greenhouse Gas Inventories (e.g. 1A1. Fuel Combustion Activities – Energy Industries, 2B1. Chemical Industry – Ammonia Production). If subsectoral data is unavailable, "+
+  "subnational data can be used. Please provide further information on the subnational reference emissions in the justification box below."
+  subsectoral_placeholder = "Enter justification, including source of data and scope of the assessment (i.e. definition of the sub-sector or subnational boundary – for example, City of Jakarta).\n\n"+
+  "E.g.: Enter below the preceding text an example: “In case of an intervention focusing on increasing the blend in cement production, the relevant subsector is “Mineral industry "+
+  "– cement production (2A1)”. And in case of an intervention focusing on increasing the share or renewables, the relevant sector is “Fuel combustion activities – energy industries "+
+  "(1A1)”."
+
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -100,7 +120,8 @@ export class CmSectionThreeComponent implements OnInit {
     public masterDataService: MasterDataService,
     private messageService: MessageService,
     private institutionControllerServiceProxy: InstitutionControllerServiceProxy,
-    private investorToolControllerServiceProxy: InvestorToolControllerServiceProxy
+    private investorToolControllerServiceProxy: InvestorToolControllerServiceProxy,
+    private cMAssessmentQuestionControllerServiceProxy: CMAssessmentQuestionControllerServiceProxy
   ) {
     this.uploadUrl = environment.baseUrlAPI + "/document/upload-file-by-name" ; 
     this.fileServerURL = environment.baseUrlAPI+'/document/downloadDocumentsFromFileName/uploads';
@@ -154,6 +175,7 @@ export class CmSectionThreeComponent implements OnInit {
     this.relevance = this.masterDataService.relevance;
     await this.getSDGList();
     await this.setInitialState();
+    this.initializeDefaultStatus()
   }
 
   async setInitialState() {
@@ -261,6 +283,16 @@ export class CmSectionThreeComponent implements OnInit {
         )
       }
     }
+  }
+
+  initializeDefaultStatus() {
+    this.outcome.map((_outcome: OutcomeCategory) => {
+      if (this.outcome.type !== 'SD') {
+        _outcome.results.map(res => {
+          if (!this.useDefault[res.characteristic.id]) this.useDefault[res.characteristic.id] = {st_default: false, ex_default: false}
+        })
+      }
+    })
   }
 
   getSelectedScoreFromOptions (selectedScore: string, characteristic: Characteristics) {
@@ -371,6 +403,7 @@ export class CmSectionThreeComponent implements OnInit {
 
     if (newSdgs && newSdgs.length > 0) {
       let mappedSdgs = newSdgs.map(sdg => {
+        if (!this.useDefaultSDG[sdg.id]) this.useDefaultSDG[sdg.id] = {st_default: false, ex_default: false}
         let pSdg = new PortfolioSdg()
         pSdg.id = sdg.id
         pSdg.name = sdg.name
@@ -928,6 +961,20 @@ export class CmSectionThreeComponent implements OnInit {
 
   adaptationJustificationChange(){
     this.checkTab2Mandatory(this.outcome.length - 1)
+  }
+
+  async loadDefaults(ch_id: number, code: string) {
+    let res = await this.cMAssessmentQuestionControllerServiceProxy.getCMDefaultValues(ch_id).toPromise()
+    if (res) {
+      if (code === 'STARTING_SITUATION') {
+        if (!this.default_values[ch_id]) this.default_values[ch_id] = {st_default_values: [], ex_default_values: []}
+        this.default_values[ch_id].st_default_values = res;
+        this.default_values[ch_id].st_default_values = this.default_values[ch_id].st_default_values.map(val => {val['label'] = val.starting_situation_value + ' ' + val.unit; return val})
+      } else {
+        this.default_values[ch_id].ex_default_values = res;
+        this.default_values[ch_id].ex_default_values = this.default_values[ch_id].ex_default_values.map(val => {val['label'] = val.expected_impact_value + ' ' + val.unit; return val})
+      }
+    }
   }
 }
 

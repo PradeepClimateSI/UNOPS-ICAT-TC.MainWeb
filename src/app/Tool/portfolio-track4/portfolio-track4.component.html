@@ -516,10 +516,10 @@
                                   <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'International/global level'">
                                     <p *ngFor="let line of ghg_info.split('\n')">{{ line }}</p>
                                   </div>
-                                  <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'National/Sectorial level'">
+                                  <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'National/Sectoral level'">
                                     <p *ngFor="let line of ghg_info.split('\n')">{{ line }}<br></p>
                                   </div>
-                                  <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level'">
+                                  <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectoral level'">
                                     <p *ngFor="let line of ghg_info.split('\n')">{{ line }}<br></p>
                                   </div>
 
@@ -561,7 +561,7 @@
                                       <a target="_blank" [href]="fileServerURL+'/'+data.uploadedDocumentPath"><i class="pi pi-download download"></i></a>
                                     </div>
                                   </div>
-                                  <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level' ">
+                                  <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectoral level' ">
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
                                         <label for="expected_ghg_mitigation">Expected average GHG reductions or removals (mitigation outcomes) (tCO₂e/year)</label>
@@ -903,8 +903,8 @@
                                     </div>
                                   </div>
                                 </div>
-                                <div class="row p-2" *ngIf=" (category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level') ||
-                                     (category.CategoryName ==='Adaptation Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectorial level') ">
+                                <div class="row p-2" *ngIf=" (category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectoral level') ||
+                                     (category.CategoryName ==='Adaptation Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectoral level') ">
                                   <div class="col-12 col-lg-6">
                                     <div class="p-field">
                                       <label for="expected_ghg_mitigation">Expected average GHG reductions or removals (mitigation outcomes) (tCO₂e/year)   </label>

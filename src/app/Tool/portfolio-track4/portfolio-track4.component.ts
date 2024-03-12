@@ -530,6 +530,9 @@ export class PortfolioTrack4Component implements OnInit {
     this.assessment.editedOn = moment(new Date())
 
     if (form.valid) {
+
+      this.assessment.from = moment(this.from_date)
+      this.assessment.to = moment(this.to_date)
       this.methodologyAssessmentControllerServiceProxy.saveAssessment(this.assessment)
         .subscribe(res => {
           this.load = true
@@ -1380,9 +1383,9 @@ export class PortfolioTrack4Component implements OnInit {
     switch (ch) {
       case 'International/global level':
         return this.ghg_score_info.macro
-      case 'National/Sectorial level':
+      case 'National/Sectoral level':
         return this.ghg_score_info.medium
-      case 'Subnational/regional/municipal or sub sectorial level':
+      case 'Subnational/regional/municipal or sub sectoral level':
         return this.ghg_score_info.micro
       default:
         return ''
