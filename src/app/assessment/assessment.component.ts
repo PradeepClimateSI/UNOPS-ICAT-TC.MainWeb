@@ -143,12 +143,12 @@ export class AssessmentComponent implements OnInit {
   detail(assessment: Assessment) {
     if(assessment.tool =="CARBON_MARKET"){
       this.router.navigate(['app/carbon-market-tool-edit'], {  
-      queryParams: { id: assessment.id, isEdit: true,},  
+      queryParams: { id: assessment.id, isEdit: true,iscompleted:true},  
       });
     }
     if(assessment.tool =="PORTFOLIO"){
       this.router.navigate(['app/portfolio-tool'], {  
-      queryParams: { id: assessment.id, isEdit: true},  
+      queryParams: { id: assessment.id, isEdit: true, iscompleted:true},  
       });
     }
 

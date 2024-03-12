@@ -149,6 +149,7 @@ export class PortfolioTrack4Component implements OnInit {
   chapter6_url = chapter6_url
   from_date:Date
   to_date: Date
+  isCompleted: boolean = false;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -199,7 +200,8 @@ export class PortfolioTrack4Component implements OnInit {
     this.adaptation_info = this.masterDataService.other_invest_adaptation_info
     this.ghg_score_info = this.masterDataService.other_invest_ghg_score_info
     this.activatedRoute.queryParams.subscribe(params => {
-      params['isEdit'] == 'true' ? (this.isEditMode = true) : false
+      params['isEdit'] == 'true' ? (this.isEditMode = true) : false;
+      params['iscompleted'] == 'true' ? (this.isCompleted = true) : false
       this.assessmentId = params['id']
       if (!this.assessmentId && this.isEditMode) {
         window.location.reload();
@@ -325,7 +327,20 @@ export class PortfolioTrack4Component implements OnInit {
       this.activeIndexMain = 1;
     }
     this.policies.push(this.assessment.climateAction)
-    this.finalBarrierList = this.assessment['policy_barrier']
+    this.finalBarrierList = this.assessment['policy_barrier'].map((i: { is_affected: boolean; characteristics: Characteristics[]; explanation: string; barrier: string; })=> {
+      let p =  new BarrierSelected()
+      p.affectedbyIntervention = i.is_affected
+      p.characteristics = i.characteristics.map( char =>{
+        let characteristic = new Characteristics()
+        characteristic.id = char.id
+        characteristic.name = char.name
+        return characteristic
+      })
+      p.explanation = i.explanation
+      p.barrier = i.barrier
+      return p
+      
+     });
     let areas: MasterDataDto[] = []
     this.assessment['geographicalAreasCovered'].map((area: { code: any; }) => {
       let level = this.levelOfImplementation.find(o => o.code === area.code)
@@ -528,7 +543,9 @@ export class PortfolioTrack4Component implements OnInit {
     this.assessment.year = moment(new Date()).format("DD/MM/YYYY")
     if (!this.assessment.id) this.assessment.createdOn = moment(new Date())
     this.assessment.editedOn = moment(new Date())
-
+    if(this.isCompleted){
+      form.controls['sectors'].setValue(this.sectorArray)
+    }
     if (form.valid) {
 
       this.assessment.from = moment(this.from_date)
@@ -578,7 +595,7 @@ export class PortfolioTrack4Component implements OnInit {
               .subscribe(_res => {
                 if (_res) {
                   this.isSavedAssessment = true;
-
+                  this.isCompleted = false
                 }
               }, error => {
                 this.messageService.add({
@@ -1037,7 +1054,7 @@ export class PortfolioTrack4Component implements OnInit {
               isValid = false
               break;
             }
-          } else if (['SCALE_SD', 'SUSTAINED_SD'].includes(investorAssessment.characteristics.category.code)) {
+          } else if (['SCALE_SD', 'SUSTAINED_SD'].includes(investorAssessment.characteristics.category?.code) || ['SCALE_SD', 'SUSTAINED_SD'].includes(investorAssessment.category?.code)) {
             isValid = true
             continue;
           } else {
@@ -1328,7 +1345,7 @@ export class PortfolioTrack4Component implements OnInit {
   }
 
   onChangeGeoAreaCovered(){
-    if(this.assessment.climateAction.geographicalAreaCovered && this.geographicalArea.name !==this.assessment.climateAction.geographicalAreaCovered){
+    if(this.assessment.climateAction.geographicalAreaCovered && this.geographicalArea.name !==this.assessment.climateAction.geographicalAreaCovered && !this.isCompleted){
       this.confirmationService.confirm({
         message: `You selected a geographical scope that deviates from the one that was assigned to this intervention- ${this.assessment.climateAction.geographicalAreaCovered }. Are you sure you want to continue with this selection?`,
         header: 'Confirmation',
@@ -1352,7 +1369,7 @@ export class PortfolioTrack4Component implements OnInit {
 
   onItemSelectSectors(event: any) {
     if(this.assessment.climateAction.policySector){
-      if(this.assessment.climateAction.policySector.length !=  this.sectorArray.length){
+      if(this.assessment.climateAction.policySector.length !=  this.sectorArray.length && !this.isCompleted){
         this.closeMultiSelect();
         this.confirmationService.confirm({
           message: `You selected sectors that deviates from the one that was assigned to this intervention- ${ this.assessment.climateAction.policySector.map(i=> i.sector.name).join(",")}. Are you sure you want to continue with this selection?`,
