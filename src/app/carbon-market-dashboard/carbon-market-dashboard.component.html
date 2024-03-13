@@ -19,6 +19,13 @@
               </ng-container>
               <ng-template #elseBlock3 >
                 <div  class="col-12  mt-20 ml-10" >
+                  <div class="row">
+                    <label class="col-3">Select Assessments</label>
+                    <p-multiSelect placeholder="Select Assessments" name="interventions" class="col"
+                      #sector="ngModel" [(ngModel)]="selected_interventions" [options]="interventions_to_filter" appendTo="body"
+                      optionLabel="intervention" optionValue="intervention_id" (ngModelChange)="loadgridData($event)" [selectionLimit]="10"></p-multiSelect>
+                  </div>
+                  <br>
 
                   <p-table
                   #mainTable
@@ -45,7 +52,7 @@
                       </tr>
                   </ng-template>
                   <ng-template pTemplate="body" let-tableData>
-                      <tr>
+                      <tr (click)="goToResult(tableData.assessment_id)">
                           <td>{{ tableData?.intervention }}</td>
                           <td>{{ mapProcessScores(tableData.process_score) }}</td>
                           <td>{{ mapOutcomeScores(tableData.outcome_score) }}</td>

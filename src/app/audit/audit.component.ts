@@ -152,7 +152,7 @@ export class AuditComponent implements OnInit {
 
 
     let editedOn = this.searchBy.editedOn
-      ? moment(this.searchBy.editedOn).format('YYYY-MM-DD')
+      ? moment(this.searchBy.editedOn).format('dd/MM/yyyy')
       : '';
 
     let pageNumber =

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MasterDataService } from 'app/shared/master-data.service';
+import * as moment from 'moment';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
 import { GetAssessmentDetailsDto, MethodologyAssessmentControllerServiceProxy, Portfolio, PortfolioControllerServiceProxy, Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
@@ -17,6 +18,7 @@ export class PortfolioAddComponent implements OnInit {
   filterText: any = '';
   searchSectors: string = '';
   type: string = '';
+  currentDate = new Date()
 
   constructor(
     private methassess : MethodologyAssessmentControllerServiceProxy,
@@ -69,6 +71,7 @@ export class PortfolioAddComponent implements OnInit {
         { label: 'Ex-post', value: 'Ex-post' },
         { label: 'Ex-ante', value: 'Ex-ante' },
     ];
+    this.portfolio.date = this.currentDate.toLocaleDateString()
 
     this.apporoachList = [
       { label: 'Direct', value: 'Direct' },
@@ -127,6 +130,7 @@ export class PortfolioAddComponent implements OnInit {
   save( data : any){
 
     data.portfolioId = this.portfolio.portfolioId
+    data.date = this.portfolio.date
 
     if(this.selectedValues.length < 2){
       this.messageService.add({

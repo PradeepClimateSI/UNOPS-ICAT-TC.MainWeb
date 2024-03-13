@@ -88,7 +88,7 @@ export class CmResultComponent implements OnInit {
           { title: 'Geographical Areas Covered', data: this.assessmentCMDetail.geographicalAreasCovered.map(a => a.name)},
           { title: 'Sectors Covered', data: this.assessmentCMDetail.sectorsCovered.map(a => a.sector.name)},
           { title: 'Opportunities for stakeholders to participate in the assessment', data: this.assessment.opportunities},
-          { title: 'Assessment Period', data: moment(this.assessment.from).format('YYYY-MM-DD') + ' - ' + moment(this.assessment.to).format('YYYY-MM-DD')},
+          { title: 'Assessment Period', data: moment(this.assessment.from).format('DD/MM/YYYY') + ' - ' + moment(this.assessment.to).format('DD/MM/YYYY')},
           { title: 'Assessment Boundaries (If different from the intervention boundary specified in the baseline methodology)', data: this.assessmentCMDetail.boundraries},
           { title: 'International Carbon Market Approach Used', data: cmApproache?.name},
           { title: 'Baseline and monitoring methodology applied by the intervention', data: this.assessmentCMDetail.appliedMethodology}
@@ -436,26 +436,30 @@ export class CmResultComponent implements OnInit {
 
   getOutcomeScores(code: any, category: string, characteristic: Characteristics) {
     if (code) {
-      if (category == 'scale_GHGs') {
-        if (characteristic.code === 'MACRO_LEVEL') {
-          return (this.scale_GHG_score_macro.find(o => o.code === code))?.value
-        } else if (characteristic.code === 'MEDIUM_LEVEL') {
-          return (this.scale_GHG_score_medium.find(o => o.code === code))?.value
-        } else {
-          return (this.scale_GHG_score_micro.find(o => o.code === code))?.value
+      if (code === '-99') {
+        return (this.scale_GHG_score_micro.find(o => o.code === code))?.name
+      } else {
+        if (category == 'scale_GHGs') {
+          if (characteristic.code === 'MACRO_LEVEL') {
+            return (this.scale_GHG_score_macro.find(o => o.code === code))?.value
+          } else if (characteristic.code === 'MEDIUM_LEVEL') {
+            return (this.scale_GHG_score_medium.find(o => o.code === code))?.value
+          } else {
+            return (this.scale_GHG_score_micro.find(o => o.code === code))?.value
+          }
         }
-      }
-      else if (category == 'sustained_GHGs') {
-        return (this.sustained_GHG_score.find(o => o.code === code))?.value
-      }
-      else if (category == 'scale_SDs') {
-        return (this.scale_SD_score.find(o => o.code === code))?.value
-      }
-      else if (category == 'sustained_SDs') {
-        return (this.sustained_SD_score.find(o => o.code === code))?.value
-      }
-      else {
-        return '-'
+        else if (category == 'sustained_GHGs') {
+          return (this.sustained_GHG_score.find(o => o.code === code))?.value
+        }
+        else if (category == 'scale_SDs') {
+          return (this.scale_SD_score.find(o => o.code === code))?.value
+        }
+        else if (category == 'sustained_SDs') {
+          return (this.sustained_SD_score.find(o => o.code === code))?.value
+        }
+        else {
+          return '-'
+        }
       }
     } else {
       return '-'
@@ -468,13 +472,13 @@ export class CmResultComponent implements OnInit {
     } else if (name == 'Medium term (5-15 years)') {
       return 'National/Sector Level'
     } else if (name == 'Short term (<5 years)') {
-      return 'Subnational/ subsectorial'
+      return 'Subnational/ subsectoral'
     } else if (name === 'Macro Level') {
       return 'International Level';
     } else if (name === 'Medium Level') {
       return 'National/Sector Level'
     } else if (name === 'Micro Level') {
-      return 'Subnational/ subsectorial'
+      return 'Subnational/ subsectoral'
     } else {
       return name;
     }

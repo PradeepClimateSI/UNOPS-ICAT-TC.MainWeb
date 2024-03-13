@@ -4,10 +4,10 @@
 <ng-container *ngIf="this.listOfHistory?.length != 0; else elseBlock1">
 <div *ngFor="let item of this.listOfHistory; let i = index">
     
-    <p><b>Date </b>  {{item?.createdOn | date: "yyyy-MM-dd"}}</p>
-    <p><b>Parameter Created Date </b>  {{item?.parameterCreatedDate | date: "yyyy-MM-dd"}}</p>
-    <p><b>Parameter Allocated Date </b>  {{item?.parameterAllocatedDate | date: "yyyy-MM-dd"}}</p>
-    <p><b>Parameter Assigned by IA </b>  {{item?.parameterAssignDateByIA | date: "yyyy-MM-dd"}}</p>
+    <p><b>Date </b>  {{item?.createdOn | date: "dd/MM/yyyy"}}</p>
+    <p><b>Parameter Created Date </b>  {{item?.parameterCreatedDate | date: "dd/MM/yyyy"}}</p>
+    <p><b>Parameter Allocated Date </b>  {{item?.parameterAllocatedDate | date: "dd/MM/yyyy"}}</p>
+    <p><b>Parameter Assigned by IA </b>  {{item?.parameterAssignDateByIA | date: "dd/MM/yyyy"}}</p>
     <p><b>DEO Assumption</b>  {{item?.deoAssumption}}</p>
     <p><b>QC Assumption</b>  {{item?.comment}}</p>
     <p><b>Description</b>  {{item?.description}}</p>

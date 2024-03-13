@@ -120,7 +120,7 @@ export class EnterDataInvestmentComponent implements OnInit {
     let filtertext = this.searchBy.text ? this.searchBy.text : '';
 
     let editedOn = this.searchBy.editedOn
-      ? moment(this.searchBy.editedOn).format('YYYY-MM-DD')
+      ? moment(this.searchBy.editedOn).format('DD/MM/YYYY')
       : '';
 
     let pageNumber =
@@ -233,7 +233,7 @@ export class EnterDataInvestmentComponent implements OnInit {
         let id = e.investmentParameter.id;
         let intervention = e.investmentParameter.assessment.climateAction.policyName;
         let assessmentType = e.investmentParameter.assessment.assessmentType;
-        let assessmentPeriod = moment(e.investmentParameter.assessment.from).format('yy-MM-DD') + " - " + moment(e.investmentParameter.assessment.to).format('yy-MM-DD')
+        let assessmentPeriod = moment(e.investmentParameter.assessment.from).format('DD/MM/YYYY') + " - " + moment(e.investmentParameter.assessment.to).format('DD/MM/YYYY')
         let process_outcome = e.investmentParameter.type
         let category = e.investmentParameter.category.name
         let characteristic = e.investmentParameter.characteristics.name
