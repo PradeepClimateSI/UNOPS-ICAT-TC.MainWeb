@@ -276,7 +276,6 @@ export function getAuditRemoteServiceBaseUrl(): string {
     ServiceProxy,
     AuthServiceProxy,
     DocumentControllerServiceProxy,
-    ConfirmationService,
     AuthControllerServiceProxy,
     ProjectControllerServiceProxy,
     CountryControllerServiceProxy,

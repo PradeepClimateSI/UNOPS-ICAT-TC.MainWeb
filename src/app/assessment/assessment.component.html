@@ -1,11 +1,8 @@
 <div class="container pl-20 pr-20">
-
   <div class="card" style="min-height: 600px;">
-    <p-toast></p-toast>
-
     <div class="mb-12">
       <h4 class="mt-4">Assessments
-        <span (click)="watchVideo()" pTooltip="Click to watch guidance video"  class="infor-video" ><i class="pi pi-video" style=" font-size: 1em ;  margin-left: 1em;"></i></span>
+        <span (click)="watchVideo()" pTooltip="Click to watch guidance video" class="infor-video"><i class="pi pi-video" style=" font-size: 1em ;  margin-left: 1em;"></i></span>
       </h4>
     </div>
 
@@ -14,63 +11,43 @@
         <h4>Loading...</h4>
       </div>
     </ng-container>
-
- <div *ngIf="load">
-<p-table #dt2 
-  [lazy]="true" 
-  (onLazyLoad)="loadData($event)"
-  paginatorDropdownAppendTo="body"
-  [rows]="rows" 
-  [showCurrentPageReport]="true"
-  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
-  [totalRecords]="totalRecords" 
-  [value]="results" 
-  [tableStyle]="{'min-width': '50rem'}"
-  [paginator]="true"
-  [sortField]="'id'" 
-  [sortOrder]="-1"
-  [globalFilterFields]="['meth', 'method', 'approach', 'assessmentType', 'tool']">
-  <ng-template pTemplate="caption">
-    <div class="d-flex justify-content-end">
-        <span class="p-input-icon-left ml-auto">
-            <i class="pi pi-search"></i>
-            <input pInputText type="text" (input)="onInput($event, dt2)" placeholder="Search keyword" />
-        </span>
+    <div *ngIf="load">
+      <p-table #dt2 [lazy]="true" (onLazyLoad)="loadData($event)" paginatorDropdownAppendTo="body" [rows]="rows" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" [totalRecords]="totalRecords"
+        [value]="results" [tableStyle]="{'min-width': '50rem'}" [paginator]="true" [sortField]="'id'" [sortOrder]="-1" [globalFilterFields]="['meth', 'method', 'approach', 'assessmentType', 'tool']">
+        <ng-template pTemplate="caption">
+          <div class="d-flex justify-content-end">
+            <span class="p-input-icon-left ml-auto">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text" (input)="onInput($event, dt2)" placeholder="Search keyword" />
+            </span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr style="height:4rem;">
+            <th style="width:30%" pSortableColumn="method">Intervention <p-sortIcon field="meth"></p-sortIcon></th>
+            <th style="width:10%" pSortableColumn="assessmentType">Assessment Type <p-sortIcon field="assessmentType"></p-sortIcon></th>
+            <th style="width:20%" pSortableColumn="tool">Tool <p-sortIcon field="tool"></p-sortIcon></th>
+            <th style="width:15%" pSortableColumn="tool">Created Date <p-sortIcon field="tool"></p-sortIcon></th>
+            <th style="width:25%">Action</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-results>
+          <tr>
+            <td>{{results.assessment.climateAction.policyName}}</td>
+            <td>{{results.assessment.assessmentType}}</td>
+            <td>{{masterDataService.getToolName(results.assessment.tool)}}</td>
+            <td>{{results.assessment.createdOn | date: 'dd/MM/YYYY'}}</td>
+            <td>
+              <div class="row">
+                <button pButton pRipple class="col btn btn-primary btn-block text-uppercase" type='submit' (click)="viewResult(results.assessment.id, results.averageProcess, results.averageOutcome, results.assessment.tool,results.assessment.assessment_method )"> View</button>
+                <button pButton pRipple class="col ml-10 btn btn-primary btn-block text-uppercase" type='submit' (click)="editAssessment(results.assessment)"> Edit</button>
+                <button pButton pRipple class="col ml-10 btn btn-delete btn-block text-uppercase" type='submit' (click)="deleteAssessment(results.assessment.id,results.assessment.tool)"> Delete</button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
     </div>
-</ng-template>
-
-
-  <ng-template pTemplate="header">
-      <tr  style="height:4rem;">
-          <th style="width:30%" pSortableColumn="method" >Intervention <p-sortIcon field="meth"></p-sortIcon></th>
-          <th style="width:15%" pSortableColumn="assessmentType" >Assessment Type <p-sortIcon field="assessmentType"></p-sortIcon></th>
-          <th style="width:20%" pSortableColumn="tool" >Tool <p-sortIcon field="tool"></p-sortIcon></th>
-          <th style="width:15%" pSortableColumn="tool" >Created Date <p-sortIcon field="tool"></p-sortIcon></th>
-          <th style="width:20%">Action</th>
-      </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-results>
-      <tr>
-        <td>{{results.assessment.climateAction.policyName}}</td>
-        <td>{{results.assessment.assessmentType}}</td>
-        <td>{{masterDataService.getToolName(results.assessment.tool)}}</td>
-        <td>{{results.assessment.createdOn | date: 'dd/MM/YYYY'}}</td>
-        <td >
-          <button pButton pRipple class="btn btn-primary btn-block text-uppercase" type='submit' (click)="myFunction(results.assessment.id, results.averageProcess, results.averageOutcome, results.assessment.tool,results.assessment.assessment_method )"> View</button>
-          <button pButton pRipple class="ml-10 btn btn-delete btn-block text-uppercase" type='submit' (click)="deleteAssessment(results.assessment.id,results.assessment.tool)" > Delete</button>
-          <button pButton pRipple class="ml-10 btn btn-primary btn-block text-uppercase" type='submit' (click)="detail(results.assessment)"> Edit</button>
-        </td>
-
-      </tr>
-  </ng-template>
-</p-table>
-</div>
-
-
-
-
-
-
-
   </div>
 </div>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

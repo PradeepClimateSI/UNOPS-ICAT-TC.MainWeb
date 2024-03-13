@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
 import { MasterDataService } from 'app/shared/master-data.service';
-import { LazyLoadEvent, MessageService } from 'primeng/api';
+import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Table } from 'primeng/table';
 import { Assessment, AssessmentControllerServiceProxy, MethodologyAssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
@@ -33,7 +33,8 @@ export class AssessmentComponent implements OnInit {
     public masterDataService: MasterDataService,
     protected dialogService: DialogService,
     public assessmentServiceControllerProxy: AssessmentControllerServiceProxy,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService
   ) { }
 
 
@@ -92,7 +93,7 @@ export class AssessmentComponent implements OnInit {
 
 
 
-  myFunction(assessId: any, averageProcess: any, averageOutcome: any, tool: string, assessment_method: string) {
+  viewResult(assessId: any, averageProcess: any, averageOutcome: any, tool: string, assessment_method: string) {
 
     if (tool === 'INVESTOR' || (tool === 'PORTFOLIO' && assessment_method === 'Track 4')) {
       this.router.navigate(['/app/assessment-result-investor', assessId], {
@@ -119,28 +120,33 @@ export class AssessmentComponent implements OnInit {
     }
   }
 
-  async deleteAssessment(id:number, tool:string){
-    await this.assessmentServiceControllerProxy.deleteAssessment(id,tool).subscribe(res => {
-      if (res){
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Assessment deleted successfully',
-          closable: true,
-        })
-        this.loadData({})
-      }else{
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to delete assessment',
-          closable: true,
+  async deleteAssessment(id: number, tool: string) {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete the assessment?',
+      accept: () => {
+        this.assessmentServiceControllerProxy.deleteAssessment(id, tool).subscribe(res => {
+          if (res) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Assessment deleted successfully',
+              closable: true,
+            })
+            this.loadData({})
+          } else {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Failed to delete assessment',
+              closable: true,
+            })
+          }
         })
       }
     })
   }
 
-  detail(assessment: Assessment) {
+  editAssessment(assessment: Assessment) {
     if(assessment.tool =="CARBON_MARKET"){
       this.router.navigate(['app/carbon-market-tool-edit'], {  
       queryParams: { id: assessment.id, isEdit: true,iscompleted:true},  

@@ -13,6 +13,7 @@ export class CmSectionComponent implements OnInit {
   @Input() assessment: Assessment
   @Input() approach: string
   @Input() isEditMode: boolean;
+  @Input() isCompleted: boolean;
   @Input() expectedGhgMitigation: number;
  
   openAccordion = 0

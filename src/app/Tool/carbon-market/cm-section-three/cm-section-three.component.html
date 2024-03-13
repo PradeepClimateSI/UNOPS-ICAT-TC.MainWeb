@@ -46,8 +46,8 @@
                             <div class="btn btn-primary text-uppercase" (click)="next(category.code, category.characteristics)">
                                 Next
                             </div>
-                            <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.code, true,category.name,'prose')">
-                                Save
+                            <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.code, isCompleted ? false :true,category.name,'prose')">
+                                {{isCompleted ? 'Update' : 'Save'}}
                             </div>
                         </div>
                     </div>
@@ -264,7 +264,7 @@
                                         Next
                                     </div>
                                     <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, true,category.code,'out')">
-                                        Save
+                                        {{isCompleted ? 'Update' : 'Save'}}
                                     </div>
                                 </div>
                             </div>
@@ -477,7 +477,7 @@
                                         Next
                                     </div>
                                     <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, true,category.code,'out')">
-                                        Save
+                                        {{isCompleted ? 'Update' : 'Save'}}
                                     </div>
                                 </div>
                             </div>
@@ -707,7 +707,7 @@
                                         Next
                                     </div>
                                     <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, true,category.code,'out')">
-                                        Save
+                                        {{isCompleted ? 'Update' : 'Save'}}
                                     </div>
                                 </div>
                             </div>
