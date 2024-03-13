@@ -179,7 +179,6 @@ export class PortfolioResultComponent implements OnInit {
           { title: 'Portfolio ID', data: this.portfolio.portfolioId },
           { title: 'Name of the Portfolio', data: this.portfolio.portfolioName },
           { title: 'Description', data: this.portfolio.description },
-          { title: 'Person(s)/ organization(s) doing the assessment', data: this.portfolio.person },
           { title: 'Is this assessment an update of a previous assessment?', data: res[0].IsPreviousAssessment },
           { title: 'Objective(s) of the assessment', data: this.portfolio.objectives },
           { title: 'Intended audience(s) of the assessment', data: this.portfolio.audience },

@@ -47,6 +47,15 @@ export class CmSectionComponent implements OnInit {
   visible_condition: boolean;
   condition_message: string;
   emptySaveDto = new SaveDto()
+  section2_description = 'Environmental integrity ensures that carbon market activities support global mitigation efforts, importantly not causing a net increase in global GHG ' +
+    'emissions compared to a situation where the carbon market activity is not implemented. Social integrity, meanwhile, guarantees the activities benefit local communities and ' +
+    'negative impacts are avoided, aligning with broader sustainability goals. Together, these principles steer carbon markets towards activities with outcomes that are beneficial ' +
+    'for both the planet and its people.'
+  criteria1_description = 'Central to safeguarding environmental integrity is the robust assessment of the additionality of the carbon market intervention and quantification of ' +
+    'the activity’s mitigation outcomes. Safeguarding the activity’s additionality means verifying that the activity was triggered by the revenues from the credits’ sale. This can ' +
+    'be demonstrated through the application of different additionality tests including a regulatory additionality test (going beyond existing laws and regulations), an investment ' +
+    'test and/or a barrier test. For the quantification of mitigation outcomes, it is essential that crediting baselines are set credibly and conservatively and that a robust ' +
+    'monitoring concept is in place. The following questions are therefore focusing on the intervention’s approach to additionality determination, baseline setting and monitoring.'
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
