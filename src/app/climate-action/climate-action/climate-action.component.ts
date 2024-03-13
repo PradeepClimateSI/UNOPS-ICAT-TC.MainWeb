@@ -430,7 +430,6 @@ export class ClimateActionComponent implements OnInit  {
       this.docService.getDocuments(this.editEntytyId,1)
         .subscribe((res: any) => {
           this.selectedDocuments = res;
-          console.log(this.selectedDocuments.length)
         });
     }
 
@@ -823,7 +822,6 @@ export class ClimateActionComponent implements OnInit  {
     this.location.back();
   }
   edit(label: string){
-    console.log(label)
     if (label === 'Edit') {
       this.editMode =true;
 
@@ -832,18 +830,6 @@ export class ClimateActionComponent implements OnInit  {
       this.editMode =false;
       this.project.dateOfCompletion= this.dateOfCompletion
       this.project.dateOfImplementation =this.dateOfImplementation;
-      // for (let sec of this.finalSectors) {
-      //   let ps = new PolicySector();
-      //   ps.intervention = this.project
-      //   ps.sector =sec;        
-      //   this.policySectorArray.push(ps);
-      // }
-      
-      // let allSectors= new AllPolicySectors();
-      //         allSectors.allSectors =this.policySectorArray;
-      // console.log(allSectors);
-      // this.projectProxy.policySectors(allSectors).subscribe((res) => {              
-      // })
 
       this.projectProxy.updateOneClimateAction(this.project)
       .subscribe(
