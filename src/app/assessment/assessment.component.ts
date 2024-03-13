@@ -82,7 +82,6 @@ export class AssessmentComponent implements OnInit {
     let res = await this.methassess.getResultPageData(skip, this.rows, this.filterText, '', '').toPromise();
 
     this.results = res[0];
-    console.log("this.results",this.results)
     this.totalRecords = res[1];
    
     if (this.results){

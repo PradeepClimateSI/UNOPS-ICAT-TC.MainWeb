@@ -171,7 +171,6 @@ export class CarbonMarketAssessmentComponent implements OnInit {
       let policy = this.policies.find(o => o.id === this.assessment.climateAction.id)
       if (policy) this.assessment.climateAction = policy
       this.cm_detail = await this.assessmentCMDetailControllerServiceProxy.getAssessmentCMDetailByAssessmentId(this.assessmentId).toPromise()
-      console.log(this.cm_detail)
       this.expected_ghg_mitigation = this.cm_detail.expected_ghg_mitigation
       let areas: MasterDataDto[] = []
       this.cm_detail.geographicalAreasCovered.map(area => {
@@ -237,7 +236,6 @@ export class CarbonMarketAssessmentComponent implements OnInit {
       form.controls['sectors'].setValue(this.sectorArray)
     }
 
-    console.log(form)
     if (form.valid) {
       this.assessment.from = moment(this.from_date)
       this.assessment.to = moment(this.to_date)
@@ -248,7 +246,6 @@ export class CarbonMarketAssessmentComponent implements OnInit {
 
             
             if (this.finalBarrierList.length > 0) {
-              console.log(this.finalBarrierList)
               let allBarriersSelected = new AllBarriersSelected()
                 allBarriersSelected.allBarriers =this.finalBarrierList
                 allBarriersSelected.climateAction =res.climateAction
@@ -286,7 +283,6 @@ export class CarbonMarketAssessmentComponent implements OnInit {
             } else {
               req = this.cm_detail;
             }
-            console.log("saving", req)
 
             this.serviceProxy.createOneBaseAssessmentCMDetailControllerAssessmentCMDetail(req)
               .subscribe(async _res => {
@@ -344,7 +340,6 @@ export class CarbonMarketAssessmentComponent implements OnInit {
                   }
                 }
               }, error => {
-                console.log(error)
                 this.messageService.add({
                   severity: 'error',
                   summary: 'Error',
