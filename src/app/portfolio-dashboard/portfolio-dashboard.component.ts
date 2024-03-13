@@ -64,7 +64,7 @@ export class PortfolioDashboardComponent implements OnInit,AfterViewInit {
   outcomeData: any[] = [];
   outcomeData2: any[] = [];
   allData : any = [];
-  rows :number;
+  rows :number = 10;
   loadSelectedTable : boolean = false;
   pieChart2: any;
   slicedData:{
@@ -108,6 +108,12 @@ export class PortfolioDashboardComponent implements OnInit,AfterViewInit {
     'rgba(47, 79, 79, 1)',
     'rgba(139, 69, 19, 1)'
   ]
+
+  allAssessments: any[] = [];
+  selectedAssessments: any;
+  selectedIds:string[] = [];
+  selectionLimit:number = 10;
+  
   async ngOnInit(): Promise<void> {
     this.xData = this.masterDataService.xData
     this.yData = this.masterDataService.yData
@@ -118,19 +124,12 @@ export class PortfolioDashboardComponent implements OnInit,AfterViewInit {
     this.averageTCValue =63.78
     this.tool = 'PORTFOLIO'
 
-  
-
-  
-
-
     this.portfolioServiceProxy.getAll().subscribe(async (res: any) => {
       this.portfolioList = res;
      });
-
-    
-
      this.getSectorCount(this.tool);
-  
+     this.setAlldata()
+    
   }
   ngAfterViewInit(): void {
     this.cdr.detectChanges();
@@ -158,8 +157,15 @@ export class PortfolioDashboardComponent implements OnInit,AfterViewInit {
   goToFunction(){
 this.selectedPortfolio = ''
 this.loadLast2graphs=false;
+this.setAlldata()
  this.getSectorCount(this.tool);
 this.selectPortfolio();
+  }
+
+  setAlldata(){
+    this.portfolioServiceProxy.getDashboardData(this.selectedPortfolio?this.selectedPortfolio.id:0,1,this.rows,this.selectedIds).subscribe((res) => {
+      this.allAssessments = res.meta.allData
+    });
   }
 
   selectPortfolio(){
@@ -171,6 +177,7 @@ this.selectPortfolio();
     let event: any = {};
     event.rows = this.rows;
     event.first = 0;
+    this.setAlldata()
     this.loadgridData(event);
 
     
@@ -191,6 +198,23 @@ this.selectPortfolio();
 
 
   }
+  onSelectAssessment() {
+    this.selectedIds = this.selectedAssessments.map((item: any)=> item.id)
+    this.callTable()
+ }
+
+ onClear() {
+   this.selectedIds = []
+    this.selectedAssessments = []
+    this.callTable()
+ }
+
+ callTable(){
+   let event: any = {};
+     event.rows = this.rows;
+     event.first = 0;
+     this.loadgridData(event);
+ }
   loadgridData = (event: LazyLoadEvent) => {
     this.loading = true;
     this.totalRecords = 0;
@@ -200,7 +224,7 @@ this.selectPortfolio();
         ? 1
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
-    this.portfolioServiceProxy.getDashboardData(this.selectedPortfolio?this.selectedPortfolio.id:0,pageNumber,this.rows).subscribe((res) => {
+    this.portfolioServiceProxy.getDashboardData(this.selectedPortfolio?this.selectedPortfolio.id:0,pageNumber,this.rows,this.selectedIds).subscribe((res) => {
       this.dashboardData = res.items;
       this.tableData = this.dashboardData.map(item => {return {climateAction: item.climateAction,tool:item.tool, outcomeScore: item.result.averageOutcome, processScore: item.result.averageProcess}}) 
       

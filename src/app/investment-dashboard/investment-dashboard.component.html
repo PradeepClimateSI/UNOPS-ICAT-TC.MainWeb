@@ -1,6 +1,17 @@
 <div class="p-grid p-fluid card m-3">
   <div class="row">
     <h3>Recent Assessments Done</h3>
+      <div class="row mt-20 ml-10">
+        <div class="col-3 ">
+          <h5>Select Assessments </h5>
+        </div>
+    
+        <div class="col-6 ">
+          <p-multiSelect name="assess" [options]="allAssessments" [(ngModel)]="selectedAssessments" appendTo="body"
+          (onChange)="onSelectAssessment()" (onClear) ="onClear()" [showClear]="true" defaultLabel="Select Assessment" [selectionLimit]="selectionLimit"
+          optionLabel="climateAction.policyName"></p-multiSelect>
+        </div>
+      </div>
     <div class="col-12 mt-20 ml-10" [hidden]="calResults?.length == 0">
       <p-table
       [value]="tableData"

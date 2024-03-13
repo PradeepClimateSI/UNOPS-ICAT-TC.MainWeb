@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Chart } from 'chart.js';
 import { Subscription } from 'rxjs';
-import { CountryControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { CountryControllerServiceProxy, InvestorToolControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { LoginRole } from 'shared/AppService';
 import { MasterDataService } from 'app/shared/master-data.service';
@@ -77,6 +77,7 @@ export class DashboardComponent implements OnInit {
     private countryProxy: CountryControllerServiceProxy,
     public masterDataService: MasterDataService,
     protected dialogService: DialogService,
+    private investorProxy: InvestorToolControllerServiceProxy,
   ) {}
 
   ngOnInit(): void {
@@ -84,6 +85,8 @@ export class DashboardComponent implements OnInit {
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
     this.userRole = tokenPayload.role.code;
+
+ 
 
     this.countryProxy.getCountry(tokenPayload.countryId).subscribe((res:any)=>{
       this.isCarbonMarketTool = res.carboneMarketTool;
@@ -174,7 +177,7 @@ export class DashboardComponent implements OnInit {
       datasets: [
         {
           label: 'Type of Interventions',
-          backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#66BB6A', '#FF7043', '#9575CD'],
+          backgroundColor: ['#222b46', '#222b46', '#222b46', '#222b46', '#222b46', '#222b46'],
           data: counts,
         },
       ],
@@ -271,71 +274,73 @@ export class DashboardComponent implements OnInit {
   }
   
   viewPieChart() {
-    const labels = this.typeofInterventionCount.map((item) => item.name);
-    let counts: number[] = this.typeofInterventionCount.map((item) => item.count);
-    const total = counts.reduce((acc, val) => acc + val, 0);
-    const percentages = counts.map((count) => ((count / total) * 100).toFixed(2));
-    this.pieChart = new Chart('pieChart', {
-      type: 'doughnut',
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            data: counts,
-            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#66BB6A', '#FF7043', '#9575CD'],
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: false,
-          },
-          datalabels: {
-            color: '#fff',
-            font: {
-              size: 12,
+    this.investorProxy.getDashboardAllDataGraph().subscribe((res:any)=>{
+     let  counts= res[0];
+      let percentages = res[1];
+      this.pieChart = new Chart('pieChart', {
+        type: 'doughnut',
+        data: {
+          datasets: [
+            {
+              data: res[0],
+              backgroundColor:res[1],
             },
-            formatter: (value, ctx) => {
-              const label = ctx.chart.data.labels![ctx.dataIndex];
-              const percentage = percentages[ctx.dataIndex];
-              return `${label}: ${value} (${percentage}%)`;
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false,
+              position:'center',
+              labels:{
+                boxWidth: 17,
+                    boxHeight: 15,
+              }
             },
-          },
-          tooltip: {
-            position: 'average',
-            boxWidth: 10,
-            callbacks: {
-              label: (ctx) => {
-                let sum = 0;
-                let array = counts;
-                array.forEach((number) => {
-                  sum += Number(number);
-                });
-                let percentage = (counts[ctx.dataIndex] * 100 / sum).toFixed(2) + "%";
-                return [
-                  `Intervention: ${labels[ctx.dataIndex]}`,
-                  `Count: ${counts[ctx.dataIndex]}`,
-                  `Percentage: ${percentage}`,
-                ];
+            datalabels: {
+              color: '#fff',
+              font: {
+                size: 12,
+              },
+              formatter: (value, ctx) => {
+                const percentage = percentages[ctx.dataIndex];
+                return `${value} (${percentage}%)`;
               },
             },
-            backgroundColor: 'rgba(0, 0, 0, 0.8)', 
-            titleFont: {
-              size: 14,
-              weight: 'bold',
+            
+            tooltip: {
+              position: 'average',
+              boxWidth: 10,
+              callbacks: {
+                label: (ctx) => {
+                  let sum = 0;
+                  let array = counts;
+                  array.forEach((number: any) => {
+                    sum += Number(number);
+                  });
+                  let percentage = (counts[ctx.dataIndex] ).toFixed(2) + "%";
+                  return [
+                    `Percentage: ${percentage}`,
+                  ];
+                },
+              },
+              backgroundColor: 'rgba(0, 0, 0, 0.8)', 
+              titleFont: {
+                size: 14,
+                weight: 'bold',
+              },
+              bodyFont: {
+                size: 14,
+              },
+              displayColors: true,
+              bodyAlign: 'left',
             },
-            bodyFont: {
-              size: 14,
-            },
-            displayColors: true,
-            bodyAlign: 'left',
           },
         },
-      },
-    });
+      });
+     })
   }
 
 }

@@ -1,6 +1,19 @@
 <div class="p-grid p-fluid card m-3">
     <div class="row">
         <h3>Recent Assessments Done</h3>
+
+        <div class="row p-2">
+            <div class="col-3">
+                <h6>Select Interventions </h6>
+            </div>
+            <div class="col-7">
+                <p-multiSelect name="policy"   appendTo="body" #policy="ngModel" placeholder="Select Intervention" [(ngModel)]="selectPolicy"  appendTo="body" [options]="policies" optionLabel="policyName" 
+                (ngModelChange)="onPlicyChange($event)"></p-multiSelect>
+            </div>
+            
+            
+          </div>
+
         <div class="col-12 mt-20 ml-10" [hidden]="calResults?.length == 0">
             <p-table [value]="tableData" [paginator]="true" [rows]="rows" [totalRecords]="totalRecords" [lazy]="true"
                 (onLazyLoad)="loadgridData($event)" [showCurrentPageReport]="true"

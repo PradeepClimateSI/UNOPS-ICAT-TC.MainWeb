@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, 
 import { MasterDataService } from 'app/shared/master-data.service';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { LazyLoadEvent } from 'primeng/api';
-import { Assessment, InvestorToolControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Assessment, InvestorToolControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { Chart, ChartType } from 'chart.js';
 import { HeatMapScore, TableData } from 'app/charts/heat-map/heat-map.component';
@@ -29,6 +29,9 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
   totalRecords: number;
   pointTableDatas: Assessment[] = []
   userRole: string = "";
+  policies:any;
+  selectPolicy:any;
+  countryId:number;
 
   sectorCount: {
     sector: string,
@@ -39,6 +42,7 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
   pieChart2: Chart;
   tool: string;
   tableData: any[] = []
+  projectName: any[] = []
   xData: { label: string; value: number }[]
   yData: { label: string; value: number }[]
   rows: number = 5;
@@ -76,15 +80,26 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
     private investorProxy: InvestorToolControllerServiceProxy,
     public masterDataService: MasterDataService,
     private cdr: ChangeDetectorRef,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private projectProxy: ProjectControllerServiceProxy,
   ) {
   }
   ngOnInit(): void {
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
     this.userRole = tokenPayload.role.code;
+    this.countryId =tokenPayload.countryId
     this.sdgColorMap = this.masterDataService.SDG_color_map
-    this.sectorColorMap = this.masterDataService.Sector_color_map
+    this.sectorColorMap = this.masterDataService.Sector_color_map;
+
+    setTimeout(() => {
+      this.projectProxy
+        .getProjectName(this.countryId)
+
+        .subscribe((a) => {
+         this.policies = a.filter((obj:any) => obj !== null);
+        }, err => {this.loading = false;});
+    }, 1000);
 
     this.xData = this.masterDataService.xData;
     this.yData = this.masterDataService.yData;
@@ -229,6 +244,13 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
 
   }
 
+  onPlicyChange(event: any){
+    this.projectName =[];
+
+ event.forEach((a:any)=>{this.projectName.push(a.policyName)})
+ this.loadgridData(event);
+  }
+
   loadgridData = (event: LazyLoadEvent) => {
     this.loading = true;
     this.totalRecords = 0;
@@ -238,7 +260,7 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
         ? 1
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
-    this.investorProxy.getDashboardAllData(pageNumber,this.rows).subscribe((res) => {
+    this.investorProxy.getDashboardAllData(pageNumber,this.rows,this.projectName).subscribe((res) => {
       this.tableData=res.items;
       this.heatMapScore = this.tableData.map(item => {return {processScore: item.process_score, outcomeScore: item.outcome_score}})
       this.heatMapData = this.tableData.map(item => {return {interventionId: item.climateAction?.intervention_id, interventionName: item.climateAction?.policyName, processScore: item.process_score, outcomeScore: item.outcome_score}}) 
@@ -380,7 +402,7 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
 
   viewFrequencyofSDGsChart() {
     this.sdgDetailsList.sort((a: any, b: any) => b.count - a.count)
-    let labels = this.sdgDetailsList.map((item: any) => item.sdg);
+    let labels = this.sdgDetailsList.map((item:any) => 'SDG ' + item.number + ' - ' + item.sdg);
     let counts: number[] = this.sdgDetailsList.map((item: any) => item.count);
     let total = counts.reduce((acc, val) => acc + val, 0);
     let percentages = counts.map(count => ((count / total) * 100).toFixed(2));
