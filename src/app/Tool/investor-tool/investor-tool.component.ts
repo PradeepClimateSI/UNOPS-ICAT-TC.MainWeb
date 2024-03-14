@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { FieldNames, MasterDataDto, MasterDataService, assessment_period_info, chapter6_url } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { ConfirmationService,MessageService } from 'primeng/api';
-import { Any, AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, AssessmentControllerServiceProxy, Category, PortfolioSdg, TotalInvestment, TotalInvestmentDto } from 'shared/service-proxies/service-proxies';
+import { AllBarriersSelected, Assessment, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorQuestions, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, AssessmentControllerServiceProxy, Category, PortfolioSdg, TotalInvestment, TotalInvestmentDto } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,8 +11,6 @@ import { environment } from 'environments/environment';
 import { HttpResponse } from '@angular/common/http';
 import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
 import { DialogService } from 'primeng/dynamicdialog';
-import { of } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { MultiSelect } from 'primeng/multiselect';
 
 
@@ -179,16 +177,15 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   to_date: Date
   isCompleted: boolean = false;
   assessment_period_info = assessment_period_info
+  isContinue: boolean = false;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
     public masterDataService: MasterDataService,
     private messageService: MessageService,
     private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
-    private sectorProxy: SectorControllerServiceProxy,
     private investorToolControllerproxy: InvestorToolControllerServiceProxy,
     private router: Router,
-    private instituionProxy: InstitutionControllerServiceProxy,
     private changeDetector: ChangeDetectorRef,
     private activatedRoute: ActivatedRoute,
     private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
@@ -215,6 +212,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.activatedRoute.queryParams.subscribe(params => {
       params['isEdit'] == 'true' ? (this.isEditMode = true) : false;
       params['iscompleted'] == 'true' ? (this.isCompleted = true) : false
+      params['isContinue'] == 'true' ? (this.isContinue = true) : false
       this.assessmentId = params['id'];
       if (!this.assessmentId && this.isEditMode) {
         window.location.reload()
@@ -224,9 +222,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       await this.getPolicies();
       await this.getAllImpactsCovered();
       await this.getCharacteristics();
-      // for (let i = 0; i < 3; i++) {
-      //   this.totalInvestments.push(new TotalInvestment)
-      // }
 
     } else {
       try {
@@ -333,6 +328,14 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     })
 
     this.totalInvestments = this.investorAssessment.total_investements
+    this.selectedInstruments = []
+    this.totalInvestments.map(inv => {
+      let instrument = this.investment_instruments.find(o => inv.instrument_code === o.code)
+      if (instrument){
+        this.selectedInstruments.push(instrument)
+      }
+    })
+
 
     this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise();
     this.policies.push(this.assessment.climateAction);
@@ -527,7 +530,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.assessment.year = moment(new Date()).format("DD/MM/YYYY")
     if (!this.assessment.id) this.assessment.createdOn = moment(new Date())
     this.assessment.editedOn = moment(new Date())
-    if(this.isCompleted){
+    if(this.isCompleted || !this.isContinue){
       form.controls['sectors'].setValue(this.sectorArray)
     }
     
