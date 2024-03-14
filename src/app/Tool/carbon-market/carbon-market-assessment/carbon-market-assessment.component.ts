@@ -77,6 +77,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   to_date: Date
   assessment_period_info = assessment_period_info
   isCompleted: boolean = false;
+  isContinue: boolean = false;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -110,6 +111,8 @@ export class CarbonMarketAssessmentComponent implements OnInit {
       this.assessmentId = params['id']
       this.isEditMode = params['isEdit']
       params['iscompleted'] == 'true' ? (this.isCompleted = true) : false
+      params['isContinue'] == 'true' ? (this.isContinue = true) : false
+
     })
     await this.setInitialStates()
     this.phaseTransformExapmle = this.masterDataService.phase_transfrom
@@ -180,6 +183,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
         }
       })
       this.geographicalAreasCoveredArr = areas
+      console.log(areas)
       this.geographicalArea = this.geographicalAreasCoveredArr[0]
       this.cm_detail.sectorsCovered.map(sector => {
         this.sectorArray.push(sector.sector)
@@ -189,7 +193,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
       this.setTo()
       this.assessmentres = this.assessment
       this.showSections = true
-      if (!this.isCompleted) this.isSavedAssessment = true
+      if (!this.isCompleted && this.isContinue) this.isSavedAssessment = true
     }
   }
 
@@ -232,7 +236,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     this.isStageDisble =true;
     if (!this.assessment.id) this.assessment.createdOn = moment(new Date())
     this.assessment.editedOn = moment(new Date())
-    if(this.isCompleted){
+    if(this.isCompleted || !this.isContinue){
       form.controls['sectors'].setValue(this.sectorArray)
     }
 
@@ -265,7 +269,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
 
             let req = new AssessmentCMDetail()
 
-            if (this.isEditMode && this.isCompleted) {
+            if (this.isEditMode && (this.isCompleted || !this.isContinue)) {
               let assessment = new Assessment()
               assessment.id = this.cm_detail.cmassessment.id
               assessment.init()
@@ -307,8 +311,8 @@ export class CarbonMarketAssessmentComponent implements OnInit {
                   _a.assessmentCMDetail = _res
                   toolsMultiselectDto.geographicalAreas.push(_a)
 
-                  if (this.isEditMode && this.isCompleted) {
-                    toolsMultiselectDto.isCompleted = this.isCompleted;
+                  if (this.isEditMode && (this.isCompleted || !this.isContinue)) {
+                    toolsMultiselectDto.isCompleted = this.isCompleted ? this.isCompleted : !this.isContinue;
                     toolsMultiselectDto.assessmentId = res.id;
                   }
 
@@ -320,7 +324,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
                       detail: 'Assessment has been created successfully',
                       closable: true,
                     })
-                    if (!this.isCompleted || !this.isEditMode) this.isSavedAssessment = true
+                    if ((!this.isCompleted && this.isContinue ) || !this.isEditMode) this.isSavedAssessment = true
                     this.assessmentres = res
                     this.showSections = true
                   } else if (!res_sec['sector']) {
@@ -340,6 +344,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
                   }
                 }
               }, error => {
+                console.error(error)
                 this.messageService.add({
                   severity: 'error',
                   summary: 'Error',
@@ -482,7 +487,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   }
   showDialog(){
     if (!this.isEditMode) this.barrierBox =true; 
-    else if (this.isEditMode && this.isCompleted) this.barrierBox = true;
+    else if (this.isEditMode && (this.isCompleted || !this.isContinue)) this.barrierBox = true;
   }
 
   getProductsData() {
