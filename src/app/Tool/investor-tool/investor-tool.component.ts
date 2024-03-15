@@ -178,6 +178,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   isCompleted: boolean = false;
   assessment_period_info = assessment_period_info
   isContinue: boolean = false;
+  format = "### \'%\'"
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -930,6 +931,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       return
     }
 
+    console.log(this.outcomeData)
+
 
     if (this.assessment.assessment_approach === 'Direct') {
       let finalArray = this.processData.concat(this.outcomeData)
@@ -1459,13 +1462,13 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     if (this.totalInvestments.length > this.selectedInstruments.length) {
       this.totalInvestments = this.totalInvestments.filter(item => (this.selectedInstruments.map(ins => ins.code)).includes(item.instrument_code))
     }
-    this.onInputChange({ target: { value: 0 } })
+    this.onInputChange( { value: 0 } )
 
   }
 
   onInputChange(event: any) {
     this.show_less_message = false
-    const inputValue = event.target.value;
+    const inputValue = event.value;
     const numericValue = parseFloat(inputValue);
 
     this.totalInvestments = this.totalInvestments.map(inv => {
@@ -1477,7 +1480,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     })
 
     if (numericValue > 100) {
-      event.target.value = 100;
+      event.value = 100;
     }
 
     let tot = 0
