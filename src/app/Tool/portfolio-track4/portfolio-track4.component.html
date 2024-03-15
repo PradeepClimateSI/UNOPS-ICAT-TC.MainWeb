@@ -152,7 +152,7 @@
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <textarea [disabled]="isSavedAssessment|| (isEditMode && !isCompleted)" name="phase_of_transformation" placeholder="See Chapter 6 of the ICAT Transformational Change Methodology" #phase_of_transformation="ngModel" [(ngModel)]="assessment.phase_of_transformation" rows="2" cols="130" pInputText
+                  <textarea [disabled]="isSavedAssessment|| (isEditMode && !isCompleted)" name="phase_of_transformation" placeholder="Pre-development, Take-off, Acceleration, Stabilization / Relapse" #phase_of_transformation="ngModel" [(ngModel)]="assessment.phase_of_transformation" rows="2" cols="130" pInputText
                     autoResize="autoResize" required [maxlength]="masterDataService.getFieldCharCount(fieldNames.VISION)"></textarea>
                   <label style="font-size: 12px;"><i>See <a [href]="chapter6_url" target="_blank">Chapter 6 </a>of the ICAT Transformational Change Methodology</i></label>
                   <span style="float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.VISION)}}</span>

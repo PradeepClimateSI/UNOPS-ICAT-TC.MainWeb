@@ -8,6 +8,7 @@ import { LazyLoadEvent } from 'primeng/api';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { HeatMapScore, TableData } from 'app/charts/heat-map/heat-map.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-investment-dashboard',
@@ -133,9 +134,22 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
     event.rows = this.rows;
     event.first = 0;
     this.investorProxy.getDashboardData(1,this.rows,this.selectedIds).subscribe((res) => {
-      this.allAssessments = res.meta.allData
+     
+      if(res.meta.allData && res.meta.allData.length>0){
+        this.allAssessments = this.mapOptionlable(res.meta.allData)
+      }
     });
     this.sectorCountResult();
+  }
+  
+  mapOptionlable(data: any[]) {
+    return data.map(item => {
+      let label:string = item.climateAction.policyName
+      if (item.from && item.to) {
+       label = label + " - " + moment(new Date(item.from)).format("DD/MM/YYYY").toString() + " - " + moment(new Date(item.to)).format("DD/MM/YYYY").toString()
+      }
+      return {label:label}
+    })
   }
 
   loadgridData = (event: LazyLoadEvent) => {
