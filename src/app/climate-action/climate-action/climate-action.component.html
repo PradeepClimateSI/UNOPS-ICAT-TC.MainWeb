@@ -264,8 +264,8 @@
               <div class="col-12 col-md-6">
                 <div class="p-field">
                   <label for="impEntity">Implementing Entity or Entities <i class="pi pi-info-circle" pTooltip="{{tooltips.entity}}" tooltipPosition="bottom" style="font-size: 1rem"></i></label>
-                  <input [disabled]="editEntytyId > 0 && !editMode" type="text" placeholder="Name of the Implementing Entity" name="impEntity" #impEntity="ngModel" field="contatname" pInputText [(ngModel)]="project.implementingEntity"
-                    [maxlength]="masterDataService.getFieldCharCount(fieldNames.IMPLEMENTING_ENTITY)" />
+                  <textarea rows="5" [disabled]="editEntytyId > 0 && !editMode" type="text" placeholder="Name of the Implementing Entity" name="impEntity" #impEntity="ngModel" field="contatname" pInputText [(ngModel)]="project.implementingEntity"
+                    [maxlength]="masterDataService.getFieldCharCount(fieldNames.IMPLEMENTING_ENTITY)" ></textarea>
                   <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.IMPLEMENTING_ENTITY)}}</span>
                 </div>
               </div>

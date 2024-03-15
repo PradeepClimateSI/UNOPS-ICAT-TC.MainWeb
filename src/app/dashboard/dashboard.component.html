@@ -77,7 +77,7 @@
                         pRipple
                         [disabled]="!this.isPortfolioTool &&  userRole !=loginRole.External"
                         (click)="goToPortfolio()"
-                        [label]="masterDataService.getToolName('PORTFOLIO')">
+                        [label]="masterDataService.getToolName('PORTFOLIO').split(' ')[0]">
                     </button>
                 </div>
 
@@ -89,7 +89,7 @@
                       type="button"
                       pButton
                       pRipple
-                      label="All Option"
+                      label="All Tools"
                       [disabled]="!this.isAllTool &&  userRole !=loginRole.External"
                       (click)="goToAllTool()">
                   </button>

@@ -336,6 +336,7 @@ export class ClimateActionComponent implements OnInit  {
           this.showDeleteButton=false;
           this.projectProxy.getIntervention(this.editEntytyId)
             .subscribe(async (res1) => {
+              console.log(res1)
               this.project = res1;
               this.loadProjectStatus= true
               this.loadingCountry= true
