@@ -593,28 +593,37 @@ export class ClimateActionComponent implements OnInit  {
                
               })
               this.isSaving = true;
-              let allBarriersSelected = new AllBarriersSelected()
-              allBarriersSelected.allBarriers =this.finalBarrierList
-              allBarriersSelected.climateAction =res;
-              this.projectProxy.policyBar(allBarriersSelected).subscribe((res) => {
+              if (this.finalBarrierList.length > 0) {
+                let allBarriersSelected = new AllBarriersSelected()
+                allBarriersSelected.allBarriers =this.finalBarrierList
+                allBarriersSelected.climateAction =res;
+                this.projectProxy.policyBar(allBarriersSelected).subscribe((res) => {
+                  this.messageService.add({
+                    severity: 'success',
+                    summary: 'Success',
+                    detail: 'Intervention  has been saved successfully',
+                    closable: true,
+                  },
+                  
+                  
+                  );
+                },
+                (err) => {
+                  this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error.',
+                    detail: 'Internal server error in policy barriers',
+                    sticky: true,
+                  });
+                })
+              } else {
                 this.messageService.add({
                   severity: 'success',
                   summary: 'Success',
                   detail: 'Intervention  has been saved successfully',
                   closable: true,
-                },
-                
-                
-                );
-              },
-              (err) => {
-                this.messageService.add({
-                  severity: 'error',
-                  summary: 'Error.',
-                  detail: 'Internal server error in policy barriers',
-                  sticky: true,
                 });
-              })
+              }
               
              
              
