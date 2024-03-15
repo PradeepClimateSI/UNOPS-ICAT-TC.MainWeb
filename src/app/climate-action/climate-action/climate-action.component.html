@@ -254,8 +254,8 @@
                         #sector="ngModel" [(ngModel)]="finalSectors" [options]="sectorList" appendTo="body"
                         optionLabel="name" ></p-multiSelect>                      
                     </ng-container> -->
-                    <ng-container *ngIf="isDownloadMode == 0 && !editMode">
-                      <input [disabled]="editEntytyId > 0 && !editMode" type="text" maxlength="50" name="projsector"
+                    <ng-container *ngIf="isDownloadMode == 0 ">
+                      <input [disabled]="editEntytyId > 0 " type="text" maxlength="50" name="projsector"
                       #projsector="ngModel" class="p-inputtext" [(ngModel)]="sectorsJoined"
                       [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
                     </ng-container>
@@ -270,7 +270,7 @@
                 <div class="p-field">
                   <label for="projStatus">Geographical Area Targeted* <i class="pi pi-info-circle" pTooltip="{{tooltips.geo}}" tooltipPosition="bottom"
                     style="font-size: 1rem"></i></label>
-                  <ng-container *ngIf="isDownloadMode == 0 && flag !=1 ; else elseBlockGeoAreas">
+                  <ng-container *ngIf="isDownloadMode == 0 && flag !=1 && !editMode">
                     <p-dropdown [disabled]="editEntytyId > 0 && !editMode" placeholder="Please Select the Geographical Area Targeted"
                       name="level_of_implemetation" #geographical_areas="ngModel" [(ngModel)]="project.geographicalAreaCovered"
                       [options]="levelOfImplementation" optionLabel="name" optionValue="name"
@@ -283,11 +283,26 @@
                       This is a mandatory field
                     </p>
                   </ng-container>
-                  <ng-template #elseBlockGeoAreas>
+                  <ng-container *ngIf="editEntytyId > 0  && editMode">
+
+                    <p-dropdown [disabled]="editEntytyId > 0 && !editMode" placeholder="Please Select the Geographical Area Targeted"
+                      name="level_of_implemetation" #geographical_areas="ngModel" [(ngModel)]="project.geographicalAreaCovered"
+                      [options]="levelOfImplementation" optionLabel="name" optionValue="name"
+                      [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false"  appendTo="body"
+                      [required]="true"></p-dropdown>
+                      
+                    <p class="info-message text-danger" *ngIf="
+                    !project.geographicalAreaCovered &&
+                    (fData.submitted || geographical_areas.touched || geographical_areas.dirty)
+                  ">
+                      This is a mandatory field
+                    </p>
+                  </ng-container>
+                  <ng-container *ngIf="editEntytyId > 0 && !editMode">
                     <input [disabled]="editEntytyId > 0 && !editMode" type="text" maxlength="50" name="geographical_areas"
                       #geographical_areas="ngModel" class="p-inputtext" [(ngModel)]="project.levelofImplemenation"
                       [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
-                  </ng-template>
+                  </ng-container>
 
                 </div>
               </div>

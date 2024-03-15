@@ -312,11 +312,12 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
         ? 1
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
-    this.investorProxy.getDashboardAllData(pageNumber,this.rows,this.projectName,this.selectedPortfolio?this.selectedPortfolio.id:0).subscribe((res) => {
-      this.tableData=res.items;
+    let skip = pageNumber * this.rows;
+    this.investorProxy.getDashboardAllData(skip,this.rows,this.projectName,this.selectedPortfolio?this.selectedPortfolio.id:0).subscribe((res) => {
+      this.tableData=res[0];
       this.heatMapScore = this.tableData.map(item => {return {processScore: item.process_score, outcomeScore: item.outcome_score}})
       this.heatMapData = this.tableData.map(item => {return {interventionId: item.climateAction?.intervention_id, interventionName: item.climateAction?.policyName, processScore: item.process_score, outcomeScore: item.outcome_score}}) 
-      this.totalRecords= res.meta.totalItems
+      this.totalRecords= res[1]
       this.loading = false;
     }, err => {
       this.loading = false;});
