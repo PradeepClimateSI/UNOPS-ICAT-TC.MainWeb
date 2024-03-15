@@ -39,7 +39,7 @@
       <div class="col-6 ">
         <p-multiSelect name="assess" [options]="allAssessments" [(ngModel)]="selectedAssessments" appendTo="body"
         (onChange)="onSelectAssessment()" (onClear) ="onClear()" [showClear]="true" defaultLabel="Select Assessment" [selectionLimit]="selectionLimit"
-        optionLabel="climateAction.policyName"></p-multiSelect>
+        optionLabel="label"></p-multiSelect>
       </div>
     </div>
     <div class="col-12 mt-20 ml-10" [hidden]="calResults?.length == 0">
@@ -61,6 +61,7 @@
         <ng-template pTemplate="header">
           <tr>
             <th class="table-header-3">Intervention Name</th>
+            <th class="table-header-3">Assessment Period</th>
             <th class="table-header" style="line-height: 130%;">Likelihood of Transformation</th>
             <th class="table-header" style="line-height: 130%;">Outcome Score</th>
             
@@ -70,6 +71,7 @@
           <tr (click)="goToResult(tableData.assessId)">
             
             <td>{{ tableData.climateAction?.policyName }}</td>
+            <td>{{ tableData.from| date: 'dd/MM/yyyy'}} - {{tableData.to| date: 'dd/MM/yyyy'}}</td>
             <td class="text-center">{{ mapProcessScores(tableData.processScore) }}</td>
             <td class="text-center">{{ mapOutcomeScores(tableData.outcomeScore) }}</td>
            

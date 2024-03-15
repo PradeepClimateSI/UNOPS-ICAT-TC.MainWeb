@@ -5,10 +5,10 @@
         <div class="p-grid p-fluid col-sm-12">
           <div *ngIf="project.projectApprovalStatus ; else elseblock" class="mb-12">
             <h4 class="mt-4">{{ project.projectApprovalStatus.id == 1 ?'Accepted':project.projectApprovalStatus.id
-              == 5 ?'Accepted':editEntytyId > 0?'View ':'Create an '}} Intervention</h4>
+              == 5 ?'Accepted':editEntytyId > 0?'View ':'Create an '}} Intervention <i class="pi pi-info-circle" style="font-size: 25px" tooltipPosition="bottom" pTooltip="An intervention can be a project, a policy, or a coherent set of activities"></i></h4>
           </div>
           <ng-template #elseblock>
-            <h4>Create an Intervention</h4>
+           <h4>Create an Intervention  <i class="pi pi-info-circle" style="font-size: 25px" tooltipPosition="bottom" pTooltip="An intervention can be a project, a policy, or a coherent set of activities"></i></h4>
           </ng-template>
           <div class="p-2">
             <h6>Contact Details</h6>
@@ -580,3 +580,9 @@
     </ng-template>
   </p-overlayPanel>
 </div>
+
+<p-overlayPanel #opAssessment [style]="{'width': '800px'}">
+  <div class="p-grid p-fluid col-md-12 col-sm-12 text-title">
+    <p><b>An intervention can be a project, a policy, or a coherent set of activities</b></p>
+  </div>
+</p-overlayPanel>
