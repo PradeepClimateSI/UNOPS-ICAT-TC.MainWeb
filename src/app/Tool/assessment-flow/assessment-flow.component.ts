@@ -54,9 +54,9 @@ export class AssessmentFlowComponent implements OnInit {
     const tokenPayload = decode<any>(token);
     this.userRole = tokenPayload.role.code;
     this.countryProxy.getCountry(tokenPayload.countryId).subscribe((res: any) => {
-      // this.isCarbonMarketTool = res.carboneMarketTool;
-      // this.isInvesmentTool = res.investmentTool;
-      // this.isPortfolioTool = res.portfoloaTool;
+      this.isCarbonMarketTool = res.carboneMarketTool;
+      this.isInvesmentTool = res.investmentTool;
+      this.isPortfolioTool = res.portfoloaTool;
     })
   }
 
