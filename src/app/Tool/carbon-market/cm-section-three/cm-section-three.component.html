@@ -253,6 +253,12 @@
                                     </p-inputNumber>
                                 </div>
                             </div>
+                            <div  class=" p-2">
+                                <p> <br><br>
+                                    Note: All GHG impacts should be calculated as average reductions in emissions in tCO₂e/year (over the intervention's lifetime) and compared
+                                     to subnational/regional/municipal emissions or subsectoral level emissions for the latest year for which those emissions data is available.
+                                  </p>
+                            </div>
                         </ng-container>
                         <ng-container *ngIf="category.method === 'SUSTAINED'">
                             <h6>GHG Answer</h6>
@@ -781,3 +787,4 @@
         </p-table>
     </div>
 </p-overlayPanel>
+<p-confirmDialog></p-confirmDialog>

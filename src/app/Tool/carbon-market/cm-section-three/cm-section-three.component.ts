@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren
 import { NgForm } from '@angular/forms';
 import { FieldNames, MasterDataService } from 'app/shared/master-data.service';
 import { environment } from 'environments/environment';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Assessment, CMAssessmentQuestion, CMAssessmentQuestionControllerServiceProxy, CMDefaultValue, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, ScoreDto, UniqueCategory } from 'shared/service-proxies/service-proxies';
 
 
@@ -122,7 +122,8 @@ export class CmSectionThreeComponent implements OnInit {
     private messageService: MessageService,
     private institutionControllerServiceProxy: InstitutionControllerServiceProxy,
     private investorToolControllerServiceProxy: InvestorToolControllerServiceProxy,
-    private cMAssessmentQuestionControllerServiceProxy: CMAssessmentQuestionControllerServiceProxy
+    private cMAssessmentQuestionControllerServiceProxy: CMAssessmentQuestionControllerServiceProxy,
+    private confirmationService: ConfirmationService,
   ) {
     this.uploadUrl = environment.baseUrlAPI + "/document/upload-file-by-name" ; 
     this.fileServerURL = environment.baseUrlAPI+'/document/downloadDocumentsFromFileName/uploads';
@@ -664,229 +665,244 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   async submit(draftCategory: string, isDraft: boolean = false, name: string, type: string) {
-    this.nextClicked = true
-    this.results = []
-    this.categoriesToSave.push(draftCategory)
-    let save_process: boolean = false
-    let save_sd_sc: boolean = false
-    let save_sd_sus: boolean = false
-    let save_ghg_sc: boolean = false
-    let save_ghg_sus: boolean = false
-    let save_ad_sc: boolean = false
-    let save_ad_sus: boolean = false
-    for await (let category of this.categories['process']) {
-      if (isDraft) {
-        if (this.categoriesToSave.includes(category.code)) save_process = true
-        else save_process = false
-      } else save_process = true
-      if (save_process) {
-        for await (let char of category.characteristics) {
-          for await (let q of char.questions) {
-            let res = new CMResultDto()
-            Object.keys(q.result).forEach(e => {
-              res[e] = q.result[e]
-            })
-            let ch = new Characteristics()
-            ch.id = q.characteristic.id
-            res.characteristic = ch
-            res.relevance = char.relevance
-            if (res.institution?.id) {
-              let inst = new Institution()
-              inst.id = res.institution.id
-              res.institution = inst
-            }
-            res.type = this.approach
-            if (this.isEditMode){
-              let assQ = this.assessmentquestions.find(o => (o.characteristic.id === char.id) && (o.question.id === q.id || o.relevance === 0))
-              if (assQ) {
-                res.assessmentQuestionId = assQ.id
-                res.assessmentAnswerId = assQ.assessmentAnswers[0]?.id
-              }
-            }
-            res.selectedSdg = new PortfolioSdg()
-            if (res.question.id) {
-              this.results.push(res)
-            } else if (res.relevance === 0 && !res.assessmentQuestionId) {
-              this.results.push(res)
-            }
-          }
-        }
-      }
-    }
-
-    if (this.selectedSDGs?.length > 0) {
-      if (isDraft) {
-        if (this.categoriesToSave.includes('SD_SCALE')) save_sd_sc = true
-        else save_sd_sc = false
-        if (this.categoriesToSave.includes('SD_SUSTAINED')) save_sd_sus = true
-        else save_sd_sus = false
-      } else save_sd_sc = true, save_sd_sus = true
-      for await (let sd of this.selectedSDGs) {
-        if (save_sd_sc) {
-          sd.scaleResult.forEach(res => {
-            if (res.selectedScore) {
+    if (name === 'SCALE_SD' && this.isCompleted) {
+      console.log("if")
+      this.confirmationService.confirm({
+        message: 'Pls make sure to update "Time frame outcome is sustained section" to update the result.',
+        header: 'Warning',
+        acceptLabel: 'Okay',
+        rejectLabel: 'Cancel',
+        accept: () => {
+          this.categoriesToSave.push(draftCategory)
+          this.next(draftCategory)
+        }, reject: () => {}
+      })
+    } else {
+      console.log("else")
+      this.nextClicked = true
+      this.results = []
+      this.categoriesToSave.push(draftCategory)
+      let save_process: boolean = false
+      let save_sd_sc: boolean = false
+      let save_sd_sus: boolean = false
+      let save_ghg_sc: boolean = false
+      let save_ghg_sus: boolean = false
+      let save_ad_sc: boolean = false
+      let save_ad_sus: boolean = false
+      for await (let category of this.categories['process']) {
+        if (isDraft) {
+          if (this.categoriesToSave.includes(category.code)) save_process = true
+          else save_process = false
+        } else save_process = true
+        if (save_process) {
+          for await (let char of category.characteristics) {
+            for await (let q of char.questions) {
+              let res = new CMResultDto()
+              Object.keys(q.result).forEach(e => {
+                res[e] = q.result[e]
+              })
+              let ch = new Characteristics()
+              ch.id = q.characteristic.id
+              res.characteristic = ch
+              res.relevance = char.relevance
               if (res.institution?.id) {
                 let inst = new Institution()
                 inst.id = res.institution.id
                 res.institution = inst
               }
-              let score = new ScoreDto()
-              score.name = res.selectedScore.name
-              score.code = res.selectedScore.code
-              score.value = res.selectedScore.value
-              res.selectedScore = score
               res.type = this.approach
               if (this.isEditMode){
-                let assQ = this.assessmentquestions.find(o => (o.characteristic.id === res.characteristic.id) && (o.selectedSdg.id === res.selectedSdg.id))
+                let assQ = this.assessmentquestions.find(o => (o.characteristic.id === char.id) && (o.question.id === q.id || o.relevance === 0))
                 if (assQ) {
                   res.assessmentQuestionId = assQ.id
                   res.assessmentAnswerId = assQ.assessmentAnswers[0]?.id
                 }
               }
-              if (res.selectedScore.name) {
+              res.selectedSdg = new PortfolioSdg()
+              if (res.question.id) {
+                this.results.push(res)
+              } else if (res.relevance === 0 && !res.assessmentQuestionId) {
                 this.results.push(res)
               }
             }
-          })
-        }
-        if (save_sd_sus) {
-          sd.sustainResult.forEach(res => {
-            if (res.selectedScore) {
-              if (res.institution?.id) {
-                let inst = new Institution()
-                inst.id = res.institution.id
-                res.institution = inst
-              }
-              let susScore = new ScoreDto()
-              susScore.name = res.selectedScore.name
-              susScore.code = res.selectedScore.code
-              susScore.value = res.selectedScore.value
-              res.selectedScore = susScore
-              res.type = this.approach
-              if (this.isEditMode){
-                let assQ = this.assessmentquestions.find(o => (o.characteristic.id === res.characteristic.id) && (o.selectedSdg.id === res.selectedSdg.id))
-                if (assQ) {
-                  res.assessmentQuestionId = assQ.id
-                  res.assessmentAnswerId = assQ.assessmentAnswers[0].id
-                }
-              }
-              if (res.selectedScore.name) {
-                this.results.push(res)
-              }
-            }
-          })
+          }
         }
       }
-    }
-
-    if (this.outcome?.length > 0) {
-      for await (let item of this.outcome) {
+  
+      if (this.selectedSDGs?.length > 0) {
         if (isDraft) {
+          if (this.categoriesToSave.includes('SD_SCALE')) save_sd_sc = true
+          else save_sd_sc = false
+          if (this.categoriesToSave.includes('SD_SUSTAINED')) save_sd_sus = true
+          else save_sd_sus = false
+        } else save_sd_sc = true, save_sd_sus = true
+        for await (let sd of this.selectedSDGs) {
+          if (save_sd_sc) {
+            sd.scaleResult.forEach(res => {
+              if (res.selectedScore) {
+                if (res.institution?.id) {
+                  let inst = new Institution()
+                  inst.id = res.institution.id
+                  res.institution = inst
+                }
+                let score = new ScoreDto()
+                score.name = res.selectedScore.name
+                score.code = res.selectedScore.code
+                score.value = res.selectedScore.value
+                res.selectedScore = score
+                res.type = this.approach
+                if (this.isEditMode){
+                  let assQ = this.assessmentquestions.find(o => (o.characteristic.id === res.characteristic.id) && (o.selectedSdg.id === res.selectedSdg.id))
+                  if (assQ) {
+                    res.assessmentQuestionId = assQ.id
+                    res.assessmentAnswerId = assQ.assessmentAnswers[0]?.id
+                  }
+                }
+                if (res.selectedScore.name) {
+                  this.results.push(res)
+                }
+              }
+            })
+          }
+          if (save_sd_sus) {
+            sd.sustainResult.forEach(res => {
+              if (res.selectedScore) {
+                if (res.institution?.id) {
+                  let inst = new Institution()
+                  inst.id = res.institution.id
+                  res.institution = inst
+                }
+                let susScore = new ScoreDto()
+                susScore.name = res.selectedScore.name
+                susScore.code = res.selectedScore.code
+                susScore.value = res.selectedScore.value
+                res.selectedScore = susScore
+                res.type = this.approach
+                if (this.isEditMode){
+                  let assQ = this.assessmentquestions.find(o => (o.characteristic.id === res.characteristic.id) && (o.selectedSdg.id === res.selectedSdg.id))
+                  if (assQ) {
+                    res.assessmentQuestionId = assQ.id
+                    res.assessmentAnswerId = assQ.assessmentAnswers[0].id
+                  }
+                }
+                if (res.selectedScore.name) {
+                  this.results.push(res)
+                }
+              }
+            })
+          }
+        }
+      }
+  
+      if (this.outcome?.length > 0) {
+        for await (let item of this.outcome) {
+          if (isDraft) {
+            if (item.type === 'GHG') {
+              if (this.categoriesToSave.includes('GHG_SCALE') && item.method === 'SCALE') { save_ghg_sc = true }
+              if (this.categoriesToSave.includes('GHG_SUSTAINED') && item.method === 'SUSTAINED') { save_ghg_sus = true }
+            } else if (item.type === 'ADAPTATION') {
+              if (this.categoriesToSave.includes('ADAPTATION_SCALE') && item.method === 'SCALE') { save_ad_sc = true }
+              if (this.categoriesToSave.includes('ADAPTATION_SUSTAINED') && item.method === 'SUSTAINED') { save_ad_sus = true }
+            }
+          } else { save_ghg_sc = true; save_ghg_sus = true; save_ad_sc = true; save_ad_sus = true; }
           if (item.type === 'GHG') {
-            if (this.categoriesToSave.includes('GHG_SCALE') && item.method === 'SCALE') { save_ghg_sc = true }
-            if (this.categoriesToSave.includes('GHG_SUSTAINED') && item.method === 'SUSTAINED') { save_ghg_sus = true }
-          } else if (item.type === 'ADAPTATION') {
-            if (this.categoriesToSave.includes('ADAPTATION_SCALE') && item.method === 'SCALE') { save_ad_sc = true }
-            if (this.categoriesToSave.includes('ADAPTATION_SUSTAINED') && item.method === 'SUSTAINED') { save_ad_sus = true }
-          }
-        } else { save_ghg_sc = true; save_ghg_sus = true; save_ad_sc = true; save_ad_sus = true; }
-        if (item.type === 'GHG') {
-          if (save_ghg_sc || save_ghg_sus) {
-            item.results.forEach((res: any) => {
-              res.type = this.approach
-              if (res.institution?.id) {
-                let inst = new Institution()
-                inst.id = res.institution.id
-                res.institution = inst
-              }
-              if (res.selectedScore) {
-                let score = new ScoreDto()
-                score.name = res.selectedScore.name
-                score.code = res.selectedScore.code
-                score.value = res.selectedScore.value
-                res.selectedScore = score
+            if (save_ghg_sc || save_ghg_sus) {
+              item.results.forEach((res: any) => {
                 res.type = this.approach
-                res.selectedSdg = new PortfolioSdg()
-                if (this.isEditMode){
-                  let assQ = this.assessmentquestions.find(o => (o.characteristic.id === res.characteristic.id) )
-                  if (assQ) {
-                    res.assessmentQuestionId = assQ.id
-                    res.assessmentAnswerId = assQ.assessmentAnswers[0].id
+                if (res.institution?.id) {
+                  let inst = new Institution()
+                  inst.id = res.institution.id
+                  res.institution = inst
+                }
+                if (res.selectedScore) {
+                  let score = new ScoreDto()
+                  score.name = res.selectedScore.name
+                  score.code = res.selectedScore.code
+                  score.value = res.selectedScore.value
+                  res.selectedScore = score
+                  res.type = this.approach
+                  res.selectedSdg = new PortfolioSdg()
+                  if (this.isEditMode){
+                    let assQ = this.assessmentquestions.find(o => (o.characteristic.id === res.characteristic.id) )
+                    if (assQ) {
+                      res.assessmentQuestionId = assQ.id
+                      res.assessmentAnswerId = assQ.assessmentAnswers[0].id
+                    }
+                  }
+                  res.isSDG = false
+                  res.isAdaptation = false
+                  res.isGHG = true
+                  if (res.selectedScore.name) {
+                    this.results.push(res)
                   }
                 }
-                res.isSDG = false
-                res.isAdaptation = false
-                res.isGHG = true
-                if (res.selectedScore.name) {
-                  this.results.push(res)
-                }
-              }
-            })
+              })
+            }
           }
-        }
-        if (item.type === 'ADAPTATION') {
-          if (save_ad_sc || save_ad_sus) {
-            item.results.forEach((res: any) => {
-              res.type = this.approach
-              if (res.institution?.id) {
-                let inst = new Institution()
-                inst.id = res.institution.id
-                res.institution = inst
-              }
-              if (res.selectedScore) {
-                let score = new ScoreDto()
-                score.name = res.selectedScore.name
-                score.code = res.selectedScore.code
-                score.value = res.selectedScore.value
-                res.selectedScore = score
+          if (item.type === 'ADAPTATION') {
+            if (save_ad_sc || save_ad_sus) {
+              item.results.forEach((res: any) => {
                 res.type = this.approach
-                res.selectedSdg = new PortfolioSdg()
-                if (this.isEditMode){
-                  let assQ = this.assessmentquestions.find(o => (o.characteristic.id === res.characteristic.id) )
-                  if (assQ) {
-                    res.assessmentQuestionId = assQ.id
-                    res.assessmentAnswerId = assQ.assessmentAnswers[0].id
+                if (res.institution?.id) {
+                  let inst = new Institution()
+                  inst.id = res.institution.id
+                  res.institution = inst
+                }
+                if (res.selectedScore) {
+                  let score = new ScoreDto()
+                  score.name = res.selectedScore.name
+                  score.code = res.selectedScore.code
+                  score.value = res.selectedScore.value
+                  res.selectedScore = score
+                  res.type = this.approach
+                  res.selectedSdg = new PortfolioSdg()
+                  if (this.isEditMode){
+                    let assQ = this.assessmentquestions.find(o => (o.characteristic.id === res.characteristic.id) )
+                    if (assQ) {
+                      res.assessmentQuestionId = assQ.id
+                      res.assessmentAnswerId = assQ.assessmentAnswers[0].id
+                    }
+                  }
+                  res.isSDG = false
+                  res.isAdaptation = true
+                  res.isGHG = false
+                  if (res.selectedScore.name) {
+                    this.results.push(res)
                   }
                 }
-                res.isSDG = false
-                res.isAdaptation = true
-                res.isGHG = false
-                if (res.selectedScore.name) {
-                  this.results.push(res)
-                }
-              }
-            })
+              })
+            }
           }
+          save_ghg_sc = false; save_ghg_sus = false; save_ad_sc = false; save_ad_sus = false;
         }
-        save_ghg_sc = false; save_ghg_sus = false; save_ad_sc = false; save_ad_sus = false;
       }
-    }
-
-    let isValid = true
-    if (draftCategory === '') {
-      isValid = await this.checkMandotary()
-    }
-
-    if (!isDraft) {
-      if (this.activeIndexMain === 1) {
-        this.clickedFormMap[this.activeIndex2] = true
+  
+      let isValid = true
+      if (draftCategory === '') {
+        isValid = await this.checkMandotary()
       }
-      isValid = this.isFormValid()
-    }
-
-
-    if (isValid) {
-      this.categoriesToSave = []
-      this.isDraftSaved = true
-      if(!isDraft) this.savedData = true
-      this.onSubmit.emit({result: this.results, isDraft: isDraft,name:name,type:type, expected_ghg_mitigation: this.expected_ghg_mitigation})
-    } else {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Please fill all mandotory fields',
-        closable: true,
-      });
+  
+      if (!isDraft) {
+        if (this.activeIndexMain === 1) {
+          this.clickedFormMap[this.activeIndex2] = true
+        }
+        isValid = this.isFormValid()
+      }
+  
+  
+      if (isValid) {
+        this.categoriesToSave = []
+        this.isDraftSaved = true
+        if(!isDraft) this.savedData = true
+        this.onSubmit.emit({result: this.results, isDraft: isDraft,name:name,type:type, expected_ghg_mitigation: this.expected_ghg_mitigation})
+      } else {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Please fill all mandotory fields',
+          closable: true,
+        });
+      }
     }
   }
 

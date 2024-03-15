@@ -76,7 +76,8 @@
               <ng-container *ngFor="let investment of totalInvestments; let idx = index">
                 <div class="row">
                   <label class="col">{{investment.instrument_name}}</label>
-                  <input class="col" pInputText type="number" (input)="onInputChange($event)" #totInvestment="ngModel" [name]="'totInvestment'+idx" ngModel [(ngModel)]="investment.propotion" required [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" />
+                  <p-inputNumber class="col"  [(ngModel)]="investment.propotion" inputId="expiry"  suffix=" %" (onInput)="onInputChange($event)" #totInvestment="ngModel" [name]="'totInvestment'+idx" [required]="true" [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)"> </p-inputNumber>
+                  <!-- <input class="col" suffix=" %" pInputText type="number" (input)="onInputChange($event)" #totInvestment="ngModel" [name]="'totInvestment'+idx" ngModel [(ngModel)]="investment.propotion" required [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" /> -->
                 </div>
               </ng-container>
               <p class="info-message text-danger" *ngIf="isExceeded">
@@ -106,7 +107,8 @@
             </div>
             <div class="p-field p-2">
               <label for="opportunities">Opportunities for stakeholders to participate in the assessment *</label>
-              <input pInputText type="text" #opportunities="ngModel" name="opportunities" ngModel placeholder="Describe if and how stakeholders will participate in the assessment" [(ngModel)]="assessment.opportunities" required [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" />
+              <textarea rows="5" pInputText type="text" #opportunities="ngModel" name="opportunities" ngModel [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" placeholder="Describe if and how stakeholders will participate in the assessment" [(ngModel)]="assessment.opportunities" required
+                              [maxlength]="masterDataService.getFieldCharCount(fieldNames.ASSESSMENT_OPPORTUNITIES)"></textarea>
               <p class="info-message text-danger" *ngIf="!opportunities.value && (fData.submitted || opportunities.touched)">This is a mandatory field</p>
             </div>
           </div>
@@ -623,7 +625,7 @@
                                 <div class="row p-2">
                                   <div class="col-12 col-lg-6">
                                     <div class="p-field">
-                                      <label for="expected_ghg_mitigation">Expected GHG reductions over intervention lifetime(t CO2-eq)</label>
+                                      <label for="expected_ghg_mitigation">Expected GHG reductions over intervention lifetime(t CO₂-eq)</label>
                                       <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation" name="expected_ghg_mitigation" placeholder="Expected GHG reductions over intervention lifetime" inputId="locale-us" mode="decimal" locale="en-US" [minFractionDigits]="2"
                                         (onInput)="calculateAbatement($event.value, data)">
                                       </p-inputNumber>
@@ -633,8 +635,8 @@
                                 <div class="row p-2">
                                   <div class="col-12 col-lg-6">
                                     <div class="p-field">
-                                      <label for="expected_ghg_mitigation">Expected GHG reduction (Mt CO2-eq) per year</label>
-                                      <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation_year" name="expected_ghg_mitigation_year" placeholder="Expected GHG reduction per year" inputId="locale-us" mode="decimal" locale="en-US" [minFractionDigits]="2">
+                                      <label for="expected_ghg_mitigation">Expected average GHG reductions or removals (mitigation outcomes) (tCO₂e/year)</label>
+                                      <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation_year" name="expected_ghg_mitigation_year" placeholder="Expected average GHG reductions or removals (mitigation outcomes)" inputId="locale-us" mode="decimal" locale="en-US" [minFractionDigits]="2">
                                       </p-inputNumber>
                                     </div>
                                   </div>
@@ -642,11 +644,17 @@
                                 <div class="row p-2">
                                   <div class="col-12 col-lg-6">
                                     <div class="p-field">
-                                      <label for="expected_ghg_mitigation">Abatement per dollar (GHG reduction over intervention lifetime/total investment), t CO2-eq/USD</label>
+                                      <label for="expected_ghg_mitigation">Abatement per dollar (GHG reduction over intervention lifetime/total investment), t CO₂-eq/USD</label>
                                       <p-inputNumber [disabled]="true" [(ngModel)]="data['abatement']" disabl [name]="'abatement'+data.characteristics.id" placeholder="Expected GHG reduction per year" mode="decimal" locale="en-US" [minFractionDigits]="3">
                                       </p-inputNumber>
                                     </div>
                                   </div>
+                                </div>
+                                <div class="row p-2">
+                                  <p> <br><br>
+                                    Note: All GHG impacts should be calculated as average reductions in emissions in tCO₂e/year (over the intervention's lifetime) and compared
+                                     to subnational/regional/municipal emissions or subsectoral level emissions for the latest year for which those emissions data is available.
+                                  </p>
                                 </div>
                               </div>
                             </div>

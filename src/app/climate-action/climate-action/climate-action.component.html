@@ -43,27 +43,14 @@
           <div class="row p-2">
             <div class="col-12 col-md-6">
               <div class="p-field">
-                <label for="institute">Institute*</label>
-                <input [disabled]="editEntytyId > 0" type="text" maxlength="100" placeholder="Institute" #ins="ngModel" name="ins" class="p-inputtext" [(ngModel)]="project.institute" [ngModelOptions]="{ standalone: false }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText required />
-                <p class="info-message text-danger" *ngIf="
-                  !project.institute &&
-                  (fData.submitted || ins.touched || ins.dirty)
-                ">
-                  This is a mandatory field
-                </p>
+                <label for="institute">Institute</label>
+                <input [disabled]="editEntytyId > 0" type="text" maxlength="100" placeholder="Institute" #ins="ngModel" name="ins" class="p-inputtext" [(ngModel)]="project.institute" [ngModelOptions]="{ standalone: false }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
               </div>
             </div>
             <div class="col-12 col-md-6">
               <div class="p-field">
-                <label for="designation">Contact Person's Job Title*</label>
-                <input [disabled]="editEntytyId > 0" type="text" maxlength="30" placeholder="Designation" #designation="ngModel" name="designation" class="p-inputtext" [(ngModel)]="project.contactPersonDesignation" [ngModelOptions]="{ standalone: false }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText
-                  required />
-                <p class="info-message text-danger" *ngIf="
-                  !project.contactPersonDesignation &&
-                  (fData.submitted || designation.touched || designation.dirty)
-                ">
-                  This is a mandatory field
-                </p>
+                <label for="designation">Contact Person's Job Title</label>
+                <input [disabled]="editEntytyId > 0" type="text" maxlength="30" placeholder="Designation" #designation="ngModel" name="designation" class="p-inputtext" [(ngModel)]="project.contactPersonDesignation" [ngModelOptions]="{ standalone: false }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
               </div>
             </div>
           </div>
@@ -232,17 +219,11 @@
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="projStatus">Level of Implementation*</label>
+                  <label for="projStatus">Level of Implementation</label>
                   <div type="button" class="pi pi-info-circle ml-10" pTooltip="Who does implement the policy?"></div>
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1 ; else elseBlocklevelofIpml">
                     <p-dropdown [disabled]="editEntytyId > 0 && !editMode" placeholder="Please Select the Level of Implementation" name="level_of_implemetation" #level_of_implemetation="ngModel" [(ngModel)]="project.levelofImplemenation" [options]="levelOfImplementation" optionLabel="name"
-                      optionValue="name" [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false" appendTo="body" [required]="true"></p-dropdown>
-                    <p class="info-message text-danger" *ngIf="
-                    !project.levelofImplemenation &&
-                    (fData.submitted || level_of_implemetation.touched || level_of_implemetation.dirty)
-                  ">
-                      This is a mandatory field
-                    </p>
+                      optionValue="name" [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false" appendTo="body"></p-dropdown>
                   </ng-container>
                   <ng-template #elseBlocklevelofIpml>
                     <input [disabled]="editEntytyId > 0 && !editMode" type="text" maxlength="50" name="level_of_implemetation" #level_of_implemetation="ngModel" class="p-inputtext" [(ngModel)]="project.levelofImplemenation" [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$"
@@ -264,43 +245,28 @@
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="description">Description of the Intervention*</label>
-                  <textarea [disabled]="editEntytyId > 0 && !editMode" name="description" placeholder="Description" #description="ngModel" [(ngModel)]="project.description" rows="5" cols="130" pInputText [required]="true" autoResize="autoResize"
+                  <label for="description">Description of the Intervention</label>
+                  <textarea [disabled]="editEntytyId > 0 && !editMode" name="description" placeholder="Description" #description="ngModel" [(ngModel)]="project.description" rows="5" cols="130" pInputText autoResize="autoResize"
                     [maxlength]="masterDataService.getFieldCharCount(fieldNames.INTERVENTION_DESCRIPTION)"></textarea>
                   <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.INTERVENTION_DESCRIPTION)}}</span>
-                  <p class="info-message text-danger" *ngIf="
-                    !project.description &&
-                    (fData.submitted || description.touched || description.dirty) ">
-                    This is a mandatory field
-                  </p>
                 </div>
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="objective">Objectives and Intended Impacts or Benefits of the Intervention* <i class="pi pi-info-circle" pTooltip="{{tooltips.objective}}" tooltipPosition="bottom" style="font-size: 1rem"></i></label>
-                  <textarea [disabled]="editEntytyId > 0 && !editMode" name="objective" placeholder="Objective" #objective="ngModel" [(ngModel)]="project.objective" rows="5" cols="130" pInputText autoResize="autoResize" [required]="true"
+                  <label for="objective">Objectives and Intended Impacts or Benefits of the Intervention<i class="pi pi-info-circle" pTooltip="{{tooltips.objective}}" tooltipPosition="bottom" style="font-size: 1rem"></i></label>
+                  <textarea [disabled]="editEntytyId > 0 && !editMode" name="objective" placeholder="Objective" #objective="ngModel" [(ngModel)]="project.objective" rows="5" cols="130" pInputText autoResize="autoResize"
                     [maxlength]="masterDataService.getFieldCharCount(fieldNames.INTERVENTION_OBJECTIVE)"></textarea>
                   <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.INTERVENTION_OBJECTIVE)}}</span>
-                  <p class="info-message text-danger" *ngIf="
-                    !project.objective &&
-                    (fData.submitted || objective.touched || objective.dirty) ">
-                    This is a mandatory field
-                  </p>
                 </div>
               </div>
             </div>
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="impEntity">Implementing Entity or Entities* <i class="pi pi-info-circle" pTooltip="{{tooltips.entity}}" tooltipPosition="bottom" style="font-size: 1rem"></i></label>
-                  <input [disabled]="editEntytyId > 0 && !editMode" type="text" placeholder="Name of the Implementing Entity" name="impEntity" #impEntity="ngModel" field="contatname" pInputText [required]="true" [(ngModel)]="project.implementingEntity"
-                    [maxlength]="masterDataService.getFieldCharCount(fieldNames.IMPLEMENTING_ENTITY)" />
+                  <label for="impEntity">Implementing Entity or Entities <i class="pi pi-info-circle" pTooltip="{{tooltips.entity}}" tooltipPosition="bottom" style="font-size: 1rem"></i></label>
+                  <textarea rows="5" [disabled]="editEntytyId > 0 && !editMode" type="text" placeholder="Name of the Implementing Entity" name="impEntity" #impEntity="ngModel" field="contatname" pInputText [(ngModel)]="project.implementingEntity"
+                    [maxlength]="masterDataService.getFieldCharCount(fieldNames.IMPLEMENTING_ENTITY)" ></textarea>
                   <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.IMPLEMENTING_ENTITY)}}</span>
-                  <p class="info-message text-danger" *ngIf="
-                    !project.implementingEntity &&
-                    (fData.submitted || impEntity.touched || impEntity.dirty) ">
-                    This is a mandatory field
-                  </p>
                 </div>
               </div>
             </div>
