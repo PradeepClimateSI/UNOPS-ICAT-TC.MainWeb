@@ -91,21 +91,21 @@ export class AssessmentInprogressComponent implements OnInit {
     this.loadgridData(event);
   }
 
-  detail(assessment: Assessment) {
+  detail(assessment: Assessment, isContinue: boolean) {
     if (assessment.tool =="CARBON_MARKET"){
       this.router.navigate(['app/carbon-market-tool-edit'], {  
-      queryParams: { id: assessment.id,isEdit:assessment.isDraft},  
+      queryParams: { id: assessment.id,isEdit:assessment.isDraft, isContinue: isContinue},  
       });
     }
     if (assessment.tool =="PORTFOLIO"){
       this.router.navigate(['app/portfolio-tool'], {  
-      queryParams: { id: assessment.id,isEdit:assessment.isDraft},  
+      queryParams: { id: assessment.id,isEdit:assessment.isDraft, isContinue: isContinue},  
       });
     }
 
     if (assessment.tool =="INVESTOR"){
       this.router.navigate(['app/investor-tool-new'], {  
-      queryParams: { id: assessment.id,isEdit:assessment.isDraft},  
+      queryParams: { id: assessment.id,isEdit:assessment.isDraft, isContinue: isContinue},  
       });
     }
     

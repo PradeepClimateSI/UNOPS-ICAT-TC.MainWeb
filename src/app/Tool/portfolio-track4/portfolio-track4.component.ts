@@ -151,6 +151,7 @@ export class PortfolioTrack4Component implements OnInit {
   to_date: Date
   isCompleted: boolean = false;
   assessment_period_info = assessment_period_info
+  isContinue: boolean = false;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -203,6 +204,7 @@ export class PortfolioTrack4Component implements OnInit {
     this.activatedRoute.queryParams.subscribe(params => {
       params['isEdit'] == 'true' ? (this.isEditMode = true) : false;
       params['iscompleted'] == 'true' ? (this.isCompleted = true) : false
+      params['isContinue'] == 'true' ? (this.isContinue = true) : false
       this.assessmentId = params['id']
       if (!this.assessmentId && this.isEditMode) {
         window.location.reload();
@@ -544,7 +546,7 @@ export class PortfolioTrack4Component implements OnInit {
     this.assessment.year = moment(new Date()).format("DD/MM/YYYY")
     if (!this.assessment.id) this.assessment.createdOn = moment(new Date())
     this.assessment.editedOn = moment(new Date())
-    if(this.isCompleted){
+    if(this.isCompleted || !this.isContinue){
       form.controls['sectors'].setValue(this.sectorArray)
     }
     if (form.valid) {

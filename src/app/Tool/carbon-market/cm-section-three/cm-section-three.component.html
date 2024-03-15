@@ -1,12 +1,12 @@
 <p-tabView (onChange)="onMainTabChange($event) " [(activeIndex)]="activeIndexMain ">
     <p-tabPanel *ngFor="let type of types; let idx = index" header="{{type.name}}">
         <ng-template pTemplate="header">
-            <span>{{type.name}}</span><i *ngIf="maintabIsValid[idx] !== undefined && !maintabIsValid[idx]"  pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
+            <span>{{type.name}}</span><i *ngIf="maintabIsValid[idx] !== undefined && !maintabIsValid[idx]" pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
         </ng-template>
         <p-tabView #tabView (onChange)="onCategoryTabChange($event)" [(activeIndex)]="activeIndex" *ngIf="type.code === 'process'">
             <p-tabPanel *ngFor="let category of categories[type.code]; let catidx = index" [header]="category.name" [selected]="category.name==assessment.processDraftLocation">
                 <ng-template pTemplate="header">
-                    <span>{{category.name}}</span><i *ngIf="tab1IsValid[catidx] !== undefined && !tab1IsValid[catidx]"  pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
+                    <span>{{category.name}}</span><i *ngIf="tab1IsValid[catidx] !== undefined && !tab1IsValid[catidx]" pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
                 </ng-template>
                 <br>
                 <p style="font-size: large;">{{category.description}}</p>
@@ -16,8 +16,7 @@
                     <p>{{char.description}}</p>
                     <div class="row">
                         <div class="col-2">
-                            <label for="Description">Relevance * <i class="pi pi-info-circle" pTooltip="{{relevance_tooltip}}" tooltipPosition="bottom"
-                                style="font-size: 1rem"></i></label>
+                            <label for="Description">Relevance * <i class="pi pi-info-circle" (mouseover)="opRelevance.toggle($event)" (mouseout)="opRelevance.toggle($event)" style="font-size: 1rem"></i></label>
                         </div>
                         <div class="col-5">
                             <p-dropdown name="data_charData_relavance" #data_charData_relavance="ngModel" placeholder="Select Relevance" [(ngModel)]="char.relevance" [options]="relevance" optionLabel="name" appendTo="body" optionValue="value" [required]="true"
@@ -46,8 +45,8 @@
                             <div class="btn btn-primary text-uppercase" (click)="next(category.code, category.characteristics)">
                                 Next
                             </div>
-                            <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.code, true,category.name,'prose')">
-                                Save
+                            <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.code, isCompleted ? false :true,category.name,'prose')">
+                                {{isCompleted ? 'Update' : 'Save'}}
                             </div>
                         </div>
                     </div>
@@ -57,7 +56,7 @@
         <p-tabView #tabView (onChange)="onCategoryTabChange2($event)" [(activeIndex)]="activeIndex2" *ngIf="type.code === 'outcome'">
             <p-tabPanel *ngFor="let category of outcome; let catidx = index" [selected]="category.name==assessment.outcomeDraftLocation">
                 <ng-template pTemplate="header">
-                    <span [innerHTML]="category.name"></span><i *ngIf="tabIsValid[catidx] !== undefined && !tabIsValid[catidx]"  pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
+                    <span [innerHTML]="category.name"></span><i *ngIf="tabIsValid[catidx] !== undefined && !tabIsValid[catidx]" pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
                 </ng-template>
                 <form #fData="ngForm">
                     <ng-container *ngIf="category.type === 'GHG'">
@@ -84,7 +83,9 @@
                                         <div class="row">
                                             <div [ngClass]="char.characteristic.code === 'INTERNATIONAL' ? 'col-9' : 'col-12'">
                                                 <ng-container *ngIf="!(useDefault[char.characteristic.id] && useDefault[char.characteristic.id].st_default) || char.characteristic.code !== 'INTERNATIONAL'">
-                                                    <input type="text" [name]="'stSituation'+char.characteristic.id" #tboundrary="ngModel" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)" [(ngModel)]="char.startingSituation" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" />
+                                                    <input type="text" [name]="'stSituation'+char.characteristic.id" #tboundrary="ngModel"
+                                                        [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)"
+                                                        [(ngModel)]="char.startingSituation" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" />
                                                     <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
                                                         ((fData.form.controls['stSituation'+char.characteristic.id]?.touched ? 
                                                             (char.startingSituation === undefined || char.startingSituation === '')
@@ -94,13 +95,16 @@
                                                     </p>
                                                 </ng-container>
                                                 <ng-container *ngIf="(useDefault[char.characteristic.id] && useDefault[char.characteristic.id].st_default) && char.characteristic.code === 'INTERNATIONAL'">
-                                                    <p-dropdown [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)"
-                                                    [options]="default_values[char.characteristic.id]? default_values[char.characteristic.id].st_default_values : []" [name]="'st_default_values'+char.characteristic.code" [required]="char.characteristic.code === 'INTERNATIONAL'" [(ngModel)]="char.startingSituation" optionLabel="label" optionValue="starting_situation_value">
+                                                    <p-dropdown
+                                                        [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)"
+                                                        [options]="default_values[char.characteristic.id]? default_values[char.characteristic.id].st_default_values : []" [name]="'st_default_values'+char.characteristic.code" [required]="char.characteristic.code === 'INTERNATIONAL'"
+                                                        [(ngModel)]="char.startingSituation" optionLabel="label" optionValue="starting_situation_value">
                                                     </p-dropdown>
                                                 </ng-container>
                                             </div>
-                                            <div class="col-3" *ngIf="char.characteristic.code === 'INTERNATIONAL' && useDefault[char.characteristic.id]" >
-                                                <p-checkbox [name]="'st-checkbox' + char.characteristic.code" [(ngModel)]="useDefault[char.characteristic.id].st_default" [binary]="true" inputId="binary" label="Default Values" (onChange)="loadDefaults(char.characteristic.id, 'STARTING_SITUATION')"></p-checkbox>
+                                            <div class="col-3" *ngIf="char.characteristic.code === 'INTERNATIONAL' && useDefault[char.characteristic.id]">
+                                                <p-checkbox [name]="'st-checkbox' + char.characteristic.code" [(ngModel)]="useDefault[char.characteristic.id].st_default" [binary]="true" inputId="binary" label="Default Values"
+                                                    (onChange)="loadDefaults(char.characteristic.id, 'STARTING_SITUATION')"></p-checkbox>
                                                 <i class="pi pi-info-circle" [pTooltip]="source" tooltipPosition="bottom" style="font-size: 1rem"></i>
                                             </div>
                                         </div>
@@ -112,7 +116,8 @@
                                         <div class="row">
                                             <div [ngClass]="char.characteristic.code === 'INTERNATIONAL' ? 'col-9' : 'col-12'">
                                                 <ng-container *ngIf="!(useDefault[char.characteristic.id] && useDefault[char.characteristic.id].ex_default) || char.characteristic.code !== 'INTERNATIONAL'">
-                                                    <input type="text" [name]="'impact'+char.characteristic.id" #tboundrary="ngModel" placeholder="Please describe the expected emissions reductions on the indicated scale." [(ngModel)]="char.expectedImpact" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" />
+                                                    <input type="text" [name]="'impact'+char.characteristic.id" #tboundrary="ngModel" placeholder="Please describe the expected emissions reductions on the indicated scale." [(ngModel)]="char.expectedImpact" class="form-control"
+                                                        [required]="char.characteristic.code === 'INTERNATIONAL'" />
                                                     <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
                                                             ((fData.form.controls['impact'+char.characteristic.id]?.touched ? 
                                                                 (char.expectedImpact === undefined || char.expectedImpact === '')
@@ -122,13 +127,14 @@
                                                     </p>
                                                 </ng-container>
                                                 <ng-container *ngIf="(useDefault[char.characteristic.id] && useDefault[char.characteristic.id].ex_default) && char.characteristic.code === 'INTERNATIONAL'">
-                                                    <p-dropdown placeholder="Please describe the expected emissions reductions on the indicated scale."
-                                                    [options]="default_values[char.characteristic.id] ? default_values[char.characteristic.id].ex_default_values : []" [name]="'ex_default_values'+char.characteristic.code" [required]="char.characteristic.code === 'INTERNATIONAL'" [(ngModel)]="char.expectedImpact" optionLabel="label" optionValue="starting_situation_value">
+                                                    <p-dropdown placeholder="Please describe the expected emissions reductions on the indicated scale." [options]="default_values[char.characteristic.id] ? default_values[char.characteristic.id].ex_default_values : []"
+                                                        [name]="'ex_default_values'+char.characteristic.code" [required]="char.characteristic.code === 'INTERNATIONAL'" [(ngModel)]="char.expectedImpact" optionLabel="label" optionValue="starting_situation_value">
                                                     </p-dropdown>
                                                 </ng-container>
                                             </div>
-                                            <div class="col-3" *ngIf="char.characteristic.code === 'INTERNATIONAL' && useDefault[char.characteristic.id]" >
-                                                <p-checkbox [name]="'ex-checkbox' + char.characteristic.code" [(ngModel)]="useDefault[char.characteristic.id].ex_default" [binary]="true" inputId="binary" label="Default Values" (onChange)="loadDefaults(char.characteristic.id, 'EXPECTED_IMPACT')"></p-checkbox>
+                                            <div class="col-3" *ngIf="char.characteristic.code === 'INTERNATIONAL' && useDefault[char.characteristic.id]">
+                                                <p-checkbox [name]="'ex-checkbox' + char.characteristic.code" [(ngModel)]="useDefault[char.characteristic.id].ex_default" [binary]="true" inputId="binary" label="Default Values"
+                                                    (onChange)="loadDefaults(char.characteristic.id, 'EXPECTED_IMPACT')"></p-checkbox>
                                                 <i class="pi pi-info-circle" [pTooltip]="source" tooltipPosition="bottom" style="font-size: 1rem"></i>
                                             </div>
                                         </div>
@@ -157,11 +163,11 @@
                                     </div>
                                 </div>
                                 <div class="row p-2">
-                                    <div class="col-4">Justification  <i *ngIf="['NATIONAL', 'SUBNATIONAL'].includes(char.characteristic.code)" class="pi pi-info-circle" pTooltip="{{char.characteristic.code === 'NATIONAL' ? sectoral_placeholder : subsectoral_placeholder}}" tooltipPosition="bottom"
-                                        style="font-size: 1rem"></i></div>
+                                    <div class="col-4">Justification <i *ngIf="['NATIONAL', 'SUBNATIONAL'].includes(char.characteristic.code)" class="pi pi-info-circle" pTooltip="{{char.characteristic.code === 'NATIONAL' ? sectoral_placeholder : subsectoral_placeholder}}" tooltipPosition="bottom"
+                                            style="font-size: 1rem"></i></div>
                                     <div class="col-6">
-                                        <textarea type="text" rows="5" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? 'Enter Justification' : ''" [required]="char.characteristic.code === 'INTERNATIONAL'" 
-                                        [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
+                                        <textarea type="text" rows="5" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? 'Enter Justification' : ''"
+                                            [required]="char.characteristic.code === 'INTERNATIONAL'" [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
                                         <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                         <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
                                                 ((fData.form.controls['justification'+char.characteristic.id]?.touched ? 
@@ -212,8 +218,8 @@
                                 <div class="row p-2">
                                     <div class="col-4">Justification</div>
                                     <div class="col-6">
-                                        <textarea rows="5" type="text" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" placeholder="Enter Justification" [required]="char.characteristic.code === 'INTERNATIONAL'" 
-                                        [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
+                                        <textarea rows="5" type="text" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" placeholder="Enter Justification" [required]="char.characteristic.code === 'INTERNATIONAL'"
+                                            [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
                                         <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                         <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
                                                 ((fData.form.controls['justification'+char.characteristic.id]?.touched ? 
@@ -247,6 +253,12 @@
                                     </p-inputNumber>
                                 </div>
                             </div>
+                            <div  class=" p-2">
+                                <p> <br><br>
+                                    Note: All GHG impacts should be calculated as average reductions in emissions in tCO₂e/year (over the intervention's lifetime) and compared
+                                     to subnational/regional/municipal emissions or subsectoral level emissions for the latest year for which those emissions data is available.
+                                  </p>
+                            </div>
                         </ng-container>
                         <ng-container *ngIf="category.method === 'SUSTAINED'">
                             <h6>GHG Answer</h6>
@@ -264,7 +276,7 @@
                                         Next
                                     </div>
                                     <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, true,category.code,'out')">
-                                        Save
+                                        {{isCompleted ? 'Update' : 'Save'}}
                                     </div>
                                 </div>
                             </div>
@@ -307,7 +319,9 @@
                                         <div class="row">
                                             <div [ngClass]="char.characteristic.code === 'INTERNATIONAL' ? 'col-9' : 'col-12'">
                                                 <ng-container *ngIf="!(useDefault[char.characteristic.id] && useDefault[char.characteristic.id].st_default) || char.characteristic.code !== 'INTERNATIONAL'">
-                                                    <input type="text" [name]="'stSituation'+char.characteristic.id" #tboundrary="ngModel" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)" [(ngModel)]="char.startingSituation" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" />
+                                                    <input type="text" [name]="'stSituation'+char.characteristic.id" #tboundrary="ngModel"
+                                                        [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)"
+                                                        [(ngModel)]="char.startingSituation" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" />
                                                     <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
                                                         ((fData.form.controls['stSituation'+char.characteristic.id]?.touched ? 
                                                             (char.startingSituation === undefined || char.startingSituation === '')
@@ -317,13 +331,16 @@
                                                     </p>
                                                 </ng-container>
                                                 <ng-container *ngIf="(useDefault[char.characteristic.id] && useDefault[char.characteristic.id].st_default) && char.characteristic.code === 'INTERNATIONAL'">
-                                                    <p-dropdown [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)"
-                                                    [options]="default_values[char.characteristic.id]? default_values[char.characteristic.id].st_default_values : []" [name]="'st_default_values'+char.characteristic.code" [required]="char.characteristic.code === 'INTERNATIONAL'" [(ngModel)]="char.startingSituation" optionLabel="label" optionValue="starting_situation_value">
+                                                    <p-dropdown
+                                                        [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)"
+                                                        [options]="default_values[char.characteristic.id]? default_values[char.characteristic.id].st_default_values : []" [name]="'st_default_values'+char.characteristic.code" [required]="char.characteristic.code === 'INTERNATIONAL'"
+                                                        [(ngModel)]="char.startingSituation" optionLabel="label" optionValue="starting_situation_value">
                                                     </p-dropdown>
                                                 </ng-container>
                                             </div>
-                                            <div class="col-3" *ngIf="char.characteristic.code === 'INTERNATIONAL' && useDefault[char.characteristic.id]" >
-                                                <p-checkbox [name]="'st-checkbox' + char.characteristic.code" [(ngModel)]="useDefault[char.characteristic.id].st_default" [binary]="true" inputId="binary" label="Default Values" (onChange)="loadDefaults(char.characteristic.id, 'STARTING_SITUATION')"></p-checkbox>
+                                            <div class="col-3" *ngIf="char.characteristic.code === 'INTERNATIONAL' && useDefault[char.characteristic.id]">
+                                                <p-checkbox [name]="'st-checkbox' + char.characteristic.code" [(ngModel)]="useDefault[char.characteristic.id].st_default" [binary]="true" inputId="binary" label="Default Values"
+                                                    (onChange)="loadDefaults(char.characteristic.id, 'STARTING_SITUATION')"></p-checkbox>
                                                 <i class="pi pi-info-circle" [pTooltip]="source" tooltipPosition="bottom" style="font-size: 1rem"></i>
                                             </div>
                                         </div>
@@ -335,7 +352,8 @@
                                         <div class="row">
                                             <div [ngClass]="char.characteristic.code === 'INTERNATIONAL' ? 'col-9' : 'col-12'">
                                                 <ng-container *ngIf="!(useDefault[char.characteristic.id] && useDefault[char.characteristic.id].ex_default) || char.characteristic.code !== 'INTERNATIONAL'">
-                                                    <input type="text" [name]="'impact'+char.characteristic.id" #tboundrary="ngModel" placeholder="Please describe the expected emissions reductions on the indicated scale." [(ngModel)]="char.expectedImpact" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" />
+                                                    <input type="text" [name]="'impact'+char.characteristic.id" #tboundrary="ngModel" placeholder="Please describe the expected emissions reductions on the indicated scale." [(ngModel)]="char.expectedImpact" class="form-control"
+                                                        [required]="char.characteristic.code === 'INTERNATIONAL'" />
                                                     <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
                                                             ((fData.form.controls['impact'+char.characteristic.id]?.touched ? 
                                                                 (char.expectedImpact === undefined || char.expectedImpact === '')
@@ -345,13 +363,14 @@
                                                     </p>
                                                 </ng-container>
                                                 <ng-container *ngIf="useDefault[char.characteristic.id] && useDefault[char.characteristic.id].ex_default && char.characteristic.code === 'INTERNATIONAL'">
-                                                    <p-dropdown placeholder="Please describe the expected emissions reductions on the indicated scale."
-                                                    [options]="default_values[char.characteristic.id] ? default_values[char.characteristic.id].ex_default_values : []" [name]="'ex_default_values'+char.characteristic.code" [required]="char.characteristic.code === 'INTERNATIONAL'" [(ngModel)]="char.expectedImpact" optionLabel="label" optionValue="starting_situation_value">
+                                                    <p-dropdown placeholder="Please describe the expected emissions reductions on the indicated scale." [options]="default_values[char.characteristic.id] ? default_values[char.characteristic.id].ex_default_values : []"
+                                                        [name]="'ex_default_values'+char.characteristic.code" [required]="char.characteristic.code === 'INTERNATIONAL'" [(ngModel)]="char.expectedImpact" optionLabel="label" optionValue="starting_situation_value">
                                                     </p-dropdown>
                                                 </ng-container>
                                             </div>
-                                            <div class="col-3" *ngIf="char.characteristic.code === 'INTERNATIONAL' && useDefault[char.characteristic.id]" >
-                                                <p-checkbox [name]="'ex-checkbox' + char.characteristic.code" [(ngModel)]="useDefault[char.characteristic.id].ex_default" [binary]="true" inputId="binary" label="Default Values" (onChange)="loadDefaults(char.characteristic.id, 'EXPECTED_IMPACT')"></p-checkbox>
+                                            <div class="col-3" *ngIf="char.characteristic.code === 'INTERNATIONAL' && useDefault[char.characteristic.id]">
+                                                <p-checkbox [name]="'ex-checkbox' + char.characteristic.code" [(ngModel)]="useDefault[char.characteristic.id].ex_default" [binary]="true" inputId="binary" label="Default Values"
+                                                    (onChange)="loadDefaults(char.characteristic.id, 'EXPECTED_IMPACT')"></p-checkbox>
                                                 <i class="pi pi-info-circle" [pTooltip]="source" tooltipPosition="bottom" style="font-size: 1rem"></i>
                                             </div>
                                         </div>
@@ -380,10 +399,10 @@
                                 </div>
                                 <div class="row p-2">
                                     <div class="col-4">Justification <i *ngIf="['NATIONAL', 'SUBNATIONAL'].includes(char.characteristic.code)" class="pi pi-info-circle" pTooltip="{{char.characteristic.code === 'NATIONAL' ? sectoral_placeholder : subsectoral_placeholder}}" tooltipPosition="bottom"
-                                        style="font-size: 1rem"></i></div>
+                                            style="font-size: 1rem"></i></div>
                                     <div class="col-6">
-                                        <textarea rows="5" type="text" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? 'Enter Justification' : ''" [required]="char.characteristic.code === 'INTERNATIONAL'" 
-                                        [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
+                                        <textarea rows="5" type="text" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? 'Enter Justification' : ''"
+                                            [required]="char.characteristic.code === 'INTERNATIONAL'" [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
                                         <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                         <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
                                             ((fData.form.controls['justification'+char.characteristic.id]?.touched ? 
@@ -413,8 +432,8 @@
                                 <div class="row p-2">
                                     <div class="col-4">Score</div>
                                     <div class="col-6">
-                                        <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.characteristic.id" #type="ngModel" placeholder="Select Score" [(ngModel)]="char.selectedScore" [options]="adaptation_sustained_score" optionLabel="name" [required]="char.characteristic.code === 'INTERNATIONAL'" appendTo="body"
-                                            [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}" (onChange)="onSelectScore($event, char, idx, category.type)">
+                                        <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.characteristic.id" #type="ngModel" placeholder="Select Score" [(ngModel)]="char.selectedScore" [options]="adaptation_sustained_score" optionLabel="name"
+                                            [required]="char.characteristic.code === 'INTERNATIONAL'" appendTo="body" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}" (onChange)="onSelectScore($event, char, idx, category.type)">
                                             <ng-template let-option pTemplate="item">
                                                 <div class="custom-option">
                                                     {{ option.name }}
@@ -434,8 +453,8 @@
                                 <div class="row p-2">
                                     <div class="col-4">Justification</div>
                                     <div class="col-6">
-                                        <textarea rows="5" type="text" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" placeholder="Enter Justification" [required]="char.characteristic.code === 'INTERNATIONAL'" 
-                                        [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (ngModelChange)="adaptationJustificationChange()"></textarea>
+                                        <textarea rows="5" type="text" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" placeholder="Enter Justification" [required]="char.characteristic.code === 'INTERNATIONAL'"
+                                            [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (ngModelChange)="adaptationJustificationChange()"></textarea>
                                         <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                         <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
                                             ((fData.form.controls['justification'+char.characteristic.id]?.touched ? 
@@ -477,7 +496,7 @@
                                         Next
                                     </div>
                                     <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, true,category.code,'out')">
-                                        Save
+                                        {{isCompleted ? 'Update' : 'Save'}}
                                     </div>
                                 </div>
                             </div>
@@ -505,7 +524,8 @@
                                                 <p><i [innerText]="sectoral_description"></i></p>
                                                 <p><a target="_blank" href="https://www.ipcc-nggip.iges.or.jp/public/2006gl/pdf/1_Volume1/V1_4_Ch4_MethodChoice.pdf">Chapter 4 - Methodological Choice And Identification Of Key Categories </a></p>
                                                 <p><a target="_blank" href="https://unfccc.int/process-and-meetings/transparency-and-reporting/reporting-and-review/reporting-and-review-under-the-paris-agreement/national-inventory-reports">National Inventory Reports</a></p>
-                                                <p><a target="_blank" href="https://unfccc.int/non-annex-I-NCs?psafe_param=1&gad_source=1&gclid=CjwKCAiAlJKuBhAdEiwAnZb7ld5rCNwYr_3YUGFNjcZVY8belZMnWpNOggJZePrFCqaJ-RVnD8H66BoCGQIQAvD_BwE">National Communication submissions from Non-Annex I Parties</a></p>
+                                                <p><a target="_blank" href="https://unfccc.int/non-annex-I-NCs?psafe_param=1&gad_source=1&gclid=CjwKCAiAlJKuBhAdEiwAnZb7ld5rCNwYr_3YUGFNjcZVY8belZMnWpNOggJZePrFCqaJ-RVnD8H66BoCGQIQAvD_BwE">National Communication submissions from Non-Annex I Parties</a>
+                                                </p>
                                                 <p><a target="_blank" href="https://unfccc.int/process-and-meetings/transparency-and-reporting/preparing-for-the-ETF">Preparing for the Enhanced Transparency Framework</a></p>
                                             </ng-container>
                                             <ng-container *ngIf="category.method === 'SCALE' && char.characteristic.code === 'SUBNATIONAL'">
@@ -531,7 +551,9 @@
                                                     <div class="row">
                                                         <div [ngClass]="char.characteristic.code === 'INTERNATIONAL' ? 'col-9' : 'col-12'">
                                                             <ng-container *ngIf="!useDefaultSDG[SDG.id].st_default || char.characteristic.code !== 'INTERNATIONAL'">
-                                                                <input type="text" [name]="'stSituation'+char.characteristic.id" #tboundrary="ngModel" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)" [(ngModel)]="char.startingSituation" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" />
+                                                                <input type="text" [name]="'stSituation'+char.characteristic.id" #tboundrary="ngModel"
+                                                                    [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)"
+                                                                    [(ngModel)]="char.startingSituation" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" />
                                                                 <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
                                                                     ((fData.form.controls['stSituation'+char.characteristic.id]?.touched ? 
                                                                         (char.startingSituation === undefined || char.startingSituation === '')
@@ -541,13 +563,16 @@
                                                                 </p>
                                                             </ng-container>
                                                             <ng-container *ngIf="useDefaultSDG[SDG.id].st_default && char.characteristic.code === 'INTERNATIONAL'">
-                                                                <p-dropdown [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)"
-                                                                [options]="default_values[char.characteristic.id]? default_values[char.characteristic.id].st_default_values : []" [name]="'st_default_values'+char.characteristic.code" [required]="char.characteristic.code === 'INTERNATIONAL'" [(ngModel)]="char.startingSituation" optionLabel="label" optionValue="starting_situation_value">
+                                                                <p-dropdown
+                                                                    [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)"
+                                                                    [options]="default_values[char.characteristic.id]? default_values[char.characteristic.id].st_default_values : []" [name]="'st_default_values'+char.characteristic.code" [required]="char.characteristic.code === 'INTERNATIONAL'"
+                                                                    [(ngModel)]="char.startingSituation" optionLabel="label" optionValue="starting_situation_value">
                                                                 </p-dropdown>
                                                             </ng-container>
                                                         </div>
-                                                        <div class="col-3" *ngIf="char.characteristic.code === 'INTERNATIONAL'" >
-                                                            <p-checkbox [name]="'st-checkbox' + char.characteristic.code" [(ngModel)]="useDefaultSDG[SDG.id].st_default" [binary]="true" inputId="binary" label="Default Values" (onChange)="loadDefaults(char.characteristic.id, 'STARTING_SITUATION')"></p-checkbox>
+                                                        <div class="col-3" *ngIf="char.characteristic.code === 'INTERNATIONAL'">
+                                                            <p-checkbox [name]="'st-checkbox' + char.characteristic.code" [(ngModel)]="useDefaultSDG[SDG.id].st_default" [binary]="true" inputId="binary" label="Default Values"
+                                                                (onChange)="loadDefaults(char.characteristic.id, 'STARTING_SITUATION')"></p-checkbox>
                                                             <i class="pi pi-info-circle" [pTooltip]="source" tooltipPosition="bottom" style="font-size: 1rem"></i>
                                                         </div>
                                                     </div>
@@ -559,7 +584,8 @@
                                                     <div class="row">
                                                         <div [ngClass]="char.characteristic.code === 'INTERNATIONAL' ? 'col-9' : 'col-12'">
                                                             <ng-container *ngIf="!useDefaultSDG[SDG.id].ex_default || char.characteristic.code !== 'INTERNATIONAL'">
-                                                                <input type="text" [name]="'impact'+char.characteristic.id" #tboundrary="ngModel" placeholder="Please describe the expected emissions reductions on the indicated scale." [(ngModel)]="char.expectedImpact" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" />
+                                                                <input type="text" [name]="'impact'+char.characteristic.id" #tboundrary="ngModel" placeholder="Please describe the expected emissions reductions on the indicated scale." [(ngModel)]="char.expectedImpact" class="form-control"
+                                                                    [required]="char.characteristic.code === 'INTERNATIONAL'" />
                                                                 <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
                                                                         ((fData.form.controls['impact'+char.characteristic.id]?.touched ? 
                                                                             (char.expectedImpact === undefined || char.expectedImpact === '')
@@ -569,13 +595,14 @@
                                                                 </p>
                                                             </ng-container>
                                                             <ng-container *ngIf="useDefaultSDG[SDG.id].ex_default && char.characteristic.code === 'INTERNATIONAL'">
-                                                                <p-dropdown placeholder="Please describe the expected emissions reductions on the indicated scale."
-                                                                [options]="default_values[char.characteristic.id] ? default_values[char.characteristic.id].ex_default_values : []" [name]="'ex_default_values'+char.characteristic.code" [required]="char.characteristic.code === 'INTERNATIONAL'" [(ngModel)]="char.expectedImpact" optionLabel="label" optionValue="starting_situation_value">
+                                                                <p-dropdown placeholder="Please describe the expected emissions reductions on the indicated scale." [options]="default_values[char.characteristic.id] ? default_values[char.characteristic.id].ex_default_values : []"
+                                                                    [name]="'ex_default_values'+char.characteristic.code" [required]="char.characteristic.code === 'INTERNATIONAL'" [(ngModel)]="char.expectedImpact" optionLabel="label" optionValue="starting_situation_value">
                                                                 </p-dropdown>
                                                             </ng-container>
                                                         </div>
-                                                        <div class="col-3" *ngIf="char.characteristic.code === 'INTERNATIONAL'" >
-                                                            <p-checkbox [name]="'ex-checkbox' + char.characteristic.code" [(ngModel)]="useDefaultSDG[SDG.id].ex_default" [binary]="true" inputId="binary" label="Default Values" (onChange)="loadDefaults(char.characteristic.id, 'EXPECTED_IMPACT')"></p-checkbox>
+                                                        <div class="col-3" *ngIf="char.characteristic.code === 'INTERNATIONAL'">
+                                                            <p-checkbox [name]="'ex-checkbox' + char.characteristic.code" [(ngModel)]="useDefaultSDG[SDG.id].ex_default" [binary]="true" inputId="binary" label="Default Values"
+                                                                (onChange)="loadDefaults(char.characteristic.id, 'EXPECTED_IMPACT')"></p-checkbox>
                                                             <i class="pi pi-info-circle" [pTooltip]="source" tooltipPosition="bottom" style="font-size: 1rem"></i>
                                                         </div>
                                                     </div>
@@ -603,11 +630,11 @@
                                                 </div>
                                             </div>
                                             <div class="row p-2">
-                                                <div class="col-4">Justification <i *ngIf="['NATIONAL', 'SUBNATIONAL'].includes(char.characteristic.code)" class="pi pi-info-circle" pTooltip="{{char.characteristic.code === 'NATIONAL' ? sectoral_placeholder : subsectoral_placeholder}}" tooltipPosition="bottom"
-                                                    style="font-size: 1rem"></i></div>
+                                                <div class="col-4">Justification <i *ngIf="['NATIONAL', 'SUBNATIONAL'].includes(char.characteristic.code)" class="pi pi-info-circle" pTooltip="{{char.characteristic.code === 'NATIONAL' ? sectoral_placeholder : subsectoral_placeholder}}"
+                                                        tooltipPosition="bottom" style="font-size: 1rem"></i></div>
                                                 <div class="col-6">
-                                                    <textarea rows="5" type="text" [name]="'justification'+SDG.code+char.characteristic.id" [(ngModel)]="char.comment" class="form-control" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? 'Enter Justification' : ''" [required]="char.characteristic.code === 'INTERNATIONAL'" 
-                                                    [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
+                                                    <textarea rows="5" type="text" [name]="'justification'+SDG.code+char.characteristic.id" [(ngModel)]="char.comment" class="form-control" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? 'Enter Justification' : ''"
+                                                        [required]="char.characteristic.code === 'INTERNATIONAL'" [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
                                                     <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                                     <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
                                                         ((fData.form.controls['justification'+SDG.code+char.characteristic.id]?.touched ? 
@@ -640,8 +667,8 @@
                                             <div class="row p-2">
                                                 <div class="col-4">Score</div>
                                                 <div class="col-6">
-                                                    <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'susScore'+SDG.code+chSus.characteristic.id" #type="ngModel" placeholder="Select Score" [(ngModel)]="chSus.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
-                                                        (onChange)="onSelectScore($event, chSus, idx, category.type)" [options]="SDG_sustained_score" optionLabel="name" [required]="chSus.characteristic.code === 'INTERNATIONAL'" appendTo="body">
+                                                    <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'susScore'+SDG.code+chSus.characteristic.id" #type="ngModel" placeholder="Select Score" [(ngModel)]="chSus.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20"
+                                                        [style]="{'width': '100%'}" (onChange)="onSelectScore($event, chSus, idx, category.type)" [options]="SDG_sustained_score" optionLabel="name" [required]="chSus.characteristic.code === 'INTERNATIONAL'" appendTo="body">
                                                         <ng-template let-option pTemplate="item">
                                                             <div class="custom-option">
                                                                 {{ option.name }}
@@ -661,8 +688,8 @@
                                             <div class="row p-2">
                                                 <div class="col-4">Justification</div>
                                                 <div class="col-6">
-                                                    <textarea rows="5" type="text" [name]="'susJustification'+SDG.code+chSus.characteristic.id" [(ngModel)]="chSus.comment" class="form-control" placeholder="Enter Justification" [required]="chSus.characteristic.code === 'INTERNATIONAL'" 
-                                                    [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
+                                                    <textarea rows="5" type="text" [name]="'susJustification'+SDG.code+chSus.characteristic.id" [(ngModel)]="chSus.comment" class="form-control" placeholder="Enter Justification" [required]="chSus.characteristic.code === 'INTERNATIONAL'"
+                                                        [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
                                                     <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                                     <p class="info-message text-danger" *ngIf="chSus.characteristic.code === 'INTERNATIONAL' &&
                                                         ((fData.form.controls['susJustification'+SDG.code+chSus.characteristic.id]?.touched ? 
@@ -707,7 +734,7 @@
                                         Next
                                     </div>
                                     <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, true,category.code,'out')">
-                                        Save
+                                        {{isCompleted ? 'Update' : 'Save'}}
                                     </div>
                                 </div>
                             </div>
@@ -731,3 +758,33 @@
         </p-tabView>
     </p-tabPanel>
 </p-tabView>
+
+<p-overlayPanel #opRelevance [style]="{'width': '800px'}">
+    <div class="p-grid p-fluid col-md-12 col-sm-12 text-title">
+        <label>Does the process characteristic affects/impacts any of the identified barriers? does the intervention affects/impacts the process characteristic?</label>
+        <br>
+        <p-table [value]="[{}]">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Relevance</th>
+                    <th>Description</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-row>
+                <tr>
+                    <td>Relevant</td>
+                    <td>Reason to believe that a characteristic is important for transformational change in the context of the policy</td>
+                </tr>
+                <tr>
+                    <td>Possibly relevant</td>
+                    <td>Not clear whether the characteristic is important for transformational change in the context of the policy. Where the relevance is unknown or cannot be determined, the characteristic should be monitored over time.</td>
+                </tr>
+                <tr>
+                    <td>Not relevant</td>
+                    <td>Reason to believe that the characteristic is not important for transformational change in the context of the policy.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</p-overlayPanel>
+<p-confirmDialog></p-confirmDialog>

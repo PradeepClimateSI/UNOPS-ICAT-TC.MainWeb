@@ -35,7 +35,7 @@
                     <th>Tool</th>
                     <th>Sector/Sectors(Intervention)</th>
                     <th style="width:10%" >Last Update Date</th>
-                    <th>Action</th>
+                    <th style="width:15%" >Action</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-assessment>
@@ -55,8 +55,10 @@
                         {{assessment?.editedOn | date: "dd/MM/yyyy "}}
                     </td>
                     <td>
-                        <button type="button" pButton pRipple label="Continue"
-                            (click)="detail(assessment)"></button>
+                        <div class="row">
+                            <button class="col" type="button" pButton pRipple label="Edit" (click)="detail(assessment, false)"></button>
+                            <button class="col" type="button" pButton pRipple label="Continue" (click)="detail(assessment, true)"></button>
+                        </div>
                     </td>
 
                 </tr>
