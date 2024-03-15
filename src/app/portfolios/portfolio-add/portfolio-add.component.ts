@@ -71,7 +71,8 @@ export class PortfolioAddComponent implements OnInit {
         { label: 'Ex-post', value: 'Ex-post' },
         { label: 'Ex-ante', value: 'Ex-ante' },
     ];
-    this.portfolio.date = this.currentDate.toLocaleDateString()
+    // this.portfolio.date = this.currentDate.toLocaleDateString()
+    console.log(this.portfolio.date)
 
     this.apporoachList = [
       { label: 'Direct', value: 'Direct' },
@@ -130,7 +131,7 @@ export class PortfolioAddComponent implements OnInit {
   save( data : any){
 
     data.portfolioId = this.portfolio.portfolioId
-    data.date = this.portfolio.date
+    data.date = this.currentDate
 
     if(this.selectedValues.length < 2){
       this.messageService.add({
