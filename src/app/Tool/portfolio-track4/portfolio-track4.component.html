@@ -11,7 +11,7 @@
         <div class="p-grid p-fluid col-md-6 col-sm-12">
           <div class="p-field p-2">
             <label for="policy">Select Intervention *</label>
-            <p-dropdown appendTo="body" name="policy" #policy="ngModel" placeholder="Select Intervention" [disabled]="isSavedAssessment|| isEditMode" [(ngModel)]="assessment.climateAction" appendTo="body" [options]="policies" optionLabel="policyName" [required]="true"
+            <p-dropdown appendTo="body" name="policy" #policy="ngModel" placeholder="Select Intervention" [disabled]="isSavedAssessment|| isEditMode || isDisableIntervention" [(ngModel)]="assessment.climateAction" appendTo="body" [options]="policies" optionLabel="policyName" [required]="true"
               (onChange)="onSelectIntervention($event)"></p-dropdown>
             <p class="info-message text-danger" *ngIf="
                                                   !assessment.climateAction &&
@@ -22,7 +22,7 @@
           </div>
           <div class="p-field p-2">
             <label for="policy">Assessment Type *</label>
-            <p-dropdown appendTo="body" name="type" #type="ngModel" placeholder="Select Assessment Type" [(ngModel)]="assessment.assessmentType" [options]="assessment_types" optionLabel="name" [disabled]="isSavedAssessment|| isEditMode" optionValue="name" [required]="true"
+            <p-dropdown appendTo="body" name="type" #type="ngModel" placeholder="Select Assessment Type" [(ngModel)]="assessment.assessmentType" [options]="assessment_types" optionLabel="name" [disabled]="isSavedAssessment|| isEditMode || isDisableIntervention" optionValue="name" [required]="true"
               (onChange)="selectAssessmentType($event)"></p-dropdown>
             <p class="info-message text-danger" *ngIf="
                               !assessment.assessmentType &&

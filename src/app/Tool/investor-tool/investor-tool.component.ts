@@ -178,6 +178,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   isCompleted: boolean = false;
   assessment_period_info = assessment_period_info
   isContinue: boolean = false;
+  isDisableIntervention: boolean = false;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -209,11 +210,17 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
     this.relevance_tooltip = "Does the process characteristic affects/impacts any of the identified barriers? does the intervention affects/impacts the process characteristic?"
 
-    this.activatedRoute.queryParams.subscribe(params => {
+    this.activatedRoute.queryParams.subscribe(async params => {
       params['isEdit'] == 'true' ? (this.isEditMode = true) : false;
       params['iscompleted'] == 'true' ? (this.isCompleted = true) : false
       params['isContinue'] == 'true' ? (this.isContinue = true) : false
       this.assessmentId = params['id'];
+      if(params['interventionId'] && params['assessmentType']){
+        await this.getPolicies().then( x=>
+          this.setDataFromFlow(params['interventionId'],params['assessmentType'])
+        )
+        
+      }
       if (!this.assessmentId && this.isEditMode) {
         window.location.reload()
       }
@@ -275,7 +282,15 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     });
 
   }
-
+  setDataFromFlow(interventonId:string, assessmentType:string) {
+    this.isDisableIntervention = true
+    this.assessment.climateAction = this.policies.find((i)=>i.id==Number(interventonId))! 
+    this.assessment.assessmentType = assessmentType;
+    console.log(this.policies.find((i)=>i.id==Number(interventonId)),this.assessment.assessmentType)
+    let event:any = {}
+    event.value = this.assessment.climateAction
+    this.onSelectIntervention(event)
+  }
 
 
 

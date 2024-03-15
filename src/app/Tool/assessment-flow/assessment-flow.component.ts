@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MasterDataService } from 'app/shared/master-data.service';
 import { MessageService } from 'primeng/api';
-import { MethodologyAssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { ClimateAction, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-assessment-flow',
@@ -12,29 +13,41 @@ export class AssessmentFlowComponent implements OnInit {
 
   isShowQ2: boolean = false;
   isShowQ3: boolean = false
-  flowConditions=FlowConditions;
+  flowConditions = FlowConditions;
   rows: number = 10;
   filterText: any = '';
   searchSectors: string = '';
   type: string = '';
   totalRecords: number = 0;
   loading: boolean = false;
+  intervention: ClimateAction = new ClimateAction()
+  policies: ClimateAction[] = [];
+  assessment_types: any[];
+  assessmentType: string
+  isShowInternvention: boolean = false;
 
   constructor(
     private router: Router,
-    private methassess : MethodologyAssessmentControllerServiceProxy,
+    private methassess: MethodologyAssessmentControllerServiceProxy,
     private messageService: MessageService,
-    ) { }
+    private projectControllerServiceProxy: ProjectControllerServiceProxy,
+    public masterDataService: MasterDataService,
+  ) { }
 
   async ngOnInit(): Promise<void> {
-    await this.methassess.getAssessmentCount().subscribe(res=>{
-      if(res){
+    this.assessment_types = this.masterDataService.assessment_type;
+    await this.methassess.getAssessmentCount().subscribe(res => {
+      if (res) {
         this.loading = true
         this.totalRecords = res
       }
     })
-    
-    
+    await this.getPolicies();
+
+
+  }
+  async getPolicies() {
+    this.policies = await this.projectControllerServiceProxy.findAllPolicies().toPromise();
   }
 
   onClick(input: FlowConditions) {
@@ -44,7 +57,7 @@ export class AssessmentFlowComponent implements OnInit {
         break
       }
       case FlowConditions.Q1_NO: {
-        this.isShowQ2 = true;
+        this.isShowInternvention = true;
         break
       }
       case FlowConditions.Q2_YES: {
@@ -68,23 +81,37 @@ export class AssessmentFlowComponent implements OnInit {
     }
 
   }
+  onChangeInterventionAndType() {
+    if (this.intervention.id && this.assessmentType) {
+      this.isShowQ2 = true
+    }
+  }
 
   goToCarbonMarket() {
-    this.router.navigate(['app/carbon-market-tool'])
+    this.router.navigate(['app/carbon-market-tool'], {
+      queryParams: { interventionId: this.intervention.id, assessmentType: this.assessmentType },
+    })
   }
 
   goToGeneral() {
-    this.router.navigate(['app/portfolio-tool'])
+    this.router.navigate(['app/portfolio-tool'], {
+      queryParams: { interventionId: this.intervention.id, assessmentType: this.assessmentType, },
+    })
   }
 
   goToInvestment() {
-    this.router.navigate(['app/investor-tool-new']) 
+    this.router.navigate(['app/investor-tool-new'], {
+      queryParams: { interventionId: this.intervention.id, assessmentType: this.assessmentType },
+    })
   }
   goToPortfolio() {
-    if(this.totalRecords && this.totalRecords>0){
-      this.router.navigate(['app/portfolio-add']) 
+    if (this.totalRecords && this.totalRecords > 0) {
+      this.router.navigate(['app/portfolio-add'], {
+        queryParams: { interventionId: this.intervention.id, assessmentType: this.assessmentType },
+      }
+      )
     }
-    else{
+    else {
       this.messageService.add({
         severity: 'info',
         summary: 'Info',
@@ -93,7 +120,7 @@ export class AssessmentFlowComponent implements OnInit {
       })
 
     }
-    
+
   }
 
 }
