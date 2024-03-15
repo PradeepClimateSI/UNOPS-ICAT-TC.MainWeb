@@ -54,23 +54,19 @@ export class RegisterUserComponent implements OnInit {
     this.router.navigate(['../forgot'], { relativeTo: this.activatedRoute });
   }
   async userCreate(form: NgForm) {
-    console.log(form.value)
 
     let newUser = new User();
 
-    // newUser.password = form.value.RegPassword;
     newUser.email = form.value.email;
     newUser.firstName = form.value.fName;
     newUser.lastName = form.value.lName;
-    console.log(newUser)
 
     let newProfile = new LoginProfile();
-    // newProfile.password = form.value.RegPassword;
     newProfile.userName = form.value.email;
     newProfile.coutryId =0;
     newProfile.insId=0;
  
-      const b = await this.service.createOneBaseLoginProfileControllerLoginProfile(newProfile).subscribe(async (res) => {
+      const b = await this.loginprofileControllerServiceProxy.create(newProfile).subscribe(async (res) => {
 
         try {
           newUser.loginProfile=res.id;
@@ -79,12 +75,6 @@ export class RegisterUserComponent implements OnInit {
           const a = await this.userControllerService.createExternalUser(newUser).toPromise()
           
         } catch (error) {
-          // this.messageService.add({
-          //   severity: 'error',
-          //   summary: 'Error',
-          //   detail: 'Username is existing',
-          //   closable: true,
-          // });
         }
         this.messageService.add({
           severity: 'success',

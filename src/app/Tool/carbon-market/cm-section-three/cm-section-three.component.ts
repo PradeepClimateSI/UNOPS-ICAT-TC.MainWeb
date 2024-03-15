@@ -1,11 +1,10 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { MasterDataService } from 'app/shared/master-data.service';
-import { SelectedScoreDto } from 'app/shared/score.dto';
+import { FieldNames, MasterDataService } from 'app/shared/master-data.service';
 import { environment } from 'environments/environment';
 import { MessageService } from 'primeng/api';
-import { Assessment, CMAnswer, CMAssessmentQuestion, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, ScoreDto } from 'shared/service-proxies/service-proxies';
+import { Assessment, CMAssessmentQuestion, CMAssessmentQuestionControllerServiceProxy, CMDefaultValue, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, ScoreDto, UniqueCategory } from 'shared/service-proxies/service-proxies';
 
 
 interface UploadEvent {
@@ -27,17 +26,18 @@ export class CmSectionThreeComponent implements OnInit {
   @Input() approach: string
   @Input() assessmentquestions: CMAssessmentQuestion[]
   @Input() isEditMode: boolean
+  @Input() isCompleted: boolean
   @Input() assessment:Assessment;
-  @Output() onSubmit = new EventEmitter()
-  // @ViewChild('scaleGHGData', { read: NgForm }) scale_ghg_form!: NgForm;
-  // @ViewChild('sustainGHGData', { read: NgForm }) sustaine_ghg_form!: NgForm;
-  // @ViewChild('fData', { read: NgForm }) scale_sdg_form!: NgForm;
-  // @ViewChild('fData', { read: NgForm }) sustaine_sdg_form!: NgForm;
+  @Input() expected_ghg_mitigation: number
+  @Output() onSubmit = new EventEmitter();
 
   @ViewChildren(NgForm) viewChildren!: QueryList<NgForm>;
 
 
   clickedFormMap: {[key: number]: boolean}= {}
+  tabIsValid: {[key: number]: boolean}= {}
+  tab1IsValid: {[key: number]: boolean}= {}
+  maintabIsValid: {[key: number]: boolean}= {}
 
   comment: any;
   SDGs: SDG[]
@@ -47,29 +47,29 @@ export class CmSectionThreeComponent implements OnInit {
   activeIndexMain: number = 0;
   mainTabIndex: any;
   categoryTabIndex: any;
-  categories: any = {}
-  types: any
-  selectedType: any
-  selectedCategory: any
-  questions: any = {}
-  outcome: any = []
+  categories: any = {};
+  types: any;
+  selectedType: any;
+  selectedCategory: any;
+  questions: any = {};
+  outcome: any = [];
   selectedSDGs: SDG[];
-  results: CMResultDto[] = []
+  results: CMResultDto[] = [];
   activeIndex2: number = 0;
-  sdgsToLoop: SDG[]
+  sdgsToLoop: SDG[];
   uploadedFiles: any = [];
   uploadUrl: string;
-  GHG_scale_info: any
-  SD_scale_info: any
-  adaptation_scale_info: any
-  GHG_scale_score_macro: ScoreDto[]
-  GHG_scale_score_medium: ScoreDto[]
-  GHG_scale_score_micro: ScoreDto[]
-  GHG_sustained_score: ScoreDto[]
-  SDG_scale_score: ScoreDto[]
-  SDG_sustained_score: ScoreDto[]
-  adaptation_scale_score: ScoreDto[]
-  adaptation_sustained_score: ScoreDto[]
+  GHG_scale_info: any;
+  SD_scale_info: any;
+  adaptation_scale_info: any;
+  GHG_scale_score_macro: ScoreDto[];
+  GHG_scale_score_medium: ScoreDto[];
+  GHG_scale_score_micro: ScoreDto[];
+  GHG_sustained_score: ScoreDto[];
+  SDG_scale_score: ScoreDto[];
+  SDG_sustained_score: ScoreDto[];
+  adaptation_scale_score: ScoreDto[];
+  adaptation_sustained_score: ScoreDto[];
   SDGScore: any = 0;
   adaptationScore: any = 0;
   SDGWeight: any = '10%';
@@ -78,28 +78,54 @@ export class CmSectionThreeComponent implements OnInit {
   fileServerURL: string;
   institutions: Institution[] = [];
   relevance: any[];
-  adaptation_tooltip: string
-  starting_situation_tooltip: string
-  expected_impact_tooltip: string
+  adaptation_tooltip: string;
+  starting_situation_tooltip: string;
+  expected_impact_tooltip: string;
   sdgList: any;
-  selectedSDGsList: PortfolioSdg[];
-  categoriesToSave: string[] = []
-  isDraftSaved: boolean = false
+  selectedSDGsList: PortfolioSdg[] = [];
+  categoriesToSave: string[] = [];
+  isDraftSaved: boolean = false;
   nextClicked: boolean;
   savedData: boolean = false;
   relevance_tooltip: string;
   ghg_starting_situation_placeholder: any;
+  isFirstLoading0: boolean = true;
+  isFirstLoading1: boolean = true;
+  fieldNames = FieldNames;
+  notFilledCategories: (OutcomeCategory | UniqueCategory)[] = [];
+  st_default: boolean = false
+  ex_default: boolean = false
+  default_values: {[key: string]: {st_default_values: CMDefaultValue[], ex_default_values: CMDefaultValue[]}} = {}
+  useDefault: {[key: string]: {st_default: boolean, ex_default: boolean}} = {}
+  useDefaultSDG: {[key: string]: {st_default: boolean, ex_default: boolean}} = {}
+  source = 'IPCC, 2023: Summary for Policymakers. In: Climate Change 2023: Synthesis Report. Contribution of Working Groups I, II and III to the Sixth Assessment Report of the Intergovernmental Panel on Climate Change [Core Writing Team, H. Lee and J. Romero (eds.)]. IPCC, Geneva, Switzerland, pp. 1-34, doi: 10.59327/IPCC/AR6-9789291691647.001';
+
+  sectoral_description = "Sectoral data should be used when possible. If sectoral data is unavailable, national data can be used. Data on national or sectoral level emissions can "+
+  "be found in countries’ National Inventory Reports. If a National Inventory Report has not been submitted, National Communications or Biennial Transparency Reports (BTRs) may "+
+  "also contain such information. At this level, the four applicable sectors would be Energy, IPPU, AFOLU and Waste, based on the 2006 IPCC Guidelines for National Greenhouse Gas "+
+  "Inventories."
+  sectoral_placeholder = 'Please enter justification, including source of data and scope of the assessment (i.e. sectoral or national level).\n\n'+
+  'E.g.:In case of an intervention focusing on increasing the blend in cement production, the relevant sector is “Industrial Processes and Product Use”. And in case of an intervention focusing on increasing the share or renewables, the relevant sector is “Energy”.'
+  subsectoral_description = "Subsectoral data should be used when possible. Subsectors can be identified using the categories listed in the 2006 IPCC Guidelines for National "+ 
+  "Greenhouse Gas Inventories (e.g. 1A1. Fuel Combustion Activities – Energy Industries, 2B1. Chemical Industry – Ammonia Production). If subsectoral data is unavailable, "+
+  "subnational data can be used. Please provide further information on the subnational reference emissions in the justification box below."
+  subsectoral_placeholder = "Enter justification, including source of data and scope of the assessment (i.e. definition of the sub-sector or subnational boundary – for example, City of Jakarta).\n\n"+
+  "E.g.: Enter below the preceding text an example: “In case of an intervention focusing on increasing the blend in cement production, the relevant subsector is “Mineral industry "+
+  "– cement production (2A1)”. And in case of an intervention focusing on increasing the share or renewables, the relevant sector is “Fuel combustion activities – energy industries "+
+  "(1A1)”."
+
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
     private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
-    private masterDataService: MasterDataService,
+    public masterDataService: MasterDataService,
     private messageService: MessageService,
     private institutionControllerServiceProxy: InstitutionControllerServiceProxy,
-    private investorToolControllerServiceProxy: InvestorToolControllerServiceProxy
+    private investorToolControllerServiceProxy: InvestorToolControllerServiceProxy,
+    private cMAssessmentQuestionControllerServiceProxy: CMAssessmentQuestionControllerServiceProxy
   ) {
-    this.uploadUrl = environment.baseUrlAPI + '/cm-assessment-question/upload-file'
-    this.fileServerURL = environment.baseUrlAPI + '/uploads'
+    this.uploadUrl = environment.baseUrlAPI + "/document/upload-file-by-name" ; 
+    this.fileServerURL = environment.baseUrlAPI+'/document/downloadDocumentsFromFileName/uploads';
   }
 
   async ngOnInit(): Promise<void> {
@@ -125,35 +151,36 @@ export class CmSectionThreeComponent implements OnInit {
     this.expected_impact_tooltip = "Please describe the adaptation benefits on the indicated scale."
     this.relevance_tooltip = "Does the process characteristic affects/impacts any of the identified barriers? does the intervention affects/impacts the process characteristic?"
 
-    this.GHG_scale_info = this.masterDataService.GHG_scale_info
-    this.SD_scale_info = this.masterDataService.SD_scale_info
-    this.adaptation_scale_info = this.masterDataService.adaptation_scale_info
-    this.GHG_scale_score_macro = this.masterDataService.GHG_scale_score_macro
-    this.GHG_scale_score_medium = this.masterDataService.GHG_scale_score_medium
-    this.GHG_scale_score_micro = this.masterDataService.GHG_scale_score_micro
-    this.GHG_sustained_score = this.masterDataService.GHG_sustained_score
-    this.SDG_scale_score = this.masterDataService.SDG_scale_score
-    this.SDG_sustained_score = this.masterDataService.SDG_sustained_score
-    this.adaptation_scale_score = this.masterDataService.adaptation_scale_score
-    this.adaptation_sustained_score = this.masterDataService.adaptation_sustained_score
-    this.SDGs = this.masterDataService.SDGs
-    this.categories = await this.cMQuestionControllerServiceProxy.getUniqueCharacterisctics().toPromise()
-    this.selectedType = this.types[0]
-    this.selectedCategory = this.categories[this.selectedType.code][0]
-    this.onMainTabChange({ index: 0 })
-    this.onCategoryTabChange({ index: 0 })
-    this.outcome = await this.methodologyAssessmentControllerServiceProxy.getAllOutcomeCharacteristics().toPromise()
-    this.outcome = this.outcome.sort((a: any, b: any) => a.order - b.order)
+    this.GHG_scale_info = this.masterDataService.GHG_scale_info;
+    this.SD_scale_info = this.masterDataService.SD_scale_info;
+    this.adaptation_scale_info = this.masterDataService.adaptation_scale_info;
+    this.GHG_scale_score_macro = this.masterDataService.GHG_scale_score_macro;
+    this.GHG_scale_score_medium = this.masterDataService.GHG_scale_score_medium;
+    this.GHG_scale_score_micro = this.masterDataService.GHG_scale_score_micro;
+    this.GHG_sustained_score = this.masterDataService.GHG_sustained_score;
+    this.SDG_scale_score = this.masterDataService.SDG_scale_score;
+    this.SDG_sustained_score = this.masterDataService.SDG_sustained_score;
+    this.adaptation_scale_score = this.masterDataService.adaptation_scale_score;
+    this.adaptation_sustained_score = this.masterDataService.adaptation_sustained_score;
+    this.SDGs = this.masterDataService.SDGs;
+    this.categories = await this.cMQuestionControllerServiceProxy.getUniqueCharacterisctics().toPromise();
+    this.selectedType = this.types[0];
+    this.selectedCategory = this.categories[this.selectedType.code][0];
+    this.onCategoryTabChange({ index: 0 });
+    this.isFirstLoading0 = false;
+    this.outcome = await this.methodologyAssessmentControllerServiceProxy.getAllOutcomeCharacteristics().toPromise();
+    this.outcome = this.outcome.sort((a: any, b: any) => a.order - b.order);
     this.institutionControllerServiceProxy.getAllInstitutions().subscribe((res: any) => {
       this.institutions = res;
     });
     this.relevance = this.masterDataService.relevance;
-    await this.getSDGList()
-    await this.setInitialState()
+    await this.getSDGList();
+    await this.setInitialState();
+    this.initializeDefaultStatus()
   }
 
   async setInitialState() {
-    let int=0
+    let int=0;
 
     this.categories['process'].forEach((d: any) => {
       if (d.name == this.assessment.processDraftLocation) {
@@ -259,6 +286,16 @@ export class CmSectionThreeComponent implements OnInit {
     }
   }
 
+  initializeDefaultStatus() {
+    this.outcome.map((_outcome: OutcomeCategory) => {
+      if (this.outcome.type !== 'SD') {
+        _outcome.results.map(res => {
+          if (!this.useDefault[res.characteristic.id]) this.useDefault[res.characteristic.id] = {st_default: false, ex_default: false}
+        })
+      }
+    })
+  }
+
   getSelectedScoreFromOptions (selectedScore: string, characteristic: Characteristics) {
     let score
     if (characteristic.code === "INTERNATIONAL" && characteristic.category.code === "SCALE_GHG") {
@@ -288,11 +325,56 @@ export class CmSectionThreeComponent implements OnInit {
   onMainTabChange(event: any) {
     this.selectedType = this.types[event.index]
     this.mainTabIndex = event.index;
+
+    for (let i = 0; i<2; i++) {
+      if (i == 0) {
+        if (!this.isFirstLoading0) {
+          this.checkTab1Mandatory(4);
+  
+          this.maintabIsValid[i] = true
+          for (let k of Object.keys(this.tab1IsValid)) {
+            if (!this.tab1IsValid[parseInt(k)]){
+              this.maintabIsValid[i] = false;
+              break;
+            }
+          }
+        }
+      } else {
+        if (!this.isFirstLoading1) {
+          this.checkTab2Mandatory(6)
+          this.maintabIsValid[i] = true
+          for (let k of Object.keys(this.tabIsValid)) {
+            if (!this.tabIsValid[parseInt(k)]){
+              this.maintabIsValid[i] = false;
+              break;
+            }
+          }
+        } else {
+          this.isFirstLoading1 = false;
+        }
+      }
+    }
+
   }
 
   async onCategoryTabChange(event: any) {
-    this.nextClicked = false
+    this.nextClicked = false;
     this.categoryTabIndex = event.index;
+    this.checkTab1Mandatory(event.index);
+  }
+
+  checkTab1Mandatory(idx: number) {
+    for (const [index, category] of this.categories['process'].entries()) {
+      if (index < idx) {
+        let validation = category.characteristics?.filter((o:any) => o.relevance !== undefined)?.length === category.characteristics?.length
+        this.tab1IsValid[index] = validation
+        if (!validation) {
+          this.notFilledCategories.push(category)
+        } else {
+          this.notFilledCategories = this.notFilledCategories.filter(o => o.code !== category.code)
+        }
+      }
+    }
   }
 
   onSelectSDG(event: any) {
@@ -322,6 +404,7 @@ export class CmSectionThreeComponent implements OnInit {
 
     if (newSdgs && newSdgs.length > 0) {
       let mappedSdgs = newSdgs.map(sdg => {
+        if (!this.useDefaultSDG[sdg.id]) this.useDefaultSDG[sdg.id] = {st_default: false, ex_default: false}
         let pSdg = new PortfolioSdg()
         pSdg.id = sdg.id
         pSdg.name = sdg.name
@@ -360,8 +443,37 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   onCategoryTabChange2($event: any) {
-    // throw new Error('Method not implemented.');
-    // this.nextClicked = false
+    this.checkTab2Mandatory(this.activeIndex2)
+  }
+
+  checkTab2Mandatory(idx: number) {
+    if (idx + 1 === this.outcome.length) {
+      for (let i = 0; i <= idx; i++) {
+        this.validate(i)
+      }
+    } else {
+      for (let i = 0; i < idx; i++) {
+        this.validate(i)
+      }
+    }
+  }
+
+  validate(i: number) {
+    let form = this.viewChildren.filter((f, idx) => idx === i)
+    if (this.outcome[i].type === 'SD' && this.outcome[i].method === 'SCALE' && this.selectedSDGsList.length === 0) {
+      this.tabIsValid[i] = false
+      this.notFilledCategories.push(this.outcome[i])
+    } else {
+      if (form) {
+        let validation = form[0].form.valid
+        this.tabIsValid[i] = validation
+        if (validation) {
+          this.notFilledCategories = this.notFilledCategories.filter(o => o.code !== this.outcome[i].code)
+        } else {
+          this.notFilledCategories.push(this.outcome[i])
+        }
+      }
+    }
   }
 
   isFormValid() {
@@ -389,6 +501,7 @@ export class CmSectionThreeComponent implements OnInit {
     if (characteristics?.filter(o => o.relevance !== undefined)?.length === characteristics?.length) {
       if (this.activeIndexMain === 1 && this.isFormValid()) {
         this.activeIndex2 = this.activeIndex2 + 1;
+        this.onCategoryTabChange2(this.activeIndex2)
       }
       if (this.activeIndex === this.categories.process.length - 1 ) {
         this.activeIndexMain = 1;
@@ -407,47 +520,126 @@ export class CmSectionThreeComponent implements OnInit {
         closable: true,
       });
     }
+  }
 
+  autoFillInternational(char_code: string, category_code: string, score_array: ScoreDto[]){
+    if (['NATIONAL', 'SUBNATIONAL'].includes(char_code)) {
+      this.outcome = this.outcome.map((category: OutcomeCategory) => {
+        if (category.code === category_code) {
+          category.results = category.results.map((result: CMResultDto) => {
+            if (result.characteristic.code === 'INTERNATIONAL') {
+              let score = score_array.find(o => o.code === '-99')
+              if (score) result.selectedScore = score
+              result.comment = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.'
+              result.startingSituation = 'N/A'
+              result.expectedImpact = 'N/A'
+              if (['SCALE_ADAPTATION', 'SUSTAINED_ADAPTATION'].includes(category_code)) {
+                result.adaptationCoBenifit = 'N/A'
+              }
+            }
+            return result;
+          })
+        }
+        return category
+      })
+    }
   }
 
   onSelectScore(event: any, char: CMResultDto, index: number, type?: string) {
-    let score = new ScoreDto()
-
-    // if (index === 2) {
-      if (char.characteristic.category.code === 'SUSTAINED_GHG') {
-        let score = 0
-        this.outcome.forEach((category: OutcomeCategory) => {
-          if (['SUSTAINED_GHG', 'SCALE_GHG'].includes(category.code)) {
+    if (['SUSTAINED_GHG', 'SCALE_GHG'].includes(char.characteristic.category.code)) {
+      let score: number | null = null
+      this.outcome.forEach((category: OutcomeCategory) => {
+        if (['SUSTAINED_GHG', 'SCALE_GHG'].includes(category.code)) {
+          if (category.results.every(result => result.selectedScore.value === -99)) {
+            score = score !== null ? score : null
+          } else {
             category.results.forEach((result) => {
-              if (result.selectedScore.value) score = score + result.selectedScore.value
+              score = score === null ? 0 : score = score
+              if (result.selectedScore.value) score = score + (result.selectedScore.value === -99 ? 0 : result.selectedScore.value)
             })
           }
-        })
-        this.GHGScore = Math.round(score / 6)
-      } else if (char.characteristic.category.code === 'SUSTAINED_SD') {
-        let score = 0
-        this.selectedSDGs.forEach(sdg => {
-          sdg.scaleResult.forEach(sr => {
-            if (sr.selectedScore.value) score = score + sr.selectedScore.value
-          })
-          sdg.sustainResult.forEach(susr => {
-            if (susr.selectedScore.value) score = score + susr.selectedScore.value
-          })
-        })
-        this.SDGScore = Math.round(score / 6 / this.selectedSDGs.length)
-      } else if (char.characteristic.category.code === 'SUSTAINED_ADAPTATION') {
-        let score = 0
-        this.outcome.forEach((category: OutcomeCategory) => {
-          if (['SUSTAINED_ADAPTATION', 'SCALE_ADAPTATION'].includes(category.code)) {
-            category.results.forEach((result) => {
-              if (result.selectedScore.value) score = score + result.selectedScore.value
-            })
-          }
-        })
-        this.adaptationScore = Math.round(score / 6)
+        }
+      })
+      this.GHGScore = score === null ? 'N/A' : Math.round(score / 6)
+      if (char.characteristic.category.code === 'SCALE_GHG') {
+        this.autoFillInternational(char.characteristic.code, 'SCALE_GHG', this.masterDataService.GHG_scale_score_macro)
+      } else if (char.characteristic.category.code === 'SUSTAINED_GHG') {
+        this.autoFillInternational(char.characteristic.code, 'SUSTAINED_GHG', this.masterDataService.GHG_sustained_score)
       }
-    // }
+    } else if (['SUSTAINED_SD', 'SCALE_SD'].includes(char.characteristic.category.code)) {
+      let score: number | null = null
+      this.selectedSDGs.forEach(sdg => {
+        if (sdg.scaleResult.every(sr => sr.selectedScore.value)) {
+          score = score !== null ? score : null
+        } else {
+          sdg.scaleResult.forEach(sr => {
+            score = score === null ? 0 : score = score
+            if (sr.selectedScore.value) score = score + (sr.selectedScore.value === -99 ? 0 : sr.selectedScore.value)
+          })
+        }
+        if (sdg.sustainResult.every(sr => sr.selectedScore.value)) {
+          score = score !== null ? score : null
+        } else {
+          sdg.sustainResult.forEach(susr => {
+            score = score === null ? 0 : score = score
+            if (susr.selectedScore.value) score = score + (susr.selectedScore.value === -99 ? 0 : susr.selectedScore.value)
+          })
+        }
+      })
+      this.SDGScore = score === null ? 'N/A' : Math.round(score / 6 / this.selectedSDGs.length)
+      if (['NATIONAL', 'SUBNATIONAL'].includes(char.characteristic.code)) {
+        this.selectedSDGs = this.selectedSDGs.map(sdg => {
+          if (char.characteristic.category.code === 'SCALE_SD') {
+            sdg.scaleResult = sdg.scaleResult.map(result => {
+              if (result.characteristic.code === 'INTERNATIONAL') {
+                let score = this.masterDataService.SDG_scale_score.find(o => o.code === '-99')
+                if(score) result.selectedScore = score
+                result.comment = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.'
+                result.startingSituation = 'N/A'
+                result.expectedImpact = 'N/A'
+                result.sdgIndicator = 'N/A'
+              }
+              return result
+            })
+          } else if (char.characteristic.category.code === 'SUSTAINED_SD') {
+            sdg.sustainResult = sdg.sustainResult.map(result => {
+              if (result.characteristic.code === 'INTERNATIONAL') {
+                let score = this.masterDataService.SDG_sustained_score.find(o => o.code === '-99')
+                if(score) result.selectedScore = score
+                result.comment = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.'
+                result.startingSituation = 'N/A'
+                result.expectedImpact = 'N/A'
+                result.sdgIndicator ='N/A'
+              }
+              return result
+            })
+          }
+          return sdg
+        })
+      }
+    } else if (['SUSTAINED_ADAPTATION', 'SCALE_ADAPTATION'].includes(char.characteristic.category.code)) {
+      let score: number | null = null
+      this.outcome.forEach((category: OutcomeCategory) => {
+        if (['SUSTAINED_ADAPTATION', 'SCALE_ADAPTATION'].includes(category.code)) {
+          if (category.results.every(sr => sr.selectedScore.value)) {
+            score = score !== null ? score : null
+          } else {
+            category.results.forEach((result) => {
+              score = score === null ? 0 : score = score
+              if (result.selectedScore.value) score = score + (result.selectedScore.value === -99 ? 0 : result.selectedScore.value)
+            })
+          }
+        }
+      })
+      this.adaptationScore = score === null ? 'N/A' : Math.round(score / 6);
+      if (char.characteristic.category.code === 'SCALE_ADAPTATION') {
+        this.autoFillInternational(char.characteristic.code, 'SCALE_ADAPTATION', this.masterDataService.adaptation_scale_score)
+      } else if (char.characteristic.category.code === 'SUSTAINED_ADAPTATION') {
+        this.autoFillInternational(char.characteristic.code, 'SUSTAINED_ADAPTATION', this.masterDataService.adaptation_sustained_score)
+      }
+    }
   }
+
 
   onAnswer(event: any, question: any, characteristic?: Characteristics) {
     let q = new CMQuestion()
@@ -471,7 +663,7 @@ export class CmSectionThreeComponent implements OnInit {
 
   }
 
-  async submit(draftCategory: string, isDraft: boolean = false, name:string,type:string) {
+  async submit(draftCategory: string, isDraft: boolean = false, name: string, type: string) {
     this.nextClicked = true
     this.results = []
     this.categoriesToSave.push(draftCategory)
@@ -687,7 +879,7 @@ export class CmSectionThreeComponent implements OnInit {
       this.categoriesToSave = []
       this.isDraftSaved = true
       if(!isDraft) this.savedData = true
-      this.onSubmit.emit({result: this.results, isDraft: isDraft,name:name,type:type})
+      this.onSubmit.emit({result: this.results, isDraft: isDraft,name:name,type:type, expected_ghg_mitigation: this.expected_ghg_mitigation})
     } else {
       this.messageService.add({
         severity: 'error',
@@ -696,8 +888,6 @@ export class CmSectionThreeComponent implements OnInit {
         closable: true,
       });
     }
-    // this.isEditMode = true
-    // this.setInitialState() //TODO this occurres faulty data load. data get from the database before saving. This should be called after saving data.
   }
 
   async checkMandotary () {
@@ -736,6 +926,56 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   onRelevanceChange(event: any, characteristic: any) {
+  }
+
+  getNotFilledCaution(): string {
+    let str: string = 'Please fill '
+    let sections: string[] = []
+    for (let notFilled of this.notFilledCategories) {
+      if (notFilled.name.includes('<br>')) {
+        if (notFilled.method === "SUSTAINED") {
+          sections.push(this.mapType(notFilled.type) + ' - ' + notFilled.name.replace('<br>', '')  )
+        } else {
+          sections.push(notFilled.name.replace('<br>', ' - '))
+        }
+      } else {
+        sections.push(notFilled.name)
+      }
+    }
+    sections = [... new Set(sections)]
+    str = str + sections.join(', ') + ' sections before continue.'
+    return str
+  }
+
+  mapType(type: string) {
+    switch(type) {
+      case 'GHG':
+        return 'GHGs'
+      case 'SD':
+        return 'SDGs'
+      case 'ADAPTATION':
+        return 'Adaptation co-benifits'
+      default:
+        return type
+    }
+  }
+
+  adaptationJustificationChange(){
+    this.checkTab2Mandatory(this.outcome.length - 1)
+  }
+
+  async loadDefaults(ch_id: number, code: string) {
+    let res = await this.cMAssessmentQuestionControllerServiceProxy.getCMDefaultValues(ch_id).toPromise()
+    if (res) {
+      if (code === 'STARTING_SITUATION') {
+        if (!this.default_values[ch_id]) this.default_values[ch_id] = {st_default_values: [], ex_default_values: []}
+        this.default_values[ch_id].st_default_values = res;
+        this.default_values[ch_id].st_default_values = this.default_values[ch_id].st_default_values.map(val => {val['label'] = val.starting_situation_value + ' ' + val.unit; return val})
+      } else {
+        this.default_values[ch_id].ex_default_values = res;
+        this.default_values[ch_id].ex_default_values = this.default_values[ch_id].ex_default_values.map(val => {val['label'] = val.expected_impact_value + ' ' + val.unit; return val})
+      }
+    }
   }
 }
 

@@ -1,12 +1,13 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Chart } from 'chart.js';
-import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { CountryControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { CountryControllerServiceProxy, InvestorToolControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
-import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
+import { LoginRole } from 'shared/AppService';
 import { MasterDataService } from 'app/shared/master-data.service';
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
+import { DialogService } from 'primeng/dynamicdialog';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -55,10 +56,10 @@ export class DashboardComponent implements OnInit {
   userName: string = "";
   userRole: string = "";
   loginRole = LoginRole;
-  typeofInterventionCount:  {
-    name:string,
-    count:number
-    }[];
+  typeofInterventionCount: {
+    name: string,
+    count: number
+  }[];
 
     chart: any = [];
     pieChart:any=[];
@@ -74,28 +75,26 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private projectProxy: ProjectControllerServiceProxy,
     private countryProxy: CountryControllerServiceProxy,
-    public masterDataService: MasterDataService
+    public masterDataService: MasterDataService,
+    protected dialogService: DialogService,
+    private investorProxy: InvestorToolControllerServiceProxy,
   ) {}
 
   ngOnInit(): void {
 
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
-    // this.userName = tokenPayload.username;
-    // this.userName = `${this.appService.getUserName()}`;
     this.userRole = tokenPayload.role.code;
-    console.log("++++++++++++++++++",tokenPayload);
+
+ 
 
     this.countryProxy.getCountry(tokenPayload.countryId).subscribe((res:any)=>{
-      console.log('Countryy',res) 
       this.isCarbonMarketTool = res.carboneMarketTool;
       this.isInvesmentTool = res.investmentTool;
       this.isPortfolioTool = res.portfoloaTool;   
       if(this.isCarbonMarketTool || this.isInvesmentTool || this.isPortfolioTool ){
         this.isAllTool =true;
       } 
-      
-      console.log('tooll22',this.isCarbonMarketTool,this.isInvesmentTool,this.isPortfolioTool)
 
       if(this.userRole !=this.loginRole.External){
         if(this.isCarbonMarketTool){
@@ -105,7 +104,7 @@ export class DashboardComponent implements OnInit {
          } else if (this.isPortfolioTool){
            this.goToPortfolio();
          } else if(this.isAllTool){
-          this.goToAllTool
+          this.goToAllTool;
          }
       }else{
         this.clickcarbon = true;
@@ -119,8 +118,7 @@ export class DashboardComponent implements OnInit {
 
     this.projectProxy.findTypeofAction().subscribe((res: any) => {
       this.typeofInterventionCount = res;
-      console.log("typeofInterventionCount", res);
-      this.loading =true
+      this.loading =true;
       setTimeout(() => {
         this.viewPieChart();
         this.viewbarChart();
@@ -128,8 +126,6 @@ export class DashboardComponent implements OnInit {
       
       
     });
-
-   // this.SelectedTool = 3;
 
   }
 
@@ -140,7 +136,6 @@ export class DashboardComponent implements OnInit {
     this.clickInvest = true;
     this.clickpor= false;
     this.clickall=false;
-   // this.router.navigate(['/app/investment-dashboard'],);
 
    this.SelectedTool =1;
   }
@@ -150,8 +145,7 @@ export class DashboardComponent implements OnInit {
     this.clickInvest = false;
     this.clickpor= true;
     this.clickall=false;
-    //this.router.navigate(['/app/portfolio-dashboard'],);
-    this.SelectedTool = 2
+    this.SelectedTool = 2;
   }
 
   goToCarbonMarket(){
@@ -159,8 +153,7 @@ export class DashboardComponent implements OnInit {
     this.clickInvest = false;
     this.clickpor= false;
     this.clickall=false;
-    //this.router.navigate(['/app/carbon-dashboard'],);
-    this.SelectedTool = 3
+    this.SelectedTool = 3;
   }
   goToAllTool(){
     this.clickcarbon = false;
@@ -184,7 +177,7 @@ export class DashboardComponent implements OnInit {
       datasets: [
         {
           label: 'Type of Interventions',
-          backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#66BB6A', '#FF7043', '#9575CD'],
+          backgroundColor: ['#222b46', '#222b46', '#222b46', '#222b46', '#222b46', '#222b46'],
           data: counts,
         },
       ],
@@ -194,9 +187,18 @@ export class DashboardComponent implements OnInit {
       indexAxis: 'y',
       maintainAspectRatio: false,
       aspectRatio: 1.1,
+      onClick: (event: any, elements: any) => {
+        if (elements.length > 0) {
+          const clickedIndex = elements[0].index;
+          const clickedLabel = labels[clickedIndex];
+          const clickedCount = counts[clickedIndex];
+  
+          this.handleBarClick(clickedLabel, clickedCount);
+        }
+      },
       plugins: {
         legend: {
-          display: false, // Set display to false to remove the legend
+          display: false, 
           labels: {
             color: textColor,
           },
@@ -217,11 +219,11 @@ export class DashboardComponent implements OnInit {
             font: {
               weight: 500,
             },
-            stepSize: 1, // Set the step size to 1 to show only integer values
+            stepSize: 1, 
           },
           title: {
             display: true,
-            text: 'Number of assessments', // Set the X-axis label
+            text: 'Number of assessments', 
             color: textColorSecondary,
             font: {
               weight: 'bold',
@@ -237,79 +239,108 @@ export class DashboardComponent implements OnInit {
             color: textColorSecondary,
           },
           grid: {
-            display: false, // Set display to false to remove horizontal grid lines
+            display: false, 
           },
         },
       },
     };
   }
-
-  viewPieChart() {
-    const labels = this.typeofInterventionCount.map((item) => item.name);
-    let counts: number[] = this.typeofInterventionCount.map((item) => item.count);
-    const total = counts.reduce((acc, val) => acc + val, 0);
-    const percentages = counts.map((count) => ((count / total) * 100).toFixed(2));
-    this.pieChart = new Chart('pieChart', {
-      type: 'doughnut',
+  handleBarClick(label: string, count: number) {
+    if(label=='Carbon Market'){
+      this.goToCarbonMarket();
+    }
+    else if(label=='Investment'){
+      this.goToInvestment();
+    }
+    else if(label=='General'){
+      this.goToPortfolio();
+    }
+  
+  }
+  watchVideo(){
+    let ref = this.dialogService.open(GuidanceVideoComponent, {
+      header: 'Guidance Video',
+      width: '60%',
+      contentStyle: {"overflow": "auto"},
+      baseZIndex: 10000,
       data: {
-        labels: labels,
-        datasets: [
-          {
-            data: counts,
-            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#66BB6A', '#FF7043', '#9575CD'],
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: false, // Set display to false to remove the legend
-          },
-          datalabels: {
-            color: '#fff',
-            font: {
-              size: 12,
-            },
-            formatter: (value, ctx) => {
-              const label = ctx.chart.data.labels![ctx.dataIndex];
-              const percentage = percentages[ctx.dataIndex];
-              return `${label}: ${value} (${percentage}%)`;
-            },
-          },
-          tooltip: {
-            position: 'average',
-            boxWidth: 10,
-            callbacks: {
-              label: (ctx) => {
-                let sum = 0;
-                let array = counts;
-                array.forEach((number) => {
-                  sum += Number(number);
-                });
-                let percentage = (counts[ctx.dataIndex] * 100 / sum).toFixed(2) + "%";
-                return [
-                  `Intervention: ${labels[ctx.dataIndex]}`,
-                  `Count: ${counts[ctx.dataIndex]}`,
-                  `Percentage: ${percentage}`,
-                ];
-              },
-            },
-            backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
-            titleFont: {
-              size: 14,
-              weight: 'bold',
-            },
-            bodyFont: {
-              size: 14,
-            },
-            displayColors: true, // Hide the color box in the tooltip
-            bodyAlign: 'left',
-          },
-        },
+        sourceName: 'Overview',
       },
     });
+
+    ref.onClose.subscribe(() => {
+      
+    })
+  }
+  
+  viewPieChart() {
+    this.investorProxy.getDashboardAllDataGraph().subscribe((res:any)=>{
+     let  counts= res[0];
+      let percentages = res[1];
+      this.pieChart = new Chart('pieChart', {
+        type: 'doughnut',
+        data: {
+          datasets: [
+            {
+              data: res[0],
+              backgroundColor:res[1],
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false,
+              position:'center',
+              labels:{
+                boxWidth: 17,
+                    boxHeight: 15,
+              }
+            },
+            datalabels: {
+              color: '#fff',
+              font: {
+                size: 12,
+              },
+              formatter: (value, ctx) => {
+                const percentage = percentages[ctx.dataIndex];
+                return `${value} (${percentage}%)`;
+              },
+            },
+            
+            tooltip: {
+              position: 'average',
+              boxWidth: 10,
+              callbacks: {
+                label: (ctx) => {
+                  let sum = 0;
+                  let array = counts;
+                  array.forEach((number: any) => {
+                    sum += Number(number);
+                  });
+                  let percentage = (counts[ctx.dataIndex] ).toFixed(2) + "%";
+                  return [
+                    `Percentage: ${percentage}`,
+                  ];
+                },
+              },
+              backgroundColor: 'rgba(0, 0, 0, 0.8)', 
+              titleFont: {
+                size: 14,
+                weight: 'bold',
+              },
+              bodyFont: {
+                size: 14,
+              },
+              displayColors: true,
+              bodyAlign: 'left',
+            },
+          },
+        },
+      });
+     })
   }
 
 }

@@ -30,13 +30,11 @@ export class UserDetailsFormComponent implements OnInit {
   public user: User = new User();
 
 
-
-  // units: Unit[] = [];
   @ViewChild('fData', { static: true }) form: NgForm;
   
   constructor(
     private masterDataService: MasterDataService,
-    private activatedRoute:ActivatedRoute, // {relativeTo:this.activatedRoute}
+    private activatedRoute:ActivatedRoute, 
     private serviceProxy: ServiceProxy,
     private route: ActivatedRoute,
     private messageService: MessageService,
@@ -51,11 +49,9 @@ export class UserDetailsFormComponent implements OnInit {
         this.isView =true;
       }
     });
-    // this.getUnits();
     const token = localStorage.getItem('ACCESS_TOKEN')!;
 
     const tokenPayload = decode<any>(token);
-    console.log("tokenPayload", tokenPayload)
     
     this.user.userType = undefined!;
     this.user.mobile = '';
@@ -65,7 +61,6 @@ export class UserDetailsFormComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.editUserId = params['id'];
 
-      console.log("editUserId====",this.editUserId)
       if (this.editUserId && this.editUserId > 0) {
         this.isNewUser = false;
         this.serviceProxy
@@ -76,15 +71,12 @@ export class UserDetailsFormComponent implements OnInit {
             0
           )
           .subscribe((res: any) => {
-            console.log('User====', res);
             this.user = res;
            
-            console.log('User====',  this.user.institution.name);
 
             this.isActive=this.user.status;
             this.itsMe=this.user.username==tokenPayload.usr;
-            let loggedUserRole=tokenPayload.roles.code
-            console.log('this.itsMe---------', this.itsMe);
+            let loggedUserRole=tokenPayload.roles.code;
             if (this.user.userType.name == "Country Admin") {
    
               }
@@ -105,23 +97,15 @@ export class UserDetailsFormComponent implements OnInit {
                 this.checkRole=loggedUserRole!="Sector Admin"&&loggedUserRole!="MRV Admin"&&loggedUserRole!="Country User"&&loggedUserRole!="Data Collection Team"
              
               }
-              // else if (loggedUserRole == "Data Collection Team" ) {
-                
-              // }
               
               else {
               
                
               }
-              console.log('this.checkRole',this.checkRole);
-            // this.selecteduserTitle = this.userTitles.find(
-            //   (a) => a.name == this.user.title
-            // );
 
             this.institutions.forEach((ins) => {
               if (ins.id == this.user.institution.id) {
                 this.user.institution = ins;
-                console.log('ins set =======================');
               }
             });
           });
@@ -129,7 +113,6 @@ export class UserDetailsFormComponent implements OnInit {
     });
   }
 
-  // 
   async save(loginProfileId: string, email: string): Promise<boolean>{
     this.user.email = email;
     this.user.loginProfile = loginProfileId;
@@ -161,7 +144,6 @@ export class UserDetailsFormComponent implements OnInit {
     this.router.navigate(['../list'], { relativeTo:this.activatedRoute});
   }
   onDeleteClick(){
-   // console.log(alert('helooooo'))
    
   this.userControllerService.changeStatus(this.user.id, this.isActive==0?1:0 ).subscribe(res=>{
     this.messageService.add({severity:'success', summary: 'Success', detail:`Successfully ${ this.isActive==0?'Deactivate':'activate'}`});
@@ -182,20 +164,10 @@ export class UserDetailsFormComponent implements OnInit {
         header: 'Confirmation',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
-          console.log('comfirm1')
          this.onDeleteClick()
             
         },
         reject: (type: ConfirmEventType) => {
-          // console.log('comfirm2')
-          //   switch(type) {
-          //       case ConfirmEventType.REJECT:
-          //           this.messageService.add({severity:'info', summary:'Rejected', detail:'You have rejected'});
-          //       break;
-          //       case ConfirmEventType.CANCEL:
-          //           this.messageService.add({severity:'warn', summary:'Cancelled', detail:'You have cancelled'});
-          //       break;
-          //   }
         }
     });
 }

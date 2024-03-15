@@ -1,7 +1,6 @@
 <div>
-    <div class="dahsboard-header">
+    <div class="dahsboard-header" >
         <h1>Transformational Change Toolkit</h1>
-       <!--  <h2>We are on a mission to help take actions against climate change.</h2> -->
     </div>
     <div class="dashboard-wrapper container pl-20 pr-20">
 
@@ -9,28 +8,28 @@
         <div class="p-grid p-fluid card">
           <div class="row">
             <div class="col-md-7 ">
-              <h3>Tool used</h3><br>
+              <h3>Tool used
+                <span (click)="watchVideo()" pTooltip="Click to watch guidance video"  class="infor-video" ><i class="pi pi-video" style=" font-size: 1em ;  margin-left: 1em;"></i></span>
+              </h3><br>
               <div *ngIf="typeofInterventionCount" [hidden]="typeofInterventionCount.length==0">
                 <p-chart type="bar" [data]="data" [options]="options"></p-chart>
               </div>
 
-              <!-- a//////////////////////////////////// -->
               <div  *ngIf="typeofInterventionCount" class="col-12 " [hidden]="typeofInterventionCount.length!=0">
                 <p-messages severity="warn">
                   <ng-template pTemplate>
-                    <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
                     <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
                     <div class="ml-2">No data to show.</div>
                   </ng-template>
                 </p-messages>
               </div>
-              <!-- a//////////////////////////////////// -->
             </div>
 
             <div class="col-md-5 ">
+              <h3 class="text-center ">Assessment summary </h3><br>
               <div class="row text-center ">
 
-                <div   [hidden]="typeofInterventionCount?.length==0" class="col-12  mt-20 ml-10">
+                <div   [hidden]="typeofInterventionCount ? typeofInterventionCount.length==0 : false" class="col-12  mt-20 ml-10">
                   <canvas id="pieChart">{{chart}}</canvas>
                 </div>
               </div>
@@ -38,7 +37,6 @@
           </div>
         </div>
 
-<!-- <div style="padding-top: 30px; padding-bottom: 30px;"> <h3>Select an intervention type to get an overview of the assessed interventions</h3></div> -->
 <div style="padding-top: 30px; padding-bottom: 30px;"> <h3>Select a tool below to see an overview of the interventions</h3></div>
         <div class="p-grid p-fluid ">
             <div class="row">
@@ -46,7 +44,7 @@
                     <button
 
                         class="p-button-lg"
-                        [style.background-color]="(clickcarbon) ? 'green' :'blue'"
+                        [style.background-color]="(clickcarbon) ? '#1a4f7b' :'#222b46'"
                         type="button"
                         pButton
                         pRipple
@@ -59,7 +57,7 @@
                     <button
 
                         class="p-button-lg"
-                        [style.background-color]="(clickInvest) ? 'green' :'blue'"
+                        [style.background-color]="(clickInvest) ?  '#1a4f7b' :'#222b46'"
                         type="button"
                         pButton
                         pRipple
@@ -73,7 +71,7 @@
                     <button
 
                         class="p-button-lg"
-                        [style.background-color]="(clickpor) ? 'green' :'blue'"
+                        [style.background-color]="(clickpor) ?  '#1a4f7b' :'#222b46'"
                         type="button"
                         pButton
                         pRipple
@@ -87,7 +85,7 @@
                   <button
 
                       class="p-button-lg"
-                      [style.background-color]="(clickall) ? 'green' :'blue'"
+                      [style.background-color]="(clickall) ?  '#1a4f7b' :'#222b46'"
                       type="button"
                       pButton
                       pRipple
@@ -117,5 +115,4 @@
 <div *ngIf="SelectedTool === 4">
   <app-all-too-dashbord></app-all-too-dashbord>
 </div>
-<!--<ngx-org-chart direction="horizontal" [nodes]="nodes" (itemClick)="test($event)"></ngx-org-chart>-->
 

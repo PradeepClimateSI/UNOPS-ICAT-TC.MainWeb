@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, UntypedFormGroup, NgForm, Validators } from '@angular/forms';
 import decode from 'jwt-decode';
 import { AuthControllerServiceProxy, AuthCredentialDto } from 'shared/service-proxies/auth-service-proxies';
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-set-password',
@@ -30,20 +32,13 @@ export class SetPasswordComponent implements OnInit {
   
 
   constructor(
-    // private appServiceProxy: AuthControllerServiceProxy,
     private router: Router,
     private authControllerServiceProxy: AuthControllerServiceProxy,
-    // private fb: FormBuilder,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    protected dialogService: DialogService,
   ) { 
-    // this.authenticationService.authenticate(false, true);
     let regEx = new RegExp("^(?=.*[a-z])(?=.*[A-Z])((?=.*[0-9])|(?=.*[!@#$%^&*]))(?=.{6,})");
 
-    // this.form1 = this.fb.group({
-    //   // password: ['', [Validators.required]],
-    //   password: ['', [Validators.required, Validators.pattern(regEx)]],
-    //   confirmPassword: ['', Validators.required],
-    // });
   }
 
   ngOnInit(): void {
@@ -56,7 +51,21 @@ export class SetPasswordComponent implements OnInit {
       }
     });
   }
+  watchVideo(){
+    let ref = this.dialogService.open(GuidanceVideoComponent, {
+      header: 'Guidance Video',
+      width: '60%',
+      contentStyle: {"overflow": "auto"},
+      baseZIndex: 10000,
+      data: {
+        sourceName: 'Reports',
+      },
+    });
 
+    ref.onClose.subscribe(() => {
+      
+    })
+  }
 
   clickResetPassword() {
     if (this.form.valid && this.passwordConfirm == this.resetPasswordDto.password) {
@@ -73,7 +82,6 @@ export class SetPasswordComponent implements OnInit {
       },
         err => {
           this.isErrorPopup = true;
-          console.log(err);
 
         });
     }

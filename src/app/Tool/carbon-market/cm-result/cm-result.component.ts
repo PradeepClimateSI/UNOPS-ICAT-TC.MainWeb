@@ -7,7 +7,6 @@ import jsPDF from 'jspdf';
 import { MasterDataDto, MasterDataService } from 'app/shared/master-data.service';
 import { environment } from 'environments/environment';
 import { SDG } from '../cm-section-three/cm-section-three.component';
-import { SelectedScoreDto } from 'app/shared/score.dto';
 import { HeatMapScore } from 'app/charts/heat-map/heat-map.component';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
@@ -86,12 +85,10 @@ export class CmResultComponent implements OnInit {
           { title: 'Intervention', data: this.intervention.policyName },
           { title: 'Scale of Activity', data: scale?.name },
           { title: 'Assessment Type', data: this.assessment.assessmentType },
-          // { title: 'Assessment Boundaries', data: this.assessmentCMDetail.boundraries },
           { title: 'Geographical Areas Covered', data: this.assessmentCMDetail.geographicalAreasCovered.map(a => a.name)},
           { title: 'Sectors Covered', data: this.assessmentCMDetail.sectorsCovered.map(a => a.sector.name)},
           { title: 'Opportunities for stakeholders to participate in the assessment', data: this.assessment.opportunities},
-          // { title: 'Principles on which the assessment is based', data: this.assessment.principles},
-          { title: 'Assessment Period', data: moment(this.assessment.from).format('YYYY-MM-DD') + ' - ' + moment(this.assessment.to).format('YYYY-MM-DD')},
+          { title: 'Assessment Period', data: moment(this.assessment.from).format('DD/MM/YYYY') + ' - ' + moment(this.assessment.to).format('DD/MM/YYYY')},
           { title: 'Assessment Boundaries (If different from the intervention boundary specified in the baseline methodology)', data: this.assessmentCMDetail.boundraries},
           { title: 'International Carbon Market Approach Used', data: cmApproache?.name},
           { title: 'Baseline and monitoring methodology applied by the intervention', data: this.assessmentCMDetail.appliedMethodology}
@@ -104,32 +101,37 @@ export class CmResultComponent implements OnInit {
 
   }
 
-  getBackgroundColor(value: number): string {
-    switch (value) {
-      case -3:
-        return '#ec6665';
-      case -2:
-        return '#ed816c';
-      case -1:
-        return '#f19f70';
-      case 0:
-        return '#f4b979';
-      case 1:
-        return '#f9d57f';
-      case 2:
-        return '#fcf084';
-      case 3:
-        return '#e0e885';
-      case 4:
-        return '#c1e083';
-      case 5:
-        return '#a3d481';
-      case 6:
-        return '#84cc80';
-      case 7:
-        return '#65c17e';
-      default:
-        return 'white';
+  getBackgroundColor(x: number, y: number): string {
+    if ((x <= -1) || (x === 1 && y === 0) || (x === 0 && y === 1) || (x === 0 && y === 0)) {
+      return '#ec6665'
+    } else {
+      let value = x + y
+      switch (value) {
+        case -3:
+          return '#ec6665';
+        case -2:
+          return '#ed816c';
+        case -1:
+          return '#f19f70';
+        case 0:
+          return '#f4b979';
+        case 1:
+          return '#f9d57f';
+        case 2:
+          return '#f98570';
+        case 3:
+          return '#fdbf7b';
+        case 4:
+          return '#fedc82';
+        case 5:
+          return '#a9d27f';
+        case 6:
+          return '#86c97d';
+        case 7:
+          return '#63be7b';
+        default:
+          return 'white';
+      }
     }
   }
 
@@ -161,17 +163,17 @@ export class CmResultComponent implements OnInit {
 
       let response = await this.cMAssessmentQuestionControllerServiceProxy.calculateResult(req).toPromise()
       this.score = response
-      this.heatMapScore = [{processScore: this.score.process_score, outcomeScore: this.score.outcome_score.outcome_score}]
-      Object.keys(response.outcome_score.sdgs_score)?.map((key: any) => {
-        this.selectedSdgs = this.selectedSdgs.map((sd: any) => {
-          console.log(key, sd.id)
-          if (+key === sd.id) {
-            sd['score'] = response.outcome_score.sdgs_score[key]
-          }
-          return sd
+      this.heatMapScore = [{ processScore: this.score.process_score, outcomeScore: this.score.outcome_score.outcome_score }]
+      if (response?.outcome_score?.sdgs_score) {
+        Object.keys(response.outcome_score.sdgs_score)?.map((key: any) => {
+          this.selectedSdgs = this.selectedSdgs.map((sd: any) => {
+            if (+key === sd.id) {
+              sd['score'] = response.outcome_score.sdgs_score[key]
+            }
+            return sd
+          })
         })
-      }) 
-      console.log(this.selectedSdgs) 
+      }
     }
   }
 
@@ -187,7 +189,7 @@ export class CmResultComponent implements OnInit {
         let obj = new ColorMap()
         obj.cell = cols[index] + rows[idx]
         obj.value = row + col
-        obj.color = hasScore ? '0000ff' : this.getBackgroundColor(row + col).replace('#', '')
+        obj.color = hasScore ? '0000ff' : this.getBackgroundColor(col, row).replace('#', '')
         colorMap.push(obj)
       }
     }
@@ -206,18 +208,20 @@ export class CmResultComponent implements OnInit {
       let worksheet = XLSX.utils.table_to_sheet(table,{})
       this.isDownloading = false
       setTimeout(() => {
-        let heatmap = XLSX.utils.table_to_sheet(document.getElementById('heatmap'),{})
-        
         XLSX.utils.book_append_sheet(workbook, ws, 'Assessment Info');
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Assessment Results');
-        XLSX.utils.book_append_sheet(workbook, heatmap, 'Score map');
-
-        for (const itm of colorMap) {
-          if (heatmap[itm.cell]) {
-            heatmap[itm.cell].s = {
-              fill: { fgColor: { rgb: itm.color } },
-              font: { color: { rgb: itm.color } }
-            };
+        let doc = document.getElementById('heatmap')
+        let heatmap
+        if (doc){ 
+          heatmap = XLSX.utils.table_to_sheet(doc,{})
+          XLSX.utils.book_append_sheet(workbook, heatmap, 'Score map');
+          for (const itm of colorMap) {
+            if (heatmap[itm.cell]) {
+              heatmap[itm.cell].s = {
+                fill: { fgColor: { rgb: itm.color } },
+                font: { color: { rgb: itm.color } }
+              };
+            }
           }
         }
 
@@ -227,7 +231,7 @@ export class CmResultComponent implements OnInit {
     }, 1000)
   }
 
-  _toDownloadExcel(){ //Not using
+  _toDownloadExcel(){ 
     let length = 0
     let book_name = 'Results - ' + this.intervention.policyName
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.card, { skipHeader: true });
@@ -298,7 +302,7 @@ export class CmResultComponent implements OnInit {
     XLSX.writeFile(wb, book_name + '.xlsx');
   }
 
-  _mapProcessData(){ // Not using
+  _mapProcessData(){ 
     let data = new ProcessData()
     if (this.processData?.technology && this.processData?.technology?.length !== 0){
       data.technology = this.processData.technology.map((ele: { characteristic: string; question: string; score: number; justification: string; }) => {
@@ -432,26 +436,30 @@ export class CmResultComponent implements OnInit {
 
   getOutcomeScores(code: any, category: string, characteristic: Characteristics) {
     if (code) {
-      if (category == 'scale_GHGs') {
-        if (characteristic.code === 'MACRO_LEVEL') {
-          return (this.scale_GHG_score_macro.find(o => o.code === code))?.value
-        } else if (characteristic.code === 'MEDIUM_LEVEL') {
-          return (this.scale_GHG_score_medium.find(o => o.code === code))?.value
-        } else {
-          return (this.scale_GHG_score_micro.find(o => o.code === code))?.value
+      if (code === '-99') {
+        return (this.scale_GHG_score_micro.find(o => o.code === code))?.name
+      } else {
+        if (category == 'scale_GHGs') {
+          if (characteristic.code === 'MACRO_LEVEL') {
+            return (this.scale_GHG_score_macro.find(o => o.code === code))?.value
+          } else if (characteristic.code === 'MEDIUM_LEVEL') {
+            return (this.scale_GHG_score_medium.find(o => o.code === code))?.value
+          } else {
+            return (this.scale_GHG_score_micro.find(o => o.code === code))?.value
+          }
         }
-      }
-      else if (category == 'sustained_GHGs') {
-        return (this.sustained_GHG_score.find(o => o.code === code))?.value
-      }
-      else if (category == 'scale_SDs') {
-        return (this.scale_SD_score.find(o => o.code === code))?.value
-      }
-      else if (category == 'sustained_SDs') {
-        return (this.sustained_SD_score.find(o => o.code === code))?.value
-      }
-      else {
-        return '-'
+        else if (category == 'sustained_GHGs') {
+          return (this.sustained_GHG_score.find(o => o.code === code))?.value
+        }
+        else if (category == 'scale_SDs') {
+          return (this.scale_SD_score.find(o => o.code === code))?.value
+        }
+        else if (category == 'sustained_SDs') {
+          return (this.sustained_SD_score.find(o => o.code === code))?.value
+        }
+        else {
+          return '-'
+        }
       }
     } else {
       return '-'
@@ -464,13 +472,13 @@ export class CmResultComponent implements OnInit {
     } else if (name == 'Medium term (5-15 years)') {
       return 'National/Sector Level'
     } else if (name == 'Short term (<5 years)') {
-      return 'Subnational/ subsectorial'
+      return 'Subnational/ subsectoral'
     } else if (name === 'Macro Level') {
       return 'International Level';
     } else if (name === 'Medium Level') {
       return 'National/Sector Level'
     } else if (name === 'Micro Level') {
-      return 'Subnational/ subsectorial'
+      return 'Subnational/ subsectoral'
     } else {
       return name;
     }
@@ -482,24 +490,26 @@ export class CmResultComponent implements OnInit {
 
 
   confirm(){
-    console.log("confirm")
     let body = new CreateReportDto()
     body.assessmentId = this.assessment.id;
-    body.tool = "Carbon Market Tool"
+    body.tool = this.masterDataService.getToolName('CARBON_MARKET')
     body.type = 'Result'
     body.climateAction = this.intervention
     body.reportName = this.reportName
     this.reportControllerServiceProxy.generateReport(body).subscribe(res => {
-      console.log("generated repotr", res)
       if (res) {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Report generated successfully',
-          closable: true,
-        })
-        this.display = false
-        window.open(this.SERVER_URL +'/'+res.generateReportName, "_blank");
+       
+        this.display = false;
+        setTimeout(() => {
+          window.open(this.SERVER_URL +'/report/downloadReport/inline/'+res.id, "_blank")
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Report generated successfully',
+            closable: true,
+          })
+        },5000)
+       
       }
     }, error => {
       this.messageService.add({
@@ -515,7 +525,6 @@ export class CmResultComponent implements OnInit {
   }
 
   async downloadFiles(documents: any[]) {
-    console.log(documents)
     await Promise.all(
       documents.map(async (doc) => {
         try {
@@ -531,7 +540,6 @@ export class CmResultComponent implements OnInit {
   
           document.body.removeChild(link);
         } catch (error) {
-          console.error(`Error downloading file ${doc}:`, error);
         }
       })
     );

@@ -2,7 +2,6 @@
   <div class="row">
     <div class="col-md-6 login-content-wrapper">
       <div class="login-inner">
-       <!--  <img style="height: 130px;" src="../assets/images/logo-new.png"/>   -->
        <div class="row mb-2">
         <div class="logo_img_w">
           <img class="logo_img active_mod"
@@ -15,7 +14,9 @@
           />
         </div>
       </div>
-        <h2 class="mt-4">Transformational Change Toolkit</h2>
+        <h2 class="mt-4">Transformational Change Toolkit
+          <span (click)="watchVideo()" pTooltip="Click to watch guidance video"  class="infor-video" ><i class="pi pi-video" style=" font-size: 1em ;  margin-left: 1em;"></i></span>
+        </h2>
         <p class="mb-35">
           Enter details below to
           <span class="text-info font-weight-bold">sign in</span> to your account.
@@ -38,11 +39,11 @@
             <span class="p-input-icon-right" style="width: 400px">
               <i *ngIf="passwordType=='password'" class="pi pi-eye pass-icon" (click)="togglePassword()"></i>
               <i *ngIf="passwordType=='text'" class="pi pi-eye-slash pass-icon" (click)="togglePassword()"></i>
-              <input required pInputText [type]="passwordType" #fpassowrd="ngModel" name="password" [(ngModel)]="password" placeholder="Password" class="form-control"/>
+              <input required pInputText [type]="passwordType" #fpassword="ngModel" name="password" [(ngModel)]="password" placeholder="Password" class="form-control"/>
             </span>
             <p class="info-message text-danger" *ngIf="
-                (fpassowrd.errors?.['required'] && (fpassowrd.touched || fpassowrd.dirty)) ||
-                (fpassowrd.errors?.['required'] && isSubmitted  )">
+                (fpassword.errors?.['required'] && (fpassword.touched || fpassword.dirty)) ||
+                (fpassword.errors?.['required'] && isSubmitted  )">
                 Password is required
             </p>
           </div>

@@ -7,8 +7,6 @@ import decode from 'jwt-decode';
 import {
   Assessment,
   QualityCheckControllerServiceProxy,
-  // AssessmentYear,
-  // QualityCheckControllerServiceProxy,
   ServiceProxy,
 } from 'shared/service-proxies/service-proxies';
 
@@ -58,7 +56,6 @@ export class QualityCheckComponent implements OnInit {
     this.userSectorId = tokenPayload.sectorId;
     this.usrRole = tokenPayload.role.code;
 
-    console.log("usrRole", this.usrRole)
 
     if (this.usrRole == "QC Team" || this.usrRole == "MRV Admin") {
       this.qcDisable = true;
@@ -66,17 +63,11 @@ export class QualityCheckComponent implements OnInit {
     else {
       this.qcDisable = false;
     }
-    console.log("userCountryId", this.userCountryId)
-    console.log("userSectorId", this.userSectorId)
 
 
 
 
-
-    let statusId = this.searchBy.status
     let filtertext = this.searchBy.text ? this.searchBy.text : '';
-    let ndcId = this.searchBy.ndc ? this.searchBy.ndc.id : 0;
-    let subNDC = this.searchBy.subNdc ? this.searchBy.subNdc.id : 0;
 
     await this.qaServiceProxy.getQCParameters(
       1,
@@ -86,19 +77,15 @@ export class QualityCheckComponent implements OnInit {
       '',
     )
       .subscribe((a) => {
-        console.log("userSectorId", a)
-        // this.parameteters = a.items;
         a.items.forEach((b: any) => {
           if (!this.climateAction.includes(b.climateAction.policyName)) {            
-            this.climateAction.push(b.climateAction.policyName)
-            console.log(this.climateAction)
+            this.climateAction.push(b.climateAction.policyName);
           }
 
         })
       });
 
     this.onSearch();
-    console.log(this.climateAction)
   }
 
   onStatusChange($event: any) {
@@ -117,13 +104,10 @@ export class QualityCheckComponent implements OnInit {
     this.loadgridData(event);
   }
 
-  // /////////////////////////////////////////////
-
   loadgridData = (event: LazyLoadEvent) => {
     this.loading = true;
     this.totalRecords = 0;
 
-    console.log(this.searchBy);
     let statusId = this.searchBy.status
       ? Number(QuAlityCheckStatus[this.searchBy.status])
       : 0;
@@ -133,7 +117,6 @@ export class QualityCheckComponent implements OnInit {
     let ctAction = this.searchBy.climateaction
       ? this.searchBy.climateaction
       : '';
-    console.log("===========", ctAction)
     let pageNumber =
       event.first === 0 || event.first === undefined
         ? 1
@@ -150,10 +133,8 @@ export class QualityCheckComponent implements OnInit {
           ctAction
         )
         .subscribe((a) => {
-          console.log('parameteters', a)
           this.parameteters = a.items;
           this.totalRecords = a.meta.totalItems;
-          console.log('parameteters', this.parameteters)
           this.loading = false;
           this.itemsPerPage = a.meta.itemsPerPage;
         });
@@ -161,12 +142,10 @@ export class QualityCheckComponent implements OnInit {
   };
 
   onCAChange(event: any) {
-    console.log('searchby...', this.searchBy);
     this.onSearch();
   }
 
   statusClick(event: any, object: Assessment) {
-    console.log("button status..", object)
     this.router.navigate(['/app/qc/detail'], {
       queryParams: { id: object.id, flag: object.qaStatus },
     });

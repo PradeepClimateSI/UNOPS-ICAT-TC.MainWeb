@@ -6,7 +6,6 @@ import { environment } from "environments/environment";
 import { ButtonModule } from "primeng/button";
 import { DropdownModule } from "primeng/dropdown";
 import { StyleClassModule } from "primeng/styleclass";
-// import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { ChartComponent } from "./chart/chart.component";
 import { ClimateActionComponent } from "./climate-action/climate-action/climate-action.component";
@@ -51,15 +50,12 @@ import {
 } from '@nebular/theme';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
-//import { GMapModule } from 'primeng/gmap';
 import { PaginatorModule } from 'primeng/paginator';
 import { CarouselModule } from 'primeng/carousel';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ConfirmationService } from "primeng/api";
-// import { API_BASE_URL, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, AuthControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CMQuestionControllerServiceProxy, CountryControllerServiceProxy, DocumentControllerServiceProxy, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, NdcControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequestControllerServiceProxy, ProjectControllerServiceProxy, QualityCheckControllerServiceProxy, SectorControllerServiceProxy, ServiceProxy, UserTypeControllerServiceProxy, VerificationControllerServiceProxy } from "shared/service-proxies/service-proxies";
-import { API_BASE_URL, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, AuthControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CMQuestionControllerServiceProxy, CountryControllerServiceProxy, DocumentControllerServiceProxy, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, NdcControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequestControllerServiceProxy, ProjectControllerServiceProxy, QualityCheckControllerServiceProxy, SectorControllerServiceProxy, ServiceProxy, UserTypeControllerServiceProxy, VerificationControllerServiceProxy, ReportControllerServiceProxy, NotificationControllerServiceProxy, InvestorToolControllerServiceProxy, PortfolioControllerServiceProxy, SystemStatusControllerServiceProxy } from "shared/service-proxies/service-proxies";
-// import { API_BASE_URL, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, AuthControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CMQuestionControllerServiceProxy, CountryControllerServiceProxy, DocumentControllerServiceProxy, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, NdcControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequestControllerServiceProxy, ProjectControllerServiceProxy, QualityCheckControllerServiceProxy, ReportControllerServiceProxy, SectorControllerServiceProxy, ServiceProxy, UserTypeControllerServiceProxy, VerificationControllerServiceProxy } from "shared/service-proxies/service-proxies";
+import { API_BASE_URL, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, AuthControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CMQuestionControllerServiceProxy, CountryControllerServiceProxy, DocumentControllerServiceProxy, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, NdcControllerServiceProxy, ParameterHistoryControllerServiceProxy, ParameterRequestControllerServiceProxy, ProjectControllerServiceProxy, QualityCheckControllerServiceProxy, SectorControllerServiceProxy, ServiceProxy, UserTypeControllerServiceProxy, VerificationControllerServiceProxy, ReportControllerServiceProxy, NotificationControllerServiceProxy, InvestorToolControllerServiceProxy, PortfolioControllerServiceProxy, SystemStatusControllerServiceProxy, InstitutionTypeControllerServiceProxy, InstitutionCategoryControllerServiceProxy, ProjectApprovalStatusControllerServiceProxy, ProjectStatusControllerServiceProxy } from "shared/service-proxies/service-proxies";
 import { AUTH_API_BASE_URL, ServiceProxy as AuthServiceProxy, } from 'shared/service-proxies/auth-service-proxies';
 import { BadgeModule } from 'primeng/badge';
 import { RoleGuardService } from "./auth/role-guard.service";
@@ -130,15 +126,14 @@ import { PortfolioAlignmentComponent } from './portfolios/portfolio-alignment/po
 import { SdgPriorityComponent } from './sdg-priority/sdg-priority.component';
 import { AssessmentInprogressComponent } from './assessment-inprogress/assessment-inprogress.component';
 import { LandingPageComponent } from "./landing-page/landing-page.component";
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
+import { AssessmentFlowComponent } from "./Tool/assessment-flow/assessment-flow.component";
 
 
 
 
 export function getRemoteServiceBaseUrl(): string {
   return environment.baseUrlAPI;
-}
-export function getRemoteServiceESBaseUrl(): string {
-  return environment.esbaseUrlAPI;
 }
 export function getAuthRemoteServiceBaseUrl(): string {
   return environment.authBaseUrlAPI;
@@ -216,7 +211,9 @@ export function getAuditRemoteServiceBaseUrl(): string {
     PortfolioAlignmentComponent,
     SdgPriorityComponent,
     AssessmentInprogressComponent,
-    LandingPageComponent
+    LandingPageComponent,
+    GuidanceVideoComponent,
+    AssessmentFlowComponent
   ],
 
 
@@ -252,7 +249,6 @@ export function getAuditRemoteServiceBaseUrl(): string {
     TooltipModule,
     ProgressBarModule,
     ConfirmDialogModule,
-  //  GMapModule,
     ChartModule,
     ProgressSpinnerModule,
     OverlayPanelModule,
@@ -273,7 +269,6 @@ export function getAuditRemoteServiceBaseUrl(): string {
     DashboardModule,
     FileUploadModule,
     OverlayPanelModule,
-    // NgMultiSelectDropDownModule.forRoot(),
     UserModule,
   ],
   providers: [
@@ -281,7 +276,6 @@ export function getAuditRemoteServiceBaseUrl(): string {
     ServiceProxy,
     AuthServiceProxy,
     DocumentControllerServiceProxy,
-    ConfirmationService,
     AuthControllerServiceProxy,
     ProjectControllerServiceProxy,
     CountryControllerServiceProxy,
@@ -299,6 +293,10 @@ export function getAuditRemoteServiceBaseUrl(): string {
     InvestorToolControllerServiceProxy,
     PortfolioControllerServiceProxy,
     SystemStatusControllerServiceProxy,
+    InstitutionTypeControllerServiceProxy,
+    InstitutionCategoryControllerServiceProxy,
+    ProjectApprovalStatusControllerServiceProxy,
+    ProjectStatusControllerServiceProxy,
 
 
     DatePipe,

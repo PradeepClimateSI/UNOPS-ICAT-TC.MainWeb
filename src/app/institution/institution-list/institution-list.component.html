@@ -1,5 +1,7 @@
 <div class="container">
-    <h4 class="mt-4">Institutions</h4>
+    <h4 class="mt-4">Institutions
+        <span (click)="watchVideo()" pTooltip="Click to watch guidance video"  class="infor-video" ><i class="pi pi-video" style=" font-size: 1em ;  margin-left: 1em;"></i></span>
+    </h4>
     <div class="card">
         <div class="p-grid p-fluid col-sm-12">
             <div class="row">
@@ -13,7 +15,6 @@
                 </div>
             </div>
 
-            <!-- {{institutions|json}}      -->
         </div>
         <div class="row p-2">
             <p-table #table [value]="institutions" [lazy]="true" (onLazyLoad)="loadgridData($event)" [paginator]="true"
@@ -21,7 +22,6 @@
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                 [rowsPerPageOptions]="[ 10, 25, 50]" [totalRecords]="totalRecords" [loading]="loading">
 
-                <!-- [responsive]="true" -->
 
 
                 <ng-template pTemplate="header">
@@ -38,7 +38,7 @@
                             </div>
                         </th>
                         <th>Name</th>
-                        <th>Type</th>
+                        <!-- <th>Type</th> -->
                         <th>Category</th>
                         <th>Address</th>
                         <th>Admin</th>
@@ -53,7 +53,7 @@
                         </td>
 
                         <td>{{ institutions.name }}</td>
-                        <td>{{ institutions.type?.name }}</td>
+                        <!-- <td>{{ institutions.type?.name }}</td> -->
                         <td>{{ institutions.category?.name }}</td>
                         <td>{{ institutions.address }}</td>
                         <td>{{ institutions.user[0]?.firstName }} {{ institutions.user?.lastName }}</td>

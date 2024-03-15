@@ -1,11 +1,9 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService, ConfirmationService } from 'primeng/api';
-import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
 import { UsersControllerServiceProxy, ServiceProxy, User, Institution, InstitutionControllerServiceProxy, UserTypeControllerServiceProxy, Country, InstitutionType, InstitutionCategory, UserType, CountryControllerServiceProxy } from 'shared/service-proxies/service-proxies';
-import { CreateManyUserTypeDto, LoginProfile, UserType as AuthUserType, LoginProfileControllerServiceProxy, ServiceProxy as authServiceProxy } from 'shared/service-proxies/auth-service-proxies';
-import { UserDetailsFormComponent } from '../user-details-form/user-details-form.component';
+import { LoginProfile, UserType as AuthUserType, LoginProfileControllerServiceProxy, ServiceProxy as authServiceProxy } from 'shared/service-proxies/auth-service-proxies';
 import decode from 'jwt-decode';
 
 @Component({
@@ -75,9 +73,9 @@ export class UserFormComponent implements OnInit, AfterViewInit {
     private instProxy: InstitutionControllerServiceProxy,
     private userController: UsersControllerServiceProxy,
     private authUser: LoginProfileControllerServiceProxy,
-    private authServiceProxy: authServiceProxy,
     private countryProxy: CountryControllerServiceProxy,
-    private ref: ChangeDetectorRef
+    private ref: ChangeDetectorRef,
+    private logProxy : LoginProfileControllerServiceProxy,
   ) { }
   ngAfterViewInit(): void {
     this.ref.detectChanges();
@@ -149,9 +147,8 @@ export class UserFormComponent implements OnInit, AfterViewInit {
           if (ins.id == this.user.institution.id) {
             let cat = ins.category;
             let type = ins.type;
-            ins.category = new InstitutionCategory(cat)
-            ins.type = new InstitutionType(type)
-            // let _ins = new Institution(ins)
+            ins.category = new InstitutionCategory(cat);
+            ins.type = new InstitutionType(type);
             this.user.institution = ins;
           }
         });
@@ -164,10 +161,6 @@ export class UserFormComponent implements OnInit, AfterViewInit {
 
     });
 
-
-    console.log('working');
-   
-
   
   }
 
@@ -175,7 +168,6 @@ export class UserFormComponent implements OnInit, AfterViewInit {
   }
 
   async saveUser(userForm: NgForm) {
-    console.log('userForm================', userForm);
 
 
     if (userForm.valid) {
@@ -208,8 +200,7 @@ export class UserFormComponent implements OnInit, AfterViewInit {
         authUser.coutryId = this.countryId;
         authUser.insId = this.user.institution.id;
 
-
-        this.authServiceProxy.createOneBaseLoginProfileControllerLoginProfile(authUser).subscribe(
+        this.logProxy.create(authUser).subscribe(
           (res) => {
             let sa
             this.authUser.getById(res.id).subscribe((res) => {
@@ -222,7 +213,6 @@ export class UserFormComponent implements OnInit, AfterViewInit {
               .create(this.user)
               .subscribe(
                 (res) => {
-                  console.log(res)
 
 
                   this.messageService.add({
@@ -256,23 +246,9 @@ export class UserFormComponent implements OnInit, AfterViewInit {
         let institute = new Institution;
         institute.init(this.userInstitution)
         this.user.institution = institute;
-        this.serviceProxy
-          .updateOneBaseUsersControllerUser(this.user.id, this.user)
+        this.userController.update(this.user)
           .subscribe(
             (res) => {
-              // this.confirmationService.confirm({
-              //   message: 'User is updated successfully!',
-              //   header: 'Confirmation',
-              //   //acceptIcon: 'icon-not-visible',
-              //   rejectIcon: 'icon-not-visible',
-              //   rejectVisible: false,
-              //   acceptLabel: 'Ok',
-              //   accept: () => {
-              //     // this.onBackClick();
-              //   },
-
-              //   reject: () => {},
-              // });
               this.messageService.add({
                 severity: 'success',
                 summary: 'Success',
@@ -292,14 +268,8 @@ export class UserFormComponent implements OnInit, AfterViewInit {
                 detail: 'An error occurred, please try again.',
                 closable: true,
               });
-              // this.DisplayAlert('An error occurred, please try again.', AlertType.Error);
-
-              console.log('Error', error);
             }
           );
-        // setTimeout(() => {
-        //   this.onBackClick();
-        // },1000);
       }
     }
     else {
@@ -350,7 +320,6 @@ export class UserFormComponent implements OnInit, AfterViewInit {
   }
 
   async deleteUser(status: number) {
-    // this.serviceProxy
     this.user.status = status;
     this.userController.changeStatus(this.user.id, 1)
       .subscribe((res) => {
@@ -368,7 +337,6 @@ export class UserFormComponent implements OnInit, AfterViewInit {
 
 
   async onInstitutionChange(event: any) {
-    console.log('event====1', event.type.id, this.userRole);
     let tempList = this.userTypes
     if (event.type.id == 1) {
       this.selectedUserTypesFordrop = tempList.filter((a) => (a.id == 2))
@@ -390,15 +358,10 @@ export class UserFormComponent implements OnInit, AfterViewInit {
       this.selectedUserTypesFordrop = tempList.filter((a) => (a.id == 7))
     }
 
-    console.log('eventtypeID===', tempList);
-    console.log('eventtypeID===', event.type.id);
-    console.log('selectedUserTypesFordrop=====', this.selectedUserTypesFordrop);
   }
 
   onInstitutionChange2(aaa: any) {
     let ty = [];
-    console.log('event====', aaa.institution);
-    console.log('selectedUserTypesFordrop=====', this.selectedUserTypesFordrop);
 
     let tempList = this.userTypes
     if (aaa.institution.type.id == 1) {
@@ -417,8 +380,7 @@ export class UserFormComponent implements OnInit, AfterViewInit {
       ty = tempList.filter((a) => (a.id == 7))
     }
 
-    this.selectedUserTypesFordrop = ty
-    console.log('selectedUserTypesFordrop=====', this.selectedUserTypesFordrop);
+    this.selectedUserTypesFordrop = ty;
 
   }
 

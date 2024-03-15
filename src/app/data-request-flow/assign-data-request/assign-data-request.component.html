@@ -40,24 +40,7 @@
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
         [rowsPerPageOptions]="[10, 25, 50]" [totalRecords]="totalRecords" [loading]="loading" [responsive]="true"
         [(selection)]="selectedParameters">
-        <!-- Table header start search -->
-
-        <!-- <p-table #tt [value]="climateactions" [columns]="cols" placeholder="Global Filter" [filter]="true" filterMatchMode="contains" >                                                          
-        <ng-template pTemplate="caption">
-            <div style="text-align: right">        
-                <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
-                <input type="text" pInputText size="50" style="width:auto">
-            </div>
-        </ng-template> -->
-
-        <!-- Table header END Search -->
         <ng-template pTemplate="header">
-          <!-- <tr> 
-            <th *ngFor="let col of columns" [ngSwitch]="col.field">
-              <input *ngSwitchCase="'climateActionName'" pInputText type="text"
-                (input)="dt.filter($event.target.value, col.field, 'contains')" />
-            </th>
-          </tr> -->
 
           <tr>
             <th style="width: 3rem">
@@ -74,7 +57,6 @@
             <th>Characteristic</th>
             <th>Indicator/Score</th>
             <ng-container *ngIf="tabIndex==0">
-              <!-- <th>Question</th> -->
 
             </ng-container>
             <th>Assign To</th>
@@ -107,8 +89,8 @@
                 {{ assignDataRequestList?.investmentParameter?.assessment?.assessmentType}}
               </td>
               <td>
-                {{ assignDataRequestList?.investmentParameter?.assessment?.from | date: "dd-MM-yyyy " }} - {{
-                assignDataRequestList?.investmentParameter?.assessment?.to | date: "dd-MM-yyyy "}}
+                {{ assignDataRequestList?.investmentParameter?.assessment?.from | date: "dd/MM/yyyy " }} - {{
+                assignDataRequestList?.investmentParameter?.assessment?.to | date: "dd/MM/yyyy "}}
               </td>
               <td>{{ assignDataRequestList?.investmentParameter?.type}}</td>
               <td>{{ assignDataRequestList?.investmentParameter?.category?.name}}</td>
@@ -157,7 +139,7 @@
 
               }}
             </td>
-            <td>{{ assignDataRequestList.deadlineDataEntry | date: "dd-MM-yyyy " }}</td>
+            <td>{{ assignDataRequestList.deadlineDataEntry | date: "dd/MM/yyyy " }}</td>
             <td>
               {{
               assignDataRequestList.dataRequestStatus == 2
@@ -176,7 +158,6 @@
             <td>
               <i class="pi pi-ellipsis-v" style="font-size: 2rem" (click)="getInfo(assignDataRequestList)"></i>
             </td>
-            <!-- <td>{{ dataRequestList.id }}</td> -->
           </tr>
         </ng-template>
 

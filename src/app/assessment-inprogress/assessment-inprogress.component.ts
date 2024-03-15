@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { LazyLoadEvent } from 'primeng/api';
-import { Assessment, AssessmentControllerServiceProxy, ServiceProxy } from 'shared/service-proxies/service-proxies';
+import { DialogService } from 'primeng/dynamicdialog';
+import { Assessment, AssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-assessment-inprogress',
@@ -24,14 +26,14 @@ export class AssessmentInprogressComponent implements OnInit {
     editedOn: null,
   };
 
-  assesments: Assessment[];
+  assessments: Assessment[];
 
 
   constructor(
     private router: Router,
-    private serviceProxy: ServiceProxy,
     private assessmentProxy: AssessmentControllerServiceProxy,
     public masterDataService: MasterDataService,
+    protected dialogService: DialogService,
   ) { }
 
 
@@ -43,15 +45,30 @@ export class AssessmentInprogressComponent implements OnInit {
     this.loadgridData(event);
   }
 
+  watchVideo(){
+    let ref = this.dialogService.open(GuidanceVideoComponent, {
+      header: 'Guidance Video',
+      width: '60%',
+      contentStyle: {"overflow": "auto"},
+      baseZIndex: 10000,
+      data: {
+        sourceName: 'assessmentInprogreass',
+      },
+    });
+
+    ref.onClose.subscribe(() => {
+      
+    })
+  }
+
   loadgridData = (event: LazyLoadEvent) => {
     let filterText = this.searchBy.text ? this.searchBy.text : '';
     let pageNumber = event.first === 0 || event.first === undefined ? 1 : (event.first / (event.rows === undefined ? 10 : event.rows)) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
 
     this.assessmentProxy.assessmentInprogress(pageNumber,this.rows,filterText).subscribe(res => {
-        this.assesments=res[1];
+        this.assessments=res[1];
         this.totalRecords= res[0];
-        console.log(this.assesments)
       }
       )
   }
@@ -74,21 +91,21 @@ export class AssessmentInprogressComponent implements OnInit {
     this.loadgridData(event);
   }
 
-  detail(assessment: Assessment) {
+  detail(assessment: Assessment, isContinue: boolean) {
     if (assessment.tool =="CARBON_MARKET"){
       this.router.navigate(['app/carbon-market-tool-edit'], {  
-      queryParams: { id: assessment.id,isEdit:assessment.isDraft},  
+      queryParams: { id: assessment.id,isEdit:assessment.isDraft, isContinue: isContinue},  
       });
     }
     if (assessment.tool =="PORTFOLIO"){
       this.router.navigate(['app/portfolio-tool'], {  
-      queryParams: { id: assessment.id,isEdit:assessment.isDraft},  
+      queryParams: { id: assessment.id,isEdit:assessment.isDraft, isContinue: isContinue},  
       });
     }
 
     if (assessment.tool =="INVESTOR"){
       this.router.navigate(['app/investor-tool-new'], {  
-      queryParams: { id: assessment.id,isEdit:assessment.isDraft},  
+      queryParams: { id: assessment.id,isEdit:assessment.isDraft, isContinue: isContinue},  
       });
     }
     

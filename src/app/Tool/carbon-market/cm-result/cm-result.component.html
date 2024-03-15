@@ -1,6 +1,6 @@
 <div class="container pl-20 pr-20" id="content">
     <div class="mb-12">
-        <h4 class="mt-4"> Result - {{intervention?.policyName}}</h4>
+        <h4 class="mt-4"> Result - {{intervention? intervention.policyName : ''}}</h4>
     </div>
     <div class="card" style="min-height: 600px;" id="cmtool">
         <div class="p-grid p-fluid col-md-12 col-sm-12 text-title">
@@ -12,9 +12,6 @@
         <hr>
         <div class="table-data">
             <div class="p-grid p-fluid col-md-12 col-sm-12" *ngFor="let section of sections ">
-                <!-- <div class="row p-2">
-                <label class="text" for=""><u><b>{{section}}</b> </u></label>
-            </div> -->
                 <br>
                 <table>
                     <tr class="table-header-left">
@@ -51,7 +48,6 @@
                                 <td>{{criteria.isPassing ? 'Yes' : 'No'}}</td>
                                 <td *ngIf="criteria.hasEvidence === 'Yes'"><a href="#" (click)="$event.preventDefault();downloadFiles(criteria.document)">{{criteria.hasEvidence}}</a></td>
                                 <td *ngIf="criteria.hasEvidence === 'No'">{{criteria.hasEvidence}}</td>
-                                <!-- <td> <a *ngIf="criteria?.document" target="_blank" [href]="fileServerURL+'/'+criteria?.document"><i class="pi pi-download download"></i></a></td> -->
                             </tr>
                         </ng-template>
                     </p-table>
@@ -61,16 +57,12 @@
                 <tr></tr>
             </table>
             <div class="p-grid p-fluid col-12">
-                <!-- <div class="row p-2">
-                <label class="text"><u><b>Transformational Change Criteria</b> </u></label>
-            </div> -->
                 <br>
                 <table>
                     <tr class="table-header-left">
                         <p class="category-topic"><u><b>Transformational Change Criteria</b> </u> </p>
                     </tr>
                 </table>
-                <!-- <p style="font-size: large;">Process of Change</p> -->
                 <br>
                 <table>
                     <tr></tr>
@@ -154,7 +146,6 @@
                 <table>
                     <tr></tr>
                 </table>
-                <!-- <p style="font-size: large;">Category Score - Process of change - {{score.process_score}}</p> -->
                 <br>
                 <table *ngIf="processData?.data?.length > 0">
                     <tr class="table-header-left">
@@ -165,7 +156,6 @@
                 <table>
                     <tr></tr>
                 </table>
-                <!-- <p style="font-size: large;">Outcome of Change - GHG</p> -->
                 <br>
                 <table *ngIf="outcomeData.scale_GHGs.length!=0 || outcomeData.scale_SDs.length!=0 || outcomeData.scale_adaptation.length!=0">
                     <tr class="table-header-left">
@@ -200,9 +190,9 @@
                                         scale_GHGs.characteristic):'-'}}</td>
                                     <td>{{(scale_GHGs?.justification)?(scale_GHGs?.justification):'-'}} </td>
                                     <td><a *ngIf="scale_GHGs?.document" target="_blank" [href]="fileServerURL+'/'+scale_GHGs?.document"><i class="pi pi-download download"></i></a></td>
-                                    <td *ngIf="i==0" [attr.rowspan]="outcomeData.scale_GHGs.length">{{score.outcome_score.scale_ghg_score}}</td>
+                                    <td *ngIf="i==0" [attr.rowspan]="outcomeData.scale_GHGs.length">{{score.outcome_score.scale_ghg_score === null ? 'N/A' : score.outcome_score.scale_ghg_score}}</td>
                                     <td *ngIf="i==0" [attr.rowspan]="outcomeData.scale_GHGs.length + outcomeData.sustained_GHGs.length">{{scale_GHGs.weight}}%</td>
-                                    <td *ngIf="i==0" [attr.rowspan]="outcomeData.scale_GHGs.length + outcomeData.sustained_GHGs.length">{{score.outcome_score.ghg_score}}</td>
+                                    <td *ngIf="i==0" [attr.rowspan]="outcomeData.scale_GHGs.length + outcomeData.sustained_GHGs.length">{{score.outcome_score.ghg_score === null ? 'N/A' : score.outcome_score.ghg_score}}</td>
                                 </tr>
                             </ng-container>
                             <ng-container *ngFor="let sustained_GHGs of outcomeData.sustained_GHGs; let i = index">
@@ -215,7 +205,7 @@
                                         sustained_GHGs.characteristic):'-'}}</td>
                                     <td>{{(sustained_GHGs?.justification)?(sustained_GHGs?.justification):'-'}} </td>
                                     <td><a *ngIf="sustained_GHGs?.document" target="_blank" [href]="fileServerURL+'/'+sustained_GHGs?.document"><i class="pi pi-download download"></i></a></td>
-                                    <td *ngIf="i==0" [attr.rowspan]="outcomeData.sustained_GHGs.length">{{score.outcome_score.sustained_ghg_score}}</td>
+                                    <td *ngIf="i==0" [attr.rowspan]="outcomeData.sustained_GHGs.length">{{score.outcome_score.sustained_ghg_score === null ? 'N/A' : score.outcome_score.sustained_ghg_score}}</td>
                             </ng-container>
                         </ng-template>
                     </p-table>
@@ -225,7 +215,6 @@
                 </table>
                 <div class="row p-2" *ngIf="outcomeData.scale_SDs.length!=0">
                     <br>
-                    <!-- <p style="font-size: large;">Outcome of Change - SDGs</p> -->
                     <br>
                     <table>
                         <tr class="table-header-left">
@@ -263,11 +252,11 @@
                                         scale_SDs.characteristic):'-'}}</td>
                                     <td>{{(scale_SDs?.justification)?(scale_SDs?.justification):'-'}} </td>
                                     <td><a *ngIf="scale_SDs?.document" target="_blank" [href]="fileServerURL+'/'+scale_SDs?.document"><i class="pi pi-download download"></i></a></td>
-                                    <td *ngIf="i==0" [attr.rowspan]="outcomeData.sustained_SDs.length">{{score.outcome_score.scale_sdg_score}}</td>
+                                    <td *ngIf="i==0" [attr.rowspan]="outcomeData.scale_SDs.length">{{score.outcome_score.scale_sdg_score === null ? 'N/A' : score.outcome_score.scale_sdg_score}}</td>
                                     <td *ngIf="i==0" [attr.rowspan]="outcomeData.sustained_SDs.length + outcomeData.scale_SDs.length">
                                         {{scale_SDs.weight}}%</td>
                                     <td *ngIf="i==0" [attr.rowspan]="outcomeData.sustained_SDs.length + outcomeData.scale_SDs.length">
-                                        {{score.outcome_score.sdg_score}}</td>
+                                        {{score.outcome_score.sdg_score === null ? 'N/A' : score.outcome_score.sdg_score}}</td>
                                 </tr>
                             </ng-container>
                             <ng-container *ngFor="let sustained_SDs of outcomeData.sustained_SDs; let i = index">
@@ -282,7 +271,7 @@
                                         sustained_SDs.characteristic):'-'}}</td>
                                     <td>{{(sustained_SDs?.justification)?(sustained_SDs?.justification):'-'}} </td>
                                     <td><a *ngIf="sustained_SDs?.document" target="_blank" [href]="fileServerURL+'/'+sustained_SDs?.document"><i class="pi pi-download download"></i></a></td>
-                                    <td *ngIf="i==0" [attr.rowspan]="outcomeData.sustained_SDs.length">{{score.outcome_score.sustained_sdg_score}}</td>
+                                    <td *ngIf="i==0" [attr.rowspan]="outcomeData.sustained_SDs.length">{{score.outcome_score.sustained_sdg_score === null ? 'N/A' : score.outcome_score.sustained_sdg_score}}</td>
                                 </tr>
                             </ng-container>
                         </ng-template>
@@ -301,7 +290,7 @@
                         <ng-template pTemplate="body" let-sdg>
                             <tr>
                                 <td>{{sdg.name}}</td>
-                                <td>{{sdg.score}}</td>
+                                <td>{{sdg.score === null ? 'N/A' : sdg.score}}</td>
                             </tr>
                         </ng-template>
                     </p-table>
@@ -312,7 +301,6 @@
                 </table>
                 <div class="row p-2" *ngIf="outcomeData.scale_adaptation.length!=0">
                     <br>
-                    <!-- <p style="font-size: large;">Outcome of Change - Adaptation Co Benifits</p> -->
                     <br>
                     <table>
                         <tr class="table-header-left">
@@ -337,9 +325,6 @@
                         </ng-template>
 
                         <ng-template pTemplate="body" let-rowData>
-                            <!-- <tr>
-                            <td [attr.rowspan]="outcomeData.scale_adaptation.length + 1">Scale Adaptation Co Benifits</td>
-                        </tr> -->
                             <ng-container *ngFor="let scale_ADs of outcomeData.scale_adaptation;let i=index">
                                 <tr>
                                     <td *ngIf="i === 0" [attr.rowspan]="outcomeData.scale_adaptation.length">Scale Adaptation Co Benifits</td>
@@ -351,16 +336,13 @@
                                         scale_ADs.characteristic):'-'}}</td>
                                     <td>{{(scale_ADs?.justification)?(scale_ADs?.justification):'-'}} </td>
                                     <td><a *ngIf="scale_ADs?.document" target="_blank" [href]="fileServerURL+'/'+scale_ADs?.document"><i class="pi pi-download download"></i></a></td>
-                                    <td *ngIf="i==0" [attr.rowspan]="outcomeData.scale_adaptation.length">{{score.outcome_score.scale_adaptation_score}}</td>
+                                    <td *ngIf="i==0" [attr.rowspan]="outcomeData.scale_adaptation.length">{{score.outcome_score.scale_adaptation_score === null ? 'N/A' : score.outcome_score.scale_adaptation_score}}</td>
                                     <td *ngIf="i==0" [attr.rowspan]="outcomeData.scale_adaptation.length + outcomeData.sustained_adaptation.length">
                                         {{scale_ADs.weight}}%</td>
                                     <td *ngIf="i==0" [attr.rowspan]="outcomeData.scale_adaptation.length + outcomeData.sustained_adaptation.length">
-                                        {{score.outcome_score.adaptation_score}}</td>
+                                        {{score.outcome_score.adaptation_score === null ? 'N/A' : score.outcome_score.adaptation_score}}</td>
                                 </tr>
                             </ng-container>
-                            <!-- <tr>
-                            <td [attr.rowspan]="outcomeData.sustained_adaptation.length + 1">Sustained Adaptation Co Benifits</td>
-                        </tr> -->
                             <ng-container *ngFor="let sustained_ADs of outcomeData.sustained_adaptation; let i = index">
                                 <tr>
                                     <td *ngIf="i === 0" [attr.rowspan]="outcomeData.sustained_adaptation.length">Sustained Adaptation Co Benifits</td>
@@ -372,7 +354,7 @@
                                         sustained_ADs.characteristic):'-'}}</td>
                                     <td>{{(sustained_ADs?.justification)?(sustained_ADs?.justification):'-'}} </td>
                                     <td><a *ngIf="sustained_ADs?.document" target="_blank" [href]="fileServerURL+'/'+sustained_ADs?.document"><i class="pi pi-download download"></i></a></td>
-                                    <td *ngIf="i==0" [attr.rowspan]="outcomeData.sustained_adaptation.length">{{score.outcome_score.sustained_adaptation_score}}</td>
+                                    <td *ngIf="i==0" [attr.rowspan]="outcomeData.sustained_adaptation.length">{{score.outcome_score.sustained_adaptation_score === null ? 'N/A' : score.outcome_score.sustained_adaptation_score}}</td>
                                 </tr>
                             </ng-container>
                         </ng-template>
@@ -382,11 +364,10 @@
                 <table>
                     <tr></tr>
                 </table>
-                <!-- <p style="font-size: large;">Category Score - Outcome of change - {{score.outcome_score.outcome_score}}</p> -->
                 <br>
                 <table *ngIf="outcomeData.scale_GHGs.length!=0 || outcomeData.scale_SDs.length!=0 || outcomeData.scale_adaptation.length!=0">
                     <tr class="table-header-left">
-                        <p style="font-size: large;">Category Score - Outcome of change - {{score.outcome_score.outcome_score}}</p>
+                        <p style="font-size: large;">Category Score - Outcome of change - {{score.outcome_score.outcome_score === null ? 'N/A' : score.outcome_score.outcome_score}}</p>
                     </tr>
                 </table>
                 <br>
@@ -395,25 +376,13 @@
                 </div>
 
             </div>
-            <!-- <div class="p-grid p-fluid col-md-12 col-sm-12">
-                <div class="row p-2">
-                    <div class="col-8"></div>
-                    <div class="col-2">
-                        <button pButton pRipple type="button" label="Download Excel" (click)="toDownloadExcel()" class="p-button-info" *ngIf="!isDownloading"></button>
-                        <button  class="btn btn-primary btn-block text-uppercase mr-20" label="Genarate" (click)="generate()">Genarate Report</button>
-
-                    </div>
-                 
-                </div>
-             
-            </div> -->
         </div>
     </div>
     <div class="container pl-20 pr-20">
  
         <div class="d-flex flex-row-reverse mt-2 mb-2">
           <button (click)="toDownloadExcel()" class="btn btn-primary btn-block text-uppercase">Download as Excel</button>
-          <button  class="btn btn-primary btn-block text-uppercase mr-20" label="Genarate" (click)="generate()">Genarate Report</button>
+          <button  class="btn btn-primary btn-block text-uppercase mr-20" label="Generate" (click)="generate()">Generate Report</button>
         </div>
       </div>
     <p-dialog [(visible)]="display">

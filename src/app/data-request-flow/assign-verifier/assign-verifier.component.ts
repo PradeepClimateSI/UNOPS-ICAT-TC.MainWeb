@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { VerificationStatus } from 'app/Model/VerificationStatus.enum';
 import * as moment from 'moment';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
-import { Assessment, AssessmentControllerServiceProxy, DataVerifierDto, MethodologyAssessmentControllerServiceProxy, UsersControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Assessment, DataVerifierDto, MethodologyAssessmentControllerServiceProxy, UsersControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-assign-verifier',
@@ -12,12 +12,6 @@ import { Assessment, AssessmentControllerServiceProxy, DataVerifierDto, Methodol
 export class AssignVerifierComponent implements OnInit {
   VerificationStatusEnum = VerificationStatus;
   verificationStatus: string[] = [
-    // VerificationStatus[VerificationStatus.Fail],
-    // VerificationStatus[VerificationStatus.FinalAssessment],
-    // VerificationStatus[VerificationStatus.InitialAssessment],
-    // VerificationStatus[VerificationStatus.NCRecieved],
-    // VerificationStatus[VerificationStatus.Pass],
-    // VerificationStatus[VerificationStatus.PreAssessment],
   ];
   assesMentYearId: number = 0;
   assessment: Assessment = new Assessment();
@@ -39,7 +33,6 @@ export class AssignVerifierComponent implements OnInit {
   };
 
   constructor(
-    private assesmentProxy: AssessmentControllerServiceProxy,
     private MethodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
     private messageService: MessageService,
     private usersControllerServiceProxy: UsersControllerServiceProxy
@@ -55,12 +48,9 @@ export class AssignVerifierComponent implements OnInit {
       .subscribe((res: any) => {
         this.userList = res.items;
         this.totalRecords = res.totalRecords;
-
-        console.log('this.userList', this.userList);
       });
   }
   onSearch() {
-    console.log("onSearch")
     let event: any = {};
     event.rows = this.rows;
     event.first = 0;
@@ -68,11 +58,9 @@ export class AssignVerifierComponent implements OnInit {
     this.loadgridData(event);
   }
   onStatusChange($event: any) {
-    console.log("onstatuschange")
     this.onSearch();
   }
   loadgridData = (event: LazyLoadEvent) => {
-    console.log('event Date', event);
     this.loading = true;
     this.totalRecords = 0;
 
@@ -87,8 +75,6 @@ export class AssignVerifierComponent implements OnInit {
       : 0;
 
     let filtertext = this.searchBy.text ? this.searchBy.text : '';
-    console.log('searchBy', statusId);
-    // setTimeout(() => {
       this.MethodologyAssessmentControllerServiceProxy
         .getAssessmentForAssignVerifier(
           pageNumber,
@@ -97,15 +83,12 @@ export class AssignVerifierComponent implements OnInit {
           filtertext
         )
         .subscribe((a) => {
-          console.log('aa', a);
           if (a) {
             this.parameters = a.items;
-            console.log(this.parameters)
             this.totalRecords = a.meta.totalItems;
             const uniqueStatus = [
               ...new Set(a.items.map((obj: any) => obj.verificationStatus)),
             ];
-            console.log('uniqueStatus', uniqueStatus);
             this.verificationStatus = [];
             uniqueStatus.forEach((element) => {
               this.verificationStatus.push(
@@ -115,10 +98,8 @@ export class AssignVerifierComponent implements OnInit {
           }
           this.loading = false;
         }, error => {
-          console.log("error", error)
-          this.loading = false
+          this.loading = false;
         });
-    // }, 1);
   };
 
   onAcceptClick() {
@@ -128,7 +109,6 @@ export class AssignVerifierComponent implements OnInit {
   }
 
   onAcceptConfirm() {
-    console.log('this.selectedUser', this.selectedUser);
     let idList = new Array<number>();
     for (let index = 0; index < this.selectedParameters.length; index++) {
       const element = this.selectedParameters[index];
@@ -137,7 +117,6 @@ export class AssignVerifierComponent implements OnInit {
 
     let inputParameters = new DataVerifierDto();
     inputParameters.ids = idList;
-    // inputParameters.status = 4;
     inputParameters.userId = this.selectedUser?.id;
     inputParameters.deadline = moment(this.selectedDeadline);
     this.MethodologyAssessmentControllerServiceProxy.updateAssignVerifiers(inputParameters).subscribe(

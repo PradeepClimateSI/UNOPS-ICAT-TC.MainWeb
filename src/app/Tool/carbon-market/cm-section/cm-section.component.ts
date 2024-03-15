@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit, } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { Assessment, CMAnswer, CMAssessmentQuestion, CMAssessmentQuestionControllerServiceProxy, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Criteria, Institution, SaveCMResultDto, ScoreDto, Section, ServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Assessment, CMAnswer, CMAssessmentQuestion, CMAssessmentQuestionControllerServiceProxy, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Category, Criteria, Institution, SaveCMResultDto, ScoreDto, Section, ServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-cm-section',
@@ -13,6 +13,8 @@ export class CmSectionComponent implements OnInit {
   @Input() assessment: Assessment
   @Input() approach: string
   @Input() isEditMode: boolean;
+  @Input() isCompleted: boolean;
+  @Input() expectedGhgMitigation: number;
  
   openAccordion = 0
 
@@ -45,6 +47,16 @@ export class CmSectionComponent implements OnInit {
   showConditionDialog: boolean;
   visible_condition: boolean;
   condition_message: string;
+  emptySaveDto = new SaveDto()
+  section2_description = 'Environmental integrity ensures that carbon market activities support global mitigation efforts, importantly not causing a net increase in global GHG ' +
+    'emissions compared to a situation where the carbon market activity is not implemented. Social integrity, meanwhile, guarantees the activities benefit local communities and ' +
+    'negative impacts are avoided, aligning with broader sustainability goals. Together, these principles steer carbon markets towards activities with outcomes that are beneficial ' +
+    'for both the planet and its people.'
+  criteria1_description = 'Central to safeguarding environmental integrity is the robust assessment of the additionality of the carbon market intervention and quantification of ' +
+    'the activity’s mitigation outcomes. Safeguarding the activity’s additionality means verifying that the activity was triggered by the revenues from the credits’ sale. This can ' +
+    'be demonstrated through the application of different additionality tests including a regulatory additionality test (going beyond existing laws and regulations), an investment ' +
+    'test and/or a barrier test. For the quantification of mitigation outcomes, it is essential that crediting baselines are set credibly and conservatively and that a robust ' +
+    'monitoring concept is in place. The following questions are therefore focusing on the intervention’s approach to additionality determination, baseline setting and monitoring.'
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -100,14 +112,14 @@ export class CmSectionComponent implements OnInit {
   }
 
   async getSections() {
-    let res = await this.cMQuestionControllerServiceProxy.getAllSection().toPromise()
-    this.sections = res.sort((a, b) => a.order - b.order)
+    let res = await this.cMQuestionControllerServiceProxy.getAllSection().toPromise();
+    this.sections = res.sort((a, b) => a.order - b.order);
     
   }
 
   async getCriteriaBySection(sectionId: number) {
     let res = await this.cMQuestionControllerServiceProxy.getCriteriaBySectionId(sectionId).toPromise()
-    let _criterias = res.sort((a, b) => a.order - b.order)
+    let _criterias = res.sort((a, b) => a.order - b.order);
     _criterias = await Promise.all(
       _criterias.map(async criteria => {
         let q = await this.cMQuestionControllerServiceProxy.getQuestionsByCriteria(criteria.id).toPromise()
@@ -120,8 +132,8 @@ export class CmSectionComponent implements OnInit {
   }
 
   async onOpenTab(e: any) {
-    let section = this.sections[e.index]
-    await this.getCriteriaBySection(section.id)
+    let section = this.sections[e.index];
+    await this.getCriteriaBySection(section.id);
   }
 
   onAnswer2(e:any, message: string, question: any, criteria: any, section: any) {
@@ -172,31 +184,30 @@ export class CmSectionComponent implements OnInit {
       })
     } else {
       if (e.type === 'INDIRECT') {
-        questionDto.institution = e.answer
+        questionDto.institution = e.answer;
       } else {
         if (e.answer.label === 'Unsure') {
           this.message = 'You are allowed to continue with the assessment, but we are strongly encouraged to evaluate all preconditions to ensure that they are met to enable transformational change.'
           if (!e.isLoading) {
-            this.visible = true
+            this.visible = true;
           } 
         }
         if (!e.answer.isPassing) {
           if (!this.isFirstLoading) {
-            this.visible = true
+            this.visible = true;
           } else {
-            this.isFirstLoading = false
+            this.isFirstLoading = false;
           }
           if (message) {
-            this.message = message
+            this.message = message;
           } else {
-            this.message = this.defaultMessage
+            this.message = this.defaultMessage;
           }
         }
-        questionDto.answer = e.answer
-        // if (this.isPassed) this.isPassed = e.answer.isPassed
+        questionDto.answer = e.answer;
       }
-      questionDto.question = question
-      questionDto.type = e.type
+      questionDto.question = question;
+      questionDto.type = e.type;
     }
 
     this.sectionResult.sections.map(sec => {
@@ -205,17 +216,17 @@ export class CmSectionComponent implements OnInit {
           if (cr.criteria.id === criteria.id) {
             cr.questions.map(q => {
               if (q.question.id === question.id) {
-                q.answer = questionDto.answer
-                q.comment = questionDto.comment
-                q.file = questionDto.file
-                q.institution = questionDto.institution
-                q.question = questionDto.question
-                q.type = questionDto.type
+                q.answer = questionDto.answer;
+                q.comment = questionDto.comment;
+                q.file = questionDto.file;
+                q.institution = questionDto.institution;
+                q.question = questionDto.question;
+                q.type = questionDto.type;
               } 
               return q
             })
             if (!cr.questions.find(_q => _q.question?.id === question.id)) {
-              cr.questions.push(questionDto)
+              cr.questions.push(questionDto);
             }
           }
           return cr
@@ -277,51 +288,50 @@ export class CmSectionComponent implements OnInit {
       this.loadedQuestions.push(question.id)
     }
     if (e.type === 'COMMENT') {
-      this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['comment'] = e.comment
+      this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['comment'] = e.comment;
     } else if (e.type === 'FILE') {
-      this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['file'] = e.path
-      criteria.questions[idx]['result'] = {}
-      criteria.questions[idx]['result']['filePath'] = e.path
+      this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['file'] = e.path;
+      criteria.questions[idx]['result'] = {};
+      criteria.questions[idx]['result']['filePath'] = e.path;
     } else {
       if (e.type === 'INDIRECT') {
-        this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['institution'] = e.answer
+        this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['institution'] = e.answer;
       } else {
-        this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['answer'] = e.answer
+        this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['answer'] = e.answer;
       }
-      this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['question'] = question
+      this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['question'] = question;
       if (this.isEditMode) {
-        let q = this.assessmentQuestions.find(o => o.question.id === question.id)
+        let q = this.assessmentQuestions.find(o => o.question.id === question.id);
         if (q) {
-          this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['assessmentQuestionId'] = q.id
-          this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['assessmentAnswerId'] = q.assessmentAnswers[0].id
+          this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['assessmentQuestionId'] = q.id;
+          this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['assessmentAnswerId'] = q.assessmentAnswers[0].id;
         }
       }
-      this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['type'] = e.type
+      this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx]['type'] = e.type;
 
       if (criteria.questions.length === idx + 1 && !this.recievedQuestions.includes(idx)) {
         this.preQuestionIdx = undefined
         if (e.type === 'MULTI') {
           if (this.criterias[sectionIdx]?.length === this.shownCriterias[sectionIdx].length) {
-            // this.openAccordion = this.openAccordion + 1
             if (this.prev_answer.isPassing) {
-              this.shownSections.push(true)
-              this.shownCriterias[sectionIdx + 1] = [true]
-              this.shownQuestions[sectionIdx + 1][0] = [true]
+              this.shownSections.push(true);
+              this.shownCriterias[sectionIdx + 1] = [true];
+              this.shownQuestions[sectionIdx + 1][0] = [true];
               if (!this.result.sections[sectionIdx + 1] && this.result.sections.length !== this.sections.length) {
-                this.result.sections.push({ id: sectionIdx + 1 })
-                this.result.sections[sectionIdx + 1]['criteria'] = [{ id: 0 }]
-                this.result.sections[sectionIdx + 1].criteria[0]['questions'] = [{ id: 0 }]
+                this.result.sections.push({ id: sectionIdx + 1 });
+                this.result.sections[sectionIdx + 1]['criteria'] = [{ id: 0 }];
+                this.result.sections[sectionIdx + 1].criteria[0]['questions'] = [{ id: 0 }];
               }
             } else {
-              this.shownCriterias[sectionIdx].splice(criteriaIdx + 1, this.shownCriterias[sectionIdx].length - (criteriaIdx + 1))
-              this.shownSections.splice(sectionIdx + 1, this.shownSections.length - (sectionIdx + 1))
+              this.shownCriterias[sectionIdx].splice(criteriaIdx + 1, this.shownCriterias[sectionIdx].length - (criteriaIdx + 1));
+              this.shownSections.splice(sectionIdx + 1, this.shownSections.length - (sectionIdx + 1));
             }
           } else {
-            this.shownCriterias[sectionIdx].push(true)
-            this.shownQuestions[sectionIdx][criteriaIdx + 1] = [true]
+            this.shownCriterias[sectionIdx].push(true);
+            this.shownQuestions[sectionIdx][criteriaIdx + 1] = [true];
             if (!this.result.sections[sectionIdx].criteria[criteriaIdx + 1]) {
-              this.result.sections[sectionIdx].criteria.push({ id: criteriaIdx + 1 })
-              this.result.sections[sectionIdx].criteria[criteriaIdx + 1]['questions'] = [{ id: 0 }]
+              this.result.sections[sectionIdx].criteria.push({ id: criteriaIdx + 1 });
+              this.result.sections[sectionIdx].criteria[criteriaIdx + 1]['questions'] = [{ id: 0 }];
             }
           }
 
@@ -331,84 +341,84 @@ export class CmSectionComponent implements OnInit {
             if (e.answer.label === 'Unsure') {
               this.message = 'You are allowed to continue with the assessment, but we are strongly encouraged to evaluate all preconditions to ensure that they are met to enable transformational change.'
               if (!e.isLoading) {
-                this.visible = true
+                this.visible = true;
               } 
             }
             if (this.criterias[sectionIdx]?.length === this.shownCriterias[sectionIdx].length) {
               this.shownSections.push(true)
               this.isPassed = true
-              this.shownCriterias[sectionIdx + 1] = [true]
-              this.shownQuestions[sectionIdx + 1] = []
-              this.shownQuestions[sectionIdx + 1][0] = [true]
+              this.shownCriterias[sectionIdx + 1] = [true];
+              this.shownQuestions[sectionIdx + 1] = [];
+              this.shownQuestions[sectionIdx + 1][0] = [true];
               if (!this.result.sections[sectionIdx + 1] && this.result.sections.length !== this.sections.length) {
-                this.result.sections.push({ id: sectionIdx + 1 })
-                this.result.sections[sectionIdx + 1]['criteria'] = [{ id: 0 }]
-                this.result.sections[sectionIdx + 1].criteria[0]['questions'] = [{ id: 0 }]
+                this.result.sections.push({ id: sectionIdx + 1 });
+                this.result.sections[sectionIdx + 1]['criteria'] = [{ id: 0 }];
+                this.result.sections[sectionIdx + 1].criteria[0]['questions'] = [{ id: 0 }];
               }
-              this.preQuestionIdx = idx
+              this.preQuestionIdx = idx;
             } else {
-              this.shownCriterias[sectionIdx].push(true)
-              this.shownQuestions[sectionIdx][criteriaIdx + 1] = [true]
+              this.shownCriterias[sectionIdx].push(true);
+              this.shownQuestions[sectionIdx][criteriaIdx + 1] = [true];
               if (!this.result.sections[sectionIdx].criteria[criteriaIdx + 1]) {
-                this.result.sections[sectionIdx].criteria.push({ id: criteriaIdx + 1 })
-                this.result.sections[sectionIdx].criteria[criteriaIdx + 1]['questions'] = [{ id: 0 }]
+                this.result.sections[sectionIdx].criteria.push({ id: criteriaIdx + 1 });
+                this.result.sections[sectionIdx].criteria[criteriaIdx + 1]['questions'] = [{ id: 0 }];
               }
             }
             this.recievedQuestions = []
           } else {
             if (message) {
-              this.message = message
+              this.message = message;
             } else {
-              this.message = this.defaultMessage
+              this.message = this.defaultMessage;
             }
             if (!this.isFirstLoading) {
-              this.visible = true
+              this.visible = true;
             } else {
-              this.isFirstLoading = false
+              this.isFirstLoading = false;
             }
-            this.shownCriterias[sectionIdx].splice(criteriaIdx + 1, this.shownCriterias[sectionIdx].length - (criteriaIdx + 1))
-            this.shownSections.splice(sectionIdx + 1, this.shownSections.length - (sectionIdx + 1))
-            this.isPassed = false
+            this.shownCriterias[sectionIdx].splice(criteriaIdx + 1, this.shownCriterias[sectionIdx].length - (criteriaIdx + 1));
+            this.shownSections.splice(sectionIdx + 1, this.shownSections.length - (sectionIdx + 1));
+            this.isPassed = false;
           }
         }
       } else {
         if ((e.type === 'MULTI' || e.type === "INDIRECT") && !this.recievedQuestions.includes(idx)) {
-          this.shownQuestions[sectionIdx][criteriaIdx].push(true)
+          this.shownQuestions[sectionIdx][criteriaIdx].push(true);
           if (!this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx + 1]) {
-            this.result.sections[sectionIdx].criteria[criteriaIdx].questions.push({ id: idx + 1 })
+            this.result.sections[sectionIdx].criteria[criteriaIdx].questions.push({ id: idx + 1 });
           }
         } else {
           if (this.prev_answer.isPassing) {
             if (e.answer.label === 'Unsure') {
               this.message = 'You are allowed to continue with the assessment, but we are strongly encouraged to evaluate all preconditions to ensure that they are met to enable transformational change.'
               if (!e.isLoading) {
-                this.visible = true
+                this.visible = true;
               } 
             }
             if (this.preQuestionIdx !== idx) this.shownQuestions[sectionIdx][criteriaIdx].push(true)
-            this.preQuestionIdx = idx
+            this.preQuestionIdx = idx;
             if (!this.result.sections[sectionIdx].criteria[criteriaIdx].questions[idx + 1]) {
-              this.result.sections[sectionIdx].criteria[criteriaIdx].questions.push({ id: idx + 1 })
+              this.result.sections[sectionIdx].criteria[criteriaIdx].questions.push({ id: idx + 1 });
             }
           } else {
             if (!this.isFirstLoading) {
-              this.visible = true
+              this.visible = true;
             } else {
-              this.isFirstLoading = false
+              this.isFirstLoading = false;
             }
             if (message) {
-              this.message = message
+              this.message = message;
             } else {
-              this.message = this.defaultMessage
+              this.message = this.defaultMessage;
             }
-            this.shownQuestions[sectionIdx][criteriaIdx].splice(idx + 1, this.shownQuestions[sectionIdx][criteriaIdx].length - (idx + 1))
-            this.shownCriterias[sectionIdx].splice(criteriaIdx + 1, this.shownCriterias[sectionIdx].length - (criteriaIdx + 1))
-            this.shownSections.splice(sectionIdx + 1, this.shownSections.length - (sectionIdx + 1))
-            this.preQuestionIdx = undefined
+            this.shownQuestions[sectionIdx][criteriaIdx].splice(idx + 1, this.shownQuestions[sectionIdx][criteriaIdx].length - (idx + 1));
+            this.shownCriterias[sectionIdx].splice(criteriaIdx + 1, this.shownCriterias[sectionIdx].length - (criteriaIdx + 1));
+            this.shownSections.splice(sectionIdx + 1, this.shownSections.length - (sectionIdx + 1));
+            this.preQuestionIdx = undefined;
           }
         }
         if (!this.recievedQuestions.includes(idx)) {
-          this.recievedQuestions.push(idx)
+          this.recievedQuestions.push(idx);
         }
       }
     }
@@ -417,44 +427,47 @@ export class CmSectionComponent implements OnInit {
 
   save(event: SaveDto) {
      if(event.type){
-      this.shownSections.push(true)
+      this.shownSections.push(true);
      }
     let result: SaveCMResultDto = new SaveCMResultDto()
     result.result = []
-    result.result = [...event.result]
+    result.result = [...event?.result]
     this.sectionResult.sections.forEach((section: any) => {
       section.criteria.forEach((cr: any) => {
         cr.questions.forEach((q: any) => {
-          let item = new CMResultDto()
-          if (q.answer) item.answer = q.answer
-          let ins = new Institution()
-          ins.id = q.institution?.id
-          if (q.institution) item.institution = ins
-          item.comment = q.comment
-          item.question = q.question
-          item.type = q.type
-          item.filePath = q.file
+          let item = new CMResultDto();
+          if (q.answer) item.answer = q.answer;
+          let ins = new Institution();
+          ins.id = q.institution?.id;
+          if (q.institution) item.institution = ins;
+          item.comment = q.comment;
+          item.question = q.question;
+          item.type = q.type;
+          item.filePath = q.file;
           if (this.isEditMode){
             let assQ = this.assessmentQuestions.find(o => (o.question.id === q.question?.id))
             if (assQ) {
-              item.assessmentQuestionId = assQ.id
-              item.assessmentAnswerId = assQ.assessmentAnswers[0]?.id
+              item.assessmentQuestionId = assQ.id;
+              item.assessmentAnswerId = assQ.assessmentAnswers[0]?.id;
             }
           }
           if (item.question) result.result.push(item)
         })
       })
     })
-    result.assessment = this.assessment
-    result.isDraft = event.isDraft
+    result.assessment = this.assessment;
+    result.isDraft = event.isDraft;
     result.type =event.type;
     result.name=event.name;
+    result.expectedGHGMitigation = event.expected_ghg_mitigation
     this.cMAssessmentQuestionControllerServiceProxy.saveResult(result)
       .subscribe(res => {
         if (res) {
           let message = ''
           if (event.isDraft) {
             message = 'Assessment saved successfully. You will be able to continue the assessment from the “In progress” menu'
+          } else if (this.isCompleted) {
+            message = 'Assessment is updated successfully.'
           } else {
             message = 'Assessment created successfully'
           }
@@ -467,10 +480,10 @@ export class CmSectionComponent implements OnInit {
           if (event.isDraft) {
             this.isEditMode = true
             this.setInitialState()
-            this.router.navigate(['../carbon-market-tool-edit'], { queryParams: { id: this.assessment.id, isEdit: true }, relativeTo: this.activatedRoute });
-            // window.location.reload()
+            this.router.navigate(['../carbon-market-tool-edit'], { queryParams: { id: this.assessment.id, isEdit: true, isContinue: true }, relativeTo: this.activatedRoute });
+          
           }
-          if (result.assessment.assessment_approach === 'DIRECT' && !event.isDraft) {
+          if (result.assessment.assessment_approach === 'DIRECT' && !event.isDraft && !this.isCompleted) {
             this.router.navigate(['../carbon-market-tool-result'], { queryParams: { id: this.assessment.id }, relativeTo: this.activatedRoute });
           } 
 
@@ -499,10 +512,11 @@ export class CmSectionComponent implements OnInit {
 }
 
 export class SaveDto {
-  result: CMResultDto[]
+  result: CMResultDto[] = []
   isDraft: boolean = false
-  name:string
-  type:string
+  name:string = ''
+  type:string = ''
+  expected_ghg_mitigation: number = 0
 }
 
 export class SectionResultDto{

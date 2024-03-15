@@ -1,5 +1,7 @@
 <div class="container pl-20 pr-20">
-    <h4 class="mt-4">Reports</h4>
+    <h4 class="mt-4">Reports
+        <span (click)="watchVideo()" pTooltip="Click to watch guidance video"  class="infor-video" ><i class="pi pi-video" style=" font-size: 1em ;  margin-left: 1em;"></i></span>
+    </h4>
     <div class="p-grid p-fluid card">
         <div class="row mb-3">
             <div class="col-md-4"></div>
@@ -51,84 +53,15 @@
            
         </div>
         <div class="row mb-3"></div>
-        <!-- <div class="row mb-3">
-            <div class="col-md-4"></div>
-            <div class="col-md-5"></div>
-            <div class="col-md-3 text-end">
-                <button pButton pRipple label="Genarate" (click)="generate()"></button>
-            </div>
-        </div> -->
         <h6 class="mt-4" style="color: #1a4f7b">Reports</h6>
-        <!-- <div class="row">
-            <div *ngFor="let file of pdfFiles" class="col col-md-6" style="margin: auto;">
-                <a href="{{SERVER_URL}}/{{file.generateReportName}}">{{file.reportName}}</a>
-            </div>
-            <br />
-        </div> -->
         <div class="row">
             <div _ngcontent-mil-c27="" style="padding: 10px; cursor: pointer;" class="col-md-4 col-xs-6 ng-star-inserted" *ngFor="let r of pdfFiles">
                 <div _ngcontent-mil-c27="" class="row  d-flex justify-content-center">
-                    <img (click)="view(r.generateReportName)" _ngcontent-mil-c27="" src="./assets/images/pdf.webp" style="display: block; min-width:120px;max-width: 120px;">
+                    <img (click)="view(r.savedLocation)" _ngcontent-mil-c27="" src="./assets/images/pdf.webp" style="display: block; min-width:120px;max-width: 120px;">
                 </div>
                 <div _ngcontent-mil-c27="" class="row d-flex justify-content-center">
-                    <span  class="row d-flex justify-content-center" (click)="view(r.generateReportName)">{{r.reportName}}</span>                
+                    <span  class="row d-flex justify-content-center" (click)="view(r.savedLocation)">{{r.reportName}}</span>                
                 </div>
             </div>
         </div>
     </div>
-    <!-- <p-dialog [(visible)]="display">
-        <div class="container" style="width: 600px; height: 400px">
-            <div class="row p-2">
-                <div class="col-2">
-                    <div>
-                        <label for="project">Select Intervention</label>
-                    </div>
-                </div>
-                <div class="col-10">
-                    <div>
-                        <p-dropdown appendTo="body" name="ndc" [options]="climateActions" placeholder="Select .."
-                            [(ngModel)]="selectedClimateAction" #fndc="ngModel" [showClear]="true" [filter]="true"
-                            optionLabel="policyName" (onChange)="loadAssessmnets($event)">
-                        </p-dropdown>
-                    </div>
-                </div>
-            </div>
-      
-            <div class="row p-2">
-                <div class="col-2">
-                    <div>
-                        <label for="project">Select Assessments</label>
-                    </div>
-                </div>
-                <div class="col-10">
-                    <div>
-                        <p-dropdown [disabled]="assessments.length === 0" appendTo="body" name="ndc"
-                            [options]="assessments" placeholder="Select .." [(ngModel)]="selectedAssessment"
-                            #fndc="ngModel" [showClear]="true" [filter]="true" optionLabel="climateAction.policyName">
-                            <ng-template let-assessment pTemplate="item">
-                                <div class="item">
-                                    <div>{{assessment.tool=='PORTFOLIO'?'General tool':'Investment'}} - {{assessment.assessmentType}}</div>
-                                </div>
-                            </ng-template>
-                        </p-dropdown>
-                    </div>
-                </div>
-            </div>
-            <div class="row p-2">
-                <div class="col-2">
-                    <div>
-                        <label for="sector">Report Name</label>
-                    </div>
-                </div>
-                <div class="col-10">
-                    <div>
-                        <input [style]="{ width: '75%' }" type="text" name="reportName" class="p-inputtext"
-                            [(ngModel)]="reportName" pInputText />
-                    </div>
-                </div>
-            </div>
-            <div>
-                <button style="margin-right: 5px" pButton pRipple label="Generate" (click)="confirm()"></button>
-            </div>
-        </div>
-    </p-dialog> -->

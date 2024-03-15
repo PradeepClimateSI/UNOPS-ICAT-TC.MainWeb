@@ -22,7 +22,7 @@
         <p>{{assessment_approach}}</p>
         <p>{{assessment_method}}</p>
         <p>{{tool}}</p>
-        <p>{{date1 | date:'yyyy-MM-dd'}} to {{date2 | date:'yyyy-MM-dd'}}</p>
+        <p>{{date1 | date:'dd/MM/yyyy'}} to {{date2 | date:'dd/MM/yyyy'}}</p>
         <p>{{barriersList.join(', ')}}</p>
       </div>
     </div>
@@ -33,26 +33,6 @@
 
 <div *ngIf="load">
 
-<!-- pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp -->
-<!-- <p-table [value]="outcomeCategory" [tableStyle]="{ 'min-width': '50rem' }">
-  <ng-template pTemplate="header">
-      <tr>
-          <th>Code</th>
-          <th>Name</th>
-          <th>Category</th>
-          <th>Quantity</th>
-      </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-outcomeCategory>
-      <tr>
-          <td>{{ outcomeCategory.category }}</td>
-          <td>{{ outcomeCategory.chaName }}</td>
-          <td>{{ outcomeCategory.score }}</td>
-          <td>{{ outcomeCategory.score }}</td>
-      </tr>
-  </ng-template>
-</p-table>
-</div> -->
 
 <br><br><br>
 <h5>Process of Change</h5><br>
@@ -124,7 +104,6 @@
       </tr>
   </ng-template>
 </p-table>
-<!-- ppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp -->
 <br><br><br>
 <div *ngIf="averageOutcome">
   <h6>Transformational Impact Mapping</h6> <br>

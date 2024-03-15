@@ -1,11 +1,13 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
-import { InvestorAssessment, InvestorToolControllerServiceProxy, ParameterRequest, ParameterRequestControllerServiceProxy, ParameterRequestTool, ServiceProxy, UpdateDeadlineDto, UpdateDeadlineDtoTool, UpdateInvestorToolDto } from 'shared/service-proxies/service-proxies';
+import { InvestorToolControllerServiceProxy, ParameterRequest, ParameterRequestControllerServiceProxy, ServiceProxy, UpdateDeadlineDto, UpdateDeadlineDtoTool, UpdateInvestorToolDto } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import * as moment from 'moment';
 import { DataRequestStatus } from 'app/Model/DataRequestStatus.enum';
 import * as XLSX from 'xlsx';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'environments/environment';
+
 @Component({
   selector: 'app-enter-data-investment',
   templateUrl: './enter-data-investment.component.html',
@@ -48,7 +50,7 @@ export class EnterDataInvestmentComponent implements OnInit {
   isDropdown: boolean;
   answers: any[] = ['Yes', 'No']
   parameterListFilterData: any[];
-  SERVER_URL = 'http://localhost:7080/investor-tool/upload'  
+  SERVER_URL =  environment.baseUrlAPI + '/investor-tool/upload'  
   
   @ViewChild('myInput')
   myInputVariable: ElementRef;
@@ -84,7 +86,6 @@ export class EnterDataInvestmentComponent implements OnInit {
       '1234'
     )
     .subscribe((res: any) => {
-      console.log(res)
       for (let a of res.items) {
         if (a.investmentParameter.assessment !== null) {
 
@@ -119,7 +120,7 @@ export class EnterDataInvestmentComponent implements OnInit {
     let filtertext = this.searchBy.text ? this.searchBy.text : '';
 
     let editedOn = this.searchBy.editedOn
-      ? moment(this.searchBy.editedOn).format('YYYY-MM-DD')
+      ? moment(this.searchBy.editedOn).format('DD/MM/YYYY')
       : '';
 
     let pageNumber =
@@ -141,7 +142,6 @@ export class EnterDataInvestmentComponent implements OnInit {
           '1234'
         )
         .subscribe((a) => {
-          console.log('aa', a);
           if (a) {
             this.parameterList = a.items;
             this.totalRecords = a.meta.totalItems;
@@ -152,7 +152,6 @@ export class EnterDataInvestmentComponent implements OnInit {
   };
 
   onCAChange(event: any) {
-    console.log('searchby...', this.searchBy);
     this.onSearch();
   }
 
@@ -216,23 +215,11 @@ export class EnterDataInvestmentComponent implements OnInit {
   }
 
   getInfo(obj: any) {
-    console.log('dataRequestList...', obj);
     this.paraId = obj.parameterId.id;
-    console.log('this.paraId...', this.paraId);
-
-    // let x = 602;
-    // this.prHistoryProxy
-    //   .getHistroyByid(this.paraId) // this.paraId
-    //   .subscribe((res) => {
-    //     this.requestHistoryList = res;
-
-    //     console.log('this.requestHistoryList...', this.requestHistoryList);
-    //   });
 
     this.displayHistory = true;
   }
 
-  // On file Select
   onChange(event: any) {
     this.fileData = event.target.files[0];
   }
@@ -245,8 +232,8 @@ export class EnterDataInvestmentComponent implements OnInit {
       this.selectedParameters.map((e) => {
         let id = e.investmentParameter.id;
         let intervention = e.investmentParameter.assessment.climateAction.policyName;
-        let assesmentType = e.investmentParameter.assessment.assessmentType;
-        let assessmentPeriod = moment(e.investmentParameter.assessment.from).format('yy-MM-DD') + " - " + moment(e.investmentParameter.assessment.to).format('yy-MM-DD')
+        let assessmentType = e.investmentParameter.assessment.assessmentType;
+        let assessmentPeriod = moment(e.investmentParameter.assessment.from).format('DD/MM/YYYY') + " - " + moment(e.investmentParameter.assessment.to).format('DD/MM/YYYY')
         let process_outcome = e.investmentParameter.type
         let category = e.investmentParameter.category.name
         let characteristic = e.investmentParameter.characteristics.name
@@ -256,7 +243,7 @@ export class EnterDataInvestmentComponent implements OnInit {
         let obj = {
           id,
           intervention,
-          assesmentType,
+          assessmentType,
           assessmentPeriod,
           process_outcome,
           category,
@@ -276,22 +263,17 @@ export class EnterDataInvestmentComponent implements OnInit {
     var d = new Date();
     var reportTime = this.formatDate(d);
 
-
-    console.log(this.parameterListFilterData)
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
       this.parameterListFilterData
     );
 
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
 
-    console.log(ws)
-    console.log(wb)
     XLSX.utils.book_append_sheet(wb, ws, 'sheet1');
 
     XLSX.writeFile(wb, 'data_entry_template_' + reportTime + '.xlsx');
 
     this.onSearch();
-    //
     this.messageService.add({
       severity: 'info',
       summary: 'Info',
@@ -309,7 +291,7 @@ export class EnterDataInvestmentComponent implements OnInit {
     var minutes = date.getMinutes();
     var ampm = hours >= 12 ? 'pm' : 'am';
     hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
+    hours = hours ? hours : 12; 
     minutes = minutes < 10 ? '0' + minutes : minutes;
     var strTime = hours + ':' + minutes + ' ' + ampm;
     return (
@@ -332,7 +314,6 @@ export class EnterDataInvestmentComponent implements OnInit {
     this.uploadFile = false;
   }
 
-  // OnClick of button Upload
   onUpload() {
     const formData = new FormData();
     formData.append('file', this.fileData);
@@ -358,15 +339,10 @@ export class EnterDataInvestmentComponent implements OnInit {
     );
     setTimeout(() => {
       this.onSearch();
-      //location.reload();
     }, 1000);
   }
 
   async onClickSendNow(status: number) {
-    // let inputValues = new UpdateValueEnterData();
-    // inputValues.id = this.selectedParameterId;
-    // inputValues.value = this.selectedValue;
-    // inputValues.assumptionParameter = this.selectedAssumption;
 
     let invest = new UpdateInvestorToolDto()
     invest.id = this.selectedParameter.id
@@ -383,7 +359,6 @@ export class EnterDataInvestmentComponent implements OnInit {
     inputParameters.status = status;
     inputParameters.tool = this.tool as unknown as UpdateDeadlineDtoTool
 
-    console.log('inputParameters', inputParameters);
     this.parameterRequestControllerServiceProxy.acceptReviewData(inputParameters).subscribe(res => {
       this.messageService.add({
         severity: 'success',
@@ -418,15 +393,11 @@ export class EnterDataInvestmentComponent implements OnInit {
     let idList = new Array<number>();
     for (let index = 0; index < this.selectedParameters.length; index++) {
       let element = this.selectedParameters[index];
-      console.log('++++',element)
       if (
         element.investmentParameter?.parameter_value != null 
-        // && element.parameterId?.uomDataEntry != null
       ) {
         idList.push(element.id);
-        console.log('element Pushed', element);
       } else {
-        console.log('element', element);
         this.messageService.add({
           severity: 'error',
           summary: 'Error.',
@@ -467,7 +438,6 @@ export class EnterDataInvestmentComponent implements OnInit {
   }
 
   onHideDialog() {
-    // this.isHistorical = false
   }
 
   getValue(para: any){
@@ -477,10 +447,6 @@ export class EnterDataInvestmentComponent implements OnInit {
       } else if (para.institutionDescription === 'relavance') {
         return para.relavance
       } else {
-        // this.investorToolControllerServiceProxy.getInvestorQuestionById(para.institutionDescription)
-        // .subscribe(res => {
-        //   return 
-        // })
       }
     }
   }

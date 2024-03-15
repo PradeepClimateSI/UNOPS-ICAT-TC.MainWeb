@@ -42,8 +42,7 @@ export class VerificationListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.loggedUserRole = this.appService.getLoggedUserRole()
-    console.log(this.loggedUserRole)
+    this.loggedUserRole = this.appService.getLoggedUserRole();
   }
 
   loadgridData = (event: LazyLoadEvent) => {
@@ -71,7 +70,6 @@ export class VerificationListComponent implements OnInit {
       this.verificationControllerServiceProxy
         .getVerifierParameters(pageNumber, this.rows, statusId, filtertext)
         .subscribe(res => {
-          console.log(res)
           this.assessments = res.items
           this.totalRecords = res.meta.totalItems
           this.loading = false

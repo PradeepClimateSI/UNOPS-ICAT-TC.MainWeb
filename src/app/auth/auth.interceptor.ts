@@ -33,9 +33,9 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(req)
       .pipe(catchError((err) => {
-        // this._loading.setLoading(false, req.url);
         return err;
       }))
+      // this is ignore type
       // @ts-ignore
       .pipe(map<HttpEvent<any>, any>((evt: HttpEvent<any>) => {
         if (evt instanceof HttpResponse) {
@@ -44,6 +44,5 @@ export class AuthInterceptor implements HttpInterceptor {
         return evt;
       }));
 
-    // return next.handle(req);
   }
 }

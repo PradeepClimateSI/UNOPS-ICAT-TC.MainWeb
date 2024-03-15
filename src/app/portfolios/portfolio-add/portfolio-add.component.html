@@ -11,13 +11,6 @@
         <div class="row p-2">
           <div class="col-12 col-md-6">
 
-            <!--  <div class="p-field p-2">
-              <label for="portfolioId">Portfolio ID *</label>
-              <input pInputText type="text" #portfolioId="ngModel" name="portfolioId"
-                [(ngModel)]="portfolio.portfolioId" placeholder="portfolio Id" required />
-              <p class="info-message text-danger"
-                *ngIf="!portfolioId.value && (fData.submitted || portfolioId.touched)">This is a mandatory field</p>
-            </div> -->
 
             <div class="p-field p-2">
               <label for="portfolioId">Portfolio ID </label>
@@ -32,7 +25,7 @@
             <div class="p-field p-2">
               <label for="portfolioName">Name of the Portfolio *</label>
               <input pInputText type="text" #portfolioName="ngModel" name="portfolioName"
-                [(ngModel)]="portfolio.portfolioName" placeholder="portfolio Name" required />
+                [(ngModel)]="portfolio.portfolioName" placeholder="Portfolio Name" required />
               <p class="info-message text-danger"
                 *ngIf="!portfolioName.value && (fData.submitted || portfolioName.touched)">This is a mandatory field</p>
             </div>
@@ -45,15 +38,6 @@
               <p class="info-message text-danger"
                 *ngIf="!description.value && (fData.submitted || description.touched)">This is a mandatory field</p>
             </div>
-
-            <div class="p-field p-2">
-              <label for="person">Person(s)/ organization(s) doing the assessment *</label>
-              <input pInputText type="text" #person="ngModel" name="person" [(ngModel)]="portfolio.person"
-                placeholder="Person(s)/ organization(s) doing the assessment" required />
-              <p class="info-message text-danger" *ngIf="!person.value && (fData.submitted || person.touched)">This is a
-                mandatory field</p>
-            </div>
-
 
             <div class="p-field p-2">
               <label for="IsPreviousAssessment">Is this assessment an update of a previous assessment? *</label>
@@ -70,8 +54,6 @@
                 <label for="link">Links to any previous assessments</label>
                 <input pInputText type="text" #link="ngModel" name="link" [(ngModel)]="portfolio.link"
                   placeholder="Links to any previous assessments" required />
-               <!--  <p class="info-message text-danger" *ngIf="!link.value && (fData.submitted || link.touched)">This is a
-                  mandatory field</p> -->
               </div>
             </div>
 
@@ -90,37 +72,13 @@
               <p class="info-message text-danger" *ngIf="!audience.value && (fData.submitted || audience.touched)">This
                 is a mandatory field</p>
             </div>
-
-            <!-- <div class="p-field p-2">
-              <label for="opportunities">Opportunities for stakeholders to participate in the assessment *</label>
-              <input pInputText type="text" #opportunities="ngModel" name="opportunities"
-                [(ngModel)]="portfolio.opportunities"
-                placeholder="Opportunities for stakeholders to participate in the assessment" required />
-              <p class="info-message text-danger"
-                *ngIf="!opportunities.value && (fData.submitted || opportunities.touched)">This is a mandatory field</p>
-            </div>
-
-            <div class="p-field p-2">
-              <label for="principles">Principles on which the assessment is based *</label>
-              <input pInputText type="text" #principles="ngModel" name="principles" [(ngModel)]="portfolio.principles"
-                placeholder="Principles on which the assessment is based" required />
-              <p class="info-message text-danger" *ngIf="!principles.value && (fData.submitted || principles.touched)">
-                This is a mandatory field</p>
-            </div> -->
-
             <div class="p-field p-2">
 
               <label for="date">Date* <i class="pi pi-info-circle" pTooltip="Date of the assessment" tooltipPosition="bottom"
                 style="font-size: 1rem"></i></label>
-              <div class="p-inputgroup">
-                <span class="p-inputgroup-addon">
-                  <i class="pi pi-calendar"></i>
-                </span>
-                <p-calendar dateFormat="mm-dd-yy" inputId="date" placeholder="Date" [(ngModel)]="portfolio.date"
+                <p-calendar [disabled]="true" inputId="date"  [(ngModel)]="currentDate" 
                   name="date" #date="ngModel" [required]="true" appendTo="body">
                 </p-calendar>
-  
-              </div>
               <div class="col-12">
                 <p class="info-message text-danger"
                   *ngIf="(date.invalid) && (fData.submitted || date.touched)">
@@ -197,7 +155,6 @@
             <th style="width:6%">ID</th>
             <th style="width:20%">Intervention</th>
             <th style="width:20%">Sectors Covered</th>
-            <!-- <th style="width:12%">Assessment Approach</th> -->
             <th style="width:12%">Assessment Type</th>
             <th style="width:12%">Tool</th>
             <th style="width:20%">Assessment Period</th>
@@ -222,9 +179,6 @@
                 {{sec.sector.name}}<span *ngIf="idx !== assessList.assessment.climateAction.policy_sector.length-1">, </span>
               </span>
             </td>
-            <!-- <td>
-              {{ assessList.assessment_approach }}
-            </td> -->
             <td>
               {{ assessList.assessment.assessmentType }}
             </td>
@@ -232,7 +186,7 @@
               {{ masterDataService.getToolName(assessList.assessment.tool) }}
             </td>
             <td>
-              {{ assessList.assessment.from | date:'yyyy-MM-dd' }} - {{ assessList.assessment.to | date:'yyyy-MM-dd'}}
+              {{ assessList.assessment.from | date:'dd/MM/yyyy' }} - {{ assessList.assessment.to | date:'dd/MM/yyyy'}}
             </td>
 
           </tr>
@@ -262,17 +216,4 @@
 
   </form>
 
-
-
-
-  <!--   <div class="row justify-content-end">
-    <div>
-
-      <div class="d-flex flex-row-reverse  ">
-        <button class="btn btn-primary text-uppercase" type="submit" (click)="sendData()">
-          send
-        </button>
-      </div>
-    </div>
-  </div> -->
 </div>

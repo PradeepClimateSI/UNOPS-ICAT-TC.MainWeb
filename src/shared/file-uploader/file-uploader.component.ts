@@ -1,6 +1,5 @@
 import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
-// import { environment } from 'src/environments/environment';
 
 export enum UploadFileType{
   img="img",
@@ -13,7 +12,6 @@ export enum UploadFileType{
   styleUrls: ['./file-uploader.component.css']
 })
 export class FileUploaderComponent implements OnInit {
-  // environment:any=environment;
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
   @ViewChild('myInput') private myInputVariable: ElementRef;
 
@@ -33,12 +31,6 @@ export class FileUploaderComponent implements OnInit {
 
 
   displayData(){
-    console.log("deletable-", this.deletable);
-    console.log("addable-", this.addable);
-    console.log("rootUrl-", this.rootUrl);
-    console.log("multiple-", this.multiple);
-    console.log("fileTypes-", this.fileTypes);
-    console.log("data-", this.data);
 
   }
 

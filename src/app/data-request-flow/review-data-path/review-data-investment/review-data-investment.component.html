@@ -16,7 +16,7 @@
     <div class="col-md-4">
         <div class="p-field">
             <label for="projYear">Type</label>
-            <p-dropdown name="assesmentType" [options]="assessmentType" [(ngModel)]="searchBy.type" #fsector="ngModel"
+            <p-dropdown name="assessmentType" [options]="assessmentType" [(ngModel)]="searchBy.type" #fsector="ngModel"
                 [showClear]="true" [filter]="true" placeholder="Select .." (ngModelChange)="onYearChange($event)">
             </p-dropdown>
         </div>
@@ -71,8 +71,8 @@
                     </div>
                 </td>
                 <td>{{ request.investmentParameter.assessment.assessmentType! }}</td>
-                <td>{{request.investmentParameter.assessment.from| date: "yyyy/MM/dd "}} -
-                    {{request.investmentParameter.assessment.to| date: "yyyy/MM/dd "}}</td>
+                <td>{{request.investmentParameter.assessment.from| date: "dd/MM/yyyy"}} -
+                    {{request.investmentParameter.assessment.to| date: "dd/MM/yyyy"}}</td>
                 <td>{{request.investmentParameter.type }}</td>
                 <td>{{request.investmentParameter.category?.name}}</td>
                 <td>{{request.investmentParameter.characteristics?.name}}</td>
@@ -80,10 +80,10 @@
                 <td>{{request.investmentParameter.parameter_value}}</td>
 
             <td>
-                {{ request.deadlineDataEntry | date: "yyyy-MM-dd " }}
+                {{ request.deadlineDataEntry | date: "dd/MM/yyyy" }}
             </td>
             <td>{{request.user?.firstName}} {{request.user?.lastName}}</td>
-            <td>{{request.createdOn | date: "yyyy-MM-dd" }}</td>
+            <td>{{request.createdOn | date: "dd/MM/yyyy" }}</td>
             <td>
                 <i class="pi pi-ellipsis-v" style="font-size: 2rem" (click)="getInfo(request)"></i>
             </td>

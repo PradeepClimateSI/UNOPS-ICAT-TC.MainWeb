@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { environment } from 'environments/environment';
 import { MessageService } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
 import { Assessment, ClimateAction, CreateReportDto, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, ReportControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
@@ -31,13 +33,15 @@ export class ReportComponent implements OnInit {
   assessments: Assessment[] = []
   pdfFiles: any;
   SERVER_URL = environment.baseUrlAPI;
+  DOWNLOAD_BY_NAMA_URL = environment.baseUrlAPI + "/document/downloadDocumentsFromFileName";
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
     private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
     private reportControllerServiceProxy: ReportControllerServiceProxy,
     private masterDataService: MasterDataService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    protected dialogService: DialogService,
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -55,7 +59,6 @@ export class ReportComponent implements OnInit {
   } 
 
   onCAChange(e: any){
-    console.log(e)
     this.selectedTool='';
     this.searchBy.climateAction = e.value
     this.filterReportData()
@@ -65,12 +68,26 @@ export class ReportComponent implements OnInit {
     this.selectedReportTypes=this.selectedReportTypes||''
    this.selectedTool='';
    this.searchBy.climateAction =''
-   console.log(this.selectedReportTypes)
-   this.filterReportData()
+   this.filterReportData();
+  }
+
+  watchVideo(){
+    let ref = this.dialogService.open(GuidanceVideoComponent, {
+      header: 'Guidance Video',
+      width: '60%',
+      contentStyle: {"overflow": "auto"},
+      baseZIndex: 10000,
+      data: {
+        sourceName: 'Reports',
+      },
+    });
+
+    ref.onClose.subscribe(() => {
+      
+    })
   }
 
   onSelectTool(e: any){
-    console.log(this.selectedTool)
     this.filterReportData()
    }
   generate(){
@@ -82,13 +99,11 @@ export class ReportComponent implements OnInit {
   }
 
   confirm(){
-    console.log("confirm")
     let body = new CreateReportDto()
     body.assessmentId = this.selectedAssessment.id
     body.climateAction = this.selectedClimateAction
     body.reportName = this.reportName
     this.reportControllerServiceProxy.generateReport(body).subscribe(res => {
-      console.log("generated repotr", res)
       if (res) {
         this.messageService.add({
           severity: 'success',
@@ -110,21 +125,18 @@ export class ReportComponent implements OnInit {
   }
 
   filterReportData() {
-    console.log("this.searchBy", this.searchBy);
     let climateAction = this.searchBy.climateAction ? this.searchBy.climateAction.policyName.toString() : "";
     let reportName = this.searchBy.text ? this.searchBy.text : "";
-    console.log(climateAction)
 
     this.reportControllerServiceProxy.getReportData(climateAction, reportName,this.selectedReportTypes,this.selectedTool).subscribe(res => {
-      this.pdfFiles = res
-      console.log('pdfFiles',res)
+      this.pdfFiles = res;
     })
 
 
   }
 
-  view(url: string){
-    window.open(this.SERVER_URL +"/"+ url, "_blank");
+  view(path: string){
+    window.open(this.DOWNLOAD_BY_NAMA_URL +"/"+ path, "_blank");
   }
 
 }

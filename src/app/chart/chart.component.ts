@@ -20,7 +20,6 @@ export class ChartComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngAfterViewInit(): void {
     if (!this.canvasRef) {
-      console.error('Could not find canvas element');
       return;
     }
 
@@ -28,7 +27,6 @@ export class ChartComponent implements OnInit, AfterViewInit, OnChanges {
     const ctx = canvas.getContext('2d');
 
     if (!ctx) {
-      console.error('Could not get canvas context');
       return;
     }
 

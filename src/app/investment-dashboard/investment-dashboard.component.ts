@@ -1,14 +1,14 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit ,Renderer2,ViewChild } from '@angular/core';
 import { Chart, ChartType, registerables } from 'chart.js';
-import { Assessment, AssessmentCMDetailControllerServiceProxy, ClimateAction, InvestorToolControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
-import * as pluginDataLabels from 'chartjs-plugin-datalabels';
+import { Assessment, AssessmentCMDetailControllerServiceProxy, InvestorToolControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
-import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
+import { LoginRole } from 'shared/AppService';
 import { MasterDataService } from 'app/shared/master-data.service';
-import { Paginator } from 'primeng/paginator';
 import { LazyLoadEvent } from 'primeng/api';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { HeatMapScore, TableData } from 'app/charts/heat-map/heat-map.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-investment-dashboard',
@@ -16,9 +16,6 @@ import { HeatMapScore, TableData } from 'app/charts/heat-map/heat-map.component'
   styleUrls: ['./investment-dashboard.component.css','../portfolio-dashboard/portfolio-dashboard.component.css']
 })
 export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
-  // canvas: any;
-  // ctx: any;
- 
 
 
   @ViewChild('investmentSDGsPieChart')
@@ -71,7 +68,7 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
   totalRecords: number = 0;
   xData: {label: string; value: number}[]
   yData: {label: string; value: number}[]
-  rows :number;
+  rows :number = 10;
   score={
     process_score: [], outcome_score: [] 
   }
@@ -79,6 +76,8 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
   heatMapScore: HeatMapScore[];
   heatMapData: TableData[];
   sdgColorMap: any;
+  sectorColorMap: {id: number; sectorNumber: number; color: string;}[]
+  secbgColors : string[] = [];
   bgColors: any = []
   defaulColors =[
     'rgba(153, 102, 255, 1)',
@@ -100,22 +99,29 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
     'rgba(47, 79, 79, 1)',
     'rgba(139, 69, 19, 1)'
   ]
+  allAssessments: any[] = [];
+  selectedAssessments: any;
+  selectedIds:string[] = [];
+  selectionLimit:number = 10;
+
   constructor(
     private projectProxy: ProjectControllerServiceProxy,
     private investorProxy: InvestorToolControllerServiceProxy,
     private assessmentCMProxy:AssessmentCMDetailControllerServiceProxy,
     public masterDataService: MasterDataService,
     private cdr: ChangeDetectorRef,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
   ) {
     Chart.register(...registerables);
   
   }
 
   ngOnInit(): void {
-    this.averageTCValue =75
-    // let tool ='INVESTOR'
+    this.averageTCValue = 75
     this.sdgColorMap = this.masterDataService.SDG_color_map
+    this.sectorColorMap = this.masterDataService.Sector_color_map
 
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
@@ -124,26 +130,29 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
     this.xData = this.masterDataService.xData
     this.yData = this.masterDataService.yData
     
-    
-
-    // this.investorProxy.calculateAssessmentResults(tool).subscribe((res: any) => {
-    //   this.calResults = res[0]
-    //   console.log("assessdetails",this.calResults)
-    //   const RecentInterventions = this.calResults.slice(0,10);
-    //   this.recentResult = RecentInterventions
-
-
-    // });
     let event: any = {};
     event.rows = this.rows;
     event.first = 0;
-    this.loadgridData(event);
+    this.investorProxy.getDashboardData(1,this.rows,this.selectedIds).subscribe((res) => {
+     
+      if(res.meta.allData && res.meta.allData.length>0){
+        this.allAssessments = this.mapOptionlable(res.meta.allData)
+      }
+    });
     this.sectorCountResult();
-    // this.sdgResults();
-
   }
+  
+  mapOptionlable(data: any[]) {
+    return data.map(item => {
+      let label:string = item.climateAction.policyName
+      if (item.from && item.to) {
+       label = label + " - " + moment(new Date(item.from)).format("DD/MM/YYYY").toString() + " - " + moment(new Date(item.to)).format("DD/MM/YYYY").toString()
+      }
+      return {label:label}
+    })
+  }
+
   loadgridData = (event: LazyLoadEvent) => {
-    console.log('event Date', event);
     this.loading = true;
     this.totalRecords = 0;
 
@@ -152,11 +161,10 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
         ? 1
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
-    this.investorProxy.getDashboardData(pageNumber,this.rows).subscribe((res) => {
+    this.investorProxy.getDashboardData(pageNumber,this.rows,this.selectedIds).subscribe((res) => {
       this.tableData=res.items;
       this.heatMapScore = this.tableData.map(item => {return {processScore: item.process_score, outcomeScore: item.outcome_score}})
       this.heatMapData = this.tableData.map(item => {return {interventionId: item.climateAction?.intervention_id, interventionName: item.climateAction?.policyName, processScore: item.process_score, outcomeScore: item.outcome_score}}) 
-      console.log("kkkkk : ", res)
       this.totalRecords= res.meta.totalItems
       this.loading = false;
     }, err => {
@@ -164,6 +172,27 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
 
   
   };
+
+  goToResult(id: number) {
+    this.router.navigate(['assessment-result-investor', id], { queryParams: { assessmentId:id }, relativeTo: this.activatedRoute });
+  }
+  onSelectAssessment() {
+     this.selectedIds = this.selectedAssessments.map((item: any)=> item.id)
+     this.callTable()
+  }
+
+  onClear() {
+    this.selectedIds = []
+     this.selectedAssessments = []
+     this.callTable()
+  }
+
+  callTable(){
+    let event: any = {};
+      event.rows = this.rows;
+      event.first = 0;
+      this.loadgridData(event);
+  }
 
   mapOutcomeScores(value: number) {
     
@@ -212,7 +241,6 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
   }
   ngAfterViewInit(): void {
     this.cdr.detectChanges();
-    // this.updateSourceDivHeight();
   }
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
@@ -223,47 +251,35 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
     this.targetDivHeight = this.targetDiv.nativeElement.offsetHeight;
     this.renderer.setStyle(this.sourceDiv.nativeElement, 'height', `${this.targetDivHeight}px`);
     this.renderer.setStyle(this.sourceDiv.nativeElement, 'overflow-y', 'auto');
-    // this.targetDivHeightofMeetingEnvironmental = this.targetDiv2.nativeElement.offsetHeight;
-    // this.renderer.setStyle(this.sourceDiv2.nativeElement, 'height', `${this.targetDivHeightofMeetingEnvironmental}px`);
-    // this.renderer.setStyle(this.sourceDiv2.nativeElement, 'overflow-y', 'auto');
     this.cdr.detectChanges();
   }
 
   sectorCountResult(){
     let tool ='INVESTOR'
-    this.investorProxy.findSectorCount(tool).subscribe((res: any) => {
-      this.sectorCount = res
-      console.log("sectorcount",this.sectorCount)
+    this.investorProxy.getSectorCountByTool(tool).subscribe((res: any) => {
+      this.sectorCount = res.sort(this.compareByAge);
       setTimeout(() => {
        
         this.viewSecterTargetedPieChart();
         this.updateSourceDivHeight();
       }, 20);
-      this.sdgResults()
-      // 
+      this.sdgResults();
      
     });
-       // this.sectorCount=[{sector:'test1',count:23},
-       // {sector:'test2',count:10}]
-     
-       // setTimeout(() => {
-       //   this.viewSecterTargetedPieChart();
-       // }, 200);
    }
   sdgResults(){
     this.sdgDetailsList=[]
     this.investorProxy.sdgSumCalculate('INVESTOR').subscribe(async (res: any) => {
-      console.log("sdgDetailsList : ", res)
       this.sdgDetailsList = res;
       setTimeout(() => {
         this.viewFrequencyofSDGsChart();
         
       }, 200);
-    //  this.viewFrequencyofSDGsChart();
      });
   }
 
   viewFrequencyofSDGsChart(){
+    this.sdgDetailsList.sort((a: any, b: any) => b.count - a.count)
     let labels = this.sdgDetailsList.map((item:any) => 'SDG ' + item.number + ' - ' + item.sdg);
     let counts:number[] = this.sdgDetailsList.map((item:any) => item.count);
     this.sdgDetailsList.forEach((sd: any) => {
@@ -278,7 +294,6 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
     let percentages = counts.map(count => ((count / total) * 100).toFixed(2));
 
     if (!this.canvasRefSDGsPieChart) {
-      console.error('Could not find canvas element');
       return;
     }
 
@@ -286,12 +301,10 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
     const ctx = canvas.getContext('2d');
 
     if (!ctx) {
-      console.error('Could not get canvas context');
       return;
     }
 
     if (this.pieChart1) {
-      // Update the chart data
       this.pieChart1.data.datasets[0].data = counts;
       this.pieChart1.data.labels=labels
       this.pieChart1.update();
@@ -338,16 +351,11 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
             callbacks:{
               
               label:(ctx)=>{ 
-                // console.log(ctx)
-                // let sum = ctx.dataset._meta[0].total;
-                // let percentage = (value * 100 / sum).toFixed(2) + "%";
-                // return percentage;
                 let sum = 0;
                 let array =counts
                 array.forEach((number) => {
                   sum += Number(number);
                 });
-                // console.log(sum, counts[ctx.dataIndex])
                 let percentage = (counts[ctx.dataIndex]*100 / sum).toFixed(2)+"%";
 
                 return[
@@ -357,7 +365,7 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
                 ];
                }
             },
-            backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
               titleFont: {
                 size: 14,
                 weight: 'bold'
@@ -365,7 +373,7 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
               bodyFont: {
                 size: 14
               },
-              displayColors: true, // Hide the color box in the tooltip
+              displayColors: true,
               bodyAlign: 'left'
           }
        }
@@ -381,8 +389,16 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
     let counts:number[] = this.sectorCount.map((item) => item.count);
     const total = counts.reduce((acc, val) => acc + val, 0);
     const percentages = counts.map(count => ((count / total) * 100).toFixed(2));
+    this.sectorCount.forEach((sd: any) => {
+      let color = this.sectorColorMap.find(o => o.sectorNumber === sd.id)
+      if (color) {
+        this.secbgColors.push(color.color)
+      } else {
+        this.secbgColors.push(this.defaulColors[sd.id])
+      }
+    })
+
     if (!this.canvasRefSectorCountPieChart) {
-      console.error('Could not find canvas element');
       return;
     }
 
@@ -390,12 +406,10 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
     const ctx = canvas.getContext('2d');
 
     if (!ctx) {
-      console.error('Could not get canvas context');
       return;
     }
 
     if (this.pieChart2) {
-      // Update the chart data
       this.pieChart2.data.datasets[0].data = counts;
       this.pieChart2.data.labels=labels
       this.pieChart2.update();
@@ -408,22 +422,7 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
         labels: labels,
         datasets: [{
           data: counts,
-          backgroundColor: [
-            'rgb(250,227,114)',
-              'rgb(51,51,51)',
-              'rgb(0,170,187)',
-              'rgb(227,120,42)',
-              'rgb(150,131,141)',
-              'rgb(42,61,227)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(75, 192, 192,1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(123, 122, 125, 1)',
-              'rgba(255, 99, 132, 1)',
-              'rgba(255, 205, 86, 1)',
-              'rgba(255, 99, 132, 1)',
-
-          ],
+          backgroundColor: this.secbgColors,
          
         }]
       },
@@ -455,16 +454,11 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
             callbacks:{
               
               label:(ctx)=>{ 
-                // console.log(ctx)
-                // let sum = ctx.dataset._meta[0].total;
-                // let percentage = (value * 100 / sum).toFixed(2) + "%";
-                // return percentage;
                 let sum = 0;
                 let array =counts
                 array.forEach((number) => {
                   sum += Number(number);
                 });
-                // console.log(sum, counts[ctx.dataIndex])
                 let percentage = (counts[ctx.dataIndex]*100 / sum).toFixed(2)+"%";
 
                 return[
@@ -474,7 +468,7 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
                 ];
                }
             },
-            backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
               titleFont: {
                 size: 14,
                 weight: 'bold'
@@ -482,7 +476,7 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
               bodyFont: {
                 size: 14
               },
-              displayColors: true, // Hide the color box in the tooltip
+              displayColors: true,
               bodyAlign: 'left'
           }
        }
@@ -577,6 +571,10 @@ enterHeatMapPoint(x:number, y: number,event:any){
  
      this.pointTableDatas=[];
 
+  }
+
+  compareByAge(a:any, b:any) {
+    return b.count - a.count;
   }
 
 }

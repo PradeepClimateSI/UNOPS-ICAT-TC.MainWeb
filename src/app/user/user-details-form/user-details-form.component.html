@@ -10,16 +10,6 @@
         <div class="col-12 col-md-6">
           <div class="p-field">
             <label for="institution">Assigned Institution </label>
-            <!-- <p-dropdown
-              [disabled]="editUserId > 0"
-              name="namehhhh"
-              [options]="institutions"
-              [(ngModel)]="user.institution"
-              #namehhhh="ngModel"
-              [filter]="false"
-              placeholder= {{user.institution.name}}
-              optionLabel="name"
-            ></p-dropdown> -->
 
             <input
               [disabled]="editUserId > 0"
@@ -41,14 +31,6 @@
         <div class="col-12 col-md-8">
           <div class="p-field">
             <label for="usertype">User Type </label>
-            <!-- <p-dropdown
-              [disabled]="editUserId > 0"
-              name="usertype"
-              [(ngModel)]="user.userType"
-              placeholder={{user.userType.name}}
-              optionLabel="name"
-              #fut="ngModel"
-            ></p-dropdown> -->
 
             <input *ngIf="user.userType"
               [disabled]="editUserId > 0"
@@ -134,17 +116,6 @@
         <div class="col-12 col-md-8">
           <div class="p-field">
             <label for="institution">Landline </label>
-            <!-- <input
-              [disabled]="editUserId > 0"
-              type="text"
-              name="telephone"
-              mask="+99 99-999-9999"
-              class="form-control"
-              placeholder="+99 999 999-9999"
-              [(ngModel)]="user.landline"
-              #ftelephone="ngModel"
-              
-            > -->
             <input id="ftelephone" type="text" name="ftelephone" class="form-control" [disabled]="editUserId > 0"
             [(ngModel)]="user.landline" #ftelephone="ngModel" placeholder="+xxxxxxxxx"
              />
@@ -159,17 +130,6 @@
           <div class="p-field">
             <label for="mobile">Mobile </label>
 
-            <!-- <input
-            [disabled]="editUserId > 0"
-            type="text"
-            name="telephone"
-            mask="+99 99-999-9999"
-            class="form-control"
-            placeholder="+99 999 999-9999"
-            [(ngModel)]="user.mobile"
-            #mobile="ngModel"
-            
-          > -->
           <input id="mobile" type="text" name="mobile" class="form-control" [disabled]="editUserId > 0"
           [(ngModel)]="user.landline" #mobile="ngModel" placeholder="+xxxxxxxxx"
            />
@@ -178,19 +138,6 @@
       </div>
     </div>
 
-    <!-- <div class="p-grid p-fluid col-md-9 col-sm-12">
-      <div class="row p-2">
-        <div class="col-12 col-md-8">
-          <div class="p-field">
-            <label for="photo">Uplaod profile photo</label>
-
-            <label class="image-upload-container btn btn-bwm">
-              <input #imageInput type="file" accept="image/*" />
-            </label>
-          </div>
-        </div>
-      </div>
-    </div> -->
 
     <div class="row">
       <div class="d-flex  col-2 justify-content-start mb-0 pl-2  ">
@@ -216,23 +163,7 @@
           {{isActive==0?'Deactivate':'Activate'}}
         </button>
       </div>
-      <!-- <div class="col-2 d-flex justify-content-end ml-4">
-            <button
-              [disabled]="coreatingUser || user.canNotDelete == true"
-              class="btn btn-primary text-uppercase btn-lg"
-              type="submit"
-            >
-              Save
-            </button>
-          </div> -->
     </div>
-    <!-- <div class="row">
-          <div *ngIf="coreatingUser" class="d-flex col-6 justify-content-end">
-            <p class="info-message text-warning mt-2" *ngIf="true">
-              please wait a moment...
-            </p>
-          </div>
-        </div> -->
   </div>
 </div>
 

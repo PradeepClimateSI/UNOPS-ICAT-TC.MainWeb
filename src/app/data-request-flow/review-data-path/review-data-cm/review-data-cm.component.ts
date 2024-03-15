@@ -51,18 +51,10 @@ export class ReviewDataCmComponent implements OnInit {
     const tokenPayload = decode<any>(token);
     this.userCountryId  = tokenPayload.countryId;
     this.userSectorId = tokenPayload.sectorId;
-    // this.totalRecords = 0;
     this.minDate = new Date();
 
     this.userName = tokenPayload.username;
 
-    // this.usersControllerServiceProxy
-    //   .usersByInstitution(1, 1000, '', 9, this.userName)
-    //   .subscribe((res: any) => {
-    //     this.userList = res.items;
-
-    //     console.log('this.userList', this.userList);
-    //   });
 
     this.userList = await this.usersControllerServiceProxy.usersByInstitution(1, 1000, '', 9, this.userName).toPromise()
 
@@ -79,7 +71,6 @@ export class ReviewDataCmComponent implements OnInit {
         "1234"
       )
       .subscribe((res: any) => {
-        console.log('my list....s', res.items);
         for (let a of res.items) {
           if (a.cmAssessmentAnswer.CMAssessmentQuestion.assessment !== null) {
 
@@ -103,7 +94,6 @@ export class ReviewDataCmComponent implements OnInit {
   }
 
   loadgridData = (event: LazyLoadEvent) => {
-    console.log('event Date', event);
     this.loading = true;
     this.totalRecords = 0;
 
@@ -118,7 +108,7 @@ export class ReviewDataCmComponent implements OnInit {
     let filtertext = this.searchBy.text ? this.searchBy.text : '';
 
     let editedOn = this.searchBy.editedOn
-      ? moment(this.searchBy.editedOn).format('YYYY-MM-DD')
+      ? moment(this.searchBy.editedOn).format('DD/MM/YYYY')
       : '';
 
     let pageNumber =
@@ -126,7 +116,6 @@ export class ReviewDataCmComponent implements OnInit {
         ? 1
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
-    console.log('searchBy', this.searchBy);
     setTimeout(() => {
       this.parameterRequestControllerServiceProxy
         .getReviewDataRequests(
@@ -141,10 +130,8 @@ export class ReviewDataCmComponent implements OnInit {
           "1234"
         )
         .subscribe(async (a) => {
-          console.log('aa', a);
           if (a) {
             this.dataRequestList = a.items;
-            console.log("this.dataRequestList...",this.dataRequestList)
             this.totalRecords = a.meta.totalItems;
             this.dataRequestList = await Promise.all(this.dataRequestList.map(async (req: any) => {
               let userId = req.UserDataEntry
@@ -155,7 +142,6 @@ export class ReviewDataCmComponent implements OnInit {
               return req
             }))
           }
-          console.log(this.dataRequestList)
           this.loading = false;
         });
     }, 1);
@@ -176,54 +162,14 @@ export class ReviewDataCmComponent implements OnInit {
 
   getInfo(obj: any)
   {
-      //  console.log("dataRequestList...",obj)
-      //  this.paraId = obj.parameter.id;
-      //  console.log("this.paraId...",this.paraId)
-
-      // // let x = 602;
-      //  this.prHistoryProxy
-      //  .getHistroyByid(this.paraId)  // this.paraId
-      //  .subscribe((res) => {
-         
-      //   this.requestHistoryList =res;
-         
-      //  console.log('this.requestHistoryList...', this.requestHistoryList);
-       
-      //  });
-      // //  let filter1: string[] = [];
-      // //  filter1.push('parameter.id||$eq||' + this.paraId);
-      // //  this.serviceProxy
-      // //  .getManyBaseParameterRequestControllerParameterRequest(
-      // //    undefined,
-      // //    undefined,
-      // //    filter1,
-      // //    undefined,
-      // //    undefined,
-      // //    undefined,
-      // //    1000,
-      // //    0,
-      // //    0,
-      // //    0
-      // //  )
-      // //  .subscribe((res: any) => {
-      // //    this.requestHistoryList =res.data;
-         
-      // //    console.log('this.requestHistoryList...', this.requestHistoryList);
-      // //  });
-
-      //  this.displayHistory = true;
   }
 
   onAcceptClick() {
-    console.log('onAcceptClick');
-    console.log(this.selectedParameters)
     if (this.selectedParameters) {
       
       this.confirmationService.confirm({
         message: 'Are you sure you want to accept all the selected parameters?',
         accept: () => {
-          ////////Inside Accept////////
-          console.log('Inside Accept');
           let idList = new Array<number>();
           for (let index = 0; index < this.selectedParameters.length; index++) {
             const element = this.selectedParameters[index];
@@ -233,8 +179,7 @@ export class ReviewDataCmComponent implements OnInit {
           let inputParameters = new UpdateDeadlineDto();
           inputParameters.ids = idList;
           inputParameters.status = 9;
-          inputParameters.tool = UpdateDeadlineDtoTool.Carbon_Market_Tool
-          console.log("inputParameters..",inputParameters)
+          inputParameters.tool = UpdateDeadlineDtoTool.Carbon_Market_Tool;
           this.parameterRequestControllerServiceProxy.acceptReviewData(inputParameters).subscribe(
             (res) => {
               this.messageService.add({
@@ -253,7 +198,6 @@ export class ReviewDataCmComponent implements OnInit {
               });
             }
           );
-          //////End Accept////////
         },
       });
     }

@@ -10,23 +10,6 @@
             </div>
         </div>
     </div>
-    <!-- <div class="col-md-4">
-      <div class="p-field">
-        <label for="projStatus">Year</label>
-        <p-dropdown
-          name="projYear"
-          [options]="yearList"
-          [(ngModel)]="searchBy.year"
-          #fsector="ngModel"
-          [showClear]="true"
-          [filter]="true"
-          placeholder="Select .."
-          optionLabel="assessmentYear"
-          (ngModelChange)="onYearChange($event)"
-        >
-        </p-dropdown>
-      </div>
-    </div> -->
 
     <div class="col-md-4">
         <div class="p-inputgroup pt-4">
@@ -55,7 +38,6 @@
                 <th>Category</th>
                 <th>Characteristic</th>
                 <th>Indicator/Score</th>
-                <!-- <th>Question</th> -->
                 <th>Answer</th>
                 <th>Actions</th>
                 <th>Deadline</th>
@@ -107,7 +89,7 @@
             </td>
 
             <td>
-                {{ parameterList.deadlineDataEntry | date: "yyyy-MM-dd " }}
+                {{ parameterList.deadlineDataEntry | date: "dd/MM/yyyy" }}
             </td>
             <td>
                 <i class="pi pi-ellipsis-v" style="font-size: 2rem" (click)="getInfo(parameterList)"></i>
@@ -244,7 +226,6 @@
 <p-dialog header="Possible Reasons for Reject" [(visible)]="isOpen" [draggable]="false" [resizable]="false">
     <div class="container" style="width: 300px; height: 100px">
         <p>Eg - Data is not available</p>
-        <!-- <p>Data is not accurate</p> -->
     </div>
 </p-dialog>
 <p-toast position="top-right"></p-toast>

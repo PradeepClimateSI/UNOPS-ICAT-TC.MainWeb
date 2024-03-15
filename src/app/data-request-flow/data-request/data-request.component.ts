@@ -7,11 +7,6 @@ import {
   ParameterHistoryControllerServiceProxy,
   UpdateDeadlineDto,
   ParameterRequest,
-  CMAssessmentAnswer,
-  InvestorAssessment,
-  // ParameterHistoryControllerServiceProxy,
-  // ParameterRequestControllerServiceProxy,
-  // UpdateDeadlineDto,
 } from './../../../shared/service-proxies/service-proxies';
 import {
   AfterViewInit,
@@ -22,12 +17,9 @@ import {
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
-// import {MessageModule} from 'primeng/message';
-// import { strictEqual } from 'assert';
 import { ClimateAction, ServiceProxy } from 'shared/service-proxies/service-proxies';
 import { Tool } from '../enum/tool.enum';
 import { MasterDataService } from 'app/shared/master-data.service';
-import { SDG } from 'app/Tool/carbon-market/cm-section-three/cm-section-three.component';
 import { DataRequestPathService } from 'app/shared/data-request-path.service';
 
 @Component({
@@ -107,7 +99,6 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
     private parameterProxy: MethodologyAssessmentControllerServiceProxy,
     private parameterRqstProxy: ParameterRequestControllerServiceProxy,
     private cdr: ChangeDetectorRef,
-    // private assessmentYearProxy: AssessmentYearControllerServiceProxy,
     private messageService: MessageService,
     private prHistoryProxy: ParameterHistoryControllerServiceProxy,
     private institutionProxy: InstitutionControllerServiceProxy,
@@ -124,7 +115,6 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
 
     this.parameterRqstProxy
       .getNewDataRequestForClimateList(0, 0, '', 0, '', 0, '1234').subscribe(res => {
-        console.log("data",res)
         this.loading=true
         for (let a of res.items) {
           if(this.tool==Tool.CM_tool){
@@ -136,7 +126,6 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
                 )
                 
               ) {
-                // console.log("climateactionsList",this.assignCAArray)
   
                 this.assignCAArray.push(
                   a.cmAssessmentAnswer.assessment_question.assessment.climateAction.policyName
@@ -145,7 +134,6 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
                   a.cmAssessmentAnswer.assessment_question.assessment.climateAction
                   
                 );
-                console.log("climateactionsList",this.dataReqAssignCA)
                
               }
             }
@@ -160,7 +148,6 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
                 )
                 
               ) {
-                // console.log("climateactionsList",this.assignCAArray)
   
                 this.assignCAArray.push(
                   a.investmentParameter.assessment.climateAction.policyName
@@ -169,7 +156,6 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
                   a.investmentParameter.assessment.climateAction
                   
                 );
-                console.log("climateactionsList",this.dataReqAssignCA)
                
               }
             }
@@ -186,13 +172,8 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
       this.parameterRqstProxy
         .getNewDataRequest(1, this.rows, '', 0, '', 0,this.tool, '1234')
         .subscribe((a) => {
-          console.log('aa', a);
           if (a) {
             this.dataRequestList = a.items;
-            console.log('ttttttttt', this.dataRequestList);
-            console.log('dataReqAssignCA===', this.dataReqAssignCA);
-
-            console.log('assignCAArray===', this.assignCAArray);
           }
         });
     }, 10);
@@ -203,60 +184,19 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
     this.minDate = new Date();
     let filter1: string[] = new Array();
     filter1.push('projectApprovalStatus.id||$eq||' + 5);
-    // this.serviceProxy
-    //   .getManyBaseProjectControllerProject(
-    //     undefined,
-    //     undefined,
-    //     filter1,
-    //     undefined,
-    //     undefined,
-    //     undefined,
-    //     1000,
-    //     0,
-    //     0,
-    //     0
-    //   )
-    //   .subscribe((res: any) => {
-    //     this.climateactions = res.data;
-    //     console.log('my list....s', res.data);
-    //   });
   }
-///////////////////////////////////////////////////////////
   onCAChange(event: any) {
-    console.log('searchby', this.searchBy);
-    // if (this.searchBy.climateaction) {
-    //   this.assessmentYearProxy
-    //   .getAllByProjectId(this.searchBy.climateaction.id)
-    //   .subscribe((res: any) => {
-    //     this.yearList = res;
-    //     const tempYearList = getUniqueListBy(this.yearList, 'assessmentYear');
-    //     this.yearList = tempYearList;
-    //     console.log('yearlist----', this.yearList);
-    //   });
     }
 
-  //   function getUniqueListBy(arr: any, key: any) {
-  //     return [
-  //       ...new Map(
-  //         arr.map((item: { [x: string]: any }) => [item[key], item])
-  //       ).values(),
-  //     ];
-  //   }
-
-  //   this.onSearch();
-  // }
 
   onYearChange(event: any) {
     this.onSearch();
-    console.log('searchby', this.searchBy);
   }
 
   onInstitutionChange(event: any) {
-    console.log('searchby', this.searchBy);
     this.onSearch();
   }
   onSendClick() {
-    console.log("selectedParameters",this.selectedParameters)
    
     if (this.selectedParameters.length > 0) {
       for (let drqst of this.selectedParameters) {
@@ -305,11 +245,9 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
     this.loadgridData(event);
   }
 
-  // /////////////////////////////////////////////
 
   showDataProviders(parameter: any) {
     
-    console.log("parameter",parameter)
     this.selectedParameter = parameter;
     this.selectedDataProvider = this.tabIndex==0?(this.selectedParameter.cmAssessmentAnswer.institution):(this.selectedParameter.investmentParameter?.institution);
     if (this.selectedDataProvider) {
@@ -320,13 +258,11 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
       this.dataProviderList = this.instuitutionList;
 
     }
-    // console.log('parameter',parameter)
 
     this.displayDataProvider = true;
   }
 
   updateDataProviders() {
-    console.log('workdata',this.selectedDataProvider)
     let param =this.tabIndex==0?(this.selectedParameter.cmAssessmentAnswer.institution):(this.selectedParameter.investmentParameter?.institution)
     if (
       this.selectedDataProvider != undefined &&
@@ -335,11 +271,8 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
     ) {
       this.selectDataProvider = false;
 
-      // console.log('selectedParameter',this.selectedParameter)
-      // console.log('selectedDataProvider',this.selectedDataProvider)
       this.tabIndex==0?(this.selectedParameter.cmAssessmentAnswer.institution= this.selectedDataProvider):(this.selectedParameter.investmentParameter.institution= this.selectedDataProvider)
-      // this.selectedParameter.institution = this.selectedDataProvider;
-      console.log('selectedParameter2',this.selectedParameter)
+     
       this.parameterRqstProxy
         .updateInstitution(
           this.selectedParameter.id,
@@ -347,7 +280,6 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
         )
         .subscribe(
           (res) => {
-            console.log("res",res)
             this.messageService.add({
               severity: 'success',
               summary: 'Success',
@@ -371,109 +303,14 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
         );
     } else {
       this.selectDataProvider = true;
-      // this.messageService.add({severity:'success', summary:'Service Message', detail:'Via MessageService'});
-      // this.messageService.add({
-      //   severity: 'error',
-      //   summary: 'Error.',
-      //   detail: 'Select data provider.',
-      // });
     }
   }
 
 
   showAlternativity(para: any) {
-    // this.isAlternative = para.isAlternative ? para.isAlternative : false;
-    // console.log('para', para);
-    // if (para.isAlternative) {
-    //   console.log(para.ParentParameterId);
-    //   this.serviceProxy
-    //     .getOneBaseParameterControllerParameter(
-    //       para.ParentParameterId,
-    //       undefined,
-    //       undefined,
-    //       undefined
-    //     )
-    //     .subscribe((res) => {
-    //       console.log('parachild', res);
-    //       this.parentParameter = [res];
-    //       let filter1: string[] = [];
-    //       filter1.push('ParentParameterId||$eq||' + res.id);
-    //       this.serviceProxy
-    //         .getManyBaseParameterControllerParameter(
-    //           undefined,
-    //           undefined,
-    //           filter1,
-    //           undefined,
-    //           undefined,
-    //           undefined,
-    //           1000,
-    //           0,
-    //           0,
-    //           0
-    //         )
-    //         .subscribe((res) => {
-    //           console.log('para', res);
 
-    //           this.childParameter = res.data;
-    //           this.disableButton =
-    //             this.childParameter.length < 1 ? true : false;
-    //         });
-    //     });
-    // } else {
-    //   this.parentParameter = [para];
-    //   let filter1: string[] = [];
-    //   filter1.push('ParentParameterId||$eq||' + para.id);
-    //   this.serviceProxy
-    //     .getManyBaseParameterControllerParameter(
-    //       undefined,
-    //       undefined,
-    //       filter1,
-    //       undefined,
-    //       undefined,
-    //       undefined,
-    //       1000,
-    //       0,
-    //       0,
-    //       0
-    //     )
-    //     .subscribe((res) => {
-    //       console.log('para', res);
-
-    //       this.childParameter = res.data;
-    //       this.disableButton = this.childParameter.length < 1 ? true : false;
-    //     });
-    // }
-
-    // this.parameterDisplay = true;
   }
   activateAlternativity(isAlternative: boolean) {
-    // this.childParameter.map((a) => {
-    //   a.isEnabledAlternative = !isAlternative;
-    //   console.log('para alt', this.isAlternative);
-    //   return a;
-    // });
-    // console.log(this.childParameter);
-    // this.parentParameter[0].isEnabledAlternative = !isAlternative;
-    // this.parameterProxy
-    //   .updateParameterAlternative([
-    //     this.parentParameter[0],
-    //     ...this.childParameter,
-    //   ])
-    //   .subscribe(
-    //     (res) => {
-    //       if (res) {
-    //         let event: any = {};
-    //         event.rows = this.rows;
-    //         event.first = 0;
-    //         this.loadgridData(event);
-
-    //         this.parameterDisplay = false;
-    //         this.childParameter = [];
-    //         this.parentParameter = [];
-    //       }
-    //     },
-    //     (err) => { }
-    //   );
   }
 
   cancelActiveAlternative() {
@@ -491,7 +328,6 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
   }
 
   loadgridData = (event: LazyLoadEvent) => {
-    console.log('event Date', event);
     
     this.loading = true;
     this.totalRecords = 0;
@@ -506,7 +342,7 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
     let filtertext = this.searchBy.text ? this.searchBy.text : '';
 
     let editedOn = this.searchBy.editedOn
-      ? moment(this.searchBy.editedOn).format('YYYY-MM-DD')
+      ? moment(this.searchBy.editedOn).format('DD/MM/YYYY')
       : '';
 
     let pageNumber =
@@ -514,8 +350,6 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
         ? 1
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
-    // this.loading = false;
-    console.log('tool', this.tool);
     setTimeout(() => {
       this.parameterRqstProxy
         .getNewDataRequest(
@@ -530,10 +364,8 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
           
         )
         .subscribe((res) => {
-          console.log('aa', res);
           if (res) {
             this.dataRequestList = res.items;
-            console.log('data requests.....', this.dataRequestList);
             this.totalRecords = res.meta.totalItems;
             this.assignCAArray.length=0;
             this.dataReqAssignCA.length=0;
@@ -547,7 +379,6 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
                     )
                     
                   ) {
-                    // console.log("climateactionsList",this.assignCAArray)
       
                     this.assignCAArray.push(
                       a.cmAssessmentAnswer.assessment_question.assessment.climateAction.policyName
@@ -556,7 +387,6 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
                       a.cmAssessmentAnswer.assessment_question.assessment.climateAction
                       
                     );
-                    console.log("climateactionsList",this.dataReqAssignCA)
                    
                   }
                 }
@@ -571,7 +401,6 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
                     )
                     
                   ) {
-                    // console.log("climateactionsList",this.assignCAArray)
       
                     this.assignCAArray.push(
                       a.investmentParameter.assessment.climateAction.policyName
@@ -580,7 +409,6 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
                       a.investmentParameter.assessment.climateAction
                       
                     );
-                    console.log("climateactionsList",this.dataReqAssignCA)
                    
                   }
                 }
@@ -619,7 +447,6 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
   }
 
   getInfo(obj: any) {
-    console.log('dataRequestList...', obj);
     if (this.tool == Tool.CM_tool) {
       let res = this.dataRequestPathService.getInfo(obj, this.tool)
       this.paraId = res?.paraId;
@@ -634,15 +461,11 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
       let res = this.dataRequestPathService.getInfo(obj, this.tool)
       this.paraId = res.paraId
     }
-    console.log('this.paraId...', this.paraId);
 
-    // let x = 602;
     this.prHistoryProxy
-      .getHistroyByid(this.paraId) // this.paraId
+      .getHistroyByid(this.paraId) 
       .subscribe((res) => {
         this.requestHistoryList = res;
-
-        console.log('this.requestHistoryList...', this.requestHistoryList);
       });
 
     this.displayHistory = true;
@@ -695,7 +518,6 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
     inputParameters.ids = idList;
     inputParameters.status = status;
     inputParameters.tool =this.tool;
-    console.log('this.selectedDeadline', this.selectedDeadline);
     inputParameters.deadline = moment(this.selectedDeadline);
     this.parameterRqstProxy.updateDeadline(inputParameters).subscribe(
       (res) => {
@@ -724,19 +546,16 @@ export class DataRequestComponent implements OnInit, AfterViewInit {
     if (this.activeIndexMain==0){
      this.tool=Tool.CM_tool
      this.loadgridData(event);
-      // this.loadgridData(event2,Tool.CM_tool )
     }
     else if (this.activeIndexMain==1){
       this.tool=Tool.Investor_tool
       this.loadgridData(event);
-      // this.loadgridData(event2,Tool.Investor_tool )
     }
     else if (this.activeIndexMain==2){
       this.tool=Tool.Portfolio_tool;
       this.loadgridData(event);
       
     }
-    console.log("tabIndex",this.tabIndex)
   }
 }
 

@@ -2,7 +2,6 @@
   <div class="row">
     <div class="col-md-6 login-content-wrapper">
       <div class="login-inner">
-        <!--    <img style="height: 40px;padding-left: 20px" src="../../../country/assets/images/logo-new.png"/> -->
         <img style="height: 130px;" src="../../../country/assets/images/logo-new.png" />
         <h2 class="mt-4">Transformational Change Toolkit</h2>
         <p class="mb-35">
@@ -18,16 +17,16 @@
             <span class="p-input-icon-right" style="width: 400px">
               <i *ngIf="passwordType=='password'" class="pi pi-eye pass-icon" (click)="togglePassword()"></i>
               <i *ngIf="passwordType=='text'" class="pi pi-eye-slash pass-icon" (click)="togglePassword()"></i>
-              <input required pInputText [type]="passwordType" #fpassowrd="ngModel" name="password"
+              <input required pInputText [type]="passwordType" #fpassword="ngModel" name="password"
                 [(ngModel)]="password" placeholder="Password" class="form-control"
                 pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$" />
             </span>
-            <p class="info-message text-danger" *ngIf="(fpassowrd.errors?.['pattern'])">
+            <p class="info-message text-danger" *ngIf="(fpassword.errors?.['pattern'])">
               Password must contain more than 8 characters,1 number, 1 upper case letter, and 1 special character
             </p>
             <p class="info-message text-danger" *ngIf="
-                (fpassowrd.errors?.['required'] && (fpassowrd.touched || fpassowrd.dirty)) ||
-                (fpassowrd.errors?.['required'] && isSubmitted  )">
+                (fpassword.errors?.['required'] && (fpassword.touched || fpassword.dirty)) ||
+                (fpassword.errors?.['required'] && isSubmitted  )">
               Password is required
             </p>
           </div>
@@ -63,5 +62,3 @@
     </div>
   </div>
 </div>
-
-<!-- <p-toast position="top-right"></p-toast> -->

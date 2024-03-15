@@ -1,9 +1,8 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ConfirmationService, Message } from 'primeng/api';
-import { AvatarModule } from 'primeng/avatar';
-import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
-import { UserType, ServiceProxy } from 'shared/service-proxies/auth-service-proxies';
-import { NotificationControllerServiceProxy, User, UsersControllerServiceProxy,Notification, CountryControllerServiceProxy, SystemStatusControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { AppService, LoginRole } from 'shared/AppService';
+import { UserType } from 'shared/service-proxies/auth-service-proxies';
+import { NotificationControllerServiceProxy, UsersControllerServiceProxy,Notification, CountryControllerServiceProxy, SystemStatusControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { map } from 'rxjs/operators';
@@ -18,7 +17,6 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
   title = 'SCC ';
   togglemenu: boolean = true;
   innerWidth = 0;
-  // user: User = new User();
   userId: number;
   notification:Notification[] =[];
   notificationViewCount:number=0;
@@ -55,20 +53,18 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
     ];
 
     const token = localStorage.getItem('ACCESS_TOKEN')!;
+   
     const tokenPayload = decode<any>(token);
     this.userName = tokenPayload.username;
+    
     this.userName = `${this.appService.getUserName()}`;
-    this.userRole = tokenPayload.role.code;
-    // this.userRole = tokenPayload.role[0];
-    console.log("++++++++++++++++++",tokenPayload);
+    this.userRole = tokenPayload.role.code;;
+
 
     this.countryProxy.getCountry(tokenPayload.countryId).subscribe((res:any)=>{
-         console.log('Countryy',res) 
          this.isCarbonMarketTool = res.carboneMarketTool;
          this.isInvesmentTool = res.investmentTool;
          this.isPortfolioTool = res.portfoloaTool;    
-         
-         console.log('tooll',this.isCarbonMarketTool,this.isInvesmentTool,this.isPortfolioTool)
          
        })
 
@@ -86,7 +82,6 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
             this.notificationViewCount ++;
           }
         }
-        console.log("++++++++++++++++++", this.notification );
       })
 
     });
@@ -101,32 +96,17 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
   }
   detail(note:Notification){
     note.is_viewed=true;
-    console.log("climateactions",note )
     this.notificationServiceProxy.updateNoti(note).subscribe((res:any)=>{
-      console.log("11111111111",res)
     })
   }
 
   logout() {
     this.appService.logout();
     this.stopSystemStatusTimer();
-    // this.confirmationService.confirm({
-
-    //   message: 'Are you sure you want to login out?',
-    //   header: 'Confirmation',
-    //   acceptIcon: 'icon-not-visible',
-    //   rejectIcon: 'icon-not-visible',
-    //   accept: () => {
-    //     console.log('aaaa')
-
-    //   },
-    //   reject: () => { },
-    // });
 
   }
 
   public startSystemStatusTimer(isFirst: boolean=false) {
-    console.log("isFirst",isFirst)
     if(isFirst){
       this.checkSystemStatus().subscribe()
     }else{
@@ -137,7 +117,6 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
   private checkSystemStatus() {
     return this.systemStatusProxy.systemStatus()
     .pipe(map(res => {
-      console.log("isdeploying",res)
       if(res === 1 ){        
         this.isDeploying=true;
       }else{

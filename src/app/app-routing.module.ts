@@ -66,15 +66,6 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     data: {}
   },
-  /*  {
-    path: 'app/audit-log',
-    component: AuditComponent,
-   loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
-    canActivate: [],
-    data: {}
-  }, */
-
-
 
 ];
 

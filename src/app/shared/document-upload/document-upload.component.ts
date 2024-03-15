@@ -1,6 +1,5 @@
-import { async } from '@angular/core/testing';
+
 import { LazyLoadEvent, ConfirmationService, MessageService } from 'primeng/api';
-// import {FileUploadModule} from 'primeng/api';
 import { HttpClient } from '@angular/common/http';
 import {
   DocumentControllerServiceProxy,
@@ -36,8 +35,8 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
 
   loading: boolean;
   uploadedFiles: any[] = [];
-  SERVER_URL = environment.baseUrlAPIDocUploadAPI; //"http://localhost:7080/document/upload2";
-  SERVER_URL_ANONYMOUS = environment.baseUrlAPIDocUploadAPI;
+  SERVER_URL = environment.baseUrlAPI + '/document/upload2';
+  SERVER_URL_ANONYMOUS = environment.baseUrlAPI + '/document/upload2';
   uploadURL: string;
   token: string;
   constructor(
@@ -47,7 +46,6 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
     private docArrayforSave:GlobalArrayService,
     private messageService: MessageService,
   ) {
-    // this.showDeleteButton = false;
     this.token = localStorage.getItem('ACCESS_TOKEN')!;
   }
 
@@ -64,9 +62,6 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    // this.token = localStorage.getItem('access_token')!;
-
-    console.log("documentOwnerId..",this.documentOwner);
 
     if (this.documentOwner) {
       this.uploadURL =
@@ -76,8 +71,6 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
         '/' +
         this.documentOwner.toString();
     }
-    console.log('uploadURL', this.uploadURL);
-    console.log('============' + this.showDeleteButton + '==============');
   }
 
   loadDocments(event: LazyLoadEvent) {
@@ -90,12 +83,10 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
       this.loading = true;
 
       if (this.token) {
-        // console.log('token123', this.token);
         await this.docService
           .getDocuments(this.documentOwnerId, this.documentOwner)
           .subscribe(
             (res) => {
-              console.log('token12344444', res);
               this.doucmentList = res;
               this.loading = false;
               let ids=res.map(item=>{return item.id})
@@ -106,10 +97,9 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
               
              
             },
-            (err: any) => console.log(err)
+            
           );
       } else {
-        console.log('token124', this.token);
      
         await this.docService
           .getDocuments(this.documentOwnerId, this.documentOwner)
@@ -119,14 +109,12 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
               this.doucmentList = res;
               this.loading = false;
             },
-            (err: any) => console.log(err)
           );
       }
     }
   }
 
   onUploadComplete(event: any) {
-    console.log(event);
     this.messageService.add({
       severity: 'info',
       summary: 'Success',
@@ -144,10 +132,8 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
     if (this.doucmentList === undefined || this.doucmentList === null) {
       this.doucmentList = new Array();
     }
-    let fileReader = new FileReader();
 
     for (let file of event.files) {
-      console.log('timecheck1');
       this.loading = true;
       file.documentOwner = this.documentOwner;
       const formData = new FormData();
@@ -159,28 +145,23 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
         this.documentOwnerId +
         '/' +
         this.documentOwner.toString();
-      console.log('this.uploadURL', this.uploadURL);
 
       
       this.httpClient.post<any>(fullUrl, formData).subscribe(
         (res) => {
           this.valueClicked.emit({ data: res, fullUrl})
-          console.log("333333",res)
           
           this.load();
         },
         (err) => {
-          console.log(err);
           this.loading = false;
         }
       );
     }
-     
-    console.log('timecheck2');
+    
   }
 
   async deleteConfirm(doc: Documents) {
-    console.log('name');
     this.confirmationService.confirm({
       message: `Do you want to delete ${(doc.fileName)} ?`,
       header: 'Delete Confirmation',
@@ -189,10 +170,9 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
         if (this.token) {
           this.docService.deleteDoc(doc.id).subscribe(
             (res: any) => {
-              console.log('token12345', res);
              
-              this.docArrayforSave.removeItem(doc.id)
-              this.docArrayforSave.getArray()
+              this.docArrayforSave.removeItem(doc.id);
+              this.docArrayforSave.getArray();
               this.messageService.add({
                 severity: 'info',
                 summary: 'Success',
@@ -203,20 +183,17 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
                 this.load();
               }, 1500);
             },
-            (err: any) => console.log(err)
           );
         } else {
           this.docService.deleteDoc(doc.id).subscribe(
             (res: any) => {
-              console.log('deleteDocAnonymous', res);
               this.load();
             },
-            (err: any) => console.log(err)
+            
           );
         }
       },
       reject: () => {
-        //this.messageService.add({severity:'info', summary:'Rejected', detail:'You have rejected'});
       },
     });
   }

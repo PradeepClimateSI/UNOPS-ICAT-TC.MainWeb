@@ -61,30 +61,10 @@
         
                 <th>ID</th>
                 <th>
-                  <!-- <button
-                  pRipple
-                  class="fas fa-plus"
-                  pButton
-                  type="button"
-                  style="background-color: #c6cfd7; border-color: transparent"
-                  (click)="addproject()"
-                >
-                  <i
-                    class="pi pi-plus"
-                    style="font-size: 1rem; color: #000"
-                  ></i>
-                </button>
-                   -->
-
-                  <!-- <button (click)="addproject()" class="button-plus" icon="pi pi-plus" iconPos="left"></button> -->
                 INTERVENTION </th>
               
              
               <th>PROJECT PROPENENT</th>
-              <!-- <th>Type of Mitigation Action</th> -->
-              <!-- <ng-container *ngIf="this.loggedUser?.userType!?.id! == 1">
-                <th>STATUS OF APPPROVAL</th>
-              </ng-container> -->
               <th>STATUS OF APPPROVAL</th>
               <th>ACTIONS</th>
               
@@ -100,27 +80,10 @@
               <td>
               {{ climateactions.policyName }}</td>
               <td>{{ climateactions.contactPersoFullName }}</td>
-              <!-- <td>{{ climateactions.mitigationAction?.name }}</td> -->
-              <!-- <ng-container *ngIf="this.loggedUser?.userType!?.id! == 1">
-                <td
-                (mouseenter) ="showDialog(climateactions)"
-                (mouseleave) ="hideDialog()"
-                class="reasonDialog"
-                >
-                {{(climateactions.projectApprovalStatus?.id == undefined || climateactions.projectApprovalStatus?.id == 4)?'Proposed':(climateactions.projectApprovalStatus.id == 3?'Data Requested':(climateactions.projectApprovalStatus.id == 1?'Accept':(climateactions.projectApprovalStatus.id == 5?'Active':'Reject')))}}
-                </td>
-              </ng-container> -->
               <td>
                 {{(climateactions.projectApprovalStatus?.id == undefined || climateactions.projectApprovalStatus?.id == 4)?'Proposed':(climateactions.projectApprovalStatus.id == 3?'Data Requested':(climateactions.projectApprovalStatus.id == 1?'Accepted':(climateactions.projectApprovalStatus.id == 5?'Active':'Reject')))}}
               </td>
               <td>
-                <!-- <button 
-                
-                style="font-size: 1rem; color: #4c6fff; margin-left: 17%">
-                view
-                
-                (Onclick)="detail(climateactions)"
-              </button> -->
               <i
                 class="pi pi-eye"
                 style="font-size: 1.5rem; color: #000; margin-left: 17%"

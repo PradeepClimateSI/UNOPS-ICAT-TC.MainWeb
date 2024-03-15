@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
 import { MasterDataService } from 'app/shared/master-data.service';
-import { LazyLoadEvent } from 'primeng/api';
+import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
 import { Table } from 'primeng/table';
-import { MethodologyAssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { Assessment, AssessmentControllerServiceProxy, MethodologyAssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-assessment',
@@ -28,7 +30,11 @@ export class AssessmentComponent implements OnInit {
     private methassess: MethodologyAssessmentControllerServiceProxy,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    public masterDataService: MasterDataService
+    public masterDataService: MasterDataService,
+    protected dialogService: DialogService,
+    public assessmentServiceControllerProxy: AssessmentControllerServiceProxy,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService
   ) { }
 
 
@@ -37,51 +43,6 @@ export class AssessmentComponent implements OnInit {
   async ngOnInit() {
     this.loading = true;
     await this.loadData({})
-    
-    // this.results = await this.methassess.results().toPromise()
-
-   
-
-    // this.methassess.assessmentDetails().subscribe(async (res: any) => {
-    //   this.assessmentData = res
-
-    //   for await (let x of this.assessmentData) {
-    //     for await (let result of this.resultsList) {
-
-    //       if (result.assessment?.id == x.id) {
-    //         //  console.log("aaaaaaaaaaaaaaaa")
-    //         let data: any = {
-    //           id: result.id,
-    //           assessId: x.id,
-    //           meth: x.climateAction.policyName,
-    //           method: result.assessment.assessment_method,
-    //           approach: result.assessment.assessment_approach,
-    //           tool: result.assessment.tool,
-    //           assessmentType: result.assessment.assessmentType,
-    //           averageOutcome: result.averageOutcome,
-    //           averageProcess: result.averageProcess
-
-    //         }
-
-    //         this.results.push(data)
-    //       }
-    //     }
-    //   }
-
-      console.log("resultdataa", this.results)
-
-
-      //  console.log("resultdataareverse",  this.results.reverse())
-
-
-    // });
-
-
-
-    // setTimeout(() => {
-    //   this.load = true;
-    //   this.loading = false;
-    // }, 5000);
 
   }
 
@@ -90,11 +51,24 @@ export class AssessmentComponent implements OnInit {
     table.clear();
   }
 
+  watchVideo(){
+    let ref = this.dialogService.open(GuidanceVideoComponent, {
+      header: 'Guidance Video',
+      width: '60%',
+      contentStyle: {"overflow": "auto"},
+      baseZIndex: 10000,
+      data: {
+        sourceName: 'Assessmentresults',
+      },
+    });
+
+    ref.onClose.subscribe(() => {
+      
+    })
+  }
+  
   onInput(event: any, dt: any) {
-    // const value = event.target.value;
-    // console.log(value)
-    // dt.filterGlobal(value, 'contains');
-    this.filterText = event.target.value
+    this.filterText = event.target.value;
     this.loadData({})
   }
 
@@ -104,15 +78,11 @@ export class AssessmentComponent implements OnInit {
     let pageNumber = (event.first === 0 || event.first == undefined) ? 0 : event.first / (event.rows == undefined ? 1 : event.rows) + 1;
     this.rows = event.rows == undefined ? 10 : event.rows;
 
-    let skip = pageNumber * this.rows
-    // if (skip > this.totalRecords) {
-    //   skip = skip - (skip - this.totalRecords)
-    // }
-    let res = await this.methassess.getResultPageData(skip, this.rows, this.filterText, '', '').toPromise()
+    let skip = pageNumber * this.rows;
+    let res = await this.methassess.getResultPageData(skip, this.rows, this.filterText, '', '').toPromise();
 
-    this.results = res[0]
-    this.totalRecords = res[1]
-    console.log(this.totalRecords)
+    this.results = res[0];
+    this.totalRecords = res[1];
    
     if (this.results){
       this.load = true
@@ -122,8 +92,7 @@ export class AssessmentComponent implements OnInit {
 
 
 
-  myFunction(assessId: any, averageProcess: any, averageOutcome: any, tool: string, assessment_method: string) {
-    console.log("dddd", assessId, tool, assessment_method, averageProcess, averageOutcome);
+  viewResult(assessId: any, averageProcess: any, averageOutcome: any, tool: string, assessment_method: string) {
 
     if (tool === 'INVESTOR' || (tool === 'PORTFOLIO' && assessment_method === 'Track 4')) {
       this.router.navigate(['/app/assessment-result-investor', assessId], {
@@ -148,6 +117,53 @@ export class AssessmentComponent implements OnInit {
         }
       });
     }
+  }
+
+  async deleteAssessment(id: number, tool: string) {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete the assessment?',
+      accept: () => {
+        this.assessmentServiceControllerProxy.deleteAssessment(id, tool).subscribe(res => {
+          if (res) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Assessment deleted successfully',
+              closable: true,
+            })
+            this.loadData({})
+          } else {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Failed to delete assessment',
+              closable: true,
+            })
+          }
+        })
+      }
+    })
+  }
+
+  editAssessment(assessment: Assessment) {
+    if(assessment.tool =="CARBON_MARKET"){
+      this.router.navigate(['app/carbon-market-tool-edit'], {  
+      queryParams: { id: assessment.id, isEdit: true,iscompleted:true},  
+      });
+    }
+    if(assessment.tool =="PORTFOLIO"){
+      this.router.navigate(['app/portfolio-tool'], {  
+      queryParams: { id: assessment.id, isEdit: true, iscompleted:true},  
+      });
+    }
+
+    if(assessment.tool =="INVESTOR"){
+      this.router.navigate(['app/investor-tool-new'], {  
+      queryParams: { id: assessment.id, isEdit: true, iscompleted:true},  
+      });
+    }
+    
+
   }
 
 

@@ -2,7 +2,6 @@
 <div class="container pl-20 pr-20">
     <div class="p-grid p-fluid card" id="content" #content>
         <h4 class="mt-4">Non - Conformance Report</h4>
-        <!-- <div> {{climateactions|json}} </div> -->
         <div *ngIf="roundOneHeadTable != null">
             <div class="row p-2" style="border:1px solid black;">
                 <div class="masterRoundOne" style="border:1px solid black;">
@@ -21,7 +20,7 @@
                                 <p><b>Date Generated</b></p>
                             </div>
                             <div class="col-md-6">
-                                <p>{{this.roundOneHeadTable?.createdOn | date: "yyyy-MM-dd "}}</p>
+                                <p>{{this.roundOneHeadTable?.createdOn | date: "dd/MM/yyyy"}}</p>
                             </div>
                         </div>
 
@@ -59,7 +58,6 @@
                                 <h6>Area : Aggregated Actions/Action Areas </h6>
                             </div>
                             <div class="col-md-3">
-                                <!-- <h6>Date : {{roundOnendcList[0]?.editedOn | date: "yyyy-MM-dd "}} </h6> -->
                             </div>
                             <div class="col-md-2">
                                 <button pButton pRipple type="button" label="Edit" class="p-button-info"
@@ -136,7 +134,7 @@
                                 <p><b>Generated Date</b></p>
                             </div>
                             <div class="col-md-6">
-                                <p>{{this.roundTwoHeadTable?.createdOn | date: "yyyy-MM-dd "}}</p>
+                                <p>{{this.roundTwoHeadTable?.createdOn | date: "dd/MM/yyyy"}}</p>
                             </div>
                         </div>
 
@@ -174,7 +172,6 @@
                                 <h6>Area : Aggregated Actions/Action Areas </h6>
                             </div>
                             <div class="col-md-3">
-                                <!-- <h6>Date : {{roundTwondcList[0]?.editedOn | date: "yyyy-MM-dd "}} </h6> -->
                             </div>
                             <div class="col-md-2">
                                 <button pButton pRipple type="button" label="Edit" (click)="toDetailPage()"
@@ -249,7 +246,7 @@
                                 <p><b>Date Generated</b></p>
                             </div>
                             <div class="col-md-6">
-                                <p>{{this.roundThreeHeadTable?.createdOn | date: "yyyy-MM-dd "}}</p>
+                                <p>{{this.roundThreeHeadTable?.createdOn | date: "dd/MM/yyyy"}}</p>
                             </div>
                         </div>
 
@@ -287,7 +284,6 @@
                                 <h6>Area : Aggregated Actions/Action Areas </h6>
                             </div>
                             <div class="col-md-3">
-                                <!-- <h6>Date : {{roundThreendcList[0]?.editedOn | date: "yyyy-MM-dd "}} </h6> -->
                             </div>
                             <div class="col-md-2">
                                 <button pButton pRipple type="button" label="Edit" (click)="toDetailPage()"
@@ -346,8 +342,6 @@
                 pButton pRipple type="button" (click)="toChangeStatus()" class="p-button-info">
                 {{assessment.verificationStatus == 7 ? "Submited" : "Submit" }}
             </button>
-            <!-- <button *ngIf="vStatus != 3 || assementYear.verificationStatus == 7"
-             pButton pRipple type="button" label="Submited" [disabled]="true" class="p-button-info"></button> -->
         </div>
         <div class="col-md-2">
             <button pButton pRipple type="button" label="Download" (click)="toDownload()"

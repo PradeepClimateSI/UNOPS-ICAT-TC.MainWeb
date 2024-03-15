@@ -1,26 +1,13 @@
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
-//import { MethodologyControllerServiceProxy } from 'shared/service-proxies/meth-service-proxies';
 import { Documents, DocumentsDocumentOwner, Institution, InstitutionControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy, ServiceProxy, UpdateIndicatorDto } from 'shared/service-proxies/service-proxies';
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
 import {  Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {Chart} from 'chart.js';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { environment } from 'environments/environment';
 import decode from 'jwt-decode';
-import { AbstractControl, ValidatorFn } from '@angular/forms';
 
-
-interface CategoryInput {
-  id: number;
-  category: string;
-  characteristics: {
-    name: string;
-    relevance: string;
-    score: number;
-  }[];
-}
 
 interface CategoryFileUploaded {
   [key: string]: boolean;
@@ -57,8 +44,6 @@ interface ChaCategoryTotalEqualsTo1 {
 })
 export class CarbonComponent implements OnInit {
 
-
-  private apiUrl = 'http://localhost:7100/methodology/assessmentData';
 
   @ViewChild('myCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
 
@@ -121,9 +106,7 @@ trigger : boolean = false;
   relevantChaList : any = []
 
   methId :number;
-//Processess of change
   dropdownList: { item_id: number, item_text: string }[] = [];
- // selectedItems: { id: number, name: string }[] = [];
   selectedItems: { id: number; name: string }[] = [];
 
   dropdownSettings: IDropdownSettings = {};
@@ -163,31 +146,21 @@ trigger : boolean = false;
   characteristics :any = [];
 
   selectedCategories: string[] = ['Category 1', 'Category 2'];
-  categoryWeightOption : string
-  categoryWeight : any
-  //characteristicWeightOption : string
-  //characteristicWeightOptionOutcome : string
-  categoryWeightOptionOutcome: string
-  objectivesList : any = []
+  categoryWeightOption : string;
+  categoryWeight : any;
+  categoryWeightOptionOutcome: string;
+  objectivesList : any = [];
 
   checkedMethodology:boolean=false;
 
-/*   showSelectedItems() {
-    console.log("aaa",this.categories);
-  }
-   */
 
   assessmentMethodList: any[] = [
-    // { name: 'Track 1' },
-    // { name: 'Track 2' },
-    // { name: 'Track 3' },
     { name: 'Track 4' }
   ];
 
 
   chart(): void {
     if (!this.canvasRef) {
-      console.error('Could not find canvas element');
       return;
     }
 
@@ -195,7 +168,6 @@ trigger : boolean = false;
     const ctx = canvas.getContext('2d');
 
     if (!ctx) {
-      console.error('Could not get canvas context');
       return;
     }
 
@@ -271,52 +243,40 @@ trigger : boolean = false;
 
     this.instituionProxy.getInstituion(3,this.userCountryId,1000,0).subscribe((res: any) => {
       this.instiTutionList = res;
-      console.log( "listtt",this.instiTutionList)
     });
 
 
   this.methassess.findAllBarriers().subscribe((res: any) => {
-      console.log("barrierss : ", res)
-      this.barrierListobject = res
+      this.barrierListobject = res;
       for(let x of res){
-        this.barriersList.push(x.barrier)
+        this.barriersList.push(x.barrier);
       }
-      console.log("barriersList : ", this.barriersList)
 
     });
 
     this.methassess.findAllPolicyBarriers().subscribe((res: any) => {
-      console.log("policybarrierssList : ", res)
-      this.policyBarriersList = res
+      this.policyBarriersList = res;
     });
 
     this.methassess.findAllObjectives().subscribe((res: any) => {
-      console.log("objectivesList : ", res)
-      this.objectivesList = res
-    });
+      this.objectivesList = res;
+    });;
 
 
     this.methassess.findAllIndicators().subscribe((res: any) => {
-      console.log("indicators : ", res)
-      this.indicatorList = res
-   /*    this.barriersList = res
-      console.log("barriersList : ", this.barriersList) */
-
+      this.indicatorList = res;
     });
 
 
     this.climateAction.findAllPolicies().subscribe((res: any) => {
-      console.log("policyList : ", res)
       for(let data of res){
         let policyObj = {
           id : data.id,
           policyName : data.policyName
         }
 
-        this.policyList.push(policyObj)
+        this.policyList.push(policyObj);
       }
-
-      console.log("policyList : ", this.policyList)
 
     });
 
@@ -324,13 +284,10 @@ trigger : boolean = false;
     this.methListAll = [];
     this.characteristicsList = [];
     this.methassess.findAllMethodologies().subscribe((res: any) => {
-      console.log("ressss", res)
       for (let x of res) {
         this.methList.push(x.methodology_name);
         this.methListAll.push(x);
       }
-
-      console.log("policyList222 : ", this.policyList)
     });
 
 
@@ -339,9 +296,7 @@ trigger : boolean = false;
     this.meth1Process = [];
     this.meth1Outcomes = [];
     this.methassess.findAllCategories().subscribe((res2: any) => {
-      console.log("categoryList", res2)
       for (let x of res2) {
-        //this.categotyList.push(x);
           if(x.type === 'process'){
             this.meth1Process.push(x)
           }
@@ -349,25 +304,19 @@ trigger : boolean = false;
             this.meth1Outcomes.push(x)
           }
       }
-      console.log("yyyy",this.meth1Process )
     });
 
     this.methassess.findAllCharacteristics().subscribe((res3: any) => {
-      console.log("ressss3333", res3)
-      this.characteristicsList = res3
+      this.characteristicsList = res3;
 
     });
 
-   // console.log("categotyList", this.categotyList)
    this.methassess.findAllMethIndicators().subscribe((res: any) => {
-    console.log("ressssponseee", res)
-    this.methIndicatorsList = res
-   // this.characteristicsList = res
+    this.methIndicatorsList = res;
 
   });
   this.methassess.findAllMethParameters().subscribe((res: any) => {
-    console.log("methParametersList", res)
-    this.methParametersList = res
+    this.methParametersList = res;
 
   });
 
@@ -414,30 +363,15 @@ trigger : boolean = false;
       allowSearchFilter: true
     };
 
-
-
-
-     // Initialize the list of characteristics based on the selected category
-    /*  this.updateCharacteristics(); */
   }
 
-/*   onSubmit(data:any){
-    console.log("dataaaa", data)
-
-
-    this.methassess.methAssignDataSave(data).subscribe(res => {
-      console.log("saved data",res)
-    } )
-  }
- */
 
   flag : boolean = false
   selectedMethodology : any
 
    onChange(event:any) {
 
-    this.flag = false
-   //this.onChange2(event)
+    this.flag = false;
     this.selectedType = event.target.value;
     this.selectedPolicyBarriersList = []
 
@@ -446,12 +380,11 @@ trigger : boolean = false;
           for(let barriersss of this.barriersList){
               if(x.barriers.barrier === barriersss)
 
-            this.selectedPolicyBarriersList.push(barriersss)
+            this.selectedPolicyBarriersList.push(barriersss);
           }
 
         }
     }
-    console.log("selectedPolicyBarriersList: ", this.selectedPolicyBarriersList)
 
     setTimeout(() => {
       this.flag = true;
@@ -464,237 +397,91 @@ trigger : boolean = false;
 
   getCategory(characteristics: any, category: any) {
 
-    /* const foundCategory = this.categories.find(c => c.name === category);
-    console.log("chaaaa",foundCategory ? foundCategory.characteristics : [])
-    return foundCategory ? foundCategory.characteristics : [];  */
     this.characteristicsArray = [];
     for (let x of this.characteristicsList) {
       if (x.category.name === category) {
-        this.characteristicsArray.push(x)
+        this.characteristicsArray.push(x);
       }
     }
-
-   // console.log("cha", this,this.characteristicsArray)
-    return this.characteristicsArray
+    return this.characteristicsArray;
 
   }
 
-
-//Processess of change
 onItemSelect(item: any) {
-  console.log("aaa1",item);
   this.selectedItems = [];
   for(let x of item.value){
-    this.selectedItems.push(x)
+    this.selectedItems.push(x);
   }
-
-  console.log("select11", this.selectedItems);
 
 }
 
 onItemSelectBarriers(item: any){
-  console.log("bbbbb",item);
   this.selectedPolicyBarriersList = [];
   for(let x of item.value){
-    this.selectedPolicyBarriersList.push(x)
+    this.selectedPolicyBarriersList.push(x);
   }
-  console.log("policyBarriersList99999999", this.selectedPolicyBarriersList);
 }
 
 
 onItemSelectObjectives(item: any){
-  console.log("kkkkkkk",item);
   this.selectedObjectivesList = [];
   for(let x of item.value){
-    this.selectedObjectivesList.push(x)
+    this.selectedObjectivesList.push(x);
   }
-  console.log("selectedObjectivesListttt", this.selectedObjectivesList);
-}
-/* onSelectAll(items: any) {
-  this.selectedItems = [];
-  for(let x of items){
-    this.selectedItems.push(x)
-  }
-  console.log(items);
 }
 
- onItemDeSelect(item: any) {
-  const index = this.selectedItems.findIndex((selectedItem) => selectedItem.id === item.item_id);
-  this.selectedItems.splice(index, 1);
-}
-
-
-onDeSelectAll(item: any){
-  this.selectedItems = [];
-} */
-
-
-
-//Outcomes of change
 onItemSelect2(item: any) {
-  console.log("aaa2",item);
   this.selectedItems2 = [];
   for(let x of item.value){
     this.selectedItems2.push(x)
   }
 
-  console.log("select22", this.selectedItems2);
 }
-
-/* onSelectAll2(items: any) {
-  this.selectedItems2 = [];
-  for(let x of items){
-    this.selectedItems2.push(x)
-  }
-  console.log(items);
-}
-
- onItemDeSelect2(item: any) {
-  const index = this.selectedItems2.findIndex((selectedItem2) => selectedItem2.id === item.item_id);
-  this.selectedItems2.splice(index, 1);
-}
-
-onDeSelectAll2(item: any){
-  this.selectedItems2 = [];
-} */
 
 
 onItemSelect3(item: any) {
-  console.log("aaa",item);
   this.selectedItems3 = [];
   for(let x of item.value){
     this.selectedItems3.push(x)
   }
-
-  console.log("select3", this.selectedItems3);
 }
 
-
-/* onSelectAll3(items: any) {
-  this.selectedItems3 = [];
-  for(let x of items){
-    this.selectedItems3.push(x)
-  }
-  console.log(items);
-}
-
- onItemDeSelect3(item: any) {
-  const index = this.selectedItems3.findIndex((selectedItem3) => selectedItem3.id === item.item_id);
-  this.selectedItems3.splice(index, 1);
-}
-
-
-onDeSelectAll3(item: any){
-  this.selectedItems3 = [];
-} */
 
 
 onItemSelect4(item: any) {
-  console.log("aaa",item);
   this.selectedItems4 = [];
   for(let x of item.value){
     this.selectedItems4.push(x)
   }
 
-  console.log("select4", this.selectedItems4);
 
 }
 
 onItemSelectcha(item :any){
-  console.log("aaa333",item);
   this.selectChaAffectByBarriers = [];
   for(let x of item.value){
     this.selectChaAffectByBarriers.push(x)
   }
 
-  console.log("select123", this.selectChaAffectByBarriers);
 
 }
 
-/* onSelectAll4(items: any) {
-  this.selectedItems4 = [];
-  for(let x of items){
-    this.selectedItems4.push(x)
-  }
-  console.log(items);
-}
-
- onItemDeSelect4(item: any) {
-  const index = this.selectedItems4.findIndex((selectedItem4) => selectedItem4.id === item.item_id);
-  this.selectedItems4.splice(index, 1);
-}
-
-
-onDeSelectAll4(item: any){
-  this.selectedItems4 = [];
-} */
-
-
-/* //////////////////////////////// */
 
 onItemSelect6(item: any) {
-  console.log("aaa",item);
   this.selectedBarriers = [];
   for(let x of item.value){
-    this.selectedBarriers.push(x)
+    this.selectedBarriers.push(x);
   }
-  console.log("select77", this.selectedBarriers);
 
 }
-/* onSelectAll6(items: any) {
-  this.selectedBarriers = [];
-  for(let x of items){
-    this.selectedBarriers.push(x)
-  }
-  console.log("select6", this.selectedBarriers);
-}
-
- onItemDeSelect6(item: any) {
-  const index = this.selectedBarriers.findIndex((selectedBarriers) => selectedBarriers.id === item.id);
-  this.selectedBarriers.splice(index, 1);
-
-  console.log("select6", this.selectedBarriers);
-}
-
-onDeSelectAll6(item: any){
-  this.selectedBarriers = [];
-
-  console.log("select6", this.selectedBarriers);
-} */
-
 
 onItemSelect7(item: any) {
-/*   console.log(item);
-  this.characAffectedByBarriers.push(item)
-  console.log("select7", this.characAffectedByBarriers); */
-  console.log("aaa",item);
   this.characAffectedByBarriers = [];
   for(let x of item.value){
     this.characAffectedByBarriers.push(x)
   }
-  console.log("select77", this.characAffectedByBarriers);
 
 }
-/* onSelectAll7(items: any) {
-  this.characAffectedByBarriers = [];
-  for(let x of items){
-    this.characAffectedByBarriers.push(x)
-  }
-  console.log("select7", this.characAffectedByBarriers);
-}
-
- onItemDeSelect7(item: any) {
-  const index = this.characAffectedByBarriers.findIndex((characAffectedByBarriers) => characAffectedByBarriers.id === item.id);
-  this.characAffectedByBarriers.splice(index, 1);
-
-  console.log("select7", this.characAffectedByBarriers);
-}
-
-onDeSelectAll7(item: any){
-  this.characAffectedByBarriers = [];
-
-  console.log("select7", this.characAffectedByBarriers);
-} */
 dataArray : any= []
 track2Direct : boolean = false
 track2Indirect : boolean = false
@@ -709,9 +496,7 @@ allData: any
   this.track2Direct = false
   this.track2Indirect = false
 
-  console.log("pppppp :",data)
   if((data.assessment_approach === 'Direct' || data.assessment_approach === 'Indirect' ) && data.assessment_method === 'Track 2'){
-   // this.fileDataArray = ''
     if((data.assessment_approach === 'Direct' ) ){
       this.track2Direct = true
     }
@@ -746,10 +531,8 @@ allData: any
         }
       }
     }
-    console.log("dataArray",this.dataArray)
 
     for(let methdata of this.methListAll){
-      console.log("methdata",methdata)
       if(data.methodology == methdata.methodology_name){
          this.methId = methdata.id
       }
@@ -757,7 +540,6 @@ allData: any
     }
 
     for(let policydata of this.policyList){
-      console.log("policydata",policydata)
       if(data.policy == policydata.policyName){
          this.policyId = policydata.id
       }
@@ -789,16 +571,7 @@ allData: any
       audience : data.audience,
       assessBoundry: data.assessBoundry,
       impactsCovered : data.impactsCovered
-     // barriers : this.selectedBarriers
     };
-
-
-    /*   this.methassess.barrierCharacteristics(this.allData).subscribe( res => {
-        this.assessmentId = res
-        console.log("assessIddd",this.assessmentId)
-        } ) */
-
-        console.log("rrrr",this.dataArray)
 
   }
   else{
@@ -806,7 +579,6 @@ allData: any
       this.isSubmitted = true;
       }
 
-      console.log("ddd: ", data)
       let categoryDataArray: any[] = [];
     if( data.methodology === 'Methodology 1'){
       for (let category of this.selectedItems) {
@@ -851,7 +623,6 @@ allData: any
             });
           }
         }
-        console.log("kkk",categoryData);
         categoryDataArray.push(categoryData);
       }
 
@@ -898,7 +669,6 @@ allData: any
             });
           }
         }
-        console.log("kkk",categoryData);
         categoryDataArray.push(categoryData);
       }
     }
@@ -957,7 +727,6 @@ allData: any
             });
           }
         }
-        console.log("kkk",categoryData);
         categoryDataArray.push(categoryData);
       }
 
@@ -1013,16 +782,10 @@ allData: any
             });
           }
         }
-        console.log("kkk",categoryData);
         categoryDataArray.push(categoryData);
       }
     }
-      console.log("data",data)
-
-      //pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
-
       for(let methdata of this.methListAll){
-        console.log("methdata",methdata)
         if(data.methodology == methdata.methodology_name){
            this.methId = methdata.id
         }
@@ -1030,7 +793,6 @@ allData: any
       }
 
       for(let policydata of this.policyList){
-        console.log("policydata",policydata)
         if(data.policy == policydata.policyName){
            this.policyId = policydata.id
         }
@@ -1045,10 +807,6 @@ allData: any
         }
       }
 
-
-      console.log("policy Selected Id : ", this.policyId)
-
-    console.log("methiddd,", this.methId)
       let allData: any = {
         methodology : this.methId,
         categoryData :categoryDataArray,
@@ -1066,23 +824,15 @@ allData: any
         audience : data.audience,
         assessBoundry: data.assessBoundry,
         impactsCovered : data.impactsCovered
-       // barriers : this.selectedBarriers
       };
-      console.log("final array",allData);
-
-      // Send categoryDataArray to backend here
 
        this.methassess.methAssignDataSave(allData).subscribe( res => {
 
 
-        this.averageProcess = res.result.averageProcess
-        this.averageOutcome = res.result.averageOutcome
-        this.assessmentId = res.assesId
-        this.assessID =res.assesId
-
-        console.log("averageProcess1 : ", this.averageProcess)
-        console.log("averageOutcome1 : ", this.averageOutcome)
-        console.log("assessId : ", this.assessmentId)
+        this.averageProcess = res.result.averageProcess;
+        this.averageOutcome = res.result.averageOutcome;
+        this.assessmentId = res.assesId;
+        this.assessID =res.assesId;
         this.chart();
 
         this.messageService.add({
@@ -1094,8 +844,7 @@ allData: any
 
 
        this.methassess.findByAssessIdAndRelevanceNotRelevant(this.assessmentId).subscribe(res => {
-          console.log("chaaaaaa2",res )
-          this.relevantChaList = res
+          this.relevantChaList = res;
           } )
 
 
@@ -1105,10 +854,8 @@ allData: any
                 averageProcess : this.averageProcess , averageOutcome: this.averageOutcome} });
             }, 2000);
           }
-       //   this.fileDataArray = ''
       } ,
      error => {
-      console.log(error)
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -1128,7 +875,6 @@ allData: any
 submitData : boolean = false
 
 submitBarrierData(dataArray : any){
-  console.log("xxxxxxx", dataArray)
 
   this.submitData = true
 
@@ -1145,15 +891,9 @@ submitBarrierData(dataArray : any){
     alldata : this.allData
   }
 
-  console.log("objjjj", obj)
-
-/*   this.methassess.barrierCharacteristics(obj).subscribe(res => {
-    console.log("newww data",res)
-  } ) */
 }
 
 onSubmitCatData(data : any){
-console.log("daaaaneeeww", data)
 let categoryDataArray: any[] = [];
 
 for (let category of this.selectedItems3) {
@@ -1203,7 +943,6 @@ for (let category of this.selectedItems3) {
       });
     }
   }
-  console.log("kkk",categoryData);
   categoryDataArray.push(categoryData);
 }
 
@@ -1255,7 +994,6 @@ for (let category of this.selectedItems4) {
       });
     }
   }
-  console.log("kkk",categoryData);
   categoryDataArray.push(categoryData);
 }
 
@@ -1266,7 +1004,6 @@ let assessData : any = {
 }
 
     this.methassess.barrierCharacteristics(assessData).subscribe(res => {
-      console.log("newww data",res)
 
       this.messageService.add({
         severity: 'success',
@@ -1287,7 +1024,6 @@ let assessData : any = {
 
     },
      error => {
-      console.log(error)
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -1296,10 +1032,6 @@ let assessData : any = {
       })
     }
      )
-
-console.log("assessData",assessData)
-
-
 
 }
 
@@ -1310,32 +1042,23 @@ submitForm(){
   }
 
   this.methassess.assessCharacteristicsDataSave(sendData).subscribe(res => {
-    console.log("savetttt data",res)
 
   } )
 
-  this.trigger = true
-
-  console.log("senddddd", sendData)
+  this.trigger = true;
 }
 
 filterMethList :any  = []
 
 onIndicatorSelected( indicator: any) {
-  // console.log('Selected indicator for22233:', indicator);
-  this.filterMethList = []
+  this.filterMethList = [];
 
   for(let item of this.methIndicatorsList){
-    // console.log("sl indii2222: ", "ind",indicator,"item",item.indicator.id)
     if(item.indicator.id == indicator){
 
-      this.filterMethList.push(item)
+      this.filterMethList.push(item);
     }
   }
-  // console.log("selectChaAffectByBarriers22: ",this.selectChaAffectByBarriers)
-
-
-
 
   return this.filterMethList
 }
@@ -1343,8 +1066,6 @@ onIndicatorSelected( indicator: any) {
 handleSelectedCharacteristic(event: any) {
   this.filteredIndicatorList = []
   const selectedCharacteristic = event;
-  // Do something with the selected characteristic
-  // console.log(selectedCharacteristic);
 
   for(let indicator of this.indicatorList){
     if(indicator.characteristics.name === selectedCharacteristic){
@@ -1371,8 +1092,6 @@ chaCategoryTotalEqualsTo1 : ChaCategoryTotalEqualsTo1 = {};
 
 async myUploader(event: any, chaName : any) {
 
-  console.log("chaaNamee", event, chaName)
-
   for (let file of event.files) {
 
     const formData = new FormData();
@@ -1389,9 +1108,7 @@ async myUploader(event: any, chaName : any) {
           characteristic : chaName
         }
 
-        this.fileDataArray.push(fileData)
-        console.log("nameeee", fileData);
-        console.log("fileDataArray", this.fileDataArray);
+        this.fileDataArray.push(fileData);
 
         this.categoryFileUploaded[chaName] = true;
 
@@ -1401,7 +1118,6 @@ async myUploader(event: any, chaName : any) {
         this.messageService.add({severity: 'info', summary: 'File Uploaded', detail: ''});
       },
       err => {
-        console.log(err);
       }
     );
   }
@@ -1412,18 +1128,14 @@ onUpload(event :any) {
   for(let file of event.files) {
       this.uploadedFiles.push(file);
   }
-      console.log("hello")
-
 }
 onRemove(event :any,x:number) {
-  console.log("hello",event)
 }
 
 track4Select : boolean = false
 onChangeTrack(event : any){
   this.track4Select = false
   this.selectedTrack = event.value;
-  console.log("selectedTrack : ", this.selectedTrack)
 
   if(this.selectedTrack === 'Track 4'){
     this.track4Select = true
@@ -1432,16 +1144,13 @@ onChangeTrack(event : any){
 
 onChangeApproach(event : any){
   this.selectedApproach = event.target.value;
-  console.log("selectedApproach : ", this.selectedApproach)
 }
 
 
 onChangeInstitution(event : any){
-  console.log("selectedInstitution: ", event.target.value)
 }
 
 onChangeCha(event : any){
-  console.log("selectedCharacteristic: ", event.target.value)
 }
 
 isBarrierWeightValid(chaId: number): boolean {
@@ -1505,9 +1214,7 @@ onCatWeightChangeOutcome(categoryName: string, catWeight: number) {
 }
 
 onCharacteristicChange(characteristicName: string, isChecked: any) {
-  this.chaChecked[characteristicName] = isChecked.target.checked
-  console.log('Characteristic Name:', characteristicName);
-  console.log('Checkbox State:', isChecked.target.checked);
+  this.chaChecked[characteristicName] = isChecked.target.checked;
 }
 
 
@@ -1521,39 +1228,28 @@ onChaWeightChange(categoryName: string, characteristicName : string, chaWeight: 
   if( this.chaChecked[cha.name]){
     this.chaCategoryWeightTotal[categoryName] =  this.chaCategoryWeightTotal[categoryName] +  this.characteristicWeightScore[cha.name]
 
-    console.log('Characteristicrrrrrrr:',  this.characteristicWeightScore[cha.name]);
   }
  }
 
  if( this.chaCategoryWeightTotal[categoryName] == 1){
   this.chaCategoryTotalEqualsTo1[categoryName] = true
  }
- console.log('Characteristic Name:', characteristicName, 'chaWeight:', chaWeight);
-  console.log( 'category :',categoryName,' Total: ',  this.chaCategoryWeightTotal[categoryName]);
 
 }
 
 onMethSelected(characteristic:any){
-  console.log("value", characteristic)
-
-
-  // this.filterParamList = []
  characteristic.parameters =[];
   for(let item of this.methParametersList){
     if(item.methodology.id === characteristic.selectedMethodology.id){
-      // this.filterParamList.push(item)
 
-      characteristic.parameters.push({name:item.name,value:'', unit:item.unit,id:item.id})
-      console.log("item para ",item, characteristic.parameters)
+      characteristic.parameters.push({name:item.name,value:'', unit:item.unit,id:item.id});
     }
   }
-  console.log("selectChaAffectByBarriers: ",this.selectChaAffectByBarriers)
 }
 
 onIndicatorChange(characteristic:any){
   characteristic.parameters =[];
-  characteristic.selectedMethodology =''
-  console.log("selectChaAffectByBarriers22: ",this.selectChaAffectByBarriers)
+  characteristic.selectedMethodology ='';
 }
 
 
@@ -1561,12 +1257,9 @@ calculateResults(){
 
   let calData =new UpdateIndicatorDto()
   calData.assessmentId=this.assessID;
-  calData.data=this.selectChaAffectByBarriers
-
-  console.log("results",calData)
+  calData.data=this.selectChaAffectByBarriers;
 
   this.methassess.updateIndicatorValue(calData).subscribe(res => {
-    console.log("res final", res)
 
       this.messageService.add({
         severity: 'success',
@@ -1574,14 +1267,7 @@ calculateResults(){
         detail: 'Assessment created successfully',
         closable: true,
       })
-      // this.showResults();
-      // this.isSavedAssessment = true
-      // this.onCategoryTabChange('', this.tabView);
-
-
-    // form.reset();
   }, error => {
-    console.log(error)
     this.messageService.add({
       severity: 'error',
       summary: 'Error',

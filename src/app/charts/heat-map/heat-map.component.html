@@ -1,28 +1,31 @@
-<table id="heatmap" class="heatmap" style="text-align: center;">
-    <tbody>
-        <tr>
-            <td></td>
-            <td colspan="8">​​Outcome: Extent and sustained nature of transformation</td>
-        </tr>
-        <tr>
-            <td class="vertical-text" [ngClass]="isSafari ? 'vertical-text-safari' : 'vertical-text-chrome'" rowspan="6">Process: Likelihood of transformation</td>
-            <td></td>
-            <ng-container *ngFor="let x of xData">
-                <td style="font-size: small;">{{x.label}}</td>
-            </ng-container>
-        </tr>
-        <tr *ngFor="let y of yData">
-            <td style="font-size: small;">{{y.label}}</td>
-            <ng-container *ngFor="let x of xData">
-                <td class="charttd" [style.background-color]="getBackgroundColor(x.value, y.value)" [style.color]="getIntervention(x.value, y.value)?'blue':getBackgroundColor(x.value, y.value)">
-                    <span (mouseenter)="enterHeatMapPoint(x.value, y.value,$event);"
-                        (mouseleave)="leaveHeatMapPoint();op.hide()"
-                        [ngClass]="getIntervention(x.value, y.value)? 'intervention':''">1</span>
-                </td>
-            </ng-container>
-        </tr>
-    </tbody>
-</table>
+<div class="centered-table">
+    <table id="heatmap" class="heatmap" style="text-align: center;">
+        <tbody>
+            <tr>
+                <td></td>
+                <td colspan="8">​​Outcome: Extent and sustained nature of transformation</td>
+            </tr>
+            <tr>
+                <td class="vertical-text" [ngClass]="isSafari ? 'vertical-text-safari' : 'vertical-text-chrome'" rowspan="6">Process: Likelihood of transformation</td>
+                <td></td>
+                <ng-container *ngFor="let x of xData">
+                    <td style="font-size: small;">{{x.label}}</td>
+                </ng-container>
+            </tr>
+            <tr *ngFor="let y of yData">
+                <td style="font-size: small;">{{y.label}}</td>
+                <ng-container *ngFor="let x of xData">
+                    <td class="charttd" [style.background-color]="getBackgroundColor(x.value, y.value)" [style.color]="getIntervention(x.value, y.value)?'#404040':getBackgroundColor(x.value, y.value)">
+                        <span (mouseenter)="enterHeatMapPoint(x.value, y.value,$event);"
+                            (mouseleave)="leaveHeatMapPoint();op.hide()"
+                            [ngClass]="getIntervention(x.value, y.value)==1? 'intervention':(getIntervention(x.value, y.value)>1? 'intervention-large':'')">1</span>
+                    </td>
+                </ng-container>
+            </tr>
+        </tbody>
+    </table>
+  </div>
+
 <p-overlayPanel [style]="{'min-width': '200px'}" [hidden]="pointTableDatas && pointTableDatas.length==0" #op>
     <ng-template  pTemplate="content">
         <div *ngFor="let pointTableData of pointTableDatas" style=" border-style: solid;min-width: 500px !important;" class="m-3 p-1">

@@ -35,13 +35,6 @@ const routes: Routes = [
     },
     component: UserFormComponent
   },
-  // {
-  //   path: 'edit',
-  //   data: {
-  //     title: 'User Edit',
-  //   },
-  //   component: UserFormComponent
-  // },
   {
     path: 'view-user',
     data: {

@@ -9,8 +9,6 @@
         <h4 class="mt-4"> {{title2}}</h4>
       </div>
 
-<!-- 
-      <div class="card" style="min-height: 600px;"> -->
       <div id="card" class="card" *ngIf="loading">
         <div style="display: flex; flex-direction: row;">
           <div style="flex-basis: 40%;">
@@ -18,201 +16,29 @@
             <p><strong>Tool Applied</strong></p>
             <p><strong>Intervention Status</strong></p>
             <p><strong>Assessment Type</strong></p>
-            <!--    <p><strong>Assessment Approach</strong></p>
-         <p><strong>Assessment Method</strong></p> -->
-            <!--  <p><strong>Tool</strong></p> -->
-
-            <!-- <div class="mb-12" *ngIf="investerTool">
-              <p><strong>Level of Implementation</strong></p>
-            </div> -->
 
             <p><strong>Geographical Area Covered</strong></p>
 
             <p><strong>Sectors Covered</strong></p>
-
-            <!-- <div class="mb-12" *ngIf="investerTool">
-              <p><strong>Impact Covered</strong></p>
-            </div> -->
-
             <p><strong>Assessment Period</strong></p>
             <p><strong>Opportunities for stakeholders to participate in the assessment</strong></p>
-            <!-- <p><strong>Principles on which the assessment is based</strong></p> -->
           </div>
           <div style="flex-basis: 50%;">
-            <!--    <p>{{policyName}}</p> -->
             <p>{{(intervention.intervention_id)?(intervention.intervention_id):'-'}}</p>
             <p>{{masterDataService.getToolName(investerTool ? 'INVESTOR' : 'PORTFOLIO')}}</p>
             <p>{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</p>
             <p>{{assessmentType}}</p>
-            <!--   <p>{{assessment_approach}}</p>
-         <p>{{assessment_method}}</p> -->
-            <!--   <p>{{tool}}</p> -->
-<!-- 
-            <div class="mb-12" *ngIf="investerTool">
-              <p>{{levelofImplemetation}}</p>
-            </div> -->
-
             <p>{{geographicalAreasCovered ? geographicalAreasCovered : '-'}}</p>
 
             <p>{{sectorList.join(', ')}}</p>
 
-            <!-- <div class="mb-12" *ngIf="investerTool">
-              <p>{{impactCoverList.join(', ')}}</p>
-            </div> -->
-
-            <p>{{date1 | date:'yyyy-MM-dd'}} to {{date2 | date:'yyyy-MM-dd'}}</p>
+            <p>{{date1 | date:'dd/MM/yyyy'}} to {{date2 | date:'dd/MM/yyyy'}}</p>
             <p>{{opportunities}}</p>
-            <!-- <p>{{principles}}</p> -->
             
           </div>
         </div>
         
 
-
-
-
-
-          <!-- <h6>Process of Change</h6><br>
-          <p-table [value]="categoryDataArray" [tableStyle]="{ 'width': '50rem' }">
-            <ng-template pTemplate="header">
-              <tr>
-
-                <th> <strong style="color: black; font-size: large;">Characteristic</strong></th>
-                <th> <strong style="color: black;  font-size: large; ">Relevance</strong></th>
-                <th> <strong style="color: black;  font-size: large; ">Likelihood</strong></th>
-              </tr>
-            </ng-template>
-          </p-table>
-
-          <br><br>
-          <p-table [value]="categoryDataArray" [tableStyle]="{ 'width': '50rem' }">
-            <ng-template pTemplate="body" let-data>
-              <tr>
-                <td><strong>{{ data.categoryName }}</strong></td>
-                <td><strong>{{ data.categotyRelevance }}</strong></td>
-                <td><strong>{{ data.categoryLikelihood }}</strong></td>
-              </tr>
-              <ng-container *ngFor="let characteristic of data.characteristics">
-                <tr>
-                  <td>{{ characteristic.name }}</td>
-                  <td>{{ characteristic.relevance }}</td>
-                  <td>{{ characteristic.likelihood }}</td>
-                </tr>
-              </ng-container>
-              <br><br>
-
-            </ng-template>
-          </p-table>
-
-          <div class="mb-12" *ngIf="!investerTool">
-          <h6>Selected SDGs</h6><br>
-          <div *ngFor="let item of SDGsList; index as i">
-            <p> {{i+1}}) SDG {{item.sdg.number}} - {{item.sdg.name}} </p>
-          </div>
-        </div>
-
-          <br> <br>
-          <h6>Outcome of Change</h6><br>
-          <p-table [value]="categoryDataArrayOutcome" [tableStyle]="{ 'width': '50rem' }">
-            <ng-template pTemplate="header">
-              <tr>
-
-                <th> <strong style="color: black; font-size: large;">Characteristic</strong></th>
-                <th> <strong style="color: black;  font-size: large; ">Scale Score</strong></th>
-                <th> <strong style="color: black;  font-size: large; ">Sustained Score</strong></th>
-              </tr>
-            </ng-template>
-          </p-table>
-
-          <br><br>
-          <p-table [value]="categoryDataArrayOutcome" [tableStyle]="{ 'width': '50rem' }">
-            <ng-template pTemplate="body" let-data>
-              <tr>
-                <td><strong>{{ data.categoryName }}</strong></td>
-                <td><strong>{{ data.categoryScaleScore }}</strong></td>
-                <td><strong>{{ data.categorySustainedScore }}</strong></td>
-              </tr>
-              <ng-container *ngFor="let characteristic of data.characteristics">
-                <tr>
-                  <td>{{ characteristic.name }}</td>
-                  <td>{{ characteristic.scaleScore }}</td>
-                  <td>{{ characteristic.sustainedScore }}</td>
-                </tr>
-              </ng-container>
-              <br><br>
-            </ng-template>
-          </p-table> -->
-
-
-       <!--  <div *ngIf="load && investerTool">
-
-          <h6>Process of Change</h6><br>
-          <p-table [value]="categoryDataArray" [tableStyle]="{ 'width': '50rem' }">
-            <ng-template pTemplate="header">
-              <tr>
-
-                <th> <strong style="color: black; font-size: large;">Characteristic</strong></th>
-                <th> <strong style="color: black;  font-size: large; ">Relevance</strong></th>
-                <th> <strong style="color: black;  font-size: large; ">Likelihood</strong></th>
-              </tr>
-            </ng-template>
-          </p-table>
-
-          <br><br>
-          <p-table [value]="categoryDataArray" [tableStyle]="{ 'width': '50rem' }">
-            <ng-template pTemplate="body" let-data>
-              <tr>
-                <td><strong>{{ data.categoryName }}</strong></td>
-                <td><strong>{{ data.categotyRelevance }}</strong></td>
-                <td><strong>{{ data.categoryLikelihood }}</strong></td>
-              </tr>
-              <ng-container *ngFor="let characteristic of data.characteristics">
-                <tr>
-                  <td>{{ characteristic.name }}</td>
-                  <td>{{ characteristic.relevance }}</td>
-                  <td>{{ characteristic.likelihood }}</td>
-                </tr>
-              </ng-container>
-              <br><br>
-
-            </ng-template>
-          </p-table>
-
-
-          <br>
-          <h6>Outcome of Change</h6><br>
-          <p-table [value]="categoryDataArrayOutcome" [tableStyle]="{ 'width': '50rem' }">
-            <ng-template pTemplate="header">
-              <tr>
-
-                <th> <strong style="color: black; font-size: large;">Characteristic</strong></th>
-                <th> <strong style="color: black;  font-size: large; ">Scale Score</strong></th>
-                <th> <strong style="color: black;  font-size: large; ">Sustained Score</strong></th>
-              </tr>
-            </ng-template>
-          </p-table>
-
-          <br><br>
-          <p-table [value]="categoryDataArrayOutcome" [tableStyle]="{ 'width': '50rem' }">
-            <ng-template pTemplate="body" let-data>
-              <tr>
-                <td><strong>{{ data.categoryName }}</strong></td>
-                <td><strong>{{ data.categoryScaleScore }}</strong></td>
-                <td><strong>{{ data.categorySustainedScore }}</strong></td>
-              </tr>
-              <ng-container *ngFor="let characteristic of data.characteristics">
-                <tr>
-                  <td>{{ characteristic.name }}</td>
-                  <td>{{ characteristic.scaleScore }}</td>
-                  <td>{{ characteristic.sustainedScore }}</td>
-                </tr>
-              </ng-container>
-              <br><br>
-            </ng-template>
-          </p-table>
-        </div> -->
-
-        <!-- <br><br> -->
 
       </div>
       <div id="allTables" class="card" *ngIf="loading">
@@ -337,9 +163,6 @@
                 </tr> 
             </ng-template>
         </p-table>
-        <!-- <br>
-        <p class="category-topic"> Processes Score - {{processScore}}</p>
-        <br> -->
         <br>
         <table> 
           <tr></tr>
@@ -353,7 +176,6 @@
           <tr></tr>
         </table>  
         <br>
-        <!-- <p class="category-topic">Outcome of Change - GHGs</p> -->
         <p-table id="table2"[value]="[{}]" styleClass="p-datatable-gridlines" *ngIf="loading">
             <ng-template pTemplate="header">
               <tr>
@@ -446,8 +268,6 @@
           <tr></tr>
         </table>  
         <br>
-        <!-- <br> <br>
-        <p class="category-topic">Outcome of Change - SDGs</p> -->
         <p-table [value]="[{}]" styleClass="p-datatable-gridlines" *ngIf="loading">
             <ng-template pTemplate="header">
               <tr>
@@ -460,7 +280,6 @@
                   <td colspan="4" class="table-header-left">Intervention Information</td>
                   <td  class="table-header">SDG</td>
                   <td colspan="5" class="table-header">Sustainable Development</td>
-                  <!-- <td  class="table-header">Weights</td> -->
                 </tr>
                 <tr>
                   <td class="table-header">ID</td>
@@ -469,11 +288,10 @@
                   <td class="table-header">Status</td>
                   <td class="table-header"></td>
                   <td class="table-header">International/global level</td>
-                  <td class="table-header">National/Sectorial level</td>
-                  <td class="table-header">Subnational/regional/municipal or sub sectorial level</td>
+                  <td class="table-header">National/Sectoral level</td>
+                  <td class="table-header">Subnational/regional/municipal or sub sectoral level</td>
                   <td class="table-header">SDG Score</td>
                   <td class="table-header"></td>
-                  <!-- <td class="table-header"></td> -->
                 </tr>
                
                   <ng-container *ngFor="let char of scale_SD.characteristicData">
@@ -500,14 +318,12 @@
                     <td  class="table-data">Outside assessment boundaries</td>
                     <td  class="table-data">Outside assessment boundaries</td>
                     <td class="table-data"></td>
-                    <!-- <td class="table-data"></td> -->
                   </tr>
                 <tr>
                   <td  class="table-header" colspan="8">Category Score</td>
                   <td class="table-data">{{(scale_SD.category_score.value!=null)?(scale_SD.category_score.value):'Outside assessment boundaries'}}</td>
                   <td class="table-data">{{(scale_SD.category_score.value!=null)?(scale_SD.category_score.value + "-" + scale_SD.category_score.name):'Outside assessment boundaries'}}</td>
-                  <!-- <td class="table-data">{{scale_SD.category_weight?scale_SD.category_weight+'%':'-'}}</td> -->
-                  <!-- <td class="table-data"></td> -->
+                 
                 </tr>
                   
             </ng-template>
@@ -576,7 +392,6 @@
                 <td  class="table-header" colspan="8">Category Score</td>
                 <td class="table-data">{{(sustained_SD.category_score.value!=null)?(sustained_SD.category_score.value):'Outside assessment boundaries'}}</td>
                 <td class="table-data">{{(sustained_SD.category_score.value!=null)?(sustained_SD.category_score.value + "-" + sustained_SD.category_score.name):'Outside assessment boundaries'}}</td>
-                <!-- <td class="table-data">{{sustained_SD.category_weight?sustained_SD.category_weight+'%':'-'}}</td> -->
                 <td class="table-data"></td>
               </tr>
               <tr>
@@ -614,8 +429,6 @@
           <tr></tr>
         </table>  
       <br>
-      <!-- <br> <br>
-      <p class="category-topic">Outcome of Change - Adaptation</p> -->
       <p-table [value]="[{}]" styleClass="p-datatable-gridlines" *ngIf="loading">
         <ng-template pTemplate="header">
           <tr>
@@ -713,36 +526,10 @@
         </table>  
       <br>
       
-        <!-- <p class="category-topic">Outcome Score - {{outcomeScore}}</p>
-      <br><br> -->
       
       </div>
       <div id="heatmap" class="card">
         <app-heat-map id="heatmap" [xData]="xData" [yData]="yData" [score]="heatMapScore"></app-heat-map>
-        <!-- <table id="heatmap" class="heatmap" style=" text-align: center;">
-          
-          <tbody>
-              <tr>
-                  <td></td>
-                  <td colspan="8">Outcome: Extent and sustained nature of the transformation</td>
-              </tr>
-              <tr>
-                <td rowspan="6">Process: Transformational change supported</td>
-                  <td></td>
-                  <ng-container *ngFor="let x of xData">
-                      <td>{{x.label}}</td>
-                  </ng-container>
-              </tr>
-              <tr *ngFor="let y of yData">
-                  <td>{{y.label}}</td>
-                  <ng-container *ngFor="let x of xData">
-                      <td  [style.background-color]="getBackgroundColor(y.value+x.value)">
-                          <span [ngClass]="getIntervention(x.value, y.value)? 'intervention':''">{{y.value+x.value}}</span>
-                      </td>
-                  </ng-container>
-              </tr>
-          </tbody>
-      </table> -->
       </div>
     </div>
   </div>
@@ -752,7 +539,7 @@
  
   <div class="d-flex flex-row-reverse mt-2 mb-2">
     <button (click)="exportToExcel()" class="btn btn-primary btn-block text-uppercase">Download as Excel</button>
-    <button *ngIf="this.tool === 'PORTFOLIO'||this.tool === 'INVESTOR'" class="btn btn-primary btn-block text-uppercase mr-20" label="Genarate" (click)="generate()">Genarate Report</button>
+    <button *ngIf="this.tool === 'PORTFOLIO'||this.tool === 'INVESTOR'" class="btn btn-primary btn-block text-uppercase mr-20" label="Generate" (click)="generate()">Generate Report</button>
   </div>
 </div>
 <p-dialog [(visible)]="display">

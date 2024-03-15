@@ -109,7 +109,6 @@ export class NonconformanceReportComponent implements OnInit {
       this.flag = params['flag'];
       this.isVerificationHistory = params['isVerificationHistory'];
       this.vStatus = params['vStatus'];
-      console.log("this.flag..,,",params)
 
       this.assessment =  await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
 
@@ -118,8 +117,6 @@ export class NonconformanceReportComponent implements OnInit {
       this.roundOneList = this.verificationList.filter((o: any)=>o.verificationStage == 1 && o.isAccepted == 0);
       this.roundTwoList= this.verificationList.filter((o: any)=>o.verificationStage == 2 && o.isAccepted == 0);
       this.roundThreeList= this.verificationList.filter((o: any)=>o.verificationStage == 3 && o.isAccepted == 0);
-
-      console.log("roundOneList", this.roundOneList)
 
       this.roundOneHeadTable = this.verificationList?.find((o: any)=>o.verificationStage == 1);
       if (this.roundOneHeadTable != null) {
@@ -171,7 +168,6 @@ export class NonconformanceReportComponent implements OnInit {
   }
 
   toPopUp(item: any) {
-    //console.log("click");
   }
 
   toDownload() {
@@ -222,15 +218,12 @@ export class NonconformanceReportComponent implements OnInit {
         })
     }
     else {
-      // need to get relevent assse year row
-      this.assessment.verificationStatus = 1; //Nc REcieved
+      this.assessment.verificationStatus = 1; 
       this.assessment.editedOn = moment();
 
-      // then update the object
-      // then need to send the updte crud
       if (this.roundOneHeadTable != undefined) {
         if (this.roundOneList.length != 0) {
-          this.assessment.verificationStatus = 3; //Nc REcieved
+          this.assessment.verificationStatus = 3; 
         }
         else {
           this.assessment.verificationStatus = 7;
@@ -239,7 +232,7 @@ export class NonconformanceReportComponent implements OnInit {
 
       if (this.roundTwoHeadTable != undefined) {
         if (this.roundTwoList.length != 0) {
-          this.assessment.verificationStatus = 3; //Nc REcieved
+          this.assessment.verificationStatus = 3; 
         }
         else {
           this.assessment.verificationStatus = 7;
@@ -248,7 +241,7 @@ export class NonconformanceReportComponent implements OnInit {
 
       if (this.roundThreeHeadTable != undefined) {
         if (this.roundThreeList.length != 0) {
-          this.assessment.verificationStatus = 6; //Nc REcieved
+          this.assessment.verificationStatus = 6; 
         }
         else {
           this.assessment.verificationStatus = 7;
@@ -274,7 +267,6 @@ export class NonconformanceReportComponent implements OnInit {
       this.router.navigate(['/verification-sector-admin/detail'], {
         queryParams: {
           id: this.assessment.id,
-          // verificationStatus: object.verificationStatus,
         },
       });
 

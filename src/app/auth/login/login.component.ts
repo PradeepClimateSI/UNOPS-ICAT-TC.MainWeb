@@ -6,6 +6,8 @@ import decode from 'jwt-decode';
 import { AppService } from 'shared/AppService';
 import { AuthControllerServiceProxy, AuthCredentialDto, ServiceProxy } from 'shared/service-proxies/auth-service-proxies';
 import { UsersControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-login',
@@ -27,9 +29,26 @@ export class LoginComponent implements OnInit {
     private appService: AppService,
     private activatedRoute:ActivatedRoute,
     private userControllerService: UsersControllerServiceProxy,
+    protected dialogService: DialogService,
   ) { }
 
   ngOnInit(): void {
+  }
+
+  watchVideo(){
+    let ref = this.dialogService.open(GuidanceVideoComponent, {
+      header: 'Guidance Video',
+      width: '60%',
+      contentStyle: {"overflow": "auto"},
+      baseZIndex: 10000,
+      data: {
+        sourceName: 'Landing',
+      },
+    });
+
+    ref.onClose.subscribe(() => {
+      
+    })
   }
 
   togglePassword(){
@@ -62,14 +81,14 @@ export class LoginComponent implements OnInit {
       a.username = this.userName;
       try{
         const res = await this.authControllerServiceProxy.login(a).toPromise();
-        console.log("returned user data",res);
-        //@ts-ignore
+       
         if(res.isEmailConfirmed){
-          this.appService.steToken(res.accessToken);
+
+        this.appService.steToken(res.accessToken);
         this.appService.steRefreshToken(res.refreshToken);
-        // this.appService.steRole(res.role);
         this.appService.steProfileId(res.loginProfileId);
         this.appService.steUserName(this.userName);
+        this.appService.steRole(res.roles)
         this.appService.startRefreshTokenTimer();
         this.appService.startIdleTimer();
         this.router.navigate(['../../app'], {});
@@ -86,7 +105,6 @@ export class LoginComponent implements OnInit {
         
        
       }catch(err){
-        console.error(err);
         this.messageService.add({
           severity: 'error',
           summary: 'Error',

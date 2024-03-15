@@ -57,24 +57,12 @@
               <p-dropdown [options]="selectedUserTypesFordrop" name="usertype" [(ngModel)]="selecteduserType"
                 placeholder="select user type" optionLabel="name" #fut="ngModel"></p-dropdown>
 
-              <!-- <p class="info-message text-danger" *ngIf="
-                  !selecteduserType?.id &&
-                  (fLogin.submitted || fut.touched || fut.dirty)
-                ">
-                This is a mandatory field
-              </p> -->
             </div>
             <div class="p-field" *ngIf="!isNewUser ">
               <label for="contatname">User Type*</label>
               <p-dropdown [options]="selectedUserTypesFordrop" name="usertype" [(ngModel)]="selecteduserType"
                 placeholder={{user.userType.name}} optionLabel="name" #fut="ngModel" ></p-dropdown>
 
-              <!-- <p class="info-message text-danger" *ngIf="
-                  !selecteduserType &&
-                  (fLogin.submitted || fut.touched || fut.dirty)
-                ">
-                This is a mandatory field
-              </p> -->
             </div>
           </div>
         </div>
@@ -146,16 +134,12 @@
         <div class="row p-2">
           <div class="col-12 col-md-8">
             <div class="p-field">
-              <label for="institution">Landline *</label>
-              <!-- <p-inputMask type="text" name="telephone" mask="+99 99-999-9999" [autoClear]="false"
-                placeholder="+99 999 999-9999" [(ngModel)]="user.landline" [styleClass]="'form-control'" #ftelephone="ngModel"
-                >
-              </p-inputMask> -->
-              <input id="ftelephone" type="text" name="ftelephone" class="form-control" [disabled]="editUserId > 0" required
+              <label for="institution">Landline</label>
+              <input id="ftelephone" type="text" name="ftelephone" class="form-control" [disabled]="editUserId > 0"
               [(ngModel)]="user.landline" #ftelephone="ngModel" placeholder="+xxxxxxxxx" 
                />
 
-              <p
+              <!-- <p
                 class="info-message text-danger"
                 *ngIf="
                   (!user.landline) &&
@@ -163,10 +147,6 @@
                 "
               >
                 This is a mandatory field
-              </p>
-              <!-- <p class="info-message text-danger" *ngIf=" user.landline !== undefined &&  user?.landline!.indexOf('_') > 0">
-
-                A valid telephone number is required.
               </p> -->
             </div>
           </div>
@@ -179,9 +159,6 @@
             <div class="p-field">
               <label for="mobile">Mobile *</label>
 
-              <!-- <p-inputMask type="text" name="mobile" mask="+99 99-999-9999" [autoClear]="false"
-                placeholder="+99 999 999-999" [(ngModel)]="user.mobile" [styleClass]="'form-control'"
-                #fmobile="ngModel"></p-inputMask> -->
                 <input id="fmobile" type="text" name="fmobile" class="form-control" [disabled]="editUserId > 0" required
               [(ngModel)]="user.mobile" #fmobile="ngModel" placeholder="+xxxxxxxxx" 
                />
@@ -194,11 +171,6 @@
               >
                 This is a mandatory field
               </p>
-              <!-- <p class="info-message text-danger" *ngIf="
-                  user.mobile !== undefined && user?.mobile!.indexOf('_') > 0
-                ">
-                A valid mobile number is required.
-              </p> -->
             </div>
           </div>
         </div>
@@ -211,19 +183,6 @@
       </div>
 
 
-      <!-- <div class="p-grid p-fluid col-md-9 col-sm-12" >
-        <div class="row p-2" *ngIf="!isNewUser">
-          <div class="col-12 col-md-8">
-            <div class="p-field">
-              <label for="photo">Uplaod profile photo</label>
-
-              <label class="image-upload-container btn btn-bwm">
-                <input #imageInput type="file" accept="image/*" />
-              </label>
-            </div>
-          </div>
-        </div>
-      </div> -->
 
 
     </div>

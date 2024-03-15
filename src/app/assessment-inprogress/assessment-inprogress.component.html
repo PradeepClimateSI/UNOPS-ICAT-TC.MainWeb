@@ -4,11 +4,14 @@
         <p-toast></p-toast>
 
         <div class="mb-12">
-            <h4 class="mt-4"> Assessments in progress</h4>
+            <h4 class="mt-4"> Assessments in progress    
+                <span (click)="watchVideo()" pTooltip="Click to watch guidance video"  class="infor-video" ><i class="pi pi-video" style=" font-size: 1em ;  margin-left: 1em;"></i></span>
+            </h4>
+
         </div>
 
 
-        <p-table #dt2 [value]="assesments" [paginator]="true" [rows]="rows" [totalRecords]="totalRecords"
+        <p-table #dt2 [value]="assessments" [paginator]="true" [rows]="rows" [totalRecords]="totalRecords"
             [sortField]="'id'" [sortOrder]="-1" [lazy]="true" (onLazyLoad)="loadgridData($event)"
             [showCurrentPageReport]="true"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Entries"
@@ -32,7 +35,7 @@
                     <th>Tool</th>
                     <th>Sector/Sectors(Intervention)</th>
                     <th style="width:10%" >Last Update Date</th>
-                    <th>Action</th>
+                    <th style="width:15%" >Action</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-assessment>
@@ -49,11 +52,13 @@
                         {{setName( assessment)}}
                     </td>
                     <td>
-                        {{assessment?.editedOn | date: "dd-MM-yyyy "}}
+                        {{assessment?.editedOn | date: "dd/MM/yyyy "}}
                     </td>
                     <td>
-                        <button type="button" pButton pRipple label="Continue"
-                            (click)="detail(assessment)"></button>
+                        <div class="row">
+                            <button class="col" type="button" pButton pRipple label="Edit" (click)="detail(assessment, false)"></button>
+                            <button class="col" type="button" pButton pRipple label="Continue" (click)="detail(assessment, true)"></button>
+                        </div>
                     </td>
 
                 </tr>

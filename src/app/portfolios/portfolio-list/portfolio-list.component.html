@@ -1,16 +1,14 @@
 <div class="container pl-20 pr-20">
   <div class="mb-12">
-    <h4 class="mt-4"> Portfolios</h4>
+    <h4 class="mt-4"> Portfolios
+      <span (click)="watchVideo()" pTooltip="Click to watch guidance video"  class="infor-video" ><i class="pi pi-video" style=" font-size: 1em ;  margin-left: 1em;"></i></span>
+    </h4>
   </div>
 
   <div class="p-grid p-fluid card">
     <div class="row">
 
 
-
-      <!--     <div class="col-md-5 ">
-        <h3>Type of Interventions</h3>
-      </div> -->
 
     </div>
     <br><br>
@@ -42,8 +40,8 @@
           <th style="width:15%">Action</th>
           <th style="width:20%">Portfolio ID</th>
           <th style="width:30%">Name of the Portfolio</th>
-          <th style="width:35%">Person(s) / Organization(s)</th>
-
+          <th style="width:30%">Created Date</th>
+          <th style="width:30%">Person(s) / Organization(s)</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-portfolioList>
@@ -54,6 +52,7 @@
           </td>
           <td>{{ portfolioList.portfolioId }}</td>
           <td>{{ portfolioList.portfolioName }}</td>
+          <td>{{portfolioList.date|date: 'dd/MM/YYYY'}}</td>
           <td>{{ portfolioList.person }}</td>
         </tr>
       </ng-template>

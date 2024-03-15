@@ -34,14 +34,14 @@
                 <label for="sector">Sector</label>
                 <input
                 [disabled]="institutionId !==0"
-                placeholder={{institution.sector.name}}
+                [placeholder]="institution.sector? institution.sector.name : ''"
 
                   name="sector"
                   class="p-inputtext"
                   pInputText
 
 
-                >
+                />
 
               </div>
             </div>
@@ -68,7 +68,7 @@
           <div class="row p-2">
             <div class="col-12 col-md-6">
               <div class="p-field">
-                <label for="projScope">Name</label>
+                <label for="projScope">Institution Name</label>
                 <input
                 [disabled]="institutionId > 0"
                 pattern="^[a-zA-Z]{1,64}$"
@@ -186,7 +186,6 @@
         </button>
 
       </div>
-    <!-- </form> -->
 
     <p-toast position="top-right"></p-toast>
     <p-toast

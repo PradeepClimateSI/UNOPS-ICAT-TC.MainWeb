@@ -7,11 +7,6 @@ import {
 } from '@angular/core';
 import { environment } from 'environments/environment';
 import { Router, ActivatedRoute } from '@angular/router';
-import {
-  ConfirmationService,
-  LazyLoadEvent,
-  MessageService,
-} from 'primeng/api';
 
 import {
   ServiceProxy,
@@ -68,15 +63,10 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     let reportFilter: string[] = [];
-    reportFilter.push('Report.isPublish||$eq||' + 1); //&
-    // parameterFilter.push('Parameter.assessmentYear||$eq||');
-
+    reportFilter.push('Report.isPublish||$eq||' + 1); 
 
     let countryFilter: string[] = [];
-    countryFilter.push('Country.isSystemUse||$eq||' + 1); //&
-    // parameterFilter.push('Parameter.assessmentYear||$eq||');
-
-
+    countryFilter.push('Country.isSystemUse||$eq||' + 1); 
     let lmFilter: string[] = [];
     lmFilter.push('LearningMaterial.documentType||$eq||' + 'User Guidence') &
       lmFilter.push('LearningMaterial.isPublish||$eq||' + 1);
@@ -89,8 +79,6 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
   }
 
   toView(lm: any) {
-    console.log(lm);
-    //alert("hellll");
     window.location.href = lm.document;
   }
 

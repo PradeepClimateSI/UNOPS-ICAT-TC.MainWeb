@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DataRequestComponent } from 'app/data-request-flow/data-request/data-request.component';
 import * as moment from 'moment';
 import {
   MethodologyAssessmentControllerServiceProxy,
@@ -15,7 +14,7 @@ import {
   styleUrls: ['./quality-check-detail.component.css']
 })
 export class QualityCheckDetailComponent implements OnInit {
-  assesmentId: number = 0;
+  assessmentId: number = 0;
   param: Parameters[] = [];
   loading: boolean = false;
   commentRequried: boolean = false;
@@ -41,14 +40,13 @@ export class QualityCheckDetailComponent implements OnInit {
   ngOnInit(): void {
 
     this.route.queryParams.subscribe((params) => {
-      this.assesmentId = params['id'];
-      this.metAssesment.findByAssemeId(this.assesmentId).subscribe((res) => {
+      this.assessmentId = params['id'];
+      this.metAssesment.findByAssemeId(this.assessmentId).subscribe((res) => {
         this.param = res;
         this.headerlcimateActionName = res[0].assessment.climateAction.policyName;
         this.headerAssessmentType = res[0].assessment.assessmentType;
-        this.from =  moment(res[0].assessment.from).format('YYYY-MM-DD');
-        this.fromTo = moment(res[0].assessment.to).format('YYYY-MM-DD');
-        console.log("param ", this.param)
+        this.from =  moment(res[0].assessment.from).format('DD/MM/YYYY');
+        this.fromTo = moment(res[0].assessment.to).format('DD/MM/YYYY');
 
       })
 
@@ -64,7 +62,6 @@ export class QualityCheckDetailComponent implements OnInit {
 
 
     }
-    console.log('selectedParameters', this.selectedParam);
     this.selectedParam =[]
 
   }
@@ -74,7 +71,6 @@ export class QualityCheckDetailComponent implements OnInit {
       
       p.parameterRequest.qaStatus = 3
     }
-    console.log('selectedParameters', this.selectedParam);
     this.selectedParam =[]
   }
 

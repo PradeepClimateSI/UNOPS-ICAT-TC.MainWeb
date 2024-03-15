@@ -4,9 +4,9 @@ import { MasterDataService } from 'app/shared/master-data.service';
 import { Chart, ChartType } from 'chart.js';
 import { LazyLoadEvent } from 'primeng/api';
 import { OverlayPanel } from 'primeng/overlaypanel';
-import { Paginator } from 'primeng/paginator';
 import { Assessment, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PortfolioControllerServiceProxy } from 'shared/service-proxies/service-proxies';
-
+import { ActivatedRoute, Router } from '@angular/router';
+import * as moment from 'moment';
 @Component({
   selector: 'app-portfolio-dashboard',
   templateUrl: './portfolio-dashboard.component.html',
@@ -25,7 +25,9 @@ export class PortfolioDashboardComponent implements OnInit,AfterViewInit {
     private portfolioServiceProxy : PortfolioControllerServiceProxy,
     public masterDataService: MasterDataService,
     private cdr: ChangeDetectorRef,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
   ) {
     this.test= [{data: 'AAA', x:2,y:3}, {data: 'BBB', x:3,y:3},{data: 'CCC', x:4,y:4}]
   }
@@ -58,12 +60,14 @@ export class PortfolioDashboardComponent implements OnInit,AfterViewInit {
 
   averageTCValue:any;
   selectedPortfolio : any
+  sectorColorMap: {id: number; sectorNumber: number; color: string;}[]
+  secbgColors : string[] = [];
 
   processData: any = [];
   outcomeData: any[] = [];
   outcomeData2: any[] = [];
   allData : any = [];
-  rows :number;
+  rows :number = 10;
   loadSelectedTable : boolean = false;
   pieChart2: any;
   slicedData:{
@@ -72,7 +76,6 @@ export class PortfolioDashboardComponent implements OnInit,AfterViewInit {
     outcome_score: number,
     intervention: string
   }[]=[];
-  /////
   portfolioSDGsPieChart:Chart;
   sectorCountPieChart:Chart;
   portfolioBarChart:Chart;
@@ -108,43 +111,38 @@ export class PortfolioDashboardComponent implements OnInit,AfterViewInit {
     'rgba(47, 79, 79, 1)',
     'rgba(139, 69, 19, 1)'
   ]
+
+  allAssessments: any[] = [];
+  selectedAssessments: any;
+  selectedIds:string[] = [];
+  selectionLimit:number = 10;
+  
   async ngOnInit(): Promise<void> {
     this.xData = this.masterDataService.xData
     this.yData = this.masterDataService.yData
     this.sdgColorMap = this.masterDataService.SDG_color_map
+    this.sectorColorMap = this.masterDataService.Sector_color_map
     this.loadSelectedTable = false;
     this.loadSelectedTable =false;
     this.averageTCValue =63.78
     this.tool = 'PORTFOLIO'
 
-  
-
-  
-
-
     this.portfolioServiceProxy.getAll().subscribe(async (res: any) => {
-      console.log("assesss : ", res)
       this.portfolioList = res;
      });
-
-    
-
      this.getSectorCount(this.tool);
-    //  this.sdgResults()
-  
+     this.setAlldata()
+    
   }
   ngAfterViewInit(): void {
     this.cdr.detectChanges();
-    // this.updateSourceDivHeight();
   }
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
     this.updateSourceDivHeight();
   }
   updateSourceDivHeight(): void {
-    // console.log(".....",this.barChartData)
     if(this.barChartData.length==0){
-      console.log(".....",this.barChartData)
       this.targetDivHeight = this.targetDiv.nativeElement.offsetHeight;
       this.renderer.setStyle(this.canvasRefSDGsPieChart.nativeElement, 'height', `400px`);
       this.renderer.setStyle(this.sourceDiv.nativeElement, 'height', `${this.targetDivHeight}px`);
@@ -153,11 +151,7 @@ export class PortfolioDashboardComponent implements OnInit,AfterViewInit {
     }
     else{
       let newHeight = 250;
-      // console.log(".....",this.barChartData)
       this.renderer.setStyle(this.canvasRefSDGsPieChart.nativeElement, 'height', `${newHeight}px`);
-      
-      // this.renderer.setStyle(this.sourceDiv.nativeElement, 'height', `${this.targetDivHeight}px`);
-      // this.renderer.setStyle(this.sourceDiv.nativeElement, 'overflow-y', 'auto');
     }
    
   }
@@ -166,12 +160,29 @@ export class PortfolioDashboardComponent implements OnInit,AfterViewInit {
   goToFunction(){
 this.selectedPortfolio = ''
 this.loadLast2graphs=false;
+this.setAlldata()
  this.getSectorCount(this.tool);
 this.selectPortfolio();
   }
 
+  setAlldata(){
+    this.portfolioServiceProxy.getDashboardData(this.selectedPortfolio?this.selectedPortfolio.id:0,1,this.rows,this.selectedIds).subscribe((res) => {
+      if(res.meta.allData && res.meta.allData.length>0){
+        this.allAssessments = this.mapOptionlable(res.meta.allData)
+      }
+    });
+  }
+  mapOptionlable(data: any[]) {
+    return data.map(item => {
+      let label:string = item.climateAction.policyName
+      if (item.from && item.to) {
+       label = label + " - " + moment(new Date(item.from)).format("DD/MM/YYYY").toString() + " - " + moment(new Date(item.to)).format("DD/MM/YYYY").toString()
+      }
+      return {label:label}
+    })
+  }
+
   selectPortfolio(){
-    console.log("portfolio : ", this.selectedPortfolio)
 
     this.sdgDetailsList=[];
     this.barChartData=[];
@@ -180,14 +191,14 @@ this.selectPortfolio();
     let event: any = {};
     event.rows = this.rows;
     event.first = 0;
+    this.setAlldata()
     this.loadgridData(event);
 
     
    
    if(this.selectedPortfolio){
     this.portfolioServiceProxy.assessmentsDataByAssessmentId(this.selectedPortfolio?this.selectedPortfolio.id:0).subscribe(async (res: any) => {
-      console.log("arrayyy : ", res)
-      this.barChartData=res
+      this.barChartData=res;
       setTimeout(() => {
       this.viewPortfolioBarChart();
       this.updateSourceDivHeight()
@@ -201,8 +212,24 @@ this.selectPortfolio();
 
 
   }
+  onSelectAssessment() {
+    this.selectedIds = this.selectedAssessments.map((item: any)=> item.id)
+    this.callTable()
+ }
+
+ onClear() {
+   this.selectedIds = []
+    this.selectedAssessments = []
+    this.callTable()
+ }
+
+ callTable(){
+   let event: any = {};
+     event.rows = this.rows;
+     event.first = 0;
+     this.loadgridData(event);
+ }
   loadgridData = (event: LazyLoadEvent) => {
-    console.log('event Date', event);
     this.loading = true;
     this.totalRecords = 0;
 
@@ -211,14 +238,13 @@ this.selectPortfolio();
         ? 1
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
-    this.portfolioServiceProxy.getDashboardData(this.selectedPortfolio?this.selectedPortfolio.id:0,pageNumber,this.rows).subscribe((res) => {
+    this.portfolioServiceProxy.getDashboardData(this.selectedPortfolio?this.selectedPortfolio.id:0,pageNumber,this.rows,this.selectedIds).subscribe((res) => {
       this.dashboardData = res.items;
-      this.tableData = this.dashboardData.map(item => {return {climateAction: item.climateAction,tool:item.tool, outcomeScore: item.result.averageOutcome, processScore: item.result.averageProcess}}) 
-      console.log("tableData : ", this.tableData)
+      this.tableData = this.dashboardData.map(item => {return {climateAction: item.climateAction,tool:item.tool, outcomeScore: item.result.averageOutcome, processScore: item.result.averageProcess,assessId:item.id,from:item.from,to: item.to}}) 
+      
       this.heatMapScore = this.dashboardData.map(item => {return {outcomeScore: item.result.averageOutcome, processScore: item.result.averageProcess,}})
       this.heatMapData = this.dashboardData.map(item => {return {interventionId: item.climateAction?.intervention_id, interventionName: item.climateAction?.policyName, outcomeScore: item.result.averageOutcome, processScore: item.result.averageProcess}}) 
-      console.log("kkkkk : ", res, this.heatMapData)
-      // this.tableData = this.heatMapData
+      
       this.totalRecords= res.meta.totalItems 
       this.loading = false;
     }, err => {
@@ -226,6 +252,9 @@ this.selectPortfolio();
 
   
   };
+  goToResult(id: number) {
+    this.router.navigate(['assessment-result-investor', id], { queryParams: { assessmentId:id }, relativeTo: this.activatedRoute });
+  }
   mapOutcomeScores(value: number) {
     
     switch (value) {
@@ -273,9 +302,8 @@ this.selectPortfolio();
   }
 
  async getSectorCount(tool:string){
-    this.investorProxy.findSectorCount(tool).subscribe((res: any) => {
-      this.sectorCount = res
-      console.log("sectorcount",this.sectorCount)
+    this.investorProxy.getSectorCountByTool(tool).subscribe((res: any) => {
+      this.sectorCount = res.sort(this.compareByAge);
    
       setTimeout(() => {
         this.viewPortfolioSectorCountPieChart();
@@ -292,7 +320,7 @@ this.selectPortfolio();
   async sdgResults(){
     this.sdgDetailsList=[]
     this.portfolioServiceProxy.sdgSumCalculate(this.selectedPortfolio?this.selectedPortfolio.id:0).subscribe(async (res: any) => {
-      console.log("sdgDetailsList : ", res)
+      
       this.sdgDetailsList = res;
       setTimeout(() => {
      this.viewPortfolioSDGsPieChart();
@@ -360,6 +388,7 @@ this.selectPortfolio();
 
 
   viewPortfolioSDGsPieChart(){
+    this.sdgDetailsList.sort((a: any, b: any) => b.count - a.count)
     let labels = this.sdgDetailsList.map((item:any) => 'SDG ' + item.number + ' - ' + item.sdg);
     let counts:number[] = this.sdgDetailsList.map((item:any) => item.count);
     this.sdgDetailsList.forEach((sd: any) => {
@@ -374,7 +403,6 @@ this.selectPortfolio();
     let percentages = counts.map(count => ((count / total) * 100).toFixed(2));
 
     if (!this.canvasRefSDGsPieChart) {
-      console.error('Could not find canvas element');
       return;
     }
 
@@ -382,12 +410,10 @@ this.selectPortfolio();
     const ctx = canvas.getContext('2d');
 
     if (!ctx) {
-      console.error('Could not get canvas context');
       return;
     }
 
     if (this.portfolioSDGsPieChart) {
-      // Update the chart data
       this.portfolioSDGsPieChart.data.datasets[0].data = counts;
       this.portfolioSDGsPieChart.data.labels=labels
       this.portfolioSDGsPieChart.update();
@@ -448,7 +474,7 @@ this.selectPortfolio();
                   ];
                  }
               },
-              backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
+              backgroundColor: 'rgba(0, 0, 0, 0.8)', 
                 titleFont: {
                   size: 14,
                   weight: 'bold'
@@ -456,7 +482,7 @@ this.selectPortfolio();
                 bodyFont: {
                   size: 14
                 },
-                displayColors: true, // Hide the color box in the tooltip
+                displayColors: true, 
                 bodyAlign: 'left'
             }
          }
@@ -473,9 +499,16 @@ this.selectPortfolio();
     let counts:number[] = this.sectorCount.map((item:any) => item.count);
     let total = counts.reduce((acc, val) => acc + val, 0);
     let percentages = counts.map(count => ((count / total) * 100).toFixed(2));
+    this.sectorCount.forEach((sd: any) => {
+      let color = this.sectorColorMap.find(o => o.sectorNumber === sd.id)
+      if (color) {
+        this.secbgColors.push(color.color)
+      } else {
+        this.secbgColors.push(this.defaulColors[sd.id])
+      }
+    })
 
     if (!this.canvasRefSectorCountPieChart) {
-      console.error('Could not find canvas element');
       return;
     }
 
@@ -483,7 +516,6 @@ this.selectPortfolio();
     const ctx = canvas.getContext('2d');
 
     if (!ctx) {
-      console.error('Could not get canvas context');
       return;
     }
 
@@ -495,23 +527,7 @@ this.selectPortfolio();
           labels: labels,
           datasets: [{
             data: counts,
-            backgroundColor: [
-              'rgb(250,227,114)',
-              'rgb(51,51,51)',
-              'rgb(0,170,187)',
-              'rgb(227,120,42)',
-              'rgb(150,131,141)',
-              'rgb(42,61,227)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(75, 192, 192,1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(123, 122, 125, 1)',
-              'rgba(255, 99, 132, 1)',
-              'rgba(255, 205, 86, 1)',
-              'rgba(255, 99, 132, 1)',
-
-            ],
-
+            backgroundColor: this.secbgColors,
           }]
         },
         options: {
@@ -558,7 +574,7 @@ this.selectPortfolio();
                   ];
                  }
               },
-              backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
+              backgroundColor: 'rgba(0, 0, 0, 0.8)', 
                 titleFont: {
                   size: 14,
                   weight: 'bold'
@@ -566,7 +582,7 @@ this.selectPortfolio();
                 bodyFont: {
                   size: 14
                 },
-                displayColors: true, // Hide the color box in the tooltip
+                displayColors: true,
                 bodyAlign: 'left'
             }
          }
@@ -583,11 +599,9 @@ this.selectPortfolio();
 
     let label =this.barChartData.map((item:any) => item?.assessment?.climateAction?.policyName );
     let data =this.barChartData.map((item:any) => item.ghgValue?item.ghgValue:0);
-    console.log("label",label,"data",data)
 
 
     if (!this.canvasRefBarChart) {
-      console.error('Could not find canvas element');
       return;
     }
 
@@ -595,17 +609,9 @@ this.selectPortfolio();
     const ctx = canvas.getContext('2d');
 
     if (!ctx) {
-      console.error('Could not get canvas context');
       return;
     }
 
-    // if (this.portfolioBarChart) {
-    //   // Update the chart data
-    //   this.portfolioBarChart.data.datasets[0].data = data;
-    //   this.portfolioBarChart.data.labels=label;
-    //   this.portfolioBarChart.update();
-    // }
-    // else{
       if (this.portfolioBarChart) {
         this.portfolioBarChart.destroy();
        
@@ -678,7 +684,7 @@ this.selectPortfolio();
               beginAtZero: true,
               title: {
                 display: true,
-                text: 'Expected GHG reductions over intervention lifetime (Mt CO2-eq)',
+                text: 'Expected average GHG reductions or removals (mitigation outcomes) (tCO₂e/year) ',
                 font: {
                   size: 10,
                   weight: 'bold',
@@ -697,14 +703,13 @@ this.selectPortfolio();
               callbacks:{
 
                 label:(context)=>{
-                  // console.log("context",context,"4444",data[context.dataIndex])
                   return[
 
                     `Expected GHG reductions over intervention lifetime  (Mt CO2-eq): ${context.raw}`,
                   ];
                  }
               },
-              backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
+              backgroundColor: 'rgba(0, 0, 0, 0.8)', 
                 titleFont: {
                   size: 14,
                   weight: 'bold'
@@ -712,7 +717,7 @@ this.selectPortfolio();
                 bodyFont: {
                   size: 14
                 },
-                displayColors: true, // Hide the color box in the tooltip
+                displayColors: true, 
                 bodyAlign: 'left'
             }
           }
@@ -720,12 +725,13 @@ this.selectPortfolio();
         }
     });
 
-  // }
 
 
   }
 
-
+  compareByAge(a:any, b:any) {
+    return b.count - a.count;
+  }
 
   getBackgroundColor(value: number): string {
     switch (value) {

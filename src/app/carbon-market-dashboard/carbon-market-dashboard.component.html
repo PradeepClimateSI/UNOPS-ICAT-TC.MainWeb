@@ -1,109 +1,4 @@
 
-  <!-- <div class="row">
-    <div class="col-md-5 col-12 d-flex align-items-stretch">
-        <div class="p-grid p-fluid card m-3">
-            <div class="row text-center ">
-              <h3>Transformational Change </h3>
-              <ng-container *ngIf="tcData.length==0; else elseBlock1">
-                <div  class="col-12 " >
-                  <p-messages severity="warn" >
-                    <ng-template pTemplate>
-                        <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
-                        <div class="ml-2">No data to show.</div>
-                    </ng-template>
-                </p-messages>
-
-                 </div>
-              </ng-container>
-              <ng-template #elseBlock1>
-                <h2  class="tc-value">{{averageTCValue}}%</h2>
-                <div class="col-12  mt-20 ml-10" >
-                  <div class="first">
-                    <div class="second" [ngStyle]="{'width.%':averageTCValue}">
-
-                    </div>
-                    <div class="row justify-content-between ">
-                      <div  class="col-4 mt-25"  align="left" >
-                        <h5>Low</h5>
-                      </div>
-                      <div  align="right " class="col-4 mt-25">
-                        <h5>High</h5>
-                      </div>
-                    </div>
-                    <div class="d-flex flex-row-reverse mt-60">
-                      <div  align="right " ><p class="fs-6">Average Transformational Change</p></div>
-
-                    </div>
-                  </div>
-                 </div>
-              </ng-template>
-
-
-            </div>
-        </div>
-    </div>
-    <div class="col-md-7 col-12 d-flex align-items-stretch">
-        <div class="p-grid p-fluid card m-3">
-          <div class="row text-center ">
-            <h3>Sectors Targeted</h3>
-            <div *ngIf="sectorCount" [hidden]="sectorCount.length==0" class="col-12  mt-20 ml-10 chart-container"  >
-              <canvas   id="pieChart2">{{pieChart2}}</canvas>
-            </div>
-            <div  *ngIf="sectorCount" class="col-12 " [hidden]="sectorCount.length!==0 ">
-              <p-messages severity="warn" >
-                <ng-template pTemplate>
-                    <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
-                    <div class="ml-2">No data to show.</div>
-                </ng-template>
-            </p-messages>
-
-             </div>
-             <div  *ngIf="!sectorCount" >
-              <p-messages severity="warn" >
-                <ng-template pTemplate>
-                    <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
-                    <div class="ml-2">No data to show.</div>
-                </ng-template>
-            </p-messages>
-
-             </div>
-        </div>
-        </div>
-    </div>
-
-  </div> -->
-
-
-
-
-
-
-<!-- <div class="p-grid p-fluid card mt-20 m-3">
-  <div class="row text-center " >
-      <h3>Transformational Change by Interventions</h3>
-      <div  class="col-12  mt-20 ml-10 chart-container"  style="max-height: 600px;">
-
-          <div  class="col-12 " [hidden]="tcData.length!==0">
-            <p-messages severity="warn" >
-              <ng-template pTemplate>
-                  <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
-                  <div class="ml-2">No data to show.</div>
-              </ng-template>
-          </p-messages>
-
-           </div>
-           <div [hidden]="tcData.length==0">
-              <canvas  id="canvas">{{chart}}</canvas>
-           </div>
-
-
-
-
-
-       </div>
-   </div>
-</div> -->
-
 
 
 <div class="row">
@@ -124,6 +19,13 @@
               </ng-container>
               <ng-template #elseBlock3 >
                 <div  class="col-12  mt-20 ml-10" >
+                  <div class="row">
+                    <label class="col-3">Select Assessments</label>
+                    <p-multiSelect placeholder="Select Assessments" name="interventions" class="col"
+                      #sector="ngModel" [(ngModel)]="selected_interventions" [options]="interventions_to_filter" appendTo="body"
+                      optionLabel="intervention" optionValue="intervention_id" (ngModelChange)="loadgridData($event)" [selectionLimit]="10"></p-multiSelect>
+                  </div>
+                  <br>
 
                   <p-table
                   #mainTable
@@ -144,24 +46,18 @@
                   <ng-template pTemplate="header">
                       <tr>
                           <th style="width:60%">Intervention Name</th>
-                          <th style="width:20%" style="line-height: 130%;">Process of Change Score</th>
-                          <th style="width:20%" style="line-height: 130%;">Outcome of Change Score</th>
+                          <th style="width:20%" style="line-height: 130%;">Likelihood of Transformation</th>
+                          <th style="width:20%" style="line-height: 130%;">Outcome Score</th>
 
                       </tr>
                   </ng-template>
                   <ng-template pTemplate="body" let-tableData>
-                      <tr>
+                      <tr (click)="goToResult(tableData.assessment_id)">
                           <td>{{ tableData?.intervention }}</td>
                           <td>{{ mapProcessScores(tableData.process_score) }}</td>
                           <td>{{ mapOutcomeScores(tableData.outcome_score) }}</td>
                       </tr>
                   </ng-template>
-              <!--     <ng-template pTemplate="paginatorleft">
-                      <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"></p-button>
-                  </ng-template> -->
-  <!--                 <ng-template pTemplate="paginatorright">
-                      <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
-                  </ng-template> -->
               </p-table>
                  </div>
               </ng-template>
@@ -173,7 +69,6 @@
 
     <div  class="p-grid p-fluid card m-3 ">
       <div class="row text-center ">
-          <!-- <h3>Meeting Preconditions</h3> -->
           <h3>Meeting Environmental Integrity Criteria</h3>
           <div *ngIf="CMPrerequiste" [hidden]="CMPrerequiste[0].count==0 && CMPrerequiste[1].count==0" class="col-12  mt-20 ml-10 "  >
               <canvas id="pieChartCM" >{{pieChartCM}}</canvas>
@@ -181,7 +76,6 @@
           <div  *ngIf="CMPrerequiste" class="col-12 " [hidden]="CMPrerequiste[0].count!=0 || CMPrerequiste[1].count!=0">
             <p-messages severity="warn" >
               <ng-template pTemplate>
-                  <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
                   <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
                   <div class="ml-2">No data to show.</div>
               </ng-template>
@@ -223,32 +117,6 @@
                   </ng-container>
                   <ng-template #elseBlock4>
                     <app-heat-map  id="heatmap" [xData]="xData" [yData]="yData" [score]="heatMapScore" [showOp]="true" [tableData]="heatMapData"></app-heat-map>
-                    <!-- <table class="heatmap" style="text-align: center;">
-                      <tbody>
-                          <tr>
-                              <td></td>
-                              <td colspan="7">Outcome: Extent and sustained nature of the transformation</td>
-                          </tr>
-                          <tr>
-                              <td rowspan="7">Process: Transformational change supported</td>
-                          </tr>
-                          <tr>
-                              <td></td>
-                              <ng-container *ngFor="let x of xData">
-                                  <td>{{x.label}}</td>
-                              </ng-container>
-                          </tr>
-                          <tr *ngFor="let y of yData">
-                              <td>{{y.label}}</td>
-                              <ng-container *ngFor="let x of xData">
-                                  <td  [style.background-color]="getBackgroundColor(y.value+x.value)">
-                                      <span (mouseenter)="enterHeatMapPoint(x.value, y.value,$event);" (mouseleave)="leaveHeatMapPoint();op.hide()"
-                                      [style.background-color]=" getIntervention(x.value, y.value) ?getDotColor(y.value + x.value):''" [ngClass]="getIntervention(x.value, y.value)? 'intervention':''" >{{y.value+x.value}}</span>
-                                  </td>
-                              </ng-container>
-                          </tr>
-                      </tbody>
-                    </table> -->
                   </ng-template>
 
                  </div>
@@ -274,7 +142,6 @@
       >
         <p-messages severity="warn">
           <ng-template pTemplate>
-            <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
             <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
             <div class="ml-2">No data to show.</div>
           </ng-template>
@@ -285,7 +152,6 @@
   <div  class="col-md-6 col-sm-6 col-12 d-flex align-items-stretch" >
     <div #targetDiv class="p-grid p-fluid card m-3">
       <div class="row text-center">
-        <!-- <h3>Sectors Targeted</h3> -->
         <h3>Sectors represented</h3>
         <div
           *ngIf="sectorCount.length != 0"
@@ -302,7 +168,6 @@
       >
         <p-messages severity="warn">
           <ng-template pTemplate>
-            <!-- <img src="assets/showcase/images/primeng.svg" width="32" /> -->
             <i class="pi pi-info-circle mr-20" style="font-size: 2rem"></i>
             <div class="ml-2">No data to show.</div>
           </ng-template>
@@ -311,28 +176,3 @@
     </div>
   </div>
 </div>
-<!-- <p-overlayPanel  [hidden]="pointTableDatas.length==0" #op>
-  <ng-template pTemplate="content">
-    <div *ngFor="let pointTableData of pointTableDatas" style=" border-style: solid;" class="m-3 p-1" >
-
-      <div  class="row">
-         <div class="col-4">Intervation ID :</div>
-         <div class="col-8">{{pointTableData?.intervention_id}}</div>
-         
-      </div>
-      <div  class="row">
-        <div class="col-4">Intervation Name :</div>
-        <div class="col-8">{{pointTableData?.intervention}}</div>
-      </div>
-      <div  class="row">
-        <div class="col-4">Process score :</div>
-        <div class="col-8">{{pointTableData.process_score}}</div>
-      </div>
-      <div  class="row">
-        <div class="col-4">outcome score :</div>
-        <div class="col-8">{{pointTableData.outcome_score}}</div>
-      </div>
-    </div>
-    
-</ng-template>
-</p-overlayPanel> -->

@@ -1,6 +1,8 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
 import { LazyLoadEvent } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
 import { Institution, InstitutionControllerServiceProxy, ServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
@@ -36,7 +38,8 @@ export class InstitutionListComponent implements OnInit {
     private router: Router,
     private serviceProxy: ServiceProxy,
     private institutionProxy: InstitutionControllerServiceProxy,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    protected dialogService: DialogService,
   ) { }
 
   ngAfterViewInit(): void {
@@ -45,35 +48,12 @@ export class InstitutionListComponent implements OnInit {
 
   ngOnInit(): void {
 
-    // this.serviceProxy
-    // .getManyBaseInstitutionControllerInstitution(
-    //   undefined,
-    //   undefined,
-    //   undefined,
-    //   undefined,
-    //   undefined,
-    //   undefined,
-    //   1000,
-    //   0,
-    //   0,
-    //   0
-    // ).subscribe((res: any) => {
-    //   this.institutions = res.data;
-    //   this.totalRecords = res.totalRecords;
-    //   if(res.totalRecords !== null){
-    //     this.last = res.count;
-    //   }else{
-    //     this.last = 0;
-    //   }
-    //   // console.log('insti....',res.data);
-    // })
     let event: any = {};
    this.loadgridData(event)
 
   }
 
   onSearch() {
-    console.log("llllllllllllllll")
     let event: any = {};
     event.rows = this.rows;
     event.first = 0;
@@ -81,10 +61,25 @@ export class InstitutionListComponent implements OnInit {
     this.loadgridData(event);
   }
 
+  watchVideo(){
+    let ref = this.dialogService.open(GuidanceVideoComponent, {
+      header: 'Guidance Video',
+      width: '60%',
+      contentStyle: {"overflow": "auto"},
+      baseZIndex: 10000,
+      data: {
+        sourceName: 'institution',
+      },
+    });
+
+    ref.onClose.subscribe(() => {
+      
+    })
+  }
+
   
   loadgridData = (event: LazyLoadEvent) => {
 
-    console.log('event Date', this.searchBy.text);
     
     
     this.loading = true;
@@ -99,19 +94,14 @@ export class InstitutionListComponent implements OnInit {
     this.rows = event.rows === undefined ? 10 : event.rows;
 
 
-
-console.log("pageNumber==",pageNumber)
-
-console.log("rows==",this.rows)
 setTimeout(() => {
       this.institutionProxy
       .getInstiDetails(
         pageNumber,
         this.rows,
         filtertext,
-        this.userId,//utypeid
+        this.userId,
       ).subscribe((a) => {
-        console.log('int=========',a)
           this.institutions = a.items;
           this.totalRecords = a.meta.totalItems;
           this.loading = false;
@@ -126,11 +116,9 @@ setTimeout(() => {
   }
 
   viewInstitution(institutions: Institution){
-    console.log(institutions)
     this.router.navigate(['/app/view-institution'],{
       queryParams: { id: institutions.id},
     });
-    console.log('id',institutions.id)
   }
 
   

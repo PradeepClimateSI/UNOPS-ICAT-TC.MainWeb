@@ -42,20 +42,7 @@
         <div class="col-md-4">
           <div class="col-12">
             <div class="p-field">
-              <!--climateactions-->
               <label for="projStatus">Intervention </label>
-              <!-- <p-dropdown
-                name="climateActiontype"
-                [options]="dataReqAssignCA"
-                [(ngModel)]="searchBy.climateaction"
-                #fsector="ngModel"
-                [showClear]="true"
-                [filter]="true"
-                placeholder="Select .."
-                optionLabel="climateActionName"
-                (ngModelChange)="onCAChange($event)"
-              >
-              </p-dropdown> -->
               <p-dropdown
                 name="climateActiontype"
                 [options]="dataReqAssignCA"
@@ -108,7 +95,6 @@
         </div>
       </div>
   
-      <!-- <div> {{climateactions|json}} </div> -->
   
       <div class="row p-2" style="margin-bottom: 36px;">
         <p-table
@@ -126,25 +112,8 @@
           [responsive]="true"
           [(selection)]="selectedParameters"
         >
-          <!-- Table header start search -->
-  
-          <!-- <p-table #tt [value]="climateactions" [columns]="cols" placeholder="Global Filter" [filter]="true" filterMatchMode="contains" >                                                          
-        <ng-template pTemplate="caption">
-            <div style="text-align: right">        
-                <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
-                <input type="text" pInputText size="50" style="width:auto">
-            </div>
-        </ng-template> -->
-  
-          <!-- Table header END Search -->
   
           <ng-template pTemplate="header">
-            <!-- <tr> 
-            <th *ngFor="let col of columns" [ngSwitch]="col.field">
-              <input *ngSwitchCase="'climateActionName'" pInputText type="text"
-                (input)="dt.filter($event.target.value, col.field, 'contains')" />
-            </th>
-          </tr> -->
   
             <tr>
               <th style="width: 3rem">
@@ -161,7 +130,6 @@
                 <th>Characteristic</th>
                 <th>Indicator/Score</th>
               <ng-container *ngIf="tabIndex==0" >
-                <!-- <th>Question</th> -->
                 
               </ng-container>
               <th >Data Provider</th>
@@ -198,7 +166,7 @@
                 {{  dataRequestList?.investmentParameter?.assessment?.assessmentType}}
               </td>
               <td>
-                {{  dataRequestList?.investmentParameter?.assessment?.from | date: "dd-MM-yyyy " }} - {{ dataRequestList?.investmentParameter?.assessment?.to | date: "dd-MM-yyyy "}}
+                {{  dataRequestList?.investmentParameter?.assessment?.from | date: "dd/MM/yyyy " }} - {{ dataRequestList?.investmentParameter?.assessment?.to | date: "dd/MM/yyyy "}}
               </td>
               <td>{{ dataRequestList?.investmentParameter?.type}}</td>
               <td>{{ dataRequestList?.investmentParameter?.category?.name}}</td>
@@ -290,8 +258,7 @@
                 </td>
                 
               </ng-container>
-              <!-- data provider -->
-              <td>{{ dataRequestList.deadline | date: "dd-MM-yyyy " }}</td>
+              <td>{{ dataRequestList.deadline | date: "dd/MM/yyyy " }}</td>
               <td>
                 {{
                   dataRequestList.dataRequestStatus ==null ? "Just Created" : ""
@@ -308,7 +275,6 @@
                   (click)="getInfo(dataRequestList)"
                 ></i>
               </td>
-              <!-- <td>{{ dataRequestList.id }}</td> -->
             </tr>
           </ng-template>
         </p-table>
@@ -354,7 +320,6 @@
                 (click)="onClickSend(1)"
                 style="width: 100px"
               ></button>
-              <!-- <p-toast position="top-right"></p-toast> -->
             </div>
           </td>
           <td>
@@ -367,7 +332,6 @@
                 label="Send Now"
                 (click)="onClickSend(2)"
               ></button>
-              <!-- <p-toast position="top-right"></p-toast> -->
             </div>
           </td>
           <td>
@@ -395,13 +359,6 @@
     <p *ngIf="category && ['SCALE_GHG', 'SCALE_SD'].includes(category)">Expected impact: {{expectedImpact}}</p>
     <p>Justification: {{justification}}</p>
   </ng-container>
-    <!-- <app-raise-concern
-      [area]="raiseConcernSection"
-      [verificationDetails]="concernVerificationDetails"
-      [assesmentYear]="assementYear"
-      [isNdC]="concernIsNdC"
-      [isMethodology]="concernIsMethodology"
-    ></app-raise-concern> -->
     <h6>Data Request History</h6>
     <app-view-datarequest-history
       [parameterId]="paraId"
@@ -418,12 +375,6 @@
   [draggable]="false"
   [resizable]="true"
 >
-  <!-- <div class="p-field p-col-12 p-md-4">
-  <span class="p-float-label">
-    
-    <label>{{selectedParameter?.name}}</label>
-  </span>
-</div> -->
   <p-card
     [style]="{ width: '360px' }"
     styleClass="p-card-shadow"
@@ -438,11 +389,6 @@
       [listStyle]="{ 'max-height': '250px' }"
       optionLabel="name"
     >
-      <!-- <ng-template let-country pTemplate="item">
-        <div class="country-item">
-            <div>{{country.name}}</div>
-        </div>
-    </ng-template> -->
     </p-listbox>
     <small *ngIf="selectDataProvider" class="p-error"
       >Please select Data provider.</small
@@ -462,8 +408,6 @@
           [style]="{ 'margin-right': '.5em' }"
         ></p-button>
       </div>
-      <!-- <p-button label="Save" icon="pi pi-check"></p-button>
-      <p-button label="Cancel" icon="pi pi-times" styleClass="p-button-secondary" [style]="{'margin-left': '.5em'}"></p-button> -->
     </ng-template>
   </p-card>
 </p-dialog>
@@ -510,8 +454,6 @@
             [style]="{ 'margin-right': '.5em' }"
           ></p-button>
         </div>
-        <!-- <p-button label="Save" icon="pi pi-check"></p-button>
-        <p-button label="Cancel" icon="pi pi-times" styleClass="p-button-secondary" [style]="{'margin-left': '.5em'}"></p-button> -->
       </ng-template>
     </p-card>
   </p-dialog>

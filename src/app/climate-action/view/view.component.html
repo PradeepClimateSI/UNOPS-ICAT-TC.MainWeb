@@ -5,7 +5,9 @@
       <p-toast></p-toast>
 
       <div class="mb-12">
-        <h4 class="mt-4">Manage Interventions</h4>
+        <h4 class="mt-4">Manage Interventions
+          <span (click)="watchVideo()" pTooltip="Click to watch guidance video"  class="infor-video" ><i class="pi pi-video" style=" font-size: 1em ;  margin-left: 1em;"></i></span>
+        </h4>
       </div>
 
   <p-table #dt2 
@@ -36,25 +38,20 @@
 
     <ng-template pTemplate="header">
         <tr  >
-            <!-- <th pSortableColumn="id" >ID <p-sortIcon field="id"></p-sortIcon></th> -->
-            <!-- <th pSortableColumn="policyName" >INTERVENTION <p-sortIcon field="policyName"></p-sortIcon></th> -->
-            <!-- <th pSortableColumn="contactPersoFullName">PROJECT PROPENENT<p-sortIcon field="contactPersoFullName"></p-sortIcon></th> -->
-            <th>Intervention</th>
-            <!-- <th>Type of intervention</th> -->
-            <th>Current status</th>
-            <th>Status of approval</th>
-            <th>Actions</th>
+            <th rowspan="2">Intervention</th>
+            <th rowspan="2">Current status</th>
+            <th rowspan="2">Status of approval</th>
+            <th  class="text-center" colspan="2">Actions</th>
+        </tr>
+        <tr>
+          <th></th>
+          <th></th>
         </tr>
     </ng-template>
     <ng-template  pTemplate="body" let-climateactions >
         <tr>
-          <!-- <td>{{climateactions.id}}</td> -->
           <td>
             {{ climateactions?.policyName }}</td>
-          <!-- <td>{{ climateactions.contactPersoFullName }}</td> -->
-          <!-- <td>
-             {{climateactions?.typeofAction}}
-         </td> -->
            <td>
              {{climateactions?.projectStatus?.name}}
           </td>
@@ -67,6 +64,9 @@
           <td>
             <i class="pi pi-eye" style="font-size: 1.5rem; color: #000; margin-left: 17%"
               (click)="detail(climateactions)"></i>
+          </td>
+          <td>
+            <p-button  icon="pi pi-trash" severity="danger" (click)="delete(climateactions)"></p-button>
           </td>
 
         </tr>

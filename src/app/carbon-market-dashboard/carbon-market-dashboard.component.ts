@@ -1,14 +1,15 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Chart, ChartType } from 'chart.js';
-import { AssessmentCMDetailControllerServiceProxy, CMAssessmentAnswerControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CMScoreDto, ClimateAction, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { AssessmentCMDetailControllerServiceProxy, CMAssessmentQuestionControllerServiceProxy, CMScoreDto, InvestorToolControllerServiceProxy,} from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
-import { AppService, LoginRole, RecordStatus } from 'shared/AppService';
+import { LoginRole, } from 'shared/AppService';
 import { MasterDataService } from 'app/shared/master-data.service';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Paginator } from 'primeng/paginator';
 import { LazyLoadEvent } from 'primeng/api';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { HeatMapScore, TableData } from 'app/charts/heat-map/heat-map.component';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-carbon-market-dashboard',
   templateUrl: './carbon-market-dashboard.component.html',
@@ -19,8 +20,6 @@ export class CarbonMarketDashboardComponent implements OnInit,AfterViewInit {
   canvascmRefSDGsPieChart: ElementRef<HTMLCanvasElement>;
   @ViewChild('sourceDiv', { read: ElementRef }) sourceDiv: ElementRef;
   @ViewChild('targetDiv', { read: ElementRef }) targetDiv: ElementRef;
-  // @ViewChild('sourceDiv2', { read: ElementRef }) sourceDiv2: ElementRef;
-  // @ViewChild('targetDiv2', { read: ElementRef }) targetDiv2: ElementRef;
 
 
   @ViewChild('cmSectorCountPieChart')
@@ -30,25 +29,25 @@ export class CarbonMarketDashboardComponent implements OnInit,AfterViewInit {
   heatMapScore: HeatMapScore[];
   heatMapData: TableData[];
   targetDivHeight: any;
-  // targetDivHeightofMeetingEnvironmental: any;
-  // cmloading: boolean=false;
   sdgColorMap: {id: number; sdgNumber: number; color: string;}[]
+  sectorColorMap: {id: number; sectorNumber: number; color: string;}[]
   bgColors: string[] = [];
+  secbgColors : string[] = [];
+  interventions_to_filter: any[] = [];
+  selected_interventions: string[] = [];
 
   constructor(
-    // private projectProxy: ProjectControllerServiceProxy,
     private assessmentCMProxy:AssessmentCMDetailControllerServiceProxy,
-    // private methassess : MethodologyAssessmentControllerServiceProxy,
     private investorProxy: InvestorToolControllerServiceProxy,
     private cmAssessmentQuestionProxy : CMAssessmentQuestionControllerServiceProxy,
     public masterDataService: MasterDataService,
     private cdr: ChangeDetectorRef,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
   ) { 
-    // Chart.register(ChartDataLabels)
   }
 
- // @ViewChild('canvas', { static: false }) canvas: ElementRef;
  totalRecords: number = 0;
  score: CMScoreDto = new CMScoreDto()
  userName: string = "";
@@ -125,12 +124,12 @@ CMPrerequiste: {
       'rgba(139, 69, 19, 1)'
     ]
   ngOnInit(): void {
-    // this.averageTCValue =58.05;
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
     this.userRole = tokenPayload.role.code;
 
-    this.sdgColorMap = this.masterDataService.SDG_color_map
+    this.sdgColorMap = this.masterDataService.SDG_color_map;
+    this.sectorColorMap = this.masterDataService.Sector_color_map
 
     this.tool = 'CARBON_MARKET';
     let event: any = {};
@@ -140,48 +139,43 @@ CMPrerequiste: {
     this.loadgridData(event);
    
 
-    this.xData = this.masterDataService.xData
-    this.yData = this.masterDataService.yData
-    console.log("CMPrerequistepre", this.CMPrerequiste)
+    this.xData = this.masterDataService.xData;
+    this.yData = this.masterDataService.yData;
     this.assessmentCMProxy.getPrerequisite().subscribe((res:any)=>{
 
       this.CMPrerequiste=res
       setTimeout(() => {
         this.viewPieChartCM();
       }, 20);
-      console.log("CMPrerequiste",res, this.CMPrerequiste[0]?.count, this.CMPrerequiste[1]?.count)
       
     })
 
-    // this.sdgResults();
     this.sectorCountResult();
 
   }
 
   loadgridData = (event: LazyLoadEvent) => {
-    console.log('event Date', event);
     
     this.totalRecords = 0;
-    // this.loading = true;
     let pageNumber =
       event.first === 0 || event.first === undefined
         ? 1
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
-    this.rows = event.rows === undefined ? 10 : event.rows;
-    this.cmAssessmentQuestionProxy.getDashboardData(pageNumber,this.rows).subscribe((res) => {
+    this.rows = event.rows === undefined ? 5 : event.rows;
+    this.cmAssessmentQuestionProxy.getDashboardData(pageNumber,this.rows, this.selected_interventions).subscribe((res_) => {
+      let res = res_.assessments
       this.tableData=res.items;
-      this.heatMapScore = this.tableData.map(item => {return {processScore: item.process_score, outcomeScore: item.outcome_score}})
+      this.interventions_to_filter = res_.interventions
+      this.heatMapScore = this.tableData.map(item => {return {processScore: item.process_score, outcomeScore: item.outcome_score}});
       this.heatMapData = this.tableData.map(item => {return {interventionId: item.intervention_id, interventionName: item.intervention, processScore: item.process_score, outcomeScore: item.outcome_score}}) 
-      console.log("kkkkk : ", res)
-      this.totalRecords= res.meta.totalItems
+      
+      this.totalRecords= res.meta.totalItems;
       this.loading = false;
     }, err => {
       this.loading = false;});
 
-
-    // setTimeout(() => {
-    // }, 1);
   };
+
   mapOutcomeScores(value: number) {
     
     switch (value) {
@@ -229,7 +223,6 @@ CMPrerequiste: {
   }
   ngAfterViewInit(): void {
     this.cdr.detectChanges();
-    // this.updateSourceDivHeight();
   }
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
@@ -240,16 +233,12 @@ CMPrerequiste: {
     this.targetDivHeight = this.targetDiv.nativeElement.offsetHeight;
     this.renderer.setStyle(this.sourceDiv.nativeElement, 'height', `${this.targetDivHeight}px`);
     this.renderer.setStyle(this.sourceDiv.nativeElement, 'overflow-y', 'auto');
-    // this.targetDivHeightofMeetingEnvironmental = this.targetDiv2.nativeElement.offsetHeight;
-    // this.renderer.setStyle(this.sourceDiv2.nativeElement, 'height', `${this.targetDivHeightofMeetingEnvironmental}px`);
-    // this.renderer.setStyle(this.sourceDiv2.nativeElement, 'overflow-y', 'auto');
     this.cdr.detectChanges();
   }
 
   sdgResults(){
     this.sdgDetailsList=[]
     this.investorProxy.sdgSumCalculate('CARBON_MARKET').subscribe(async (res: any) => {
-      console.log("sdgDetailsList : ", res)
       this.sdgDetailsList = res;
       setTimeout(() => {
         this.viewFrequencyofSDGsChart();
@@ -264,29 +253,20 @@ CMPrerequiste: {
   }
 sectorCountResult(){
  this.investorProxy.getSectorCountByTool(this.tool).subscribe((res: any) => {
-      this.sectorCount = res
-      console.log("sectorcount",this.sectorCount)
+      this.sectorCount = res.sort(this.compareByAge);
       setTimeout(() => {
        
         this.viewSecterTargetedPieChart();
         this.updateSourceDivHeight();
       }, 20);
       
-      this.sdgResults()
-      // 
+      this.sdgResults();
      
     });
-
-    // this.sectorCount=[{sector:'test1',count:23},
-    // {sector:'test2',count:10}]
-  
-    // setTimeout(() => {
-    //   this.viewSecterTargetedPieChart();
-    // }, 200);
+;
 }
   viewFrequencyofSDGsChart(){
-    console.log(this.sdgDetailsList)
-    this.sdgDetailsList.sort((a: any, b: any) => a.number - b.number)
+    this.sdgDetailsList.sort((a: any, b: any) => b.count - a.count)
     let labels = this.sdgDetailsList.map((item:any) => 'SDG ' + item.number + ' - ' + item.sdg);
     let counts:number[] = this.sdgDetailsList.map((item:any) => item.count);
     this.sdgDetailsList.forEach((sd: any) => {
@@ -299,24 +279,20 @@ sectorCountResult(){
     })
     let total = counts.reduce((acc, val) => acc + val, 0);
     let percentages = counts.map(count => ((count / total) * 100).toFixed(2));
-    // labels = [labels[0]]
-    // this.bgColors = [this.bgColors[0]]
 
-    if (!this.canvascmRefSDGsPieChart) {
-      console.error('Could not find canvas element');
+
+    if (!this.canvascmRefSDGsPieChart) {;
       return;
     }
 
     const canvas = this.canvascmRefSDGsPieChart.nativeElement;
     const ctx = canvas.getContext('2d');
 
-    if (!ctx) {
-      console.error('Could not get canvas context');
+    if (!ctx) {;
       return;
     }
 
-    if (this.cmPieChartSDG) {
-      // Update the chart data
+    if (this.cmPieChartSDG) {;
       this.cmPieChartSDG.data.datasets[0].data = counts;
       this.cmPieChartSDG.data.labels=labels
       this.cmPieChartSDG.update();
@@ -342,7 +318,6 @@ sectorCountResult(){
           legend:{
             position: 'bottom',
             labels: {
-              // padding: 20
             }
           },
           datalabels: {
@@ -363,16 +338,11 @@ sectorCountResult(){
             callbacks:{
               
               label:(ctx)=>{ 
-                // console.log(ctx)
-                // let sum = ctx.dataset._meta[0].total;
-                // let percentage = (value * 100 / sum).toFixed(2) + "%";
-                // return percentage;
                 let sum = 0;
                 let array =counts
                 array.forEach((number) => {
                   sum += Number(number);
                 });
-                // console.log(sum, counts[ctx.dataIndex])
                 let percentage = (counts[ctx.dataIndex]*100 / sum).toFixed(2)+"%";
 
                 return[
@@ -382,7 +352,7 @@ sectorCountResult(){
                 ];
                }
             },
-            backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
+            backgroundColor: 'rgba(0, 0, 0, 0.8)', 
               titleFont: {
                 size: 14,
                 weight: 'bold'
@@ -390,7 +360,7 @@ sectorCountResult(){
               bodyFont: {
                 size: 14
               },
-              displayColors: true, // Hide the color box in the tooltip
+              displayColors: true, 
               bodyAlign: 'left'
           }
        }
@@ -405,8 +375,15 @@ sectorCountResult(){
     let counts:number[] = this.sectorCount.map((item) => item.count);
     const total = counts.reduce((acc, val) => acc + val, 0);
     const percentages = counts.map(count => ((count / total) * 100).toFixed(2));
+    this.sectorCount.forEach((sd: any) => {
+      let color = this.sectorColorMap.find(o => o.sectorNumber === sd.id)
+      if (color) {
+        this.secbgColors.push(color.color)
+      } else {
+        this.secbgColors.push(this.defaulColors[sd.id])
+      }
+    })
     if (!this.canvascmRefSectorCountPieChart) {
-      console.error('Could not find canvas element');
       return;
     }
 
@@ -414,12 +391,10 @@ sectorCountResult(){
     const ctx = canvas.getContext('2d');
 
     if (!ctx) {
-      console.error('Could not get canvas context');
       return;
     }
 
     if (this.cmPieChartSectorCount) {
-      // Update the chart data
       this.cmPieChartSectorCount.data.datasets[0].data = counts;
       this.cmPieChartSectorCount.data.labels=labels
       this.cmPieChartSectorCount.update();
@@ -432,22 +407,7 @@ sectorCountResult(){
         labels: labels,
         datasets: [{
           data: counts,
-          backgroundColor: [
-            'rgb(250,227,114)',
-              'rgb(51,51,51)',
-              'rgb(0,170,187)',
-              'rgb(227,120,42)',
-              'rgb(150,131,141)',
-              'rgb(42,61,227)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(75, 192, 192,1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(123, 122, 125, 1)',
-              'rgba(255, 99, 132, 1)',
-              'rgba(255, 205, 86, 1)',
-              'rgba(255, 99, 132, 1)',
-
-          ],
+          backgroundColor: this.secbgColors,
          
         }]
       },
@@ -481,16 +441,11 @@ sectorCountResult(){
             callbacks:{
               
               label:(ctx)=>{ 
-                // console.log(ctx)
-                // let sum = ctx.dataset._meta[0].total;
-                // let percentage = (value * 100 / sum).toFixed(2) + "%";
-                // return percentage;
                 let sum = 0;
                 let array =counts
                 array.forEach((number) => {
                   sum += Number(number);
                 });
-                // console.log(sum, counts[ctx.dataIndex])
                 let percentage = (counts[ctx.dataIndex]*100 / sum).toFixed(2)+"%";
 
                 return[
@@ -500,7 +455,7 @@ sectorCountResult(){
                 ];
                }
             },
-            backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
+            backgroundColor: 'rgba(0, 0, 0, 0.8)', 
               titleFont: {
                 size: 14,
                 weight: 'bold'
@@ -508,7 +463,7 @@ sectorCountResult(){
               bodyFont: {
                 size: 14
               },
-              displayColors: true, // Hide the color box in the tooltip
+              displayColors: true, 
               bodyAlign: 'left'
           }
        }
@@ -527,101 +482,6 @@ sectorCountResult(){
     return colors;
   }
 
-  // viewCMBarChart(){
-  //   let label =this.CMsectorCount.map((item) => item.sectoral_boundary);
-  //   let data =this.CMsectorCount.map((item) => item.average_tc_value);
-  //   console.log("label",label,"data",data)
-  //   this.CMBarChart =new Chart('CMBarCahart', {
-  //     type: 'bar',
-
-  //     data: {
-  //       labels: label,
-  //       datasets: [{
-  //         label: 'Bar Chart',
-  //         data: data,
-  //         backgroundColor: [
-  //           'rgba(153, 102, 255, 1)',
-  //           'rgba(75, 192, 192,1)',
-  //           'rgba(54, 162, 235, 1)',
-  //           'rgba(123, 122, 125, 1)',
-  //           'rgba(255, 99, 132, 1)',
-  //           'rgba(255, 205, 86, 1)',
-  //           'rgba(255, 99, 132, 1)',
-
-  //         ],
-  //         borderColor:[
-  //           'rgba(153, 102, 255, 1)',
-  //           'rgba(75, 192, 192,1)',
-  //           'rgba(54, 162, 235, 1)',
-  //           'rgba(123, 122, 125, 1)',
-  //           'rgba(255, 99, 132, 1)',
-  //           'rgba(255, 205, 86, 1)',
-  //           'rgba(255, 99, 132, 1)',],
-
-  //         borderWidth: 1
-  //       }]
-  //     },
-  //     options:{
-  //       scales: {
-  //         x: {
-  //           beginAtZero: true,
-  //           title: {
-  //             display: true,
-  //             text: 'Sectors',
-  //             font: {
-  //               size: 16,
-  //               weight: 'bold',
-
-  //             }
-  //           }
-  //         },
-  //         y: {
-  //           beginAtZero: true,
-  //           title: {
-  //             display: true,
-  //             text: 'Average Transformational Change (%)',
-  //             font: {
-  //               size: 12,
-  //               weight: 'bold',
-
-  //             }
-  //           }
-  //         }
-  //       },
-  //       plugins:{
-  //         legend: {
-  //           display: false
-  //         },
-  //         tooltip:{
-  //           position:'average',
-  //           boxWidth:10,
-  //           callbacks:{
-
-  //             label:(context)=>{
-
-  //               return[
-
-  //                 `Average TC value: ${data[context.dataIndex]}`,
-  //               ];
-  //              }
-  //           },
-  //           backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
-  //             titleFont: {
-  //               size: 14,
-  //               weight: 'bold'
-  //             },
-  //             bodyFont: {
-  //               size: 14
-  //             },
-  //             displayColors: true, // Hide the color box in the tooltip
-  //             bodyAlign: 'left'
-  //         }
-  //       }
-
-  //     }
-  // });
-
-  // }
 
 
   viewPieChartCM(){
@@ -654,8 +514,6 @@ sectorCountResult(){
             display: true,
             align: 'bottom',
             color:'#fff',
-            // backgroundColor: '#fff',
-            // borderRadius: 3,
             font: {
               size: 12,
             },
@@ -676,7 +534,6 @@ sectorCountResult(){
                 array.forEach((number) => {
                   sum += Number(number);
                 });
-                // console.log(sum, counts[ctx.dataIndex])
                 let percentage = (counts[ctx.dataIndex]*100 / sum).toFixed(2)+"%";
 
                 return[
@@ -686,7 +543,7 @@ sectorCountResult(){
                 ];
                }
             },
-            backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set the background color of the tooltip box
+            backgroundColor: 'rgba(0, 0, 0, 0.8)', 
               titleFont: {
                 size: 14,
                 weight: 'bold'
@@ -694,7 +551,7 @@ sectorCountResult(){
               bodyFont: {
                 size: 14
               },
-              displayColors: true, // Hide the color box in the tooltip
+              displayColors: true,
               bodyAlign: 'left'
 
           }
@@ -734,17 +591,12 @@ sectorCountResult(){
         return 'white';
     }
   }
-  // getCircleColor(): string {
-  //   const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
-  //   return randomColor
-  // }
 
   getIntervention(p:number, q: number){
     return this.tableData.some(item => item.outcome_score === p && item.process_score === q);
   }
   paginate(event:Paginator|undefined) {
     if (event){
-      console.log("paginate",event)
       this.slicedData = this.tableData.slice(event?.first,event?.first+this.rows)
     }
     else{
@@ -796,4 +648,12 @@ sectorCountResult(){
      this.pointTableDatas=[];
 
   }
+  compareByAge(a:any, b:any) {
+    return b.count - a.count;
+  }
+
+  goToResult(id: number) {
+    this.router.navigate(['carbon-market-tool-result'], { queryParams: { id: id }, relativeTo: this.activatedRoute })
+  }
+  
 }

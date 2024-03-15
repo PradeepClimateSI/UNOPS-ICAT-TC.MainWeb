@@ -66,7 +66,6 @@ export class AssessmentResultInvestorComponent implements OnInit {
   SDGsList : any = [];
   card: any = []
  
-  ////
   intervention:ClimateAction;
   principles: string;
   opportunities:string;
@@ -110,11 +109,7 @@ export class AssessmentResultInvestorComponent implements OnInit {
     this.xData = this.masterDataService.xData
     this.yData = this.masterDataService.yData
 
-    // console.log("daaaaa:", this.assessmentId)
-    // console.log("daaaaa111:", this.averageProcess)
-    // console.log("daaaaa222:", this.averageOutcome)
     this.investorToolControllerproxy.calculateFinalResults(this.assessmentId).subscribe((res: any) => {
-      console.log(res)
       this.processData = res?.processData;
       this.outcomeData = res?.outcomeData;
       this.outcomeScore = res?.outcomeScore;
@@ -127,22 +122,13 @@ export class AssessmentResultInvestorComponent implements OnInit {
       this.sustained_adaptation = res?.outcomeData.find((item: { code: string; })=>item?.code=='SUSTAINED_ADAPTATION')
       this.aggregated_score = res?.aggregatedScore;
       this.sdgListWithScores = res?.sdgListwithScores;
-      console.log("sdglist",this.sdgListWithScores)
-      console.log("aggregated_score",this.aggregated_score)
-      console.log("all: ",  this.scale_GHGs,this.scale_SD,this.sustained_GHGs ,this.sustained_SD,this.scale_adaptation,this.sustained_adaptation)
-      // console.log("processData: ", this.processData)
-      // console.log("outcomeData: ", this.outcomeData)
-      // console.log("processData: ", this.processData)
-      // console.log("rr: ", this.sustained_GHGs.category_score.value==null)
       this.heatMapScore = [{processScore: this.processScore, outcomeScore: this.outcomeScore}]
       this.loading=true 
     });
 
 
     this.methassess.assessmentData(this.assessmentId).subscribe((res: any) => {
-      console.log("assessmentDataaaaa: ", res)
       for (let x of res) {
-        // this.policyName = x.climateAction.policyName
         this.intervention = x.climateAction
         this.assessmentType = x.assessmentType
         this.date1 = x.from
@@ -155,17 +141,14 @@ export class AssessmentResultInvestorComponent implements OnInit {
         this.assessment_method = x.assessment_method
         
       }
-      console.log("toool", this.tool)
       if (this.tool === 'PORTFOLIO') {
         this.investerTool = false;
         this.loadTitle = true;
-        // this.title2 = 'Result - Assess the Transformational Change due to a Portfolio of Interventions'
         this.title2 ='Assessment results'
       }
       else if (this.tool === 'INVESTOR') {
         this.investerTool = true;
         this.loadTitle = true;
-        // this.title2 = 'Result - Invesment & Private Sector Tool '
         this.title2 ='Assessment results'
       }
 
@@ -174,241 +157,21 @@ export class AssessmentResultInvestorComponent implements OnInit {
 
 
     this.investorToolControllerproxy.getResultByAssessment(this.assessmentId).subscribe((res: any) => {
-      // console.log("getResultByAssessment: ", res)
-      // this.levelofImplemetation = res.level_of_implemetation
-      // this.geographicalAreasCovered = res.geographical_areas_covered
       this.tool = res.assessment.tool
 
     });
 
     this.investorToolControllerproxy.findAllSectorData(this.assessmentId).subscribe((res: any) => {
-      // console.log("findAllSectorData: ", res)
       for (let x of res) {
-        this.sectorList.push(x.sector.name)
+        this.sectorList.push(x.sector.name);
       }
     });
 
     this.investorToolControllerproxy.findAllGeographicalAreaData(this.assessmentId).subscribe((res: any) => {
-        this.geographicalAreasList = res
-        this.geographicalAreasCovered = this.geographicalAreasList.map((a: any) => a.name).join(',')
+        this.geographicalAreasList = res;
+        this.geographicalAreasCovered = this.geographicalAreasList.map((a: any) => a.name).join(',');
     });
 
-    // this.investorToolControllerproxy.findAllImpactCoverData(this.assessmentId).subscribe((res: any) => {
-    //   console.log("findAllImpactCoverData: ", res)
-    //   for (let x of res) {
-    //     this.impactCoverList.push(x.name)
-    //   }
-    // });
-
-
-    // this.methassess.findAllCategories().subscribe((res2: any) => {
-    //   console.log("categoryList", res2)
-    //   for (let x of res2) {
-    //     //this.categotyList.push(x);
-    //     if (x.type === 'process') {
-    //       this.meth1Process.push(x)
-    //     }
-    //     if (x.type === 'outcome') {
-    //       this.meth1Outcomes.push(x)
-    //     }
-    //   }
-    //   console.log("yyyy", this.meth1Process)
-    // });
-
-
-
-    // this.investorToolControllerproxy.findAllAssessData(this.assessmentId).subscribe(async (res: any) => {
-    //   console.log("findAllAssessData: ", res)
-
-
-    //   for (let category of this.meth1Process) {
-    //     let categoryData: any = {
-    //       categoryName: category.name,
-    //       characteristics: [],
-    //       categotyRelevance: 0,
-    //       categoryLikelihood: 0
-    //     };
-
-    //     let totalRel = 0
-    //     let countRel = 0
-    //     let totalLikelihood = 0
-    //     let countLikelihood = 0
-    //     for (let x of res) {
-    //       if (category.name === x.category.name) {
-    //         categoryData.categoryName = category.name;
-    //         categoryData.characteristics.push(
-    //           {
-    //             relevance: !x.relavance ? '-' : x.relavance,
-    //             likelihood: !x.likelihood ? '-' : x.likelihood,
-    //             name: x.characteristics.name
-    //           }
-    //         )
-
-    //         totalRel = totalRel + x.relavance
-    //         countRel++
-
-    //         totalLikelihood = totalLikelihood + x.likelihood
-    //         countLikelihood++
-
-    //       }
-    //     }
-
-    //     categoryData.categotyRelevance = (totalRel / countRel).toFixed(3)
-    //     categoryData.categoryLikelihood = (totalLikelihood / countLikelihood).toFixed(3)
-    //     this.categoryDataArray.push(categoryData)
-
-    //     // console.log("categoryDataArray: ", this.categoryDataArray)
-    //   }
-
-    //   for (let category of this.meth1Outcomes) {
-    //     let categoryData: any = {
-    //       categoryName: category.name,
-    //       characteristics: [],
-    //       categotyRelevance: 0,
-    //       categoryLikelihood: 0,
-    //       categoryScaleScore: 0,
-    //       categorySustainedScore: 0
-    //     };
-
-    //     let totalScale = 0
-    //     let countScale = 0
-    //     let totalSustained = 0
-    //     let countSustained = 0
-    //     for (let x of res) {
-    //       if (category.name === x.category.name && (x.category.name === 'GHG Scale of the Outcome' || x.category.name === 'SDG Scale of the Outcome')) {
-    //         categoryData.categoryName = category.name;
-    //         categoryData.characteristics.push(
-    //           {
-    //             scaleScore: x.score,
-    //             sustainedScore: '-',
-    //             name: x.characteristics.name
-    //           }
-    //         )
-
-    //         totalScale = totalScale + x.score
-    //         countScale++
-
-    //       }
-    //       if (category.name === x.category.name && (x.category.name === 'GHG Time frame over which the outcome is sustained' || x.category.name === 'SDG Time frame over which the outcome is sustained')) {
-    //         categoryData.categoryName = category.name;
-    //         categoryData.characteristics.push(
-    //           {
-    //             scaleScore: '-',
-    //             sustainedScore: x.score,
-    //             name: x.characteristics.name
-    //           }
-    //         )
-
-    //         totalSustained = totalSustained + x.score
-    //         countSustained++
-
-    //       }
-    //     }
-
-    //     if (category.name === 'GHG Scale of the Outcome' || category.name === 'SDG Scale of the Outcome') {
-    //       categoryData.categoryScaleScore = (totalScale / countScale).toFixed(3)
-    //       categoryData.categorySustainedScore = '-'
-    //     }
-
-    //     if (category.name === 'GHG Time frame over which the outcome is sustained' || category.name === 'SDG Time frame over which the outcome is sustained') {
-    //       categoryData.categorySustainedScore = (totalSustained / countSustained).toFixed(3)
-    //       categoryData.categoryScaleScore = '-'
-    //     }
-
-    //     this.categoryDataArrayOutcome.push(categoryData)
-    //   }
-
-    //   console.log("categoryDataArrayOutcome: ", this.categoryDataArrayOutcome)
-
-    //   /* Portfolio toolll */
-
-    //   const data: any =  this.categoryDataArrayOutcome[1]
-
-    //   const averages: any = {};
-
-    //   data.characteristics.forEach((obj: { name: any; scaleScore: any; sustainedScore: any; }) => {
-    //     if (obj.name in averages) {
-    //       averages[obj.name].scaleScore += obj.scaleScore || 0;
-    //       averages[obj.name].sustainedScore += obj.sustainedScore === '-' ? 0 : parseInt(obj.sustainedScore);
-    //       averages[obj.name].count++;
-    //     } else {
-    //       averages[obj.name] = {
-    //         scaleScore: obj.scaleScore || 0,
-    //         sustainedScore: obj.sustainedScore === '-' ? 0 : parseInt(obj.sustainedScore),
-    //         count: 1
-    //       };
-    //     }
-    //   });
-
-    //   const result = [];
-
-    //   for (const name in averages) {
-    //     const averageScaleScore = averages[name].scaleScore / averages[name].count;
-    //     const averageSustainedScore = averages[name].sustainedScore / averages[name].count;
-
-    //     result.push({
-    //       scaleScore: averageScaleScore.toFixed(3),
-    //       sustainedScore: '-',
-    //       name: name
-    //     });
-    //   }
-
-    //   console.log("resulttt", result);
-
-    //    /* Portfolio toolll */
-    //    const data2: any =  this.categoryDataArrayOutcome[3];
-
-    //    const averages2: any = {};
-
-    //    data2.characteristics.forEach((obj: { name: any; scaleScore: any; sustainedScore: any; }) => {
-    //      if (obj.name in averages2) {
-    //        averages2[obj.name].sustainedScore += obj.sustainedScore || 0;
-    //        averages2[obj.name].scaleScore += obj.scaleScore === '-' ? 0 : parseInt(obj.scaleScore);
-    //        averages2[obj.name].count++;
-    //      } else {
-    //        averages2[obj.name] = {
-    //         sustainedScore: obj.sustainedScore || 0,
-    //         scaleScore: obj.scaleScore === '-' ? 0 : parseInt(obj.scaleScore),
-    //          count: 1
-    //        };
-    //      }
-    //    });
-
-    //    const result2 = [];
-
-    //    for (const name in averages2) {
-    //      const averageScaleScore2 = averages2[name].scaleScore / averages2[name].count;
-    //      const averageSustainedScore2 = averages2[name].sustainedScore / averages2[name].count;
-
-    //      result2.push({
-    //        scaleScore: '-',
-    //        sustainedScore: averageSustainedScore2.toFixed(3),
-    //        name: name
-    //      });
-    //    }
-
-    //    console.log("resulttt22", result2);
-
-
-    //    if(!this.investerTool){
-    //     this.categoryDataArrayOutcome[1].characteristics = []
-    //     this.categoryDataArrayOutcome[1].characteristics = result
-
-    //     this.categoryDataArrayOutcome[3].characteristics = []
-    //     this.categoryDataArrayOutcome[3].characteristics = result2
-    //    }
-
-    //    console.log("categoryDataArrayOutcome222: ", this.categoryDataArrayOutcome)
-    //     /* Portfolio toolll */
-    // });
-
-
-    // this.investorToolControllerproxy.findSDGs(this.assessmentId).subscribe((res: any) => {
-    //   console.log("sdgssss: ", res)
-    //   this.SDGsList = res
-    // });
-
-console.log(this.geographicalAreasList)
 
     setTimeout(() => {
       this.card.push(
@@ -419,14 +182,11 @@ console.log(this.geographicalAreasList)
           { title: 'Assessment Type', data: this.assessmentType },
           { title: 'Geographical Area Covered', data: this.geographicalAreasList.map((a: any) => a.name) },
           { title: 'Sectors Covered', data: this.sectorList.join(', ') },
-          { title: 'From', data: this.datePipe.transform(this.date1, 'yyyy-MM-dd') },
-          { title: 'To', data: this.datePipe.transform(this.date2, 'yyyy-MM-dd') },
+          { title: 'From', data: this.datePipe.transform(this.date1, 'dd/MM/yyyy') },
+          { title: 'To', data: this.datePipe.transform(this.date2, 'dd/MM/yyyy') },
           { title: 'Opportunities for stakeholders to participate in the assessment', data: (this.opportunities)?(this.opportunities):'-' },
-          // { title: 'Principles on which the assessment is based', data: (this.principles)?(this.principles):'-' },
 
         ])
-
-      // console.log("cardddd", this.card)
       this.load = true;
 
     }, 1000);
@@ -471,19 +231,15 @@ console.log(this.geographicalAreasList)
   }
 
   exportToExcel() {
-    let colorMap = this.createColorMap()
-    console.log(colorMap)
-    // this.isDownloading = true
-    
-      let book_name = 'Results - ' + this.intervention.policyName
+    let colorMap = this.createColorMap();
+      let book_name = 'Results - ' + this.intervention.policyName;
   
       const workbook = XLSX.utils.book_new();
       const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.card, { skipHeader: true });
-      let table = document.getElementById('allTables')
-      let worksheet = XLSX.utils.table_to_sheet(table,{})
-      // this.isDownloading = false
+      let table = document.getElementById('allTables');
+      let worksheet = XLSX.utils.table_to_sheet(table,{});
     
-        let heatmap = XLSX.utils.table_to_sheet(document.getElementById('heatmap'),{})
+        let heatmap = XLSX.utils.table_to_sheet(document.getElementById('heatmap'),{});
         
         XLSX.utils.book_append_sheet(workbook, ws, 'Assessment Info');
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Assessment Results');
@@ -499,48 +255,14 @@ console.log(this.geographicalAreasList)
         }
   
         XLSX.writeFile(workbook, book_name + ".xlsx");
-      
-      // this.isDownloading = false
     
   }
-  // public exportToExcel(): void {
-  //   import("xlsx").then(xlsx => {
-  //     // const ws = xlsx.utils.json_to_sheet(this.card, { skipHeader: true });
-  //     // const worksheet = xlsx.utils.table_to_sheet(document.querySelector("#content"));
-
-  //     // add existing data to worksheet
-  //     // const existingData = xlsx.utils.sheet_to_json(worksheet, { header: 1 });
-  //     // xlsx.utils.sheet_add_json(ws, existingData, { skipHeader: true, origin: -1 });
-
-  //     // const workbook = xlsx.utils.book_new();
-  //     // xlsx.utils.book_append_sheet(workbook, ws, "Sheet1");
-  //     // xlsx.writeFile(workbook, "data.xlsx", { cellStyles: true });
-  //     // const wb: XLSX.WorkBook = XLSX.utils.book_new();
-  //     // const table1 = document.getElementById('table1');
-  //     // const table2 = document.getElementById('table2');
-  //     // const ws1: XLSX.WorkSheet = XLSX.utils.table_to_sheet([table1,table2], { cellStyles: true });
-  //     // // const ws2: XLSX.WorkSheet = XLSX.utils.table_to_sheet(table2, { cellStyles: true });
-  //   let book_name = 'Results - ' + this.intervention.policyName+'.xlsx'
-  //   const workbook = XLSX.utils.book_new();
-  //   const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.card, { skipHeader: true });
-  //   let table = document.getElementById('allTables')
-  //   let worksheet = XLSX.utils.table_to_sheet(table,{})
-
-  //   XLSX.utils.book_append_sheet(workbook, ws, 'Assessment Info');
-
-  //   XLSX.utils.book_append_sheet(workbook, worksheet, 'Assessment Results');
-
-  //   XLSX.writeFile(workbook, book_name);
-   
-     
-  //   });
-  // }
   createColorMap(){
-    let colorMap = []
-    let cols = 'CDEFGHI'
-    let rows = '34567'
-    let col_values = [3,2,1,0,-1,-2,-3]
-    let row_values = [4,3,2,1,0]
+    let colorMap = [];
+    let cols = 'CDEFGHI';
+    let rows = '34567';
+    let col_values = [3,2,1,0,-1,-2,-3];
+    let row_values = [4,3,2,1,0];
     for (let [idx,row] of row_values.entries()){
       for (let [index, col] of col_values.entries()){
         let hasScore = this.getIntervention(col, row)
@@ -561,44 +283,45 @@ console.log(this.geographicalAreasList)
     var data = document.getElementById('content')!;
 
     html2canvas(data).then((canvas) => {
-      const componentWidth = data.offsetWidth
-      const componentHeight = data.offsetHeight
+      const componentWidth = data.offsetWidth;
+      const componentHeight = data.offsetHeight;
 
       const orientation = componentWidth >= componentHeight ? 'l' : 'p'
 
-      const imgData = canvas.toDataURL('image/png')
+      const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF({
         orientation,
         unit: 'px'
       })
 
-      pdf.internal.pageSize.width = componentWidth
-      pdf.internal.pageSize.height = componentHeight
+      pdf.internal.pageSize.width = componentWidth;
+      pdf.internal.pageSize.height = componentHeight;
 
-      pdf.addImage(imgData, 'PNG', 0, 0, componentWidth, componentHeight)
-      pdf.save('assessment-result.pdf')
+      pdf.addImage(imgData, 'PNG', 0, 0, componentWidth, componentHeight);
+      pdf.save('assessment-result.pdf');
     })
 
   }
   confirm(){
-    console.log("confirm")
     let body = new CreateReportDto()
     body.assessmentId = this.assessmentId
-    body.tool = this.tool=="PORTFOLIO"?"General tool":"Investment"
+    body.tool = this.masterDataService.getToolName(this.tool)
     body.type = 'Result'
     body.climateAction = this.intervention
     body.reportName = this.reportName
     this.reportControllerServiceProxy.generateReport(body).subscribe(res => {
-      console.log("generated repotr", res)
       if (res) {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Report generated successfully',
-          closable: true,
-        })
+    
         this.display = false
-        window.open(this.SERVER_URL +'/'+res.generateReportName, "_blank");
+        setTimeout(() => {
+          window.open(this.SERVER_URL +'/report/downloadReport/inline/'+res.id, "_blank")
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Report generated successfully',
+            closable: true,
+          })
+        },5000)
       }
     }, error => {
       this.messageService.add({

@@ -25,16 +25,14 @@
             <th style="width:40%">INTERVENTION</th>
             <th style="width:20%">ASSESSMENT TYPE</th>
             <th style="width:40%">ASSESSMENT PERIOD</th>
-            <!--     <th style="width:20%">TRANSFORMATIONAL CHANGE</th> -->
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-assessList>
           <tr>
             <td>{{ assessList.assessment.climateAction.policyName }}</td>
             <td>{{ assessList.assessment.assessmentType }}</td>
-            <td>{{ assessList.assessment.from | date:'yyyy-MM-dd'}} - {{ assessList.assessment.to | date:'yyyy-MM-dd'}}
+            <td>{{ assessList.assessment.from | date:'dd/MM/yyyy'}} - {{ assessList.assessment.to | date:'dd/MM/yyyy'}}
             </td>
-            <!--           <td>{{ assessList.assessment.tc_value }}</td> -->
           </tr>
         </ng-template>
       </p-table>
@@ -43,7 +41,6 @@
       <br><br><br>
 
       <h4>Process of Change</h4><br>
-      <!-- ================================================================================== -->
       <p-table [value]="allData" [tableStyle]="{ 'min-width': '100%' }">
         <ng-template pTemplate="header">
           <tr>
@@ -106,7 +103,6 @@
         </ng-template>
       </p-table>
 
-      <!-- =============================================================================================================================== -->
       <br><br><br>
       <p-table [value]="allData" [tableStyle]="{ 'min-width': '100%' }">
         <ng-template pTemplate="header">
@@ -171,7 +167,6 @@
       </p-table>
 
 
-      <!-- =============================================================================================================================== -->
       <br><br><br>
 
       <h4>Outcome of Change</h4><br>
@@ -228,7 +223,6 @@
         </ng-template>
       </p-table>
 
-      <!-- =============================================================================================================================== -->
       <br><br><br>
       <p-table [value]="allData" [tableStyle]="{ 'min-width': '100%' }">
         <ng-template pTemplate="header">
@@ -283,9 +277,6 @@
       </p-table>
 
 
-
-
-       <!-- =============================================================================================================================== -->
        <br><br><br>
 
        <h4>Expected GHG reductions over intervention lifetime</h4><br>
@@ -297,7 +288,7 @@
             <th style="width:30%">Name</th>
             <th style="width:25%">Intervention Type</th>
             <th style="width:10%">Status</th>
-            <th style="width:20%">Expected GHG reductions over intervention lifetime (MT CO2-EQ)</th>
+            <th style="width:20%">Expected average GHG reductions or removals (mitigation outcomes) (tCO₂e/year)</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-allData>
@@ -311,9 +302,7 @@
         </ng-template>
       </p-table>
 
-       <!-- =============================================================================================================================== -->
-
-
+     
        <br><br>
   </div>
 </div>
@@ -327,12 +316,6 @@
 </div>
 
 
-<!-- <div class="container pl-20 pr-20">
-  <div class="d-flex flex-row-reverse mt-2 mb-2">
-    <button (click)="Back()" class="btn btn-primary btn-block text-uppercase">Back</button> &nbsp;&nbsp;
-  </div>
-
-</div> -->
 
 
 
@@ -376,9 +359,6 @@
   </p-table>
 </p-dialog>
 
-<!-- =============================================================================================================================== -->
-
-
 <p-dialog [(visible)]="tableShow2" [style]="{ width: '500px' }" [showHeader]="false" [modal]="true" [responsive]="true"
   showEffect="fade" (onHide)="showTable2()">
   <div class="row">
@@ -413,7 +393,6 @@
 </p-dialog>
 
 
-<!-- =============================================================================================================================== -->
 <p-dialog [(visible)]="tableShow3" [style]="{ width: '500px' }" [showHeader]="false" [modal]="true" [responsive]="true"
   showEffect="fade" (onHide)="showTable3()">
   <div class="row">
@@ -446,8 +425,6 @@
     </ng-template>
   </p-table>
 </p-dialog>
-
-<!-- =============================================================================================================================== -->
 
 
 <p-dialog [(visible)]="tableShow4" [style]="{ width: '500px' }" [showHeader]="false" [modal]="true" [responsive]="true"
@@ -482,8 +459,6 @@
     </ng-template>
   </p-table>
 </p-dialog>
-
-<!-- =============================================================================================================================== -->
 
  <div class="container pl-20 pr-20">
   <div class="d-flex flex-row-reverse mt-2 mb-2">
