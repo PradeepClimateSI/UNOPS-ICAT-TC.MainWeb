@@ -13,6 +13,7 @@ export class CmSectionComponent implements OnInit {
   @Input() assessment: Assessment
   @Input() approach: string
   @Input() isEditMode: boolean;
+  @Input() isCompleted: boolean;
   @Input() expectedGhgMitigation: number;
  
   openAccordion = 0
@@ -465,6 +466,8 @@ export class CmSectionComponent implements OnInit {
           let message = ''
           if (event.isDraft) {
             message = 'Assessment saved successfully. You will be able to continue the assessment from the “In progress” menu'
+          } else if (this.isCompleted) {
+            message = 'Assessment is updated successfully.'
           } else {
             message = 'Assessment created successfully'
           }
@@ -477,10 +480,10 @@ export class CmSectionComponent implements OnInit {
           if (event.isDraft) {
             this.isEditMode = true
             this.setInitialState()
-            this.router.navigate(['../carbon-market-tool-edit'], { queryParams: { id: this.assessment.id, isEdit: true }, relativeTo: this.activatedRoute });
+            this.router.navigate(['../carbon-market-tool-edit'], { queryParams: { id: this.assessment.id, isEdit: true, isContinue: true }, relativeTo: this.activatedRoute });
           
           }
-          if (result.assessment.assessment_approach === 'DIRECT' && !event.isDraft) {
+          if (result.assessment.assessment_approach === 'DIRECT' && !event.isDraft && !this.isCompleted) {
             this.router.navigate(['../carbon-market-tool-result'], { queryParams: { id: this.assessment.id }, relativeTo: this.activatedRoute });
           } 
 

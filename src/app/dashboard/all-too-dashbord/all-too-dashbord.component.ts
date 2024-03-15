@@ -530,7 +530,6 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
                 size: 12
               },
               formatter: (value, ctx) => {
-              console.log(value)
                 const label = ctx.chart.data.labels![ctx.dataIndex];
                 const percentage = percentages[ctx.dataIndex];
                 return `${label}: ${value} (${percentage}%)`;

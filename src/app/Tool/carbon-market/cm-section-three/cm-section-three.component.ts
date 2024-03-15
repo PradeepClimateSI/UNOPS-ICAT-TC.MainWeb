@@ -26,6 +26,7 @@ export class CmSectionThreeComponent implements OnInit {
   @Input() approach: string
   @Input() assessmentquestions: CMAssessmentQuestion[]
   @Input() isEditMode: boolean
+  @Input() isCompleted: boolean
   @Input() assessment:Assessment;
   @Input() expected_ghg_mitigation: number
   @Output() onSubmit = new EventEmitter();
@@ -662,7 +663,7 @@ export class CmSectionThreeComponent implements OnInit {
 
   }
 
-  async submit(draftCategory: string, isDraft: boolean = false, name:string,type:string) {
+  async submit(draftCategory: string, isDraft: boolean = false, name: string, type: string) {
     this.nextClicked = true
     this.results = []
     this.categoriesToSave.push(draftCategory)

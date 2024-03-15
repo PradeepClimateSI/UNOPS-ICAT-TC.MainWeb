@@ -1,10 +1,6 @@
 <div class="container pl-20 pr-20">
-
-
-
   <form #fData="ngForm" (ngSubmit)="saveForm(fData)">
     <div id="content" #content>
-
       <div class="card">
         <div class="p-grid p-fluid col-sm-12">
           <div *ngIf="project.projectApprovalStatus ; else elseblock" class="mb-12">
@@ -21,9 +17,7 @@
             <div class="col-12 col-md-6 ">
               <div class="p-field">
                 <label for="contatname">Contact Person's Full Name*</label>
-                <input [disabled]="editEntytyId > 0" type="text" maxlength="50" placeholder="Full Name"
-                  name="contatname" #contatname="ngModel" field="contatname" pInputText
-                  [(ngModel)]="project.contactPersoFullName" [ngModelOptions]="{ standalone: false }" required />
+                <input [disabled]="editEntytyId > 0" type="text" maxlength="50" placeholder="Full Name" name="contatname" #contatname="ngModel" field="contatname" pInputText [(ngModel)]="project.contactPersoFullName" [ngModelOptions]="{ standalone: false }" required />
 
                 <p class="info-message text-danger" *ngIf="
                   !project.contactPersoFullName &&
@@ -31,38 +25,26 @@
                 ">
                   This is a mandatory field
                 </p>
-
               </div>
             </div>
-
-              <div class="col-12 col-md-6">
-                <div class="p-field">
-                  <label for="contatemail"> Email*</label>
-                  <input [disabled]="editEntytyId > 0" pattern="[\w-\.]+@([\w-]+\.)+[\w-]{1,30}$" type="text"
-                    maxlength="300" placeholder="Email" name="contatemail" class="p-inputtext" #contatemail="ngModel"
-                    pInputText [(ngModel)]="project.email" [ngModelOptions]="{ standalone: false }" required />
-                  <p class="info-message text-danger" *ngIf="
+            <div class="col-12 col-md-6">
+              <div class="p-field">
+                <label for="contatemail"> Email*</label>
+                <input [disabled]="editEntytyId > 0" pattern="[\w-\.]+@([\w-]+\.)+[\w-]{1,30}$" type="text" maxlength="300" placeholder="Email" name="contatemail" class="p-inputtext" #contatemail="ngModel" pInputText [(ngModel)]="project.email" [ngModelOptions]="{ standalone: false }" required />
+                <p class="info-message text-danger" *ngIf="
                     !project.email &&
                     (fData.submitted || contatemail.touched || contatemail.dirty)
                   ">
-                    This is a mandatory field
-                  </p>
-
-                </div>
+                  This is a mandatory field
+                </p>
               </div>
-
-
-
-
+            </div>
           </div>
           <div class="row p-2">
             <div class="col-12 col-md-6">
               <div class="p-field">
                 <label for="institute">Institute*</label>
-                <input [disabled]="editEntytyId > 0" type="text" maxlength="100" placeholder="Institute"
-                  #ins="ngModel" name="ins" class="p-inputtext"
-                  [(ngModel)]="project.institute" [ngModelOptions]="{ standalone: false }"
-                  pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText required />
+                <input [disabled]="editEntytyId > 0" type="text" maxlength="100" placeholder="Institute" #ins="ngModel" name="ins" class="p-inputtext" [(ngModel)]="project.institute" [ngModelOptions]="{ standalone: false }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText required />
                 <p class="info-message text-danger" *ngIf="
                   !project.institute &&
                   (fData.submitted || ins.touched || ins.dirty)
@@ -74,10 +56,8 @@
             <div class="col-12 col-md-6">
               <div class="p-field">
                 <label for="designation">Contact Person's Job Title*</label>
-                <input [disabled]="editEntytyId > 0" type="text" maxlength="30" placeholder="Designation"
-                  #designation="ngModel" name="designation" class="p-inputtext"
-                  [(ngModel)]="project.contactPersonDesignation" [ngModelOptions]="{ standalone: false }"
-                  pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText required />
+                <input [disabled]="editEntytyId > 0" type="text" maxlength="30" placeholder="Designation" #designation="ngModel" name="designation" class="p-inputtext" [(ngModel)]="project.contactPersonDesignation" [ngModelOptions]="{ standalone: false }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText
+                  required />
                 <p class="info-message text-danger" *ngIf="
                   !project.contactPersonDesignation &&
                   (fData.submitted || designation.touched || designation.dirty)
@@ -86,11 +66,7 @@
                 </p>
               </div>
             </div>
-
-
           </div>
-
-
         </div>
         <div class=" mt-10">
           <div class="p-grid p-fluid col-sm-12">
@@ -101,11 +77,9 @@
               <div class="col-12 col-md-6">
                 <div class="p-field">
                   <label for="nameClimate">Title of the Intervention*</label>
-                  <input [disabled]="editEntytyId > 0  && !editMode" [(ngModel)]="project.policyName"
-                    [ngModelOptions]="{ standalone: false }" placeholder="Name" #nameClimate="ngModel" type="text"
-                    name="nameClimate" class="p-inputtext" pInputText [maxlength]="masterDataService.getFieldCharCount(fieldNames.INTERVENTION_TITLE)"
-                    required />
-                    <span style=" float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.INTERVENTION_TITLE)}}</span>
+                  <input [disabled]="editEntytyId > 0  && !editMode" [(ngModel)]="project.policyName" [ngModelOptions]="{ standalone: false }" placeholder="Name" #nameClimate="ngModel" type="text" name="nameClimate" class="p-inputtext" pInputText
+                    [maxlength]="masterDataService.getFieldCharCount(fieldNames.INTERVENTION_TITLE)" required />
+                  <span style=" float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.INTERVENTION_TITLE)}}</span>
                   <p class="info-message text-danger" *ngIf="
                     !project.policyName &&
                     (fData.submitted || nameClimate.touched || nameClimate.dirty)
@@ -119,7 +93,6 @@
                     Project already exists. Duplicate entries are not allowed.
                   </p>
                 </div>
-
                 <div *ngIf="
                   relatedItem !== undefined &&
                   relatedItem !== null &&
@@ -136,30 +109,34 @@
                   </div>
                 </div>
               </div>
-
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="interventionID">Intervention ID <i class="pi pi-info-circle" pTooltip="{{tooltips.id}}" tooltipPosition="bottom"
-                    style="font-size: 1rem"></i></label> 
-                  <input disabled="true" type="text" maxlength="50" placeholder="{{project.intervention_id}}"
-                    #interventionID="ngModel" name="interventionID" pInputText
-                    [(ngModel)]="project.intervention_id" [ngModelOptions]="{ standalone: false }"
-                    pInputText  />
-
+                  <label for="nameClimate">Country of the Intervention*</label>
+                  <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocknameClimate">
+                    <div>
+                      <p-dropdown [disabled]="editEntytyId > 0 || isSector" appendTo="body" name="countryDD" placeholder="Country" #countryDD="ngModel" [(ngModel)]="project.country" [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false" [options]="countryList" optionLabel="name"
+                        (ngModelChange)="onCountryChnage()" [required]="true"></p-dropdown>
+                    </div>
+                    <p class="info-message text-danger" *ngIf="
+                    !project.country &&
+                      (fData.submitted || countryDD.touched || countryDD.dirty)
+                    ">
+                      This is a mandatory field
+                    </p>
+                  </ng-container>
+                  <ng-template #elseBlocknameClimate>
+                    <input *ngIf="loadingCountry" [disabled]="editEntytyId > 0" type="text" maxlength="50" name="nameCountry" #nameCountry="ngModel" class="p-inputtext" [(ngModel)]="project.country.name!" [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText required />
+                  </ng-template>
                 </div>
               </div>
-
-
             </div>
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
                   <label for="projStatus">Current Status of the Intervention*</label>
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlockprojStatus">
-                    <p-dropdown [disabled]="editEntytyId > 0" placeholder="Please Select Status" name="projStatus"
-                      #projStatus="ngModel" [(ngModel)]="project.projectStatus" [ngModelOptions]="{ standalone: false }"
-                      [autoDisplayFirst]="false" [options]="projectStatusList" optionLabel="name" appendTo="body"
-                      [required]="true"></p-dropdown>
+                    <p-dropdown [disabled]="editEntytyId > 0" placeholder="Please Select Status" name="projStatus" #projStatus="ngModel" [(ngModel)]="project.projectStatus" [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false" [options]="projectStatusList" optionLabel="name"
+                      appendTo="body" [required]="true"></p-dropdown>
                     <p class="info-message text-danger" *ngIf="
                     !project.projectStatus &&
                     (fData.submitted || projStatus.touched || projStatus.dirty)
@@ -168,73 +145,15 @@
                     </p>
                   </ng-container>
                   <ng-template #elseBlockprojStatus>
-                    <input *ngIf="loadProjectStatus" [disabled]="editEntytyId > 0" type="text" maxlength="50" name="projStatus"
-                      #projStatus1="ngModel" class="p-inputtext" [(ngModel)]="project.projectStatus.name!"
-                      [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
+                    <input *ngIf="loadProjectStatus" [disabled]="editEntytyId > 0" type="text" maxlength="50" name="projStatus" #projStatus1="ngModel" class="p-inputtext" [(ngModel)]="project.projectStatus.name!" [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
                   </ng-template>
                 </div>
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="nameClimate">Country of the Intervention*</label>
-                  <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocknameClimate">
-                    <div>
-                  <p-dropdown
-                    [disabled]="editEntytyId > 0 || isSector"
-                    appendTo="body"
-                    name="countryDD"
-                    placeholder="Country"
-                    #countryDD="ngModel"
-                    [(ngModel)]="project.country"
-                    [ngModelOptions]="{ standalone: false }"
-                    [autoDisplayFirst]="false"
-                    [options]="countryList"
-                    optionLabel="name"
-                    (ngModelChange)="onCountryChnage()"
-                    [required]="true"
-                  ></p-dropdown>
-                </div>
-                  <p
-                    class="info-message text-danger"
-                    *ngIf="
-                    !project.country &&
-                      (fData.submitted || countryDD.touched || countryDD.dirty)
-                    "
-                  >
-                    This is a mandatory field
-                  </p>
-                </ng-container>
-                <ng-template #elseBlocknameClimate>
-
-                  <input
-                  *ngIf="loadingCountry"
-                  [disabled]="editEntytyId > 0"
-                  type="text"
-                  maxlength="50"
-                  name="nameCountry"
-                  #nameCountry="ngModel"
-                  class="p-inputtext"
-                  [(ngModel)]="project.country.name!"
-                  [ngModelOptions]="{ standalone: true }"
-                  pattern="^[a-zA-Z0-9 ]{1,64}$"
-                  pInputText
-                  required
-                />
-
-                </ng-template>
-                </div>
-              </div>
-
-            </div>
-            <div class="row p-2">
-              <div class="col-12 col-md-6">
-                <div class="p-field">
                   <label for="sector">Sectors Targeted*</label>
-
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1; else elseBlocksector">
-                    <p-multiSelect [disabled]="editEntytyId > 0 && !editMode" placeholder="Select Sectors" name="sector"
-                      #sector="ngModel" [(ngModel)]="finalSectors" [options]="sectorList" appendTo="body"
-                      optionLabel="name" (ngModelChange)="onSectorChange($event)" [required]="true"></p-multiSelect>
+                    <p-multiSelect [disabled]="editEntytyId > 0 && !editMode" placeholder="Select Sectors" name="sector" #sector="ngModel" [(ngModel)]="finalSectors" [options]="sectorList" appendTo="body" optionLabel="name" (ngModelChange)="onSectorChange($event)" [required]="true"></p-multiSelect>
                     <p class="info-message text-danger" *ngIf="
                     !finalSectors &&
                     (fData.submitted || sector.touched || sector.dirty)
@@ -244,140 +163,21 @@
                   </ng-container>
                   <ng-template #elseBlocksector>
                     <ng-container *ngIf="isDownloadMode == 1 ">
-                      <p-multiSelect [disabled]="editEntytyId > 0"  name="sector"
-                        #sector="ngModel" [(ngModel)]="finalSectors" [options]="sectorList" appendTo="body"
-                        optionLabel="name" ></p-multiSelect>
-
+                      <p-multiSelect [disabled]="editEntytyId > 0" name="sector" #sector="ngModel" [(ngModel)]="finalSectors" [options]="sectorList" appendTo="body" optionLabel="name"></p-multiSelect>
                     </ng-container>
-                    <!-- <ng-container *ngIf="isDownloadMode == 0 && editMode">
-                      <p-multiSelect [disabled]="editEntytyId > 0 && !editMode "  name="sector"
-                        #sector="ngModel" [(ngModel)]="finalSectors" [options]="sectorList" appendTo="body"
-                        optionLabel="name" ></p-multiSelect>                      
-                    </ng-container> -->
                     <ng-container *ngIf="isDownloadMode == 0 && !editMode">
-                      <input [disabled]="editEntytyId > 0 && !editMode" type="text" maxlength="50" name="projsector"
-                      #projsector="ngModel" class="p-inputtext" [(ngModel)]="sectorsJoined"
-                      [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
+                      <input [disabled]="editEntytyId > 0 && !editMode" type="text" maxlength="50" name="projsector" #projsector="ngModel" class="p-inputtext" [(ngModel)]="sectorsJoined" [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
                     </ng-container>
-
                   </ng-template>
                 </div>
               </div>
             </div>
-
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="projStatus">Geographical Area Targeted* <i class="pi pi-info-circle" pTooltip="{{tooltips.geo}}" tooltipPosition="bottom"
-                    style="font-size: 1rem"></i></label>
-                  <ng-container *ngIf="isDownloadMode == 0 && flag !=1 ; else elseBlockGeoAreas">
-                    <p-dropdown [disabled]="editEntytyId > 0 && !editMode" placeholder="Please Select the Geographical Area Targeted"
-                      name="level_of_implemetation" #geographical_areas="ngModel" [(ngModel)]="project.geographicalAreaCovered"
-                      [options]="levelOfImplementation" optionLabel="name" optionValue="name"
-                      [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false"  appendTo="body"
-                      [required]="true"></p-dropdown>
-                    <p class="info-message text-danger" *ngIf="
-                    !project.geographicalAreaCovered &&
-                    (fData.submitted || geographical_areas.touched || geographical_areas.dirty)
-                  ">
-                      This is a mandatory field
-                    </p>
-                  </ng-container>
-                  <ng-template #elseBlockGeoAreas>
-                    <input [disabled]="editEntytyId > 0 && !editMode" type="text" maxlength="50" name="geographical_areas"
-                      #geographical_areas="ngModel" class="p-inputtext" [(ngModel)]="project.levelofImplemenation"
-                      [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
-                  </ng-template>
-
-                </div>
-              </div>
-              <div class="col-12 col-md-6">
-                <div class="p-field">
-                  <label for="projStatus">Level of Implementation*</label><div type="button" class="pi pi-info-circle ml-10"
-                  pTooltip="Who does implement the policy?"></div>
-                  <ng-container *ngIf="isDownloadMode == 0 && flag !=1 ; else elseBlocklevelofIpml">
-                    <p-dropdown [disabled]="editEntytyId > 0 && !editMode" placeholder="Please Select the Level of Implementation"
-                      name="level_of_implemetation" #level_of_implemetation="ngModel" [(ngModel)]="project.levelofImplemenation"
-                      [options]="levelOfImplementation" optionLabel="name" optionValue="name"
-                      [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false"  appendTo="body"
-                      [required]="true"></p-dropdown>
-                    <p class="info-message text-danger" *ngIf="
-                    !project.levelofImplemenation &&
-                    (fData.submitted || level_of_implemetation.touched || level_of_implemetation.dirty)
-                  ">
-                      This is a mandatory field
-                    </p>
-                  </ng-container>
-                  <ng-template #elseBlocklevelofIpml>
-                    <input [disabled]="editEntytyId > 0 && !editMode" type="text" maxlength="50" name="level_of_implemetation"
-                      #level_of_implemetation="ngModel" class="p-inputtext" [(ngModel)]="project.levelofImplemenation"
-                      [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
-                  </ng-template>
-
-                </div>
-              </div>
-             
-
-
-            </div>
-            <div class="row p-2">
-              <div class="col-12 col-md-6">
-                <div class="p-field">
-                  <label for="geographicCoverage">Geographic Coverage</label>
-                  <textarea [disabled]="editEntytyId > 0 && !editMode" name="geographicCoverage"
-                    placeholder="Geographic Coverage" #geographicCoverage="ngModel"
-                    [(ngModel)]="project.geographicCoverage" rows="5" cols="130" pInputText
-                    autoResize="autoResize" [maxlength]="masterDataService.getFieldCharCount(fieldNames.GEOGRAPHICAL_COVERAGE)"></textarea>
-                    <span style=" float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.GEOGRAPHICAL_COVERAGE)}}</span>
-                </div>
-              </div>
-            </div>
-            <div class="row p-2">
-              <div class="col-12 col-md-6">
-                <div class="p-field">
-                  <label for="description">Description of the Intervention*</label>
-                  <textarea [disabled]="editEntytyId > 0 && !editMode" name="description" placeholder="Description"
-                    #description="ngModel" [(ngModel)]="project.description" rows="5" cols="130" pInputText [required]="true"
-                    autoResize="autoResize" [maxlength]="masterDataService.getFieldCharCount(fieldNames.INTERVENTION_DESCRIPTION)"></textarea>
-                    <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.INTERVENTION_DESCRIPTION)}}</span>
-                    <p class="info-message text-danger" *ngIf="
-                    !project.description &&
-                    (fData.submitted || description.touched || description.dirty) ">
-                    This is a mandatory field
-                    </p>
-                </div>
-              </div>
-              <div class="col-12 col-md-6">
-                <div class="p-field">
-                  <label for="objective">Objectives and Intended Impacts or Benefits of the Intervention* <i class="pi pi-info-circle" pTooltip="{{tooltips.objective}}" tooltipPosition="bottom"
-                    style="font-size: 1rem"></i></label>
-                  <textarea [disabled]="editEntytyId > 0 && !editMode" name="objective" placeholder="Objective" #objective="ngModel"
-                    [(ngModel)]="project.objective" rows="5" cols="130" pInputText autoResize="autoResize" [required]="true" [maxlength]="masterDataService.getFieldCharCount(fieldNames.INTERVENTION_OBJECTIVE)"></textarea>
-                    <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.INTERVENTION_OBJECTIVE)}}</span>
-                    <p class="info-message text-danger" *ngIf="
-                    !project.objective &&
-                    (fData.submitted || objective.touched || objective.dirty) ">
-                    This is a mandatory field
-                    </p>
-                </div>
-              </div>
-            </div>
-
-            <div class="row p-2">
-
-              <div class="col-12 col-md-6">
-                <div class="p-field">
-                  <label for="impleDate"> Start Date* <i class="pi pi-info-circle" pTooltip="{{tooltips.start_date}}" tooltipPosition="bottom"
-                    style="font-size: 1rem"></i></label>
+                  <label for="impleDate"> Start Date* <i class="pi pi-info-circle" pTooltip="{{tooltips.start_date}}" tooltipPosition="bottom" style="font-size: 1rem"></i></label>
                   <div>
-
-                    <p-calendar [disabled]="editEntytyId > 0 && !editMode"
-                      placeholder="DD/MM/YYYY"
-                      dateFormat="dd/mm/yy"
-                      name="impleDate"
-                      #impleDate="ngModel"
-                      [(ngModel)]="dateOfImplementation"  appendTo="body"
-                      (onSelect)="onImplementatonYearChange(dateOfImplementation)"
+                    <p-calendar [disabled]="editEntytyId > 0 && !editMode" placeholder="DD/MM/YYYY" dateFormat="dd/mm/yy" name="impleDate" #impleDate="ngModel" [(ngModel)]="dateOfImplementation" appendTo="body" (onSelect)="onImplementatonYearChange(dateOfImplementation)"
                       [required]="true"></p-calendar>
                   </div>
                   <p class="info-message text-danger" *ngIf="
@@ -390,13 +190,9 @@
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="propsedDate"> End Date* <i class="pi pi-info-circle" pTooltip="{{tooltips.end_date}}" tooltipPosition="bottom"
-                    style="font-size: 1rem"></i></label>
+                  <label for="propsedDate"> End Date* <i class="pi pi-info-circle" pTooltip="{{tooltips.end_date}}" tooltipPosition="bottom" style="font-size: 1rem"></i></label>
                   <div>
-
-                    <p-calendar [disabled]="editEntytyId > 0 && !editMode" placeholder="DD/MM/YYYY" dateFormat="dd/mm/yy"
-                      name="complDate" #complDate="ngModel" [(ngModel)]="dateOfCompletion" appendTo="body"
-                      [required]="true"></p-calendar>
+                    <p-calendar [disabled]="editEntytyId > 0 && !editMode" placeholder="DD/MM/YYYY" dateFormat="dd/mm/yy" name="complDate" #complDate="ngModel" [(ngModel)]="dateOfCompletion" appendTo="body" [required]="true"></p-calendar>
                   </div>
                   <p class="info-message text-danger" *ngIf="
                     !dateOfCompletion &&
@@ -406,47 +202,123 @@
                   </p>
                 </div>
               </div>
-
             </div>
-
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="impEntity">Implementing Entity or Entities* <i class="pi pi-info-circle" pTooltip="{{tooltips.entity}}" tooltipPosition="bottom"
-                    style="font-size: 1rem"></i></label>
-                  <input [disabled]="editEntytyId > 0 && !editMode" type="text" placeholder="Name of the Implementing Entity"
-                    name="impEntity" #impEntity="ngModel" field="contatname" pInputText [required]="true"
-                    [(ngModel)]="project.implementingEntity" [maxlength]="masterDataService.getFieldCharCount(fieldNames.IMPLEMENTING_ENTITY)"/>
-                    <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.IMPLEMENTING_ENTITY)}}</span>
+                  <label for="interventionID">Intervention ID <i class="pi pi-info-circle" pTooltip="{{tooltips.id}}" tooltipPosition="bottom" style="font-size: 1rem"></i></label>
+                  <input disabled="true" type="text" maxlength="50" placeholder="{{project.intervention_id}}" #interventionID="ngModel" name="interventionID" pInputText [(ngModel)]="project.intervention_id" [ngModelOptions]="{ standalone: false }" pInputText />
+                </div>
+              </div>
+            </div>
+            <div class="row p-2">
+              <div class="col-12 col-md-6">
+                <div class="p-field">
+                  <label for="projStatus">Geographical Area Targeted* <i class="pi pi-info-circle" pTooltip="{{tooltips.geo}}" tooltipPosition="bottom" style="font-size: 1rem"></i></label>
+                  <ng-container *ngIf="isDownloadMode == 0 && flag !=1 ; else elseBlockGeoAreas">
+                    <p-dropdown [disabled]="editEntytyId > 0 && !editMode" placeholder="Please Select the Geographical Area Targeted" name="level_of_implemetation" #geographical_areas="ngModel" [(ngModel)]="project.geographicalAreaCovered" [options]="levelOfImplementation" optionLabel="name"
+                      optionValue="name" [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false" appendTo="body" [required]="true"></p-dropdown>
                     <p class="info-message text-danger" *ngIf="
+                    !project.geographicalAreaCovered &&
+                    (fData.submitted || geographical_areas.touched || geographical_areas.dirty)
+                  ">
+                      This is a mandatory field
+                    </p>
+                  </ng-container>
+                  <ng-template #elseBlockGeoAreas>
+                    <input [disabled]="editEntytyId > 0 && !editMode" type="text" maxlength="50" name="geographical_areas" #geographical_areas="ngModel" class="p-inputtext" [(ngModel)]="project.levelofImplemenation" [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
+                  </ng-template>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="p-field">
+                  <label for="projStatus">Level of Implementation*</label>
+                  <div type="button" class="pi pi-info-circle ml-10" pTooltip="Who does implement the policy?"></div>
+                  <ng-container *ngIf="isDownloadMode == 0 && flag !=1 ; else elseBlocklevelofIpml">
+                    <p-dropdown [disabled]="editEntytyId > 0 && !editMode" placeholder="Please Select the Level of Implementation" name="level_of_implemetation" #level_of_implemetation="ngModel" [(ngModel)]="project.levelofImplemenation" [options]="levelOfImplementation" optionLabel="name"
+                      optionValue="name" [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false" appendTo="body" [required]="true"></p-dropdown>
+                    <p class="info-message text-danger" *ngIf="
+                    !project.levelofImplemenation &&
+                    (fData.submitted || level_of_implemetation.touched || level_of_implemetation.dirty)
+                  ">
+                      This is a mandatory field
+                    </p>
+                  </ng-container>
+                  <ng-template #elseBlocklevelofIpml>
+                    <input [disabled]="editEntytyId > 0 && !editMode" type="text" maxlength="50" name="level_of_implemetation" #level_of_implemetation="ngModel" class="p-inputtext" [(ngModel)]="project.levelofImplemenation" [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$"
+                      pInputText />
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+            <div class="row p-2">
+              <div class="col-12 col-md-6">
+                <div class="p-field">
+                  <label for="geographicCoverage">Geographic Coverage</label>
+                  <textarea [disabled]="editEntytyId > 0 && !editMode" name="geographicCoverage" placeholder="Geographic Coverage" #geographicCoverage="ngModel" [(ngModel)]="project.geographicCoverage" rows="5" cols="130" pInputText autoResize="autoResize"
+                    [maxlength]="masterDataService.getFieldCharCount(fieldNames.GEOGRAPHICAL_COVERAGE)"></textarea>
+                  <span style=" float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.GEOGRAPHICAL_COVERAGE)}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="row p-2">
+              <div class="col-12 col-md-6">
+                <div class="p-field">
+                  <label for="description">Description of the Intervention*</label>
+                  <textarea [disabled]="editEntytyId > 0 && !editMode" name="description" placeholder="Description" #description="ngModel" [(ngModel)]="project.description" rows="5" cols="130" pInputText [required]="true" autoResize="autoResize"
+                    [maxlength]="masterDataService.getFieldCharCount(fieldNames.INTERVENTION_DESCRIPTION)"></textarea>
+                  <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.INTERVENTION_DESCRIPTION)}}</span>
+                  <p class="info-message text-danger" *ngIf="
+                    !project.description &&
+                    (fData.submitted || description.touched || description.dirty) ">
+                    This is a mandatory field
+                  </p>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="p-field">
+                  <label for="objective">Objectives and Intended Impacts or Benefits of the Intervention* <i class="pi pi-info-circle" pTooltip="{{tooltips.objective}}" tooltipPosition="bottom" style="font-size: 1rem"></i></label>
+                  <textarea [disabled]="editEntytyId > 0 && !editMode" name="objective" placeholder="Objective" #objective="ngModel" [(ngModel)]="project.objective" rows="5" cols="130" pInputText autoResize="autoResize" [required]="true"
+                    [maxlength]="masterDataService.getFieldCharCount(fieldNames.INTERVENTION_OBJECTIVE)"></textarea>
+                  <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.INTERVENTION_OBJECTIVE)}}</span>
+                  <p class="info-message text-danger" *ngIf="
+                    !project.objective &&
+                    (fData.submitted || objective.touched || objective.dirty) ">
+                    This is a mandatory field
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="row p-2">
+              <div class="col-12 col-md-6">
+                <div class="p-field">
+                  <label for="impEntity">Implementing Entity or Entities* <i class="pi pi-info-circle" pTooltip="{{tooltips.entity}}" tooltipPosition="bottom" style="font-size: 1rem"></i></label>
+                  <input [disabled]="editEntytyId > 0 && !editMode" type="text" placeholder="Name of the Implementing Entity" name="impEntity" #impEntity="ngModel" field="contatname" pInputText [required]="true" [(ngModel)]="project.implementingEntity"
+                    [maxlength]="masterDataService.getFieldCharCount(fieldNames.IMPLEMENTING_ENTITY)" />
+                  <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.IMPLEMENTING_ENTITY)}}</span>
+                  <p class="info-message text-danger" *ngIf="
                     !project.implementingEntity &&
                     (fData.submitted || impEntity.touched || impEntity.dirty) ">
                     This is a mandatory field
-                    </p>
+                  </p>
                 </div>
               </div>
-
-             
             </div>
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="relatedPolicies">Related Interventions <i class="pi pi-info-circle" pTooltip="{{tooltips.related}}" tooltipPosition="bottom"
-                    style="font-size: 1rem"></i></label>
-                  <textarea [disabled]="editEntytyId > 0 && !editMode" name="relatedPolicies" placeholder="Related interventions"
-                    #relatedPolicies="ngModel" [(ngModel)]="project.related_policies" rows="5" cols="130" pInputText
-                    autoResize="autoResize" class="p-inputtext" [maxlength]="masterDataService.getFieldCharCount(fieldNames.RELATED_INTERVENTION)"></textarea>
-                    <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.RELATED_INTERVENTION)}}</span>
+                  <label for="relatedPolicies">Related Interventions <i class="pi pi-info-circle" pTooltip="{{tooltips.related}}" tooltipPosition="bottom" style="font-size: 1rem"></i></label>
+                  <textarea [disabled]="editEntytyId > 0 && !editMode" name="relatedPolicies" placeholder="Related interventions" #relatedPolicies="ngModel" [(ngModel)]="project.related_policies" rows="5" cols="130" pInputText autoResize="autoResize" class="p-inputtext"
+                    [maxlength]="masterDataService.getFieldCharCount(fieldNames.RELATED_INTERVENTION)"></textarea>
+                  <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.RELATED_INTERVENTION)}}</span>
                 </div>
               </div>
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="reference">Reference <i class="pi pi-info-circle" pTooltip="{{tooltips.reference}}" tooltipPosition="bottom"
-                    style="font-size: 1rem"></i></label>
-                  <textarea [disabled]="editEntytyId > 0 && !editMode" name="reference" placeholder="Reference" #reference="ngModel"
-                    [(ngModel)]="project.reference" rows="5" cols="130" pInputText autoResize="autoResize"
-                    class="p-inputtext" [maxlength]="masterDataService.getFieldCharCount(fieldNames.REFERENCE)"></textarea>
-                    <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.REFERENCE)}}</span>
+                  <label for="reference">Reference <i class="pi pi-info-circle" pTooltip="{{tooltips.reference}}" tooltipPosition="bottom" style="font-size: 1rem"></i></label>
+                  <textarea [disabled]="editEntytyId > 0 && !editMode" name="reference" placeholder="Reference" #reference="ngModel" [(ngModel)]="project.reference" rows="5" cols="130" pInputText autoResize="autoResize" class="p-inputtext"
+                    [maxlength]="masterDataService.getFieldCharCount(fieldNames.REFERENCE)"></textarea>
+                  <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.REFERENCE)}}</span>
                 </div>
               </div>
             </div>
@@ -454,23 +326,18 @@
         </div>
         <div class="mt-2 overflow-visible" style="z-index: 1;">
           <div class="p-grid p-fluid col-sm-12">
-
             <div class="row p-2">
-
             </div>
           </div>
         </div>
-
         <div class=" mt-2  overflow-visible" style="z-index: 1;">
           <div class="p-grid p-fluid col-sm-12">
             <div class="p-2">
-              <h6>Project Documents <div type="button" class="pi pi-info-circle ml-10"
-                pTooltip="File types: .pdf, .docx, .jpg, .png"></div></h6>
-              
+              <h6>Project Documents <div type="button" class="pi pi-info-circle ml-10" pTooltip="File types: .pdf, .docx, .jpg, .png"></div>
+              </h6>
               <ng-container *ngIf="isDownloadMode == 0 ; else elseBlockdocuments">
-                <div class="col-12 wrapper-doc-upload mt-4" >
-                  <app-document-upload [doucmentList]="documents" [documentOwner]="documentsDocumentOwner"
-                    [documentOwnerId]="documentOwnerId" [isNew]="false" [showUpload]="showUpload" [showDeleteButton]="showDeleteButton">
+                <div class="col-12 wrapper-doc-upload mt-4">
+                  <app-document-upload [doucmentList]="documents" [documentOwner]="documentsDocumentOwner" [documentOwnerId]="documentOwnerId" [isNew]="false" [showUpload]="showUpload" [showDeleteButton]="showDeleteButton">
                   </app-document-upload>
                 </div>
               </ng-container>
@@ -478,7 +345,6 @@
                 <div *ngFor="let item of selectedDocuments">
                   <p>{{item.fileName}}</p>
                 </div>
-                
               </ng-template>
               <div *ngIf="selectedDocuments.length ==0">
                 <p>Documents not uploaded</p>
@@ -486,99 +352,60 @@
             </div>
           </div>
         </div>
-
-
-
       </div>
-
       <div class="card mt-2" *ngIf="flag ==1">
         <div class="p-grid p-fluid col-sm-12">
           <div class="p-2">
             <h6>Summary of the Proposal</h6>
           </div>
-
           <div class="p-2">
             <p>Current Status is <b>{{this.originalApprovalStatus}}</b></p>
           </div>
           <div class="p-2">
             <p>Proposed Date is <b>{{proposedDate| date: "dd/MM/YYYY "}}</b></p>
           </div>
-
-
-
-
           <div *ngIf="ndcupdatehistoryList.length != 0">
             <div class="p-2">
               <h6>Aggregated Actions and Action Areas mapped history</h6>
             </div>
-
             <ng-container *ngFor="let item of ndcupdatehistoryList; let i = index">
-
               <p><b>{{item.createdOn | date: "dd/MM/yyyy"}}</b> ,changed Aggregated Actions from
                 <b>{{item.previousNdcs}}</b> to <b>{{item.currentNdcs}}</b> and changed Action Areas from
-                <b>{{item.previousSubNdcs}}</b> to <b>{{item.currentSubNdcs}}</b> by <b>{{item.actionUser}}</b>.</p>
-
+                <b>{{item.previousSubNdcs}}</b> to <b>{{item.currentSubNdcs}}</b> by <b>{{item.actionUser}}</b>.
+              </p>
             </ng-container>
           </div>
-
-
           <div *ngIf="statusupdatehistoryList.length != 0">
             <div class="p-2">
               <h6>Project approval status update history</h6>
             </div>
-
             <ng-container *ngFor="let status of statusupdatehistoryList; let i = index">
-
               <p><b>{{status.createdOn | date: "dd/MM/yyyy"}}</b> ,changed Status from <b>{{status.previousAction}}</b>
                 to <b>{{status.currentAction}}</b> by <b>{{status.actionUser}}</b>.</p>
-
             </ng-container>
           </div>
-
         </div>
       </div>
-
-
-
-
-
-
-
-
       <div class="p-grid p-fluid col-sm-12">
         <div class="p-2">
           <ng-container *ngIf="isDownloadMode == 1; else elseBlockdate">
             <h6>{{textdlod}}</h6>
           </ng-container>
           <ng-template #elseBlockdate>
-
           </ng-template>
-
         </div>
       </div>
-
     </div>
-
-
-
-
     <div class="d-flex flex-row-reverse mt-2 mb-2">
       <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
-
-      <button pButton pRipple type="button" [label]="editEntytyId>0?'Back':(isSaving?'Back':'Cancel')"
-        class="p-button-raised" (click)="confirmBack(editEntytyId>0?'Back':(isSaving?'Back':'Cancel'))"></button>
-      <button pButton pRipple label="Download PDF" type="button" style="margin-right: 10px"
-        [disabled]="!(editEntytyId>0) &&  !isSaving" class="p-button-raised" (click)="toDownload()"></button>
-
-        <button pButton pRipple type="button" style="margin-right: 10px" [label]="editEntytyId>0 && editMode?'Save':'Edit'"
-          class="p-button-raised" (click)="edit(editEntytyId>0 && editMode?'Save':'Edit')"></button>
+      <button pButton pRipple type="button" [label]="editEntytyId>0?'Back':(isSaving?'Back':'Cancel')" class="p-button-raised" (click)="confirmBack(editEntytyId>0?'Back':(isSaving?'Back':'Cancel'))"></button>
+      <button pButton pRipple label="Download PDF" type="button" style="margin-right: 10px" [disabled]="!(editEntytyId>0) &&  !isSaving" class="p-button-raised" (click)="toDownload()"></button>
+      <button pButton pRipple type="button" style="margin-right: 10px" [label]="editEntytyId>0 && editMode?'Save':'Edit'" class="p-button-raised" (click)="edit(editEntytyId>0 && editMode?'Save':'Edit')"></button>
       <div *ngIf="flag !=1">
-        <button pButton pRipple label="Submit" style="margin-right: 10px" [disabled]="!fData.form.valid || isSaving"
-          class="p-button-raised" type="submit">
+        <button pButton pRipple label="Submit" style="margin-right: 10px" [disabled]="!fData.form.valid || isSaving" class="p-button-raised" type="submit">
         </button>
       </div>
     </div>
-
   </form>
 
   <p-toast position="top-right"></p-toast>
@@ -601,9 +428,6 @@
       </div>
     </ng-template>
   </p-toast>
-
-
-
   <p-overlayPanel #op [showCloseIcon]="true" [style]="{ width: '50vw' }" (onShow)="OnShowOerlay()">
     <ng-template pTemplate>
       <div class="
@@ -613,8 +437,7 @@
           flex-wrap
           mb-15
         ">
-        <textarea name="scopeTA" class="form-control" class="form-control" style="width: 100%" pInputTextarea
-          [(ngModel)]="rejectComment" #fscope="ngModel" [rows]="5" [cols]="30" required maxlength="2500"></textarea>
+        <textarea name="scopeTA" class="form-control" class="form-control" style="width: 100%" pInputTextarea [(ngModel)]="rejectComment" #fscope="ngModel" [rows]="5" [cols]="30" required maxlength="2500"></textarea>
         <p class="info-message text-danger" *ngIf="rejectCommentRequried">
           This is a mandatory field
         </p>
@@ -637,8 +460,6 @@
     </ng-template>
   </p-overlayPanel>
 
-
-
   <p-overlayPanel #opDR [showCloseIcon]="true" [style]="{ width: '50vw' }" (onShow)="OnShowOerlayDR()">
     <ng-template pTemplate>
       <div class="
@@ -648,8 +469,7 @@
         flex-wrap
         mb-15
       ">
-        <textarea name="scopeTA" class="form-control" class="form-control" style="width: 100%" pInputTextarea
-          [(ngModel)]="drComment" #fscope="ngModel" [rows]="5" [cols]="30" required maxlength="2500"></textarea>
+        <textarea name="scopeTA" class="form-control" class="form-control" style="width: 100%" pInputTextarea [(ngModel)]="drComment" #fscope="ngModel" [rows]="5" [cols]="30" required maxlength="2500"></textarea>
         <p class="info-message text-danger" *ngIf="drCommentRequried">
           This is a mandatory field
         </p>
@@ -671,11 +491,6 @@
       </div>
     </ng-template>
   </p-overlayPanel>
-
-
-
-
-
 </div>
 
 <p-overlayPanel #opAssessment [style]="{'width': '800px'}">
