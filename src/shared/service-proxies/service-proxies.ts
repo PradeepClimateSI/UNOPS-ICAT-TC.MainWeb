@@ -20103,16 +20103,14 @@ export class InvestorToolControllerServiceProxy {
         return _observableOf(null as any);
     }
 
-    getDashboardAllData(page: number, limit: number, filterText: string[], portfolioID: number): Observable<any> {
-        let url_ = this.baseUrl + "/investor-tool/dashboard-all-data?";
-        if (page === undefined || page === null)
-            throw new Error("The parameter 'page' must be defined and cannot be null.");
-        else
-            url_ += "page=" + encodeURIComponent("" + page) + "&";
-        if (limit === undefined || limit === null)
-            throw new Error("The parameter 'limit' must be defined and cannot be null.");
-        else
-            url_ += "limit=" + encodeURIComponent("" + limit) + "&";
+    getDashboardAllData(skip: number, pageSize: number, filterText: string[], portfolioID: number): Observable<any> {
+        let url_ = this.baseUrl + "/investor-tool/dashboard-all-data/{skip}/{pageSize}?";
+        if (skip === undefined || skip === null)
+            throw new Error("The parameter 'skip' must be defined.");
+        url_ = url_.replace("{skip}", encodeURIComponent("" + skip));
+        if (pageSize === undefined || pageSize === null)
+            throw new Error("The parameter 'pageSize' must be defined.");
+        url_ = url_.replace("{pageSize}", encodeURIComponent("" + pageSize));
         if (filterText === undefined || filterText === null)
             throw new Error("The parameter 'filterText' must be defined and cannot be null.");
         else
@@ -35387,6 +35385,16 @@ export interface ICreateAssessmentDto {
     [key: string]: any;
 }
 
+export enum DocumentsDocumentOwner {
+    Project = <any>"Project",
+    Country = <any>"Country",
+    CountryNC = <any>"CountryNC",
+    CountryBUR = <any>"CountryBUR",
+    CountryBTR = <any>"CountryBTR",
+    CountryNDC = <any>"CountryNDC",
+    CountryGHG = <any>"CountryGHG",
+}
+
 export class UpdateAssessmentDto implements IUpdateAssessmentDto {
     ids: number;
     deadline: moment.Moment;
@@ -39695,15 +39703,6 @@ export interface INotification {
     toUser: User;
 
     [key: string]: any;
-}
-export enum DocumentsDocumentOwner {
-    Project = <any>"Project",
-    Country = <any>"Country",
-    CountryNC = <any>"CountryNC",
-    CountryBUR = <any>"CountryBUR",
-    CountryBTR = <any>"CountryBTR",
-    CountryNDC = <any>"CountryNDC",
-    CountryGHG = <any>"CountryGHG",
 }
 
 export enum CountryStatus {

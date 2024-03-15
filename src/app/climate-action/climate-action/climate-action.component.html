@@ -152,8 +152,15 @@
                     <ng-container *ngIf="isDownloadMode == 1 ">
                       <p-multiSelect [disabled]="editEntytyId > 0" name="sector" #sector="ngModel" [(ngModel)]="finalSectors" [options]="sectorList" appendTo="body" optionLabel="name"></p-multiSelect>
                     </ng-container>
-                    <ng-container *ngIf="isDownloadMode == 0 && !editMode">
-                      <input [disabled]="editEntytyId > 0 && !editMode" type="text" maxlength="50" name="projsector" #projsector="ngModel" class="p-inputtext" [(ngModel)]="sectorsJoined" [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
+                    <!-- <ng-container *ngIf="isDownloadMode == 0 && editMode">
+                      <p-multiSelect [disabled]="editEntytyId > 0 && !editMode "  name="sector"
+                        #sector="ngModel" [(ngModel)]="finalSectors" [options]="sectorList" appendTo="body"
+                        optionLabel="name" ></p-multiSelect>                      
+                    </ng-container> -->
+                    <ng-container *ngIf="isDownloadMode == 0 ">
+                      <input [disabled]="editEntytyId > 0 " type="text" maxlength="50" name="projsector"
+                      #projsector="ngModel" class="p-inputtext" [(ngModel)]="sectorsJoined"
+                      [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
                     </ng-container>
                   </ng-template>
                 </div>
@@ -162,7 +169,122 @@
             <div class="row p-2">
               <div class="col-12 col-md-6">
                 <div class="p-field">
-                  <label for="impleDate"> Start Date* <i class="pi pi-info-circle" pTooltip="{{tooltips.start_date}}" tooltipPosition="bottom" style="font-size: 1rem"></i></label>
+                  <label for="projStatus">Geographical Area Targeted* <i class="pi pi-info-circle" pTooltip="{{tooltips.geo}}" tooltipPosition="bottom"
+                    style="font-size: 1rem"></i></label>
+                  <ng-container *ngIf="isDownloadMode == 0 && flag !=1 && !editMode">
+                    <p-dropdown [disabled]="editEntytyId > 0 && !editMode" placeholder="Please Select the Geographical Area Targeted"
+                      name="level_of_implemetation" #geographical_areas="ngModel" [(ngModel)]="project.geographicalAreaCovered"
+                      [options]="levelOfImplementation" optionLabel="name" optionValue="name"
+                      [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false"  appendTo="body"
+                      [required]="true"></p-dropdown>
+                    <p class="info-message text-danger" *ngIf="
+                    !project.geographicalAreaCovered &&
+                    (fData.submitted || geographical_areas.touched || geographical_areas.dirty)
+                  ">
+                      This is a mandatory field
+                    </p>
+                  </ng-container>
+                  <ng-container *ngIf="editEntytyId > 0  && editMode">
+
+                    <p-dropdown [disabled]="editEntytyId > 0 && !editMode" placeholder="Please Select the Geographical Area Targeted"
+                      name="level_of_implemetation" #geographical_areas="ngModel" [(ngModel)]="project.geographicalAreaCovered"
+                      [options]="levelOfImplementation" optionLabel="name" optionValue="name"
+                      [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false"  appendTo="body"
+                      [required]="true"></p-dropdown>
+                      
+                    <p class="info-message text-danger" *ngIf="
+                    !project.geographicalAreaCovered &&
+                    (fData.submitted || geographical_areas.touched || geographical_areas.dirty)
+                  ">
+                      This is a mandatory field
+                    </p>
+                  </ng-container>
+                  <ng-container *ngIf="editEntytyId > 0 && !editMode">
+                    <input [disabled]="editEntytyId > 0 && !editMode" type="text" maxlength="50" name="geographical_areas"
+                      #geographical_areas="ngModel" class="p-inputtext" [(ngModel)]="project.levelofImplemenation"
+                      [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
+                  </ng-container>
+
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="p-field">
+                  <label for="projStatus">Level of Implementation*</label><div type="button" class="pi pi-info-circle ml-10"
+                  pTooltip="Who does implement the policy?"></div>
+                  <ng-container *ngIf="isDownloadMode == 0 && flag !=1 ; else elseBlocklevelofIpml">
+                    <p-dropdown [disabled]="editEntytyId > 0 && !editMode" placeholder="Please Select the Level of Implementation"
+                      name="level_of_implemetation" #level_of_implemetation="ngModel" [(ngModel)]="project.levelofImplemenation"
+                      [options]="levelOfImplementation" optionLabel="name" optionValue="name"
+                      [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false"  appendTo="body"
+                      [required]="true"></p-dropdown>
+                    <p class="info-message text-danger" *ngIf="
+                    !project.levelofImplemenation &&
+                    (fData.submitted || level_of_implemetation.touched || level_of_implemetation.dirty)
+                  ">
+                      This is a mandatory field
+                    </p>
+                  </ng-container>
+                  <ng-template #elseBlocklevelofIpml>
+                    <input [disabled]="editEntytyId > 0 && !editMode" type="text" maxlength="50" name="level_of_implemetation"
+                      #level_of_implemetation="ngModel" class="p-inputtext" [(ngModel)]="project.levelofImplemenation"
+                      [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
+                  </ng-template>
+
+                </div>
+              </div>
+             
+
+
+            </div>
+            <div class="row p-2">
+              <div class="col-12 col-md-6">
+                <div class="p-field">
+                  <label for="geographicCoverage">Geographic Coverage</label>
+                  <textarea [disabled]="editEntytyId > 0 && !editMode" name="geographicCoverage"
+                    placeholder="Geographic Coverage" #geographicCoverage="ngModel"
+                    [(ngModel)]="project.geographicCoverage" rows="5" cols="130" pInputText
+                    autoResize="autoResize" [maxlength]="masterDataService.getFieldCharCount(fieldNames.GEOGRAPHICAL_COVERAGE)"></textarea>
+                    <span style=" float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.GEOGRAPHICAL_COVERAGE)}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="row p-2">
+              <div class="col-12 col-md-6">
+                <div class="p-field">
+                  <label for="description">Description of the Intervention*</label>
+                  <textarea [disabled]="editEntytyId > 0 && !editMode" name="description" placeholder="Description"
+                    #description="ngModel" [(ngModel)]="project.description" rows="5" cols="130" pInputText [required]="true"
+                    autoResize="autoResize" [maxlength]="masterDataService.getFieldCharCount(fieldNames.INTERVENTION_DESCRIPTION)"></textarea>
+                    <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.INTERVENTION_DESCRIPTION)}}</span>
+                    <p class="info-message text-danger" *ngIf="
+                    !project.description &&
+                    (fData.submitted || description.touched || description.dirty) ">
+                    This is a mandatory field
+                    </p>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="p-field">
+                  <label for="objective">Objectives and Intended Impacts or Benefits of the Intervention* <i class="pi pi-info-circle" pTooltip="{{tooltips.objective}}" tooltipPosition="bottom"
+                    style="font-size: 1rem"></i></label>
+                  <textarea [disabled]="editEntytyId > 0 && !editMode" name="objective" placeholder="Objective" #objective="ngModel"
+                    [(ngModel)]="project.objective" rows="5" cols="130" pInputText autoResize="autoResize" [required]="true" [maxlength]="masterDataService.getFieldCharCount(fieldNames.INTERVENTION_OBJECTIVE)"></textarea>
+                    <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.INTERVENTION_OBJECTIVE)}}</span>
+                    <p class="info-message text-danger" *ngIf="
+                    !project.objective &&
+                    (fData.submitted || objective.touched || objective.dirty) ">
+                    This is a mandatory field
+                    </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="row p-2">
+
+              <div class="col-12 col-md-6">
+                <div class="p-field">
+                  <label for="impleDate"> Start Date* <i class="pi pi-info-circle" pTooltip="{{tooltips.start_date}}" tooltipPosition="bottom"
+                    style="font-size: 1rem"></i></label>
                   <div>
                     <p-calendar [disabled]="editEntytyId > 0 && !editMode" placeholder="DD/MM/YYYY" dateFormat="dd/mm/yy" name="impleDate" #impleDate="ngModel" [(ngModel)]="dateOfImplementation" appendTo="body" (onSelect)="onImplementatonYearChange(dateOfImplementation)"
                       [required]="true"></p-calendar>

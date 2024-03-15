@@ -191,7 +191,7 @@ export class ClimateActionComponent implements OnInit  {
   { }
 
   async ngOnInit(): Promise<void> {
-
+console.log(this.editMode)
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;
     const token = localStorage.getItem('ACCESS_TOKEN')!; 
     this.userRole =decode<any>(token).role?.code;
@@ -834,18 +834,16 @@ export class ClimateActionComponent implements OnInit  {
   edit(label: string){
     if (label === 'Edit') {
       this.editMode =true;
-
     }
     else {
       this.editMode =false;
+      this.project.geographicalAreaCovered = this.project.geographicalAreaCovered;
       this.project.dateOfCompletion= this.dateOfCompletion
       this.project.dateOfImplementation =this.dateOfImplementation;
 
       this.projectProxy.updateOneClimateAction(this.project)
       .subscribe(
         (res) => {
-
-
           this.messageService.add({
             severity: 'success',
             summary: 'Success',

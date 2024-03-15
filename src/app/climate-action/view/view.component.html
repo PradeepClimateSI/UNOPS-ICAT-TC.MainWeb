@@ -56,9 +56,7 @@
              {{climateactions?.projectStatus?.name}}
           </td>
           <td>
-            {{(climateactions?.projectApprovalStatus?.id == undefined || climateactions?.projectApprovalStatus?.id ==
-            4)?'Proposed':(climateactions?.projectApprovalStatus.id == 3?'Data
-            Requested':(climateactions.projectApprovalStatus.id == 1?'Accepted':(climateactions.projectApprovalStatus.id
+            {{(climateactions?.projectApprovalStatus?.id == undefined || climateactions?.projectApprovalStatus?.id == 4)?'Proposed':(climateactions?.projectApprovalStatus.id == 3?'Data Requested':(climateactions.projectApprovalStatus.id == 1?'Accepted':(climateactions.projectApprovalStatus.id
             == 5?'Active':'Rejected')))}}
           </td>
           <td>
@@ -74,7 +72,7 @@
   </p-table>
 
 
-
+  <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000"  rejectButtonStyleClass="p-button-text"></p-confirmDialog>
 
 
 
