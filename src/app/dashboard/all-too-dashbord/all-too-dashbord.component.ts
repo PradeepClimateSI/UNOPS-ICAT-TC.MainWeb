@@ -13,7 +13,7 @@ import * as moment from 'moment';
   templateUrl: './all-too-dashbord.component.html',
   styleUrls: ['./all-too-dashbord.component.css']
 })
-export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
+export class AllTooDashbordComponent implements OnInit, AfterViewInit {
   calResults: any;
 
   @ViewChild('portfolioSDGsPieChart')
@@ -30,9 +30,9 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
   totalRecords: number;
   pointTableDatas: Assessment[] = []
   userRole: string = "";
-  policies:any;
-  selectPolicy:any;
-  countryId:number;
+  policies: any;
+  selectPolicy: any;
+  countryId: number;
 
   sectorCount: {
     sector: string,
@@ -51,12 +51,12 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
   heatMapScore: HeatMapScore[];
   heatMapData: TableData[];
 
-  secbgColors : string[] = [];
-  sectorColorMap: {id: number; sectorNumber: number; color: string;}[]
+  secbgColors: string[] = [];
+  sectorColorMap: { id: number; sectorNumber: number; color: string; }[]
 
   sdgColorMap: any;
   bgColors: any = []
-  defaulColors =[
+  defaulColors = [
     'rgba(153, 102, 255, 1)',
     'rgba(75, 192, 192,1)',
     'rgba(54, 162, 235, 1)',
@@ -76,12 +76,12 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
     'rgba(47, 79, 79, 1)',
     'rgba(139, 69, 19, 1)'
   ]
-  selectedPortfolio : any;
-  portfolioList : any[]= [];
+  selectedPortfolio: any;
+  portfolioList: any[] = [];
   allAssessments: any[] = [];
-  selectedAssessments: any[]=[];
-  selectedIds:string[] = [];
-  selectionLimit:number = 10;
+  selectedAssessments: any[] = [];
+  selectedIds: string[] = [];
+  selectionLimit: number = 10;
 
   constructor(
     private investorProxy: InvestorToolControllerServiceProxy,
@@ -89,8 +89,8 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
     private cdr: ChangeDetectorRef,
     private renderer: Renderer2,
     private projectProxy: ProjectControllerServiceProxy,
-    private portfolioServiceProxy : PortfolioControllerServiceProxy,
-     private activatedRoute: ActivatedRoute,
+    private portfolioServiceProxy: PortfolioControllerServiceProxy,
+    private activatedRoute: ActivatedRoute,
     private router: Router,
   ) {
   }
@@ -98,7 +98,7 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
     const token = localStorage.getItem('ACCESS_TOKEN')!;
     const tokenPayload = decode<any>(token);
     this.userRole = tokenPayload.role.code;
-    this.countryId =tokenPayload.countryId
+    this.countryId = tokenPayload.countryId
     this.sdgColorMap = this.masterDataService.SDG_color_map
     this.sectorColorMap = this.masterDataService.Sector_color_map;
     this.getPortfolioList()
@@ -109,8 +109,8 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
         .getProjectName(this.countryId)
 
         .subscribe((a) => {
-         this.policies = a.filter((obj:any) => obj !== null);
-        }, err => {this.loading = false;});
+          this.policies = a.filter((obj: any) => obj !== null);
+        }, err => { this.loading = false; });
     }, 1000);
 
     this.xData = this.masterDataService.xData;
@@ -123,33 +123,33 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
 
   }
 
-  getPortfolioList(){
+  getPortfolioList() {
     this.portfolioServiceProxy.getAll().subscribe(async (res: any) => {
       this.portfolioList = res;
-     });
+    });
   }
 
-  goToFunction(){
+  goToFunction() {
     this.selectedPortfolio = ''
     this.selectPortfolio()
     this.setAlldata()
   }
 
   setAlldata() {
-    let tool ='ALL_OPTION'
-    this.portfolioServiceProxy.getAlltoolDashboardData(this.selectedPortfolio ? this.selectedPortfolio.id : 0, 1, this.rows, this.selectedIds,tool).subscribe((res) => {
-      if(res.meta.allData && res.meta.allData.length>0){
+    let tool = 'ALL_OPTION'
+    this.portfolioServiceProxy.getAlltoolDashboardData(this.selectedPortfolio ? this.selectedPortfolio.id : 0, 1, this.rows, this.selectedIds, tool).subscribe((res) => {
+      if (res.meta.allData && res.meta.allData.length > 0) {
         this.allAssessments = this.mapOptionlable(res.meta.allData)
       }
     });
   }
   mapOptionlable(data: any[]) {
     return data.map(item => {
-      let label:string = item.climateAction.policyName
+      let label: string = item.climateAction.policyName
       if (item.from && item.to) {
-       label = label + " - " + moment(new Date(item.from)).format("DD/MM/YYYY").toString() + " - " + moment(new Date(item.to)).format("DD/MM/YYYY").toString()
+        label = label + " - " + moment(new Date(item.from)).format("DD/MM/YYYY").toString() + " - " + moment(new Date(item.to)).format("DD/MM/YYYY").toString()
       }
-      return {label:label}
+      return { label: label }
     })
   }
 
@@ -170,28 +170,21 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
   }
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
-    // this.updateSourceDivHeight();
   }
-  // updateSourceDivHeight(): void {
-  //   this.targetDivHeight = this.targetDiv.nativeElement.offsetHeight;
-  //   this.renderer.setStyle(this.sourceDiv.nativeElement, 'height', `${this.targetDivHeight}px`);
-  //   this.renderer.setStyle(this.sourceDiv.nativeElement, 'overflow-y', 'auto');
-  //   this.cdr.detectChanges();
-  // }
-  sectorCountResult(){
-    this.investorProxy.findSectorCountAllTool(this.selectedPortfolio?this.selectedPortfolio.id:0).subscribe((res: any) => {
+
+  sectorCountResult() {
+    this.investorProxy.findSectorCountAllTool(this.selectedPortfolio ? this.selectedPortfolio.id : 0).subscribe((res: any) => {
       this.sectorCount = res.sort(this.compareByAge);
       setTimeout(() => {
 
         this.viewSecterTargetedPieChart();
-        // this.updateSourceDivHeight();
       }, 20);
       this.sdgResults()
 
     });
-   }
+  }
 
-   compareByAge(a:any, b:any) {
+  compareByAge(a: any, b: any) {
     return b.count - a.count;
   }
   viewSecterTargetedPieChart() {
@@ -278,7 +271,7 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
                   ];
                 }
               },
-              backgroundColor: 'rgba(0, 0, 0, 0.8)', 
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
               titleFont: {
                 size: 14,
                 weight: 'bold'
@@ -286,7 +279,7 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
               bodyFont: {
                 size: 14
               },
-              displayColors: true, 
+              displayColors: true,
               bodyAlign: 'left'
             }
           }
@@ -298,22 +291,28 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
 
   }
   onSelectAssessment() {
-    this.selectedIds = this.selectedAssessments.map((item: any)=> item.id)
+    this.selectedIds = this.selectedAssessments.map((item: any) => item.id)
+    this.projectName = this.selectedAssessments.map((item: any) => item.label)
     this.callTable()
- }
+  }
 
- onClear() {
-   this.selectedIds = []
+  onClear() {
+    this.selectedIds = []
     this.selectedAssessments = []
     this.callTable()
- }
+    this.projectName = [];
+    let event: any = {};
+    event.rows = this.rows;
+    event.first = 0;
+    this.loadgridData(event);
+  }
 
- callTable(){
-   let event: any = {};
-     event.rows = this.rows;
-     event.first = 0;
-     this.loadgridData(event);
- }
+  callTable() {
+    let event: any = {};
+    event.rows = this.rows;
+    event.first = 0;
+    this.loadgridData(event);
+  }
 
   loadgridData = (event: LazyLoadEvent) => {
     this.loading = true;
@@ -325,28 +324,31 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
     let skip = pageNumber * this.rows;
-    this.investorProxy.getDashboardAllData(skip,this.rows,this.projectName,this.selectedPortfolio?this.selectedPortfolio.id:0).subscribe((res) => {
-      this.tableData=res[0];
-      this.heatMapScore = this.tableData.map(item => {return {processScore: item.process_score, outcomeScore: item.outcome_score}})
-      this.heatMapData = this.tableData.map(item => {return {interventionId: item.climateAction?.intervention_id, interventionName: item.climateAction?.policyName, processScore: item.process_score, outcomeScore: item.outcome_score}}) 
-      this.totalRecords= res[1]
+    this.investorProxy.getDashboardAllDatafilter(pageNumber, this.rows, this.projectName, this.selectedPortfolio ? this.selectedPortfolio.id : 0).subscribe((res) => {
+      this.tableData = res.items;
+      this.heatMapScore = this.tableData.map(item => { return { processScore: item.process_score, outcomeScore: item.outcome_score } })
+      this.heatMapData = this.tableData.map(item => { return { interventionId: item.climateAction?.intervention_id, interventionName: item.climateAction?.policyName, processScore: item.process_score, outcomeScore: item.outcome_score } })
+      this.totalRecords = res.meta.totalItems
       this.loading = false;
     }, err => {
-      this.loading = false;});
+      this.loading = false;
+    });
 
-  
+
+
+
   };
-  goToResult(id: number,tool:string) {
-    if(tool=='CARBON_MARKET'){
+  goToResult(id: number, tool: string) {
+    if (tool == 'CARBON_MARKET') {
       this.router.navigate(['carbon-market-tool-result'], { queryParams: { id: id }, relativeTo: this.activatedRoute })
-    }else{
-      this.router.navigate(['assessment-result-investor', id], { queryParams: { assessmentId:id }, relativeTo: this.activatedRoute });
+    } else {
+      this.router.navigate(['assessment-result-investor', id], { queryParams: { assessmentId: id }, relativeTo: this.activatedRoute });
     }
-    
+
   }
 
   mapOutcomeScores(value: number) {
-    
+
     switch (value) {
       case -1:
         return 'Minor Negative';
@@ -362,7 +364,7 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
         return 'Moderate';
       case 3:
         return 'Major';
-      
+
       case null:
         return 'N/A'
       default:
@@ -372,7 +374,7 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
   }
 
   mapProcessScores(value: number) {
-   
+
     switch (value) {
       case 0:
         return 'Very unlikely (0-10%)';
@@ -464,21 +466,21 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
 
   sdgResults() {
     this.sdgDetailsList = []
-    this.investorProxy.sdgSumAllCalculate(this.selectedPortfolio?this.selectedPortfolio.id:0).subscribe(async (res: any) => {
+    this.investorProxy.sdgSumAllCalculate(this.selectedPortfolio ? this.selectedPortfolio.id : 0).subscribe(async (res: any) => {
       this.sdgDetailsList = res;
       setTimeout(() => {
         this.viewPortfolioSDGsPieChart();
-        
+
       }, 200);
     });
   }
 
-  viewPortfolioSDGsPieChart(){
+  viewPortfolioSDGsPieChart() {
     this.sdgDetailsList.sort((a: any, b: any) => b.count - a.count)
-    let labels = this.sdgDetailsList.map((item:any) => 'SDG ' + item.number + ' - ' + item.sdg);
-    let counts:number[] = this.sdgDetailsList.map((item:any) => item.count);
+    let labels = this.sdgDetailsList.map((item: any) => 'SDG ' + item.number + ' - ' + item.sdg);
+    let counts: number[] = this.sdgDetailsList.map((item: any) => item.count);
     this.sdgDetailsList.forEach((sd: any) => {
-      let color = this.sdgColorMap.find((o:any) => o.sdgNumber === sd.number)
+      let color = this.sdgColorMap.find((o: any) => o.sdgNumber === sd.number)
       if (color) {
         this.bgColors.push(color.color)
       } else {
@@ -500,12 +502,12 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
     }
     if (this.portfolioSDGsPieChart) {
       this.portfolioSDGsPieChart.data.datasets[0].data = counts;
-      this.portfolioSDGsPieChart.data.labels=labels
+      this.portfolioSDGsPieChart.data.labels = labels
       this.portfolioSDGsPieChart.update();
     }
-    else{
-      this.portfolioSDGsPieChart =new Chart(ctx, {
-        type: 'pie'as ChartType,
+    else {
+      this.portfolioSDGsPieChart = new Chart(ctx, {
+        type: 'pie' as ChartType,
 
         data: {
           labels: labels,
@@ -518,8 +520,8 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins:{
-            legend:{
+          plugins: {
+            legend: {
               position: 'bottom',
               labels: {
                 padding: 20
@@ -537,44 +539,44 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
               },
 
             },
-            tooltip:{
-              position:'average',
-              boxWidth:10,
-              callbacks:{
+            tooltip: {
+              position: 'average',
+              boxWidth: 10,
+              callbacks: {
 
-                label:(ctx)=>{
-                 
+                label: (ctx) => {
+
                   let sum = 0;
-                  let array =ctx.dataset.data
+                  let array = ctx.dataset.data
                   array.forEach((number) => {
                     sum += Number(number);
                   });
-              
-                  let percentage = (ctx.parsed/ sum*100).toFixed(2)+"%";
 
-                  return[
+                  let percentage = (ctx.parsed / sum * 100).toFixed(2) + "%";
+
+                  return [
                     `SDG: ${ctx.label}`,
                     `Count: ${ctx.raw}`,
                     `Percentage: ${percentage}`
                   ];
-                 }
+                }
               },
-              backgroundColor: 'rgba(0, 0, 0, 0.8)', 
-                titleFont: {
-                  size: 14,
-                  weight: 'bold'
-                },
-                bodyFont: {
-                  size: 14
-                },
-                displayColors: true, 
-                bodyAlign: 'left'
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              titleFont: {
+                size: 14,
+                weight: 'bold'
+              },
+              bodyFont: {
+                size: 14
+              },
+              displayColors: true,
+              bodyAlign: 'left'
             }
-         }
+          }
 
         },
 
-    });
+      });
     }
 
 

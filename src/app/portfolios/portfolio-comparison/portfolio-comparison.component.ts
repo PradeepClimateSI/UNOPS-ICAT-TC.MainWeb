@@ -8,6 +8,7 @@ import { ColorMap } from 'app/Tool/carbon-market/cm-result/cm-result.component';
 
 import * as XLSX from 'xlsx-js-style';
 import { environment } from 'environments/environment';
+import * as moment from 'moment';
 @Component({
   selector: 'app-portfolio-comparison',
   templateUrl: './portfolio-comparison.component.html',
@@ -59,13 +60,14 @@ export class PortfolioComparisonComponent implements OnInit {
   async getPortfolioData() {
     this.portfolio = (await this.portfolioServiceProxy.getPortfolioById(this.portfolioId).toPromise())[0]
     this.noOfAssessments = (await this.portfolioServiceProxy.assessmentsDataByAssessmentId(this.portfolioId).toPromise()).length
+    let date = moment(this.portfolio.date).format('DD/MM/YYYY')
 
     this.card.push(
       ...[
         { title: 'Portfolio ID', data: this.portfolio.portfolioId },
         { title: 'Name of the Portfolio', data: this.portfolio.portfolioName },
         { title: 'Description', data: this.portfolio.description },
-        { title: 'Date', data: this.portfolio.date },
+        { title: 'Date', data: date },
         { title: 'Is this assessment an update of a previous assessment?', data: this.portfolio.IsPreviousAssessment },
         { title: 'Link to previous assessment', data: this.portfolio.link },
         { title: 'Objective(s) of the assessment', data: this.portfolio.objectives },
@@ -81,50 +83,10 @@ export class PortfolioComparisonComponent implements OnInit {
 
   async getDummyData() {
     let interventions = await this.portfolioServiceProxy.getPortfolioComparisonData(this.portfolioId).toPromise()
-    //TODO sort process data by order before loop the table
-    // this.process_data = [
-    //   {
-    //     col_set_1: [
-    //       { label: 'INTERVENTION INFORMATION', colspan: 4 },
-    //       { label: 'Technology', colspan: 4 },
-    //     ],
-    //     col_set_2: [
-    //       { label: 'ID', code: 'id' },
-    //       { label: 'Intervention Name', code: 'name' },
-    //       { label: 'Intervention Type', code: 'type' },
-    //       { label: 'Status', code: 'status' },
-    //       { label: 'R&D', code: 'R_&_D' },
-    //       { label: 'Adoption', code: 'ADOPTION' },
-    //       { label: 'Category score', code: 'category_score' }
-    //     ],
-    //     interventions: [
-    //       {
-    //         id: '1',
-    //         name: 'Test 1',
-    //         type: 'Type 1',
-    //         status: 'Complete',
-    //         'R_&_D': '2',
-    //         ADOPTION: '3',
-    //         category_score: '4'
-    //       },
-    //       {
-    //         id: '2',
-    //         name: 'Test 2',
-    //         type: 'Type 2',
-    //         status: 'Complete',
-    //         'R_&_D': '2',
-    //         ADOPTION: '3',
-    //         category_score: '4'
-    //       }
-    //     ],
-    //     characteristic_count: 2,
-    //     order: 1
-    //   },
-    // ]
+    
 
     this.process_data = interventions.process_data
 
-    //TODO sort outcome data by order before loop the table
     this.outcome_data = [
       {
         comparison_type: 'SCALE COMPARISON',
