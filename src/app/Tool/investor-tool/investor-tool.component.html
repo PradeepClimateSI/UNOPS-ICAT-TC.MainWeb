@@ -13,7 +13,7 @@
             <div class="p-field p-2">
               <label for="policy">Select Intervention *</label>
               <p-dropdown name="policy" #policy="ngModel" placeholder="Select Intervention" [(ngModel)]="assessment.climateAction" appendTo="body" [options]="policies" optionLabel="policyName" [required]="true" (onChange)="onSelectIntervention($event)"
-                [disabled]="isSavedAssessment || isEditMode"></p-dropdown>
+                [disabled]="isSavedAssessment || isEditMode || isDisableIntervention"></p-dropdown>
               <p class="info-message text-danger" *ngIf="
                                 !assessment.climateAction &&
                                 (fData.submitted || policy.touched)
@@ -23,7 +23,7 @@
             </div>
             <div class="p-field p-2">
               <label for="policy">Assessment Type *</label>
-              <p-dropdown name="type" #type="ngModel" placeholder="Select Assessment Type" [(ngModel)]="assessment.assessmentType" [options]="assessment_types" optionLabel="name" optionValue="name" [required]="true" appendTo="body" [disabled]="isSavedAssessment|| isEditMode"
+              <p-dropdown name="type" #type="ngModel" placeholder="Select Assessment Type" [(ngModel)]="assessment.assessmentType" [options]="assessment_types" optionLabel="name" optionValue="name" [required]="true" appendTo="body" [disabled]="isSavedAssessment|| isEditMode || isDisableIntervention"
                 (onChange)="selectAssessmentType($event)"></p-dropdown>
               <p class="info-message text-danger" *ngIf="
                                 !assessment.assessmentType &&
@@ -185,7 +185,7 @@
                 </div>
                 <div class="col-12 col-md-6">
                   <div class="p-field">
-                    <textarea [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" name="phase_of_transformation" placeholder="See Chapter 6 of the ICAT Transformational Change Methodology" #phase_of_transformation="ngModel" [(ngModel)]="assessment.phase_of_transformation" rows="2" cols="130" pInputText
+                    <textarea [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" name="phase_of_transformation" placeholder="Pre-development, Take-off, Acceleration, Stabilization / Relapse" #phase_of_transformation="ngModel" [(ngModel)]="assessment.phase_of_transformation" rows="2" cols="130" pInputText
                       autoResize="autoResize" [maxlength]="masterDataService.getFieldCharCount(fieldNames.VISION)" required></textarea>
                     <label style="font-size: 12px;"><i>See <a [href]="chapter6_url" target="_blank">Chapter 6 </a>of the ICAT Transformational Change Methodology</i></label>
                     <span style="float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.VISION)}}</span>

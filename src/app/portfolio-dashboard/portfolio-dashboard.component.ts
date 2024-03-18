@@ -6,6 +6,7 @@ import { LazyLoadEvent } from 'primeng/api';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { Assessment, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PortfolioControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as moment from 'moment';
 @Component({
   selector: 'app-portfolio-dashboard',
   templateUrl: './portfolio-dashboard.component.html',
@@ -166,8 +167,19 @@ this.selectPortfolio();
 
   setAlldata(){
     this.portfolioServiceProxy.getDashboardData(this.selectedPortfolio?this.selectedPortfolio.id:0,1,this.rows,this.selectedIds).subscribe((res) => {
-      this.allAssessments = res.meta.allData
+      if(res.meta.allData && res.meta.allData.length>0){
+        this.allAssessments = this.mapOptionlable(res.meta.allData)
+      }
     });
+  }
+  mapOptionlable(data: any[]) {
+    return data.map(item => {
+      let label:string = item.climateAction.policyName
+      if (item.from && item.to) {
+       label = label + " - " + moment(new Date(item.from)).format("DD/MM/YYYY").toString() + " - " + moment(new Date(item.to)).format("DD/MM/YYYY").toString()
+      }
+      return {label:label}
+    })
   }
 
   selectPortfolio(){
@@ -228,7 +240,7 @@ this.selectPortfolio();
     this.rows = event.rows === undefined ? 10 : event.rows;
     this.portfolioServiceProxy.getDashboardData(this.selectedPortfolio?this.selectedPortfolio.id:0,pageNumber,this.rows,this.selectedIds).subscribe((res) => {
       this.dashboardData = res.items;
-      this.tableData = this.dashboardData.map(item => {return {climateAction: item.climateAction,tool:item.tool, outcomeScore: item.result.averageOutcome, processScore: item.result.averageProcess,assessId:item.id}}) 
+      this.tableData = this.dashboardData.map(item => {return {climateAction: item.climateAction,tool:item.tool, outcomeScore: item.result.averageOutcome, processScore: item.result.averageProcess,assessId:item.id,from:item.from,to: item.to}}) 
       
       this.heatMapScore = this.dashboardData.map(item => {return {outcomeScore: item.result.averageOutcome, processScore: item.result.averageProcess,}})
       this.heatMapData = this.dashboardData.map(item => {return {interventionId: item.climateAction?.intervention_id, interventionName: item.climateAction?.policyName, outcomeScore: item.result.averageOutcome, processScore: item.result.averageProcess}}) 
