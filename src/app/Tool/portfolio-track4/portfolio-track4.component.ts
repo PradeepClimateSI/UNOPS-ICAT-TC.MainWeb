@@ -330,7 +330,7 @@ export class PortfolioTrack4Component implements OnInit {
       this.assessment.to?.month(),
       this.assessment.to?.date()
     );
-
+    this.onSelectFromDate(this.from_date)
     this.processData.forEach((d) => {
       if (d.CategoryName == this.assessment.processDraftLocation) {
         this.activeIndex = d.categoryID - 1;

@@ -45,7 +45,8 @@
               >
                   <ng-template pTemplate="header">
                       <tr>
-                          <th style="width:60%">Intervention Name</th>
+                          <th style="width:30%">Intervention Name</th>
+                          <th style="width:30%">Assessment Period</th>
                           <th style="width:20%" style="line-height: 130%;">Likelihood of Transformation</th>
                           <th style="width:20%" style="line-height: 130%;">Outcome Score</th>
 
@@ -54,6 +55,7 @@
                   <ng-template pTemplate="body" let-tableData>
                       <tr (click)="goToResult(tableData.assessment_id)">
                           <td>{{ tableData?.intervention }}</td>
+                          <td>{{tableData?.assessment_period}}</td>
                           <td>{{ mapProcessScores(tableData.process_score) }}</td>
                           <td>{{ mapOutcomeScores(tableData.outcome_score) }}</td>
                       </tr>
