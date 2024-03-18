@@ -8,6 +8,7 @@ import { ColorMap } from 'app/Tool/carbon-market/cm-result/cm-result.component';
 
 import * as XLSX from 'xlsx-js-style';
 import { environment } from 'environments/environment';
+import * as moment from 'moment';
 @Component({
   selector: 'app-portfolio-comparison',
   templateUrl: './portfolio-comparison.component.html',
@@ -59,13 +60,14 @@ export class PortfolioComparisonComponent implements OnInit {
   async getPortfolioData() {
     this.portfolio = (await this.portfolioServiceProxy.getPortfolioById(this.portfolioId).toPromise())[0]
     this.noOfAssessments = (await this.portfolioServiceProxy.assessmentsDataByAssessmentId(this.portfolioId).toPromise()).length
+    let date = moment(this.portfolio.date).format('DD/MM/YYYY')
 
     this.card.push(
       ...[
         { title: 'Portfolio ID', data: this.portfolio.portfolioId },
         { title: 'Name of the Portfolio', data: this.portfolio.portfolioName },
         { title: 'Description', data: this.portfolio.description },
-        { title: 'Date', data: this.portfolio.date },
+        { title: 'Date', data: date },
         { title: 'Is this assessment an update of a previous assessment?', data: this.portfolio.IsPreviousAssessment },
         { title: 'Link to previous assessment', data: this.portfolio.link },
         { title: 'Objective(s) of the assessment', data: this.portfolio.objectives },

@@ -986,10 +986,10 @@ export class CmSectionThreeComponent implements OnInit {
       if (code === 'STARTING_SITUATION') {
         if (!this.default_values[ch_id]) this.default_values[ch_id] = {st_default_values: [], ex_default_values: []}
         this.default_values[ch_id].st_default_values = res;
-        this.default_values[ch_id].st_default_values = this.default_values[ch_id].st_default_values.map(val => {val['label'] = val.starting_situation_value + ' ' + val.unit; return val})
+        this.default_values[ch_id].st_default_values = this.default_values[ch_id].st_default_values.map(val => {val['label'] = val.starting_situation_value + ' ' + val.source; return val})
       } else {
         this.default_values[ch_id].ex_default_values = res;
-        this.default_values[ch_id].ex_default_values = this.default_values[ch_id].ex_default_values.map(val => {val['label'] = val.expected_impact_value + ' ' + val.unit; return val})
+        this.default_values[ch_id].ex_default_values = this.default_values[ch_id].ex_default_values.map(val => {val['label'] = val.expected_impact_value + ' ' + val.source; return val})
       }
     }
   }
