@@ -35385,16 +35385,6 @@ export interface ICreateAssessmentDto {
     [key: string]: any;
 }
 
-export enum DocumentsDocumentOwner {
-    Project = <any>"Project",
-    Country = <any>"Country",
-    CountryNC = <any>"CountryNC",
-    CountryBUR = <any>"CountryBUR",
-    CountryBTR = <any>"CountryBTR",
-    CountryNDC = <any>"CountryNDC",
-    CountryGHG = <any>"CountryGHG",
-}
-
 export class UpdateAssessmentDto implements IUpdateAssessmentDto {
     ids: number;
     deadline: moment.Moment;
@@ -39708,6 +39698,15 @@ export interface INotification {
 export enum CountryStatus {
     Active = <any>"Active",
     Deactivated = <any>"Deactivated",
+}
+export enum DocumentsDocumentOwner {
+    Project = <any>"Project",
+    Country = <any>"Country",
+    CountryNC = <any>"CountryNC",
+    CountryBUR = <any>"CountryBUR",
+    CountryBTR = <any>"CountryBTR",
+    CountryNDC = <any>"CountryNDC",
+    CountryGHG = <any>"CountryGHG",
 }
 
 export enum ParameterRequestTool {

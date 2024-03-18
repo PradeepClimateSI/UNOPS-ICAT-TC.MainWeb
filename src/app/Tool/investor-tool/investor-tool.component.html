@@ -47,7 +47,7 @@
             <div class="p-field p-2">
               <label for="Sectors Covered">Sectors Covered *</label>
               <p-confirmDialog key="sectorConfirm"  icon="pi pi-exclamation-triangle" position="top" [style]="{width: '50vw'}" [baseZIndex]="10000"></p-confirmDialog>
-              <p-multiSelect #multiSelectComponent appendTo="body" name="sectors" #type="ngModel" placeholder="Select Sectors Covered" [(ngModel)]="sectorArray" [options]="sectorList" (ngModelChange)="onItemSelectSectors($event)" [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" optionLabel="name"
+              <p-multiSelect #multiSelectComponent appendTo="body" name="sectors" #type="ngModel" placeholder="Select Sectors Covered" [(ngModel)]="sectorArray" [options]="sectorList" (onChange)="onItemSelectSectors($event)" [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" optionLabel="name"
                 [required]="true"></p-multiSelect>
               <p class="info-message text-danger" *ngIf="
                                 sectorArray.length===0 &&
@@ -67,7 +67,7 @@
               </p>
             </div>
             <div class="p-field p-2">
-              <label for="totalInvenstement">Investment Intruments</label>
+              <label for="totalInvenstement">Investment Insstruments</label>
               <p-multiSelect name="investorAssessment.investmentInstruments" #gac="ngModel" placeholder="Select Investment Instrument" [(ngModel)]="selectedInstruments" [options]="investment_instruments" optionLabel="name" [required]="true"
                 [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" appendTo="body" (onChange)="onSelectInstrument($event)">
               </p-multiSelect>
@@ -869,7 +869,7 @@
 <p-overlayPanel #opRelevance [style]="{'width': '800px'}">
   <div class="p-grid p-fluid col-md-12 col-sm-12 text-title">
       <label>Does the process characteristic affects/impacts any of the identified barriers? does the intervention affects/impacts the process characteristic?</label>
-      <br>
+      <br><br><br>
       <p-table [value]="[{}]">
           <ng-template pTemplate="header">
               <tr>

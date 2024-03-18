@@ -316,7 +316,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       this.assessment.to?.month(),
       this.assessment.to?.date()
     );
-
+    this.onSelectFromDate(this.from_date)
     this.processData.forEach((d) => {
       if (d.CategoryName == this.assessment.processDraftLocation) {
         this.activeIndex = d.categoryID - 1;
