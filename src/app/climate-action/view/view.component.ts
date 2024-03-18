@@ -199,7 +199,6 @@ export class ViewComponent implements OnInit, AfterViewInit {
   }
 
   delete(climateactions: Project) {
-    console.log("climateactions", climateactions)
     if(climateactions){
       this.confirmationService.confirm({
         message: 'Are you sure you want to delete the intervention?',
@@ -210,7 +209,6 @@ export class ViewComponent implements OnInit, AfterViewInit {
          this.deleteIN(climateactions)
         },
         reject: () => {
-          console.log("reject")
         },
       });
     }
