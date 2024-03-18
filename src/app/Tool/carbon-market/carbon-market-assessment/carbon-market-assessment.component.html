@@ -63,7 +63,7 @@
                         <div class="p-field p-2">
                           <label for="Sectors Covered">Sectors Covered *</label>
                           <p-confirmDialog key="sectorConfirm"  icon="pi pi-exclamation-triangle" position="top" [style]="{width: '50vw'}" [baseZIndex]="10000"></p-confirmDialog>
-                          <p-multiSelect #multiSelectComponent appendTo="body" name="sectors" #sectors="ngModel" placeholder="Select Sectors Covered" [(ngModel)]="sectorArray" [options]="sectorList" (ngModelChange)="onItemSelectSectors($event)" [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" optionLabel="name"
+                          <p-multiSelect #multiSelectComponent appendTo="body" name="sectors" #sectors="ngModel" placeholder="Select Sectors Covered" [(ngModel)]="sectorArray" [options]="sectorList" (onChange)="onItemSelectSectors($event)" [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" optionLabel="name"
                             [required]="true"></p-multiSelect>
                           <p class="info-message text-danger" *ngIf="
                                             sectorArray.length===0 &&

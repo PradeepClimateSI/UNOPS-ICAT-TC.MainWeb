@@ -155,6 +155,7 @@ CMPrerequiste: {
   }
 
   loadgridData = (event: LazyLoadEvent) => {
+    this.loading = true
     
     this.totalRecords = 0;
     let pageNumber =
@@ -166,11 +167,11 @@ CMPrerequiste: {
       let res = res_.assessments
       this.tableData=res.items;
       this.interventions_to_filter = res_.interventions
+      this.loading = false;
       this.heatMapScore = this.tableData.map(item => {return {processScore: item.process_score, outcomeScore: item.outcome_score}});
       this.heatMapData = this.tableData.map(item => {return {interventionId: item.intervention_id, interventionName: item.intervention, processScore: item.process_score, outcomeScore: item.outcome_score}}) 
       
       this.totalRecords= res.meta.totalItems;
-      this.loading = false;
     }, err => {
       this.loading = false;});
 

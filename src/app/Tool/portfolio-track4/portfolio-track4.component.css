@@ -111,5 +111,9 @@
   height: 80px; 
 }
 
+th, td {
+  font-size: 11px;
+}
+
 
 

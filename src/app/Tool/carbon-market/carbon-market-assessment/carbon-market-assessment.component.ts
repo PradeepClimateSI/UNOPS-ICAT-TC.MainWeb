@@ -170,6 +170,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
         this.assessment.to?.month(),
         this.assessment.to?.date()
       );
+      this.onSelectFromDate(this.from_date)
       this.finalBarrierList = this.assessment['policy_barrier'].map((i: { is_affected: boolean; characteristics: Characteristics[]; explanation: string; barrier: string; })=> {
         let p =  new BarrierSelected()
         p.affectedbyIntervention = i.is_affected
