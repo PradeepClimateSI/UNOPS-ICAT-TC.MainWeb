@@ -287,6 +287,7 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
   }
   onSelectAssessment() {
     this.selectedIds = this.selectedAssessments.map((item: any)=> item.id)
+    this.projectName = this.selectedAssessments.map((item:any)=>item.climateAction.policyName)
     this.callTable()
  }
 
@@ -313,6 +314,7 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
     let skip = pageNumber * this.rows;
+    console.log(this.projectName)
     this.investorProxy.getDashboardAllData(skip,this.rows,this.projectName,this.selectedPortfolio?this.selectedPortfolio.id:0).subscribe((res) => {
       this.tableData=res[0];
       this.heatMapScore = this.tableData.map(item => {return {processScore: item.process_score, outcomeScore: item.outcome_score}})
