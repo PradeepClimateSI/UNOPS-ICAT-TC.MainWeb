@@ -182,8 +182,8 @@ export class AssessmentResultInvestorComponent implements OnInit {
           { title: 'Assessment Type', data: this.assessmentType },
           { title: 'Geographical Area Covered', data: this.geographicalAreasList.map((a: any) => a.name) },
           { title: 'Sectors Covered', data: this.sectorList.join(', ') },
-          { title: 'From', data: this.datePipe.transform(this.date1, 'yyyy-MM-dd') },
-          { title: 'To', data: this.datePipe.transform(this.date2, 'yyyy-MM-dd') },
+          { title: 'From', data: this.datePipe.transform(this.date1, 'dd/MM/yyyy') },
+          { title: 'To', data: this.datePipe.transform(this.date2, 'dd/MM/yyyy') },
           { title: 'Opportunities for stakeholders to participate in the assessment', data: (this.opportunities)?(this.opportunities):'-' },
 
         ])

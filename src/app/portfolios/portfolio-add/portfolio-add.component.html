@@ -25,7 +25,7 @@
             <div class="p-field p-2">
               <label for="portfolioName">Name of the Portfolio *</label>
               <input pInputText type="text" #portfolioName="ngModel" name="portfolioName"
-                [(ngModel)]="portfolio.portfolioName" placeholder="portfolio Name" required />
+                [(ngModel)]="portfolio.portfolioName" placeholder="Portfolio Name" required />
               <p class="info-message text-danger"
                 *ngIf="!portfolioName.value && (fData.submitted || portfolioName.touched)">This is a mandatory field</p>
             </div>
@@ -38,15 +38,6 @@
               <p class="info-message text-danger"
                 *ngIf="!description.value && (fData.submitted || description.touched)">This is a mandatory field</p>
             </div>
-
-            <div class="p-field p-2">
-              <label for="person">Person(s)/ organization(s) doing the assessment *</label>
-              <input pInputText type="text" #person="ngModel" name="person" [(ngModel)]="portfolio.person"
-                placeholder="Person(s)/ organization(s) doing the assessment" required />
-              <p class="info-message text-danger" *ngIf="!person.value && (fData.submitted || person.touched)">This is a
-                mandatory field</p>
-            </div>
-
 
             <div class="p-field p-2">
               <label for="IsPreviousAssessment">Is this assessment an update of a previous assessment? *</label>
@@ -85,15 +76,9 @@
 
               <label for="date">Date* <i class="pi pi-info-circle" pTooltip="Date of the assessment" tooltipPosition="bottom"
                 style="font-size: 1rem"></i></label>
-              <div class="p-inputgroup">
-                <span class="p-inputgroup-addon">
-                  <i class="pi pi-calendar"></i>
-                </span>
-                <p-calendar dateFormat="mm-dd-yy" inputId="date" placeholder="Date" [(ngModel)]="portfolio.date"
+                <p-calendar [disabled]="true" inputId="date"  [(ngModel)]="currentDate" 
                   name="date" #date="ngModel" [required]="true" appendTo="body">
                 </p-calendar>
-  
-              </div>
               <div class="col-12">
                 <p class="info-message text-danger"
                   *ngIf="(date.invalid) && (fData.submitted || date.touched)">
@@ -201,7 +186,7 @@
               {{ masterDataService.getToolName(assessList.assessment.tool) }}
             </td>
             <td>
-              {{ assessList.assessment.from | date:'yyyy-MM-dd' }} - {{ assessList.assessment.to | date:'yyyy-MM-dd'}}
+              {{ assessList.assessment.from | date:'dd/MM/yyyy' }} - {{ assessList.assessment.to | date:'dd/MM/yyyy'}}
             </td>
 
           </tr>

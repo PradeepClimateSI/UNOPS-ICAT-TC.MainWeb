@@ -213,10 +213,10 @@ export class ViewInstitutionComponent implements OnInit {
           .subscribe((res) => {
             this.messageService.add({
               severity: 'success',
-              summary: institution.status === 0 ? 'Activated successfully' : 'Decativated successfully',
+              summary: institution.status === 0 ? 'Activated successfully' : 'Deactivated successfully',
               detail:
               institution.status === 0
-               ? this.institution.name + ' is activated': this.institution.name + 'is decativated',
+               ? this.institution.name + ' is activated': this.institution.name + ' is deactivated',
               closable: true,
               
             });

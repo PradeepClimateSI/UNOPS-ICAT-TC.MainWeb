@@ -1,12 +1,12 @@
 <p-tabView (onChange)="onMainTabChange($event) " [(activeIndex)]="activeIndexMain ">
     <p-tabPanel *ngFor="let type of types; let idx = index" header="{{type.name}}">
         <ng-template pTemplate="header">
-            <span>{{type.name}}</span><i *ngIf="maintabIsValid[idx] !== undefined && !maintabIsValid[idx]"  pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
+            <span>{{type.name}}</span><i *ngIf="maintabIsValid[idx] !== undefined && !maintabIsValid[idx]" pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
         </ng-template>
         <p-tabView #tabView (onChange)="onCategoryTabChange($event)" [(activeIndex)]="activeIndex" *ngIf="type.code === 'process'">
             <p-tabPanel *ngFor="let category of categories[type.code]; let catidx = index" [header]="category.name" [selected]="category.name==assessment.processDraftLocation">
                 <ng-template pTemplate="header">
-                    <span>{{category.name}}</span><i *ngIf="tab1IsValid[catidx] !== undefined && !tab1IsValid[catidx]"  pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
+                    <span>{{category.name}}</span><i *ngIf="tab1IsValid[catidx] !== undefined && !tab1IsValid[catidx]" pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
                 </ng-template>
                 <br>
                 <p style="font-size: large;">{{category.description}}</p>
@@ -16,8 +16,7 @@
                     <p>{{char.description}}</p>
                     <div class="row">
                         <div class="col-2">
-                            <label for="Description">Relevance * <i class="pi pi-info-circle" pTooltip="{{relevance_tooltip}}" tooltipPosition="bottom"
-                                style="font-size: 1rem"></i></label>
+                            <label for="Description">Relevance * <i class="pi pi-info-circle" (mouseover)="opRelevance.toggle($event)" (mouseout)="opRelevance.toggle($event)" style="font-size: 1rem"></i></label>
                         </div>
                         <div class="col-5">
                             <p-dropdown name="data_charData_relavance" #data_charData_relavance="ngModel" placeholder="Select Relevance" [(ngModel)]="char.relevance" [options]="relevance" optionLabel="name" appendTo="body" optionValue="value" [required]="true"
@@ -46,8 +45,8 @@
                             <div class="btn btn-primary text-uppercase" (click)="next(category.code, category.characteristics)">
                                 Next
                             </div>
-                            <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.code, true,category.name,'prose')">
-                                Save
+                            <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.code, isCompleted ? false :true,category.name,'prose')">
+                                {{isCompleted ? 'Update' : 'Save'}}
                             </div>
                         </div>
                     </div>
@@ -57,46 +56,79 @@
         <p-tabView #tabView (onChange)="onCategoryTabChange2($event)" [(activeIndex)]="activeIndex2" *ngIf="type.code === 'outcome'">
             <p-tabPanel *ngFor="let category of outcome; let catidx = index" [selected]="category.name==assessment.outcomeDraftLocation">
                 <ng-template pTemplate="header">
-                    <span [innerHTML]="category.name"></span><i *ngIf="tabIsValid[catidx] !== undefined && !tabIsValid[catidx]"  pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
+                    <span [innerHTML]="category.name"></span><i *ngIf="tabIsValid[catidx] !== undefined && !tabIsValid[catidx]" pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
                 </ng-template>
                 <form #fData="ngForm">
                     <ng-container *ngIf="category.type === 'GHG'">
                         <ng-container *ngFor="let char of category.results; let idx = index">
                             <h6>{{idx+1}}. {{char.characteristic.name}}</h6>
+                            <p *ngIf="category.method === 'SCALE' && char.characteristic.code === 'INTERNATIONAL'">
+                                <i [innerText]="GHG_scale_info.macro"></i>
+                            </p>
+                            <ng-container *ngIf="category.method === 'SCALE' && char.characteristic.code === 'NATIONAL'">
+                                <p><i [innerText]="sectoral_description"></i></p>
+                                <p><a target="_blank" href="https://www.ipcc-nggip.iges.or.jp/public/2006gl/pdf/1_Volume1/V1_4_Ch4_MethodChoice.pdf">Chapter 4 - Methodological Choice And Identification Of Key Categories </a></p>
+                                <p><a target="_blank" href="https://unfccc.int/process-and-meetings/transparency-and-reporting/reporting-and-review/reporting-and-review-under-the-paris-agreement/national-inventory-reports">National Inventory Reports</a></p>
+                                <p><a target="_blank" href="https://unfccc.int/non-annex-I-NCs?psafe_param=1&gad_source=1&gclid=CjwKCAiAlJKuBhAdEiwAnZb7ld5rCNwYr_3YUGFNjcZVY8belZMnWpNOggJZePrFCqaJ-RVnD8H66BoCGQIQAvD_BwE">National Communication submissions from Non-Annex I Parties</a></p>
+                                <p><a target="_blank" href="https://unfccc.int/process-and-meetings/transparency-and-reporting/preparing-for-the-ETF">Preparing for the Enhanced Transparency Framework</a></p>
+                            </ng-container>
+                            <ng-container *ngIf="category.method === 'SCALE' && char.characteristic.code === 'SUBNATIONAL'">
+                                <p><i [innerText]="sectoral_description"></i></p>
+                                <p><a target="_blank" href="https://www.ipcc-nggip.iges.or.jp/public/2006gl/pdf/1_Volume1/V1_4_Ch4_MethodChoice.pdf">Chapter 4 - Methodological Choice And Identification Of Key Categories </a></p>
+                            </ng-container>
                             <ng-container *ngIf="category.method === 'SCALE'">
                                 <div class="row p-2">
                                     <div class="col-4">Starting Situation</div>
                                     <div class="col-8">
-                                        <input type="text" [name]="'stSituation'+char.characteristic.id" #tboundrary="ngModel" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)" [(ngModel)]="char.startingSituation" class="form-control" required />
-                                        <p class="info-message text-danger" *ngIf="
-                                            (fData.form.controls['stSituation'+char.characteristic.id]?.touched ? 
-                                                (char.startingSituation === undefined || char.startingSituation === '')
-                                             : char.startingSituation === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
-                                            ">
-                                            This is a mandatory field
-                                        </p>
+                                        <div class="row">
+                                            <div [ngClass]="char.characteristic.code === 'INTERNATIONAL' ? 'col-9' : 'col-12'">
+                                                <ng-container *ngIf="!(useDefault[char.characteristic.id] && useDefault[char.characteristic.id].st_default) || char.characteristic.code !== 'INTERNATIONAL'">
+                                                    <input type="text" [name]="'stSituation'+char.characteristic.id" #tboundrary="ngModel"
+                                                        [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)"
+                                                        [(ngModel)]="char.startingSituation" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" />
+                                                    <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
+                                                        ((fData.form.controls['stSituation'+char.characteristic.id]?.touched ? 
+                                                            (char.startingSituation === undefined || char.startingSituation === '')
+                                                        : char.startingSituation === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
+                                                        ">
+                                                        This is a mandatory field
+                                                    </p>
+                                                </ng-container>
+                                                <ng-container *ngIf="(useDefault[char.characteristic.id] && useDefault[char.characteristic.id].st_default) && char.characteristic.code === 'INTERNATIONAL'">
+                                                    <p-dropdown
+                                                        [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)"
+                                                        [options]="default_values[char.characteristic.id]? default_values[char.characteristic.id].st_default_values : []" [name]="'st_default_values'+char.characteristic.code" [required]="char.characteristic.code === 'INTERNATIONAL'"
+                                                        [(ngModel)]="char.startingSituation" optionLabel="label" optionValue="starting_situation_value">
+                                                    </p-dropdown>
+                                                </ng-container>
+                                            </div>
+                                            <div class="col-3" *ngIf="char.characteristic.code === 'INTERNATIONAL' && useDefault[char.characteristic.id]">
+                                                <p-checkbox [name]="'st-checkbox' + char.characteristic.code" [(ngModel)]="useDefault[char.characteristic.id].st_default" [binary]="true" inputId="binary" label="Default Values"
+                                                    (onChange)="loadDefaults(char.characteristic.id, 'STARTING_SITUATION')"></p-checkbox>
+                                                <i class="pi pi-info-circle" [pTooltip]="source" tooltipPosition="bottom" style="font-size: 1rem"></i>
+                                            </div>
+                                        </div>
                                     </div>
-
                                 </div>
                                 <div class="row p-2">
                                     <div class="col-4">Expected Impact</div>
                                     <div class="col-8">
-                                        <input type="text" [name]="'impact'+char.characteristic.id" #tboundrary="ngModel" placeholder="Please describe the expected emissions reductions on the indicated scale." [(ngModel)]="char.expectedImpact" class="form-control" required />
-                                        <p class="info-message text-danger" *ngIf="
-                                                (fData.form.controls['impact'+char.characteristic.id]?.touched ? 
+                                        <input type="text" [name]="'impact'+char.characteristic.id" #tboundrary="ngModel" placeholder="Please describe the expected emissions reductions on the indicated scale." [(ngModel)]="char.expectedImpact" class="form-control"
+                                            [required]="char.characteristic.code === 'INTERNATIONAL'" />
+                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
+                                                ((fData.form.controls['impact'+char.characteristic.id]?.touched ? 
                                                     (char.expectedImpact === undefined || char.expectedImpact === '')
-                                                : char.expectedImpact === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
+                                                : char.expectedImpact === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                                 ">
                                             This is a mandatory field
                                         </p>
                                     </div>
                                 </div>
                                 <div class="row p-2">
-                                    <div class="col-4">Score <i class="pi pi-info-circle" pTooltip="{{char.characteristic.code === 'INTERNATIONAL' ? GHG_scale_info.macro : (char.characteristic.code === 'NATIONAL' ? GHG_scale_info.medium : GHG_scale_info.micro)}}" tooltipPosition="bottom"
-                                            style="font-size: 1rem"></i></div>
+                                    <div class="col-4">Score</div>
                                     <div class="col-6">
                                         <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.characteristic.id" #type="ngModel" placeholder="Select Score" [(ngModel)]="char.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
-                                            [options]="char.characteristic.code === 'INTERNATIONAL' ? GHG_scale_score_macro : (char.characteristic.code === 'NATIONAL' ? GHG_scale_score_medium : GHG_scale_score_micro)" [required]="true" appendTo="body"
+                                            [options]="char.characteristic.code === 'INTERNATIONAL' ? GHG_scale_score_macro : (char.characteristic.code === 'NATIONAL' ? GHG_scale_score_medium : GHG_scale_score_micro)" [required]="char.characteristic.code === 'INTERNATIONAL'" appendTo="body"
                                             (onChange)="onSelectScore($event, char, idx, category.type)" optionLabel="name">
                                             <ng-template let-option pTemplate="item">
                                                 <div class="custom-option">
@@ -104,10 +136,10 @@
                                                 </div>
                                             </ng-template>
                                         </p-dropdown>
-                                        <p class="info-message text-danger" *ngIf="
-                                            (fData.form.controls['score'+char.characteristic.id]?.touched ? 
+                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
+                                            ((fData.form.controls['score'+char.characteristic.id]?.touched ? 
                                                 (char.selectedScore.code === undefined || char.selectedScore.code === '')
-                                            : char.selectedScore.code === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
+                                            : char.selectedScore.code === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                             ">
                                             This is a mandatory field
                                         </p>
@@ -115,15 +147,16 @@
                                     </div>
                                 </div>
                                 <div class="row p-2">
-                                    <div class="col-4">Justification</div>
+                                    <div class="col-4">Justification <i *ngIf="['NATIONAL', 'SUBNATIONAL'].includes(char.characteristic.code)" class="pi pi-info-circle" pTooltip="{{char.characteristic.code === 'NATIONAL' ? sectoral_placeholder : subsectoral_placeholder}}" tooltipPosition="bottom"
+                                            style="font-size: 1rem"></i></div>
                                     <div class="col-6">
-                                        <textarea type="text" rows="5" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" placeholder="Enter Justification" required 
-                                        [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
+                                        <textarea type="text" rows="5" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? 'Enter Justification' : ''"
+                                            [required]="char.characteristic.code === 'INTERNATIONAL'" [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
                                         <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
-                                        <p class="info-message text-danger" *ngIf="
-                                                (fData.form.controls['justification'+char.characteristic.id]?.touched ? 
+                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
+                                                ((fData.form.controls['justification'+char.characteristic.id]?.touched ? 
                                                     (char.comment === undefined || char.comment === '')
-                                                : char.comment === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
+                                                : char.comment === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                                 ">
                                             This is a mandatory field
                                         </p>
@@ -149,17 +182,17 @@
                                     <div class="col-4">Score</div>
                                     <div class="col-6">
                                         <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.characteristic.id" #scoreee="ngModel" placeholder="Select Score" [(ngModel)]="char.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
-                                            [options]="GHG_sustained_score" optionLabel="name" [required]="true" appendTo="body" (onChange)="onSelectScore($event, char, idx, category.type)">
+                                            [options]="GHG_sustained_score" optionLabel="name" [required]="char.characteristic.code === 'INTERNATIONAL'" appendTo="body" (onChange)="onSelectScore($event, char, idx, category.type)">
                                             <ng-template let-option pTemplate="item">
                                                 <div class="custom-option">
                                                     {{ option.name }}
                                                 </div>
                                             </ng-template>
                                         </p-dropdown>
-                                        <p class="info-message text-danger" *ngIf="
-                                            (fData.form.controls['score'+char.characteristic.id]?.touched ? 
+                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
+                                            ((fData.form.controls['score'+char.characteristic.id]?.touched ? 
                                                 (char.selectedScore.code === undefined || char.selectedScore.code === '')
-                                            : char.selectedScore.code === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
+                                            : char.selectedScore.code === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                             ">
                                             This is a mandatory field
                                         </p>
@@ -169,13 +202,13 @@
                                 <div class="row p-2">
                                     <div class="col-4">Justification</div>
                                     <div class="col-6">
-                                        <textarea rows="5" type="text" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" placeholder="Enter Justification" required 
-                                        [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
+                                        <textarea rows="5" type="text" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" placeholder="Enter Justification" [required]="char.characteristic.code === 'INTERNATIONAL'"
+                                            [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
                                         <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
-                                        <p class="info-message text-danger" *ngIf="
-                                                (fData.form.controls['justification'+char.characteristic.id]?.touched ? 
+                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
+                                                ((fData.form.controls['justification'+char.characteristic.id]?.touched ? 
                                                     (char.comment === undefined || char.comment === '')
-                                                : char.comment === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
+                                                : char.comment === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                                 ">
                                             This is a mandatory field
                                         </p>
@@ -196,6 +229,21 @@
                                 </div>
                             </ng-container>
                         </ng-container>
+                        <ng-container *ngIf="category.method === 'SCALE'">
+                            <div class=" p-2">
+                                <label>Expected average GHG reductions or removals (mitigation outcomes) (tCO₂e/year)</label>
+                                <div class="col-8">
+                                    <p-inputNumber [(ngModel)]="expected_ghg_mitigation" name="expected_ghg_mitigation" placeholder="Expected GHG reductions over intervention lifetime" inputId="locale-us" mode="decimal" locale="en-US" [minFractionDigits]="2">
+                                    </p-inputNumber>
+                                </div>
+                            </div>
+                            <div  class=" p-2">
+                                <p> <br><br>
+                                    Note: All GHG impacts should be calculated as average reductions in emissions in tCO₂e/year (over the intervention's lifetime) and compared
+                                     to subnational/regional/municipal emissions or subsectoral level emissions for the latest year for which those emissions data is available.
+                                  </p>
+                            </div>
+                        </ng-container>
                         <ng-container *ngIf="category.method === 'SUSTAINED'">
                             <h6>GHG Answer</h6>
                             <div class="row p-2">
@@ -212,7 +260,7 @@
                                         Next
                                     </div>
                                     <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, true,category.code,'out')">
-                                        Save
+                                        {{isCompleted ? 'Update' : 'Save'}}
                                     </div>
                                 </div>
                             </div>
@@ -221,15 +269,29 @@
                     <ng-container *ngIf="category.type === 'ADAPTATION'">
                         <ng-container *ngFor="let char of category.results; let idx = index">
                             <h6>{{idx+1}}. {{char.characteristic.name}}</h6>
+                            <p *ngIf="category.method === 'SCALE' && char.characteristic.code === 'INTERNATIONAL'">
+                                <i [innerText]="adaptation_scale_info.macro"></i>
+                            </p>
+                            <ng-container *ngIf="category.method === 'SCALE' && char.characteristic.code === 'NATIONAL'">
+                                <p><i [innerText]="sectoral_description"></i></p>
+                                <p><a target="_blank" href="https://www.ipcc-nggip.iges.or.jp/public/2006gl/pdf/1_Volume1/V1_4_Ch4_MethodChoice.pdf">Chapter 4 - Methodological Choice And Identification Of Key Categories </a></p>
+                                <p><a target="_blank" href="https://unfccc.int/process-and-meetings/transparency-and-reporting/reporting-and-review/reporting-and-review-under-the-paris-agreement/national-inventory-reports">National Inventory Reports</a></p>
+                                <p><a target="_blank" href="https://unfccc.int/non-annex-I-NCs?psafe_param=1&gad_source=1&gclid=CjwKCAiAlJKuBhAdEiwAnZb7ld5rCNwYr_3YUGFNjcZVY8belZMnWpNOggJZePrFCqaJ-RVnD8H66BoCGQIQAvD_BwE">National Communication submissions from Non-Annex I Parties</a></p>
+                                <p><a target="_blank" href="https://unfccc.int/process-and-meetings/transparency-and-reporting/preparing-for-the-ETF">Preparing for the Enhanced Transparency Framework</a></p>
+                            </ng-container>
+                            <ng-container *ngIf="category.method === 'SCALE' && char.characteristic.code === 'SUBNATIONAL'">
+                                <p><i [innerText]="sectoral_description"></i></p>
+                                <p><a target="_blank" href="https://www.ipcc-nggip.iges.or.jp/public/2006gl/pdf/1_Volume1/V1_4_Ch4_MethodChoice.pdf">Chapter 4 - Methodological Choice And Identification Of Key Categories </a></p>
+                            </ng-container>
                             <ng-container *ngIf="category.method === 'SCALE'">
                                 <div class="row p-2">
                                     <div class="col-4">Adaptation Co-benifit <i class="pi pi-info-circle" pTooltip="{{adaptation_tooltip}}" tooltipPosition="bottom" style="font-size: 1rem"></i></div>
                                     <div class="col-8">
-                                        <input type="text" [name]="'benifit'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.adaptationCoBenifit" class="form-control" required />
-                                        <p class="info-message text-danger" *ngIf="
-                                            (fData.form.controls['benifit'+char.characteristic.id]?.touched ? 
+                                        <input type="text" [name]="'benifit'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.adaptationCoBenifit" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" />
+                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' && 
+                                            ((fData.form.controls['benifit'+char.characteristic.id]?.touched ? 
                                                 (char.adaptationCoBenifit === undefined || char.adaptationCoBenifit === '')
-                                            : char.adaptationCoBenifit === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
+                                            : char.adaptationCoBenifit === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                             ">
                                             This is a mandatory field
                                         </p>
@@ -238,11 +300,13 @@
                                 <div class="row p-2">
                                     <div class="col-4">Starting Situation <i class="pi pi-info-circle" pTooltip="{{starting_situation_tooltip}}" tooltipPosition="bottom" style="font-size: 1rem"></i></div>
                                     <div class="col-8">
-                                        <input type="text" [name]="'stSituation'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.startingSituation" class="form-control" required />
-                                        <p class="info-message text-danger" *ngIf="
-                                            (fData.form.controls['stSituation'+char.characteristic.id]?.touched ? 
+                                        <input type="text" [name]="'stSituation'+char.characteristic.id" #tboundrary="ngModel"
+                                            [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)"
+                                            [(ngModel)]="char.startingSituation" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" />
+                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
+                                            ((fData.form.controls['stSituation'+char.characteristic.id]?.touched ? 
                                                 (char.startingSituation === undefined || char.startingSituation === '')
-                                            : char.startingSituation === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
+                                            : char.startingSituation === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                             ">
                                             This is a mandatory field
                                         </p>
@@ -251,32 +315,32 @@
                                 <div class="row p-2">
                                     <div class="col-4">Expected Impact <i class="pi pi-info-circle" pTooltip="{{expected_impact_tooltip}}" tooltipPosition="bottom" style="font-size: 1rem"></i></div>
                                     <div class="col-8">
-                                        <input type="text" [name]="'impact'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.expectedImpact" class="form-control" required />
-                                        <p class="info-message text-danger" *ngIf="
-                                            (fData.form.controls['impact'+char.characteristic.id]?.touched ? 
-                                                (char.expectedImpact === undefined || char.expectedImpact === '')
-                                            : char.expectedImpact === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
-                                            ">
+                                        <input type="text" [name]="'impact'+char.characteristic.id" #tboundrary="ngModel" placeholder="Please describe the expected emissions reductions on the indicated scale." [(ngModel)]="char.expectedImpact" class="form-control"
+                                            [required]="char.characteristic.code === 'INTERNATIONAL'" />
+                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
+                                                ((fData.form.controls['impact'+char.characteristic.id]?.touched ? 
+                                                    (char.expectedImpact === undefined || char.expectedImpact === '')
+                                                : char.expectedImpact === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
+                                                ">
                                             This is a mandatory field
                                         </p>
                                     </div>
                                 </div>
                                 <div class="row p-2">
-                                    <div class="col-4">Score <i class="pi pi-info-circle" pTooltip="{{char.characteristic.code === 'INTERNATIONAL' ? adaptation_scale_info.macro : (char.characteristic.code === 'NATIONAL' ? adaptation_scale_info.medium : adaptation_scale_info.micro)}}"
-                                            tooltipPosition="bottom" style="font-size: 1rem"></i></div>
+                                    <div class="col-4">Score</div>
                                     <div class="col-6">
                                         <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.characteristic.id" #type="ngModel" placeholder="Select Score" [(ngModel)]="char.selectedScore" [options]="adaptation_scale_score" [virtualScroll]="true" [virtualScrollItemSize]="20"
-                                            [style]="{'width': '100%'}" optionLabel="name" [required]="true" appendTo="body" (onChange)="onSelectScore($event, char, idx, category.type)">
+                                            [style]="{'width': '100%'}" optionLabel="name" [required]="char.characteristic.code === 'INTERNATIONAL'" appendTo="body" (onChange)="onSelectScore($event, char, idx, category.type)">
                                             <ng-template let-option pTemplate="item">
                                                 <div class="custom-option">
                                                     {{ option.name }}
                                                 </div>
                                             </ng-template>
                                         </p-dropdown>
-                                        <p class="info-message text-danger" *ngIf="
-                                            (fData.form.controls['score'+char.characteristic.id]?.touched ? 
+                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
+                                            ((fData.form.controls['score'+char.characteristic.id]?.touched ? 
                                                 (char.selectedScore.code === undefined || char.selectedScore.code === '')
-                                            : char.selectedScore.code === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
+                                            : char.selectedScore.code === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                             ">
                                             This is a mandatory field
                                         </p>
@@ -284,15 +348,16 @@
                                     </div>
                                 </div>
                                 <div class="row p-2">
-                                    <div class="col-4">Justification</div>
+                                    <div class="col-4">Justification <i *ngIf="['NATIONAL', 'SUBNATIONAL'].includes(char.characteristic.code)" class="pi pi-info-circle" pTooltip="{{char.characteristic.code === 'NATIONAL' ? sectoral_placeholder : subsectoral_placeholder}}" tooltipPosition="bottom"
+                                            style="font-size: 1rem"></i></div>
                                     <div class="col-6">
-                                        <textarea rows="5" type="text" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" placeholder="Enter Justification" required 
-                                        [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
+                                        <textarea rows="5" type="text" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? 'Enter Justification' : ''"
+                                            [required]="char.characteristic.code === 'INTERNATIONAL'" [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
                                         <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
-                                        <p class="info-message text-danger" *ngIf="
-                                            (fData.form.controls['justification'+char.characteristic.id]?.touched ? 
+                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
+                                            ((fData.form.controls['justification'+char.characteristic.id]?.touched ? 
                                                 (char.comment === undefined || char.comment === '')
-                                            : char.comment === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
+                                            : char.comment === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                             ">
                                             This is a mandatory field
                                         </p>
@@ -317,18 +382,18 @@
                                 <div class="row p-2">
                                     <div class="col-4">Score</div>
                                     <div class="col-6">
-                                        <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.characteristic.id" #type="ngModel" placeholder="Select Score" [(ngModel)]="char.selectedScore" [options]="adaptation_sustained_score" optionLabel="name" [required]="true" appendTo="body"
-                                            [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}" (onChange)="onSelectScore($event, char, idx, category.type)">
+                                        <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.characteristic.id" #type="ngModel" placeholder="Select Score" [(ngModel)]="char.selectedScore" [options]="adaptation_sustained_score" optionLabel="name"
+                                            [required]="char.characteristic.code === 'INTERNATIONAL'" appendTo="body" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}" (onChange)="onSelectScore($event, char, idx, category.type)">
                                             <ng-template let-option pTemplate="item">
                                                 <div class="custom-option">
                                                     {{ option.name }}
                                                 </div>
                                             </ng-template>
                                         </p-dropdown>
-                                        <p class="info-message text-danger" *ngIf="
-                                        (fData.form.controls['score'+char.characteristic.id]?.touched ? 
+                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
+                                        ((fData.form.controls['score'+char.characteristic.id]?.touched ? 
                                             (char.selectedScore.code === undefined || char.selectedScore.code === '')
-                                        : char.selectedScore.code === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
+                                        : char.selectedScore.code === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                         ">
                                             This is a mandatory field
                                         </p>
@@ -338,13 +403,13 @@
                                 <div class="row p-2">
                                     <div class="col-4">Justification</div>
                                     <div class="col-6">
-                                        <textarea rows="5" type="text" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" placeholder="Enter Justification" required 
-                                        [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (ngModelChange)="adaptationJustificationChange()"></textarea>
+                                        <textarea rows="5" type="text" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" placeholder="Enter Justification" [required]="char.characteristic.code === 'INTERNATIONAL'"
+                                            [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (ngModelChange)="adaptationJustificationChange()"></textarea>
                                         <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
-                                        <p class="info-message text-danger" *ngIf="
-                                            (fData.form.controls['justification'+char.characteristic.id]?.touched ? 
+                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
+                                            ((fData.form.controls['justification'+char.characteristic.id]?.touched ? 
                                                 (char.comment === undefined || char.comment === '')
-                                            : char.comment === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
+                                            : char.comment === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                             ">
                                             This is a mandatory field
                                         </p>
@@ -381,7 +446,7 @@
                                         Next
                                     </div>
                                     <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, true,category.code,'out')">
-                                        Save
+                                        {{isCompleted ? 'Update' : 'Save'}}
                                     </div>
                                 </div>
                             </div>
@@ -402,14 +467,29 @@
                                     <ng-container *ngIf="category.method === 'SCALE'">
                                         <ng-container *ngFor="let char of SDG.scaleResult; let idx = index;">
                                             <h6>{{idx+1}}. {{char.characteristic.name}}</h6>
+                                            <p *ngIf="char.characteristic.code === 'INTERNATIONAL'">
+                                                <i [innerText]="SD_scale_info.macro"></i>
+                                            </p>
+                                            <ng-container *ngIf="category.method === 'SCALE' && char.characteristic.code === 'NATIONAL'">
+                                                <p><i [innerText]="sectoral_description"></i></p>
+                                                <p><a target="_blank" href="https://www.ipcc-nggip.iges.or.jp/public/2006gl/pdf/1_Volume1/V1_4_Ch4_MethodChoice.pdf">Chapter 4 - Methodological Choice And Identification Of Key Categories </a></p>
+                                                <p><a target="_blank" href="https://unfccc.int/process-and-meetings/transparency-and-reporting/reporting-and-review/reporting-and-review-under-the-paris-agreement/national-inventory-reports">National Inventory Reports</a></p>
+                                                <p><a target="_blank" href="https://unfccc.int/non-annex-I-NCs?psafe_param=1&gad_source=1&gclid=CjwKCAiAlJKuBhAdEiwAnZb7ld5rCNwYr_3YUGFNjcZVY8belZMnWpNOggJZePrFCqaJ-RVnD8H66BoCGQIQAvD_BwE">National Communication submissions from Non-Annex I Parties</a>
+                                                </p>
+                                                <p><a target="_blank" href="https://unfccc.int/process-and-meetings/transparency-and-reporting/preparing-for-the-ETF">Preparing for the Enhanced Transparency Framework</a></p>
+                                            </ng-container>
+                                            <ng-container *ngIf="category.method === 'SCALE' && char.characteristic.code === 'SUBNATIONAL'">
+                                                <p><i [innerText]="sectoral_description"></i></p>
+                                                <p><a target="_blank" href="https://www.ipcc-nggip.iges.or.jp/public/2006gl/pdf/1_Volume1/V1_4_Ch4_MethodChoice.pdf">Chapter 4 - Methodological Choice And Identification Of Key Categories </a></p>
+                                            </ng-container>
                                             <div class="row p-2">
                                                 <div class="col-4">SDG Indicator <i class="pi pi-info-circle" pTooltip="Please describe the indicator used to assess the contribution to the selected SDG (i.e. number of jobs created)." tooltipPosition="bottom" style="font-size: 1rem"></i></div>
                                                 <div class="col-8">
-                                                    <input type="text" [name]="'indicator'+SDG.code+char.characteristic.id" [(ngModel)]="char.sdgIndicator" class="form-control" placeholder="" required />
-                                                    <p class="info-message text-danger" *ngIf="
-                                                        (fData.form.controls['indicator'+SDG.code+char.characteristic.id]?.touched ? 
+                                                    <input type="text" [name]="'indicator'+SDG.code+char.characteristic.id" [(ngModel)]="char.sdgIndicator" class="form-control" placeholder="" [required]="char.characteristic.code === 'INTERNATIONAL'" />
+                                                    <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
+                                                        ((fData.form.controls['indicator'+SDG.code+char.characteristic.id]?.touched ? 
                                                             (char.sdgIndicator === undefined || char.sdgIndicator === '')
-                                                        : char.sdgIndicator === undefined && clickedFormMap[activeIndex2]  || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
+                                                        : char.sdgIndicator === undefined && clickedFormMap[activeIndex2]  || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                                         ">
                                                         This is a mandatory field
                                                     </p>
@@ -418,11 +498,13 @@
                                             <div class="row p-2">
                                                 <div class="col-4">Starting Situation <i class="pi pi-info-circle" pTooltip="Please describe the value of the indicator before intervention implementation." tooltipPosition="bottom" style="font-size: 1rem"></i></div>
                                                 <div class="col-8">
-                                                    <input type="text" [name]="'stSituation'+SDG.code+char.characteristic.id" [(ngModel)]="char.startingSituation" class="form-control" placeholder="" required />
-                                                    <p class="info-message text-danger" *ngIf="
-                                                        (fData.form.controls['stSituation'+SDG.code+char.characteristic.id]?.touched ? 
+                                                    <input type="text" [name]="'stSituation'+char.characteristic.id" #tboundrary="ngModel"
+                                                        [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)"
+                                                        [(ngModel)]="char.startingSituation" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" />
+                                                    <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
+                                                        ((fData.form.controls['stSituation'+char.characteristic.id]?.touched ? 
                                                             (char.startingSituation === undefined || char.startingSituation === '')
-                                                        : char.startingSituation === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
+                                                        : char.startingSituation === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                                         ">
                                                         This is a mandatory field
                                                     </p>
@@ -431,32 +513,32 @@
                                             <div class="row p-2">
                                                 <div class="col-4">Expected Impact <i class="pi pi-info-circle" pTooltip="Please describe the value of the indicator after intervention implementation." tooltipPosition="bottom" style="font-size: 1rem"></i></div>
                                                 <div class="col-8">
-                                                    <input type="text" [name]="'impact'+SDG.code+char.characteristic.id" [(ngModel)]="char.expectedImpact" class="form-control" placeholder="" required />
-                                                    <p class="info-message text-danger" *ngIf="
-                                                        (fData.form.controls['impact'+SDG.code+char.characteristic.id]?.touched ? 
-                                                            (char.expectedImpact === undefined || char.expectedImpact === '')
-                                                        : char.expectedImpact === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
-                                                        ">
+                                                    <input type="text" [name]="'impact'+char.characteristic.id" #tboundrary="ngModel" placeholder="Please describe the expected emissions reductions on the indicated scale." [(ngModel)]="char.expectedImpact" class="form-control"
+                                                        [required]="char.characteristic.code === 'INTERNATIONAL'" />
+                                                    <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
+                                                            ((fData.form.controls['impact'+char.characteristic.id]?.touched ? 
+                                                                (char.expectedImpact === undefined || char.expectedImpact === '')
+                                                            : char.expectedImpact === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
+                                                            ">
                                                         This is a mandatory field
                                                     </p>
                                                 </div>
                                             </div>
                                             <div class="row p-2">
-                                                <div class="col-4">Score <i class="pi pi-info-circle" pTooltip="{{char.characteristic.code === 'INTERNATIONAL' ? SD_scale_info.macro : (char.characteristic.code === 'NATIONAL' ? SD_scale_info.medium : SD_scale_info.micro)}}" tooltipPosition="bottom"
-                                                        style="font-size: 1rem"></i></div>
+                                                <div class="col-4">Score</div>
                                                 <div class="col-8">
                                                     <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+SDG.code+char.characteristic.id" #type="ngModel" placeholder="Select Score" [(ngModel)]="char.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
-                                                        (onChange)="onSelectScore($event, char, idx, category.type)" [options]="SDG_scale_score" optionLabel="name" [required]="true" appendTo="body">
+                                                        (onChange)="onSelectScore($event, char, idx, category.type)" [options]="SDG_scale_score" optionLabel="name" [required]="char.characteristic.code === 'INTERNATIONAL'" appendTo="body">
                                                         <ng-template let-option pTemplate="item">
                                                             <div class="custom-option">
                                                                 {{ option.name }}
                                                             </div>
                                                         </ng-template>
                                                     </p-dropdown>
-                                                    <p class="info-message text-danger" *ngIf="
-                                                        (fData.form.controls['score'+SDG.code+char.characteristic.id]?.touched ? 
+                                                    <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
+                                                        ((fData.form.controls['score'+SDG.code+char.characteristic.id]?.touched ? 
                                                             (char.selectedScore.code === undefined || char.selectedScore.code === '')
-                                                        : char.selectedScore.code === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
+                                                        : char.selectedScore.code === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                                         ">
                                                         This is a mandatory field
                                                     </p>
@@ -464,15 +546,16 @@
                                                 </div>
                                             </div>
                                             <div class="row p-2">
-                                                <div class="col-4">Justification</div>
+                                                <div class="col-4">Justification <i *ngIf="['NATIONAL', 'SUBNATIONAL'].includes(char.characteristic.code)" class="pi pi-info-circle" pTooltip="{{char.characteristic.code === 'NATIONAL' ? sectoral_placeholder : subsectoral_placeholder}}"
+                                                        tooltipPosition="bottom" style="font-size: 1rem"></i></div>
                                                 <div class="col-6">
-                                                    <textarea rows="5" type="text" [name]="'justification'+SDG.code+char.characteristic.id" [(ngModel)]="char.comment" class="form-control" placeholder="Enter Justification" required 
-                                                    [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
+                                                    <textarea rows="5" type="text" [name]="'justification'+SDG.code+char.characteristic.id" [(ngModel)]="char.comment" class="form-control" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? 'Enter Justification' : ''"
+                                                        [required]="char.characteristic.code === 'INTERNATIONAL'" [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
                                                     <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
-                                                    <p class="info-message text-danger" *ngIf="
-                                                        (fData.form.controls['justification'+SDG.code+char.characteristic.id]?.touched ? 
+                                                    <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
+                                                        ((fData.form.controls['justification'+SDG.code+char.characteristic.id]?.touched ? 
                                                             (char.comment === undefined || char.comment === '')
-                                                        : char.comment === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
+                                                        : char.comment === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                                         ">
                                                         This is a mandatory field
                                                     </p>
@@ -500,18 +583,18 @@
                                             <div class="row p-2">
                                                 <div class="col-4">Score</div>
                                                 <div class="col-6">
-                                                    <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'susScore'+SDG.code+chSus.characteristic.id" #type="ngModel" placeholder="Select Score" [(ngModel)]="chSus.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
-                                                        (onChange)="onSelectScore($event, chSus, idx, category.type)" [options]="SDG_sustained_score" optionLabel="name" [required]="true" appendTo="body">
+                                                    <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'susScore'+SDG.code+chSus.characteristic.id" #type="ngModel" placeholder="Select Score" [(ngModel)]="chSus.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20"
+                                                        [style]="{'width': '100%'}" (onChange)="onSelectScore($event, chSus, idx, category.type)" [options]="SDG_sustained_score" optionLabel="name" [required]="chSus.characteristic.code === 'INTERNATIONAL'" appendTo="body">
                                                         <ng-template let-option pTemplate="item">
                                                             <div class="custom-option">
                                                                 {{ option.name }}
                                                             </div>
                                                         </ng-template>
                                                     </p-dropdown>
-                                                    <p class="info-message text-danger" *ngIf="
-                                                        (fData.form.controls['susScore'+SDG.code+chSus.characteristic.id]?.touched ? 
+                                                    <p class="info-message text-danger" *ngIf="chSus.characteristic.code === 'INTERNATIONAL' &&
+                                                        ((fData.form.controls['susScore'+SDG.code+chSus.characteristic.id]?.touched ? 
                                                             (chSus.selectedScore.code === undefined || chSus.selectedScore.code === '')
-                                                        : chSus.selectedScore.code === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
+                                                        : chSus.selectedScore.code === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                                         ">
                                                         This is a mandatory field
                                                     </p>
@@ -521,13 +604,13 @@
                                             <div class="row p-2">
                                                 <div class="col-4">Justification</div>
                                                 <div class="col-6">
-                                                    <textarea rows="5" type="text" [name]="'susJustification'+SDG.code+chSus.characteristic.id" [(ngModel)]="chSus.comment" class="form-control" placeholder="Enter Justification" required 
-                                                    [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
+                                                    <textarea rows="5" type="text" [name]="'susJustification'+SDG.code+chSus.characteristic.id" [(ngModel)]="chSus.comment" class="form-control" placeholder="Enter Justification" [required]="chSus.characteristic.code === 'INTERNATIONAL'"
+                                                        [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
                                                     <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
-                                                    <p class="info-message text-danger" *ngIf="
-                                                        (fData.form.controls['susJustification'+SDG.code+chSus.characteristic.id]?.touched ? 
+                                                    <p class="info-message text-danger" *ngIf="chSus.characteristic.code === 'INTERNATIONAL' &&
+                                                        ((fData.form.controls['susJustification'+SDG.code+chSus.characteristic.id]?.touched ? 
                                                             (chSus.comment === undefined || chSus.comment === '')
-                                                        : chSus.comment === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx])
+                                                        : chSus.comment === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                                         ">
                                                         This is a mandatory field
                                                     </p>
@@ -567,7 +650,7 @@
                                         Next
                                     </div>
                                     <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, true,category.code,'out')">
-                                        Save
+                                        {{isCompleted ? 'Update' : 'Save'}}
                                     </div>
                                 </div>
                             </div>
@@ -591,3 +674,33 @@
         </p-tabView>
     </p-tabPanel>
 </p-tabView>
+
+<p-overlayPanel #opRelevance [style]="{'width': '800px'}">
+    <div class="p-grid p-fluid col-md-12 col-sm-12 text-title">
+        <label>Does the process characteristic affects/impacts any of the identified barriers? does the intervention affects/impacts the process characteristic?</label>
+        <br>
+        <p-table [value]="[{}]">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Relevance</th>
+                    <th>Description</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-row>
+                <tr>
+                    <td>Relevant</td>
+                    <td>Reason to believe that a characteristic is important for transformational change in the context of the policy</td>
+                </tr>
+                <tr>
+                    <td>Possibly relevant</td>
+                    <td>Not clear whether the characteristic is important for transformational change in the context of the policy. Where the relevance is unknown or cannot be determined, the characteristic should be monitored over time.</td>
+                </tr>
+                <tr>
+                    <td>Not relevant</td>
+                    <td>Reason to believe that the characteristic is not important for transformational change in the context of the policy.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</p-overlayPanel>
+<p-confirmDialog></p-confirmDialog>

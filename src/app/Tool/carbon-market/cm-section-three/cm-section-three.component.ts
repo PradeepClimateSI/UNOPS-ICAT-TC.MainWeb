@@ -1,11 +1,10 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { FieldNames, MasterDataService } from 'app/shared/master-data.service';
-import { SelectedScoreDto } from 'app/shared/score.dto';
 import { environment } from 'environments/environment';
-import { MessageService } from 'primeng/api';
-import { Assessment, CMAnswer, CMAssessmentQuestion, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Category, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, ScoreDto, UniqueCategory } from 'shared/service-proxies/service-proxies';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { Assessment, CMAssessmentQuestion, CMAssessmentQuestionControllerServiceProxy, CMDefaultValue, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, ScoreDto, UniqueCategory } from 'shared/service-proxies/service-proxies';
 
 
 interface UploadEvent {
@@ -27,7 +26,9 @@ export class CmSectionThreeComponent implements OnInit {
   @Input() approach: string
   @Input() assessmentquestions: CMAssessmentQuestion[]
   @Input() isEditMode: boolean
+  @Input() isCompleted: boolean
   @Input() assessment:Assessment;
+  @Input() expected_ghg_mitigation: number
   @Output() onSubmit = new EventEmitter();
 
   @ViewChildren(NgForm) viewChildren!: QueryList<NgForm>;
@@ -92,6 +93,27 @@ export class CmSectionThreeComponent implements OnInit {
   isFirstLoading1: boolean = true;
   fieldNames = FieldNames;
   notFilledCategories: (OutcomeCategory | UniqueCategory)[] = [];
+  st_default: boolean = false
+  ex_default: boolean = false
+  default_values: {[key: string]: {st_default_values: CMDefaultValue[], ex_default_values: CMDefaultValue[]}} = {}
+  useDefault: {[key: string]: {st_default: boolean, ex_default: boolean}} = {}
+  useDefaultSDG: {[key: string]: {st_default: boolean, ex_default: boolean}} = {}
+  source = 'IPCC, 2023: Summary for Policymakers. In: Climate Change 2023: Synthesis Report. Contribution of Working Groups I, II and III to the Sixth Assessment Report of the Intergovernmental Panel on Climate Change [Core Writing Team, H. Lee and J. Romero (eds.)]. IPCC, Geneva, Switzerland, pp. 1-34, doi: 10.59327/IPCC/AR6-9789291691647.001';
+
+  sectoral_description = "Sectoral data should be used when possible. If sectoral data is unavailable, national data can be used. Data on national or sectoral level emissions can "+
+  "be found in countries’ National Inventory Reports. If a National Inventory Report has not been submitted, National Communications or Biennial Transparency Reports (BTRs) may "+
+  "also contain such information. At this level, the four applicable sectors would be Energy, IPPU, AFOLU and Waste, based on the 2006 IPCC Guidelines for National Greenhouse Gas "+
+  "Inventories."
+  sectoral_placeholder = 'Please enter justification, including source of data and scope of the assessment (i.e. sectoral or national level).\n\n'+
+  'E.g.:In case of an intervention focusing on increasing the blend in cement production, the relevant sector is “Industrial Processes and Product Use”. And in case of an intervention focusing on increasing the share or renewables, the relevant sector is “Energy”.'
+  subsectoral_description = "Subsectoral data should be used when possible. Subsectors can be identified using the categories listed in the 2006 IPCC Guidelines for National "+ 
+  "Greenhouse Gas Inventories (e.g. 1A1. Fuel Combustion Activities – Energy Industries, 2B1. Chemical Industry – Ammonia Production). If subsectoral data is unavailable, "+
+  "subnational data can be used. Please provide further information on the subnational reference emissions in the justification box below."
+  subsectoral_placeholder = "Enter justification, including source of data and scope of the assessment (i.e. definition of the sub-sector or subnational boundary – for example, City of Jakarta).\n\n"+
+  "E.g.: Enter below the preceding text an example: “In case of an intervention focusing on increasing the blend in cement production, the relevant subsector is “Mineral industry "+
+  "– cement production (2A1)”. And in case of an intervention focusing on increasing the share or renewables, the relevant sector is “Fuel combustion activities – energy industries "+
+  "(1A1)”."
+
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -99,7 +121,9 @@ export class CmSectionThreeComponent implements OnInit {
     public masterDataService: MasterDataService,
     private messageService: MessageService,
     private institutionControllerServiceProxy: InstitutionControllerServiceProxy,
-    private investorToolControllerServiceProxy: InvestorToolControllerServiceProxy
+    private investorToolControllerServiceProxy: InvestorToolControllerServiceProxy,
+    private cMAssessmentQuestionControllerServiceProxy: CMAssessmentQuestionControllerServiceProxy,
+    private confirmationService: ConfirmationService,
   ) {
     this.uploadUrl = environment.baseUrlAPI + "/document/upload-file-by-name" ; 
     this.fileServerURL = environment.baseUrlAPI+'/document/downloadDocumentsFromFileName/uploads';
@@ -153,6 +177,7 @@ export class CmSectionThreeComponent implements OnInit {
     this.relevance = this.masterDataService.relevance;
     await this.getSDGList();
     await this.setInitialState();
+    this.initializeDefaultStatus()
   }
 
   async setInitialState() {
@@ -260,6 +285,16 @@ export class CmSectionThreeComponent implements OnInit {
         )
       }
     }
+  }
+
+  initializeDefaultStatus() {
+    this.outcome.map((_outcome: OutcomeCategory) => {
+      if (this.outcome.type !== 'SD') {
+        _outcome.results.map(res => {
+          if (!this.useDefault[res.characteristic.id]) this.useDefault[res.characteristic.id] = {st_default: false, ex_default: false}
+        })
+      }
+    })
   }
 
   getSelectedScoreFromOptions (selectedScore: string, characteristic: Characteristics) {
@@ -370,6 +405,7 @@ export class CmSectionThreeComponent implements OnInit {
 
     if (newSdgs && newSdgs.length > 0) {
       let mappedSdgs = newSdgs.map(sdg => {
+        if (!this.useDefaultSDG[sdg.id]) this.useDefaultSDG[sdg.id] = {st_default: false, ex_default: false}
         let pSdg = new PortfolioSdg()
         pSdg.id = sdg.id
         pSdg.name = sdg.name
@@ -485,45 +521,126 @@ export class CmSectionThreeComponent implements OnInit {
         closable: true,
       });
     }
+  }
 
+  autoFillInternational(char_code: string, category_code: string, score_array: ScoreDto[]){
+    if (['NATIONAL', 'SUBNATIONAL'].includes(char_code)) {
+      this.outcome = this.outcome.map((category: OutcomeCategory) => {
+        if (category.code === category_code) {
+          category.results = category.results.map((result: CMResultDto) => {
+            if (result.characteristic.code === 'INTERNATIONAL') {
+              let score = score_array.find(o => o.code === '-99')
+              if (score) result.selectedScore = score
+              result.comment = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.'
+              result.startingSituation = 'N/A'
+              result.expectedImpact = 'N/A'
+              if (['SCALE_ADAPTATION', 'SUSTAINED_ADAPTATION'].includes(category_code)) {
+                result.adaptationCoBenifit = 'N/A'
+              }
+            }
+            return result;
+          })
+        }
+        return category
+      })
+    }
   }
 
   onSelectScore(event: any, char: CMResultDto, index: number, type?: string) {
-    let score = new ScoreDto()
-
-      if (char.characteristic.category.code === 'SUSTAINED_GHG') {
-        let score = 0
-        this.outcome.forEach((category: OutcomeCategory) => {
-          if (['SUSTAINED_GHG', 'SCALE_GHG'].includes(category.code)) {
+    if (['SUSTAINED_GHG', 'SCALE_GHG'].includes(char.characteristic.category.code)) {
+      let score: number | null = null
+      this.outcome.forEach((category: OutcomeCategory) => {
+        if (['SUSTAINED_GHG', 'SCALE_GHG'].includes(category.code)) {
+          if (category.results.every(result => result.selectedScore.value === -99)) {
+            score = score !== null ? score : null
+          } else {
             category.results.forEach((result) => {
-              if (result.selectedScore.value) score = score + result.selectedScore.value
+              score = score === null ? 0 : score = score
+              if (result.selectedScore.value) score = score + (result.selectedScore.value === -99 ? 0 : result.selectedScore.value)
             })
           }
-        })
-        this.GHGScore = Math.round(score / 6)
-      } else if (char.characteristic.category.code === 'SUSTAINED_SD') {
-        let score = 0
-        this.selectedSDGs.forEach(sdg => {
-          sdg.scaleResult.forEach(sr => {
-            if (sr.selectedScore.value) score = score + sr.selectedScore.value
-          })
-          sdg.sustainResult.forEach(susr => {
-            if (susr.selectedScore.value) score = score + susr.selectedScore.value
-          })
-        })
-        this.SDGScore = Math.round(score / 6 / this.selectedSDGs.length)
-      } else if (char.characteristic.category.code === 'SUSTAINED_ADAPTATION') {
-        let score = 0
-        this.outcome.forEach((category: OutcomeCategory) => {
-          if (['SUSTAINED_ADAPTATION', 'SCALE_ADAPTATION'].includes(category.code)) {
-            category.results.forEach((result) => {
-              if (result.selectedScore.value) score = score + result.selectedScore.value
-            })
-          }
-        })
-        this.adaptationScore = Math.round(score / 6);
+        }
+      })
+      this.GHGScore = score === null ? 'N/A' : Math.round(score / 6)
+      if (char.characteristic.category.code === 'SCALE_GHG') {
+        this.autoFillInternational(char.characteristic.code, 'SCALE_GHG', this.masterDataService.GHG_scale_score_macro)
+      } else if (char.characteristic.category.code === 'SUSTAINED_GHG') {
+        this.autoFillInternational(char.characteristic.code, 'SUSTAINED_GHG', this.masterDataService.GHG_sustained_score)
       }
+    } else if (['SUSTAINED_SD', 'SCALE_SD'].includes(char.characteristic.category.code)) {
+      let score: number | null = null
+      this.selectedSDGs.forEach(sdg => {
+        if (sdg.scaleResult.every(sr => sr.selectedScore.value)) {
+          score = score !== null ? score : null
+        } else {
+          sdg.scaleResult.forEach(sr => {
+            score = score === null ? 0 : score = score
+            if (sr.selectedScore.value) score = score + (sr.selectedScore.value === -99 ? 0 : sr.selectedScore.value)
+          })
+        }
+        if (sdg.sustainResult.every(sr => sr.selectedScore.value)) {
+          score = score !== null ? score : null
+        } else {
+          sdg.sustainResult.forEach(susr => {
+            score = score === null ? 0 : score = score
+            if (susr.selectedScore.value) score = score + (susr.selectedScore.value === -99 ? 0 : susr.selectedScore.value)
+          })
+        }
+      })
+      this.SDGScore = score === null ? 'N/A' : Math.round(score / 6 / this.selectedSDGs.length)
+      if (['NATIONAL', 'SUBNATIONAL'].includes(char.characteristic.code)) {
+        this.selectedSDGs = this.selectedSDGs.map(sdg => {
+          if (char.characteristic.category.code === 'SCALE_SD') {
+            sdg.scaleResult = sdg.scaleResult.map(result => {
+              if (result.characteristic.code === 'INTERNATIONAL') {
+                let score = this.masterDataService.SDG_scale_score.find(o => o.code === '-99')
+                if(score) result.selectedScore = score
+                result.comment = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.'
+                result.startingSituation = 'N/A'
+                result.expectedImpact = 'N/A'
+                result.sdgIndicator = 'N/A'
+              }
+              return result
+            })
+          } else if (char.characteristic.category.code === 'SUSTAINED_SD') {
+            sdg.sustainResult = sdg.sustainResult.map(result => {
+              if (result.characteristic.code === 'INTERNATIONAL') {
+                let score = this.masterDataService.SDG_sustained_score.find(o => o.code === '-99')
+                if(score) result.selectedScore = score
+                result.comment = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.'
+                result.startingSituation = 'N/A'
+                result.expectedImpact = 'N/A'
+                result.sdgIndicator ='N/A'
+              }
+              return result
+            })
+          }
+          return sdg
+        })
+      }
+    } else if (['SUSTAINED_ADAPTATION', 'SCALE_ADAPTATION'].includes(char.characteristic.category.code)) {
+      let score: number | null = null
+      this.outcome.forEach((category: OutcomeCategory) => {
+        if (['SUSTAINED_ADAPTATION', 'SCALE_ADAPTATION'].includes(category.code)) {
+          if (category.results.every(sr => sr.selectedScore.value)) {
+            score = score !== null ? score : null
+          } else {
+            category.results.forEach((result) => {
+              score = score === null ? 0 : score = score
+              if (result.selectedScore.value) score = score + (result.selectedScore.value === -99 ? 0 : result.selectedScore.value)
+            })
+          }
+        }
+      })
+      this.adaptationScore = score === null ? 'N/A' : Math.round(score / 6);
+      if (char.characteristic.category.code === 'SCALE_ADAPTATION') {
+        this.autoFillInternational(char.characteristic.code, 'SCALE_ADAPTATION', this.masterDataService.adaptation_scale_score)
+      } else if (char.characteristic.category.code === 'SUSTAINED_ADAPTATION') {
+        this.autoFillInternational(char.characteristic.code, 'SUSTAINED_ADAPTATION', this.masterDataService.adaptation_sustained_score)
+      }
+    }
   }
+
 
   onAnswer(event: any, question: any, characteristic?: Characteristics) {
     let q = new CMQuestion()
@@ -547,230 +664,243 @@ export class CmSectionThreeComponent implements OnInit {
 
   }
 
-  async submit(draftCategory: string, isDraft: boolean = false, name:string,type:string) {
-    this.nextClicked = true
-    this.results = []
-    this.categoriesToSave.push(draftCategory)
-    let save_process: boolean = false
-    let save_sd_sc: boolean = false
-    let save_sd_sus: boolean = false
-    let save_ghg_sc: boolean = false
-    let save_ghg_sus: boolean = false
-    let save_ad_sc: boolean = false
-    let save_ad_sus: boolean = false
-    for await (let category of this.categories['process']) {
-      if (isDraft) {
-        if (this.categoriesToSave.includes(category.code)) save_process = true
-        else save_process = false
-      } else save_process = true
-      if (save_process) {
-        for await (let char of category.characteristics) {
-          for await (let q of char.questions) {
-            let res = new CMResultDto()
-            Object.keys(q.result).forEach(e => {
-              res[e] = q.result[e]
-            })
-            let ch = new Characteristics()
-            ch.id = q.characteristic.id
-            res.characteristic = ch
-            res.relevance = char.relevance
-            if (res.institution?.id) {
-              let inst = new Institution()
-              inst.id = res.institution.id
-              res.institution = inst
-            }
-            res.type = this.approach
-            if (this.isEditMode){
-              let assQ = this.assessmentquestions.find(o => (o.characteristic.id === char.id) && (o.question.id === q.id || o.relevance === 0))
-              if (assQ) {
-                res.assessmentQuestionId = assQ.id
-                res.assessmentAnswerId = assQ.assessmentAnswers[0]?.id
-              }
-            }
-            res.selectedSdg = new PortfolioSdg()
-            if (res.question.id) {
-              this.results.push(res)
-            } else if (res.relevance === 0 && !res.assessmentQuestionId) {
-              this.results.push(res)
-            }
-          }
-        }
-      }
-    }
-
-    if (this.selectedSDGs?.length > 0) {
-      if (isDraft) {
-        if (this.categoriesToSave.includes('SD_SCALE')) save_sd_sc = true
-        else save_sd_sc = false
-        if (this.categoriesToSave.includes('SD_SUSTAINED')) save_sd_sus = true
-        else save_sd_sus = false
-      } else save_sd_sc = true, save_sd_sus = true
-      for await (let sd of this.selectedSDGs) {
-        if (save_sd_sc) {
-          sd.scaleResult.forEach(res => {
-            if (res.selectedScore) {
+  async submit(draftCategory: string, isDraft: boolean = false, name: string, type: string) {
+    if (name === 'SCALE_SD' && this.isCompleted) {
+      this.confirmationService.confirm({
+        message: 'Pls make sure to update "Time frame outcome is sustained section" to update the result.',
+        header: 'Warning',
+        acceptLabel: 'Okay',
+        rejectLabel: 'Cancel',
+        accept: () => {
+          this.categoriesToSave.push(draftCategory)
+          this.next(draftCategory)
+        }, reject: () => {}
+      })
+    } else {
+      this.nextClicked = true
+      this.results = []
+      this.categoriesToSave.push(draftCategory)
+      let save_process: boolean = false
+      let save_sd_sc: boolean = false
+      let save_sd_sus: boolean = false
+      let save_ghg_sc: boolean = false
+      let save_ghg_sus: boolean = false
+      let save_ad_sc: boolean = false
+      let save_ad_sus: boolean = false
+      for await (let category of this.categories['process']) {
+        if (isDraft) {
+          if (this.categoriesToSave.includes(category.code)) save_process = true
+          else save_process = false
+        } else save_process = true
+        if (save_process) {
+          for await (let char of category.characteristics) {
+            for await (let q of char.questions) {
+              let res = new CMResultDto()
+              Object.keys(q.result).forEach(e => {
+                res[e] = q.result[e]
+              })
+              let ch = new Characteristics()
+              ch.id = q.characteristic.id
+              res.characteristic = ch
+              res.relevance = char.relevance
               if (res.institution?.id) {
                 let inst = new Institution()
                 inst.id = res.institution.id
                 res.institution = inst
               }
-              let score = new ScoreDto()
-              score.name = res.selectedScore.name
-              score.code = res.selectedScore.code
-              score.value = res.selectedScore.value
-              res.selectedScore = score
               res.type = this.approach
               if (this.isEditMode){
-                let assQ = this.assessmentquestions.find(o => (o.characteristic.id === res.characteristic.id) && (o.selectedSdg.id === res.selectedSdg.id))
+                let assQ = this.assessmentquestions.find(o => (o.characteristic.id === char.id) && (o.question.id === q.id || o.relevance === 0))
                 if (assQ) {
                   res.assessmentQuestionId = assQ.id
                   res.assessmentAnswerId = assQ.assessmentAnswers[0]?.id
                 }
               }
-              if (res.selectedScore.name) {
+              res.selectedSdg = new PortfolioSdg()
+              if (res.question.id) {
+                this.results.push(res)
+              } else if (res.relevance === 0 && !res.assessmentQuestionId) {
                 this.results.push(res)
               }
             }
-          })
-        }
-        if (save_sd_sus) {
-          sd.sustainResult.forEach(res => {
-            if (res.selectedScore) {
-              if (res.institution?.id) {
-                let inst = new Institution()
-                inst.id = res.institution.id
-                res.institution = inst
-              }
-              let susScore = new ScoreDto()
-              susScore.name = res.selectedScore.name
-              susScore.code = res.selectedScore.code
-              susScore.value = res.selectedScore.value
-              res.selectedScore = susScore
-              res.type = this.approach
-              if (this.isEditMode){
-                let assQ = this.assessmentquestions.find(o => (o.characteristic.id === res.characteristic.id) && (o.selectedSdg.id === res.selectedSdg.id))
-                if (assQ) {
-                  res.assessmentQuestionId = assQ.id
-                  res.assessmentAnswerId = assQ.assessmentAnswers[0].id
-                }
-              }
-              if (res.selectedScore.name) {
-                this.results.push(res)
-              }
-            }
-          })
+          }
         }
       }
-    }
-
-    if (this.outcome?.length > 0) {
-      for await (let item of this.outcome) {
+  
+      if (this.selectedSDGs?.length > 0) {
         if (isDraft) {
+          if (this.categoriesToSave.includes('SD_SCALE')) save_sd_sc = true
+          else save_sd_sc = false
+          if (this.categoriesToSave.includes('SD_SUSTAINED')) save_sd_sus = true
+          else save_sd_sus = false
+        } else save_sd_sc = true, save_sd_sus = true
+        for await (let sd of this.selectedSDGs) {
+          if (save_sd_sc) {
+            sd.scaleResult.forEach(res => {
+              if (res.selectedScore) {
+                if (res.institution?.id) {
+                  let inst = new Institution()
+                  inst.id = res.institution.id
+                  res.institution = inst
+                }
+                let score = new ScoreDto()
+                score.name = res.selectedScore.name
+                score.code = res.selectedScore.code
+                score.value = res.selectedScore.value
+                res.selectedScore = score
+                res.type = this.approach
+                if (this.isEditMode){
+                  let assQ = this.assessmentquestions.find(o => (o.characteristic.id === res.characteristic.id) && (o.selectedSdg.id === res.selectedSdg.id))
+                  if (assQ) {
+                    res.assessmentQuestionId = assQ.id
+                    res.assessmentAnswerId = assQ.assessmentAnswers[0]?.id
+                  }
+                }
+                if (res.selectedScore.name) {
+                  this.results.push(res)
+                }
+              }
+            })
+          }
+          if (save_sd_sus) {
+            sd.sustainResult.forEach(res => {
+              if (res.selectedScore) {
+                if (res.institution?.id) {
+                  let inst = new Institution()
+                  inst.id = res.institution.id
+                  res.institution = inst
+                }
+                let susScore = new ScoreDto()
+                susScore.name = res.selectedScore.name
+                susScore.code = res.selectedScore.code
+                susScore.value = res.selectedScore.value
+                res.selectedScore = susScore
+                res.type = this.approach
+                if (this.isEditMode){
+                  let assQ = this.assessmentquestions.find(o => (o.characteristic.id === res.characteristic.id) && (o.selectedSdg.id === res.selectedSdg.id))
+                  if (assQ) {
+                    res.assessmentQuestionId = assQ.id
+                    res.assessmentAnswerId = assQ.assessmentAnswers[0].id
+                  }
+                }
+                if (res.selectedScore.name) {
+                  this.results.push(res)
+                }
+              }
+            })
+          }
+        }
+      }
+  
+      if (this.outcome?.length > 0) {
+        for await (let item of this.outcome) {
+          if (isDraft) {
+            if (item.type === 'GHG') {
+              if (this.categoriesToSave.includes('GHG_SCALE') && item.method === 'SCALE') { save_ghg_sc = true }
+              if (this.categoriesToSave.includes('GHG_SUSTAINED') && item.method === 'SUSTAINED') { save_ghg_sus = true }
+            } else if (item.type === 'ADAPTATION') {
+              if (this.categoriesToSave.includes('ADAPTATION_SCALE') && item.method === 'SCALE') { save_ad_sc = true }
+              if (this.categoriesToSave.includes('ADAPTATION_SUSTAINED') && item.method === 'SUSTAINED') { save_ad_sus = true }
+            }
+          } else { save_ghg_sc = true; save_ghg_sus = true; save_ad_sc = true; save_ad_sus = true; }
           if (item.type === 'GHG') {
-            if (this.categoriesToSave.includes('GHG_SCALE') && item.method === 'SCALE') { save_ghg_sc = true }
-            if (this.categoriesToSave.includes('GHG_SUSTAINED') && item.method === 'SUSTAINED') { save_ghg_sus = true }
-          } else if (item.type === 'ADAPTATION') {
-            if (this.categoriesToSave.includes('ADAPTATION_SCALE') && item.method === 'SCALE') { save_ad_sc = true }
-            if (this.categoriesToSave.includes('ADAPTATION_SUSTAINED') && item.method === 'SUSTAINED') { save_ad_sus = true }
-          }
-        } else { save_ghg_sc = true; save_ghg_sus = true; save_ad_sc = true; save_ad_sus = true; }
-        if (item.type === 'GHG') {
-          if (save_ghg_sc || save_ghg_sus) {
-            item.results.forEach((res: any) => {
-              res.type = this.approach
-              if (res.institution?.id) {
-                let inst = new Institution()
-                inst.id = res.institution.id
-                res.institution = inst
-              }
-              if (res.selectedScore) {
-                let score = new ScoreDto()
-                score.name = res.selectedScore.name
-                score.code = res.selectedScore.code
-                score.value = res.selectedScore.value
-                res.selectedScore = score
+            if (save_ghg_sc || save_ghg_sus) {
+              item.results.forEach((res: any) => {
                 res.type = this.approach
-                res.selectedSdg = new PortfolioSdg()
-                if (this.isEditMode){
-                  let assQ = this.assessmentquestions.find(o => (o.characteristic.id === res.characteristic.id) )
-                  if (assQ) {
-                    res.assessmentQuestionId = assQ.id
-                    res.assessmentAnswerId = assQ.assessmentAnswers[0].id
+                if (res.institution?.id) {
+                  let inst = new Institution()
+                  inst.id = res.institution.id
+                  res.institution = inst
+                }
+                if (res.selectedScore) {
+                  let score = new ScoreDto()
+                  score.name = res.selectedScore.name
+                  score.code = res.selectedScore.code
+                  score.value = res.selectedScore.value
+                  res.selectedScore = score
+                  res.type = this.approach
+                  res.selectedSdg = new PortfolioSdg()
+                  if (this.isEditMode){
+                    let assQ = this.assessmentquestions.find(o => (o.characteristic.id === res.characteristic.id) )
+                    if (assQ) {
+                      res.assessmentQuestionId = assQ.id
+                      res.assessmentAnswerId = assQ.assessmentAnswers[0].id
+                    }
+                  }
+                  res.isSDG = false
+                  res.isAdaptation = false
+                  res.isGHG = true
+                  if (res.selectedScore.name) {
+                    this.results.push(res)
                   }
                 }
-                res.isSDG = false
-                res.isAdaptation = false
-                res.isGHG = true
-                if (res.selectedScore.name) {
-                  this.results.push(res)
-                }
-              }
-            })
+              })
+            }
           }
-        }
-        if (item.type === 'ADAPTATION') {
-          if (save_ad_sc || save_ad_sus) {
-            item.results.forEach((res: any) => {
-              res.type = this.approach
-              if (res.institution?.id) {
-                let inst = new Institution()
-                inst.id = res.institution.id
-                res.institution = inst
-              }
-              if (res.selectedScore) {
-                let score = new ScoreDto()
-                score.name = res.selectedScore.name
-                score.code = res.selectedScore.code
-                score.value = res.selectedScore.value
-                res.selectedScore = score
+          if (item.type === 'ADAPTATION') {
+            if (save_ad_sc || save_ad_sus) {
+              item.results.forEach((res: any) => {
                 res.type = this.approach
-                res.selectedSdg = new PortfolioSdg()
-                if (this.isEditMode){
-                  let assQ = this.assessmentquestions.find(o => (o.characteristic.id === res.characteristic.id) )
-                  if (assQ) {
-                    res.assessmentQuestionId = assQ.id
-                    res.assessmentAnswerId = assQ.assessmentAnswers[0].id
+                if (res.institution?.id) {
+                  let inst = new Institution()
+                  inst.id = res.institution.id
+                  res.institution = inst
+                }
+                if (res.selectedScore) {
+                  let score = new ScoreDto()
+                  score.name = res.selectedScore.name
+                  score.code = res.selectedScore.code
+                  score.value = res.selectedScore.value
+                  res.selectedScore = score
+                  res.type = this.approach
+                  res.selectedSdg = new PortfolioSdg()
+                  if (this.isEditMode){
+                    let assQ = this.assessmentquestions.find(o => (o.characteristic.id === res.characteristic.id) )
+                    if (assQ) {
+                      res.assessmentQuestionId = assQ.id
+                      res.assessmentAnswerId = assQ.assessmentAnswers[0].id
+                    }
+                  }
+                  res.isSDG = false
+                  res.isAdaptation = true
+                  res.isGHG = false
+                  if (res.selectedScore.name) {
+                    this.results.push(res)
                   }
                 }
-                res.isSDG = false
-                res.isAdaptation = true
-                res.isGHG = false
-                if (res.selectedScore.name) {
-                  this.results.push(res)
-                }
-              }
-            })
+              })
+            }
           }
+          save_ghg_sc = false; save_ghg_sus = false; save_ad_sc = false; save_ad_sus = false;
         }
-        save_ghg_sc = false; save_ghg_sus = false; save_ad_sc = false; save_ad_sus = false;
       }
-    }
-
-    let isValid = true
-    if (draftCategory === '') {
-      isValid = await this.checkMandotary()
-    }
-
-    if (!isDraft) {
-      if (this.activeIndexMain === 1) {
-        this.clickedFormMap[this.activeIndex2] = true
+  
+      let isValid = true
+      if (draftCategory === '') {
+        isValid = await this.checkMandotary()
       }
-      isValid = this.isFormValid()
-    }
-
-
-    if (isValid) {
-      this.categoriesToSave = []
-      this.isDraftSaved = true
-      if(!isDraft) this.savedData = true
-      this.onSubmit.emit({result: this.results, isDraft: isDraft,name:name,type:type})
-    } else {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Please fill all mandotory fields',
-        closable: true,
-      });
+  
+      if (!isDraft) {
+        if (this.activeIndexMain === 1) {
+          this.clickedFormMap[this.activeIndex2] = true
+        }
+        isValid = this.isFormValid()
+      }
+  
+  
+      if (isValid) {
+        this.categoriesToSave = []
+        this.isDraftSaved = true
+        if(!isDraft) this.savedData = true
+        this.onSubmit.emit({result: this.results, isDraft: isDraft,name:name,type:type, expected_ghg_mitigation: this.expected_ghg_mitigation})
+      } else {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Please fill all mandotory fields',
+          closable: true,
+        });
+      }
     }
   }
 
@@ -846,6 +976,20 @@ export class CmSectionThreeComponent implements OnInit {
 
   adaptationJustificationChange(){
     this.checkTab2Mandatory(this.outcome.length - 1)
+  }
+
+  async loadDefaults(ch_id: number, code: string) {
+    let res = await this.cMAssessmentQuestionControllerServiceProxy.getCMDefaultValues(ch_id).toPromise()
+    if (res) {
+      if (code === 'STARTING_SITUATION') {
+        if (!this.default_values[ch_id]) this.default_values[ch_id] = {st_default_values: [], ex_default_values: []}
+        this.default_values[ch_id].st_default_values = res;
+        this.default_values[ch_id].st_default_values = this.default_values[ch_id].st_default_values.map(val => {val['label'] = val.starting_situation_value + ' ' + val.source; return val})
+      } else {
+        this.default_values[ch_id].ex_default_values = res;
+        this.default_values[ch_id].ex_default_values = this.default_values[ch_id].ex_default_values.map(val => {val['label'] = val.expected_impact_value + ' ' + val.source; return val})
+      }
+    }
   }
 }
 

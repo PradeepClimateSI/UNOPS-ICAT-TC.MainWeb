@@ -1,15 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { FieldNames, MasterDataDto, MasterDataService } from 'app/shared/master-data.service';
+import { FieldNames, MasterDataDto, MasterDataService, assessment_period_info, chapter6_url } from 'app/shared/master-data.service';
 import * as moment from 'moment';
-import { MessageService } from 'primeng/api';
-import { AllBarriersSelected, Assessment, AssessmentCMDetail, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, BarrierSelected, Category, Characteristics, ClimateAction, GeographicalAreasCovered, InvestorSector, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, ServiceProxy, ToolsMultiselectDto } from 'shared/service-proxies/service-proxies';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { AllBarriersSelected, Assessment, AssessmentCMDetail, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, BarrierSelected, CMDefaultValue, Category, Characteristics, ClimateAction, GeographicalAreasCovered, InvestorSector, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, ServiceProxy, ToolsMultiselectDto } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { ActivatedRoute } from '@angular/router';
-import { DomSanitizer } from '@angular/platform-browser';
 import { DialogService } from 'primeng/dynamicdialog';
 import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
-
+import { MultiSelect } from 'primeng/multiselect';
 @Component({
   selector: 'app-carbon-market-assessment',
   templateUrl: './carbon-market-assessment.component.html',
@@ -19,7 +18,8 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   countryId: any;
   visible_ex_ante: any;
 
-
+  @ViewChild('multiSelectComponent') multiSelectComponent: MultiSelect;
+  geographicalArea:MasterDataDto = new MasterDataDto()
   policies: ClimateAction[]
   assessment: Assessment = new Assessment()
   cm_detail: AssessmentCMDetail = new AssessmentCMDetail()
@@ -43,7 +43,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
 
   assessmentres: Assessment
   levelOfImplementation: MasterDataDto[];
-  sectorArray: Sector[];
+  sectorArray: Sector[]=[];
   geographicalAreasCoveredArr: MasterDataDto[];
   sectorList: any[] = [];
   international_tooltip:string;
@@ -64,11 +64,20 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   scales: MasterDataDto[]
   tooltipContent: any;
   visionExample: any[] = []
+  phaseTransformExapmle: any[] = []
   barrierChList: any[];
   minDate: Date;
   minDateTo: Date;
   fieldNames = FieldNames
-
+  chapter6_url = chapter6_url
+  geographicalAreasCovered: any[] = [];
+  expected_ghg_mitigation: number
+  from_date:Date
+  to_date: Date
+  assessment_period_info = assessment_period_info
+  isCompleted: boolean = false;
+  isContinue: boolean = false;
+  isDisableIntervention: boolean = false;
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
     private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
@@ -81,6 +90,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     private assessmentCMDetailControllerServiceProxy: AssessmentCMDetailControllerServiceProxy,
     private route: ActivatedRoute,
     protected dialogService: DialogService,
+    private confirmationService: ConfirmationService,
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -92,18 +102,28 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     this.int_cm_approches = this.masterDataService.int_cm_approaches
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;
     this.scales = this.masterDataService.scale_of_activity;
+    this.geographicalAreasCovered = this.masterDataService.level_of_implemetation;
 
     await this.getPolicies()
     await this.getSetors()
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe(async params => {
       this.assessmentId = params['id']
       this.isEditMode = params['isEdit']
+      params['iscompleted'] == 'true' ? (this.isCompleted = true) : false
+      params['isContinue'] == 'true' ? (this.isContinue = true) : false
+      if(params['interventionId'] && params['assessmentType']){
+        await this.getPolicies().then( x=>
+          this.setDataFromFlow(params['interventionId'],params['assessmentType'])
+        )
+        
+      }
+
     })
     await this.setInitialStates()
-
+    this.phaseTransformExapmle = this.masterDataService.phase_transfrom
     this.visionExample = [
       { title: 'Transformational Vision', value: 'Decarbonized electricity sector with a high % of Solar PV energy which will enable economic growth and will lead the shift of the labour market towards green jobs.' },
-      { title: 'Long term ( > 15 years)', value: 'Zero-carbon electricity production. The 2050 vision is to achieve 60% solar PV in the national electricity mix and create 2 million new green jobs.' },
+      { title: 'Long term (> 15 years)', value: 'Zero-carbon electricity production. The 2050 vision is to achieve 60% solar PV in the national electricity mix and create 2 million new green jobs.' },
       { title: 'Medium term (> 5 years and  < 15 years)', value: 'Achieve 30% solar PV in the national electricity mix and create 1 million new green jobs. ' },
       { title: 'Short term (< 5 years)', value: 'Install 20 GW of rooftop solar PV and create 200,000 new green jobs in doing so. The solar PV policy is implemented at subnational levels, supported by incentives for private sector involvement and knowledge development.' },
       { title: 'Phase of transformation', value: 'Acceleration. Solar PV is widely accepted in the society and its use is spreading increasingly fast. Fossil-fuel based energy production is being challenged as the only way to ensure a reliable energy supply. Changes have already occurred in the economy, institutions and society as a result of the spreading of Solar PV.' },
@@ -112,6 +132,14 @@ export class CarbonMarketAssessmentComponent implements OnInit {
 
     this.international_tooltip = 'Name of international or private carbon market standard under which the intervention is registered.'
     await this.getCharacteristics();
+  }
+  setDataFromFlow(interventonId:string, assessmentType:string) {
+    this.isDisableIntervention = true
+    this.assessment.climateAction = this.policies.find((i)=>i.id==Number(interventonId))! 
+    this.assessment.assessmentType = assessmentType;
+    let event:any = {}
+    event.value = this.assessment.climateAction
+    this.onSelectIntervention(event)
   }
   watchVideo(){
     let ref = this.dialogService.open(GuidanceVideoComponent, {
@@ -132,10 +160,34 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   async setInitialStates() {
     if (this.isEditMode) {
       this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
-      this.finalBarrierList = this.assessment['policy_barrier']
+      this.from_date= new Date(
+        this.assessment.from?.year(),
+        this.assessment.from?.month(),
+        this.assessment.from?.date()
+      );
+      this.to_date= new Date(
+        this.assessment.to?.year(),
+        this.assessment.to?.month(),
+        this.assessment.to?.date()
+      );
+      this.finalBarrierList = this.assessment['policy_barrier'].map((i: { is_affected: boolean; characteristics: Characteristics[]; explanation: string; barrier: string; })=> {
+        let p =  new BarrierSelected()
+        p.affectedbyIntervention = i.is_affected
+        p.characteristics = i.characteristics.map( char =>{
+          let characteristic = new Characteristics()
+          characteristic.id = char.id
+          characteristic.name = char.name
+          return characteristic
+        })
+        p.explanation = i.explanation
+        p.barrier = i.barrier
+        return p
+        
+       });
       let policy = this.policies.find(o => o.id === this.assessment.climateAction.id)
       if (policy) this.assessment.climateAction = policy
       this.cm_detail = await this.assessmentCMDetailControllerServiceProxy.getAssessmentCMDetailByAssessmentId(this.assessmentId).toPromise()
+      this.expected_ghg_mitigation = this.cm_detail.expected_ghg_mitigation
       let areas: MasterDataDto[] = []
       this.cm_detail.geographicalAreasCovered.map(area => {
         let level = this.levelOfImplementation.find(o => o.code === area.code)
@@ -143,23 +195,23 @@ export class CarbonMarketAssessmentComponent implements OnInit {
           areas.push(level)
         }
       })
-      this.geographicalAreasCoveredArr = areas
-      let sectors: any[] = []
+      this.geographicalAreasCoveredArr = areas;
+      this.geographicalArea = this.geographicalAreasCoveredArr[0]
       this.cm_detail.sectorsCovered.map(sector => {
-        sectors.push(this.sectorList.find(o => o.name === sector.sector.name))
+        this.sectorArray.push(sector.sector)
       })
-      this.sectorArray = sectors
+      this.sectorList = this.sectorArray
       this.setFrom()
       this.setTo()
       this.assessmentres = this.assessment
       this.showSections = true
-      this.isSavedAssessment = true
+      if (!this.isCompleted && this.isContinue) this.isSavedAssessment = true
     }
   }
 
   setFrom(){
     if(this.assessment.from){  
-      let convertTime = moment(this.assessment.from).format("YYYY-MM-DD HH:mm:ss");
+      let convertTime = moment(this.assessment.from).format("DD/MM/YYYY HH:mm:ss");
       let convertTimeObject = new Date(convertTime);      
       this.assessment.from = moment(convertTimeObject) 
     }
@@ -167,7 +219,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
 
   setTo(){
     if(this.assessment.to){
-      let convertTime = moment(this.assessment.to).format("YYYY-MM-DD HH:mm:ss");
+      let convertTime = moment(this.assessment.to).format("DD/MM/YYYY HH:mm:ss");
       let convertTimeObject = new Date(convertTime);
       this.assessment.to = moment(convertTimeObject)
     }
@@ -191,35 +243,64 @@ export class CarbonMarketAssessmentComponent implements OnInit {
 
   save(form: NgForm) {
     this.assessment.tool = 'CARBON_MARKET'
-    this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
+    this.assessment.year = moment(new Date()).format("DD/MM/YYYY")
     this.assessment.assessment_approach = 'DIRECT'
     this.isStageDisble =true;
     if (!this.assessment.id) this.assessment.createdOn = moment(new Date())
     this.assessment.editedOn = moment(new Date())
+    if(this.isCompleted || !this.isContinue){
+      form.controls['sectors'].setValue(this.sectorArray)
+    }
 
     if (form.valid) {
+      this.assessment.from = moment(this.from_date)
+      this.assessment.to = moment(this.to_date)
       this.methodologyAssessmentControllerServiceProxy.saveAssessment(this.assessment)
         .subscribe(res => {
           if (res) {
             this.cm_detail.cmassessment = res;
 
-            let allBarriersSelected = new AllBarriersSelected()
-              allBarriersSelected.allBarriers =this.finalBarrierList
-              allBarriersSelected.climateAction =res.climateAction
-              allBarriersSelected.assessment =res;
+            
+            if (this.finalBarrierList.length > 0) {
+              let allBarriersSelected = new AllBarriersSelected()
+                allBarriersSelected.allBarriers =this.finalBarrierList
+                allBarriersSelected.climateAction =res.climateAction
+                allBarriersSelected.assessment =res;
 
-            this.projectControllerServiceProxy.policyBar(allBarriersSelected).subscribe((res) => {
-            },
-            (err) => {
-              this.messageService.add({
-                severity: 'error',
-                summary: 'Error.',
-                detail: 'Policy barriers saving failed',
-                sticky: true,
-              });
-            })
+                this.projectControllerServiceProxy.policyBar(allBarriersSelected).subscribe((res) => {
+                },
+                (err) => {
+                  this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error.',
+                    detail: 'Policy barriers saving failed',
+                    sticky: true,
+                  });
+                })
+            }
 
-            this.serviceProxy.createOneBaseAssessmentCMDetailControllerAssessmentCMDetail(this.cm_detail)
+            let req = new AssessmentCMDetail()
+
+            if (this.isEditMode && (this.isCompleted || !this.isContinue)) {
+              let assessment = new Assessment()
+              assessment.id = this.cm_detail.cmassessment.id
+              assessment.init()
+              req.id = this.cm_detail.id;
+              req.cmassessment = assessment;
+              req.scale = this.cm_detail.scale;
+              req.boundraries = this.cm_detail.boundraries;
+              req.intCMApproach = this.cm_detail.intCMApproach;
+              req.appliedMethodology = this.cm_detail.appliedMethodology;
+              //@ts-ignore
+              req.sectorsCovered = undefined
+              //@ts-ignore
+              req.geographicalAreasCovered = undefined
+
+            } else {
+              req = this.cm_detail;
+            }
+
+            this.serviceProxy.createOneBaseAssessmentCMDetailControllerAssessmentCMDetail(req)
               .subscribe(async _res => {
                 if (_res) {
                   let toolsMultiselectDto = new ToolsMultiselectDto()
@@ -232,14 +313,21 @@ export class CarbonMarketAssessmentComponent implements OnInit {
                     sec.sector = sector
                     toolsMultiselectDto.sectors.push(sec)
                   }
-                  for (let geo of this.geographicalAreasCoveredArr){
-                    let area = new GeographicalAreasCovered()
-                    area.assessment= res
-                    area.assessmentCMDetail = _res
-                    area.name = geo.name
-                    area.code = geo.code
-                    toolsMultiselectDto.geographicalAreas.push(area)
+
+                  this.geographicalAreasCoveredArr = []
+                  let _a = new GeographicalAreasCovered()
+                  _a.id = this.geographicalArea.id
+                  _a.name = this.geographicalArea.name
+                  _a.code = this.geographicalArea.code
+                  _a.assessment= res
+                  _a.assessmentCMDetail = _res
+                  toolsMultiselectDto.geographicalAreas.push(_a)
+
+                  if (this.isEditMode && (this.isCompleted || !this.isContinue)) {
+                    toolsMultiselectDto.isCompleted = this.isCompleted ? this.isCompleted : !this.isContinue;
+                    toolsMultiselectDto.assessmentId = res.id;
                   }
+
                   let res_sec = await this.investorToolControllerServiceProxy.saveToolsMultiSelect(toolsMultiselectDto).toPromise()
                   if (res_sec['sector'] && res_sec['area']) {
                     this.messageService.add({
@@ -248,7 +336,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
                       detail: 'Assessment has been created successfully',
                       closable: true,
                     })
-                    this.isSavedAssessment = true
+                    if ((!this.isCompleted && this.isContinue ) || !this.isEditMode) this.isSavedAssessment = true
                     this.assessmentres = res
                     this.showSections = true
                   } else if (!res_sec['sector']) {
@@ -291,6 +379,70 @@ export class CarbonMarketAssessmentComponent implements OnInit {
         detail: 'Fill all mandatory fields',
         closable: true,
       })
+    }
+  }
+
+  onSelectIntervention(event: any) {
+    this.minDate = new Date(event.value.dateOfImplementation)
+    
+    this.geographicalArea = this.geographicalAreasCovered.find(item=>{
+      if (item.name==this.assessment.climateAction.geographicalAreaCovered){
+        return item
+      }
+    })
+    this.sectorList = this.assessment.climateAction.policySector.map(i=> i.sector)
+    this.sectorArray = this.sectorList
+  }
+
+  onChangeGeoAreaCovered(){
+    if(this.assessment.climateAction.geographicalAreaCovered && this.geographicalArea.name !==this.assessment.climateAction.geographicalAreaCovered && !this.isCompleted){
+      this.confirmationService.confirm({
+        message: `You selected a geographical scope that deviates from the one that was assigned to this intervention- ${this.assessment.climateAction.geographicalAreaCovered }. Are you sure you want to continue with this selection?`,
+        header: 'Confirmation',
+        acceptIcon: 'icon-not-visible',
+        rejectIcon: 'icon-not-visible',
+        acceptLabel: 'Continue',
+        rejectLabel: 'Go back',
+        key: 'geoConfirm',
+        accept: () => {
+        },
+        reject: () => { 
+          this.geographicalArea = this.geographicalAreasCovered.find(item=>{
+            if (item.name==this.assessment.climateAction.geographicalAreaCovered){
+              return item
+            }
+          })
+        },
+      });
+    }
+  }
+
+  onItemSelectSectors(event: any) {
+    if(this.assessment.climateAction.policySector){
+      if(this.assessment.climateAction.policySector.length !=  this.sectorArray.length && !this.isCompleted){
+        this.closeMultiSelect();
+        this.confirmationService.confirm({
+          message: `You selected sectors that deviates from the one that was assigned to this intervention- ${ this.assessment.climateAction.policySector.map(i=> i.sector.name).join(",")}. Are you sure you want to continue with this selection?`,
+          header: 'Confirmation',
+          acceptIcon: 'icon-not-visible',
+          rejectIcon: 'icon-not-visible',
+          acceptLabel: 'Continue',
+          rejectLabel: 'Go back',
+          key: 'sectorConfirm',
+          accept: () => {
+          },
+          reject: () => { 
+            this.sectorArray = this.sectorList
+          },
+        });
+      }
+      
+    }
+    
+  }
+  closeMultiSelect() {
+    if (this.multiSelectComponent) {
+      this.multiSelectComponent.overlayVisible = false;
     }
   }
 
@@ -346,9 +498,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   }
   showDialog(){
     if (!this.isEditMode) this.barrierBox =true; 
-  }
-  onItemSelectSectors($event: any) {
-   
+    else if (this.isEditMode && (this.isCompleted || !this.isContinue)) this.barrierBox = true;
   }
 
   getProductsData() {
@@ -374,9 +524,6 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     ]
   }
 
-  onSelectIntervention(event: any) {
-    this.minDate = new Date(event.value.dateOfImplementation)
-  }
 
   onSelectFromDate(event: any) {
     this.minDateTo = new Date(event) 

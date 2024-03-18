@@ -1,24 +1,24 @@
-<p *ngIf="alignment_data.col_set_2.length === 4" style="color: rgb(152, 13, 13);"><i>Note: Need to add SDG priorities to the country</i></p>
+<p *ngIf="alignment_data?.col_set_2.length === 4" style="color: rgb(152, 13, 13);"><i>Note: Need to add SDG priorities to the country</i></p>
 <p-table [value]="alignment_data?.interventions">
     <ng-template pTemplate="header">
         <tr>
             <th colspan="4">ALIGNMENT</th>
-            <th [attr.colspan]="alignment_data.sdg_count">SUSTAINABLE DEVELOPMENT</th>
+            <th [attr.colspan]="alignment_data?.sdg_count">SUSTAINABLE DEVELOPMENT</th>
         </tr>
         <tr>
-            <ng-container *ngFor="let col of alignment_data.col_set_1">
+            <ng-container *ngFor="let col of alignment_data?.col_set_1">
                 <th  [attr.colspan]="col.colspan">{{col.label}}</th>
             </ng-container>
         </tr>
         <tr>
-            <ng-container *ngFor="let col of alignment_data.col_set_2">
+            <ng-container *ngFor="let col of alignment_data?.col_set_2">
                 <th>{{col.label}}</th>
             </ng-container>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-intervention>
         <tr>
-            <ng-container *ngFor="let col of alignment_data.col_set_2">
+            <ng-container *ngFor="let col of alignment_data?.col_set_2">
                 <td>{{getValue(intervention[col.code])}}</td>
             </ng-container>
         </tr>
@@ -31,22 +31,22 @@
     <ng-template pTemplate="header">
         <tr>
             <th colspan="4">ALIGNMENT</th>
-            <th [attr.colspan]="alignment_data.sdg_count">SUSTAINABLE DEVELOPMENT</th>
+            <th [attr.colspan]="alignment_data?.sdg_count">SUSTAINABLE DEVELOPMENT</th>
         </tr>
         <tr>
-            <ng-container *ngFor="let col of alignment_data.col_set_1">
+            <ng-container *ngFor="let col of alignment_data?.col_set_1">
                 <th  [attr.colspan]="col.colspan">{{col.label}}</th>
             </ng-container>
         </tr>
         <tr>
-            <ng-container *ngFor="let col of alignment_data.col_set_2">
+            <ng-container *ngFor="let col of alignment_data?.col_set_2">
                 <th>{{col.label}}</th>
             </ng-container>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-intervention>
         <tr>
-            <ng-container *ngFor="let col of alignment_data.col_set_2">
+            <ng-container *ngFor="let col of alignment_data?.col_set_2">
                 <td [style.background-color]="getBackgroundColor(intervention[col.code])"
                 [style.color]="intervention[col.code]?.name?getBackgroundColor(intervention[col.code]):''"
                 >

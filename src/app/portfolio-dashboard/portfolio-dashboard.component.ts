@@ -5,7 +5,8 @@ import { Chart, ChartType } from 'chart.js';
 import { LazyLoadEvent } from 'primeng/api';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { Assessment, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PortfolioControllerServiceProxy } from 'shared/service-proxies/service-proxies';
-
+import { ActivatedRoute, Router } from '@angular/router';
+import * as moment from 'moment';
 @Component({
   selector: 'app-portfolio-dashboard',
   templateUrl: './portfolio-dashboard.component.html',
@@ -24,7 +25,9 @@ export class PortfolioDashboardComponent implements OnInit,AfterViewInit {
     private portfolioServiceProxy : PortfolioControllerServiceProxy,
     public masterDataService: MasterDataService,
     private cdr: ChangeDetectorRef,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
   ) {
     this.test= [{data: 'AAA', x:2,y:3}, {data: 'BBB', x:3,y:3},{data: 'CCC', x:4,y:4}]
   }
@@ -64,7 +67,7 @@ export class PortfolioDashboardComponent implements OnInit,AfterViewInit {
   outcomeData: any[] = [];
   outcomeData2: any[] = [];
   allData : any = [];
-  rows :number;
+  rows :number = 10;
   loadSelectedTable : boolean = false;
   pieChart2: any;
   slicedData:{
@@ -108,6 +111,12 @@ export class PortfolioDashboardComponent implements OnInit,AfterViewInit {
     'rgba(47, 79, 79, 1)',
     'rgba(139, 69, 19, 1)'
   ]
+
+  allAssessments: any[] = [];
+  selectedAssessments: any;
+  selectedIds:string[] = [];
+  selectionLimit:number = 10;
+  
   async ngOnInit(): Promise<void> {
     this.xData = this.masterDataService.xData
     this.yData = this.masterDataService.yData
@@ -118,19 +127,12 @@ export class PortfolioDashboardComponent implements OnInit,AfterViewInit {
     this.averageTCValue =63.78
     this.tool = 'PORTFOLIO'
 
-  
-
-  
-
-
     this.portfolioServiceProxy.getAll().subscribe(async (res: any) => {
       this.portfolioList = res;
      });
-
-    
-
      this.getSectorCount(this.tool);
-  
+     this.setAlldata()
+    
   }
   ngAfterViewInit(): void {
     this.cdr.detectChanges();
@@ -158,8 +160,26 @@ export class PortfolioDashboardComponent implements OnInit,AfterViewInit {
   goToFunction(){
 this.selectedPortfolio = ''
 this.loadLast2graphs=false;
+this.setAlldata()
  this.getSectorCount(this.tool);
 this.selectPortfolio();
+  }
+
+  setAlldata(){
+    this.portfolioServiceProxy.getDashboardData(this.selectedPortfolio?this.selectedPortfolio.id:0,1,this.rows,this.selectedIds).subscribe((res) => {
+      if(res.meta.allData && res.meta.allData.length>0){
+        this.allAssessments = this.mapOptionlable(res.meta.allData)
+      }
+    });
+  }
+  mapOptionlable(data: any[]) {
+    return data.map(item => {
+      let label:string = item.climateAction.policyName
+      if (item.from && item.to) {
+       label = label + " - " + moment(new Date(item.from)).format("DD/MM/YYYY").toString() + " - " + moment(new Date(item.to)).format("DD/MM/YYYY").toString()
+      }
+      return {label:label}
+    })
   }
 
   selectPortfolio(){
@@ -171,6 +191,7 @@ this.selectPortfolio();
     let event: any = {};
     event.rows = this.rows;
     event.first = 0;
+    this.setAlldata()
     this.loadgridData(event);
 
     
@@ -191,6 +212,23 @@ this.selectPortfolio();
 
 
   }
+  onSelectAssessment() {
+    this.selectedIds = this.selectedAssessments.map((item: any)=> item.id)
+    this.callTable()
+ }
+
+ onClear() {
+   this.selectedIds = []
+    this.selectedAssessments = []
+    this.callTable()
+ }
+
+ callTable(){
+   let event: any = {};
+     event.rows = this.rows;
+     event.first = 0;
+     this.loadgridData(event);
+ }
   loadgridData = (event: LazyLoadEvent) => {
     this.loading = true;
     this.totalRecords = 0;
@@ -200,9 +238,9 @@ this.selectPortfolio();
         ? 1
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
-    this.portfolioServiceProxy.getDashboardData(this.selectedPortfolio?this.selectedPortfolio.id:0,pageNumber,this.rows).subscribe((res) => {
+    this.portfolioServiceProxy.getDashboardData(this.selectedPortfolio?this.selectedPortfolio.id:0,pageNumber,this.rows,this.selectedIds).subscribe((res) => {
       this.dashboardData = res.items;
-      this.tableData = this.dashboardData.map(item => {return {climateAction: item.climateAction,tool:item.tool, outcomeScore: item.result.averageOutcome, processScore: item.result.averageProcess}}) 
+      this.tableData = this.dashboardData.map(item => {return {climateAction: item.climateAction,tool:item.tool, outcomeScore: item.result.averageOutcome, processScore: item.result.averageProcess,assessId:item.id,from:item.from,to: item.to}}) 
       
       this.heatMapScore = this.dashboardData.map(item => {return {outcomeScore: item.result.averageOutcome, processScore: item.result.averageProcess,}})
       this.heatMapData = this.dashboardData.map(item => {return {interventionId: item.climateAction?.intervention_id, interventionName: item.climateAction?.policyName, outcomeScore: item.result.averageOutcome, processScore: item.result.averageProcess}}) 
@@ -214,6 +252,9 @@ this.selectPortfolio();
 
   
   };
+  goToResult(id: number) {
+    this.router.navigate(['assessment-result-investor', id], { queryParams: { assessmentId:id }, relativeTo: this.activatedRoute });
+  }
   mapOutcomeScores(value: number) {
     
     switch (value) {
@@ -643,7 +684,7 @@ this.selectPortfolio();
               beginAtZero: true,
               title: {
                 display: true,
-                text: 'Expected GHG reductions over intervention lifetime (Mt CO2-eq)',
+                text: 'Expected average GHG reductions or removals (mitigation outcomes) (tCO₂e/year) ',
                 font: {
                   size: 10,
                   weight: 'bold',

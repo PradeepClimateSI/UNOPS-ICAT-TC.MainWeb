@@ -38,10 +38,14 @@
 
     <ng-template pTemplate="header">
         <tr  >
-            <th>Intervention</th>
-            <th>Current status</th>
-            <th>Status of approval</th>
-            <th>Actions</th>
+            <th rowspan="2">Intervention</th>
+            <th rowspan="2">Current status</th>
+            <th rowspan="2">Status of approval</th>
+            <th  class="text-center" colspan="2">Actions</th>
+        </tr>
+        <tr>
+          <th></th>
+          <th></th>
         </tr>
     </ng-template>
     <ng-template  pTemplate="body" let-climateactions >
@@ -52,14 +56,15 @@
              {{climateactions?.projectStatus?.name}}
           </td>
           <td>
-            {{(climateactions?.projectApprovalStatus?.id == undefined || climateactions?.projectApprovalStatus?.id ==
-            4)?'Proposed':(climateactions?.projectApprovalStatus.id == 3?'Data
-            Requested':(climateactions.projectApprovalStatus.id == 1?'Accepted':(climateactions.projectApprovalStatus.id
+            {{(climateactions?.projectApprovalStatus?.id == undefined || climateactions?.projectApprovalStatus?.id == 4)?'Proposed':(climateactions?.projectApprovalStatus.id == 3?'Data Requested':(climateactions.projectApprovalStatus.id == 1?'Accepted':(climateactions.projectApprovalStatus.id
             == 5?'Active':'Rejected')))}}
           </td>
           <td>
             <i class="pi pi-eye" style="font-size: 1.5rem; color: #000; margin-left: 17%"
               (click)="detail(climateactions)"></i>
+          </td>
+          <td>
+            <p-button  icon="pi pi-trash" severity="danger" (click)="delete(climateactions)"></p-button>
           </td>
 
         </tr>
@@ -67,7 +72,7 @@
   </p-table>
 
 
-
+  <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000"  rejectButtonStyleClass="p-button-text"></p-confirmDialog>
 
 
 

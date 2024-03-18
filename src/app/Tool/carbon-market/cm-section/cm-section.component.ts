@@ -13,6 +13,8 @@ export class CmSectionComponent implements OnInit {
   @Input() assessment: Assessment
   @Input() approach: string
   @Input() isEditMode: boolean;
+  @Input() isCompleted: boolean;
+  @Input() expectedGhgMitigation: number;
  
   openAccordion = 0
 
@@ -45,6 +47,16 @@ export class CmSectionComponent implements OnInit {
   showConditionDialog: boolean;
   visible_condition: boolean;
   condition_message: string;
+  emptySaveDto = new SaveDto()
+  section2_description = 'Environmental integrity ensures that carbon market activities support global mitigation efforts, importantly not causing a net increase in global GHG ' +
+    'emissions compared to a situation where the carbon market activity is not implemented. Social integrity, meanwhile, guarantees the activities benefit local communities and ' +
+    'negative impacts are avoided, aligning with broader sustainability goals. Together, these principles steer carbon markets towards activities with outcomes that are beneficial ' +
+    'for both the planet and its people.'
+  criteria1_description = 'Central to safeguarding environmental integrity is the robust assessment of the additionality of the carbon market intervention and quantification of ' +
+    'the activity’s mitigation outcomes. Safeguarding the activity’s additionality means verifying that the activity was triggered by the revenues from the credits’ sale. This can ' +
+    'be demonstrated through the application of different additionality tests including a regulatory additionality test (going beyond existing laws and regulations), an investment ' +
+    'test and/or a barrier test. For the quantification of mitigation outcomes, it is essential that crediting baselines are set credibly and conservatively and that a robust ' +
+    'monitoring concept is in place. The following questions are therefore focusing on the intervention’s approach to additionality determination, baseline setting and monitoring.'
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -419,7 +431,7 @@ export class CmSectionComponent implements OnInit {
      }
     let result: SaveCMResultDto = new SaveCMResultDto()
     result.result = []
-    result.result = [...event.result]
+    result.result = [...event?.result]
     this.sectionResult.sections.forEach((section: any) => {
       section.criteria.forEach((cr: any) => {
         cr.questions.forEach((q: any) => {
@@ -447,12 +459,15 @@ export class CmSectionComponent implements OnInit {
     result.isDraft = event.isDraft;
     result.type =event.type;
     result.name=event.name;
+    result.expectedGHGMitigation = event.expected_ghg_mitigation
     this.cMAssessmentQuestionControllerServiceProxy.saveResult(result)
       .subscribe(res => {
         if (res) {
           let message = ''
           if (event.isDraft) {
             message = 'Assessment saved successfully. You will be able to continue the assessment from the “In progress” menu'
+          } else if (this.isCompleted) {
+            message = 'Assessment is updated successfully.'
           } else {
             message = 'Assessment created successfully'
           }
@@ -465,10 +480,10 @@ export class CmSectionComponent implements OnInit {
           if (event.isDraft) {
             this.isEditMode = true
             this.setInitialState()
-            this.router.navigate(['../carbon-market-tool-edit'], { queryParams: { id: this.assessment.id, isEdit: true }, relativeTo: this.activatedRoute });
+            this.router.navigate(['../carbon-market-tool-edit'], { queryParams: { id: this.assessment.id, isEdit: true, isContinue: true }, relativeTo: this.activatedRoute });
           
           }
-          if (result.assessment.assessment_approach === 'DIRECT' && !event.isDraft) {
+          if (result.assessment.assessment_approach === 'DIRECT' && !event.isDraft && !this.isCompleted) {
             this.router.navigate(['../carbon-market-tool-result'], { queryParams: { id: this.assessment.id }, relativeTo: this.activatedRoute });
           } 
 
@@ -497,10 +512,11 @@ export class CmSectionComponent implements OnInit {
 }
 
 export class SaveDto {
-  result: CMResultDto[]
+  result: CMResultDto[] = []
   isDraft: boolean = false
-  name:string
-  type:string
+  name:string = ''
+  type:string = ''
+  expected_ghg_mitigation: number = 0
 }
 
 export class SectionResultDto{

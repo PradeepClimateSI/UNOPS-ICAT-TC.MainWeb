@@ -1,5 +1,8 @@
-<label for="q">{{question.label}}<i *ngIf="tootltipCodes.includes(question.code)" class="pi pi-info-circle" pTooltip="{{adoptionTooltip}}" tooltipPosition="top"
+<label for="q" [innerHTML]="question.label"><i *ngIf="tootltipCodes.includes(question.code)" class="pi pi-info-circle" pTooltip="{{adoptionTooltip}}" tooltipPosition="top"
         style="font-size: 1rem"></i></label>
+<p>
+    <i [innerHTML]="question.description"></i>
+</p>
 
 <div class="row p-2">
     <div class="col-4">

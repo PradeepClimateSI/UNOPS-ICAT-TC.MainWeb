@@ -119,6 +119,7 @@ export class ClimateActionComponent implements OnInit  {
   approachList: string[] = ['AR1', 'AR2', 'AR3', 'AR4', 'AR5'];
   typeofAction: string[] = ['Investment','Carbon Market','General tool']
   levelOfImplementation: any[] = [];
+  geographicalAreaCovered: any[] = [];
   characteristicsList: Characteristics[] = [];
   
   barrierBox:boolean=false;
@@ -154,7 +155,7 @@ export class ClimateActionComponent implements OnInit  {
   title = 'htmltopdf';
   wid: number;
   hgt: number;
-  textdlod: any = 'Downloaded date ' + moment().format('YYYY-MM-DD HH:mm:ss');
+  textdlod: any = 'Downloaded date ' + moment().format('DD/MM/YYYY HH:mm:ss');
 
   getUserEnterdCountry: any = '';
   disbaleNdcmappedFromDB: number;
@@ -164,7 +165,7 @@ export class ClimateActionComponent implements OnInit  {
   int_id_year='YYYY';
   int_id_country='Country';
   tooltips: any = {}
-
+  editMode:boolean = false
   fieldNames = FieldNames
 
   constructor(
@@ -191,8 +192,8 @@ export class ClimateActionComponent implements OnInit  {
   { }
 
   async ngOnInit(): Promise<void> {
-
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;
+    this.geographicalAreaCovered= this.masterDataService.level_of_implemetation;
     const token = localStorage.getItem('ACCESS_TOKEN')!; 
     this.userRole =decode<any>(token).role?.code;
     const countryId = token ? decode<any>(token).countryId : 0;
@@ -403,6 +404,7 @@ export class ClimateActionComponent implements OnInit  {
               this.projectProxy.findPolicySectorData(this.editEntytyId ).subscribe( (res) => {
                 this.policySectorArray =res;
                 for(let x of res){
+                  this.finalSectors.push(x.sector)
                   this.sectornames.push(x.sector.name)
                 }
                  this.sectorsJoined=this.sectornames.join(', ')
@@ -592,28 +594,37 @@ export class ClimateActionComponent implements OnInit  {
                
               })
               this.isSaving = true;
-              let allBarriersSelected = new AllBarriersSelected()
-              allBarriersSelected.allBarriers =this.finalBarrierList
-              allBarriersSelected.climateAction =res;
-              this.projectProxy.policyBar(allBarriersSelected).subscribe((res) => {
+              if (this.finalBarrierList.length > 0) {
+                let allBarriersSelected = new AllBarriersSelected()
+                allBarriersSelected.allBarriers =this.finalBarrierList
+                allBarriersSelected.climateAction =res;
+                this.projectProxy.policyBar(allBarriersSelected).subscribe((res) => {
+                  this.messageService.add({
+                    severity: 'success',
+                    summary: 'Success',
+                    detail: 'Intervention  has been saved successfully',
+                    closable: true,
+                  },
+                  
+                  
+                  );
+                },
+                (err) => {
+                  this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error.',
+                    detail: 'Internal server error in policy barriers',
+                    sticky: true,
+                  });
+                })
+              } else {
                 this.messageService.add({
                   severity: 'success',
                   summary: 'Success',
                   detail: 'Intervention  has been saved successfully',
                   closable: true,
-                },
-                
-                
-                );
-              },
-              (err) => {
-                this.messageService.add({
-                  severity: 'error',
-                  summary: 'Error.',
-                  detail: 'Internal server error in policy barriers',
-                  sticky: true,
                 });
-              })
+              }
               
              
              
@@ -820,6 +831,40 @@ export class ClimateActionComponent implements OnInit  {
   back() {
     this.location.back();
   }
+  edit(label: string){
+    if (label === 'Edit') {
+      this.editMode =true;
+    }
+    else {
+      this.editMode =false;
+      this.project.geographicalAreaCovered = this.project.geographicalAreaCovered;
+      this.project.levelofImplemenation = this.project.levelofImplemenation;
+      this.project.dateOfCompletion= this.dateOfCompletion
+      this.project.dateOfImplementation =this.dateOfImplementation;
+
+      this.projectProxy.updateOneClimateAction(this.project)
+      .subscribe(
+        (res) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Intervention update successfully.',
+            closable: true,
+          });
+        },
+        (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error.',
+            detail: 'Internal server error, please try again.',
+            sticky: true,
+          });
+        }
+      )
+
+    }
+  }
+
   confirmBack(label: string) {
     if (label === 'back') {
       this.location.back();

@@ -166,7 +166,7 @@
                 {{  dataRequestList?.investmentParameter?.assessment?.assessmentType}}
               </td>
               <td>
-                {{  dataRequestList?.investmentParameter?.assessment?.from | date: "dd-MM-yyyy " }} - {{ dataRequestList?.investmentParameter?.assessment?.to | date: "dd-MM-yyyy "}}
+                {{  dataRequestList?.investmentParameter?.assessment?.from | date: "dd/MM/yyyy " }} - {{ dataRequestList?.investmentParameter?.assessment?.to | date: "dd/MM/yyyy "}}
               </td>
               <td>{{ dataRequestList?.investmentParameter?.type}}</td>
               <td>{{ dataRequestList?.investmentParameter?.category?.name}}</td>
@@ -258,7 +258,7 @@
                 </td>
                 
               </ng-container>
-              <td>{{ dataRequestList.deadline | date: "dd-MM-yyyy " }}</td>
+              <td>{{ dataRequestList.deadline | date: "dd/MM/yyyy " }}</td>
               <td>
                 {{
                   dataRequestList.dataRequestStatus ==null ? "Just Created" : ""
