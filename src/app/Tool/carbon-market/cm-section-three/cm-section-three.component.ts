@@ -683,7 +683,6 @@ export class CmSectionThreeComponent implements OnInit {
 
   async submit(draftCategory: string, isDraft: boolean = false, name: string, type: string) {
     if (name === 'SCALE_SD' && this.isCompleted) {
-      console.log("if")
       this.confirmationService.confirm({
         message: 'Pls make sure to update "Time frame outcome is sustained section" to update the result.',
         header: 'Warning',
@@ -695,7 +694,6 @@ export class CmSectionThreeComponent implements OnInit {
         }, reject: () => {}
       })
     } else {
-      console.log("else")
       this.nextClicked = true
       this.results = []
       this.categoriesToSave.push(draftCategory)

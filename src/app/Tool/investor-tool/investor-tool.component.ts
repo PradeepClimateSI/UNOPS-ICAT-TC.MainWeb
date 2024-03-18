@@ -287,7 +287,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.isDisableIntervention = true
     this.assessment.climateAction = this.policies.find((i)=>i.id==Number(interventonId))! 
     this.assessment.assessmentType = assessmentType;
-    console.log(this.policies.find((i)=>i.id==Number(interventonId)),this.assessment.assessmentType)
     let event:any = {}
     event.value = this.assessment.climateAction
     this.onSelectIntervention(event)
@@ -945,8 +944,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       })
       return
     }
-
-    console.log(this.outcomeData)
 
 
     if (this.assessment.assessment_approach === 'Direct') {

@@ -290,7 +290,6 @@ export class PortfolioTrack4Component implements OnInit {
     this.isDisableIntervention = true
     this.assessment.climateAction = this.policies.find((i)=>i.id==Number(interventonId))! 
     this.assessment.assessmentType = assessmentType;
-    console.log(this.policies.find((i)=>i.id==Number(interventonId)),this.assessment.assessmentType)
     let event:any = {}
     event.value = this.assessment.climateAction
     this.onSelectIntervention(event)
@@ -1022,19 +1021,6 @@ export class PortfolioTrack4Component implements OnInit {
   }
 
   checkValidation(data: any[], type: string){
-    // return (data?.filter(investorAssessment =>
-    //   (investorAssessment.relavance !== undefined) &&
-    //   (investorAssessment.likelihood !== undefined) &&
-    //   (investorAssessment.likelihood_justification !== undefined && investorAssessment.likelihood_justification !== null && investorAssessment.likelihood_justification !== '') ||
-    //   (investorAssessment.relavance == 0))?.length === data?.length && type == 'process') ||
-    //   (data.filter(investorAssessment =>
-    //   ((investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '') &&
-    //     (investorAssessment.score !== undefined && investorAssessment.score !== null))
-    //   )?.length === data.length && type == 'outcome') ||
-    //   (data.filter(sdg =>
-    //   (sdg.data?.filter((data: { justification: undefined; }) =>
-    //     (data.justification !== undefined))?.length === (sdg.data?.length)
-    //   ))?.length === data.length && type == 'sdg')
     let isValid: boolean = false
     for (let investorAssessment of data) {
       if (type === 'process' ) {

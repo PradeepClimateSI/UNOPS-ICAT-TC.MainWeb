@@ -71,8 +71,6 @@ export class PortfolioAddComponent implements OnInit {
         { label: 'Ex-post', value: 'Ex-post' },
         { label: 'Ex-ante', value: 'Ex-ante' },
     ];
-    // this.portfolio.date = this.currentDate.toLocaleDateString()
-    console.log(this.portfolio.date)
 
     this.apporoachList = [
       { label: 'Direct', value: 'Direct' },

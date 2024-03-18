@@ -137,7 +137,6 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     this.isDisableIntervention = true
     this.assessment.climateAction = this.policies.find((i)=>i.id==Number(interventonId))! 
     this.assessment.assessmentType = assessmentType;
-    console.log(this.policies.find((i)=>i.id==Number(interventonId)),this.assessment.assessmentType)
     let event:any = {}
     event.value = this.assessment.climateAction
     this.onSelectIntervention(event)
@@ -197,8 +196,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
           areas.push(level)
         }
       })
-      this.geographicalAreasCoveredArr = areas
-      console.log(areas)
+      this.geographicalAreasCoveredArr = areas;
       this.geographicalArea = this.geographicalAreasCoveredArr[0]
       this.cm_detail.sectorsCovered.map(sector => {
         this.sectorArray.push(sector.sector)
@@ -359,7 +357,6 @@ export class CarbonMarketAssessmentComponent implements OnInit {
                   }
                 }
               }, error => {
-                console.error(error)
                 this.messageService.add({
                   severity: 'error',
                   summary: 'Error',
