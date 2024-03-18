@@ -7,6 +7,7 @@ import decode from 'jwt-decode';
 import { Chart, ChartType } from 'chart.js';
 import { HeatMapScore, TableData } from 'app/charts/heat-map/heat-map.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as moment from 'moment';
 @Component({
   selector: 'app-all-too-dashbord',
   templateUrl: './all-too-dashbord.component.html',
@@ -137,8 +138,19 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
   setAlldata() {
     let tool ='ALL_OPTION'
     this.portfolioServiceProxy.getAlltoolDashboardData(this.selectedPortfolio ? this.selectedPortfolio.id : 0, 1, this.rows, this.selectedIds,tool).subscribe((res) => {
-      this.allAssessments = res.meta.allData
+      if(res.meta.allData && res.meta.allData.length>0){
+        this.allAssessments = this.mapOptionlable(res.meta.allData)
+      }
     });
+  }
+  mapOptionlable(data: any[]) {
+    return data.map(item => {
+      let label:string = item.climateAction.policyName
+      if (item.from && item.to) {
+       label = label + " - " + moment(new Date(item.from)).format("DD/MM/YYYY").toString() + " - " + moment(new Date(item.to)).format("DD/MM/YYYY").toString()
+      }
+      return {label:label}
+    })
   }
 
   selectPortfolio() {
@@ -312,11 +324,12 @@ export class AllTooDashbordComponent implements OnInit,AfterViewInit  {
         ? 1
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
-    this.investorProxy.getDashboardAllData(pageNumber,this.rows,this.projectName,this.selectedPortfolio?this.selectedPortfolio.id:0).subscribe((res) => {
-      this.tableData=res.items;
+    let skip = pageNumber * this.rows;
+    this.investorProxy.getDashboardAllData(skip,this.rows,this.projectName,this.selectedPortfolio?this.selectedPortfolio.id:0).subscribe((res) => {
+      this.tableData=res[0];
       this.heatMapScore = this.tableData.map(item => {return {processScore: item.process_score, outcomeScore: item.outcome_score}})
       this.heatMapData = this.tableData.map(item => {return {interventionId: item.climateAction?.intervention_id, interventionName: item.climateAction?.policyName, processScore: item.process_score, outcomeScore: item.outcome_score}}) 
-      this.totalRecords= res.meta.totalItems
+      this.totalRecords= res[1]
       this.loading = false;
     }, err => {
       this.loading = false;});

@@ -77,7 +77,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   assessment_period_info = assessment_period_info
   isCompleted: boolean = false;
   isContinue: boolean = false;
-
+  isDisableIntervention: boolean = false;
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
     private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
@@ -106,11 +106,17 @@ export class CarbonMarketAssessmentComponent implements OnInit {
 
     await this.getPolicies()
     await this.getSetors()
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe(async params => {
       this.assessmentId = params['id']
       this.isEditMode = params['isEdit']
       params['iscompleted'] == 'true' ? (this.isCompleted = true) : false
       params['isContinue'] == 'true' ? (this.isContinue = true) : false
+      if(params['interventionId'] && params['assessmentType']){
+        await this.getPolicies().then( x=>
+          this.setDataFromFlow(params['interventionId'],params['assessmentType'])
+        )
+        
+      }
 
     })
     await this.setInitialStates()
@@ -126,6 +132,15 @@ export class CarbonMarketAssessmentComponent implements OnInit {
 
     this.international_tooltip = 'Name of international or private carbon market standard under which the intervention is registered.'
     await this.getCharacteristics();
+  }
+  setDataFromFlow(interventonId:string, assessmentType:string) {
+    this.isDisableIntervention = true
+    this.assessment.climateAction = this.policies.find((i)=>i.id==Number(interventonId))! 
+    this.assessment.assessmentType = assessmentType;
+    console.log(this.policies.find((i)=>i.id==Number(interventonId)),this.assessment.assessmentType)
+    let event:any = {}
+    event.value = this.assessment.climateAction
+    this.onSelectIntervention(event)
   }
   watchVideo(){
     let ref = this.dialogService.open(GuidanceVideoComponent, {
