@@ -429,9 +429,10 @@ export class ClimateActionComponent implements OnInit  {
 
       docFilter.push('documentOwnerId||$eq||' + this.editEntytyId);
       this.docService.getDocuments(this.editEntytyId,1)
-        .subscribe((res: any) => {
-          this.selectedDocuments = res;
+        .subscribe(async (res: any) => {
+          this.selectedDocuments =await  res;
         });
+      
     }
 
     if (this.anonymousEditEntytyId && this.anonymousEditEntytyId != 0) {
@@ -455,6 +456,9 @@ export class ClimateActionComponent implements OnInit  {
           this.selectedDocuments = res.data;
         });
     }
+  
+    console.log(this.documents);
+    console.log(this.documentsDocumentOwner);
   }
 
   async getCountryList(){
