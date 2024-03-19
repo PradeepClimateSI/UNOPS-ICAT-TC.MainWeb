@@ -160,6 +160,11 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   async setInitialStates() {
     if (this.isEditMode) {
       this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+      this.minDate = new Date(
+        this.assessment.climateAction.dateOfImplementation.year(),
+        this.assessment.climateAction.dateOfImplementation.month(),
+        this.assessment.climateAction.dateOfImplementation.date(),
+      )
       this.from_date= new Date(
         this.assessment.from?.year(),
         this.assessment.from?.month(),

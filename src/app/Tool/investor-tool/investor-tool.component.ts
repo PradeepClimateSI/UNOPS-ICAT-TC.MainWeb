@@ -180,6 +180,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   isContinue: boolean = false;
   isDisableIntervention: boolean = false;
   format = "### \'%\'"
+  completModeSectorList: Sector[]=[];
+  selectedSectorsCompleteMode: Sector[] = [];
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -214,7 +216,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.activatedRoute.queryParams.subscribe(async params => {
       params['isEdit'] == 'true' ? (this.isEditMode = true) : false;
       params['iscompleted'] == 'true' ? (this.isCompleted = true) : false
-      params['isContinue'] == 'true' ? (this.isContinue = true) : false
+      params['isContinue'] == 'true' ? (this.isCompleted = true) : false
       this.assessmentId = params['id'];
       if(params['interventionId'] && params['assessmentType']){
         await this.getPolicies().then( x=>
@@ -232,6 +234,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       await this.getCharacteristics();
 
     } else {
+      
       try {
         await this.getSavedAssessment()
       }
@@ -305,6 +308,11 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.selectedSDGs = await this.investorToolControllerproxy.getSelectedSDGs(this.assessmentId).toPromise();
     this.selectedSDGsWithAnswers = await this.investorToolControllerproxy.getSelectedSDGsWithAnswers(this.assessmentId).toPromise();
     this.investorAssessment = await this.investorToolControllerproxy.getResultByAssessment(this.assessmentId).toPromise();
+    this.minDate = new Date(
+      this.assessment.climateAction.dateOfImplementation.year(),
+      this.assessment.climateAction.dateOfImplementation.month(),
+      this.assessment.climateAction.dateOfImplementation.date(),
+    )
     this.from_date = new Date(
       this.assessment.from?.year(),
       this.assessment.from?.month(),
@@ -351,7 +359,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       }
     })
 
-
     this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise();
     this.policies.push(this.assessment.climateAction);
     this.finalBarrierList = this.assessment['policy_barrier'].map((i: { is_affected: boolean; characteristics: Characteristics[]; explanation: string; barrier: string; })=> {
@@ -378,13 +385,23 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.geographicalAreasCoveredArr = areas;
 
     this.geographicalArea = this.geographicalAreasCoveredArr[0]
+    
+   
+    
+    this.completModeSectorList = this.assessment.climateAction.policySector.map(i=> i.sector)
+    this.completModeSectorList.map((sector: Sector) => {
+      let sec = new Sector()
+      sec.id = sector.id
+      sec.name = sector.name
+      this.sectorList.push(sec)
+    })
     this.assessment['sector'].map((sector: Sector) => {
       let sec = new Sector()
       sec.id = sector.id
       sec.name = sector.name
       this.sectorArray.push(sec)
     })
-    this.sectorList = this.sectorArray
+    this.selectedSectorsCompleteMode =  this.sectorArray
     this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
     this.setFrom();
     this.setTo();
@@ -728,7 +745,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   }
 
   onChangeGeoAreaCovered(){
-    if(this.assessment.climateAction.geographicalAreaCovered && this.geographicalArea.name !==this.assessment.climateAction.geographicalAreaCovered && !this.isCompleted){
+    if(this.assessment.climateAction.geographicalAreaCovered && this.geographicalArea.name !==this.assessment.climateAction.geographicalAreaCovered ){
       this.confirmationService.confirm({
         message: `You selected a geographical scope that deviates from the one that was assigned to this intervention- ${this.assessment.climateAction.geographicalAreaCovered }. Are you sure you want to continue with this selection?`,
         header: 'Confirmation',
@@ -740,11 +757,21 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
         accept: () => {
         },
         reject: () => { 
-          this.geographicalArea = this.geographicalAreasCovered.find(item=>{
-            if (item.name==this.assessment.climateAction.geographicalAreaCovered){
-              return item
-            }
-          })
+          if(this.isCompleted){
+            this.geographicalArea = this.geographicalAreasCovered.find(item=>{
+              if (item.name==this.assessment['geographicalAreasCovered'][0].name){
+                return item
+              }
+            })
+          }
+          else{
+            this.geographicalArea = this.geographicalAreasCovered.find(item=>{
+              if (item.name==this.assessment.climateAction.geographicalAreaCovered){
+                return item
+              }
+            })
+          }
+          
         },
       });
     }
@@ -752,7 +779,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   onItemSelectSectors(event: any) {
     if(this.assessment.climateAction.policySector){
-      if(this.assessment.climateAction.policySector.length !=  this.sectorArray.length && !this.isCompleted){
+      if(this.assessment.climateAction.policySector.length !=  this.sectorArray.length ){
         this.closeMultiSelect();
         this.confirmationService.confirm({
           message: `You selected sectors that deviates from the one that was assigned to this intervention- ${ this.assessment.climateAction.policySector.map(i=> i.sector.name).join(",")}. Are you sure you want to continue with this selection?`,
@@ -765,7 +792,11 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
           accept: () => {
           },
           reject: () => { 
-            this.sectorArray = this.sectorList
+            if(!this.isCompleted){
+              this.sectorArray = this.sectorList
+            }else{
+             this.sectorArray = this.selectedSectorsCompleteMode
+            }
           },
         });
       }
@@ -885,7 +916,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.tabView.tabs[this.selectedIndex].header;
   }
 
-  async onsubmit(form: NgForm) {
+  async onsubmit(form: NgForm, updateData?: {category?: any, type: string}) {
     for (let item of this.processData) {
       for (let item2 of item.data) {
         if ((item2.likelihood == null || item2.relavance == null) && item2.relavance != 0) {
@@ -947,57 +978,88 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
 
     if (this.assessment.assessment_approach === 'Direct') {
-      let finalArray = this.processData.concat(this.outcomeData)
-      if (this.isEditMode == true) {
-        this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
-        finalArray.map(x => x.data.map(y => y.assessment = this.assessment));
-      }
-      else {
-        finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
-      }
 
-      for (let i = 0; i < this.sdgDataSendArray2.length; i++) {
-        for (let item of this.sdgDataSendArray2[i].data) {
-          item.portfolioSdg = this.selectedSDGs[i];
-        }
+      this.confirmationService.confirm({
+        message: `Are you sure want to update`,
+        header: 'Confirmation',
+        acceptIcon: 'icon-not-visible',
+        rejectIcon: 'icon-not-visible',
+        acceptLabel: 'Update',
+        rejectLabel: 'Go back',
+        key: 'updateConfirm',
+        accept: async () => {
+          if (updateData?.category?.categoryCode === 'SCALE_SD' && this.isCompleted) {
+            this.confirmationService.confirm({
+              message: 'Pls make sure to update "Time frame outcome is sustained section" to update the result.',
+              header: 'Warning',
+              acceptLabel: 'Okay',
+              rejectLabel: 'Cancel',
+              accept: () => {
+                if (updateData) {this.next(updateData.category,updateData.type)}
+              }, reject: () => {}
+            })
+          } else {
+            let finalArray = this.processData.concat(this.outcomeData)
+            if (this.isEditMode == true) {
+              this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+              finalArray.map(x => x.data.map(y => y.assessment = this.assessment));
+            }
+            else {
+              finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
+            }
+  
+            for (let i = 0; i < this.sdgDataSendArray2.length; i++) {
+              for (let item of this.sdgDataSendArray2[i].data) {
+                item.portfolioSdg = this.selectedSDGs[i];
+              }
+  
+            }
+  
+            for (let i = 0; i < this.sdgDataSendArray4.length; i++) {
+              for (let item of this.sdgDataSendArray4[i].data) {
+                item.portfolioSdg = this.selectedSDGs[i];
+              }
+  
+            }
+  
+            let data: any = {
+              finalArray: finalArray,
+              scaleSDGs: this.sdgDataSendArray2,
+              sustainedSDGs: this.sdgDataSendArray4,
+              sdgs: this.selectedSDGsWithAnswers,
+              isEdit: this.isEditMode,
+              isDraft: false,
+  
+            }
+  
+            this.investorToolControllerproxy.createFinalAssessment(data)
+              .subscribe(_res => {
+                let task = this.isCompleted ? 'updated' : 'created'
+                this.messageService.add({
+                  severity: 'success',
+                  summary: 'Success',
+                  detail: `Assessment has been ${task} successfully`,
+                  closable: true,
+                })
+                if (!this.isCompleted) {
+                  this.showResults();
+                }
+  
+              }, error => {
+                this.messageService.add({
+                  severity: 'error',
+                  summary: 'Error',
+                  detail: 'Assessment detail saving failed',
+                  closable: true,
+                })
+              })
+          }
+        },
+        reject: () => {
 
-      }
+        },
+      });
 
-      for (let i = 0; i < this.sdgDataSendArray4.length; i++) {
-        for (let item of this.sdgDataSendArray4[i].data) {
-          item.portfolioSdg = this.selectedSDGs[i];
-        }
-
-      }
-
-      let data: any = {
-        finalArray: finalArray,
-        scaleSDGs: this.sdgDataSendArray2,
-        sustainedSDGs: this.sdgDataSendArray4,
-        sdgs: this.selectedSDGsWithAnswers,
-        isEdit: this.isEditMode,
-        isDraft: false,
-
-      }
-
-      this.investorToolControllerproxy.createFinalAssessment(data)
-        .subscribe(_res => {
-
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Assessment has been created successfully',
-            closable: true,
-          })
-          this.showResults();
-        }, error => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Assessment detail saving failed',
-            closable: true,
-          })
-        })
 
     }
     else {
