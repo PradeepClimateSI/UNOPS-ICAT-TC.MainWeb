@@ -881,7 +881,7 @@ export class PortfolioTrack4Component implements OnInit {
       })
   }
 
-  async onsubmit(form: NgForm, updateData?: {category?: OutcomDataDto, type: string}) {
+  async onsubmit(form: NgForm, updateData?: {category?: any, type: string}) {
 
     for (let item of this.processData) {
       for (let item2 of item.data) {
@@ -963,7 +963,7 @@ export class PortfolioTrack4Component implements OnInit {
               acceptLabel: 'Okay',
               rejectLabel: 'Cancel',
               accept: () => {
-                
+                if (updateData) {this.next(updateData.category,updateData.type)}
               }, reject: () => {}
             })
           } else {

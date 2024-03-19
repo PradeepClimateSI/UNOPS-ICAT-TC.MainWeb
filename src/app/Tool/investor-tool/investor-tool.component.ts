@@ -916,7 +916,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.tabView.tabs[this.selectedIndex].header;
   }
 
-  async onsubmit(form: NgForm, updateData?: {category?: OutcomDataDto, type: string}) {
+  async onsubmit(form: NgForm, updateData?: {category?: any, type: string}) {
     for (let item of this.processData) {
       for (let item2 of item.data) {
         if ((item2.likelihood == null || item2.relavance == null) && item2.relavance != 0) {
@@ -995,7 +995,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
               acceptLabel: 'Okay',
               rejectLabel: 'Cancel',
               accept: () => {
-                
+                if (updateData) {this.next(updateData.category,updateData.type)}
               }, reject: () => {}
             })
           } else {
