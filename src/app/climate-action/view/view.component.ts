@@ -184,12 +184,12 @@ export class ViewComponent implements OnInit, AfterViewInit {
 
   };
   addproject() {
-    this.router.navigate(['/add-policies']);
+    this.router.navigate(['/add-interventions']);
   }
 
 
   detail(climateactions: Project) {
-    this.router.navigate(['app/add-policies'], {
+    this.router.navigate(['app/add-interventions'], {
 
       queryParams: { id: climateactions.id, flag: this.flag },
 
