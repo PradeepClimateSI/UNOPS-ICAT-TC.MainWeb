@@ -978,89 +978,37 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
 
     if (this.assessment.assessment_approach === 'Direct') {
-
-      this.confirmationService.confirm({
-        message: `Are you sure want to update`,
-        header: 'Confirmation',
-        acceptIcon: 'icon-not-visible',
-        rejectIcon: 'icon-not-visible',
-        acceptLabel: 'Update',
-        rejectLabel: 'Go back',
-        key: 'updateConfirm',
-        accept: async () => {
-          if (updateData?.category?.categoryCode === 'SCALE_SD' && this.isCompleted) {
-            this.confirmationService.confirm({
-              message: 'Pls make sure to update "Time frame outcome is sustained section" to update the result.',
-              header: 'Warning',
-              acceptLabel: 'Okay',
-              rejectLabel: 'Cancel',
-              accept: () => {
-                if (updateData) {this.next(updateData.category,updateData.type)}
-              }, reject: () => {}
-            })
-          } else {
-            let finalArray = this.processData.concat(this.outcomeData)
-            if (this.isEditMode == true) {
-              this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
-              finalArray.map(x => x.data.map(y => y.assessment = this.assessment));
-            }
-            else {
-              finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
-            }
-  
-            for (let i = 0; i < this.sdgDataSendArray2.length; i++) {
-              for (let item of this.sdgDataSendArray2[i].data) {
-                item.portfolioSdg = this.selectedSDGs[i];
-              }
-  
-            }
-  
-            for (let i = 0; i < this.sdgDataSendArray4.length; i++) {
-              for (let item of this.sdgDataSendArray4[i].data) {
-                item.portfolioSdg = this.selectedSDGs[i];
-              }
-  
-            }
-  
-            let data: any = {
-              finalArray: finalArray,
-              scaleSDGs: this.sdgDataSendArray2,
-              sustainedSDGs: this.sdgDataSendArray4,
-              sdgs: this.selectedSDGsWithAnswers,
-              isEdit: this.isEditMode,
-              isDraft: false,
-  
-            }
-  
-            this.investorToolControllerproxy.createFinalAssessment(data)
-              .subscribe(_res => {
-                let task = this.isCompleted ? 'updated' : 'created'
-                this.messageService.add({
-                  severity: 'success',
-                  summary: 'Success',
-                  detail: `Assessment has been ${task} successfully`,
-                  closable: true,
-                })
-                if (!this.isCompleted) {
-                  this.showResults();
-                }
-  
-              }, error => {
-                this.messageService.add({
-                  severity: 'error',
-                  summary: 'Error',
-                  detail: 'Assessment detail saving failed',
-                  closable: true,
-                })
+      if(this.isCompleted){
+        this.confirmationService.confirm({
+          message: `Are you sure want to update`,
+          header: 'Confirmation',
+          acceptIcon: 'icon-not-visible',
+          rejectIcon: 'icon-not-visible',
+          acceptLabel: 'Update',
+          rejectLabel: 'Go back',
+          key: 'updateConfirm',
+          accept: async () => {
+            if (updateData?.category?.categoryCode === 'SCALE_SD' && this.isCompleted) {
+              this.confirmationService.confirm({
+                message: 'Pls make sure to update "Time frame outcome is sustained section" to update the result.',
+                header: 'Warning',
+                acceptLabel: 'Okay',
+                rejectLabel: 'Cancel',
+                accept: () => {
+                  if (updateData) {this.next(updateData.category,updateData.type)}
+                }, reject: () => {}
               })
-          }
-        },
-        reject: () => {
-
-        },
-      });
-
-
+            } else {
+            this.saveResults()
+            }
+          },
+          reject: () => {
+  
+          },
+        });
+      }else{
+        this.saveResults()
+      }
     }
     else {
       let finalArray: any = this.processData.concat(this.outcomeData)
@@ -1084,8 +1032,63 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
           })
         })
     }
+  }
 
+  async saveResults(){
+    let finalArray = this.processData.concat(this.outcomeData)
+    if (this.isEditMode == true) {
+      this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+      finalArray.map(x => x.data.map(y => y.assessment = this.assessment));
+    }
+    else {
+      finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
+    }
 
+    for (let i = 0; i < this.sdgDataSendArray2.length; i++) {
+      for (let item of this.sdgDataSendArray2[i].data) {
+        item.portfolioSdg = this.selectedSDGs[i];
+      }
+
+    }
+
+    for (let i = 0; i < this.sdgDataSendArray4.length; i++) {
+      for (let item of this.sdgDataSendArray4[i].data) {
+        item.portfolioSdg = this.selectedSDGs[i];
+      }
+
+    }
+
+    let data: any = {
+      finalArray: finalArray,
+      scaleSDGs: this.sdgDataSendArray2,
+      sustainedSDGs: this.sdgDataSendArray4,
+      sdgs: this.selectedSDGsWithAnswers,
+      isEdit: this.isEditMode,
+      isDraft: false,
+
+    }
+
+    this.investorToolControllerproxy.createFinalAssessment(data)
+      .subscribe(_res => {
+        let task = this.isCompleted? 'updated' :'created'
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: `Assessment has been ${task} successfully`,
+          closable: true,
+        })
+        if(!this.isCompleted){
+          this.showResults();
+        }
+        
+      }, error => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Assessment detail saving failed',
+          closable: true,
+        })
+      })
   }
 
   async showResults() {

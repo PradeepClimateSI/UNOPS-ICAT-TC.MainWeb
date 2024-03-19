@@ -146,10 +146,12 @@ export class AllTooDashbordComponent implements OnInit, AfterViewInit {
   mapOptionlable(data: any[]) {
     return data.map(item => {
       let label: string = item.climateAction.policyName
+      let id :number=item.id;
       if (item.from && item.to) {
-        label = label + " - " + moment(new Date(item.from)).format("DD/MM/YYYY").toString() + " - " + moment(new Date(item.to)).format("DD/MM/YYYY").toString()
+        label = label + " - " + moment(new Date(item.from)).format("DD/MM/YYYY").toString() + " - " + moment(new Date(item.to)).format("DD/MM/YYYY").toString();
+        
       }
-      return { label: label }
+      return { label: label,id:id }
     })
   }
 
@@ -288,7 +290,7 @@ export class AllTooDashbordComponent implements OnInit, AfterViewInit {
   }
   onSelectAssessment() {
     this.selectedIds = this.selectedAssessments.map((item: any) => item.id)
-    this.projectName = this.selectedAssessments.map((item: any) => item.label)
+    this.projectName = this.selectedAssessments.map((item: any) => item.id)
     this.callTable()
   }
 
