@@ -6,7 +6,6 @@ export const environment = {
   authBaseUrlAPI: 'https://tc-auth.climatesi.com',
   baseUrlAPIDocUploadAPI: 'http://localhost:7080/document/upload2',
   baseUrlAuditlog: '',
-  videoURL: ''
 
 
 };
