@@ -39860,15 +39860,7 @@ function throwException(message: string, status: number, response: string, heade
         return _observableThrow(new ApiException(message, status, response, headers, null));
 }
  
-export enum DocumentsDocumentOwner {
-    Project = <any>"Project",
-    Country = <any>"Country",
-    CountryNC = <any>"CountryNC",
-    CountryBUR = <any>"CountryBUR",
-    CountryBTR = <any>"CountryBTR",
-    CountryNDC = <any>"CountryNDC",
-    CountryGHG = <any>"CountryGHG",
-}
+
 
 
 function blobToText(blob: any): Observable<string> {
