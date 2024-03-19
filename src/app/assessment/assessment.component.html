@@ -41,7 +41,7 @@
               <div class="row">
                 <button pButton pRipple class="col btn btn-primary btn-block text-uppercase" type='submit' (click)="viewResult(results.assessment.id, results.averageProcess, results.averageOutcome, results.assessment.tool,results.assessment.assessment_method )"> View</button>
                 <button pButton pRipple class="col ml-10 btn btn-primary btn-block text-uppercase" type='submit' (click)="editAssessment(results.assessment)"> Edit</button>
-                <button pButton pRipple class="col ml-10 btn btn-delete btn-block text-uppercase" type='submit' (click)="deleteAssessment(results.assessment.id,results.assessment.tool)"> Delete</button>
+                <button *ngIf="loggedUser && results.assessment.user.id === loggedUser.id" pButton pRipple class="col ml-10 btn btn-delete btn-block text-uppercase" type='submit' (click)="deleteAssessment(results.assessment.id,results.assessment.tool)"> Delete</button>
               </div>
             </td>
           </tr>

@@ -5,7 +5,8 @@ import { MasterDataService } from 'app/shared/master-data.service';
 import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Table } from 'primeng/table';
-import { Assessment, AssessmentControllerServiceProxy, MethodologyAssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { AppService } from 'shared/AppService';
+import { Assessment, AssessmentControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, User, UsersControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-assessment',
@@ -22,6 +23,7 @@ export class AssessmentComponent implements OnInit {
   loading: boolean;
   totalRecords: number
   load: boolean = false
+  loggedUser: User
 
   dt2: Table
   rows: number = 10;
@@ -34,7 +36,9 @@ export class AssessmentComponent implements OnInit {
     protected dialogService: DialogService,
     public assessmentServiceControllerProxy: AssessmentControllerServiceProxy,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private appService: AppService,
+    private usersControllerServiceProxy: UsersControllerServiceProxy
   ) { }
 
 
@@ -42,6 +46,12 @@ export class AssessmentComponent implements OnInit {
 
   async ngOnInit() {
     this.loading = true;
+    let loginProfileId = this.appService.getProfileId()
+    if (loginProfileId) {
+      let user = await this.usersControllerServiceProxy.getUserLoginProfile(loginProfileId).toPromise()
+      if (user) this.loggedUser = user
+    }
+
     await this.loadData({})
 
   }
