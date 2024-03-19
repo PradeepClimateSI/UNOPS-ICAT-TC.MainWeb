@@ -588,14 +588,14 @@
                         <div class="btn btn-primary text-uppercase" (click)="next(category,'outcome')">
                           Next
                         </div>
-                        <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="isCompleted ? onsubmit(fData1):saveDraft(category,category.CategoryName,'out')">
+                        <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="isCompleted ? onsubmit(fData1, {category: category, type: 'outcome'}):saveDraft(category,category.CategoryName,'out')">
                           {{isCompleted ? 'Update': 'Save'}}  
                         </div>
                       </div>
                     </div>
                     <div class="row justify-content-end" *ngIf="activeIndex2==5 && activeIndexMain==1">
                       <div class="d-flex flex-row-reverse mt-20 ">
-                        <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="isCompleted ? onsubmit(fData1):saveDraft(category,category.CategoryName,'out')">
+                        <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="isCompleted ? onsubmit(fData1, {category: category, type: 'outcome'}):saveDraft(category,category.CategoryName,'out')">
                           {{isCompleted ? 'Update': 'Save'}}  
                         </div>
                       </div>
@@ -672,7 +672,7 @@
                         <div class="btn btn-primary text-uppercase" (click)="nextSDG(sdgDataSendArray2,'scaleSD')">
                           Next
                         </div>
-                        <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="isCompleted ? onsubmit(fData1): saveDraft(category,category.CategoryName,'out')">
+                        <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="isCompleted ? onsubmit(fData1, {category: category, type: 'outcome'}): saveDraft(category,category.CategoryName,'out')">
                           {{isCompleted ? 'Update': 'Save'}}  
                         </div>
                       </div>
@@ -745,7 +745,7 @@
                         <div class="btn btn-primary text-uppercase" (click)="nextSDG(sdgDataSendArray4,'sustainedSD')">
                           Next
                         </div>
-                        <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="isCompleted ? onsubmit(fData1): saveDraft(category,category.CategoryName,'out')">
+                        <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="isCompleted ? onsubmit(fData1, {category: category, type: 'outcome'}): saveDraft(category,category.CategoryName,'out')">
                           {{isCompleted ? 'Update': 'Save'}}  
                         </div>
                       </div>

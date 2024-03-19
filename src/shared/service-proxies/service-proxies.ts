@@ -39741,6 +39741,7 @@ export class Notification implements INotification {
         return result;
     }
 }
+ 
 export enum DocumentsDocumentOwner {
     Project = <any>"Project",
     Country = <any>"Country",
