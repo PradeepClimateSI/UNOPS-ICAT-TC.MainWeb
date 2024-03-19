@@ -35528,15 +35528,7 @@ export interface IUpdateAssessmentDto {
 
     [key: string]: any;
 }
-export enum DocumentsDocumentOwner {
-    Project = <any>"Project",
-    Country = <any>"Country",
-    CountryNC = <any>"CountryNC",
-    CountryBUR = <any>"CountryBUR",
-    CountryBTR = <any>"CountryBTR",
-    CountryNDC = <any>"CountryNDC",
-    CountryGHG = <any>"CountryGHG",
-}
+
 export class GetManyAssessmentCMDetailResponseDto implements IGetManyAssessmentCMDetailResponseDto {
     data: AssessmentCMDetail[];
     count: number;
@@ -39749,6 +39741,16 @@ export class Notification implements INotification {
         return result;
     }
 }
+export enum DocumentsDocumentOwner {
+    Project = <any>"Project",
+    Country = <any>"Country",
+    CountryNC = <any>"CountryNC",
+    CountryBUR = <any>"CountryBUR",
+    CountryBTR = <any>"CountryBTR",
+    CountryNDC = <any>"CountryNDC",
+    CountryGHG = <any>"CountryGHG",
+}
+
 
 export interface INotification {
     createdBy: string;
@@ -39771,15 +39773,6 @@ export interface INotification {
 export enum CountryStatus {
     Active = <any>"Active",
     Deactivated = <any>"Deactivated",
-}
-export enum DocumentsDocumentOwner {
-    Project = <any>"Project",
-    Country = <any>"Country",
-    CountryNC = <any>"CountryNC",
-    CountryBUR = <any>"CountryBUR",
-    CountryBTR = <any>"CountryBTR",
-    CountryNDC = <any>"CountryNDC",
-    CountryGHG = <any>"CountryGHG",
 }
 
 export enum ParameterRequestTool {
