@@ -153,15 +153,7 @@
                     </p>
                   </ng-container>
                   <ng-template #elseBlocksector>
-                    <ng-container *ngIf="isDownloadMode == 1 ">
-                      <p-multiSelect [disabled]="editEntytyId > 0" name="sector" #sector="ngModel" [(ngModel)]="finalSectors" [options]="sectorList" appendTo="body" optionLabel="name"></p-multiSelect>
-                    </ng-container>
-                    <!-- <ng-container *ngIf="isDownloadMode == 0 && editMode">
-                      <p-multiSelect [disabled]="editEntytyId > 0 && !editMode "  name="sector"
-                        #sector="ngModel" [(ngModel)]="finalSectors" [options]="sectorList" appendTo="body"
-                        optionLabel="name" ></p-multiSelect>                      
-                    </ng-container> -->
-                    <ng-container *ngIf="isDownloadMode == 0 ">
+                    <ng-container >
                       <input [disabled]="editEntytyId > 0 " type="text" maxlength="50" name="projsector" #projsector="ngModel" class="p-inputtext" [(ngModel)]="sectorsJoined" [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText />
                     </ng-container>
                   </ng-template>
