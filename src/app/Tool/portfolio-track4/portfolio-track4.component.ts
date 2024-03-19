@@ -947,17 +947,59 @@ export class PortfolioTrack4Component implements OnInit {
     }
 
     if (this.assessment.assessment_approach === 'Direct') {
-      this.confirmationService.confirm({
-        message: `Are you sure want to update`,
-        header: 'Confirmation',
-        acceptIcon: 'icon-not-visible',
-        rejectIcon: 'icon-not-visible',
-        acceptLabel: 'Update',
-        rejectLabel: 'Go back',
-        key: 'updateConfirm',
-        accept: async () => {
+      if(this.isCompleted){
+        this.confirmationService.confirm({
+          message: `Are you sure want to update`,
+          header: 'Confirmation',
+          acceptIcon: 'icon-not-visible',
+          rejectIcon: 'icon-not-visible',
+          acceptLabel: 'Update',
+          rejectLabel: 'Go back',
+          key: 'updateConfirm',
+          accept: async () => {
+            this.saveResults()
+          },
+          reject: () => {
+  
+          },
+        });
+      }else{
+        this.saveResults()
+      }
+      
+      
 
-          let finalArray = this.processData.concat(this.outcomeData)
+    }
+    else {
+      let finalArray = this.processData.concat(this.outcomeData)
+      finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment));
+      //@ts-ignore - We are accepting Array in back-end
+      this.investorToolControllerproxy.createFinalAssessmentIndirect(finalArray)
+        .subscribe(_res => {
+          let task = this.isCompleted? 'updated' :'created'
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: `Assessment has been ${task} successfully`,
+                closable: true,
+          })
+          this.showResults();
+
+        }, error => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Assessment detail saving failed',
+            closable: true,
+          })
+        })
+    }
+
+
+  }
+
+  async saveResults(){
+    let finalArray = this.processData.concat(this.outcomeData)
       if (this.isEditMode == true) {
         this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
         finalArray.map(x => x.data.map(y => y.assessment = this.assessment));
@@ -991,10 +1033,11 @@ export class PortfolioTrack4Component implements OnInit {
       
       this.investorToolControllerproxy.createFinalAssessment2(data)
         .subscribe(_res => {
+          let task = this.isCompleted? 'updated' :'created'
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Assessment has been created successfully',
+            detail: `Assessment has been ${task} successfully`,
             closable: true,
           })
           if(!this.isCompleted){
@@ -1009,40 +1052,6 @@ export class PortfolioTrack4Component implements OnInit {
             closable: true,
           })
         })
-        },
-        reject: () => {
-
-        },
-      });
-      
-
-    }
-    else {
-      let finalArray = this.processData.concat(this.outcomeData)
-      finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment));
-      //@ts-ignore - We are accepting Array in back-end
-      this.investorToolControllerproxy.createFinalAssessmentIndirect(finalArray)
-        .subscribe(_res => {
-          let task = this.isCompleted? 'updated' :'created'
-              this.messageService.add({
-                severity: 'success',
-                summary: 'Success',
-                detail: `Assessment has been ${task} successfully`,
-                closable: true,
-          })
-          this.showResults();
-
-        }, error => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Assessment detail saving failed',
-            closable: true,
-          })
-        })
-    }
-
-
   }
 
 
