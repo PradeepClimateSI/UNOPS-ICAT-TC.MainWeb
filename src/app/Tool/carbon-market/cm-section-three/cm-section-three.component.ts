@@ -110,7 +110,7 @@ export class CmSectionThreeComponent implements OnInit {
   "Greenhouse Gas Inventories (e.g. 1A1. Fuel Combustion Activities – Energy Industries, 2B1. Chemical Industry – Ammonia Production). If subsectoral data is unavailable, "+
   "subnational data can be used. Please provide further information on the subnational reference emissions in the justification box below."
   subsectoral_placeholder = "Enter justification, including source of data and scope of the assessment (i.e. definition of the sub-sector or subnational boundary – for example, City of Jakarta).\n\n"+
-  "E.g.: Enter below the preceding text an example: “In case of an intervention focusing on increasing the blend in cement production, the relevant subsector is “Mineral industry "+
+  "E.g.:  “In case of an intervention focusing on increasing the blend in cement production, the relevant subsector is “Mineral industry "+
   "– cement production (2A1)”. And in case of an intervention focusing on increasing the share or renewables, the relevant sector is “Fuel combustion activities – energy industries "+
   "(1A1)”."
 
@@ -549,6 +549,7 @@ export class CmSectionThreeComponent implements OnInit {
   onSelectScore(event: any, char: CMResultDto, index: number, type?: string) {
     if (['SUSTAINED_GHG', 'SCALE_GHG'].includes(char.characteristic.category.code)) {
       let score: number | null = null
+      let valid_scores = 0;
       this.outcome.forEach((category: OutcomeCategory) => {
         if (['SUSTAINED_GHG', 'SCALE_GHG'].includes(category.code)) {
           if (category.results.every(result => result.selectedScore.value === -99)) {
@@ -556,12 +557,15 @@ export class CmSectionThreeComponent implements OnInit {
           } else {
             category.results.forEach((result) => {
               score = score === null ? 0 : score = score
-              if (result.selectedScore.value) score = score + (result.selectedScore.value === -99 ? 0 : result.selectedScore.value)
+              if (result.selectedScore.value) {
+                score = score + (result.selectedScore.value === -99 ? 0 : result.selectedScore.value)
+                valid_scores += result.selectedScore.value === -99 ? 0 : 1;
+              }
             })
           }
         }
       })
-      this.GHGScore = score === null ? 'N/A' : Math.round(score / 6)
+      this.GHGScore = score === null ? 'N/A' : Math.round(score / valid_scores)
       if (char.characteristic.category.code === 'SCALE_GHG') {
         this.autoFillInternational(char.characteristic.code, 'SCALE_GHG', this.masterDataService.GHG_scale_score_macro)
       } else if (char.characteristic.category.code === 'SUSTAINED_GHG') {
@@ -569,22 +573,31 @@ export class CmSectionThreeComponent implements OnInit {
       }
     } else if (['SUSTAINED_SD', 'SCALE_SD'].includes(char.characteristic.category.code)) {
       let score: number | null = null
+      let valid_scores_sdg = 0
       this.selectedSDGs.forEach(sdg => {
         if (sdg.scaleResult.every(sr => sr.selectedScore.value)) {
           score = score !== null ? score : null
         } else {
           sdg.scaleResult.forEach(sr => {
             score = score === null ? 0 : score = score
-            if (sr.selectedScore.value) score = score + (sr.selectedScore.value === -99 ? 0 : sr.selectedScore.value)
+            if (sr.selectedScore.value) {
+              score = score + (sr.selectedScore.value === -99 ? 0 : sr.selectedScore.value)
+              valid_scores_sdg += sr.selectedScore.value === -99 ? 0 : 1
+            }
           })
+          console.log(char.characteristic.category.code, sdg, valid_scores_sdg)
         }
         if (sdg.sustainResult.every(sr => sr.selectedScore.value)) {
           score = score !== null ? score : null
         } else {
           sdg.sustainResult.forEach(susr => {
             score = score === null ? 0 : score = score
-            if (susr.selectedScore.value) score = score + (susr.selectedScore.value === -99 ? 0 : susr.selectedScore.value)
+            if (susr.selectedScore.value) {
+              score = score + (susr.selectedScore.value === -99 ? 0 : susr.selectedScore.value)
+              valid_scores_sdg += susr.selectedScore.value === -99 ? 0 : 1
+            }
           })
+          console.log(char.characteristic.category.code, sdg,valid_scores_sdg)
         }
       })
       this.SDGScore = score === null ? 'N/A' : Math.round(score / 6 / this.selectedSDGs.length)
@@ -620,6 +633,7 @@ export class CmSectionThreeComponent implements OnInit {
       }
     } else if (['SUSTAINED_ADAPTATION', 'SCALE_ADAPTATION'].includes(char.characteristic.category.code)) {
       let score: number | null = null
+      let valid_scores_ad = 0 
       this.outcome.forEach((category: OutcomeCategory) => {
         if (['SUSTAINED_ADAPTATION', 'SCALE_ADAPTATION'].includes(category.code)) {
           if (category.results.every(sr => sr.selectedScore.value)) {
@@ -627,7 +641,10 @@ export class CmSectionThreeComponent implements OnInit {
           } else {
             category.results.forEach((result) => {
               score = score === null ? 0 : score = score
-              if (result.selectedScore.value) score = score + (result.selectedScore.value === -99 ? 0 : result.selectedScore.value)
+              if (result.selectedScore.value) {
+                score = score + (result.selectedScore.value === -99 ? 0 : result.selectedScore.value)
+                valid_scores_ad += result.selectedScore.value === -99 ? 0 : 1
+              }
             })
           }
         }
@@ -666,7 +683,6 @@ export class CmSectionThreeComponent implements OnInit {
 
   async submit(draftCategory: string, isDraft: boolean = false, name: string, type: string) {
     if (name === 'SCALE_SD' && this.isCompleted) {
-      console.log("if")
       this.confirmationService.confirm({
         message: 'Pls make sure to update "Time frame outcome is sustained section" to update the result.',
         header: 'Warning',
@@ -678,7 +694,6 @@ export class CmSectionThreeComponent implements OnInit {
         }, reject: () => {}
       })
     } else {
-      console.log("else")
       this.nextClicked = true
       this.results = []
       this.categoriesToSave.push(draftCategory)
@@ -986,10 +1001,10 @@ export class CmSectionThreeComponent implements OnInit {
       if (code === 'STARTING_SITUATION') {
         if (!this.default_values[ch_id]) this.default_values[ch_id] = {st_default_values: [], ex_default_values: []}
         this.default_values[ch_id].st_default_values = res;
-        this.default_values[ch_id].st_default_values = this.default_values[ch_id].st_default_values.map(val => {val['label'] = val.starting_situation_value + ' ' + val.unit; return val})
+        this.default_values[ch_id].st_default_values = this.default_values[ch_id].st_default_values.map(val => {val['label'] = val.starting_situation_value + ' ' + val.source; return val})
       } else {
         this.default_values[ch_id].ex_default_values = res;
-        this.default_values[ch_id].ex_default_values = this.default_values[ch_id].ex_default_values.map(val => {val['label'] = val.expected_impact_value + ' ' + val.unit; return val})
+        this.default_values[ch_id].ex_default_values = this.default_values[ch_id].ex_default_values.map(val => {val['label'] = val.expected_impact_value + ' ' + val.source; return val})
       }
     }
   }

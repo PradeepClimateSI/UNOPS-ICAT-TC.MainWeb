@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
-import { LazyLoadEvent } from 'primeng/api';
+import { ConfirmationService, LazyLoadEvent ,MessageService} from 'primeng/api';
 import {
   ClimateAction as Project,
   ProjectControllerServiceProxy,
@@ -73,11 +73,12 @@ export class ViewComponent implements OnInit, AfterViewInit {
 
   constructor(
     private router: Router,
-    private serviceProxy: ServiceProxy,
+    private confirmationService: ConfirmationService,
     private projectProxy: ProjectControllerServiceProxy,
     private sectorProxy: CountryControllerServiceProxy,
     private cdr: ChangeDetectorRef,
     protected dialogService: DialogService,
+    private messageService: MessageService,
   ) { }
   ngAfterViewInit(): void {
     this.cdr.detectChanges();
@@ -198,12 +199,37 @@ export class ViewComponent implements OnInit, AfterViewInit {
   }
 
   delete(climateactions: Project) {
+    if(climateactions){
+      this.confirmationService.confirm({
+        message: 'Are you sure you want to delete the intervention?',
+        header: 'Delete Confirmation',
+        acceptIcon: 'icon-not-visible',
+        rejectIcon: 'icon-not-visible',
+        accept: () => {
+         this.deleteIN(climateactions)
+        },
+        reject: () => {
+        },
+      });
+    }
+   
+  }
+
+  deleteIN(climateactions: Project){
     this.projectProxy.delete(climateactions.id)
-      .subscribe((a) => {  let event: any = {};
+    .subscribe((a) => {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Interventions  is deleted successfully!',
+        closable: true,
+      });
+      let event: any = {};
       event.rows = this.rows;
       event.first = 0;
-  
-      this.loadgridData(event);})
+
+      this.loadgridData(event);
+    })
   }
 
   next() {

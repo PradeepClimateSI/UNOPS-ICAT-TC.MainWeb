@@ -46,7 +46,7 @@
           <div class="p-field p-2">
             <label for="Sectors Covered">Sectors Covered *</label>
             <p-confirmDialog key="sectorConfirm"  icon="pi pi-exclamation-triangle" position="top" [style]="{width: '50vw'}" [baseZIndex]="10000"></p-confirmDialog>
-            <p-multiSelect #multiSelectComponent appendTo="body" name="sectors" #type="ngModel" placeholder="Select Sectors Covered" [(ngModel)]="sectorArray" [options]="sectorList" (ngModelChange)="onItemSelectSectors($event)" [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" optionLabel="name"
+            <p-multiSelect #multiSelectComponent appendTo="body" name="sectors" #type="ngModel" placeholder="Select Sectors Covered" [(ngModel)]="sectorArray" [options]="sectorList" (onChange)="onItemSelectSectors($event)" [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" optionLabel="name"
               [required]="true"></p-multiSelect>
             <p class="info-message text-danger" *ngIf="
                               sectorArray.length===0 &&
@@ -461,7 +461,7 @@
                       <div class="btn btn-primary text-uppercase" (click)="next(category,'process')">
                         Next
                       </div>
-                      <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category,category.CategoryName,'pro')">
+                      <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="isCompleted ? onsubmit(fData1): saveDraft(category,category.CategoryName,'pro')">
                         Save
                       </div>
                     </div>
@@ -526,7 +526,7 @@
                                   <div class="row p-2">
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
-                                        <label for="score">Score* <i *ngIf=" category.CategoryName ==='GHG Scale of the Outcome'" class="pi pi-info-circle" pTooltip="{{getTooltipData(data.characteristics.name)}}" tooltipPosition="bottom" style="font-size: 1rem"></i></label>
+                                        <label for="score">Score<span *ngIf="['MACRO_LEVEL', 'INTERNATIONAL','LONG_TERM','MEDIUM_TERM','SHORT_TERM'].includes(data.characteristics.code) || data.category.code === 'SUSTAINED_ADAPTATION'">*</span><i *ngIf=" category.CategoryName ==='GHG Scale of the Outcome'" class="pi pi-info-circle" pTooltip="{{getTooltipData(data.characteristics.name)}}" tooltipPosition="bottom" style="font-size: 1rem"></i></label>
                                         <div *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' ||  category.CategoryName ==='Adaptation Scale of the Outcome' ">
                                           <p-dropdown appendTo="body" name="{{cat}}_{{i}}_outcomeScaleScore_" #type="ngModel" placeholder="Select Score" [(ngModel)]="data.score" [options]="outcomeScaleScore" optionLabel="id" optionValue="value"  (onChange)="onSelectScore(category, data.characteristics.code)"></p-dropdown>
                                           <p class="info-message text-danger" *ngIf="['MACRO_LEVEL', 'INTERNATIONAL'].includes(data.characteristics.code) && data.score==undefined  && ((fData1.submitted || type.touched) || (category.isValidated==false && data.score==undefined) || (tabIsValid[cat] !== undefined && !tabIsValid[cat]))">
@@ -541,7 +541,7 @@
                                     </div>
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
-                                        <label for="justification">Justification*</label>
+                                        <label for="justification">Justification<span *ngIf="['MACRO_LEVEL', 'INTERNATIONAL','LONG_TERM','MEDIUM_TERM','SHORT_TERM'].includes(data.characteristics.code)  || data.category.code === 'SUSTAINED_ADAPTATION'">*</span> </label>
                                         <textarea rows="5" type="text" pInputText [(ngModel)]="data.justification" #just2="ngModel" placeholder="Enter Justification" name="{{cat}}_{{i}}_justification" [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (ngModelChange)="adaptationJustificationChange()"></textarea>
                                         <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                         <p class="info-message text-danger" *ngIf="['MACRO_LEVEL', 'INTERNATIONAL'].includes(data.characteristics.code) && !data.justification  && ((fData1.submitted || just2.touched)|| (category.isValidated==false && !data.justification)|| (tabIsValid[cat] !== undefined && !tabIsValid[cat])) ">
@@ -629,7 +629,7 @@
                                       <div class="row p-2">
                                         <div class="col-12 col-lg-6">
                                           <div class="p-field">
-                                            <label for="score">Score*</label>
+                                            <label for="score">Score<span *ngIf="['MACRO_LEVEL','LONG_TERM','MEDIUM_TERM','SHORT_TERM'].includes(data.characteristics.code)">*</span></label>
                                             <p-dropdown appendTo="body" name="score" #type="ngModel" placeholder="Select Score" [(ngModel)]="data.score" (ngModelChange)="assignSDG(selectedSDGs[i], data)" [options]="outcomeScaleScore" optionLabel="id" optionValue="value" (onChange)="onSelectScore(category, data.characteristics.code, i)"></p-dropdown>
                                             <p class="info-message text-danger" *ngIf="['MACRO_LEVEL'].includes(data.characteristics.code) && data.score==undefined   && ((fData1.submitted || type.touched) || (isValidSCaleSD==false && data.score==undefined) || (tabIsValid[cat] !== undefined && !tabIsValid[cat]))">
                                               This is a mandatory field </p>
@@ -637,7 +637,7 @@
                                         </div>
                                         <div class="col-12 col-lg-6">
                                           <div class="p-field">
-                                            <label for="justification">Justification*</label>
+                                            <label for="justification">Justification<span *ngIf="['MACRO_LEVEL','LONG_TERM','MEDIUM_TERM','SHORT_TERM'].includes(data.characteristics.code)">*</span></label>
                                             <textarea rows="5" (ngModelChange)="assignSDG(selectedSDGs[i], data)" type="text" pInputText [(ngModel)]="data.justification" #just3="ngModel" placeholder="Enter Justification" name="justification"
                                               [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
                                             <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
@@ -772,7 +772,7 @@
         </form>
       </div>
     </div>
-
+<!--#########################################  NOT USING ########################################-->
     <div *ngIf="load && selectedApproach === 'Indirect'">
       <div class="card">
         <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)">
@@ -938,6 +938,7 @@
         </form>
       </div>
     </div>
+<!--#########################################  NOT USING END ########################################-->
   </div>
 </div>
 
@@ -973,7 +974,7 @@
 <p-overlayPanel #opRelevance [style]="{'width': '800px'}">
   <div class="p-grid p-fluid col-md-12 col-sm-12 text-title">
       <label>Does the process characteristic affects/impacts any of the identified barriers? does the intervention affects/impacts the process characteristic?</label>
-      <br>
+      <br><br><br>
       <p-table [value]="[{}]">
           <ng-template pTemplate="header">
               <tr>
