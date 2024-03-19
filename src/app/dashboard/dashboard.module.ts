@@ -115,7 +115,7 @@ const routes: Routes = [
     data: {}
   },
   {
-    path: 'add-policies',
+    path: 'add-interventions',
     component: ClimateActionComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
