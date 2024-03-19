@@ -572,35 +572,6 @@ export class CmSectionThreeComponent implements OnInit {
         this.autoFillInternational(char.characteristic.code, 'SUSTAINED_GHG', this.masterDataService.GHG_sustained_score)
       }
     } else if (['SUSTAINED_SD', 'SCALE_SD'].includes(char.characteristic.category.code)) {
-      let score: number | null = null
-      let valid_scores_sdg = 0
-      this.selectedSDGs.forEach(sdg => {
-        if (sdg.scaleResult.every(sr => sr.selectedScore.value)) {
-          score = score !== null ? score : null
-        } else {
-          sdg.scaleResult.forEach(sr => {
-            score = score === null ? 0 : score = score
-            if (sr.selectedScore.value) {
-              score = score + (sr.selectedScore.value === -99 ? 0 : sr.selectedScore.value)
-              valid_scores_sdg += sr.selectedScore.value === -99 ? 0 : 1
-            }
-          })
-          console.log(char.characteristic.category.code, sdg, valid_scores_sdg)
-        }
-        if (sdg.sustainResult.every(sr => sr.selectedScore.value)) {
-          score = score !== null ? score : null
-        } else {
-          sdg.sustainResult.forEach(susr => {
-            score = score === null ? 0 : score = score
-            if (susr.selectedScore.value) {
-              score = score + (susr.selectedScore.value === -99 ? 0 : susr.selectedScore.value)
-              valid_scores_sdg += susr.selectedScore.value === -99 ? 0 : 1
-            }
-          })
-          console.log(char.characteristic.category.code, sdg,valid_scores_sdg)
-        }
-      })
-      this.SDGScore = score === null ? 'N/A' : Math.round(score / 6 / this.selectedSDGs.length)
       if (['NATIONAL', 'SUBNATIONAL'].includes(char.characteristic.code)) {
         this.selectedSDGs = this.selectedSDGs.map(sdg => {
           if (char.characteristic.category.code === 'SCALE_SD') {
@@ -631,12 +602,45 @@ export class CmSectionThreeComponent implements OnInit {
           return sdg
         })
       }
+      let score: number | null = null
+      let valid_scores_sdg = 0
+      this.selectedSDGs.forEach(sdg => {
+        if (sdg.scaleResult.every(sr =>  sr.selectedScore.value === undefined ||  sr.selectedScore.value === -99)) {
+          score = score !== null ? score : null
+        } else {
+          sdg.scaleResult.forEach(sr => {
+            score = score === null ? 0 : score = score
+            if (sr.selectedScore.value) {
+              score = score + (sr.selectedScore.value === -99 ? 0 : sr.selectedScore.value)
+              valid_scores_sdg += sr.selectedScore.value === -99 ? 0 : 1
+            }
+          })
+        }
+        if (sdg.sustainResult.every(sr => sr.selectedScore.value === undefined || sr.selectedScore.value === -99)) {
+          score = score !== null ? score : null
+        } else {
+          sdg.sustainResult.forEach(susr => {
+            score = score === null ? 0 : score = score
+            if (susr.selectedScore.value) {
+              score = score + (susr.selectedScore.value === -99 ? 0 : susr.selectedScore.value)
+              valid_scores_sdg += susr.selectedScore.value === -99 ? 0 : 1
+            }
+          })
+        }
+      })
+      this.SDGScore = score === null ? 'N/A' : Math.round(score / valid_scores_sdg)
+      
     } else if (['SUSTAINED_ADAPTATION', 'SCALE_ADAPTATION'].includes(char.characteristic.category.code)) {
+      if (char.characteristic.category.code === 'SCALE_ADAPTATION') {
+        this.autoFillInternational(char.characteristic.code, 'SCALE_ADAPTATION', this.masterDataService.adaptation_scale_score)
+      } else if (char.characteristic.category.code === 'SUSTAINED_ADAPTATION') {
+        this.autoFillInternational(char.characteristic.code, 'SUSTAINED_ADAPTATION', this.masterDataService.adaptation_sustained_score)
+      }
       let score: number | null = null
       let valid_scores_ad = 0 
       this.outcome.forEach((category: OutcomeCategory) => {
         if (['SUSTAINED_ADAPTATION', 'SCALE_ADAPTATION'].includes(category.code)) {
-          if (category.results.every(sr => sr.selectedScore.value)) {
+          if (category.results.every(sr => sr.selectedScore.value === -99 || sr.selectedScore.value === undefined)) {
             score = score !== null ? score : null
           } else {
             category.results.forEach((result) => {
@@ -649,12 +653,7 @@ export class CmSectionThreeComponent implements OnInit {
           }
         }
       })
-      this.adaptationScore = score === null ? 'N/A' : Math.round(score / 6);
-      if (char.characteristic.category.code === 'SCALE_ADAPTATION') {
-        this.autoFillInternational(char.characteristic.code, 'SCALE_ADAPTATION', this.masterDataService.adaptation_scale_score)
-      } else if (char.characteristic.category.code === 'SUSTAINED_ADAPTATION') {
-        this.autoFillInternational(char.characteristic.code, 'SUSTAINED_ADAPTATION', this.masterDataService.adaptation_sustained_score)
-      }
+      this.adaptationScore = score === null ? 'N/A' : Math.round(score / valid_scores_ad);
     }
   }
 
