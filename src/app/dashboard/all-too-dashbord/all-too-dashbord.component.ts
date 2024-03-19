@@ -175,10 +175,10 @@ export class AllTooDashbordComponent implements OnInit, AfterViewInit {
   }
 
   sectorCountResult() {
+    this.sectorCount = []
     this.investorProxy.findSectorCountAllTool(this.selectedPortfolio ? this.selectedPortfolio.id : 0).subscribe((res: any) => {
       this.sectorCount = res.sort(this.compareByAge);
       setTimeout(() => {
-
         this.viewSecterTargetedPieChart();
       }, 20);
       this.sdgResults()
@@ -215,81 +215,77 @@ export class AllTooDashbordComponent implements OnInit, AfterViewInit {
     }
 
     if (this.pieChart2) {
-      this.pieChart2.data.datasets[0].data = counts;
-      this.pieChart2.data.labels = labels
-      this.pieChart2.update();
+      this.pieChart2.destroy()
     }
-    else {
-      this.pieChart2 = new Chart(ctx, {
-        type: 'pie' as ChartType,
+    this.pieChart2 = new Chart(ctx, {
+      type: 'pie' as ChartType,
 
-        data: {
-          labels: labels,
-          datasets: [{
-            data: counts,
-            backgroundColor: this.secbgColors,
+      data: {
+        labels: labels,
+        datasets: [{
+          data: counts,
+          backgroundColor: this.secbgColors,
 
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              position: 'bottom',
-              labels: {
-                padding: 20
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              padding: 20
+            }
+          },
+          datalabels: {
+            color: '#fff',
+            font: {
+              size: 12
+            },
+            formatter: (value, ctx) => {
+              const label = ctx.chart.data.labels![ctx.dataIndex];
+              const percentage = percentages[ctx.dataIndex];
+              return `${label}: ${value} (${percentage}%)`;
+            },
+
+          },
+          tooltip: {
+            position: 'average',
+            boxWidth: 10,
+            callbacks: {
+
+              label: (ctx) => {
+                let sum = 0;
+                let array = counts
+                array.forEach((number) => {
+                  sum += Number(number);
+                });
+                let percentage = (counts[ctx.dataIndex] * 100 / sum).toFixed(2) + "%";
+
+                return [
+                  `Sector: ${labels[ctx.dataIndex]}`,
+                  `Count: ${counts[ctx.dataIndex]}`,
+                  `Percentage: ${percentage}`
+                ];
               }
             },
-            datalabels: {
-              color: '#fff',
-              font: {
-                size: 12
-              },
-              formatter: (value, ctx) => {
-                const label = ctx.chart.data.labels![ctx.dataIndex];
-                const percentage = percentages[ctx.dataIndex];
-                return `${label}: ${value} (${percentage}%)`;
-              },
-
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            titleFont: {
+              size: 14,
+              weight: 'bold'
             },
-            tooltip: {
-              position: 'average',
-              boxWidth: 10,
-              callbacks: {
-
-                label: (ctx) => {
-                  let sum = 0;
-                  let array = counts
-                  array.forEach((number) => {
-                    sum += Number(number);
-                  });
-                  let percentage = (counts[ctx.dataIndex] * 100 / sum).toFixed(2) + "%";
-
-                  return [
-                    `Sector: ${labels[ctx.dataIndex]}`,
-                    `Count: ${counts[ctx.dataIndex]}`,
-                    `Percentage: ${percentage}`
-                  ];
-                }
-              },
-              backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              titleFont: {
-                size: 14,
-                weight: 'bold'
-              },
-              bodyFont: {
-                size: 14
-              },
-              displayColors: true,
-              bodyAlign: 'left'
-            }
+            bodyFont: {
+              size: 14
+            },
+            displayColors: true,
+            bodyAlign: 'left'
           }
+        }
 
-        },
+      },
 
-      });
-    }
+    });
 
   }
   onSelectAssessment() {

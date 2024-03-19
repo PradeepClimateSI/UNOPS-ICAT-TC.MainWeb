@@ -916,7 +916,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.tabView.tabs[this.selectedIndex].header;
   }
 
-  async onsubmit(form: NgForm) {
+  async onsubmit(form: NgForm, updateData?: {category?: any, type: string}) {
     for (let item of this.processData) {
       for (let item2 of item.data) {
         if ((item2.likelihood == null || item2.relavance == null) && item2.relavance != 0) {
@@ -988,7 +988,19 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
           rejectLabel: 'Go back',
           key: 'updateConfirm',
           accept: async () => {
+            if (updateData?.category?.categoryCode === 'SCALE_SD' && this.isCompleted) {
+              this.confirmationService.confirm({
+                message: 'Pls make sure to update "Time frame outcome is sustained section" to update the result.',
+                header: 'Warning',
+                acceptLabel: 'Okay',
+                rejectLabel: 'Cancel',
+                accept: () => {
+                  if (updateData) {this.next(updateData.category,updateData.type)}
+                }, reject: () => {}
+              })
+            } else {
             this.saveResults()
+            }
           },
           reject: () => {
   

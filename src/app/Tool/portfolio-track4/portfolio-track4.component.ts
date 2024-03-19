@@ -881,7 +881,7 @@ export class PortfolioTrack4Component implements OnInit {
       })
   }
 
-  async onsubmit(form: NgForm) {
+  async onsubmit(form: NgForm, updateData?: {category?: any, type: string}) {
 
     for (let item of this.processData) {
       for (let item2 of item.data) {
@@ -957,7 +957,19 @@ export class PortfolioTrack4Component implements OnInit {
           rejectLabel: 'Go back',
           key: 'updateConfirm',
           accept: async () => {
-            this.saveResults()
+            if (updateData?.category?.categoryCode === 'SCALE_SD' && this.isCompleted) {
+              this.confirmationService.confirm({
+                message: 'Pls make sure to update "Time frame outcome is sustained section" to update the result.',
+                header: 'Warning',
+                acceptLabel: 'Okay',
+                rejectLabel: 'Cancel',
+                accept: () => {
+                  if (updateData) {this.next(updateData.category,updateData.type)}
+                }, reject: () => {}
+              })
+            } else {
+              this.saveResults()
+            }
           },
           reject: () => {
   
@@ -966,7 +978,6 @@ export class PortfolioTrack4Component implements OnInit {
       }else{
         this.saveResults()
       }
-      
       
 
     }
@@ -998,60 +1009,60 @@ export class PortfolioTrack4Component implements OnInit {
 
   }
 
-  async saveResults(){
+  async saveResults() {
     let finalArray = this.processData.concat(this.outcomeData)
-      if (this.isEditMode == true) {
-        this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
-        finalArray.map(x => x.data.map(y => y.assessment = this.assessment));
-      }
-      else {
-        finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
-      }
+    if (this.isEditMode == true) {
+      this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+      finalArray.map(x => x.data.map(y => y.assessment = this.assessment));
+    }
+    else {
+      finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
+    }
 
-      for (let i = 0; i < this.sdgDataSendArray2.length; i++) {
-        for (let item of this.sdgDataSendArray2[i].data) {
-          item.portfolioSdg = this.selectedSDGs[i];
-        }
-
+    for (let i = 0; i < this.sdgDataSendArray2.length; i++) {
+      for (let item of this.sdgDataSendArray2[i].data) {
+        item.portfolioSdg = this.selectedSDGs[i];
       }
 
-      for (let i = 0; i < this.sdgDataSendArray4.length; i++) {
-        for (let item of this.sdgDataSendArray4[i].data) {
-          item.portfolioSdg = this.selectedSDGs[i];
-        }
+    }
 
+    for (let i = 0; i < this.sdgDataSendArray4.length; i++) {
+      for (let item of this.sdgDataSendArray4[i].data) {
+        item.portfolioSdg = this.selectedSDGs[i];
       }
 
-      let data: any = {
-        finalArray: finalArray,
-        scaleSDGs: this.sdgDataSendArray2,
-        sustainedSDGs: this.sdgDataSendArray4,
-        sdgs: this.selectedSDGsWithAnswers,
-        isEdit: this.isEditMode,
-        isDraft: false,
-      }
-      
-      this.investorToolControllerproxy.createFinalAssessment2(data)
-        .subscribe(_res => {
-          let task = this.isCompleted? 'updated' :'created'
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: `Assessment has been ${task} successfully`,
-            closable: true,
-          })
-          if(!this.isCompleted){
-            this.showResults();
-          }
+    }
 
-        }, error => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Assessment detail saving failed',
-            closable: true,
-          })
+    let data: any = {
+      finalArray: finalArray,
+      scaleSDGs: this.sdgDataSendArray2,
+      sustainedSDGs: this.sdgDataSendArray4,
+      sdgs: this.selectedSDGsWithAnswers,
+      isEdit: this.isEditMode,
+      isDraft: false,
+    }
+
+    this.investorToolControllerproxy.createFinalAssessment2(data)
+      .subscribe(_res => {
+        let task = this.isCompleted ? 'updated' : 'created'
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: `Assessment has been ${task} successfully`,
+          closable: true,
         })
+        if (!this.isCompleted) {
+          this.showResults();
+        }
+
+      }, error => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Assessment detail saving failed',
+          closable: true,
+        })
+      })
   }
 
 
