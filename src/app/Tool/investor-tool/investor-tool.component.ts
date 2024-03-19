@@ -216,7 +216,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.activatedRoute.queryParams.subscribe(async params => {
       params['isEdit'] == 'true' ? (this.isEditMode = true) : false;
       params['iscompleted'] == 'true' ? (this.isCompleted = true) : false
-      params['isContinue'] == 'true' ? (this.isContinue = true) : false
+      params['isContinue'] == 'true' ? (this.isCompleted = true) : false
       this.assessmentId = params['id'];
       if(params['interventionId'] && params['assessmentType']){
         await this.getPolicies().then( x=>
@@ -234,6 +234,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       await this.getCharacteristics();
 
     } else {
+      
       try {
         await this.getSavedAssessment()
       }
@@ -299,6 +300,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   async getSavedAssessment() {
     await this.getCharacteristics();
+    this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise();
     this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
     this.outcomeData = await this.investorToolControllerproxy.getOutcomeData(this.assessmentId).toPromise();
     this.sdgDataSendArray2 = await this.investorToolControllerproxy.getScaleSDGData(this.assessmentId).toPromise();
@@ -356,7 +358,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
         this.selectedInstruments.push(instrument)
       }
     })
-
 
     this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise();
     this.policies.push(this.assessment.climateAction);
