@@ -306,6 +306,11 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.selectedSDGs = await this.investorToolControllerproxy.getSelectedSDGs(this.assessmentId).toPromise();
     this.selectedSDGsWithAnswers = await this.investorToolControllerproxy.getSelectedSDGsWithAnswers(this.assessmentId).toPromise();
     this.investorAssessment = await this.investorToolControllerproxy.getResultByAssessment(this.assessmentId).toPromise();
+    this.minDate = new Date(
+      this.assessment.climateAction.dateOfImplementation.year(),
+      this.assessment.climateAction.dateOfImplementation.month(),
+      this.assessment.climateAction.dateOfImplementation.date(),
+    )
     this.from_date = new Date(
       this.assessment.from?.year(),
       this.assessment.from?.month(),

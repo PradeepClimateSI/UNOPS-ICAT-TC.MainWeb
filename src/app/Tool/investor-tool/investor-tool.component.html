@@ -67,7 +67,7 @@
               </p>
             </div>
             <div class="p-field p-2">
-              <label for="totalInvenstement">Investment Insstruments</label>
+              <label for="totalInvenstement">Investment Instruments</label>
               <p-multiSelect name="investorAssessment.investmentInstruments" #gac="ngModel" placeholder="Select Investment Instrument" [(ngModel)]="selectedInstruments" [options]="investment_instruments" optionLabel="name" [required]="true"
                 [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" appendTo="body" (onChange)="onSelectInstrument($event)">
               </p-multiSelect>

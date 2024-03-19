@@ -318,6 +318,11 @@ export class PortfolioTrack4Component implements OnInit {
     this.sdgDataSendArray4 = await this.investorToolControllerproxy.getSustainedSDGData(this.assessmentId).toPromise();
     this.selectedSDGs = await this.investorToolControllerproxy.getSelectedSDGs(this.assessmentId).toPromise();
     this.selectedSDGsWithAnswers = await this.investorToolControllerproxy.getSelectedSDGsWithAnswers(this.assessmentId).toPromise();
+    this.minDate = new Date(
+      this.assessment.climateAction.dateOfImplementation.year(),
+      this.assessment.climateAction.dateOfImplementation.month(),
+      this.assessment.climateAction.dateOfImplementation.date(),
+    )
     this.from_date= new Date(
       this.assessment.from?.year(),
       this.assessment.from?.month(),
@@ -791,7 +796,7 @@ export class PortfolioTrack4Component implements OnInit {
   }
 
 
-  async saveDraft(category: any, processDraftLocation: string, type: string) {
+  async saveDraft(category: any, processDraftLocation: string, type: string, isDefault?: boolean) {
 
     let finalArray = this.processData.concat(this.outcomeData)
     if (this.isEditMode == true) {
@@ -838,12 +843,14 @@ export class PortfolioTrack4Component implements OnInit {
     }
     await this.investorToolControllerproxy.createFinalAssessment2(data)
       .subscribe(async _res => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Assessment draft has been saved successfully',
-          closable: true,
-        })
+        if (!isDefault) {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Assessment draft has been saved successfully',
+            closable: true,
+          })
+        }
         if (data.isDraft) {
           this.setFrom()
           this.setTo()
@@ -893,6 +900,10 @@ export class PortfolioTrack4Component implements OnInit {
       }
     }
 
+    /**There is an issue  in setting score and justification for sustained adaptation.
+     * calling saveDraft is a tempory solution. Need to find a proper solution
+    */
+    this.saveDraft(this.outcomeData[5], this.outcomeData[5].CategoryName, 'out', true)
     for (let item of this.outcomeData) {
       if (!this.checkValidation(item.data, 'outcome')) {
         this.messageService.add({
@@ -1089,7 +1100,7 @@ export class PortfolioTrack4Component implements OnInit {
       let isValid: boolean = false;
       data.forEach(sdg => {
         for (let data of sdg.data) {
-          if (data.category.code === "SUSTAINED_SD") {
+          if (data.characteristics?.category?.code === "SUSTAINED_SD" || data.category.code === "SUSTAINED_SD") {
             if ((data.justification !== undefined && data.justification !== null && data.justification !== '') && (data.score !== undefined && data.score !== null)) {
               isValid = true
             } else {
@@ -1429,8 +1440,10 @@ export class PortfolioTrack4Component implements OnInit {
     return str
   }
 
-  adaptationJustificationChange(){
-    this.checkTab2Mandatory(6)
+  adaptationJustificationChange(data: InvestorAssessment){
+    if (data.category.code === 'SUSTAINED_ADAPTATION' || data.characteristics.category.code === 'SUSTAINED_ADAPTATION') {
+      this.checkTab2Mandatory(6)
+    }
   }
 
   onSelectScore(category: OutcomDataDto, characteristicCode: string, sdgIndex?:number) {
@@ -1462,6 +1475,10 @@ export class PortfolioTrack4Component implements OnInit {
         return data;
       })
     }
+  }
+
+  isMandatoryActive(category_code: string, characteristic_code: string) {
+    return ['MACRO_LEVEL', 'INTERNATIONAL','LONG_TERM','MEDIUM_TERM','SHORT_TERM'].includes(characteristic_code)  || category_code === 'SUSTAINED_ADAPTATION';
   }
 
 
