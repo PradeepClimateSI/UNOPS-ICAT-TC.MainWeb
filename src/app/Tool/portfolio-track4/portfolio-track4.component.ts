@@ -153,6 +153,8 @@ export class PortfolioTrack4Component implements OnInit {
   assessment_period_info = assessment_period_info
   isContinue: boolean = false;
   isDisableIntervention: boolean = false;
+  completModeSectorList: Sector[]=[];
+  selectedSectorsCompleteMode: Sector[] = [];
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -372,13 +374,20 @@ export class PortfolioTrack4Component implements OnInit {
     })
     this.geographicalAreasCoveredArr = areas
     this.geographicalArea = this.geographicalAreasCoveredArr[0]
+     this.completModeSectorList = this.assessment.climateAction.policySector.map(i=> i.sector)
+    this.completModeSectorList.map((sector: Sector) => {
+      let sec = new Sector()
+      sec.id = sector.id
+      sec.name = sector.name
+      this.sectorList.push(sec)
+    })
     this.assessment['sector'].map((sector: Sector) => {
       let sec = new Sector()
       sec.id = sector.id
       sec.name = sector.name
       this.sectorArray.push(sec)
     })
-    this.sectorList = this.sectorArray
+    this.selectedSectorsCompleteMode =  this.sectorArray
     this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
     this.setFrom()
     this.setTo()
@@ -937,7 +946,17 @@ export class PortfolioTrack4Component implements OnInit {
     }
 
     if (this.assessment.assessment_approach === 'Direct') {
-      let finalArray = this.processData.concat(this.outcomeData)
+      this.confirmationService.confirm({
+        message: `Are you sure want to update`,
+        header: 'Confirmation',
+        acceptIcon: 'icon-not-visible',
+        rejectIcon: 'icon-not-visible',
+        acceptLabel: 'Update',
+        rejectLabel: 'Go back',
+        key: 'updateConfirm',
+        accept: async () => {
+
+          let finalArray = this.processData.concat(this.outcomeData)
       if (this.isEditMode == true) {
         this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
         finalArray.map(x => x.data.map(y => y.assessment = this.assessment));
@@ -968,6 +987,7 @@ export class PortfolioTrack4Component implements OnInit {
         isEdit: this.isEditMode,
         isDraft: false,
       }
+      
       this.investorToolControllerproxy.createFinalAssessment2(data)
         .subscribe(_res => {
           this.messageService.add({
@@ -976,7 +996,9 @@ export class PortfolioTrack4Component implements OnInit {
             detail: 'Assessment has been created successfully',
             closable: true,
           })
-          this.showResults();
+          if(!this.isCompleted){
+            this.showResults();
+          }
 
         }, error => {
           this.messageService.add({
@@ -986,6 +1008,12 @@ export class PortfolioTrack4Component implements OnInit {
             closable: true,
           })
         })
+        },
+        reject: () => {
+
+        },
+      });
+      
 
     }
     else {
@@ -1373,11 +1401,20 @@ export class PortfolioTrack4Component implements OnInit {
         accept: () => {
         },
         reject: () => { 
-          this.geographicalArea = this.geographicalAreasCovered.find(item=>{
-            if (item.name==this.assessment.climateAction.geographicalAreaCovered){
-              return item
-            }
-          })
+          if(this.isCompleted){
+            this.geographicalArea = this.geographicalAreasCovered.find(item=>{
+              if (item.name==this.assessment['geographicalAreasCovered'][0].name){
+                return item
+              }
+            })
+          }
+          else{
+            this.geographicalArea = this.geographicalAreasCovered.find(item=>{
+              if (item.name==this.assessment.climateAction.geographicalAreaCovered){
+                return item
+              }
+            })
+          }
         },
       });
     }
@@ -1398,7 +1435,11 @@ export class PortfolioTrack4Component implements OnInit {
           accept: () => {
           },
           reject: () => { 
-            this.sectorArray = this.sectorList
+            if(!this.isCompleted){
+              this.sectorArray = this.sectorList
+            }else{
+             this.sectorArray = this.selectedSectorsCompleteMode
+            }
           },
         });
       }

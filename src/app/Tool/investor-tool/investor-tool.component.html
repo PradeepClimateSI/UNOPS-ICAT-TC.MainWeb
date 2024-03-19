@@ -676,7 +676,7 @@
                 </div>
                 <div class="row justify-content-end" *ngIf="activeIndex2==5 && activeIndexMain==1">
                   <div class="d-flex flex-row-reverse mt-20 ">
-                    <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="saveDraft(category,category.CategoryName,'out')">
+                    <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)=" isCompleted ? onsubmit(fData1):saveDraft(category,category.CategoryName,'out')">
                       Save
                     </div>
                   </div>
