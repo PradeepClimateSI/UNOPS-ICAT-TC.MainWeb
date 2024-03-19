@@ -178,7 +178,7 @@ this.selectPortfolio();
       if (item.from && item.to) {
        label = label + " - " + moment(new Date(item.from)).format("DD/MM/YYYY").toString() + " - " + moment(new Date(item.to)).format("DD/MM/YYYY").toString()
       }
-      return {label:label}
+      return {label:label, id: item.id}
     })
   }
 
