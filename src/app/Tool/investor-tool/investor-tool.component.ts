@@ -297,7 +297,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   async getSavedAssessment() {
     await this.getCharacteristics();
-    this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise();
     this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
     this.outcomeData = await this.investorToolControllerproxy.getOutcomeData(this.assessmentId).toPromise();
     this.sdgDataSendArray2 = await this.investorToolControllerproxy.getScaleSDGData(this.assessmentId).toPromise();
@@ -728,7 +727,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   }
 
   onChangeGeoAreaCovered(){
-    if(this.assessment.climateAction.geographicalAreaCovered && this.geographicalArea.name !==this.assessment.climateAction.geographicalAreaCovered && !this.isCompleted){
+    if(this.assessment.climateAction.geographicalAreaCovered && this.geographicalArea.name !==this.assessment.climateAction.geographicalAreaCovered ){
       this.confirmationService.confirm({
         message: `You selected a geographical scope that deviates from the one that was assigned to this intervention- ${this.assessment.climateAction.geographicalAreaCovered }. Are you sure you want to continue with this selection?`,
         header: 'Confirmation',
@@ -752,7 +751,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   onItemSelectSectors(event: any) {
     if(this.assessment.climateAction.policySector){
-      if(this.assessment.climateAction.policySector.length !=  this.sectorArray.length && !this.isCompleted){
+      if(this.assessment.climateAction.policySector.length !=  this.sectorArray.length ){
         this.closeMultiSelect();
         this.confirmationService.confirm({
           message: `You selected sectors that deviates from the one that was assigned to this intervention- ${ this.assessment.climateAction.policySector.map(i=> i.sector.name).join(",")}. Are you sure you want to continue with this selection?`,

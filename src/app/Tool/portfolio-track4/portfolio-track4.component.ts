@@ -284,7 +284,6 @@ export class PortfolioTrack4Component implements OnInit {
       this.sdgList = res
     });
     this.isFirstLoading0 = false
-
   }
   setDataFromFlow(interventonId:string, assessmentType:string) {
     this.isDisableIntervention = true
@@ -313,7 +312,6 @@ export class PortfolioTrack4Component implements OnInit {
   
   async getSavedAssessment() {
     await this.getCharacteristics();
-    this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
     this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
     this.outcomeData = await this.investorToolControllerproxy.getOutcomeData(this.assessmentId).toPromise();
     this.sdgDataSendArray2 = await this.investorToolControllerproxy.getScaleSDGData(this.assessmentId).toPromise();
@@ -344,6 +342,7 @@ export class PortfolioTrack4Component implements OnInit {
     if (this.assessment.lastDraftLocation == 'out') {
       this.activeIndexMain = 1;
     }
+    this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise();
     this.policies.push(this.assessment.climateAction)
     this.finalBarrierList = this.assessment['policy_barrier'].map((i: { is_affected: boolean; characteristics: Characteristics[]; explanation: string; barrier: string; })=> {
       let p =  new BarrierSelected()

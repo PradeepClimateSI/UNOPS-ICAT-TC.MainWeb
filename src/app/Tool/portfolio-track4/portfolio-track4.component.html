@@ -11,8 +11,8 @@
         <div class="p-grid p-fluid col-md-6 col-sm-12">
           <div class="p-field p-2">
             <label for="policy">Select Intervention *</label>
-            <p-dropdown appendTo="body" name="policy" #policy="ngModel" placeholder="Select Intervention" [disabled]="isSavedAssessment|| isEditMode || isDisableIntervention" [(ngModel)]="assessment.climateAction" appendTo="body" [options]="policies" optionLabel="policyName" [required]="true"
-              (onChange)="onSelectIntervention($event)"></p-dropdown>
+             <p-dropdown name="policy" #policy="ngModel" placeholder="Select Intervention" [(ngModel)]="assessment.climateAction" appendTo="body" [options]="policies" optionLabel="policyName" [required]="true" (onChange)="onSelectIntervention($event)"
+                [disabled]="isSavedAssessment || isEditMode || isDisableIntervention"></p-dropdown>
             <p class="info-message text-danger" *ngIf="
                                                   !assessment.climateAction &&
                                                   (fData.submitted || policy.touched)
