@@ -39833,20 +39833,3 @@ function blobToText(blob: any): Observable<string> {
         }
     });
 }
-export enum DocumentsDocumentOwner {
-
-    Project = <any>"Project",
-
-    Country = <any>"Country",
-
-    CountryNC = <any>"CountryNC",
-
-    CountryBUR = <any>"CountryBUR",
-
-    CountryBTR = <any>"CountryBTR",
-
-    CountryNDC = <any>"CountryNDC",
-
-    CountryGHG = <any>"CountryGHG",
-
-}
