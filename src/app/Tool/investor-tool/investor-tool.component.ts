@@ -180,6 +180,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   isContinue: boolean = false;
   isDisableIntervention: boolean = false;
   format = "### \'%\'"
+  completModeSectorList: Sector[]=[];
+  selectedSectorsCompleteMode: Sector[] = [];
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -377,13 +379,23 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.geographicalAreasCoveredArr = areas;
 
     this.geographicalArea = this.geographicalAreasCoveredArr[0]
+    
+   
+    
+    this.completModeSectorList = this.assessment.climateAction.policySector.map(i=> i.sector)
+    this.completModeSectorList.map((sector: Sector) => {
+      let sec = new Sector()
+      sec.id = sector.id
+      sec.name = sector.name
+      this.sectorList.push(sec)
+    })
     this.assessment['sector'].map((sector: Sector) => {
       let sec = new Sector()
       sec.id = sector.id
       sec.name = sector.name
       this.sectorArray.push(sec)
     })
-    this.sectorList = this.sectorArray
+    this.selectedSectorsCompleteMode =  this.sectorArray
     this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
     this.setFrom();
     this.setTo();
@@ -739,11 +751,21 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
         accept: () => {
         },
         reject: () => { 
-          this.geographicalArea = this.geographicalAreasCovered.find(item=>{
-            if (item.name==this.assessment.climateAction.geographicalAreaCovered){
-              return item
-            }
-          })
+          if(this.isCompleted){
+            this.geographicalArea = this.geographicalAreasCovered.find(item=>{
+              if (item.name==this.assessment['geographicalAreasCovered'][0].name){
+                return item
+              }
+            })
+          }
+          else{
+            this.geographicalArea = this.geographicalAreasCovered.find(item=>{
+              if (item.name==this.assessment.climateAction.geographicalAreaCovered){
+                return item
+              }
+            })
+          }
+          
         },
       });
     }
@@ -764,7 +786,11 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
           accept: () => {
           },
           reject: () => { 
-            this.sectorArray = this.sectorList
+            if(!this.isCompleted){
+              this.sectorArray = this.sectorList
+            }else{
+             this.sectorArray = this.selectedSectorsCompleteMode
+            }
           },
         });
       }
@@ -946,57 +972,76 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
 
     if (this.assessment.assessment_approach === 'Direct') {
-      let finalArray = this.processData.concat(this.outcomeData)
-      if (this.isEditMode == true) {
-        this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
-        finalArray.map(x => x.data.map(y => y.assessment = this.assessment));
-      }
-      else {
-        finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
-      }
 
-      for (let i = 0; i < this.sdgDataSendArray2.length; i++) {
-        for (let item of this.sdgDataSendArray2[i].data) {
-          item.portfolioSdg = this.selectedSDGs[i];
-        }
+      this.confirmationService.confirm({
+        message: `Are you sure want to update`,
+        header: 'Confirmation',
+        acceptIcon: 'icon-not-visible',
+        rejectIcon: 'icon-not-visible',
+        acceptLabel: 'Update',
+        rejectLabel: 'Go back',
+        key: 'updateConfirm',
+        accept: async () => {
+          let finalArray = this.processData.concat(this.outcomeData)
+          if (this.isEditMode == true) {
+            this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+            finalArray.map(x => x.data.map(y => y.assessment = this.assessment));
+          }
+          else {
+            finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
+          }
 
-      }
+          for (let i = 0; i < this.sdgDataSendArray2.length; i++) {
+            for (let item of this.sdgDataSendArray2[i].data) {
+              item.portfolioSdg = this.selectedSDGs[i];
+            }
 
-      for (let i = 0; i < this.sdgDataSendArray4.length; i++) {
-        for (let item of this.sdgDataSendArray4[i].data) {
-          item.portfolioSdg = this.selectedSDGs[i];
-        }
+          }
 
-      }
+          for (let i = 0; i < this.sdgDataSendArray4.length; i++) {
+            for (let item of this.sdgDataSendArray4[i].data) {
+              item.portfolioSdg = this.selectedSDGs[i];
+            }
 
-      let data: any = {
-        finalArray: finalArray,
-        scaleSDGs: this.sdgDataSendArray2,
-        sustainedSDGs: this.sdgDataSendArray4,
-        sdgs: this.selectedSDGsWithAnswers,
-        isEdit: this.isEditMode,
-        isDraft: false,
+          }
 
-      }
+          let data: any = {
+            finalArray: finalArray,
+            scaleSDGs: this.sdgDataSendArray2,
+            sustainedSDGs: this.sdgDataSendArray4,
+            sdgs: this.selectedSDGsWithAnswers,
+            isEdit: this.isEditMode,
+            isDraft: false,
 
-      this.investorToolControllerproxy.createFinalAssessment(data)
-        .subscribe(_res => {
+          }
 
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Assessment has been created successfully',
-            closable: true,
-          })
-          this.showResults();
-        }, error => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Assessment detail saving failed',
-            closable: true,
-          })
-        })
+          this.investorToolControllerproxy.createFinalAssessment(data)
+            .subscribe(_res => {
+              let task = this.isCompleted? 'updated' :'created'
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: `Assessment has been ${task} successfully`,
+                closable: true,
+              })
+              if(!this.isCompleted){
+                this.showResults();
+              }
+              
+            }, error => {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Assessment detail saving failed',
+                closable: true,
+              })
+            })
+        },
+        reject: () => {
+
+        },
+      });
+      
 
     }
     else {
