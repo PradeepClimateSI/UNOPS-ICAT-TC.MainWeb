@@ -245,7 +245,7 @@ export class ClimateActionComponent implements OnInit  {
      });
    
 
-    this.route.queryParams.subscribe((params) => {
+    this.route.queryParams.subscribe(async (params) => {
     
       this.editEntytyId = 0;
       this.anonymousEditEntytyId = 0;
@@ -254,6 +254,14 @@ export class ClimateActionComponent implements OnInit  {
       this.anonymousEditEntytyId = params['anonymousId'];
       if (this.editEntytyId > 0) {
         this.documentOwnerId = this.editEntytyId;
+        await this.docService
+        .getDocuments(this.documentOwnerId, this.documentsDocumentOwner)
+        .subscribe(
+          async (res) => {
+            this.selectedDocuments =await  res;
+          },
+          
+        );
       } else if (this.anonymousEditEntytyId > 0) {
         this.documentOwnerId = this.anonymousEditEntytyId;
       }
@@ -424,16 +432,6 @@ export class ClimateActionComponent implements OnInit  {
         this.projectApprovalStatus = res;
       });
 
-    if (this.editEntytyId && this.editEntytyId !== 0) {
-      let docFilter: string[] = new Array();
-
-      docFilter.push('documentOwnerId||$eq||' + this.editEntytyId);
-      this.docService.getDocuments(this.editEntytyId,1)
-        .subscribe(async (res: any) => {
-          this.selectedDocuments =await  res;
-        });
-      
-    }
 
     if (this.anonymousEditEntytyId && this.anonymousEditEntytyId != 0) {
       let docFilter: string[] = new Array();
@@ -457,8 +455,6 @@ export class ClimateActionComponent implements OnInit  {
         });
     }
   
-    console.log(this.documents);
-    console.log(this.documentsDocumentOwner);
   }
 
   async getCountryList(){
