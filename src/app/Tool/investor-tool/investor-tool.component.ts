@@ -624,8 +624,9 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
                   })
                   investDto.totalInvestements = this.totalInvestments
                   await this.investorToolControllerproxy.saveTotalInvestments(investDto).toPromise();
-                  this.isSavedAssessment = true
-                  this.isCompleted = false
+                  if(!this.isCompleted){
+                    this.isSavedAssessment = true;
+                  }
 
                 }
               }, error => {
