@@ -894,8 +894,7 @@ export class PortfolioTrack4Component implements OnInit {
     return true;
   }
 
-  async onsubmit(form: NgForm, updateData?: {category?: any, type: string}) {
-
+  checkMandatory(){
     for (let item of this.processData) {
       for (let item2 of item.data) {
         if ((item2.likelihood == null || item2.relavance == null) && item2.relavance != 0) {
@@ -906,7 +905,7 @@ export class PortfolioTrack4Component implements OnInit {
             closable: true,
           })
 
-          return
+          return false
         }
       }
     }
@@ -919,7 +918,7 @@ export class PortfolioTrack4Component implements OnInit {
           detail: 'Fill all mandatory justification fields',
           closable: true,
         })
-        return
+        return false
       }
     }
 
@@ -935,7 +934,7 @@ export class PortfolioTrack4Component implements OnInit {
           detail: 'Fill all mandatory justification fields',
           closable: true,
         })
-        return
+        return false
       }
     }
 
@@ -943,21 +942,25 @@ export class PortfolioTrack4Component implements OnInit {
       this.messageService.add({
         severity: 'error',
         summary: 'Warning',
-        detail: 'Fill all mandatory justification fields',
+        detail: 'Fill all mandatory fields in scale sdg',
         closable: true,
       })
-      return
+      return false
     }
 
     if (!this.sdgValidation(this.sdgDataSendArray4)) {
       this.messageService.add({
         severity: 'error',
         summary: 'Warning',
-        detail: 'Fill all mandatory justification fields',
+        detail: 'Fill all mandatory fields sustained sdg',
         closable: true,
       })
-      return
+      return false
     }
+    return true
+  }
+
+  async onsubmit(form: NgForm, updateData?: {category?: any, type: string}) {
 
     if (this.assessment.assessment_approach === 'Direct') {
       if(this.isCompleted){
@@ -971,17 +974,30 @@ export class PortfolioTrack4Component implements OnInit {
           key: 'updateConfirm',
           accept: async () => {
             if (updateData?.category?.categoryCode === 'SCALE_SD' && this.isCompleted && !this.checkSustainSDGIsFilled()) {
+              if (!this.sdgValidation(this.sdgDataSendArray2)) {
+                this.messageService.add({
+                  severity: 'error',
+                  summary: 'Warning',
+                  detail: 'Fill all mandatory fields in scale sdg',
+                  closable: true,
+                })
+                return 
+              }
               this.confirmationService.confirm({
                 message: 'Pls make sure to update "Time frame outcome is sustained section" to update the result.',
                 header: 'Warning',
                 acceptLabel: 'Okay',
                 rejectLabel: 'Cancel',
                 accept: () => {
-                  if (updateData) {this.next(updateData.category,updateData.type)}
-                }, reject: () => {}
+                  if (updateData) { this.next(updateData.category, updateData.type) }
+                }, reject: () => { }
               })
             } else {
-              this.saveResults()
+              if (!this.checkMandatory()) {
+                return 
+              } else {
+                this.saveResults()
+              }
             }
           },
           reject: () => {
@@ -989,34 +1005,42 @@ export class PortfolioTrack4Component implements OnInit {
           },
         });
       }else{
-        this.saveResults()
+        if (! this.checkMandatory()) {
+          return
+        } else {
+          this.saveResults()
+        }
       }
       
 
     }
     else {
-      let finalArray = this.processData.concat(this.outcomeData)
-      finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment));
-      //@ts-ignore - We are accepting Array in back-end
-      this.investorToolControllerproxy.createFinalAssessmentIndirect(finalArray)
-        .subscribe(_res => {
-          let task = this.isCompleted? 'updated' :'created'
-              this.messageService.add({
-                severity: 'success',
-                summary: 'Success',
-                detail: `Assessment has been ${task} successfully`,
-                closable: true,
+      if (! this.checkMandatory()){
+        return
+      } else {
+        let finalArray = this.processData.concat(this.outcomeData)
+        finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment));
+        //@ts-ignore - We are accepting Array in back-end
+        this.investorToolControllerproxy.createFinalAssessmentIndirect(finalArray)
+          .subscribe(_res => {
+            let task = this.isCompleted? 'updated' :'created'
+                this.messageService.add({
+                  severity: 'success',
+                  summary: 'Success',
+                  detail: `Assessment has been ${task} successfully`,
+                  closable: true,
+            })
+            this.showResults();
+  
+          }, error => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Assessment detail saving failed',
+              closable: true,
+            })
           })
-          this.showResults();
-
-        }, error => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Assessment detail saving failed',
-            closable: true,
-          })
-        })
+      }
     }
 
 
@@ -1097,8 +1121,6 @@ export class PortfolioTrack4Component implements OnInit {
     let isValid: boolean = false
     for (let investorAssessment of data) {
       if (type === 'process' ) {
-
-        console.log("process data",investorAssessment)
         if (investorAssessment.relavance === 0) {
           isValid = true;
         } else {
