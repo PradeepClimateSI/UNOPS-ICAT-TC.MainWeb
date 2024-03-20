@@ -726,10 +726,20 @@ export class CmSectionThreeComponent implements OnInit {
               }
               res.type = this.approach
               if (this.isEditMode){
-                let assQ = this.assessmentquestions.find(o => (o.characteristic.id === char.id) && (o.question.id === q.id || o.relevance === 0))
+                let assQ = this.assessmentquestions.filter(o => (o.characteristic.id === char.id) && (o.question.id === q.id || o.relevance === 0))
                 if (assQ) {
-                  res.assessmentQuestionId = assQ.id
-                  res.assessmentAnswerId = assQ.assessmentAnswers[0]?.id
+                  let addedCharacteristics = this.results.filter(o => o.characteristic.id === res.characteristic.id)
+                  let assessmentquestionIds = assQ.map(q => q.id)
+                  if (addedCharacteristics.length > 0) {
+                    assessmentquestionIds = assessmentquestionIds.filter(aqid => !(addedCharacteristics.filter(o => o.assessmentQuestionId === aqid)?.length > 0))
+                  }
+                  let sortedQuestion = assQ.find(o => o.id === assessmentquestionIds[0])
+                  if (sortedQuestion) {
+                    res.assessmentQuestionId = sortedQuestion.id
+                    if (sortedQuestion.assessmentAnswers.length > 0) {
+                      res.assessmentAnswerId = sortedQuestion.assessmentAnswers[0]?.id
+                    }
+                  }
                 }
               }
               res.selectedSdg = new PortfolioSdg()

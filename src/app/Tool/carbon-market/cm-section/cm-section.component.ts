@@ -448,13 +448,16 @@ export class CmSectionComponent implements OnInit {
             let assQ = this.assessmentQuestions.find(o => (o.question.id === q.question?.id))
             if (assQ) {
               item.assessmentQuestionId = assQ.id;
-              item.assessmentAnswerId = assQ.assessmentAnswers[0]?.id;
-            }
+              if (assQ.assessmentAnswers.length > 0) {
+                item.assessmentAnswerId = assQ.assessmentAnswers[0]?.id;
+              }
+            } 
           }
           if (item.question) result.result.push(item)
         })
       })
     })
+    console.log(result.result)
     result.assessment = this.assessment;
     result.isDraft = event.isDraft;
     result.type =event.type;
