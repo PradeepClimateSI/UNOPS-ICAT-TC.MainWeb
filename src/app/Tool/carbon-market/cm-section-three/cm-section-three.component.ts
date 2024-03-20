@@ -544,28 +544,28 @@ export class CmSectionThreeComponent implements OnInit {
         return category
       })
     } else {
-      this.outcome = this.outcome.map((category: OutcomeCategory) => {
-        if (category.code === category_code) {
-          category.results = category.results.map((result: CMResultDto) => {
-            if (result.characteristic.code === 'INTERNATIONAL') {
-              //@ts-ignore
-              result.selectedScore = null
-              //@ts-ignore
-              result.comment = null
-              //@ts-ignore
-              result.startingSituation = null
-              //@ts-ignore
-              result.expectedImpact = null
-              if (['SCALE_ADAPTATION', 'SUSTAINED_ADAPTATION'].includes(category_code)) {
-                //@ts-ignore
-                result.adaptationCoBenifit = null
-              }
-            }
-            return result;
-          })
-        }
-        return category
-      })
+      // this.outcome = this.outcome.map((category: OutcomeCategory) => {
+      //   if (category.code === category_code) {
+      //     category.results = category.results.map((result: CMResultDto) => {
+      //       if (result.characteristic.code === 'INTERNATIONAL') {
+      //         //@ts-ignore
+      //         result.selectedScore = null
+      //         //@ts-ignore
+      //         result.comment = null
+      //         //@ts-ignore
+      //         result.startingSituation = null
+      //         //@ts-ignore
+      //         result.expectedImpact = null
+      //         if (['SCALE_ADAPTATION', 'SUSTAINED_ADAPTATION'].includes(category_code)) {
+      //           //@ts-ignore
+      //           result.adaptationCoBenifit = null
+      //         }
+      //       }
+      //       return result;
+      //     })
+      //   }
+      //   return category
+      // })
     }
   }
 
@@ -627,44 +627,44 @@ export class CmSectionThreeComponent implements OnInit {
           return sdg
         })
       } else {
-        this.selectedSDGs = this.selectedSDGs.map(sdg => {
-          if(sdg.id === sdg_id) {
-            if (char.characteristic.category.code === 'SCALE_SD') {
-              sdg.scaleResult = sdg.scaleResult.map(result => {
-                if (['NATIONAL', 'SUBNATIONAL'].includes(result.characteristic.code)) {
-                  //@ts-ignore
-                  result.selectedScore = null
-                  //@ts-ignore
-                  result.comment = null
-                  //@ts-ignore
-                  result.startingSituation = null
-                  //@ts-ignore
-                  result.expectedImpact = null
-                  //@ts-ignore
-                  result.sdgIndicator = null
-                }
-                return result
-              })
-            } else if (char.characteristic.category.code === 'SUSTAINED_SD') {
-              sdg.sustainResult = sdg.sustainResult.map(result => {
-                if (['NATIONAL', 'SUBNATIONAL'].includes(result.characteristic.code)) {
-                  //@ts-ignore
-                  result.selectedScore = score
-                  //@ts-ignore
-                  result.comment = null
-                  //@ts-ignore
-                  result.startingSituation = null
-                  //@ts-ignore
-                  result.expectedImpact = null
-                  //@ts-ignore
-                  result.sdgIndicator = null
-                }
-                return result
-              })
-            }
-          }
-          return sdg
-        })
+        // this.selectedSDGs = this.selectedSDGs.map(sdg => {
+        //   if(sdg.id === sdg_id) {
+        //     if (char.characteristic.category.code === 'SCALE_SD') {
+        //       sdg.scaleResult = sdg.scaleResult.map(result => {
+        //         if (['NATIONAL', 'SUBNATIONAL'].includes(result.characteristic.code)) {
+        //           //@ts-ignore
+        //           result.selectedScore = null
+        //           //@ts-ignore
+        //           result.comment = null
+        //           //@ts-ignore
+        //           result.startingSituation = null
+        //           //@ts-ignore
+        //           result.expectedImpact = null
+        //           //@ts-ignore
+        //           result.sdgIndicator = null
+        //         }
+        //         return result
+        //       })
+        //     } else if (char.characteristic.category.code === 'SUSTAINED_SD') {
+        //       sdg.sustainResult = sdg.sustainResult.map(result => {
+        //         if (['NATIONAL', 'SUBNATIONAL'].includes(result.characteristic.code)) {
+        //           //@ts-ignore
+        //           result.selectedScore = score
+        //           //@ts-ignore
+        //           result.comment = null
+        //           //@ts-ignore
+        //           result.startingSituation = null
+        //           //@ts-ignore
+        //           result.expectedImpact = null
+        //           //@ts-ignore
+        //           result.sdgIndicator = null
+        //         }
+        //         return result
+        //       })
+        //     }
+        //   }
+        //   return sdg
+        // })
       }
       let score: number | null = null
       let valid_scores_sdg = 0
