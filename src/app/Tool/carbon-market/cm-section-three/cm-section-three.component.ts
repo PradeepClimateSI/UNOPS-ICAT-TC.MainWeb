@@ -744,8 +744,23 @@ export class CmSectionThreeComponent implements OnInit {
 
   }
 
+  checkSustainSDGIsFilled() {
+    if (this.selectedSDGs?.length > 0) {
+      for (let sd of this.selectedSDGs) {
+        for (let res of sd.sustainResult) {
+          if (res.characteristic.code === 'INTERNATIONAL' && !res.selectedScore.code) {
+            return false
+          }
+        }
+      }
+      return true
+    } else {
+      return true
+    }
+  }
+
   async submit(draftCategory: string, isDraft: boolean = false, name: string, type: string) {
-    if (name === 'SCALE_SD' && this.isCompleted) {
+    if (name === 'SCALE_SD' && this.isCompleted && !this.checkSustainSDGIsFilled()) {
       this.confirmationService.confirm({
         message: 'Pls make sure to update "Time frame outcome is sustained section" to update the result.',
         header: 'Warning',

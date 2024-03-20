@@ -913,6 +913,21 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.tabView.tabs[this.selectedIndex].header;
   }
 
+  checkSustainSDGIsFilled() {
+    for (let sdgData of this.sdgDataSendArray4) {
+      if (sdgData.data.length > 0) {
+        for (let data of sdgData.data) {
+          if (!data.score) {
+            return false;
+          }
+        }
+      } else {
+        return false;
+      }
+    }
+    return true;
+  }
+
   async onsubmit(form: NgForm, updateData?: {category?: any, type: string}) {
     for (let item of this.processData) {
       for (let item2 of item.data) {
@@ -985,7 +1000,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
           rejectLabel: 'Go back',
           key: 'updateConfirm',
           accept: async () => {
-            if (updateData?.category?.categoryCode === 'SCALE_SD' && this.isCompleted) {
+            if (updateData?.category?.categoryCode === 'SCALE_SD' && this.isCompleted && !this.checkSustainSDGIsFilled()) {
               this.confirmationService.confirm({
                 message: 'Pls make sure to update "Time frame outcome is sustained section" to update the result.',
                 header: 'Warning',
@@ -1615,8 +1630,10 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     return str
   }
 
-  adaptationJustificationChange() {
-    this.checkTab2Mandatory(6)
+  adaptationJustificationChange(data: InvestorAssessment) {
+    if (data.category.code === 'SUSTAINED_ADAPTATION' || data.characteristics.category.code === 'SUSTAINED_ADAPTATION') {
+      this.checkTab2Mandatory(6)
+    }
   }
 
   onSelectScore(category: OutcomDataDto, characteristicCode: string, sdgIndex?:number) {

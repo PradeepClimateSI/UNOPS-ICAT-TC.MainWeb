@@ -259,7 +259,7 @@
                                     <div class="btn btn-primary text-uppercase" (click)="next(category.type+'_'+category.method)">
                                         Next
                                     </div>
-                                    <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, true,category.code,'out')">
+                                    <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, isCompleted ? false : true,category.code,'out')">
                                         {{isCompleted ? 'Update' : 'Save'}}
                                     </div>
                                 </div>
@@ -445,7 +445,7 @@
                                     <div *ngIf="activeIndex2 < outcome.length - 1" class="btn btn-primary text-uppercase" (click)="next(category.type+'_'+category.method)">
                                         Next
                                     </div>
-                                    <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, true,category.code,'out')">
+                                    <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, isCompleted ? false : true,category.code,'out')">
                                         {{isCompleted ? 'Update' : 'Save'}}
                                     </div>
                                 </div>
@@ -649,7 +649,7 @@
                                     <div class="btn btn-primary text-uppercase" (click)="next(category.type+'_'+category.method)">
                                         Next
                                     </div>
-                                    <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, true,category.code,'out')">
+                                    <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, isCompleted ? false : true,category.code,'out')">
                                         {{isCompleted ? 'Update' : 'Save'}}
                                     </div>
                                 </div>
