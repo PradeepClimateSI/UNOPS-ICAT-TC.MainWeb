@@ -877,6 +877,21 @@ export class PortfolioTrack4Component implements OnInit {
       })
   }
 
+  checkSustainSDGIsFilled() {
+    for (let sdgData of this.sdgDataSendArray4) {
+      if (sdgData.data.length > 0) {
+        for (let data of sdgData.data) {
+          if (!data.score) {
+            return false;
+          }
+        }
+      } else {
+        return false;
+      }
+    }
+    return true;
+  }
+
   async onsubmit(form: NgForm, updateData?: {category?: any, type: string}) {
 
     for (let item of this.processData) {
@@ -953,7 +968,7 @@ export class PortfolioTrack4Component implements OnInit {
           rejectLabel: 'Go back',
           key: 'updateConfirm',
           accept: async () => {
-            if (updateData?.category?.categoryCode === 'SCALE_SD' && this.isCompleted) {
+            if (updateData?.category?.categoryCode === 'SCALE_SD' && this.isCompleted && !this.checkSustainSDGIsFilled()) {
               this.confirmationService.confirm({
                 message: 'Pls make sure to update "Time frame outcome is sustained section" to update the result.',
                 header: 'Warning',
