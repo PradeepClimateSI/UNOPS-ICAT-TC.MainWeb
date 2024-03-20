@@ -1630,8 +1630,10 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     return str
   }
 
-  adaptationJustificationChange() {
-    this.checkTab2Mandatory(6)
+  adaptationJustificationChange(data: InvestorAssessment) {
+    if (data.category.code === 'SUSTAINED_ADAPTATION' || data.characteristics.category.code === 'SUSTAINED_ADAPTATION') {
+      this.checkTab2Mandatory(6)
+    }
   }
 
   onSelectScore(category: OutcomDataDto, characteristicCode: string, sdgIndex?:number) {
