@@ -171,7 +171,7 @@ const routes: Routes = [
     data: {}
   },
   {
-    path: 'view-polocies',
+    path: 'view-interventions',
     component: ViewComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
