@@ -376,17 +376,12 @@ export class PortfolioTrack4Component implements OnInit {
     this.geographicalAreasCoveredArr = areas
     this.geographicalArea = this.geographicalAreasCoveredArr[0]
      this.completModeSectorList = this.assessment.climateAction.policySector.map(i=> i.sector)
-    this.completModeSectorList.map((sector: Sector) => {
-      let sec = new Sector()
-      sec.id = sector.id
-      sec.name = sector.name
-      this.sectorList.push(sec)
-    })
+     this.sectorList = this.completModeSectorList
     this.assessment['sector'].map((sector: Sector) => {
-      let sec = new Sector()
-      sec.id = sector.id
-      sec.name = sector.name
-      this.sectorArray.push(sec)
+      let _sector = this.sectorList.find(i =>i.id ==sector.id)
+      if(_sector){
+        this.sectorArray.push(_sector)
+      }
     })
     this.selectedSectorsCompleteMode =  this.sectorArray
     this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
@@ -593,10 +588,11 @@ export class PortfolioTrack4Component implements OnInit {
             allBarriersSelected.assessment = res;
 
             this.projectControllerServiceProxy.policyBar(allBarriersSelected).subscribe((res) => {
+              let status = this.isCompleted? 'updated': 'created'
               this.messageService.add({
                 severity: 'success',
                 summary: 'Success',
-                detail: 'Assessment has been created successfully',
+                detail: `Assessment has been ${status} successfully`,
                 closable: true,
               },
 
@@ -626,8 +622,10 @@ export class PortfolioTrack4Component implements OnInit {
             this.investorToolControllerproxy.createinvestorToolAssessment(this.createInvestorToolDto)
               .subscribe(_res => {
                 if (_res) {
-                  this.isSavedAssessment = true;
-                  this.isCompleted = false
+                  if(!this.isCompleted){
+                    this.isSavedAssessment = true;
+                  }
+                 
                 }
               }, error => {
                 this.messageService.add({
@@ -913,7 +911,7 @@ export class PortfolioTrack4Component implements OnInit {
     /**There is an issue  in setting score and justification for sustained adaptation.
      * calling saveDraft is a tempory solution. Need to find a proper solution
     */
-    this.saveDraft(this.outcomeData[5], this.outcomeData[5].CategoryName, 'out', true)
+    // this.saveDraft(this.outcomeData[5], this.outcomeData[5].CategoryName, 'out', true)
     for (let item of this.outcomeData) {
       if (!this.checkValidation(item.data, 'outcome')) {
         this.messageService.add({
@@ -1084,24 +1082,17 @@ export class PortfolioTrack4Component implements OnInit {
     let isValid: boolean = false
     for (let investorAssessment of data) {
       if (type === 'process' ) {
+
+        console.log("process data",investorAssessment)
         if (investorAssessment.relavance === 0) {
           isValid = true;
         } else {
           if (
-            (investorAssessment.relavance !== undefined) &&
-            (investorAssessment.likelihood !== undefined) &&
+            (investorAssessment.relavance !== undefined && investorAssessment.relavance !== null) &&
+            (investorAssessment.likelihood !== undefined && investorAssessment.likelihood !== null) &&
             (investorAssessment.likelihood_justification !== undefined && investorAssessment.likelihood_justification !== null && investorAssessment.likelihood_justification !== '') 
           ) {
-            for (let indicator_details of investorAssessment.indicator_details) {
-              if (!indicator_details.question.isMain && (indicator_details.justification !== undefined && indicator_details.justification !== null && indicator_details.justification !== '')) {
-                isValid = true
-              } else if (indicator_details.question.isMain) {
-                isValid = true
-              } else {
-                isValid = false
-                break;
-              }
-            }
+            isValid = true
           } else {
             isValid = false
             break;

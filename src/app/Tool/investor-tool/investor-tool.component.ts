@@ -389,17 +389,12 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
    
     
     this.completModeSectorList = this.assessment.climateAction.policySector.map(i=> i.sector)
-    this.completModeSectorList.map((sector: Sector) => {
-      let sec = new Sector()
-      sec.id = sector.id
-      sec.name = sector.name
-      this.sectorList.push(sec)
-    })
+    this.sectorList = this.completModeSectorList
     this.assessment['sector'].map((sector: Sector) => {
-      let sec = new Sector()
-      sec.id = sector.id
-      sec.name = sector.name
-      this.sectorArray.push(sec)
+      let _sector = this.sectorList.find(i =>i.id ==sector.id)
+      if(_sector){
+        this.sectorArray.push(_sector)
+      }
     })
     this.selectedSectorsCompleteMode =  this.sectorArray
     this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
@@ -580,10 +575,11 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
             allBarriersSelected.climateAction = res.climateAction
             allBarriersSelected.assessment = res;
           this.projectControllerServiceProxy.policyBar(allBarriersSelected).subscribe((res) => {
+            let status = this.isCompleted? 'updated': 'created'
             this.messageService.add({
               severity: 'success',
               summary: 'Success',
-              detail: 'Assessment has been created successfully',
+              detail: `Assessment has been ${status} successfully`,
               closable: true,
             },            
             
@@ -628,8 +624,9 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
                   })
                   investDto.totalInvestements = this.totalInvestments
                   await this.investorToolControllerproxy.saveTotalInvestments(investDto).toPromise();
-                  this.isSavedAssessment = true
-                  this.isCompleted = false
+                  if(!this.isCompleted){
+                    this.isSavedAssessment = true;
+                  }
 
                 }
               }, error => {
