@@ -457,7 +457,6 @@ export class CmSectionComponent implements OnInit {
         })
       })
     })
-    console.log(result.result)
     result.assessment = this.assessment;
     result.isDraft = event.isDraft;
     result.type =event.type;
