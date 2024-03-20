@@ -39816,6 +39816,15 @@ export enum CountryStatus {
     Active = <any>"Active",
     Deactivated = <any>"Deactivated",
 }
+export enum DocumentsDocumentOwner {
+    Project = <any>"Project",
+    Country = <any>"Country",
+    CountryNC = <any>"CountryNC",
+    CountryBUR = <any>"CountryBUR",
+    CountryBTR = <any>"CountryBTR",
+    CountryNDC = <any>"CountryNDC",
+    CountryGHG = <any>"CountryGHG",
+}
 
 export enum ParameterRequestTool {
     Carbon_Market_Tool = <any>"Carbon Market Tool",
@@ -39877,21 +39886,4 @@ function blobToText(blob: any): Observable<string> {
             reader.readAsText(blob);
         }
     });
-}
-export enum DocumentsDocumentOwner {
-
-    Project = <any>"Project",
-
-    Country = <any>"Country",
-
-    CountryNC = <any>"CountryNC",
-
-    CountryBUR = <any>"CountryBUR",
-
-    CountryBTR = <any>"CountryBTR",
-
-    CountryNDC = <any>"CountryNDC",
-
-    CountryGHG = <any>"CountryGHG",
-
 }

@@ -323,11 +323,11 @@
                   </app-document-upload>
                 </div>
               </ng-container>
-              <!-- <ng-template *ngIf="selectedDocuments.length >0 && editEntytyId > 0">
+              <ng-container *ngIf="selectedDocuments.length >0 && editEntytyId > 0">
                 <div *ngFor="let item of selectedDocuments">
                   <p>{{item.fileName}}</p>
                 </div>
-              </ng-template> -->
+              </ng-container>
               <div *ngIf="selectedDocuments.length ==0 && editEntytyId > 0 && !editMode">
                 <p>Documents not uploaded </p>
               </div>
