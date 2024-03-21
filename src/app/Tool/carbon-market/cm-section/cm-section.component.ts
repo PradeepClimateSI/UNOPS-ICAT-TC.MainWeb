@@ -426,6 +426,7 @@ export class CmSectionComponent implements OnInit {
 
 
   save(event: SaveDto) {
+    event.isDraft = true
     console.log(event)
      if(event.type){
       this.shownSections.push(true);

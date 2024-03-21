@@ -1137,7 +1137,7 @@ export class PortfolioTrack4Component implements OnInit {
         }
       } else {
         for (let investorAssessment of data) {
-          if (["SUSTAINED_GHG", "SUSTAINED_ADAPTATION"].includes(investorAssessment.category.code)) {
+          if (["SUSTAINED_GHG", "SUSTAINED_ADAPTATION"].includes(investorAssessment.category.code) || ["SUSTAINED_GHG", "SUSTAINED_ADAPTATION"].includes(investorAssessment.characteristics.category?.code)) {
             if (
               (investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '') &&
               (investorAssessment.score !== undefined && investorAssessment.score !== null)
