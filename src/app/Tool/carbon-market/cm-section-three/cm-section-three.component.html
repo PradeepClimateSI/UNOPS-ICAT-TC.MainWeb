@@ -259,7 +259,7 @@
                                     <div class="btn btn-primary text-uppercase" (click)="next(category.type+'_'+category.method)">
                                         Next
                                     </div>
-                                    <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, true,category.code,'out')">
+                                    <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, isCompleted ? false : true,category.code,'out')">
                                         {{isCompleted ? 'Update' : 'Save'}}
                                     </div>
                                 </div>
@@ -445,7 +445,7 @@
                                     <div *ngIf="activeIndex2 < outcome.length - 1" class="btn btn-primary text-uppercase" (click)="next(category.type+'_'+category.method)">
                                         Next
                                     </div>
-                                    <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, true,category.code,'out')">
+                                    <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, isCompleted ? false : true,category.code,'out')">
                                         {{isCompleted ? 'Update' : 'Save'}}
                                     </div>
                                 </div>
@@ -528,7 +528,7 @@
                                                 <div class="col-4">Score</div>
                                                 <div class="col-8">
                                                     <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+SDG.code+char.characteristic.id" #type="ngModel" placeholder="Select Score" [(ngModel)]="char.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
-                                                        (onChange)="onSelectScore($event, char, idx, category.type)" [options]="SDG_scale_score" optionLabel="name" [required]="char.characteristic.code === 'INTERNATIONAL'" appendTo="body">
+                                                        (onChange)="onSelectScore($event, char, idx, SDG.id)" [options]="SDG_scale_score" optionLabel="name" [required]="char.characteristic.code === 'INTERNATIONAL'" appendTo="body">
                                                         <ng-template let-option pTemplate="item">
                                                             <div class="custom-option">
                                                                 {{ option.name }}
@@ -584,7 +584,7 @@
                                                 <div class="col-4">Score</div>
                                                 <div class="col-6">
                                                     <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'susScore'+SDG.code+chSus.characteristic.id" #type="ngModel" placeholder="Select Score" [(ngModel)]="chSus.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20"
-                                                        [style]="{'width': '100%'}" (onChange)="onSelectScore($event, chSus, idx, category.type)" [options]="SDG_sustained_score" optionLabel="name" [required]="chSus.characteristic.code === 'INTERNATIONAL'" appendTo="body">
+                                                        [style]="{'width': '100%'}" (onChange)="onSelectScore($event, chSus, idx, SDG.id)" [options]="SDG_sustained_score" optionLabel="name" [required]="chSus.characteristic.code === 'INTERNATIONAL'" appendTo="body">
                                                         <ng-template let-option pTemplate="item">
                                                             <div class="custom-option">
                                                                 {{ option.name }}
@@ -649,7 +649,7 @@
                                     <div class="btn btn-primary text-uppercase" (click)="next(category.type+'_'+category.method)">
                                         Next
                                     </div>
-                                    <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, true,category.code,'out')">
+                                    <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="submit(category.type+'_'+category.method, isCompleted ? false : true,category.code,'out')">
                                         {{isCompleted ? 'Update' : 'Save'}}
                                     </div>
                                 </div>

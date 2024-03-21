@@ -78,6 +78,9 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   isCompleted: boolean = false;
   isContinue: boolean = false;
   isDisableIntervention: boolean = false;
+  completModeSectorList: Sector[]=[];
+  selectedSectorsCompleteMode: Sector[] = [];
+
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
     private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
@@ -203,10 +206,17 @@ export class CarbonMarketAssessmentComponent implements OnInit {
       })
       this.geographicalAreasCoveredArr = areas;
       this.geographicalArea = this.geographicalAreasCoveredArr[0]
+      
+
+      this.completModeSectorList = this.assessment.climateAction.policySector.map(i=> i.sector)
+      this.sectorList = this.completModeSectorList
       this.cm_detail.sectorsCovered.map(sector => {
-        this.sectorArray.push(sector.sector)
+        let _sector = this.sectorList.find(i =>i.id ==sector.sector.id)
+        if(_sector){
+          this.sectorArray.push(_sector)
+        }
       })
-      this.sectorList = this.sectorArray
+    this.selectedSectorsCompleteMode =  this.sectorArray
       this.setFrom()
       this.setTo()
       this.assessmentres = this.assessment
@@ -401,7 +411,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   }
 
   onChangeGeoAreaCovered(){
-    if(this.assessment.climateAction.geographicalAreaCovered && this.geographicalArea.name !==this.assessment.climateAction.geographicalAreaCovered && !this.isCompleted){
+    if(this.assessment.climateAction.geographicalAreaCovered && this.geographicalArea.name !==this.assessment.climateAction.geographicalAreaCovered ){
       this.confirmationService.confirm({
         message: `You selected a geographical scope that deviates from the one that was assigned to this intervention- ${this.assessment.climateAction.geographicalAreaCovered }. Are you sure you want to continue with this selection?`,
         header: 'Confirmation',
@@ -413,11 +423,21 @@ export class CarbonMarketAssessmentComponent implements OnInit {
         accept: () => {
         },
         reject: () => { 
-          this.geographicalArea = this.geographicalAreasCovered.find(item=>{
-            if (item.name==this.assessment.climateAction.geographicalAreaCovered){
-              return item
-            }
-          })
+          if(this.isCompleted){
+            console.log(this.assessment['geographicalAreasCovered'][0])
+            this.geographicalArea = this.geographicalAreasCovered.find(item=>{
+              if (item.name==this.assessment['geographicalAreasCovered'][0].name){
+                return item
+              }
+            })
+          }
+          else{
+            this.geographicalArea = this.geographicalAreasCovered.find(item=>{
+              if (item.name==this.assessment.climateAction.geographicalAreaCovered){
+                return item
+              }
+            })
+          }
         },
       });
     }
@@ -425,7 +445,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
 
   onItemSelectSectors(event: any) {
     if(this.assessment.climateAction.policySector){
-      if(this.assessment.climateAction.policySector.length !=  this.sectorArray.length && !this.isCompleted){
+      if(this.assessment.climateAction.policySector.length !=  this.sectorArray.length ){
         this.closeMultiSelect();
         this.confirmationService.confirm({
           message: `You selected sectors that deviates from the one that was assigned to this intervention- ${ this.assessment.climateAction.policySector.map(i=> i.sector.name).join(",")}. Are you sure you want to continue with this selection?`,
@@ -438,7 +458,11 @@ export class CarbonMarketAssessmentComponent implements OnInit {
           accept: () => {
           },
           reject: () => { 
-            this.sectorArray = this.sectorList
+            if(!this.isCompleted){
+              this.sectorArray = this.sectorList
+            }else{
+             this.sectorArray = this.selectedSectorsCompleteMode
+            }
           },
         });
       }

@@ -389,17 +389,12 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
    
     
     this.completModeSectorList = this.assessment.climateAction.policySector.map(i=> i.sector)
-    this.completModeSectorList.map((sector: Sector) => {
-      let sec = new Sector()
-      sec.id = sector.id
-      sec.name = sector.name
-      this.sectorList.push(sec)
-    })
+    this.sectorList = this.completModeSectorList
     this.assessment['sector'].map((sector: Sector) => {
-      let sec = new Sector()
-      sec.id = sector.id
-      sec.name = sector.name
-      this.sectorArray.push(sec)
+      let _sector = this.sectorList.find(i =>i.id ==sector.id)
+      if(_sector){
+        this.sectorArray.push(_sector)
+      }
     })
     this.selectedSectorsCompleteMode =  this.sectorArray
     this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
@@ -580,10 +575,11 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
             allBarriersSelected.climateAction = res.climateAction
             allBarriersSelected.assessment = res;
           this.projectControllerServiceProxy.policyBar(allBarriersSelected).subscribe((res) => {
+            let status = this.isCompleted? 'updated': 'created'
             this.messageService.add({
               severity: 'success',
               summary: 'Success',
-              detail: 'Assessment has been created successfully',
+              detail: `Assessment has been ${status} successfully`,
               closable: true,
             },            
             
@@ -628,8 +624,9 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
                   })
                   investDto.totalInvestements = this.totalInvestments
                   await this.investorToolControllerproxy.saveTotalInvestments(investDto).toPromise();
-                  this.isSavedAssessment = true
-                  this.isCompleted = false
+                  if(!this.isCompleted){
+                    this.isSavedAssessment = true;
+                  }
 
                 }
               }, error => {
@@ -916,6 +913,21 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.tabView.tabs[this.selectedIndex].header;
   }
 
+  checkSustainSDGIsFilled() {
+    for (let sdgData of this.sdgDataSendArray4) {
+      if (sdgData.data.length > 0) {
+        for (let data of sdgData.data) {
+          if (!data.score) {
+            return false;
+          }
+        }
+      } else {
+        return false;
+      }
+    }
+    return true;
+  }
+
   async onsubmit(form: NgForm, updateData?: {category?: any, type: string}) {
     for (let item of this.processData) {
       for (let item2 of item.data) {
@@ -988,7 +1000,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
           rejectLabel: 'Go back',
           key: 'updateConfirm',
           accept: async () => {
-            if (updateData?.category?.categoryCode === 'SCALE_SD' && this.isCompleted) {
+            if (updateData?.category?.categoryCode === 'SCALE_SD' && this.isCompleted && !this.checkSustainSDGIsFilled()) {
               this.confirmationService.confirm({
                 message: 'Pls make sure to update "Time frame outcome is sustained section" to update the result.',
                 header: 'Warning',
@@ -1618,8 +1630,10 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     return str
   }
 
-  adaptationJustificationChange() {
-    this.checkTab2Mandatory(6)
+  adaptationJustificationChange(data: InvestorAssessment) {
+    if (data.category.code === 'SUSTAINED_ADAPTATION' || data.characteristics.category.code === 'SUSTAINED_ADAPTATION') {
+      this.checkTab2Mandatory(6)
+    }
   }
 
   onSelectScore(category: OutcomDataDto, characteristicCode: string, sdgIndex?:number) {

@@ -426,6 +426,7 @@ export class CmSectionComponent implements OnInit {
 
 
   save(event: SaveDto) {
+    console.log(event)
      if(event.type){
       this.shownSections.push(true);
      }
@@ -448,8 +449,10 @@ export class CmSectionComponent implements OnInit {
             let assQ = this.assessmentQuestions.find(o => (o.question.id === q.question?.id))
             if (assQ) {
               item.assessmentQuestionId = assQ.id;
-              item.assessmentAnswerId = assQ.assessmentAnswers[0]?.id;
-            }
+              if (assQ.assessmentAnswers.length > 0) {
+                item.assessmentAnswerId = assQ.assessmentAnswers[0]?.id;
+              }
+            } 
           }
           if (item.question) result.result.push(item)
         })
@@ -477,7 +480,7 @@ export class CmSectionComponent implements OnInit {
             detail: message,
             closable: true,
           })
-          if (event.isDraft) {
+          if (event.isDraft && !this.isCompleted) {
             this.isEditMode = true
             this.setInitialState()
             this.router.navigate(['../carbon-market-tool-edit'], { queryParams: { id: this.assessment.id, isEdit: true, isContinue: true }, relativeTo: this.activatedRoute });

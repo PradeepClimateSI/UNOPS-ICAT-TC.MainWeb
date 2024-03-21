@@ -543,10 +543,33 @@ export class CmSectionThreeComponent implements OnInit {
         }
         return category
       })
+    } else {
+      // this.outcome = this.outcome.map((category: OutcomeCategory) => {
+      //   if (category.code === category_code) {
+      //     category.results = category.results.map((result: CMResultDto) => {
+      //       if (result.characteristic.code === 'INTERNATIONAL') {
+      //         //@ts-ignore
+      //         result.selectedScore = null
+      //         //@ts-ignore
+      //         result.comment = null
+      //         //@ts-ignore
+      //         result.startingSituation = null
+      //         //@ts-ignore
+      //         result.expectedImpact = null
+      //         if (['SCALE_ADAPTATION', 'SUSTAINED_ADAPTATION'].includes(category_code)) {
+      //           //@ts-ignore
+      //           result.adaptationCoBenifit = null
+      //         }
+      //       }
+      //       return result;
+      //     })
+      //   }
+      //   return category
+      // })
     }
   }
 
-  onSelectScore(event: any, char: CMResultDto, index: number, type?: string) {
+  onSelectScore(event: any, char: CMResultDto, index: number, sdg_id? : number) {
     if (['SUSTAINED_GHG', 'SCALE_GHG'].includes(char.characteristic.category.code)) {
       let score: number | null = null
       let valid_scores = 0;
@@ -574,33 +597,74 @@ export class CmSectionThreeComponent implements OnInit {
     } else if (['SUSTAINED_SD', 'SCALE_SD'].includes(char.characteristic.category.code)) {
       if (['NATIONAL', 'SUBNATIONAL'].includes(char.characteristic.code)) {
         this.selectedSDGs = this.selectedSDGs.map(sdg => {
-          if (char.characteristic.category.code === 'SCALE_SD') {
-            sdg.scaleResult = sdg.scaleResult.map(result => {
-              if (result.characteristic.code === 'INTERNATIONAL') {
-                let score = this.masterDataService.SDG_scale_score.find(o => o.code === '-99')
-                if(score) result.selectedScore = score
-                result.comment = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.'
-                result.startingSituation = 'N/A'
-                result.expectedImpact = 'N/A'
-                result.sdgIndicator = 'N/A'
-              }
-              return result
-            })
-          } else if (char.characteristic.category.code === 'SUSTAINED_SD') {
-            sdg.sustainResult = sdg.sustainResult.map(result => {
-              if (result.characteristic.code === 'INTERNATIONAL') {
-                let score = this.masterDataService.SDG_sustained_score.find(o => o.code === '-99')
-                if(score) result.selectedScore = score
-                result.comment = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.'
-                result.startingSituation = 'N/A'
-                result.expectedImpact = 'N/A'
-                result.sdgIndicator ='N/A'
-              }
-              return result
-            })
+          if(sdg.id === sdg_id) {
+            if (char.characteristic.category.code === 'SCALE_SD') {
+              sdg.scaleResult = sdg.scaleResult.map(result => {
+                if (result.characteristic.code === 'INTERNATIONAL') {
+                  let score = this.masterDataService.SDG_scale_score.find(o => o.code === '-99')
+                  if(score) result.selectedScore = score
+                  result.comment = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.'
+                  result.startingSituation = 'N/A'
+                  result.expectedImpact = 'N/A'
+                  result.sdgIndicator = 'N/A'
+                }
+                return result
+              })
+            } else if (char.characteristic.category.code === 'SUSTAINED_SD') {
+              sdg.sustainResult = sdg.sustainResult.map(result => {
+                if (result.characteristic.code === 'INTERNATIONAL') {
+                  let score = this.masterDataService.SDG_sustained_score.find(o => o.code === '-99')
+                  if(score) result.selectedScore = score
+                  result.comment = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.'
+                  result.startingSituation = 'N/A'
+                  result.expectedImpact = 'N/A'
+                  result.sdgIndicator ='N/A'
+                }
+                return result
+              })
+            }
           }
           return sdg
         })
+      } else {
+        // this.selectedSDGs = this.selectedSDGs.map(sdg => {
+        //   if(sdg.id === sdg_id) {
+        //     if (char.characteristic.category.code === 'SCALE_SD') {
+        //       sdg.scaleResult = sdg.scaleResult.map(result => {
+        //         if (['NATIONAL', 'SUBNATIONAL'].includes(result.characteristic.code)) {
+        //           //@ts-ignore
+        //           result.selectedScore = null
+        //           //@ts-ignore
+        //           result.comment = null
+        //           //@ts-ignore
+        //           result.startingSituation = null
+        //           //@ts-ignore
+        //           result.expectedImpact = null
+        //           //@ts-ignore
+        //           result.sdgIndicator = null
+        //         }
+        //         return result
+        //       })
+        //     } else if (char.characteristic.category.code === 'SUSTAINED_SD') {
+        //       sdg.sustainResult = sdg.sustainResult.map(result => {
+        //         if (['NATIONAL', 'SUBNATIONAL'].includes(result.characteristic.code)) {
+        //           //@ts-ignore
+        //           result.selectedScore = score
+        //           //@ts-ignore
+        //           result.comment = null
+        //           //@ts-ignore
+        //           result.startingSituation = null
+        //           //@ts-ignore
+        //           result.expectedImpact = null
+        //           //@ts-ignore
+        //           result.sdgIndicator = null
+        //         }
+        //         return result
+        //       })
+        //     }
+        //   }
+        //   return sdg
+        // })
       }
       let score: number | null = null
       let valid_scores_sdg = 0
@@ -680,8 +744,23 @@ export class CmSectionThreeComponent implements OnInit {
 
   }
 
+  checkSustainSDGIsFilled() {
+    if (this.selectedSDGs?.length > 0) {
+      for (let sd of this.selectedSDGs) {
+        for (let res of sd.sustainResult) {
+          if (res.characteristic.code === 'INTERNATIONAL' && !res.selectedScore.code) {
+            return false
+          }
+        }
+      }
+      return true
+    } else {
+      return true
+    }
+  }
+
   async submit(draftCategory: string, isDraft: boolean = false, name: string, type: string) {
-    if (name === 'SCALE_SD' && this.isCompleted) {
+    if (name === 'SCALE_SD' && this.isCompleted && !this.checkSustainSDGIsFilled()) {
       this.confirmationService.confirm({
         message: 'Pls make sure to update "Time frame outcome is sustained section" to update the result.',
         header: 'Warning',
@@ -726,10 +805,20 @@ export class CmSectionThreeComponent implements OnInit {
               }
               res.type = this.approach
               if (this.isEditMode){
-                let assQ = this.assessmentquestions.find(o => (o.characteristic.id === char.id) && (o.question.id === q.id || o.relevance === 0))
+                let assQ = this.assessmentquestions.filter(o => (o.characteristic.id === char.id) && (o.question.id === q.id || o.relevance === 0))
                 if (assQ) {
-                  res.assessmentQuestionId = assQ.id
-                  res.assessmentAnswerId = assQ.assessmentAnswers[0]?.id
+                  let addedCharacteristics = this.results.filter(o => o.characteristic.id === res.characteristic.id)
+                  let assessmentquestionIds = assQ.map(q => q.id)
+                  if (addedCharacteristics.length > 0) {
+                    assessmentquestionIds = assessmentquestionIds.filter(aqid => !(addedCharacteristics.filter(o => o.assessmentQuestionId === aqid)?.length > 0))
+                  }
+                  let sortedQuestion = assQ.find(o => o.id === assessmentquestionIds[0])
+                  if (sortedQuestion) {
+                    res.assessmentQuestionId = sortedQuestion.id
+                    if (sortedQuestion.assessmentAnswers.length > 0) {
+                      res.assessmentAnswerId = sortedQuestion.assessmentAnswers[0]?.id
+                    }
+                  }
                 }
               }
               res.selectedSdg = new PortfolioSdg()
