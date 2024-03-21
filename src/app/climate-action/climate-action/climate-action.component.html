@@ -344,34 +344,9 @@
       <div class="card mt-2" *ngIf="flag ==1">
         <div class="p-grid p-fluid col-sm-12">
           <div class="p-2">
-            <h6>Summary of the Proposal</h6>
+            <p>Created Date is <b>{{proposedDate| date: "dd/MM/YYYY "}}</b></p>
           </div>
-          <div class="p-2">
-            <p>Current Status is <b>{{this.originalApprovalStatus}}</b></p>
-          </div>
-          <div class="p-2">
-            <p>Proposed Date is <b>{{proposedDate| date: "dd/MM/YYYY "}}</b></p>
-          </div>
-          <div *ngIf="ndcupdatehistoryList.length != 0">
-            <div class="p-2">
-              <h6>Aggregated Actions and Action Areas mapped history</h6>
-            </div>
-            <ng-container *ngFor="let item of ndcupdatehistoryList; let i = index">
-              <p><b>{{item.createdOn | date: "dd/MM/yyyy"}}</b> ,changed Aggregated Actions from
-                <b>{{item.previousNdcs}}</b> to <b>{{item.currentNdcs}}</b> and changed Action Areas from
-                <b>{{item.previousSubNdcs}}</b> to <b>{{item.currentSubNdcs}}</b> by <b>{{item.actionUser}}</b>.
-              </p>
-            </ng-container>
-          </div>
-          <div *ngIf="statusupdatehistoryList.length != 0">
-            <div class="p-2">
-              <h6>Project approval status update history</h6>
-            </div>
-            <ng-container *ngFor="let status of statusupdatehistoryList; let i = index">
-              <p><b>{{status.createdOn | date: "dd/MM/yyyy"}}</b> ,changed Status from <b>{{status.previousAction}}</b>
-                to <b>{{status.currentAction}}</b> by <b>{{status.actionUser}}</b>.</p>
-            </ng-container>
-          </div>
+         
         </div>
       </div>
       <div class="p-grid p-fluid col-sm-12">
