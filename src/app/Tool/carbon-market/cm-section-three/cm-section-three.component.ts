@@ -996,7 +996,7 @@ export class CmSectionThreeComponent implements OnInit {
       if (isValid) {
         this.categoriesToSave = []
         this.isDraftSaved = true
-        if(!isDraft) this.savedData = true
+        if(!isDraft && !this.isCompleted) this.savedData = true
         this.onSubmit.emit({result: this.results, isDraft: isDraft,name:name,type:type, expected_ghg_mitigation: this.expected_ghg_mitigation})
       } else {
         this.messageService.add({

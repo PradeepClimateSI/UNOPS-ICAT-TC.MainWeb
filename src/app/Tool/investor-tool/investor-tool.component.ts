@@ -1147,7 +1147,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
         }
       } else {
         for (let investorAssessment of data) {
-          if (["SUSTAINED_GHG", "SUSTAINED_ADAPTATION"].includes(investorAssessment.category.code)) {
+          if (["SUSTAINED_GHG", "SUSTAINED_ADAPTATION"].includes(investorAssessment.category.code) || ["SUSTAINED_GHG", "SUSTAINED_ADAPTATION"].includes(investorAssessment.characteristics.category?.code)){
             if (
               (investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '') &&
               (investorAssessment.score !== undefined && investorAssessment.score !== null)
@@ -1188,7 +1188,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
       let isValid: boolean = false;
       data.forEach(sdg => {
         for (let data of sdg.data) {
-          if (data.category.code === "SUSTAINED_SD") {
+          if (data.characteristics?.category?.code === "SUSTAINED_SD" || data.category.code === "SUSTAINED_SD") {
             if ((data.justification !== undefined && data.justification !== null && data.justification !== '') && (data.score !== undefined && data.score !== null)) {
               isValid = true
             } else {
