@@ -36,7 +36,7 @@
                     <button class="btn btn-primary text-uppercase" type="submit" (click)="save(emptySaveDto)">
                       {{ (assessment && assessment.assessment_approach=== 'INDIRECT') ? 'Send to Data Collection Team' : 'Calculate & Check Results' }}
                     </button>
-                    <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="save(emptySaveDto)">
+                    <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="save({result: [], isDraft: true, name: '', type: '', expected_ghg_mitigation: 0})">
                         Save
                     </div>
                 </div>
