@@ -35,6 +35,7 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
 
   loading: boolean;
   uploadedFiles: any[] = [];
+  SERVER_URL1 = environment.baseUrlAPI;
   SERVER_URL = environment.baseUrlAPI + '/document/upload2';
   SERVER_URL_ANONYMOUS = environment.baseUrlAPI + '/document/upload2';
   uploadURL: string;
@@ -87,7 +88,11 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
           .getDocuments(this.documentOwnerId, this.documentOwner)
           .subscribe(
             (res) => {
+
               this.doucmentList = res;
+              for (let doc of this.doucmentList){
+                  doc.url =  this.SERVER_URL1 +"/document/downloadDocument/attachment/"+doc.id 
+              }
               this.loading = false;
               let ids=res.map(item=>{return item.id})
             
@@ -107,6 +112,9 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
             (res) => {
               this.valueClicked.emit({ data: res, res})
               this.doucmentList = res;
+              for (let doc of this.doucmentList){
+                doc.url =  this.SERVER_URL1 +"/document/downloadDocument/attachment/"+doc.id 
+            }
               this.loading = false;
             },
           );

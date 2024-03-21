@@ -323,10 +323,9 @@
                   </app-document-upload>
                 </div>
               </ng-container>
-              <ng-container *ngIf="selectedDocuments.length >0 && editEntytyId > 0">
-                <div *ngFor="let item of selectedDocuments">
-                  <p>{{item.fileName}}</p>
-                </div>
+              <ng-container *ngIf="selectedDocuments.length >0 && editEntytyId > 0 && !editMode">
+                <app-document-upload [doucmentList]="documents" [documentOwner]="documentsDocumentOwner" [documentOwnerId]="documentOwnerId" [isNew]="false" [showUpload]="false" [showDeleteButton]="true">
+                </app-document-upload>
               </ng-container>
               <div *ngIf="selectedDocuments.length ==0 && editEntytyId > 0 && !editMode">
                 <p>Documents not uploaded </p>
