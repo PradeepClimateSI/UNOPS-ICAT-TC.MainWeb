@@ -1667,6 +1667,18 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     }
   }
 
+  checkCategory(categoryCode: string, CharateristiCode: string){
+    let isWarning = false
+    
+    if((categoryCode == 'SCALE_GHG' || categoryCode == 'SCALE_ADAPTATION') && ['MACRO_LEVEL', 'INTERNATIONAL'].includes(CharateristiCode)){
+      isWarning = true
+    }
+    else if(categoryCode == 'SUSTAINED_GHG' || categoryCode == 'SUSTAINED_ADAPTATION'){
+      isWarning = true
+    }
+    return isWarning
+  }
+
 }
 interface UploadEvent {
   originalEvent: HttpResponse<FileDocument>;
