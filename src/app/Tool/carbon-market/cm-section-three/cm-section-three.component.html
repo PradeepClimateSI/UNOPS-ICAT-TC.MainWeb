@@ -20,7 +20,7 @@
                         </div>
                         <div class="col-5">
                             <p-dropdown name="data_charData_relavance" #data_charData_relavance="ngModel" placeholder="Select Relevance" [(ngModel)]="char.relevance" [options]="relevance" optionLabel="name" appendTo="body" optionValue="value" [required]="true"
-                                (onChange)="onRelevanceChange($event, char)"></p-dropdown>
+                                (onChange)="onRelevanceChange($event, char); autoSaveResult(category.code, true, category.name, 'prose', char.id, undefined)"></p-dropdown>
                         </div>
                         <p class="info-message text-danger" *ngIf="
                                 char.relevance === undefined &&
@@ -35,7 +35,7 @@
                         <br>
                         <p><strong><u>Guiding Question(s)</u></strong></p>
                         <div *ngFor="let question of char.questions">
-                            <app-cm-question [question]="question" [approach]="approach" [assessmentquestions]="assessmentquestions" [isEditMode]="isEditMode" (prev_answer)="onAnswer($event, question, char)"></app-cm-question>
+                            <app-cm-question [question]="question" [approach]="approach" [assessmentquestions]="assessmentquestions" [isEditMode]="isEditMode" (prev_answer)="onAnswer($event, question, category, char)"></app-cm-question>
                         </div>
                     </div>
                 </ng-container>

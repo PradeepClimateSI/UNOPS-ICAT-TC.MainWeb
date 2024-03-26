@@ -1,10 +1,11 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FieldNames, MasterDataService } from 'app/shared/master-data.service';
 import { environment } from 'environments/environment';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { Assessment, CMAssessmentQuestion, CMAssessmentQuestionControllerServiceProxy, CMDefaultValue, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, ScoreDto, UniqueCategory } from 'shared/service-proxies/service-proxies';
+import { Assessment, CMAssessmentQuestion, CMAssessmentQuestionControllerServiceProxy, CMDefaultValue, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, SaveCMResultDto, ScoreDto, UniqueCategory, UniqueCharacteristic } from 'shared/service-proxies/service-proxies';
 
 
 interface UploadEvent {
@@ -124,6 +125,8 @@ export class CmSectionThreeComponent implements OnInit {
     private investorToolControllerServiceProxy: InvestorToolControllerServiceProxy,
     private cMAssessmentQuestionControllerServiceProxy: CMAssessmentQuestionControllerServiceProxy,
     private confirmationService: ConfirmationService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
   ) {
     this.uploadUrl = environment.baseUrlAPI + "/document/upload-file-by-name" ; 
     this.fileServerURL = environment.baseUrlAPI+'/document/downloadDocumentsFromFileName/uploads';
@@ -722,7 +725,7 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
 
-  onAnswer(event: any, question: any, characteristic?: Characteristics) {
+  onAnswer(event: any, question: any, category: UniqueCategory, characteristic?: Characteristics) {
     let q = new CMQuestion()
     q.id = question.id
 
@@ -740,6 +743,10 @@ export class CmSectionThreeComponent implements OnInit {
       } else {
         question.result.answer = event.answer
       }
+    }
+
+    if (characteristic && !event.isLoading) {
+      this.autoSaveResult(category.code, true, category.name, 'prose', characteristic.id, question.id)
     }
 
   }
@@ -1006,6 +1013,90 @@ export class CmSectionThreeComponent implements OnInit {
           closable: true,
         });
       }
+    }
+  }
+
+  autoSaveResult(draftCategory: string, isDraft: boolean, name: string, type: string, characteristicId: number|undefined, questionId: number|undefined) {
+    if (type === 'prose') {
+      let result:CMResultDto[] =  []
+      let category_result: UniqueCategory;
+      let characteristic_result: any
+      let questionResult: any;
+      if (questionId && characteristicId) {
+        category_result = this.categories['process'].find((o: UniqueCategory) => o.code === draftCategory)
+        characteristic_result = category_result.characteristics.find((o: UniqueCharacteristic) => o.id === characteristicId)
+        questionResult = characteristic_result?.questions.find((q: CMQuestion) => q.id === questionId)
+        let _result = new CMResultDto()
+        if (questionResult) {
+          Object.keys(questionResult.result).forEach(e => {
+            _result[e] = questionResult[e]
+          })
+          let ch = new Characteristics()
+          ch.id = questionResult.characteristic.id
+          _result.characteristic = ch
+          _result.relevance = characteristic_result?.relevance
+          _result.answer = questionResult.result.answer
+          _result.question = questionResult.result.question
+          _result.comment = questionResult.result.comment
+          _result.filePath = questionResult.result.filePath
+        }
+        if (this.isEditMode){
+          let assQ = this.assessmentquestions.find(o => (o.characteristic.id === characteristic_result.id) && (o.question.id === questionResult?.id || o.relevance === 0))
+          if (assQ) {
+            _result.assessmentQuestionId = assQ.id
+            if (assQ.assessmentAnswers.length > 0) {
+              _result.assessmentAnswerId = assQ.assessmentAnswers[0]?.id
+            }
+          }
+        }
+        result.push(_result)
+      } else if (characteristicId) {
+        category_result = this.categories['process'].find((o: UniqueCategory) => o.code === draftCategory)
+        characteristic_result = category_result.characteristics.find((o: UniqueCharacteristic) => o.id === characteristicId)
+        characteristic_result.questions.forEach((question: CMQuestion) => {
+          let _result = new CMResultDto()
+          let ch = new Characteristics()
+          ch.id = characteristic_result.id
+          _result.characteristic = ch
+          _result.relevance = characteristic_result.relevance
+          if (this.isEditMode) {
+            let assQ = this.assessmentquestions.filter(o => (o.characteristic.id === characteristic_result.id) && (o.question.id === question.id || o.relevance === 0))
+            if (assQ) {
+              let addedCharacteristics = this.results.filter(o => o.characteristic.id === characteristic_result.id)
+              let assessmentquestionIds = assQ.map(q => q.id)
+              if (addedCharacteristics.length > 0) {
+                assessmentquestionIds = assessmentquestionIds.filter(aqid => !(addedCharacteristics.filter(o => o.assessmentQuestionId === aqid)?.length > 0))
+              }
+              let sortedQuestion = assQ.find(o => o.id === assessmentquestionIds[0])
+              if (sortedQuestion) {
+                _result.assessmentQuestionId = sortedQuestion.id
+                if (sortedQuestion.assessmentAnswers.length > 0) {
+                  _result.assessmentAnswerId = sortedQuestion.assessmentAnswers[0]?.id
+                }
+              }
+            }
+          }
+          result.push(_result)
+        })
+      }
+      
+      let cmResult: SaveCMResultDto = new SaveCMResultDto();
+      cmResult.result = result;
+      cmResult.assessment = this.assessment;
+      cmResult.isDraft = isDraft;
+      cmResult.type = type;
+      cmResult.name = name;
+      this.cMAssessmentQuestionControllerServiceProxy.saveResult(cmResult).subscribe(res => {
+        console.log(res)
+        if (res) {
+          if (!this.isEditMode) {
+            this.router.navigate(['../carbon-market-tool-edit'], { queryParams: { id: this.assessment.id, isEdit: true, isContinue: true }, relativeTo: this.activatedRoute });
+          }
+        }
+      })
+
+    } else if (type === 'out') {
+
     }
   }
 
