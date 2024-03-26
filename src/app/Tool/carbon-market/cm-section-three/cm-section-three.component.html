@@ -85,7 +85,8 @@
                                                 <ng-container *ngIf="!(useDefault[char.characteristic.id] && useDefault[char.characteristic.id].st_default) || char.characteristic.code !== 'INTERNATIONAL'">
                                                     <input type="text" [name]="'stSituation'+char.characteristic.id" #tboundrary="ngModel"
                                                         [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)"
-                                                        [(ngModel)]="char.startingSituation" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" />
+                                                        [(ngModel)]="char.startingSituation" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" 
+                                                        (change)="autoSaveResult(category.code, true, category.name, 'out', char.characteristic.id, undefined)" />
                                                     <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
                                                         ((fData.form.controls['stSituation'+char.characteristic.id]?.touched ? 
                                                             (char.startingSituation === undefined || char.startingSituation === '')
@@ -114,7 +115,7 @@
                                     <div class="col-4">Expected Impact</div>
                                     <div class="col-8">
                                         <input type="text" [name]="'impact'+char.characteristic.id" #tboundrary="ngModel" placeholder="Please describe the expected emissions reductions on the indicated scale." [(ngModel)]="char.expectedImpact" class="form-control"
-                                            [required]="char.characteristic.code === 'INTERNATIONAL'" />
+                                            [required]="char.characteristic.code === 'INTERNATIONAL'" (change)="autoSaveResult(category.code, true, category.name, 'out', char.characteristic.id, undefined)"/>
                                         <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
                                                 ((fData.form.controls['impact'+char.characteristic.id]?.touched ? 
                                                     (char.expectedImpact === undefined || char.expectedImpact === '')
@@ -129,7 +130,7 @@
                                     <div class="col-6">
                                         <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.characteristic.id" #type="ngModel" placeholder="Select Score" [(ngModel)]="char.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
                                             [options]="char.characteristic.code === 'INTERNATIONAL' ? GHG_scale_score_macro : (char.characteristic.code === 'NATIONAL' ? GHG_scale_score_medium : GHG_scale_score_micro)" [required]="char.characteristic.code === 'INTERNATIONAL'" appendTo="body"
-                                            (onChange)="onSelectScore($event, char, idx, category.type)" optionLabel="name">
+                                            (onChange)="onSelectScore($event, char, idx, category.type);autoSaveResult(category.code, true, category.name, 'out', char.characteristic.id, undefined)" optionLabel="name">
                                             <ng-template let-option pTemplate="item">
                                                 <div class="custom-option">
                                                     {{ option.name }}
@@ -151,7 +152,8 @@
                                             style="font-size: 1rem"></i></div>
                                     <div class="col-6">
                                         <textarea type="text" rows="5" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? 'Enter Justification' : ''"
-                                            [required]="char.characteristic.code === 'INTERNATIONAL'" [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
+                                            [required]="char.characteristic.code === 'INTERNATIONAL'" [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"
+                                            (change)="autoSaveResult(category.code, true, category.name, 'out', char.characteristic.id, undefined)"></textarea>
                                         <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                         <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
                                                 ((fData.form.controls['justification'+char.characteristic.id]?.touched ? 
@@ -162,7 +164,7 @@
                                         </p>
                                     </div>
                                     <div class="col-2">
-                                        <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload" name="files" [url]="uploadUrl" (onUpload)="onUpload($event,char)" [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="5000000" [auto]="true">
+                                        <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload" name="files" [url]="uploadUrl" (onUpload)="onUpload($event,char);autoSaveResult(category.code, true, category.name, 'out', char.characteristic.id, undefined)" [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="5000000" [auto]="true">
                                         </p-fileUpload>
                                     </div>
                                 </div>

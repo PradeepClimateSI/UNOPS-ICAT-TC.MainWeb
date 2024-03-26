@@ -1016,7 +1016,7 @@ export class CmSectionThreeComponent implements OnInit {
     }
   }
 
-  autoSaveResult(draftCategory: string, isDraft: boolean, name: string, type: string, characteristicId: number|undefined, questionId: number|undefined) {
+  autoSaveResult(draftCategory: string, isDraft: boolean, name: string, type: string, characteristicId: number | undefined, questionId: number | undefined) {
     if (type === 'prose') {
       let result:CMResultDto[] =  []
       let category_result: UniqueCategory;
@@ -1087,7 +1087,6 @@ export class CmSectionThreeComponent implements OnInit {
       cmResult.type = type;
       cmResult.name = name;
       this.cMAssessmentQuestionControllerServiceProxy.saveResult(cmResult).subscribe(res => {
-        console.log(res)
         if (res) {
           if (!this.isEditMode) {
             this.router.navigate(['../carbon-market-tool-edit'], { queryParams: { id: this.assessment.id, isEdit: true, isContinue: true }, relativeTo: this.activatedRoute });
@@ -1096,9 +1095,40 @@ export class CmSectionThreeComponent implements OnInit {
       })
 
     } else if (type === 'out') {
+      //TODO load assessment questions in auto save function
+      let results = this.outcome.find((o: OutcomeCategory) => o.code === draftCategory)
+      let characteristic_result = results.results.find((o: CMResultDto) => o.characteristic.id === characteristicId)
+      console.log(characteristic_result)
+      console.log(this.assessmentquestions)
 
+      if (this.isEditMode) {
+        let assQ = this.assessmentquestions.find(o => o.characteristic.id === characteristic_result.characteristic.id)
+        console.log(assQ)
+        if (assQ) {
+          characteristic_result.assessmentQuestionId = assQ.id
+          characteristic_result.assessmentAnswerId = assQ.assessmentAnswers[0].id
+        }
+      }
+      console.log(characteristic_result)
+
+      let cmResult: SaveCMResultDto = new SaveCMResultDto();
+      cmResult.result = [characteristic_result];
+      cmResult.assessment = this.assessment;
+      cmResult.isDraft = isDraft;
+      cmResult.type = type;
+      cmResult.name = name;
+      this.cMAssessmentQuestionControllerServiceProxy.saveResult(cmResult).subscribe(res => {
+        if (res) {
+          if (!this.isEditMode) {
+            this.router.navigate(['../carbon-market-tool-edit'], { queryParams: { id: this.assessment.id, isEdit: true, isContinue: true }, relativeTo: this.activatedRoute });
+          }
+        }
+      })
     }
+      
   }
+
+  
 
   async checkMandotary () {
     let isValid = true
