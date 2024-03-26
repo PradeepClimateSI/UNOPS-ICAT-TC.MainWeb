@@ -126,6 +126,9 @@ width: 80%;
   box-shadow: rgba(0, 0, 0, 0.5) 0px 5px 15px;
   /* text-align: center; */
   border-radius: 100%;
+  display: flex;
+  justify-content: center; /* Horizontal centering */
+  align-items: center; 
 }
 .third-section-circle p {
   padding-left: 3%;
@@ -135,10 +138,10 @@ width: 80%;
   font-size: 30px;
   margin: 0;
 
-  top: 50%;
-  left: 50%;
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
+  /* top: 50%;
+  left: 50%; */
+  /* -ms-transform: translate(-50%, -50%); */
+  /* transform: translate(-50%, -50%); */
 }
 .fourth-section {
   margin-top: 3%;
