@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FieldNames, MasterDataService } from 'app/shared/master-data.service';
 import { environment } from 'environments/environment';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { Assessment, CMAssessmentQuestion, CMAssessmentQuestionControllerServiceProxy, CMDefaultValue, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, SaveCMResultDto, ScoreDto, UniqueCategory, UniqueCharacteristic } from 'shared/service-proxies/service-proxies';
+import { Assessment, CMAssessmentQuestion, CMAssessmentQuestionControllerServiceProxy, CMDefaultValue, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Category, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, SaveCMResultDto, ScoreDto, UniqueCategory, UniqueCharacteristic } from 'shared/service-proxies/service-proxies';
 
 
 interface UploadEvent {
@@ -540,6 +540,8 @@ export class CmSectionThreeComponent implements OnInit {
               if (['SCALE_ADAPTATION', 'SUSTAINED_ADAPTATION'].includes(category_code)) {
                 result.adaptationCoBenifit = 'N/A'
               }
+
+              this.autoSaveResult(category.code, true, category.code, 'out', result.characteristic.id, undefined, undefined)
             }
             return result;
           })
@@ -605,11 +607,13 @@ export class CmSectionThreeComponent implements OnInit {
               sdg.scaleResult = sdg.scaleResult.map(result => {
                 if (result.characteristic.code === 'INTERNATIONAL') {
                   let score = this.masterDataService.SDG_scale_score.find(o => o.code === '-99')
-                  if(score) result.selectedScore = score
+                  if (score) result.selectedScore = score
                   result.comment = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.'
                   result.startingSituation = 'N/A'
                   result.expectedImpact = 'N/A'
                   result.sdgIndicator = 'N/A'
+
+                  this.autoSaveResult(char.characteristic.category.code, true, char.characteristic.category.code, 'out', result.characteristic.id, undefined, sdg.id)
                 }
                 return result
               })
@@ -622,6 +626,7 @@ export class CmSectionThreeComponent implements OnInit {
                   result.startingSituation = 'N/A'
                   result.expectedImpact = 'N/A'
                   result.sdgIndicator ='N/A'
+                  this.autoSaveResult(char.characteristic.category.code, true, char.characteristic.category.code, 'out', result.characteristic.id, undefined, sdg.id)
                 }
                 return result
               })
@@ -746,7 +751,7 @@ export class CmSectionThreeComponent implements OnInit {
     }
 
     if (characteristic && !event.isLoading) {
-      this.autoSaveResult(category.code, true, category.name, 'prose', characteristic.id, question.id)
+      this.autoSaveResult(category.code, true, category.code, 'prose', characteristic.id, question.id, undefined)
     }
 
   }
@@ -1016,7 +1021,8 @@ export class CmSectionThreeComponent implements OnInit {
     }
   }
 
-  autoSaveResult(draftCategory: string, isDraft: boolean, name: string, type: string, characteristicId: number | undefined, questionId: number | undefined) {
+  async autoSaveResult(draftCategory: string, isDraft: boolean, name: string, type: string, characteristicId: number | undefined, questionId: number | undefined, sdgId: number | undefined) {
+    await this.loadAssessmentQuestions()
     if (type === 'prose') {
       let result:CMResultDto[] =  []
       let category_result: UniqueCategory;
@@ -1079,53 +1085,68 @@ export class CmSectionThreeComponent implements OnInit {
           result.push(_result)
         })
       }
-      
-      let cmResult: SaveCMResultDto = new SaveCMResultDto();
-      cmResult.result = result;
-      cmResult.assessment = this.assessment;
-      cmResult.isDraft = isDraft;
-      cmResult.type = type;
-      cmResult.name = name;
-      this.cMAssessmentQuestionControllerServiceProxy.saveResult(cmResult).subscribe(res => {
-        if (res) {
-          if (!this.isEditMode) {
-            this.router.navigate(['../carbon-market-tool-edit'], { queryParams: { id: this.assessment.id, isEdit: true, isContinue: true }, relativeTo: this.activatedRoute });
-          }
-        }
-      })
+      this.saveResultInAutoSave(result, isDraft, type, name)
 
     } else if (type === 'out') {
-      //TODO load assessment questions in auto save function
-      let results = this.outcome.find((o: OutcomeCategory) => o.code === draftCategory)
-      let characteristic_result = results.results.find((o: CMResultDto) => o.characteristic.id === characteristicId)
-      console.log(characteristic_result)
-      console.log(this.assessmentquestions)
-
-      if (this.isEditMode) {
-        let assQ = this.assessmentquestions.find(o => o.characteristic.id === characteristic_result.characteristic.id)
-        console.log(assQ)
-        if (assQ) {
-          characteristic_result.assessmentQuestionId = assQ.id
-          characteristic_result.assessmentAnswerId = assQ.assessmentAnswers[0].id
-        }
+      let selectedSdg
+      if (draftCategory === 'SCALE_SD' || draftCategory === 'SUSTAINED_SD') {
+        selectedSdg = this.selectedSDGs.find(o => o.id === sdgId)
       }
-      console.log(characteristic_result)
-
-      let cmResult: SaveCMResultDto = new SaveCMResultDto();
-      cmResult.result = [characteristic_result];
-      cmResult.assessment = this.assessment;
-      cmResult.isDraft = isDraft;
-      cmResult.type = type;
-      cmResult.name = name;
-      this.cMAssessmentQuestionControllerServiceProxy.saveResult(cmResult).subscribe(res => {
-        if (res) {
-          if (!this.isEditMode) {
-            this.router.navigate(['../carbon-market-tool-edit'], { queryParams: { id: this.assessment.id, isEdit: true, isContinue: true }, relativeTo: this.activatedRoute });
+      if (draftCategory === 'SCALE_SD') {
+        if (selectedSdg) {
+          let result = selectedSdg.scaleResult.find(res => res.characteristic.id === characteristicId)
+          if (result) {
+            this.saveResultInAutoSave([result], isDraft, type, name)
           }
         }
-      })
+      } else if (draftCategory === 'SUSTAINED_SD') {
+        if (selectedSdg) {
+          let result = selectedSdg.sustainResult.find(res => res.characteristic.id === characteristicId)
+          if (result) {
+            this.saveResultInAutoSave([result], isDraft, type, name)
+          }
+        }
+      } else {
+        let results = this.outcome.find((o: OutcomeCategory) => o.code === draftCategory)
+        if (draftCategory === "SCALE_ADAPTATION" || draftCategory === 'SUSTAINED_ADAPTATION') {
+          results.results = results.results.map((res: CMResultDto) => {
+            res.isAdaptation = true
+            res.isGHG = false
+            res.isSDG = false
+            return res
+          })
+        }
+        let characteristic_result = results.results.find((o: CMResultDto) => o.characteristic.id === characteristicId)
+  
+        if (this.isEditMode) {
+          let assQ = this.assessmentquestions.find(o => o.characteristic.id === characteristic_result.characteristic.id)
+          if (assQ) {
+            characteristic_result.assessmentQuestionId = assQ.id
+            characteristic_result.assessmentAnswerId = assQ.assessmentAnswers[0].id
+          }
+        }
+  
+        this.saveResultInAutoSave([characteristic_result], isDraft, type, name)
+      }
+
     }
       
+  }
+
+  saveResultInAutoSave(results: CMResultDto[], isDraft: boolean, type: string, name: string) {
+    let cmResult: SaveCMResultDto = new SaveCMResultDto();
+    cmResult.result = results;
+    cmResult.assessment = this.assessment;
+    cmResult.isDraft = isDraft;
+    cmResult.type = type;
+    cmResult.name = name;
+    this.cMAssessmentQuestionControllerServiceProxy.saveResult(cmResult).subscribe(res => {
+      if (res) {
+        if (!this.isEditMode) {
+          this.router.navigate(['../carbon-market-tool-edit'], { queryParams: { id: this.assessment.id, isEdit: true, isContinue: true }, relativeTo: this.activatedRoute });
+        }
+      }
+    })
   }
 
   
@@ -1216,6 +1237,10 @@ export class CmSectionThreeComponent implements OnInit {
         this.default_values[ch_id].ex_default_values = this.default_values[ch_id].ex_default_values.map(val => {val['label'] = val.expected_impact_value + ' ' + val.source; return val})
       }
     }
+  }
+
+  async loadAssessmentQuestions() {
+    this.assessmentquestions = await this.cMAssessmentQuestionControllerServiceProxy.getAssessmentQuestionsByAssessmentId(this.assessment.id).toPromise()
   }
 }
 
