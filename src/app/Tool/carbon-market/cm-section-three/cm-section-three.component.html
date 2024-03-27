@@ -459,7 +459,7 @@
                         <div class="row p-2">
                             <div class="col-4">Choose SDG</div>
                             <div class="col-8">
-                                <p-multiSelect name="impact_categories" placeholder="Select SDG(s)" appendTo="body" [options]="sdgList" [(ngModel)]="selectedSDGsList" optionLabel="name" (onChange)="onSelectSDG($event)" [disabled]="category.method === 'SUSTAINED'">
+                                <p-multiSelect name="impact_categories" placeholder="Select SDG(s)" appendTo="body" [options]="sdgList" [(ngModel)]="selectedSDGsList" optionLabel="name" (onChange)="onSelectSDG($event); autoSaveResult('SCALE_SD', true, 'SCALE_SD', 'out', undefined, undefined, undefined)" [disabled]="category.method === 'SUSTAINED'">
                                 </p-multiSelect>
                             </div>
                         </div>

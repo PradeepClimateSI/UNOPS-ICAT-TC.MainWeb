@@ -1088,21 +1088,49 @@ export class CmSectionThreeComponent implements OnInit {
       this.saveResultInAutoSave(result, isDraft, type, name)
 
     } else if (type === 'out') {
-      let selectedSdg
+      let selectedSdg: SDG | undefined
       if (draftCategory === 'SCALE_SD' || draftCategory === 'SUSTAINED_SD') {
         selectedSdg = this.selectedSDGs.find(o => o.id === sdgId)
       }
       if (draftCategory === 'SCALE_SD') {
-        if (selectedSdg) {
-          let result = selectedSdg.scaleResult.find(res => res.characteristic.id === characteristicId)
-          if (result) {
-            this.saveResultInAutoSave([result], isDraft, type, name)
+        if (characteristicId === undefined && questionId === undefined) {
+          let exists = await this.cMAssessmentQuestionControllerServiceProxy.getSelectedSDGs(this.assessment.id).toPromise()
+          let existIds = exists.map(e => e.sdg.id)
+          let SDGs = this.selectedSDGs.filter(sd => !existIds.includes(sd.id))
+          SDGs.map(sd => {
+            let results = []
+            results.push(...sd.scaleResult)
+            results.push(...sd.sustainResult)
+            if (results.length > 0) {
+              this.saveResultInAutoSave(results, isDraft, type, name)
+            }
+          })
+        } else {
+          if (selectedSdg) {
+            let result = selectedSdg.scaleResult.find(res => res.characteristic.id === characteristicId)
+            if (result !== undefined) {
+              if (this.isEditMode) {
+                let assQ = this.assessmentquestions.find(o => o.characteristic.id === result?.characteristic.id && o.selectedSdg.id === selectedSdg?.id)
+                if (assQ) {
+                  result.assessmentQuestionId = assQ.id
+                  result.assessmentAnswerId = assQ.assessmentAnswers[0].id
+                }
+              }
+              this.saveResultInAutoSave([result], isDraft, type, name)
+            }
           }
         }
       } else if (draftCategory === 'SUSTAINED_SD') {
         if (selectedSdg) {
           let result = selectedSdg.sustainResult.find(res => res.characteristic.id === characteristicId)
           if (result) {
+            if (this.isEditMode) {
+              let assQ = this.assessmentquestions.find(o => o.characteristic.id === result?.characteristic.id && o.selectedSdg.id === selectedSdg?.id)
+              if (assQ) {
+                result.assessmentQuestionId = assQ.id
+                result.assessmentAnswerId = assQ.assessmentAnswers[0].id
+              }
+            }
             this.saveResultInAutoSave([result], isDraft, type, name)
           }
         }
