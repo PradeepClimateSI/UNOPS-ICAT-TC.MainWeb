@@ -248,9 +248,9 @@ export class CmSectionComponent implements OnInit {
         sec.criteria.forEach(cr => {
           cr.questions.forEach(q => {
             if (this.isPassed) {this.isPassed = q.answer.isPassing}
-            if (!this.isPassed) {
+            if (!q.answer.isPassing) {
               notMetCriterias.push(cr.criteria.name)
-            }
+            } 
           })
         })
       })
