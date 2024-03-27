@@ -502,7 +502,7 @@
                                             <div class="row p-2">
                                                 <div class="col-4">Starting Situation <i class="pi pi-info-circle" pTooltip="Please describe the value of the indicator before intervention implementation." tooltipPosition="bottom" style="font-size: 1rem"></i></div>
                                                 <div class="col-8">
-                                                    <input type="text" [name]="'stSituation'+char.characteristic.id" #tboundrary="ngModel"
+                                                    <input type="text" [name]="'stSituation'+char.characteristic.id+SDG.id" #tboundrary="ngModel"
                                                         [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)"
                                                         [(ngModel)]="char.startingSituation" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" (change)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, SDG.id)" />
                                                     <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
@@ -517,7 +517,7 @@
                                             <div class="row p-2">
                                                 <div class="col-4">Expected Impact <i class="pi pi-info-circle" pTooltip="Please describe the value of the indicator after intervention implementation." tooltipPosition="bottom" style="font-size: 1rem"></i></div>
                                                 <div class="col-8">
-                                                    <input type="text" [name]="'impact'+char.characteristic.id" #tboundrary="ngModel" placeholder="Please describe the expected emissions reductions on the indicated scale." [(ngModel)]="char.expectedImpact" class="form-control"
+                                                    <input type="text" [name]="'impact'+char.characteristic.id+SDG.id" #tboundrary="ngModel" placeholder="Please describe the expected emissions reductions on the indicated scale." [(ngModel)]="char.expectedImpact" class="form-control"
                                                         [required]="char.characteristic.code === 'INTERNATIONAL'" (change)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, SDG.id)"/>
                                                     <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
                                                             ((fData.form.controls['impact'+char.characteristic.id]?.touched ? 
