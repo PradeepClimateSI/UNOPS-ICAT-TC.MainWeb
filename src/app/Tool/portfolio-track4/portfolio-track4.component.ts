@@ -156,6 +156,7 @@ export class PortfolioTrack4Component implements OnInit {
   isDisableIntervention: boolean = false;
   completModeSectorList: Sector[]=[];
   selectedSectorsCompleteMode: Sector[] = [];
+  isCreatingAssessment: boolean = false
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -590,6 +591,7 @@ export class PortfolioTrack4Component implements OnInit {
 
             this.projectControllerServiceProxy.policyBar(allBarriersSelected).subscribe((res) => {
               let status = this.isCompleted? 'updated': 'created'
+              this.isCompleted ? this.isCreatingAssessment = false : this.isCreatingAssessment = true;
               this.messageService.add({
                 severity: 'success',
                 summary: 'Success',
@@ -880,46 +882,73 @@ export class PortfolioTrack4Component implements OnInit {
       })
   }
 
-  autoSaveResult(category_code: string, characteristic_code: string, draftLocation: string, type: string) {
-    if (type === 'pro') {
-      let pData = [...this.processData]
-      let _category_data = pData.find(p => p.categoryCode === category_code)
-      if (_category_data) {
-      let category_data = {..._category_data}
-        category_data.data = category_data.data.filter(_data => _data.characteristics.code === characteristic_code)
-        let data: any = {
-          finalArray: [category_data],
-          isDraft: true,
-          isEdit: this.isEditMode,
-          proDraftLocation: draftLocation,
-          outDraftLocation: this.assessment.outcomeDraftLocation,
-          lastDraftLocation: type,
-          scaleSDGs: [],
-          sustainedSDGs: [],
-          sdgs: []
+  async autoSaveResult(category: any, characteristic_code: string | undefined, draftLocation: string, type: string) {
+    if (this.isCreatingAssessment) {
+      this.saveDraft(category, draftLocation, type)
+      this.isCreatingAssessment = false
+    } else {
+      if (type === 'pro') {
+        let pData = [...this.processData]
+        let _category_data = pData.find(p => p.categoryCode === category.categoryCode)
+        if (_category_data) {
+        let category_data = {..._category_data}
+          category_data.data = category_data.data.filter(_data => _data.characteristics.code === characteristic_code)
+          if (this.isEditMode == true) {
+            this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise();
+            [category_data].map(x => x.data.map(y => y.assessment = this.assessment));
+          }
+          else {
+            [category_data].map(x => x.data.map(y => y.assessment = this.mainAssessment))
+          }
+          let data: any = {
+            finalArray: [category_data],
+            isDraft: true,
+            isEdit: this.isEditMode,
+            proDraftLocation: draftLocation,
+            outDraftLocation: this.assessment.outcomeDraftLocation,
+            lastDraftLocation: type,
+            scaleSDGs: [],
+            sustainedSDGs: [],
+            sdgs: []
+          }
+          this.saveResultInAutoSave(data)
         }
-        this.saveResultInAutoSave(data)
-      }
-    } else if (type === 'out') {
-      if (category_code === 'SCALE_SD') {
-
-      } else if (category_code === 'SUSTAINED_SD') {
-
-      } else {
-
+      } else if (type === 'out') {
+        if (category.categoryCode === 'SCALE_SD') {
+          if (characteristic_code === undefined) {
+            let data: any = {
+              finalArray: [],
+              isDraft: true,
+              isEdit: this.isEditMode,
+              proDraftLocation: draftLocation,
+              outDraftLocation: this.assessment.outcomeDraftLocation,
+              lastDraftLocation: type,
+              scaleSDGs: [],
+              sustainedSDGs: [],
+              sdgs: this.selectedSDGsWithAnswers
+            }
+            this.saveResultInAutoSave(data)
+          }
+          console.log(this.sdgDataSendArray2)
+          console.log(this.selectedSDGsWithAnswers)
+        } else if (category.categoryCode === 'SUSTAINED_SD') {
+  
+        } else {
+  
+        }
       }
     }
   }
 
   saveResultInAutoSave(data: FinalInvestorAssessmentDto) {
     this.investorToolControllerproxy.createFinalAssessment2(data).subscribe(res => {
-      if (res) {
+      // if (res) {
         if (!this.isEditMode) {
           this.router.navigate(['app/portfolio-tool-edit'], {
             queryParams: { id: this.mainAssessment.id, isEdit: true },
           });
         }
-      }
+      // }
     })
   }
 

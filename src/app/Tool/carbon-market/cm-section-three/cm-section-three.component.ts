@@ -1084,6 +1084,8 @@ startingSituation: any;
         }
         if (draftCategory === 'SCALE_SD') {
           if (characteristicId === undefined && questionId === undefined) {
+            let ids = this.selectedSDGs.map(o => o.id.toString())
+            this.cMAssessmentQuestionControllerServiceProxy.deleteRemovedSDGS(this.assessment.id, ids).toPromise()
             this.selectedSDGs.map(sd => {
               let results = []
               results.push(...sd.scaleResult)
