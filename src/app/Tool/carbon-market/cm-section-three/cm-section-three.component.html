@@ -153,7 +153,7 @@
                                     <div class="col-6">
                                         <textarea type="text" rows="5" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? 'Enter Justification' : ''"
                                             [required]="char.characteristic.code === 'INTERNATIONAL'" [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"
-                                            (change)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)"></textarea>
+                                            (mouseleave)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)"></textarea>
                                         <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                         <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
                                                 ((fData.form.controls['justification'+char.characteristic.id]?.touched ? 
@@ -205,7 +205,7 @@
                                     <div class="col-4">Justification</div>
                                     <div class="col-6">
                                         <textarea rows="5" type="text" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" placeholder="Enter Justification" [required]="char.characteristic.code === 'INTERNATIONAL'"
-                                            [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (change)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)"></textarea>
+                                            [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (mouseleave)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)"></textarea>
                                         <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                         <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
                                                 ((fData.form.controls['justification'+char.characteristic.id]?.touched ? 
@@ -356,7 +356,7 @@
                                             style="font-size: 1rem"></i></div>
                                     <div class="col-6">
                                         <textarea rows="5" type="text" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? 'Enter Justification' : ''"
-                                            [required]="char.characteristic.code === 'INTERNATIONAL'" [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (change)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)"></textarea>
+                                            [required]="char.characteristic.code === 'INTERNATIONAL'" [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (mouseleave)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)"></textarea>
                                         <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                         <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
                                             ((fData.form.controls['justification'+char.characteristic.id]?.touched ? 
@@ -408,7 +408,7 @@
                                     <div class="col-4">Justification</div>
                                     <div class="col-6">
                                         <textarea rows="5" type="text" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" placeholder="Enter Justification" [required]="char.characteristic.code === 'INTERNATIONAL'"
-                                            [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (change)="adaptationJustificationChange();autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)"></textarea>
+                                            [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (mouseleave)="adaptationJustificationChange();autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)"></textarea>
                                         <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                         <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
                                             ((fData.form.controls['justification'+char.characteristic.id]?.touched ? 
@@ -555,7 +555,7 @@
                                                         tooltipPosition="bottom" style="font-size: 1rem"></i></div>
                                                 <div class="col-6">
                                                     <textarea rows="5" type="text" [name]="'justification'+SDG.code+char.characteristic.id" [(ngModel)]="char.comment" class="form-control" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? 'Enter Justification' : ''"
-                                                        [required]="char.characteristic.code === 'INTERNATIONAL'" [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (change)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, SDG.id)"></textarea>
+                                                        [required]="char.characteristic.code === 'INTERNATIONAL'" [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (mouseleave)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, SDG.id)"></textarea>
                                                     <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                                     <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
                                                         ((fData.form.controls['justification'+SDG.code+char.characteristic.id]?.touched ? 
@@ -610,7 +610,7 @@
                                                 <div class="col-4">Justification</div>
                                                 <div class="col-6">
                                                     <textarea rows="5" type="text" [name]="'susJustification'+SDG.code+chSus.characteristic.id" [(ngModel)]="chSus.comment" class="form-control" placeholder="Enter Justification" [required]="chSus.characteristic.code === 'INTERNATIONAL'"
-                                                        [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (change)="autoSaveResult(category.code, true, category.code, 'out', chSus.characteristic.id, undefined, SDG.id)"></textarea>
+                                                        [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (mouseleave)="autoSaveResult(category.code, true, category.code, 'out', chSus.characteristic.id, undefined, SDG.id)"></textarea>
                                                     <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                                     <p class="info-message text-danger" *ngIf="chSus.characteristic.code === 'INTERNATIONAL' &&
                                                         ((fData.form.controls['susJustification'+SDG.code+chSus.characteristic.id]?.touched ? 

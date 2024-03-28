@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { FieldNames, MasterDataDto, MasterDataService, assessment_period_info, chapter6_url } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { AllBarriersSelected, Assessment, AssessmentControllerServiceProxy, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, PortfolioQuestionDetails, PortfolioQuestions,  Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { AllBarriersSelected, Assessment, AssessmentControllerServiceProxy, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, FinalInvestorAssessmentDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, PortfolioQuestionDetails, PortfolioQuestions,  Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { environment } from 'environments/environment';
@@ -94,6 +94,7 @@ export class PortfolioTrack4Component implements OnInit {
   processData: {
     type: string,
     CategoryName: string,
+    categoryCode: string,
     categoryID: number,
     isValidated: boolean | null
     data: InvestorAssessment[]
@@ -515,7 +516,7 @@ export class PortfolioTrack4Component implements OnInit {
 
         if (x.type === 'process') {
           this.processData.push({
-            type: 'process', CategoryName: x.name, categoryID: x.id,
+            type: 'process', CategoryName: x.name, categoryID: x.id, categoryCode: x.code,
             data: categoryArray,
             isValidated: null
           })
@@ -877,6 +878,49 @@ export class PortfolioTrack4Component implements OnInit {
           closable: true,
         })
       })
+  }
+
+  autoSaveResult(category_code: string, characteristic_code: string, draftLocation: string, type: string) {
+    if (type === 'pro') {
+      let pData = [...this.processData]
+      let _category_data = pData.find(p => p.categoryCode === category_code)
+      if (_category_data) {
+      let category_data = {..._category_data}
+        category_data.data = category_data.data.filter(_data => _data.characteristics.code === characteristic_code)
+        let data: any = {
+          finalArray: [category_data],
+          isDraft: true,
+          isEdit: this.isEditMode,
+          proDraftLocation: draftLocation,
+          outDraftLocation: this.assessment.outcomeDraftLocation,
+          lastDraftLocation: type,
+          scaleSDGs: [],
+          sustainedSDGs: [],
+          sdgs: []
+        }
+        this.saveResultInAutoSave(data)
+      }
+    } else if (type === 'out') {
+      if (category_code === 'SCALE_SD') {
+
+      } else if (category_code === 'SUSTAINED_SD') {
+
+      } else {
+
+      }
+    }
+  }
+
+  saveResultInAutoSave(data: FinalInvestorAssessmentDto) {
+    this.investorToolControllerproxy.createFinalAssessment2(data).subscribe(res => {
+      if (res) {
+        if (!this.isEditMode) {
+          this.router.navigate(['app/portfolio-tool-edit'], {
+            queryParams: { id: this.mainAssessment.id, isEdit: true },
+          });
+        }
+      }
+    })
   }
 
   checkSustainSDGIsFilled() {
