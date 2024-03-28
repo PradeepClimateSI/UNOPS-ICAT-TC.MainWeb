@@ -1022,6 +1022,7 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   async autoSaveResult(draftCategory: string, isDraft: boolean, name: string, type: string, characteristicId: number | undefined, questionId: number | undefined, sdgId: number | undefined) {
+    console.log("autosave")
     await this.loadAssessmentQuestions()
     if (type === 'prose') {
       let result:CMResultDto[] =  []
@@ -1157,8 +1158,23 @@ export class CmSectionThreeComponent implements OnInit {
         this.saveResultInAutoSave([characteristic_result], isDraft, type, name)
       }
 
+    } else if (type === 'reduction') {
+      let cmResult: SaveCMResultDto = new SaveCMResultDto();
+      cmResult.result = []
+      cmResult.assessment = this.assessment;
+      cmResult.isDraft = isDraft;
+      cmResult.type = 'out';
+      cmResult.name = name;
+      cmResult.expectedGHGMitigation = this.expected_ghg_mitigation
+      this.cMAssessmentQuestionControllerServiceProxy.saveResult(cmResult).subscribe(res => {
+        if (res) {
+          if (!this.isEditMode) {
+            this.router.navigate(['../carbon-market-tool-edit'], { queryParams: { id: this.assessment.id, isEdit: true, isContinue: true }, relativeTo: this.activatedRoute });
+          }
+        }
+      })
     }
-      
+
   }
 
   saveResultInAutoSave(results: CMResultDto[], isDraft: boolean, type: string, name: string) {
