@@ -248,9 +248,9 @@ export class CmSectionComponent implements OnInit {
         sec.criteria.forEach(cr => {
           cr.questions.forEach(q => {
             if (this.isPassed) {this.isPassed = q.answer.isPassing}
-            if (!this.isPassed) {
+            if (!q.answer.isPassing) {
               notMetCriterias.push(cr.criteria.name)
-            }
+            } 
           })
         })
       })
@@ -276,6 +276,10 @@ export class CmSectionComponent implements OnInit {
         })
         this.condition_message = this.condition_message + '</ul>'
       }
+    }
+
+    if (!e.isLoading) {
+      this.autoSaveResult(question.id)
     }
 
   }
@@ -426,8 +430,6 @@ export class CmSectionComponent implements OnInit {
 
 
   save(event: SaveDto) {
-    // event.isDraft = true
-    console.log(event)
      if(event.type){
       this.shownSections.push(true);
      }
@@ -501,6 +503,49 @@ export class CmSectionComponent implements OnInit {
         })
       })
   }
+
+  async autoSaveResult(questionId: number) {
+    await this.loadAssessmentQuestions()
+    this.sectionResult.sections.forEach((section: any) => {
+      section.criteria.forEach((cr: any) => {
+        let question = cr.questions.find((q: any) => q.question.id === questionId)
+        if (question) {
+          let item = new CMResultDto();
+          if (question.answer) item.answer = question.answer;
+          let ins = new Institution();
+          ins.id = question.institution?.id;
+          if (question.institution) item.institution = ins;
+          item.comment = question.comment;
+          item.question = question.question;
+          item.type = question.type;
+          item.filePath = question.file;
+          if (this.isEditMode) {
+            let assQ = this.assessmentQuestions.find(o => (o.question.id === question.question?.id))
+            if (assQ) {
+              item.assessmentQuestionId = assQ.id;
+              if (assQ.assessmentAnswers.length > 0) {
+                item.assessmentAnswerId = assQ.assessmentAnswers[0]?.id;
+              }
+            }
+          }
+          let cmResult: SaveCMResultDto = new SaveCMResultDto();
+          cmResult.result = [item];
+          cmResult.assessment = this.assessment;
+          cmResult.isDraft = true;
+          cmResult.type = '';
+          cmResult.name = '';
+          this.cMAssessmentQuestionControllerServiceProxy.saveResult(cmResult).subscribe(res => {
+            if (res) {
+              if (!this.isEditMode) {
+                this.router.navigate(['../carbon-market-tool-edit'], { queryParams: { id: this.assessment.id, isEdit: true, isContinue: true }, relativeTo: this.activatedRoute });
+              }
+            }
+          })
+        }
+      })
+    })
+  }
+
   okay() {
     this.visible = false
   }
@@ -511,6 +556,10 @@ export class CmSectionComponent implements OnInit {
 
   onSubmitSectionThree($event: any) {
     throw new Error('Method not implemented.');
+  }
+
+  async loadAssessmentQuestions() {
+    this.assessmentQuestions = await this.cMAssessmentQuestionControllerServiceProxy.getAssessmentQuestionsByAssessmentId(this.assessment.id).toPromise()
   }
 
 }
