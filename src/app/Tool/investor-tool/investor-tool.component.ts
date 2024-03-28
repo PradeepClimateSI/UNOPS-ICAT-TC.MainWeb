@@ -182,6 +182,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   format = "### \'%\'"
   completModeSectorList: Sector[]=[];
   selectedSectorsCompleteMode: Sector[] = [];
+  visibleDialogBox: boolean = false;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -584,6 +585,14 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
             },            
             
             );
+            
+            setTimeout(() => {
+              this.visibleDialogBox = true;
+            }, 1000);
+            setTimeout(() => {
+              this.visibleDialogBox = false;
+            }, 6000);
+            
           },
           (err) => {
             this.messageService.add({
