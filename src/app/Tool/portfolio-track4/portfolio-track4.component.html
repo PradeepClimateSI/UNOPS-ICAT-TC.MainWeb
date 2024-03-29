@@ -398,7 +398,7 @@
                                   <div class="p-field">
                                     <label for="data_charData_relavance">Relevance* <i class="pi pi-info-circle" (mouseover)="opRelevance.toggle($event)" (mouseout)="opRelevance.toggle($event)" style="font-size: 1rem"></i></label>
                                     <p-dropdown appendTo="body" [name]="data.characteristics.name" #rel="ngModel" placeholder="Select Relevance" [(ngModel)]="data.relavance" [options]="relevance" optionLabel="name" optionValue="value"
-                                      (onChange)="onChangeRelevance(data.relavance, data); autoSaveResult(category, data.characteristics.code, category.CategoryName, 'pro')"></p-dropdown>
+                                      (onChange)="onChangeRelevance(data.relavance, data);"></p-dropdown>
                                     <p class="info-message text-danger" *ngIf="data.relavance ==null  && ((fData1.submitted || rel.touched) || (category.isValidated==false && data.relavance ==null) || tab1IsValid[idx] !== undefined && !tab1IsValid[idx]) ">
                                       This is a mandatory field </p>
                                   </div>
@@ -418,8 +418,7 @@
                                   <div class="col-12 col-lg-6">
                                     <div class="p-field">
                                       <label for="Relevance">Likelihood*</label>
-                                      <p-dropdown appendTo="body" [name]="data.characteristics.name+ 'likelihood' " #likelihood2="ngModel" placeholder="Select Likelihood" [(ngModel)]="data.likelihood" [options]="likelihood" optionLabel="id" optionValue="value" [required]="true"
-                                      (onChange)="autoSaveResult(category, data.characteristics.code, category.CategoryName, 'pro')"></p-dropdown>
+                                      <p-dropdown appendTo="body" [name]="data.characteristics.name+ 'likelihood' " #likelihood2="ngModel" placeholder="Select Likelihood" [(ngModel)]="data.likelihood" [options]="likelihood" optionLabel="id" optionValue="value" [required]="true"></p-dropdown>
                                       <p class="info-message text-danger" *ngIf="data.likelihood ==null && ((fData1.submitted || likelihood2.touched) || (category.isValidated==false && data.likelihood ==null) || tab1IsValid[idx] !== undefined && !tab1IsValid[idx])">
                                         This is a mandatory field </p>
                                     </div>
@@ -428,7 +427,7 @@
                                     <div class="p-field">
                                       <label for="justification">Justification*</label>
                                       <textarea rows="5" type="text" pInputText [(ngModel)]="data.likelihood_justification" #just1="ngModel" placeholder="Enter Justification" [name]="data.characteristics.name+ 'likelihood_justification'"
-                                        [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (mouseleave)="autoSaveResult(category, data.characteristics.code, category.CategoryName, 'pro')" ></textarea>
+                                        [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" ></textarea>
                                       <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                       <p class="info-message text-danger" *ngIf="!data.likelihood_justification  && ((fData1.submitted || just1.touched) ||(category.isValidated==false && !data.likelihood_justification) || tab1IsValid[idx] !== undefined && !tab1IsValid[idx]) ">
                                         This is a mandatory field </p>
@@ -440,7 +439,7 @@
                                 </div>
                                 <div class="row p-2 align-items-center">
                                   <div class="col-2 d-flex align-items-center">
-                                    <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload" name="files" [url]="uploadUrl" (onUpload)="onUpload($event,data);autoSaveResult(category, data.characteristics.code, category.CategoryName, 'pro')" [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="5000000" [auto]="true">
+                                    <p-fileUpload mode="basic" chooseIcon="pi pi-upload" chooseLabel="Upload" name="files" [url]="uploadUrl" (onUpload)="onUpload($event,data);" [multiple]="true" accept="{{acceptedFiles}}" [maxFileSize]="5000000" [auto]="true">
                                     </p-fileUpload>
                                   </div>
                                   <div class="col-2 d-flex align-items-center" *ngIf="data.uploadedDocumentPath">
@@ -487,7 +486,7 @@
                         <p style="color: black; font-weight: normal; font-size: 17px;">Select those SDGs impacted by the intervention : </p>
                       </div>
                       <div class="col-2 ">
-                        <p-multiSelect appendTo="body" name="sdgs" placeholder="Select SDGs" [(ngModel)]="selectedSDGs" [options]="sdgList" (onChange)="onItemSelectSDGs($event); autoSaveResult(category, undefined, category.CategoryName, 'out')" optionLabel="name"></p-multiSelect>
+                        <p-multiSelect appendTo="body" name="sdgs" placeholder="Select SDGs" [(ngModel)]="selectedSDGs" [options]="sdgList" (onChange)="onItemSelectSDGs($event); " optionLabel="name"></p-multiSelect>
                       </div>
                       <div class="col-5 "></div>
                     </div>
@@ -529,12 +528,12 @@
                                       <div class="p-field">
                                         <label for="score">Score<span *ngIf="isMandatoryActive(data.category.code, data.characteristics.code)">*</span><i *ngIf=" category.CategoryName ==='GHG Scale of the Outcome'" class="pi pi-info-circle" pTooltip="{{getTooltipData(data.characteristics.name)}}" tooltipPosition="bottom" style="font-size: 1rem"></i></label>
                                         <div *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' ||  category.CategoryName ==='Adaptation Scale of the Outcome' ">
-                                          <p-dropdown appendTo="body" name="{{cat}}_{{i}}_outcomeScaleScore_" #type="ngModel" placeholder="Select Score" [(ngModel)]="data.score" [options]="outcomeScaleScore" optionLabel="id" optionValue="value"  (onChange)="onSelectScore(category, data.characteristics.code);autoSaveResult(category, data.characteristics.code, category.CategoryName, 'out')"></p-dropdown>
+                                          <p-dropdown appendTo="body" name="{{cat}}_{{i}}_outcomeScaleScore_" #type="ngModel" placeholder="Select Score" [(ngModel)]="data.score" [options]="outcomeScaleScore" optionLabel="id" optionValue="value"  (onChange)="onSelectScore(category, data.characteristics.code);"></p-dropdown>
                                           <p class="info-message text-danger" *ngIf="isMandatoryActive(data.category.code, data.characteristics.code) && data.score==undefined  && ((fData1.submitted || type.touched) || (category.isValidated==false && data.score==undefined) || (tabIsValid[cat] !== undefined && !tabIsValid[cat]))">
                                             This is a mandatory field </p>
                                         </div>
                                         <div *ngIf=" category.CategoryName ==='GHG Time frame over which the outcome is sustained' ||  category.CategoryName ==='Adaptation Time frame over which the outcome is sustained' ">
-                                          <p-dropdown appendTo="body" name="{{cat}}_{{i}}_outcomeSustainedScore_" #type="ngModel" placeholder="Select Score" [(ngModel)]="data.score" [options]="outcomeSustainedScore" optionLabel="id" optionValue="value" (onChange)="autoSaveResult(category, data.characteristics.code, category.CategoryName, 'out')"></p-dropdown>
+                                          <p-dropdown appendTo="body" name="{{cat}}_{{i}}_outcomeSustainedScore_" #type="ngModel" placeholder="Select Score" [(ngModel)]="data.score" [options]="outcomeSustainedScore" optionLabel="id" optionValue="value" ></p-dropdown>
                                           <p class="info-message text-danger" *ngIf="data.score==undefined  && ((fData1.submitted || type.touched) || (category.isValidated==false && data.score==undefined) || (tabIsValid[cat] !== undefined && !tabIsValid[cat]))">
                                             This is a mandatory field </p>
                                         </div>
@@ -543,7 +542,7 @@
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
                                         <label for="justification">Justification<span *ngIf="isMandatoryActive(data.category.code, data.characteristics.code)">*</span> </label>
-                                        <textarea rows="5" type="text" pInputText [(ngModel)]="data.justification" #just2="ngModel" placeholder="Enter Justification" name="{{cat}}_{{i}}_justification" [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (ngModelChange)="adaptationJustificationChange(data)" (mouseleave)="autoSaveResult(category, data.characteristics.code, category.CategoryName, 'out')"></textarea>
+                                        <textarea rows="5" type="text" pInputText [(ngModel)]="data.justification" #just2="ngModel" placeholder="Enter Justification" name="{{cat}}_{{i}}_justification" [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (ngModelChange)="adaptationJustificationChange(data)" ></textarea>
                                         <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                         <p class="info-message text-danger" *ngIf="checkCategory(category.categoryCode, data.characteristics.code ) && !data.justification  && ((fData1.submitted || just2.touched)|| (category.isValidated==false && !data.justification)|| (tabIsValid[cat] !== undefined && !tabIsValid[cat])) ">
                                           This is a mandatory field </p>
@@ -631,7 +630,7 @@
                                         <div class="col-12 col-lg-6">
                                           <div class="p-field">
                                             <label for="score">Score<span *ngIf="isMandatoryActive(data.category.code, data.characteristics.code)">*</span></label>
-                                            <p-dropdown appendTo="body" name="score" #type="ngModel" placeholder="Select Score" [(ngModel)]="data.score" (ngModelChange)="assignSDG(selectedSDGs[i], data)" [options]="outcomeScaleScore" optionLabel="id" optionValue="value" (onChange)="onSelectScore(category, data.characteristics.code, i);autoSaveResult(category, data.characteristics.code, category.CategoryName, 'out')"></p-dropdown>
+                                            <p-dropdown appendTo="body" name="score" #type="ngModel" placeholder="Select Score" [(ngModel)]="data.score" (ngModelChange)="assignSDG(selectedSDGs[i], data)" [options]="outcomeScaleScore" optionLabel="id" optionValue="value" (onChange)="onSelectScore(category, data.characteristics.code, i);"></p-dropdown>
                                             <p class="info-message text-danger" *ngIf="isMandatoryActive(data.category.code, data.characteristics.code) && data.score==undefined   && ((fData1.submitted || type.touched) || (isValidSCaleSD==false && data.score==undefined) || (tabIsValid[cat] !== undefined && !tabIsValid[cat]))">
                                               This is a mandatory field </p>
                                           </div>
