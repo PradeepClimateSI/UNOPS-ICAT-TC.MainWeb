@@ -186,6 +186,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
   autoSaveTimer: any;
   lastUpdatedCategory: any;
   isSavingDraft: boolean = false;
+  savedInInterval: boolean = false;
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
     public masterDataService: MasterDataService,
@@ -233,6 +234,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
         window.location.reload()
       }
     })
+    await this.getCharacteristics();
     if (this.isEditMode == false) {
       await this.getPolicies();
       await this.getAllImpactsCovered();
@@ -243,11 +245,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
       try {
         
         await this.getSavedAssessment().then(x=>{
-          if(!this.isCompleted ){
-            // this.startAutoSave()
-            window.onbeforeunload = () => {
-              this.ngOnDestroy();
-            };
+          if (!this.isCompleted) {
+            this.startAutoSave()
           }
         })
         
@@ -299,29 +298,44 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
     this.investorToolControllerproxy.findAllSDGs().subscribe((res: any) => {
       this.sdgList = res;
     });
-    await this.getCharacteristics()
+    window.onbeforeunload = () => {
+      if (!this.isSavingDraft) this.saveDraft(this.lastUpdatedCategory, this.lastUpdatedCategory.CategoryName, this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true)
+      window.setTimeout(() => {
+        window.location.reload()
+      }, 50000)
+    }
   }
 
   ngOnDestroy(): void {
-    console.log("called destroy", this.isCompleted)
-    if (!this.isCompleted && (this.isEditMode || this.isSavedAssessment) ) {
-      if(!this.isSavingDraft){
-        this.saveDraft(this.lastUpdatedCategory, this.lastUpdatedCategory.CategoryName, this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true, true)
+    if (!this.isCompleted && (this.isSavedAssessment || this.isContinue || this.isEditMode)) {
+      console.log("save draft on destroy", this.isSavingDraft)
+      
+      if (this.isEditMode) {
+        if (!this.isSavingDraft) {this.saveDraft(this.lastUpdatedCategory,this.lastUpdatedCategory.CategoryName,this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true, true)}
+      } else {
+        if (!this.savedInInterval) {
+          if (!this.isSavingDraft) {this.saveDraft(this.lastUpdatedCategory,this.lastUpdatedCategory.CategoryName,this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true, true)}
+        }
       }
     }
     this.stopAutoSave()
   }
-
+ 
   startAutoSave() {
+    console.log("startAutoSave")
+    if (this.activeIndexMain === 0 ) {
+      this.lastUpdatedCategory = this.processData[this.activeIndex]
+    } else {
+      this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
+    }
     this.autoSaveTimer = setInterval(() => {
-      if(!this.isSavingDraft){
-        this.saveDraft(this.lastUpdatedCategory, this.lastUpdatedCategory.CategoryName, this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true, true)
-      }
-    }, 30 * 1000);
+      console.log("setinterval", this.isSavingDraft)
+      this.savedInInterval = true
+      if (!this.isSavingDraft)  {this.saveDraft(this.lastUpdatedCategory,this.lastUpdatedCategory.CategoryName,this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', false, true)}
+    }, 20000);
   }
 
   stopAutoSave() {
-    console.log("stop timer")
     clearInterval(this.autoSaveTimer);
   }
   setDataFromFlow(interventonId:string, assessmentType:string) {
@@ -1711,7 +1725,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
   }
 
   adaptationJustificationChange(data: InvestorAssessment) {
-    if (data.category.code === 'SUSTAINED_ADAPTATION' || data.characteristics?.category.code === 'SUSTAINED_ADAPTATION') {
+    if (data.category?.code === 'SUSTAINED_ADAPTATION' || data.characteristics?.category?.code === 'SUSTAINED_ADAPTATION') {
       this.checkTab2Mandatory(6)
     }
   }
