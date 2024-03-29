@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { FieldNames, MasterDataDto, MasterDataService, assessment_period_info, chapter6_url } from 'app/shared/master-data.service';
 import * as moment from 'moment';
@@ -159,6 +159,10 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
   isCreatingAssessment: boolean = false
   lastUpdatedCategory: any
   autoSaveTimer: any;
+  visibleDialogBox: boolean = false;
+  isSavingDraft: boolean = false;
+  mainTabIndex: any = 0
+  categoryTabIndex: any
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -225,20 +229,21 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
 
 
     })
+    await this.getCharacteristics();
     if (this.isEditMode == false) {
       await this.getPolicies();
       await this.getAllImpactsCovered();
-      await this.getCharacteristics();
     }
     else {
       try {
-        await this.getSavedAssessment().then(x => {
+        await this.getSavedAssessment()
+        .then(x => {
           if (!this.isCompleted) {
             this.startAutoSave()
-            window.onbeforeunload = () => {
-              console.log("unloading")
-              this.ngOnDestroy();
-            };
+            // window.onbeforeunload = () => {
+            //   console.log("unloading")
+            //   this.ngOnDestroy();
+            // };
           }
         })
       }
@@ -298,24 +303,39 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
       this.sdgList = res
     });
     this.isFirstLoading0 = false
-    if (this.mainTabIndex === 0 ) {
-      this.lastUpdatedCategory = this.processData[this.categoryTabIndex]
+    if (this.activeIndexMain === 0 ) {
+      this.lastUpdatedCategory = this.processData[this.activeIndex]
     } else {
-      this.lastUpdatedCategory = this.outcomeData[this.categoryTabIndex]
+      this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
+    }
+    window.onbeforeunload = () => {
+      if (!this.isSavingDraft) this.saveDraft(this.lastUpdatedCategory, this.lastUpdatedCategory.CategoryName, this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true)
+      window.setTimeout(() => {
+        window.location.reload()
+      }, 10000)
+      // return this.confirmLeavingPage()
     }
   }
 
+
   ngOnDestroy(): void {
-    console.log(this.lastUpdatedCategory)
-    if (!this.isCompleted) {
-      this.saveDraft(this.lastUpdatedCategory,this.lastUpdatedCategory.CategoryName,this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true)
+    if (!this.isCompleted && (this.isSavedAssessment || this.isContinue || this.isEditMode)) {
+      console.log("save draft on destroy", this.lastUpdatedCategory, this.activeIndexMain)
+      if (!this.isSavingDraft) {this.saveDraft(this.lastUpdatedCategory,this.lastUpdatedCategory.CategoryName,this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true, true)}
     }
     this.stopAutoSave()
   }
 
   startAutoSave() {
+    console.log("startAutoSave")
+    if (this.activeIndexMain === 0 ) {
+      this.lastUpdatedCategory = this.processData[this.activeIndex]
+    } else {
+      this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
+    }
     this.autoSaveTimer = setInterval(() => {
-      this.saveDraft(this.lastUpdatedCategory,this.lastUpdatedCategory.CategoryName,this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out')
+      console.log("setinterval", this.isSavingDraft)
+      if (!this.isSavingDraft)  {this.saveDraft(this.lastUpdatedCategory,this.lastUpdatedCategory.CategoryName,this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', false, true)}
     }, 50000);
   }
 
@@ -349,7 +369,13 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
   }
   
   async getSavedAssessment() {
-    await this.getCharacteristics();
+    this.processData = []
+    this.outcomeData = []
+    this.sdgDataSendArray = []
+    this.sdgDataSendArray4 = []
+    this.selectedSDGs = []
+    this.selectedSDGsWithAnswers = []
+    // await this.getCharacteristics();
     this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise();
     this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
     this.outcomeData = await this.investorToolControllerproxy.getOutcomeData(this.assessmentId).toPromise();
@@ -595,6 +621,11 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
         this.tabLoading = true;
       }
     });
+    if (this.activeIndexMain === 0 ) {
+      this.lastUpdatedCategory = this.processData[this.activeIndex]
+    } else {
+      this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
+    }
 
   }
 
@@ -631,8 +662,17 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
                 detail: `Assessment has been ${status} successfully`,
                 closable: true,
               },
-
+              
               );
+              if (!this.isCompleted) {
+                setTimeout(() => {
+                  this.visibleDialogBox = true;
+                }, 300);
+                setTimeout(() => {
+                  this.visibleDialogBox = false;
+                }, 6000);
+              }
+              this.startAutoSave()
             },
               (err) => {
                 this.messageService.add({
@@ -733,8 +773,7 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
   onItemSelectImpacts(event: any) {
   }
 
-  mainTabIndex: any
-  categoryTabIndex: any
+  
 
   onMainTabChange(event: any) {
     this.mainTabIndex = event.index;
@@ -767,15 +806,10 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
       }
     }
     if (this.mainTabIndex === 0) {
-      console.log("process")
-      console.log(this.categoryTabIndex)
       this.lastUpdatedCategory = this.processData[this.activeIndex]
     } else {
-
-      console.log("outcome")
       this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
     }
-    console.log(this.lastUpdatedCategory)
 
   }
 
@@ -812,7 +846,6 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
       this.checkTab2Mandatory(event.index)
       this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
     }
-    console.log("oncattabchange", this.lastUpdatedCategory)
   }
 
   checkTab1Mandatory(idx: number) {
@@ -855,6 +888,8 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
 
 
   async saveDraft(category: any, processDraftLocation: string, type: string,isAutoSaving: boolean = false, isDefault?: boolean) {
+    console.log("savedraft")
+    this.isSavingDraft = true
 
     let finalArray = this.processData.concat(this.outcomeData)
     if (this.isEditMode == true) {
@@ -901,6 +936,7 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
     }
     await this.investorToolControllerproxy.createFinalAssessment2(data)
       .subscribe(async _res => {
+        this.isSavingDraft = false
         if (!isDefault) {
           this.messageService.add({
             severity: 'success',
@@ -920,12 +956,15 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
         }
         ;
       }, error => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Assessment detail saving failed',
-          closable: true,
-        })
+        this.isSavingDraft = false
+        if (!isDefault) {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Assessment detail saving failed',
+            closable: true,
+          })
+        }
       })
   }
 
@@ -1347,6 +1386,11 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
         this.activeIndex = this.activeIndex + 1;
         this.checkTab1Mandatory(this.activeIndex)
 
+      }
+      if (this.activeIndexMain === 0 ) {
+        this.lastUpdatedCategory = this.processData[this.activeIndex]
+      } else {
+        this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
       }
     } else {
       this.messageService.add({
