@@ -1,4 +1,4 @@
-import { AfterContentChecked, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { FieldNames, MasterDataDto, MasterDataService, assessment_period_info, chapter6_url } from 'app/shared/master-data.service';
 import * as moment from 'moment';
@@ -42,7 +42,7 @@ interface ChaCategoryTotalEqualsTo1 {
   templateUrl: './investor-tool.component.html',
   styleUrls: ['./investor-tool.component.css']
 })
-export class InvestorToolComponent implements OnInit, AfterContentChecked {
+export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDestroy  {
 
   @ViewChild('multiSelectComponent') multiSelectComponent: MultiSelect;
   geographicalArea:MasterDataDto = new MasterDataDto()
@@ -183,6 +183,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   completModeSectorList: Sector[]=[];
   selectedSectorsCompleteMode: Sector[] = [];
   visibleDialogBox: boolean = false;
+  autoSaveTimer: any;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -201,6 +202,15 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.uploadUrl = environment.baseUrlAPI + "/document/upload-file-by-name";
     this.fileServerURL = environment.baseUrlAPI + '/document/downloadDocumentsFromFileName/uploads';
 
+  }
+  
+  ngOnDestroy(): void {
+    console.log("called destroy", this.isCompleted)
+    if(!this.isCompleted){
+      this.saveDraft('','','')
+    }
+   
+   this.stopAutoSave()
   }
   async ngOnInit(): Promise<void> {
     this.phaseTransformExapmle = this.masterDataService.phase_transfrom
@@ -237,7 +247,17 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     } else {
       
       try {
-        await this.getSavedAssessment()
+        
+        await this.getSavedAssessment().then(x=>{
+          if(!this.isCompleted){
+            this.startAutoSave()
+            window.onbeforeunload = () => {
+              this.ngOnDestroy();
+            };
+          }
+        })
+        
+       
       }
       catch (error) {
       }
@@ -285,6 +305,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.investorToolControllerproxy.findAllSDGs().subscribe((res: any) => {
       this.sdgList = res;
     });
+
+    
 
   }
   setDataFromFlow(interventonId:string, assessmentType:string) {
@@ -665,6 +687,19 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     }
 
   }
+
+  startAutoSave() {
+    this.autoSaveTimer = setInterval(() => {
+      this.saveDraft('','','')
+    }, 50000);
+  }
+
+  stopAutoSave() {
+    console.log("stop timer")
+    clearInterval(this.autoSaveTimer);
+  }
+
+  
   async saveDraft(category: any, processDraftLocation: string, type: string) {
     let finalArray = this.processData.concat(this.outcomeData)
     if (this.isEditMode == true) {
@@ -710,13 +745,13 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     }
     this.investorToolControllerproxy.createFinalAssessment(data)
       .subscribe(async _res => {
-
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Assessment draft has been saved successfully',
-          closable: true,
-        })
+      console.log("data",data)
+        // this.messageService.add({
+        //   severity: 'success',
+        //   summary: 'Success',
+        //   detail: 'Assessment draft has been saved successfully',
+        //   closable: true,
+        // })
         this.setFrom()
         this.setTo()
         if (this.isEditMode == false) {
