@@ -526,3 +526,16 @@
     <img src="../../../assets/images/assessment/assessment_flow.png" alt="Assessment Flow"  width="780px" >
   </div>
 </p-overlayPanel>
+
+<p-dialog [(visible)]="autoSaveDialog" [closable]="false" >
+  <p-header  class="caution" >
+  </p-header>
+  <div style="text-align: center;">
+      <br>
+      <label [class]="'caution-dialog'">Please note that your inputs will be automatically saved upon entering the data.</label>
+      <br>
+      <button style="background-color: #224373;" class="btn btn-primary text-uppercase" type="submit" (click)="okayAutosave()">
+          OKAY
+      </button>
+  </div>
+</p-dialog>
