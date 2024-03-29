@@ -298,9 +298,15 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
       this.sdgList = res
     });
     this.isFirstLoading0 = false
+    if (this.mainTabIndex === 0 ) {
+      this.lastUpdatedCategory = this.processData[this.categoryTabIndex]
+    } else {
+      this.lastUpdatedCategory = this.outcomeData[this.categoryTabIndex]
+    }
   }
 
   ngOnDestroy(): void {
+    console.log(this.lastUpdatedCategory)
     if (!this.isCompleted) {
       this.saveDraft(this.lastUpdatedCategory,this.lastUpdatedCategory.CategoryName,this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true)
     }
@@ -760,6 +766,16 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
         }
       }
     }
+    if (this.mainTabIndex === 0) {
+      console.log("process")
+      console.log(this.categoryTabIndex)
+      this.lastUpdatedCategory = this.processData[this.activeIndex]
+    } else {
+
+      console.log("outcome")
+      this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
+    }
+    console.log(this.lastUpdatedCategory)
 
   }
 
@@ -791,11 +807,12 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
     }
     if (type === 'process'){
       this.checkTab1Mandatory(event.index)
-      this.lastUpdatedCategory = this.processData[this.categoryTabIndex]
+      this.lastUpdatedCategory = this.processData[this.activeIndex]
     } else {
       this.checkTab2Mandatory(event.index)
-      this.lastUpdatedCategory = this.outcomeData[this.categoryTabIndex]
+      this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
     }
+    console.log("oncattabchange", this.lastUpdatedCategory)
   }
 
   checkTab1Mandatory(idx: number) {
@@ -1636,7 +1653,7 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
   }
 
   adaptationJustificationChange(data: InvestorAssessment){
-    if (data.category.code === 'SUSTAINED_ADAPTATION' || data.characteristics.category.code === 'SUSTAINED_ADAPTATION') {
+    if (data.category?.code === 'SUSTAINED_ADAPTATION' || data.characteristics.category?.code === 'SUSTAINED_ADAPTATION') {
       this.checkTab2Mandatory(6)
     }
   }
