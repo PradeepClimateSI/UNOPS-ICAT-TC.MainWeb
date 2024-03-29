@@ -227,7 +227,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
     this.activatedRoute.queryParams.subscribe(async params => {
       params['isEdit'] == 'true' ? (this.isEditMode = true) : false;
       params['iscompleted'] == 'true' ? (this.isCompleted = true) : false
-      params['isContinue'] == 'true' ? (this.isCompleted = true) : false
+      params['isContinue'] == 'true' ? (this.isContinue = true) : false
       this.assessmentId = params['id'];
       if(params['interventionId'] && params['assessmentType']){
         await this.getPolicies().then( x=>
@@ -691,7 +691,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
   startAutoSave() {
     this.autoSaveTimer = setInterval(() => {
       this.saveDraft('','','')
-    }, 50000);
+    }, 10*1000);
   }
 
   stopAutoSave() {
