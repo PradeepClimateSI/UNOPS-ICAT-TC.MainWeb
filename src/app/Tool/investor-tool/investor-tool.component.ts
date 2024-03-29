@@ -298,12 +298,16 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
     this.investorToolControllerproxy.findAllSDGs().subscribe((res: any) => {
       this.sdgList = res;
     });
-    window.onbeforeunload = () => {
-      if (!this.isSavingDraft) this.saveDraft(this.lastUpdatedCategory, this.lastUpdatedCategory.CategoryName, this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true)
-      window.setTimeout(() => {
-        window.location.reload()
-      }, 50000)
-    }
+    // window.onbeforeunload = () => {
+    //   console.log("reload")
+    //   if (!this.isSavingDraft) {
+    //     console.log("reload")
+    //     this.saveDraft(this.lastUpdatedCategory, this.lastUpdatedCategory.CategoryName, this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true)}
+    //   window.setTimeout(() => {
+    //   console.log("")
+    //     window.location.reload()
+    //   }, 1000)
+    // }
   }
 
   ngOnDestroy(): void {
@@ -332,7 +336,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
       console.log("setinterval", this.isSavingDraft)
       this.savedInInterval = true
       if (!this.isSavingDraft)  {this.saveDraft(this.lastUpdatedCategory,this.lastUpdatedCategory.CategoryName,this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', false, true)}
-    }, 20000);
+    }, 50000);
   }
 
   stopAutoSave() {
