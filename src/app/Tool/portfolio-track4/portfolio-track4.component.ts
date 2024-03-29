@@ -309,12 +309,12 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
     } else {
       this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
     }
-    window.onbeforeunload = () => {
-      if (!this.isSavingDraft) this.saveDraft(this.lastUpdatedCategory, this.lastUpdatedCategory.CategoryName, this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true)
-      window.setTimeout(() => {
-        window.location.reload()
-      }, 10000)
-    }
+    // window.onbeforeunload = () => {
+    //   if (!this.isSavingDraft) this.saveDraft(this.lastUpdatedCategory, this.lastUpdatedCategory.CategoryName, this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true)
+    //   window.setTimeout(() => {
+    //     window.location.reload()
+    //   }, 10000)
+    // }
   }
 
 
