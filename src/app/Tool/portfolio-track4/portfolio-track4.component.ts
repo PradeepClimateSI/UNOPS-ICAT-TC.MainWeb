@@ -163,6 +163,7 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
   isSavingDraft: boolean = false;
   mainTabIndex: any = 0
   categoryTabIndex: any
+  savedInInterval: boolean;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -313,28 +314,31 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
       window.setTimeout(() => {
         window.location.reload()
       }, 10000)
-      // return this.confirmLeavingPage()
     }
   }
 
 
   ngOnDestroy(): void {
     if (!this.isCompleted && (this.isSavedAssessment || this.isContinue || this.isEditMode)) {
-      console.log("save draft on destroy", this.lastUpdatedCategory, this.activeIndexMain)
-      if (!this.isSavingDraft) {this.saveDraft(this.lastUpdatedCategory,this.lastUpdatedCategory.CategoryName,this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true, true)}
+      if (this.isEditMode) {
+        if (!this.isSavingDraft) {this.saveDraft(this.lastUpdatedCategory,this.lastUpdatedCategory.CategoryName,this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true, true)}
+      } else {
+        if (!this.savedInInterval) {
+          if (!this.isSavingDraft) {this.saveDraft(this.lastUpdatedCategory,this.lastUpdatedCategory.CategoryName,this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true, true)}
+        }
+      }
     }
     this.stopAutoSave()
   }
 
   startAutoSave() {
-    console.log("startAutoSave")
     if (this.activeIndexMain === 0 ) {
       this.lastUpdatedCategory = this.processData[this.activeIndex]
     } else {
       this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
     }
     this.autoSaveTimer = setInterval(() => {
-      console.log("setinterval", this.isSavingDraft)
+      this.savedInInterval = true
       if (!this.isSavingDraft)  {this.saveDraft(this.lastUpdatedCategory,this.lastUpdatedCategory.CategoryName,this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', false, true)}
     }, 50000);
   }
@@ -888,7 +892,6 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
 
 
   async saveDraft(category: any, processDraftLocation: string, type: string,isAutoSaving: boolean = false, isDefault?: boolean) {
-    console.log("savedraft")
     this.isSavingDraft = true
 
     let finalArray = this.processData.concat(this.outcomeData)
@@ -934,6 +937,7 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
       sustainedSDGs: this.sdgDataSendArray4,
       sdgs: this.selectedSDGsWithAnswers
     }
+    
     await this.investorToolControllerproxy.createFinalAssessment2(data)
       .subscribe(async _res => {
         this.isSavingDraft = false
