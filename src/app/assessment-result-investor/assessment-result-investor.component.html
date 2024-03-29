@@ -507,7 +507,7 @@
               <td  class="table-data">{{masterDataService.getToolName(investerTool ? 'INVESTOR' : 'PORTFOLIO')}}</td>
               <td  class="table-data">{{(intervention.projectStatus)?(intervention.projectStatus.name):'-'}}</td>
               <ng-container *ngFor="let char of sustained_adaptation.characteristicData">
-                <td class="table-data">{{(char.score.value==null?'Outside assessment boundaries':(char.score.value + "-" + char.score.name))}}</td>
+                <td class="table-data">{{(char.score.value==null?'-':(char.score.value==99?'Outside assessment boundaries':(char.score.value + "-" + char.score.name)))}}</td>
               </ng-container>
               <td class="table-data">{{(sustained_adaptation.category_score.value!=null)?(sustained_adaptation.category_score.value):'Outside assessment boundaries'}}</td>
               <td class="table-data">{{(sustained_adaptation.category_score.value!=null)?(sustained_adaptation.category_score.value + "-" + sustained_adaptation.category_score.name):'Outside assessment boundaries'}}</td>
