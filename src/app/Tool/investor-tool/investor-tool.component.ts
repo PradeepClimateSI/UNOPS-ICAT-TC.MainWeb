@@ -113,7 +113,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
 
   tabName: string = '';
   mainAssessment: Assessment;
-  mainTabIndex: any;
+  mainTabIndex: any = 0;
   categoryTabIndex: any;
 
   barrierBox: boolean = false;
@@ -184,7 +184,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
   selectedSectorsCompleteMode: Sector[] = [];
   visibleDialogBox: boolean = false;
   autoSaveTimer: any;
-
+  lastUpdatedCategory: any;
+  isSavingDraft: boolean = false;
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
     public masterDataService: MasterDataService,
@@ -204,14 +205,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
 
   }
   
-  ngOnDestroy(): void {
-    console.log("called destroy", this.isCompleted)
-    if(!this.isCompleted){
-      this.saveDraft('','','')
-    }
-   
-   this.stopAutoSave()
-  }
+  
   async ngOnInit(): Promise<void> {
     this.phaseTransformExapmle = this.masterDataService.phase_transfrom
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;
@@ -242,15 +236,15 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
     if (this.isEditMode == false) {
       await this.getPolicies();
       await this.getAllImpactsCovered();
-      await this.getCharacteristics();
+      
 
     } else {
       
       try {
         
         await this.getSavedAssessment().then(x=>{
-          if(!this.isCompleted){
-            this.startAutoSave()
+          if(!this.isCompleted ){
+            // this.startAutoSave()
             window.onbeforeunload = () => {
               this.ngOnDestroy();
             };
@@ -305,9 +299,30 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
     this.investorToolControllerproxy.findAllSDGs().subscribe((res: any) => {
       this.sdgList = res;
     });
+    await this.getCharacteristics()
+  }
 
-    
+  ngOnDestroy(): void {
+    console.log("called destroy", this.isCompleted)
+    if (!this.isCompleted && (this.isEditMode || this.isSavedAssessment) ) {
+      if(!this.isSavingDraft){
+        this.saveDraft(this.lastUpdatedCategory, this.lastUpdatedCategory.CategoryName, this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true, true)
+      }
+    }
+    this.stopAutoSave()
+  }
 
+  startAutoSave() {
+    this.autoSaveTimer = setInterval(() => {
+      if(!this.isSavingDraft){
+        this.saveDraft(this.lastUpdatedCategory, this.lastUpdatedCategory.CategoryName, this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true, true)
+      }
+    }, 30 * 1000);
+  }
+
+  stopAutoSave() {
+    console.log("stop timer")
+    clearInterval(this.autoSaveTimer);
   }
   setDataFromFlow(interventonId:string, assessmentType:string) {
     this.isDisableIntervention = true
@@ -322,7 +337,12 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
 
 
   async getSavedAssessment() {
-    await this.getCharacteristics();
+    this.processData = []
+    this.outcomeData = []
+    this.sdgDataSendArray = []
+    this.sdgDataSendArray4 = []
+    this.selectedSDGs = []
+    this.selectedSDGsWithAnswers = []
     this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise();
     this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
     this.outcomeData = await this.investorToolControllerproxy.getOutcomeData(this.assessmentId).toPromise();
@@ -562,6 +582,12 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
           }
 
         }
+        if (this.activeIndexMain === 0 ) {
+          this.lastUpdatedCategory = this.processData[this.activeIndex]
+        } else {
+          this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
+        }
+        console.log(this.mainTabIndex, this.lastUpdatedCategory,this.processData,this.activeIndex2,this.activeIndex)
         this.categoriesLoaded = true;
 
         if (this.characteristicsLoaded && this.categoriesLoaded) {
@@ -657,6 +683,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
                   await this.investorToolControllerproxy.saveTotalInvestments(investDto).toPromise();
                   if(!this.isCompleted){
                     this.isSavedAssessment = true;
+                    this.startAutoSave()
                   }
 
                 }
@@ -688,19 +715,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
 
   }
 
-  startAutoSave() {
-    this.autoSaveTimer = setInterval(() => {
-      this.saveDraft('','','')
-    }, 10*1000);
-  }
-
-  stopAutoSave() {
-    console.log("stop timer")
-    clearInterval(this.autoSaveTimer);
-  }
-
-  
-  async saveDraft(category: any, processDraftLocation: string, type: string) {
+  async saveDraft(category: any, processDraftLocation: string, type: string, isAutoSaving: boolean = false, isDefault?: boolean) {
+    this.isSavingDraft = true
     let finalArray = this.processData.concat(this.outcomeData)
     if (this.isEditMode == true) {
       this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise();
@@ -745,27 +761,35 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
     }
     this.investorToolControllerproxy.createFinalAssessment(data)
       .subscribe(async _res => {
+        this.isSavingDraft = false
       console.log("data",data)
-        // this.messageService.add({
-        //   severity: 'success',
-        //   summary: 'Success',
-        //   detail: 'Assessment draft has been saved successfully',
-        //   closable: true,
-        // })
+         if (!isDefault) {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Assessment draft has been saved successfully',
+            closable: true,
+          })
+        }
+        
         this.setFrom()
         this.setTo()
-        if (this.isEditMode == false) {
+        if (this.isEditMode == false  && !isAutoSaving) {
           this.router.navigate(['app/investor-tool-new-edit'], {
             queryParams: { id: this.mainAssessment.id, isEdit: true },
           });
         }
       }, error => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Assessment detail saving failed',
-          closable: true,
-        })
+        if (!isDefault){
+          this.isSavingDraft = false
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Assessment detail saving failed',
+            closable: true,
+          })
+        }
+       
       })
   }
 
@@ -884,6 +908,16 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
         }
       }
     }
+    if (this.mainTabIndex === 0) {
+      console.log("process")
+      console.log(this.categoryTabIndex)
+      this.lastUpdatedCategory = this.processData[this.activeIndex]
+    } else {
+
+      console.log("outcome")
+      this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
+    }
+    console.log(this.lastUpdatedCategory)
   }
 
   onCategoryTabChange(event: any, tabview: TabView, type: string) {
@@ -913,8 +947,10 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
     }
     if (type === 'process') {
       this.checkTab1Mandatory(event.index)
+      this.lastUpdatedCategory = this.processData[this.activeIndex]
     } else {
       this.checkTab2Mandatory(event.index)
+      this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
     }
   }
 
@@ -1675,7 +1711,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
   }
 
   adaptationJustificationChange(data: InvestorAssessment) {
-    if (data.category.code === 'SUSTAINED_ADAPTATION' || data.characteristics.category.code === 'SUSTAINED_ADAPTATION') {
+    if (data.category.code === 'SUSTAINED_ADAPTATION' || data.characteristics?.category.code === 'SUSTAINED_ADAPTATION') {
       this.checkTab2Mandatory(6)
     }
   }
