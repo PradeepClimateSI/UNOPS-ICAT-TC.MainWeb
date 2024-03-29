@@ -487,7 +487,7 @@
                         <p style="color: black; font-weight: normal; font-size: 17px;">Select those SDGs impacted by the intervention : </p>
                       </div>
                       <div class="col-2 ">
-                        <p-multiSelect appendTo="body" name="sdgs" placeholder="Select SDGs" [(ngModel)]="selectedSDGs" [options]="sdgList" (ngModelChange)="onItemSelectSDGs($event); autoSaveResult(category, undefined, category.CategoryName, 'out')" optionLabel="name"></p-multiSelect>
+                        <p-multiSelect appendTo="body" name="sdgs" placeholder="Select SDGs" [(ngModel)]="selectedSDGs" [options]="sdgList" (onChange)="onItemSelectSDGs($event); autoSaveResult(category, undefined, category.CategoryName, 'out')" optionLabel="name"></p-multiSelect>
                       </div>
                       <div class="col-5 "></div>
                     </div>
@@ -1002,3 +1002,8 @@
   </div>
 </p-overlayPanel>
 <p-confirmDialog></p-confirmDialog>
+<p-dialog header="Notification" [(visible)]="visibleDialogBox" [style]="{width: '50vw'}">
+  <p>
+    Please note that your inputs will be automatically saved upon entering the data.
+  </p>
+</p-dialog>
