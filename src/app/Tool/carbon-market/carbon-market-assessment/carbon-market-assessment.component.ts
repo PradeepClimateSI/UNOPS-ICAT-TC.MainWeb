@@ -80,6 +80,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   isDisableIntervention: boolean = false;
   completModeSectorList: Sector[]=[];
   selectedSectorsCompleteMode: Sector[] = [];
+  autoSaveDialog: boolean;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -217,27 +218,9 @@ export class CarbonMarketAssessmentComponent implements OnInit {
         }
       })
     this.selectedSectorsCompleteMode =  this.sectorArray
-      this.setFrom()
-      this.setTo()
       this.assessmentres = this.assessment
       this.showSections = true
       if (!this.isCompleted && this.isContinue) this.isSavedAssessment = true
-    }
-  }
-
-  setFrom(){
-    if(this.assessment.from){  
-      let convertTime = moment(this.assessment.from).format("DD/MM/YYYY HH:mm:ss");
-      let convertTimeObject = new Date(convertTime);      
-      this.assessment.from = moment(convertTimeObject) 
-    }
-  }
-
-  setTo(){
-    if(this.assessment.to){
-      let convertTime = moment(this.assessment.to).format("DD/MM/YYYY HH:mm:ss");
-      let convertTimeObject = new Date(convertTime);
-      this.assessment.to = moment(convertTimeObject)
     }
   }
 
@@ -269,6 +252,7 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     }
 
     if (form.valid) {
+      this.autoSaveDialog = true
       this.assessment.from = moment(this.from_date)
       this.assessment.to = moment(this.to_date)
       this.methodologyAssessmentControllerServiceProxy.saveAssessment(this.assessment)
@@ -504,6 +488,10 @@ export class CarbonMarketAssessmentComponent implements OnInit {
 
   okay() {
     this.visible_ex_ante = false
+  }
+
+  okayAutosave() {
+    this.autoSaveDialog = false
   }
 
   pushBarriers(barrier:any){

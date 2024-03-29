@@ -1,4 +1,4 @@
-import { AfterContentChecked, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { FieldNames, MasterDataDto, MasterDataService, assessment_period_info, chapter6_url } from 'app/shared/master-data.service';
 import * as moment from 'moment';
@@ -42,7 +42,7 @@ interface ChaCategoryTotalEqualsTo1 {
   templateUrl: './investor-tool.component.html',
   styleUrls: ['./investor-tool.component.css']
 })
-export class InvestorToolComponent implements OnInit, AfterContentChecked {
+export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDestroy  {
 
   @ViewChild('multiSelectComponent') multiSelectComponent: MultiSelect;
   geographicalArea:MasterDataDto = new MasterDataDto()
@@ -113,7 +113,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
   tabName: string = '';
   mainAssessment: Assessment;
-  mainTabIndex: any;
+  mainTabIndex: any = 0;
   categoryTabIndex: any;
 
   barrierBox: boolean = false;
@@ -182,7 +182,11 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   format = "### \'%\'"
   completModeSectorList: Sector[]=[];
   selectedSectorsCompleteMode: Sector[] = [];
-
+  visibleDialogBox: boolean = false;
+  autoSaveTimer: any;
+  lastUpdatedCategory: any;
+  isSavingDraft: boolean = false;
+  savedInInterval: boolean = false;
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
     public masterDataService: MasterDataService,
@@ -201,6 +205,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.fileServerURL = environment.baseUrlAPI + '/document/downloadDocumentsFromFileName/uploads';
 
   }
+  
+  
   async ngOnInit(): Promise<void> {
     this.phaseTransformExapmle = this.masterDataService.phase_transfrom
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;
@@ -216,7 +222,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.activatedRoute.queryParams.subscribe(async params => {
       params['isEdit'] == 'true' ? (this.isEditMode = true) : false;
       params['iscompleted'] == 'true' ? (this.isCompleted = true) : false
-      params['isContinue'] == 'true' ? (this.isCompleted = true) : false
+      params['isContinue'] == 'true' ? (this.isContinue = true) : false
       this.assessmentId = params['id'];
       if(params['interventionId'] && params['assessmentType']){
         await this.getPolicies().then( x=>
@@ -228,15 +234,23 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
         window.location.reload()
       }
     })
+    await this.getCharacteristics();
     if (this.isEditMode == false) {
       await this.getPolicies();
       await this.getAllImpactsCovered();
-      await this.getCharacteristics();
+      
 
     } else {
       
       try {
-        await this.getSavedAssessment()
+        
+        await this.getSavedAssessment().then(x=>{
+          if (!this.isCompleted) {
+            this.startAutoSave()
+          }
+        })
+        
+       
       }
       catch (error) {
       }
@@ -284,7 +298,49 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     this.investorToolControllerproxy.findAllSDGs().subscribe((res: any) => {
       this.sdgList = res;
     });
+    // window.onbeforeunload = () => {
+    //   console.log("reload")
+    //   if (!this.isSavingDraft) {
+    //     console.log("reload")
+    //     this.saveDraft(this.lastUpdatedCategory, this.lastUpdatedCategory.CategoryName, this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true)}
+    //   window.setTimeout(() => {
+    //   console.log("")
+    //     window.location.reload()
+    //   }, 1000)
+    // }
+  }
 
+  ngOnDestroy(): void {
+    if (!this.isCompleted && (this.isSavedAssessment || this.isContinue || this.isEditMode)) {
+      console.log("save draft on destroy", this.isSavingDraft)
+      
+      if (this.isEditMode) {
+        if (!this.isSavingDraft) {this.saveDraft(this.lastUpdatedCategory,this.lastUpdatedCategory.CategoryName,this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true, true)}
+      } else {
+        if (!this.savedInInterval) {
+          if (!this.isSavingDraft) {this.saveDraft(this.lastUpdatedCategory,this.lastUpdatedCategory.CategoryName,this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true, true)}
+        }
+      }
+    }
+    this.stopAutoSave()
+  }
+ 
+  startAutoSave() {
+    console.log("startAutoSave")
+    if (this.activeIndexMain === 0 ) {
+      this.lastUpdatedCategory = this.processData[this.activeIndex]
+    } else {
+      this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
+    }
+    this.autoSaveTimer = setInterval(() => {
+      console.log("setinterval", this.isSavingDraft)
+      this.savedInInterval = true
+      if (!this.isSavingDraft)  {this.saveDraft(this.lastUpdatedCategory,this.lastUpdatedCategory.CategoryName,this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', false, true)}
+    }, 50000);
+  }
+
+  stopAutoSave() {
+    clearInterval(this.autoSaveTimer);
   }
   setDataFromFlow(interventonId:string, assessmentType:string) {
     this.isDisableIntervention = true
@@ -299,7 +355,12 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
 
 
   async getSavedAssessment() {
-    await this.getCharacteristics();
+    this.processData = []
+    this.outcomeData = []
+    this.sdgDataSendArray = []
+    this.sdgDataSendArray4 = []
+    this.selectedSDGs = []
+    this.selectedSDGsWithAnswers = []
     this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise();
     this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
     this.outcomeData = await this.investorToolControllerproxy.getOutcomeData(this.assessmentId).toPromise();
@@ -539,6 +600,12 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
           }
 
         }
+        if (this.activeIndexMain === 0 ) {
+          this.lastUpdatedCategory = this.processData[this.activeIndex]
+        } else {
+          this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
+        }
+        console.log(this.mainTabIndex, this.lastUpdatedCategory,this.processData,this.activeIndex2,this.activeIndex)
         this.categoriesLoaded = true;
 
         if (this.characteristicsLoaded && this.categoriesLoaded) {
@@ -584,6 +651,14 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
             },            
             
             );
+            
+            setTimeout(() => {
+              this.visibleDialogBox = true;
+            }, 1000);
+            setTimeout(() => {
+              this.visibleDialogBox = false;
+            }, 6000);
+            
           },
           (err) => {
             this.messageService.add({
@@ -626,6 +701,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
                   await this.investorToolControllerproxy.saveTotalInvestments(investDto).toPromise();
                   if(!this.isCompleted){
                     this.isSavedAssessment = true;
+                    this.startAutoSave()
                   }
 
                 }
@@ -656,7 +732,9 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     }
 
   }
-  async saveDraft(category: any, processDraftLocation: string, type: string) {
+
+  async saveDraft(category: any, processDraftLocation: string, type: string, isAutoSaving: boolean = false, isDefault?: boolean) {
+    this.isSavingDraft = true
     let finalArray = this.processData.concat(this.outcomeData)
     if (this.isEditMode == true) {
       this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise();
@@ -701,27 +779,35 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     }
     this.investorToolControllerproxy.createFinalAssessment(data)
       .subscribe(async _res => {
-
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Assessment draft has been saved successfully',
-          closable: true,
-        })
+        this.isSavingDraft = false
+      console.log("data",data)
+         if (!isDefault) {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Assessment draft has been saved successfully',
+            closable: true,
+          })
+        }
+        
         this.setFrom()
         this.setTo()
-        if (this.isEditMode == false) {
+        if (this.isEditMode == false  && !isAutoSaving) {
           this.router.navigate(['app/investor-tool-new-edit'], {
             queryParams: { id: this.mainAssessment.id, isEdit: true },
           });
         }
       }, error => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Assessment detail saving failed',
-          closable: true,
-        })
+        if (!isDefault){
+          this.isSavingDraft = false
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Assessment detail saving failed',
+            closable: true,
+          })
+        }
+       
       })
   }
 
@@ -840,6 +926,16 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
         }
       }
     }
+    if (this.mainTabIndex === 0) {
+      console.log("process")
+      console.log(this.categoryTabIndex)
+      this.lastUpdatedCategory = this.processData[this.activeIndex]
+    } else {
+
+      console.log("outcome")
+      this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
+    }
+    console.log(this.lastUpdatedCategory)
   }
 
   onCategoryTabChange(event: any, tabview: TabView, type: string) {
@@ -869,8 +965,10 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
     }
     if (type === 'process') {
       this.checkTab1Mandatory(event.index)
+      this.lastUpdatedCategory = this.processData[this.activeIndex]
     } else {
       this.checkTab2Mandatory(event.index)
+      this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
     }
   }
 
@@ -1631,7 +1729,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked {
   }
 
   adaptationJustificationChange(data: InvestorAssessment) {
-    if (data.category.code === 'SUSTAINED_ADAPTATION' || data.characteristics.category.code === 'SUSTAINED_ADAPTATION') {
+    if (data.category?.code === 'SUSTAINED_ADAPTATION' || data.characteristics?.category?.code === 'SUSTAINED_ADAPTATION') {
       this.checkTab2Mandatory(6)
     }
   }

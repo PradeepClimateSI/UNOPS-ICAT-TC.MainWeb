@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FieldNames, MasterDataService } from 'app/shared/master-data.service';
 import { environment } from 'environments/environment';
+import * as moment from 'moment';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Assessment, CMAssessmentQuestion, CMAssessmentQuestionControllerServiceProxy, CMDefaultValue, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Category, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, SaveCMResultDto, ScoreDto, UniqueCategory, UniqueCharacteristic } from 'shared/service-proxies/service-proxies';
 
@@ -114,6 +115,7 @@ export class CmSectionThreeComponent implements OnInit {
   "E.g.:  “In case of an intervention focusing on increasing the blend in cement production, the relevant subsector is “Mineral industry "+
   "– cement production (2A1)”. And in case of an intervention focusing on increasing the share or renewables, the relevant sector is “Fuel combustion activities – energy industries "+
   "(1A1)”."
+startingSituation: any;
 
 
   constructor(
@@ -187,7 +189,7 @@ export class CmSectionThreeComponent implements OnInit {
     let int=0;
 
     this.categories['process'].forEach((d: any) => {
-      if (d.name == this.assessment.processDraftLocation) {
+      if (d.code == this.assessment.processDraftLocation) {
         this.activeIndex = int;
       }
       int = int + 1;
@@ -1022,94 +1024,95 @@ export class CmSectionThreeComponent implements OnInit {
   }
 
   async autoSaveResult(draftCategory: string, isDraft: boolean, name: string, type: string, characteristicId: number | undefined, questionId: number | undefined, sdgId: number | undefined) {
-    console.log("autosave")
-    await this.loadAssessmentQuestions()
-    if (type === 'prose') {
-      let result:CMResultDto[] =  []
-      let category_result: UniqueCategory;
-      let characteristic_result: any
-      let questionResult: any;
-      if (questionId && characteristicId) {
-        category_result = this.categories['process'].find((o: UniqueCategory) => o.code === draftCategory)
-        characteristic_result = category_result.characteristics.find((o: UniqueCharacteristic) => o.id === characteristicId)
-        questionResult = characteristic_result?.questions.find((q: CMQuestion) => q.id === questionId)
-        let _result = new CMResultDto()
-        if (questionResult) {
-          Object.keys(questionResult.result).forEach(e => {
-            _result[e] = questionResult[e]
-          })
-          let ch = new Characteristics()
-          ch.id = questionResult.characteristic.id
-          _result.characteristic = ch
-          _result.relevance = characteristic_result?.relevance
-          _result.answer = questionResult.result.answer
-          _result.question = questionResult.result.question
-          _result.comment = questionResult.result.comment
-          _result.filePath = questionResult.result.filePath
-        }
-        if (this.isEditMode){
-          let assQ = this.assessmentquestions.find(o => (o.characteristic.id === characteristic_result.id) && (o.question.id === questionResult?.id || o.relevance === 0))
-          if (assQ) {
-            _result.assessmentQuestionId = assQ.id
-            if (assQ.assessmentAnswers.length > 0) {
-              _result.assessmentAnswerId = assQ.assessmentAnswers[0]?.id
+    await this.loadAssessmentQuestions().then(() => {
+      if (type === 'prose') {
+        let result:CMResultDto[] =  []
+        let category_result: UniqueCategory;
+        let characteristic_result: any
+        let questionResult: any;
+        if (questionId && characteristicId) {
+          category_result = this.categories['process'].find((o: UniqueCategory) => o.code === draftCategory)
+          characteristic_result = category_result.characteristics.find((o: UniqueCharacteristic) => o.id === characteristicId)
+          questionResult = characteristic_result?.questions.find((q: CMQuestion) => q.id === questionId)
+          let _result = new CMResultDto()
+          if (questionResult) {
+            Object.keys(questionResult.result).forEach(e => {
+              _result[e] = questionResult[e]
+            })
+            let ch = new Characteristics()
+            ch.id = questionResult.characteristic.id
+            _result.characteristic = ch
+            _result.relevance = characteristic_result?.relevance
+            _result.answer = questionResult.result.answer
+            _result.question = questionResult.result.question
+            _result.comment = questionResult.result.comment
+            _result.filePath = questionResult.result.filePath
+          }
+          if (this.isEditMode){
+            let assQ = this.assessmentquestions.find(o => (o.characteristic.id === characteristic_result.id) && (o.question.id === questionResult?.id || o.relevance === 0))
+            if (assQ) {
+              _result.assessmentQuestionId = assQ.id
+              if (assQ.assessmentAnswers.length > 0) {
+                _result.assessmentAnswerId = assQ.assessmentAnswers[0]?.id
+              }
             }
           }
-        }
-        result.push(_result)
-      } else if (characteristicId) {
-        category_result = this.categories['process'].find((o: UniqueCategory) => o.code === draftCategory)
-        characteristic_result = category_result.characteristics.find((o: UniqueCharacteristic) => o.id === characteristicId)
-        characteristic_result.questions.forEach((question: CMQuestion) => {
+          result.push(_result)
+        } else if (characteristicId) {
+          category_result = this.categories['process'].find((o: UniqueCategory) => o.code === draftCategory)
+          characteristic_result = category_result.characteristics.find((o: UniqueCharacteristic) => o.id === characteristicId)
           let _result = new CMResultDto()
           let ch = new Characteristics()
           ch.id = characteristic_result.id
           _result.characteristic = ch
           _result.relevance = characteristic_result.relevance
           if (this.isEditMode) {
-            let assQ = this.assessmentquestions.filter(o => (o.characteristic.id === characteristic_result.id) && (o.question.id === question.id || o.relevance === 0))
+            let assQ = this.assessmentquestions.find(o => o.characteristic.id === characteristic_result.id)
             if (assQ) {
-              let addedCharacteristics = this.results.filter(o => o.characteristic.id === characteristic_result.id)
-              let assessmentquestionIds = assQ.map(q => q.id)
-              if (addedCharacteristics.length > 0) {
-                assessmentquestionIds = assessmentquestionIds.filter(aqid => !(addedCharacteristics.filter(o => o.assessmentQuestionId === aqid)?.length > 0))
-              }
-              let sortedQuestion = assQ.find(o => o.id === assessmentquestionIds[0])
-              if (sortedQuestion) {
-                _result.assessmentQuestionId = sortedQuestion.id
-                if (sortedQuestion.assessmentAnswers.length > 0) {
-                  _result.assessmentAnswerId = sortedQuestion.assessmentAnswers[0]?.id
-                }
-              }
+              _result.assessmentQuestionId = assQ.id
+              _result.assessmentAnswerId = assQ.assessmentAnswers[0].id
             }
           }
           result.push(_result)
-        })
-      }
-      this.saveResultInAutoSave(result, isDraft, type, name)
-
-    } else if (type === 'out') {
-      let selectedSdg: SDG | undefined
-      if (draftCategory === 'SCALE_SD' || draftCategory === 'SUSTAINED_SD') {
-        selectedSdg = this.selectedSDGs.find(o => o.id === sdgId)
-      }
-      if (draftCategory === 'SCALE_SD') {
-        if (characteristicId === undefined && questionId === undefined) {
-          let exists = await this.cMAssessmentQuestionControllerServiceProxy.getSelectedSDGs(this.assessment.id).toPromise()
-          let existIds = exists.map(e => e.sdg.id)
-          let SDGs = this.selectedSDGs.filter(sd => !existIds.includes(sd.id))
-          SDGs.map(sd => {
-            let results = []
-            results.push(...sd.scaleResult)
-            results.push(...sd.sustainResult)
-            if (results.length > 0) {
-              this.saveResultInAutoSave(results, isDraft, type, name)
+        }
+        this.saveResultInAutoSave(result, isDraft, type, name)
+  
+      } else if (type === 'out') {
+        let selectedSdg: SDG | undefined
+        if (draftCategory === 'SCALE_SD' || draftCategory === 'SUSTAINED_SD') {
+          selectedSdg = this.selectedSDGs.find(o => o.id === sdgId)
+        }
+        if (draftCategory === 'SCALE_SD') {
+          if (characteristicId === undefined && questionId === undefined) {
+            let ids = this.selectedSDGs.map(o => o.id.toString())
+            this.cMAssessmentQuestionControllerServiceProxy.deleteRemovedSDGS(this.assessment.id, ids).toPromise()
+            this.selectedSDGs.map(sd => {
+              let results = []
+              results.push(...sd.scaleResult)
+              results.push(...sd.sustainResult)
+              if (results.length > 0) {
+                this.saveResultInAutoSave(results, isDraft, type, name)
+              }
+            })
+          } else {
+            if (selectedSdg) {
+              let result = selectedSdg.scaleResult.find(res => res.characteristic.id === characteristicId)
+              if (result !== undefined) {
+                if (this.isEditMode) {
+                  let assQ = this.assessmentquestions.find(o => o.characteristic.id === result?.characteristic.id && o.selectedSdg.id === selectedSdg?.id)
+                  if (assQ) {
+                    result.assessmentQuestionId = assQ.id
+                    result.assessmentAnswerId = assQ.assessmentAnswers[0].id
+                  }
+                }
+                this.saveResultInAutoSave([result], isDraft, type, name)
+              }
             }
-          })
-        } else {
+          }
+        } else if (draftCategory === 'SUSTAINED_SD') {
           if (selectedSdg) {
-            let result = selectedSdg.scaleResult.find(res => res.characteristic.id === characteristicId)
-            if (result !== undefined) {
+            let result = selectedSdg.sustainResult.find(res => res.characteristic.id === characteristicId)
+            if (result) {
               if (this.isEditMode) {
                 let assQ = this.assessmentquestions.find(o => o.characteristic.id === result?.characteristic.id && o.selectedSdg.id === selectedSdg?.id)
                 if (assQ) {
@@ -1120,66 +1123,53 @@ export class CmSectionThreeComponent implements OnInit {
               this.saveResultInAutoSave([result], isDraft, type, name)
             }
           }
-        }
-      } else if (draftCategory === 'SUSTAINED_SD') {
-        if (selectedSdg) {
-          let result = selectedSdg.sustainResult.find(res => res.characteristic.id === characteristicId)
-          if (result) {
-            if (this.isEditMode) {
-              let assQ = this.assessmentquestions.find(o => o.characteristic.id === result?.characteristic.id && o.selectedSdg.id === selectedSdg?.id)
-              if (assQ) {
-                result.assessmentQuestionId = assQ.id
-                result.assessmentAnswerId = assQ.assessmentAnswers[0].id
-              }
+        } else {
+          let results = this.outcome.find((o: OutcomeCategory) => o.code === draftCategory)
+          if (draftCategory === "SCALE_ADAPTATION" || draftCategory === 'SUSTAINED_ADAPTATION') {
+            results.results = results.results.map((res: CMResultDto) => {
+              res.isAdaptation = true
+              res.isGHG = false
+              res.isSDG = false
+              return res
+            })
+          }
+          let characteristic_result = results.results.find((o: CMResultDto) => o.characteristic.id === characteristicId)
+    
+          if (this.isEditMode) {
+            let assQ = this.assessmentquestions.find(o => o.characteristic.id === characteristic_result.characteristic.id)
+            if (assQ) {
+              characteristic_result.assessmentQuestionId = assQ.id
+              characteristic_result.assessmentAnswerId = assQ.assessmentAnswers[0].id
             }
-            this.saveResultInAutoSave([result], isDraft, type, name)
           }
-        }
-      } else {
-        let results = this.outcome.find((o: OutcomeCategory) => o.code === draftCategory)
-        if (draftCategory === "SCALE_ADAPTATION" || draftCategory === 'SUSTAINED_ADAPTATION') {
-          results.results = results.results.map((res: CMResultDto) => {
-            res.isAdaptation = true
-            res.isGHG = false
-            res.isSDG = false
-            return res
-          })
-        }
-        let characteristic_result = results.results.find((o: CMResultDto) => o.characteristic.id === characteristicId)
-  
-        if (this.isEditMode) {
-          let assQ = this.assessmentquestions.find(o => o.characteristic.id === characteristic_result.characteristic.id)
-          if (assQ) {
-            characteristic_result.assessmentQuestionId = assQ.id
-            characteristic_result.assessmentAnswerId = assQ.assessmentAnswers[0].id
-          }
+    
+          this.saveResultInAutoSave([characteristic_result], isDraft, type, name)
         }
   
-        this.saveResultInAutoSave([characteristic_result], isDraft, type, name)
+      } else if (type === 'reduction') {
+        let cmResult: SaveCMResultDto = new SaveCMResultDto();
+        cmResult.result = []
+        cmResult.assessment = this.assessment;
+        cmResult.isDraft = isDraft;
+        cmResult.type = 'out';
+        cmResult.name = name;
+        cmResult.expectedGHGMitigation = this.expected_ghg_mitigation
+        this.cMAssessmentQuestionControllerServiceProxy.saveResult(cmResult).subscribe(res => {
+          if (res) {
+            if (!this.isEditMode) {
+              this.router.navigate(['../carbon-market-tool-edit'], { queryParams: { id: this.assessment.id, isEdit: true, isContinue: true }, relativeTo: this.activatedRoute });
+            }
+          }
+        })
       }
-
-    } else if (type === 'reduction') {
-      let cmResult: SaveCMResultDto = new SaveCMResultDto();
-      cmResult.result = []
-      cmResult.assessment = this.assessment;
-      cmResult.isDraft = isDraft;
-      cmResult.type = 'out';
-      cmResult.name = name;
-      cmResult.expectedGHGMitigation = this.expected_ghg_mitigation
-      this.cMAssessmentQuestionControllerServiceProxy.saveResult(cmResult).subscribe(res => {
-        if (res) {
-          if (!this.isEditMode) {
-            this.router.navigate(['../carbon-market-tool-edit'], { queryParams: { id: this.assessment.id, isEdit: true, isContinue: true }, relativeTo: this.activatedRoute });
-          }
-        }
-      })
-    }
+    })
 
   }
 
   saveResultInAutoSave(results: CMResultDto[], isDraft: boolean, type: string, name: string) {
     let cmResult: SaveCMResultDto = new SaveCMResultDto();
     cmResult.result = results;
+    this.assessment.editedOn = moment()
     cmResult.assessment = this.assessment;
     cmResult.isDraft = isDraft;
     cmResult.type = type;
@@ -1285,6 +1275,10 @@ export class CmSectionThreeComponent implements OnInit {
 
   async loadAssessmentQuestions() {
     this.assessmentquestions = await this.cMAssessmentQuestionControllerServiceProxy.getAssessmentQuestionsByAssessmentId(this.assessment.id).toPromise()
+  }
+
+  onSelectDefault(event: any, char: CMResultDto) {
+    char.startingSituation = event.value.label
   }
 }
 

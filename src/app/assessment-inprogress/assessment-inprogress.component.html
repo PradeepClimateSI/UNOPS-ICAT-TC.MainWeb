@@ -34,6 +34,7 @@
                     <th>Assessment Approach</th>
                     <th>Tool</th>
                     <th>Sector/Sectors(Intervention)</th>
+                    <th>Created Date</th>
                     <th style="width:10%" >Last Update Date</th>
                     <th style="width:15%" >Action</th>
                 </tr>
@@ -50,6 +51,9 @@
                     </td>
                     <td>
                         {{setName( assessment)}}
+                    </td>
+                    <td>
+                        {{assessment?.createdOn | date: "dd/MM/yyyy "}}
                     </td>
                     <td>
                         {{assessment?.editedOn | date: "dd/MM/yyyy "}}

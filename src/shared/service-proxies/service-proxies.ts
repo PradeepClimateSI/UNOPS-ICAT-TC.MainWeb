@@ -21320,7 +21320,16 @@ export class CMQuestionControllerServiceProxy {
         return _observableOf(null as any);
     }
 }
-
+export enum DocumentsDocumentOwner {
+        Project = <any>"Project",
+        Country = <any>"Country",
+        CountryNC = <any>"CountryNC",
+        CountryBUR = <any>"CountryBUR",
+        CountryBTR = <any>"CountryBTR",
+        CountryNDC = <any>"CountryNDC",
+        CountryGHG = <any>"CountryGHG",
+    }
+    
 @Injectable()
 export class CMAssessmentQuestionControllerServiceProxy {
     private http: HttpClient;
@@ -21811,6 +21820,58 @@ export class CMAssessmentQuestionControllerServiceProxy {
                 result200 = <any>null;
             }
             return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    deleteRemovedSDGS(assessmentId: number, selectedSDGS: string[]): Observable<void> {
+        let url_ = this.baseUrl + "/cm-assessment-question/delete-removed-sdgs?";
+        if (assessmentId === undefined || assessmentId === null)
+            throw new Error("The parameter 'assessmentId' must be defined and cannot be null.");
+        else
+            url_ += "assessmentId=" + encodeURIComponent("" + assessmentId) + "&";
+        if (selectedSDGS === undefined || selectedSDGS === null)
+            throw new Error("The parameter 'selectedSDGS' must be defined and cannot be null.");
+        else
+            selectedSDGS && selectedSDGS.forEach(item => { url_ += "selectedSDGS=" + encodeURIComponent("" + item) + "&"; });
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteRemovedSDGS(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteRemovedSDGS(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDeleteRemovedSDGS(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 201) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -39870,17 +39931,6 @@ export interface INotification {
 
     [key: string]: any;
 }
-
-export enum DocumentsDocumentOwner {
-    Project = <any>"Project",
-    Country = <any>"Country",
-    CountryNC = <any>"CountryNC",
-    CountryBUR = <any>"CountryBUR",
-    CountryBTR = <any>"CountryBTR",
-    CountryNDC = <any>"CountryNDC",
-    CountryGHG = <any>"CountryGHG",
-}
-
 
 export enum CountryStatus {
     Active = <any>"Active",
