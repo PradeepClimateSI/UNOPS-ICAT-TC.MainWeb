@@ -313,7 +313,11 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
   ngOnDestroy(): void {
     if (!this.isCompleted && (this.isSavedAssessment || this.isContinue || this.isEditMode)) {
       console.log("save draft on destroy", this.isSavingDraft)
-      
+      if (this.activeIndexMain === 0 ) {
+        this.lastUpdatedCategory = this.processData[this.activeIndex]
+      } else {
+        this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
+      }
       if (this.isEditMode) {
         if (!this.isSavingDraft) {this.saveDraft(this.lastUpdatedCategory,this.lastUpdatedCategory.CategoryName,this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true, true)}
       } else {
@@ -1224,8 +1228,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
           isValid = true;
         } else {
           if (
-            (investorAssessment.relavance !== undefined) &&
-            (investorAssessment.likelihood !== undefined) &&
+            (investorAssessment.relavance !== undefined && investorAssessment.relavance !== null) &&
+            (investorAssessment.likelihood !== undefined && investorAssessment.likelihood !== null ) &&
             (investorAssessment.likelihood_justification !== undefined && investorAssessment.likelihood_justification !== null && investorAssessment.likelihood_justification !== '') 
           ) {
             for (let indicator_details of investorAssessment.indicator_details) {
