@@ -408,7 +408,6 @@ export class CarbonMarketAssessmentComponent implements OnInit {
         },
         reject: () => { 
           if(this.isCompleted){
-            console.log(this.assessment['geographicalAreasCovered'][0])
             this.geographicalArea = this.geographicalAreasCovered.find(item=>{
               if (item.name==this.assessment['geographicalAreasCovered'][0].name){
                 return item

@@ -298,21 +298,10 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
     this.investorToolControllerproxy.findAllSDGs().subscribe((res: any) => {
       this.sdgList = res;
     });
-    // window.onbeforeunload = () => {
-    //   console.log("reload")
-    //   if (!this.isSavingDraft) {
-    //     console.log("reload")
-    //     this.saveDraft(this.lastUpdatedCategory, this.lastUpdatedCategory.CategoryName, this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true)}
-    //   window.setTimeout(() => {
-    //   console.log("")
-    //     window.location.reload()
-    //   }, 1000)
-    // }
   }
 
   ngOnDestroy(): void {
     if (!this.isCompleted && (this.isSavedAssessment || this.isContinue || this.isEditMode)) {
-      console.log("save draft on destroy", this.isSavingDraft)
       if (this.activeIndexMain === 0 ) {
         this.lastUpdatedCategory = this.processData[this.activeIndex]
       } else {
@@ -330,14 +319,12 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
   }
  
   startAutoSave() {
-    console.log("startAutoSave")
     if (this.activeIndexMain === 0 ) {
       this.lastUpdatedCategory = this.processData[this.activeIndex]
     } else {
       this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
     }
     this.autoSaveTimer = setInterval(() => {
-      console.log("setinterval", this.isSavingDraft)
       this.savedInInterval = true
       if (!this.isSavingDraft)  {this.saveDraft(this.lastUpdatedCategory,this.lastUpdatedCategory.CategoryName,this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', false, true)}
     }, 50000);
@@ -609,7 +596,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
         } else {
           this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
         }
-        console.log(this.mainTabIndex, this.lastUpdatedCategory,this.processData,this.activeIndex2,this.activeIndex)
         this.categoriesLoaded = true;
 
         if (this.characteristicsLoaded && this.categoriesLoaded) {
@@ -784,7 +770,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
     this.investorToolControllerproxy.createFinalAssessment(data)
       .subscribe(async _res => {
         this.isSavingDraft = false
-      console.log("data",data)
          if (!isDefault) {
           this.messageService.add({
             severity: 'success',
@@ -931,15 +916,11 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
       }
     }
     if (this.mainTabIndex === 0) {
-      console.log("process")
-      console.log(this.categoryTabIndex)
       this.lastUpdatedCategory = this.processData[this.activeIndex]
     } else {
 
-      console.log("outcome")
       this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
     }
-    console.log(this.lastUpdatedCategory)
   }
 
   onCategoryTabChange(event: any, tabview: TabView, type: string) {

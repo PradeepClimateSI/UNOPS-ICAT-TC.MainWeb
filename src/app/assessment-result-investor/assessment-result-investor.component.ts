@@ -114,7 +114,6 @@ export class AssessmentResultInvestorComponent implements OnInit {
       this.outcomeData = res?.outcomeData;
       this.outcomeScore = res?.outcomeScore;
       this.processScore = res?.processScore;
-      console.log("outcomeScore",this.outcomeData)
       this.scale_GHGs = res?.outcomeData.find((item: { code: string; })=>item?.code=='SCALE_GHG')
       this.scale_SD = res?.outcomeData.find((item: { code: string; })=>item?.code=='SCALE_SD')
       this.sustained_GHGs = res?.outcomeData.find((item: { code: string; })=>item?.code=='SUSTAINED_GHG')

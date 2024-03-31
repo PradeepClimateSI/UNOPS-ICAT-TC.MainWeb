@@ -305,12 +305,6 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
     } else {
       this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
     }
-    // window.onbeforeunload = () => {
-    //   if (!this.isSavingDraft) this.saveDraft(this.lastUpdatedCategory, this.lastUpdatedCategory.CategoryName, this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true)
-    //   window.setTimeout(() => {
-    //     window.location.reload()
-    //   }, 10000)
-    // }
   }
 
 
@@ -379,8 +373,7 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
     this.sdgDataSendArray = []
     this.sdgDataSendArray4 = []
     this.selectedSDGs = []
-    this.selectedSDGsWithAnswers = []
-    // await this.getCharacteristics();
+    this.selectedSDGsWithAnswers = [];
     this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise();
     this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
     this.outcomeData = await this.investorToolControllerproxy.getOutcomeData(this.assessmentId).toPromise();
@@ -975,13 +968,13 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
 
   saveResultInAutoSave(data: FinalInvestorAssessmentDto) {
     this.investorToolControllerproxy.createFinalAssessment2(data).subscribe(res => {
-      // if (res) {
+     
         if (!this.isEditMode) {
           this.router.navigate(['app/portfolio-tool-edit'], {
             queryParams: { id: this.mainAssessment.id, isEdit: true },
           });
         }
-      // }
+      
     })
   }
 
