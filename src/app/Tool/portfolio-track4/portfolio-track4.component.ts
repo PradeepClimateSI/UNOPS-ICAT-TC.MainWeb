@@ -241,10 +241,6 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
         .then(x => {
           if (!this.isCompleted) {
             this.startAutoSave()
-            // window.onbeforeunload = () => {
-            //   console.log("unloading")
-            //   this.ngOnDestroy();
-            // };
           }
         })
       }
@@ -320,6 +316,11 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     if (!this.isCompleted && (this.isSavedAssessment || this.isContinue || this.isEditMode)) {
+      if (this.activeIndexMain === 0 ) {
+        this.lastUpdatedCategory = this.processData[this.activeIndex]
+      } else {
+        this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
+      }
       if (this.isEditMode) {
         if (!this.isSavingDraft) {this.saveDraft(this.lastUpdatedCategory,this.lastUpdatedCategory.CategoryName,this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true, true)}
       } else {
@@ -332,12 +333,12 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
   }
 
   startAutoSave() {
-    if (this.activeIndexMain === 0 ) {
-      this.lastUpdatedCategory = this.processData[this.activeIndex]
-    } else {
-      this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
-    }
     this.autoSaveTimer = setInterval(() => {
+      if (this.activeIndexMain === 0 ) {
+        this.lastUpdatedCategory = this.processData[this.activeIndex]
+      } else {
+        this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
+      }
       this.savedInInterval = true
       if (!this.isSavingDraft)  {this.saveDraft(this.lastUpdatedCategory,this.lastUpdatedCategory.CategoryName,this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', false, true)}
     }, 50000);
@@ -970,65 +971,6 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
           })
         }
       })
-  }
-
-  async autoSaveResult(category: any, characteristic_code: string | undefined, draftLocation: string, type: string) {
-    // if (this.isCreatingAssessment) {
-    //   this.saveDraft(category, draftLocation, type)
-    //   this.isCreatingAssessment = false
-    // } else {
-    //   if (type === 'pro') {
-    //     let pData = [...this.processData]
-    //     let _category_data = pData.find(p => p.categoryCode === category.categoryCode)
-    //     if (_category_data) {
-    //     let category_data = {..._category_data}
-    //       category_data.data = category_data.data.filter(_data => _data.characteristics.code === characteristic_code)
-    //       if (this.isEditMode == true) {
-    //         this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise();
-    //         [category_data].map(x => x.data.map(y => y.assessment = this.assessment));
-    //       }
-    //       else {
-    //         [category_data].map(x => x.data.map(y => y.assessment = this.mainAssessment))
-    //       }
-    //       let data: any = {
-    //         finalArray: [category_data],
-    //         isDraft: true,
-    //         isEdit: this.isEditMode,
-    //         proDraftLocation: draftLocation,
-    //         outDraftLocation: this.assessment.outcomeDraftLocation,
-    //         lastDraftLocation: type,
-    //         scaleSDGs: [],
-    //         sustainedSDGs: [],
-    //         sdgs: []
-    //       }
-    //       this.saveResultInAutoSave(data)
-    //     }
-    //   } else if (type === 'out') {
-    //     if (category.categoryCode === 'SCALE_SD') {
-    //       if (characteristic_code === undefined) {
-    //         let data: any = {
-    //           finalArray: [],
-    //           isDraft: true,
-    //           isEdit: this.isEditMode,
-    //           proDraftLocation: this.assessment.processDraftLocation,
-    //           outDraftLocation: draftLocation,
-    //           lastDraftLocation: type,
-    //           scaleSDGs: this.sdgDataSendArray2,
-    //           sustainedSDGs: this.sdgDataSendArray4,
-    //           sdgs: this.selectedSDGsWithAnswers,
-    //           assessmentId: this.assessment.id
-    //         }
-    //         this.saveResultInAutoSave(data)
-    //       }
-    //       console.log(this.sdgDataSendArray2)
-    //       console.log(this.selectedSDGsWithAnswers)
-    //     } else if (category.categoryCode === 'SUSTAINED_SD') {
-  
-    //     } else {
-  
-    //     }
-    //   }
-    // }
   }
 
   saveResultInAutoSave(data: FinalInvestorAssessmentDto) {

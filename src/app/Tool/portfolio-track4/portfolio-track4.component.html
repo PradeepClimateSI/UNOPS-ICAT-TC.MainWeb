@@ -371,7 +371,7 @@
                 <span>Process of Change</span><i *ngIf="maintabIsValid[0] !== undefined && !maintabIsValid[0]"  pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
               </ng-template>
               <p-tabView #tabView (onChange)="onCategoryTabChange($event, tabView, 'process')" [(activeIndex)]="activeIndex ">
-                <p-tabPanel [header]="category.CategoryName" [selected]="category.CategoryName==assessment.processDraftLocation" *ngFor="let category of processData; let idx = index;">
+                <p-tabPanel [header]="category.CategoryName"  *ngFor="let category of processData; let idx = index;">
                   <ng-template pTemplate="header">
                     <span>{{category.CategoryName}}</span><i *ngIf="tab1IsValid[idx] !== undefined && !tab1IsValid[idx]"  pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
                   </ng-template>
@@ -475,7 +475,7 @@
                 <span>Outcome of Change</span><i *ngIf="maintabIsValid[1] !== undefined && !maintabIsValid[1]"  pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
               </ng-template>
               <p-tabView #tabView2 (onChange)="onCategoryTabChange($event, tabView2, 'outcome') " [(activeIndex)]="activeIndex2">
-                <p-tabPanel *ngFor="let category of outcomeData; index as cat" [selected]="category.CategoryName==assessment.outcomeDraftLocation">
+                <p-tabPanel *ngFor="let category of outcomeData; index as cat" >
                   <ng-template pTemplate="header">
                     <span class="custom-tab-header">{{ category.CategoryName }}</span>
                     <i *ngIf="tabIsValid[cat] !== undefined && !tabIsValid[cat]"  pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
@@ -491,8 +491,7 @@
                       <div class="col-5 "></div>
                     </div>
                   </div>
-
-                  <div *ngIf="category.CategoryName !== 'SDG Scale of the Outcome' && category.CategoryName !== 'SDG Time frame over which the outcome is sustained'  ">
+                  <div *ngIf="category.CategoryName !== 'SDG Scale of the Outcome' && category.CategoryName !== 'SDG Time frame over which the outcome is sustained' && [0, 1, 4, 5].includes(activeIndex2) ">
                     <div class="characteristic-Topic" *ngFor="let data of category.data; index as i">
                       <h6>{{i+1}}.{{data.characteristics.name}}</h6>
                       <div>
@@ -532,7 +531,7 @@
                                           <p class="info-message text-danger" *ngIf="isMandatoryActive(data.category.code, data.characteristics.code) && data.score==undefined  && ((fData1.submitted || type.touched) || (category.isValidated==false && data.score==undefined) || (tabIsValid[cat] !== undefined && !tabIsValid[cat]))">
                                             This is a mandatory field </p>
                                         </div>
-                                        <div *ngIf=" category.CategoryName ==='GHG Time frame over which the outcome is sustained' ||  category.CategoryName ==='Adaptation Time frame over which the outcome is sustained' ">
+                                        <div *ngIf=" category.CategoryName ==='GHG Time frame over which the outcome is sustained' ||  category.CategoryName ==='Adaptation Time frame over which the outcome is sustained' && [1,5].includes(activeIndex2)">
                                           <p-dropdown appendTo="body" name="{{cat}}_{{i}}_outcomeSustainedScore_" #type="ngModel" placeholder="Select Score" [(ngModel)]="data.score" [options]="outcomeSustainedScore" optionLabel="id" optionValue="value" ></p-dropdown>
                                           <p class="info-message text-danger" *ngIf="data.score==undefined  && ((fData1.submitted || type.touched) || (category.isValidated==false && data.score==undefined) || (tabIsValid[cat] !== undefined && !tabIsValid[cat]))">
                                             This is a mandatory field </p>
@@ -602,7 +601,7 @@
                     </div>
                   </div>
                   <br> <br>
-                  <div *ngIf="category.CategoryName === 'SDG Scale of the Outcome'">
+                  <div *ngIf="category.CategoryName === 'SDG Scale of the Outcome'  && activeIndex2 === 2" >
                     <div *ngFor="let item of sdgDataSendArray2; index as i">
                       <div class="card" style="min-height: 300px;">
                         <h6 style="color: black;">SDG {{ selectedSDGs[i].number }} - {{ selectedSDGs[i].name }}</h6> <br>
@@ -678,7 +677,7 @@
                       </div>
                     </div>
                   </div>
-                  <div *ngIf="category.CategoryName === 'SDG Time frame over which the outcome is sustained'  ">
+                  <div *ngIf="category.CategoryName === 'SDG Time frame over which the outcome is sustained' && activeIndex2 === 3 ">
                     <div *ngFor="let item of sdgDataSendArray4; index as i">
                       <div class="card" style="min-height: 300px;">
                         <h6 style="color: black;">SDG {{ selectedSDGs[i].number }} - {{ selectedSDGs[i].name }}</h6> <br>
@@ -774,7 +773,7 @@
       </div>
     </div>
 <!--#########################################  NOT USING ########################################-->
-    <div *ngIf="load && selectedApproach === 'Indirect'">
+    <!-- <div *ngIf="load && selectedApproach === 'Indirect'">
       <div class="card">
         <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)">
           <p-tabView (onChange)="onMainTabChange($event)" [(activeIndex)]="activeIndexMain ">
@@ -938,7 +937,7 @@
           </div>
         </form>
       </div>
-    </div>
+    </div> -->
 <!--#########################################  NOT USING END ########################################-->
   </div>
 </div>
