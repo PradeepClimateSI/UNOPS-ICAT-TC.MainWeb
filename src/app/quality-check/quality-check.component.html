@@ -101,14 +101,14 @@
                 {{
                   param.qaAssighnDate === null
                     ? "-"
-                    : (param.qaAssighnDate | date: "dd-MM-yyyy ")
+                    : (param.qaAssighnDate | date: "dd/MM/yyyy ")
                 }}
               </td>
               <td>
                 {{
                   param.qaDeadline === null
                     ? "-"
-                    : (param.qaDeadline | date: "dd-MM-yyyy ")
+                    : (param.qaDeadline | date: "dd/MM/yyyy ")
                 }}
               </td>
               <td>{{ QuAlityCheckStatusEnum[param.qaStatus] }}</td>

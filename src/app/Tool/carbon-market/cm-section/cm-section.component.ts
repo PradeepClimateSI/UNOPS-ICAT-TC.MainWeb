@@ -13,6 +13,8 @@ export class CmSectionComponent implements OnInit {
   @Input() assessment: Assessment
   @Input() approach: string
   @Input() isEditMode: boolean;
+  @Input() isCompleted: boolean;
+  @Input() expectedGhgMitigation: number;
  
   openAccordion = 0
 
@@ -45,6 +47,16 @@ export class CmSectionComponent implements OnInit {
   showConditionDialog: boolean;
   visible_condition: boolean;
   condition_message: string;
+  emptySaveDto = new SaveDto()
+  section2_description = 'Environmental integrity ensures that carbon market activities support global mitigation efforts, importantly not causing a net increase in global GHG ' +
+    'emissions compared to a situation where the carbon market activity is not implemented. Social integrity, meanwhile, guarantees the activities benefit local communities and ' +
+    'negative impacts are avoided, aligning with broader sustainability goals. Together, these principles steer carbon markets towards activities with outcomes that are beneficial ' +
+    'for both the planet and its people.'
+  criteria1_description = 'Central to safeguarding environmental integrity is the robust assessment of the additionality of the carbon market intervention and quantification of ' +
+    'the activity’s mitigation outcomes. Safeguarding the activity’s additionality means verifying that the activity was triggered by the revenues from the credits’ sale. This can ' +
+    'be demonstrated through the application of different additionality tests including a regulatory additionality test (going beyond existing laws and regulations), an investment ' +
+    'test and/or a barrier test. For the quantification of mitigation outcomes, it is essential that crediting baselines are set credibly and conservatively and that a robust ' +
+    'monitoring concept is in place. The following questions are therefore focusing on the intervention’s approach to additionality determination, baseline setting and monitoring.'
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -236,9 +248,9 @@ export class CmSectionComponent implements OnInit {
         sec.criteria.forEach(cr => {
           cr.questions.forEach(q => {
             if (this.isPassed) {this.isPassed = q.answer.isPassing}
-            if (!this.isPassed) {
+            if (!q.answer.isPassing) {
               notMetCriterias.push(cr.criteria.name)
-            }
+            } 
           })
         })
       })
@@ -264,6 +276,10 @@ export class CmSectionComponent implements OnInit {
         })
         this.condition_message = this.condition_message + '</ul>'
       }
+    }
+
+    if (!e.isLoading) {
+      this.autoSaveResult(question.id)
     }
 
   }
@@ -419,7 +435,7 @@ export class CmSectionComponent implements OnInit {
      }
     let result: SaveCMResultDto = new SaveCMResultDto()
     result.result = []
-    result.result = [...event.result]
+    result.result = [...event?.result]
     this.sectionResult.sections.forEach((section: any) => {
       section.criteria.forEach((cr: any) => {
         cr.questions.forEach((q: any) => {
@@ -436,8 +452,10 @@ export class CmSectionComponent implements OnInit {
             let assQ = this.assessmentQuestions.find(o => (o.question.id === q.question?.id))
             if (assQ) {
               item.assessmentQuestionId = assQ.id;
-              item.assessmentAnswerId = assQ.assessmentAnswers[0]?.id;
-            }
+              if (assQ.assessmentAnswers.length > 0) {
+                item.assessmentAnswerId = assQ.assessmentAnswers[0]?.id;
+              }
+            } 
           }
           if (item.question) result.result.push(item)
         })
@@ -447,12 +465,15 @@ export class CmSectionComponent implements OnInit {
     result.isDraft = event.isDraft;
     result.type =event.type;
     result.name=event.name;
+    result.expectedGHGMitigation = event.expected_ghg_mitigation
     this.cMAssessmentQuestionControllerServiceProxy.saveResult(result)
       .subscribe(res => {
         if (res) {
           let message = ''
           if (event.isDraft) {
             message = 'Assessment saved successfully. You will be able to continue the assessment from the “In progress” menu'
+          } else if (this.isCompleted) {
+            message = 'Assessment is updated successfully.'
           } else {
             message = 'Assessment created successfully'
           }
@@ -462,13 +483,13 @@ export class CmSectionComponent implements OnInit {
             detail: message,
             closable: true,
           })
-          if (event.isDraft) {
+          if (event.isDraft && !this.isCompleted) {
             this.isEditMode = true
             this.setInitialState()
-            this.router.navigate(['../carbon-market-tool-edit'], { queryParams: { id: this.assessment.id, isEdit: true }, relativeTo: this.activatedRoute });
+            this.router.navigate(['../carbon-market-tool-edit'], { queryParams: { id: this.assessment.id, isEdit: true, isContinue: true }, relativeTo: this.activatedRoute });
           
           }
-          if (result.assessment.assessment_approach === 'DIRECT' && !event.isDraft) {
+          if (result.assessment.assessment_approach === 'DIRECT' && !event.isDraft && !this.isCompleted) {
             this.router.navigate(['../carbon-market-tool-result'], { queryParams: { id: this.assessment.id }, relativeTo: this.activatedRoute });
           } 
 
@@ -482,6 +503,49 @@ export class CmSectionComponent implements OnInit {
         })
       })
   }
+
+  async autoSaveResult(questionId: number) {
+    await this.loadAssessmentQuestions()
+    this.sectionResult.sections.forEach((section: any) => {
+      section.criteria.forEach((cr: any) => {
+        let question = cr.questions.find((q: any) => q.question.id === questionId)
+        if (question) {
+          let item = new CMResultDto();
+          if (question.answer) item.answer = question.answer;
+          let ins = new Institution();
+          ins.id = question.institution?.id;
+          if (question.institution) item.institution = ins;
+          item.comment = question.comment;
+          item.question = question.question;
+          item.type = question.type;
+          item.filePath = question.file;
+          if (this.isEditMode) {
+            let assQ = this.assessmentQuestions.find(o => (o.question.id === question.question?.id))
+            if (assQ) {
+              item.assessmentQuestionId = assQ.id;
+              if (assQ.assessmentAnswers.length > 0) {
+                item.assessmentAnswerId = assQ.assessmentAnswers[0]?.id;
+              }
+            }
+          }
+          let cmResult: SaveCMResultDto = new SaveCMResultDto();
+          cmResult.result = [item];
+          cmResult.assessment = this.assessment;
+          cmResult.isDraft = true;
+          cmResult.type = '';
+          cmResult.name = '';
+          this.cMAssessmentQuestionControllerServiceProxy.saveResult(cmResult).subscribe(res => {
+            if (res) {
+              if (!this.isEditMode) {
+                this.router.navigate(['../carbon-market-tool-edit'], { queryParams: { id: this.assessment.id, isEdit: true, isContinue: true }, relativeTo: this.activatedRoute });
+              }
+            }
+          })
+        }
+      })
+    })
+  }
+
   okay() {
     this.visible = false
   }
@@ -494,13 +558,18 @@ export class CmSectionComponent implements OnInit {
     throw new Error('Method not implemented.');
   }
 
+  async loadAssessmentQuestions() {
+    this.assessmentQuestions = await this.cMAssessmentQuestionControllerServiceProxy.getAssessmentQuestionsByAssessmentId(this.assessment.id).toPromise()
+  }
+
 }
 
 export class SaveDto {
-  result: CMResultDto[]
+  result: CMResultDto[] = []
   isDraft: boolean = false
-  name:string
-  type:string
+  name:string = ''
+  type:string = ''
+  expected_ghg_mitigation: number = 0
 }
 
 export class SectionResultDto{

@@ -127,6 +127,7 @@ import { SdgPriorityComponent } from './sdg-priority/sdg-priority.component';
 import { AssessmentInprogressComponent } from './assessment-inprogress/assessment-inprogress.component';
 import { LandingPageComponent } from "./landing-page/landing-page.component";
 import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
+import { AssessmentFlowComponent } from "./Tool/assessment-flow/assessment-flow.component";
 
 
 
@@ -211,7 +212,8 @@ export function getAuditRemoteServiceBaseUrl(): string {
     SdgPriorityComponent,
     AssessmentInprogressComponent,
     LandingPageComponent,
-    GuidanceVideoComponent
+    GuidanceVideoComponent,
+    AssessmentFlowComponent
   ],
 
 
@@ -274,7 +276,6 @@ export function getAuditRemoteServiceBaseUrl(): string {
     ServiceProxy,
     AuthServiceProxy,
     DocumentControllerServiceProxy,
-    ConfirmationService,
     AuthControllerServiceProxy,
     ProjectControllerServiceProxy,
     CountryControllerServiceProxy,

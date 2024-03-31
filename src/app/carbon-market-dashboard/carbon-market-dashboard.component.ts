@@ -9,6 +9,7 @@ import { Paginator } from 'primeng/paginator';
 import { LazyLoadEvent } from 'primeng/api';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { HeatMapScore, TableData } from 'app/charts/heat-map/heat-map.component';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-carbon-market-dashboard',
   templateUrl: './carbon-market-dashboard.component.html',
@@ -32,6 +33,8 @@ export class CarbonMarketDashboardComponent implements OnInit,AfterViewInit {
   sectorColorMap: {id: number; sectorNumber: number; color: string;}[]
   bgColors: string[] = [];
   secbgColors : string[] = [];
+  interventions_to_filter: any[] = [];
+  selected_interventions: string[] = [];
 
   constructor(
     private assessmentCMProxy:AssessmentCMDetailControllerServiceProxy,
@@ -39,7 +42,9 @@ export class CarbonMarketDashboardComponent implements OnInit,AfterViewInit {
     private cmAssessmentQuestionProxy : CMAssessmentQuestionControllerServiceProxy,
     public masterDataService: MasterDataService,
     private cdr: ChangeDetectorRef,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
   ) { 
   }
 
@@ -150,24 +155,28 @@ CMPrerequiste: {
   }
 
   loadgridData = (event: LazyLoadEvent) => {
+    this.loading = true
     
     this.totalRecords = 0;
     let pageNumber =
       event.first === 0 || event.first === undefined
         ? 1
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
-    this.rows = event.rows === undefined ? 10 : event.rows;
-    this.cmAssessmentQuestionProxy.getDashboardData(pageNumber,this.rows).subscribe((res) => {
+    this.rows = event.rows === undefined ? 5 : event.rows;
+    this.cmAssessmentQuestionProxy.getDashboardData(pageNumber,this.rows, this.selected_interventions).subscribe((res_) => {
+      let res = res_.assessments
       this.tableData=res.items;
+      this.interventions_to_filter = res_.interventions
+      this.loading = false;
       this.heatMapScore = this.tableData.map(item => {return {processScore: item.process_score, outcomeScore: item.outcome_score}});
       this.heatMapData = this.tableData.map(item => {return {interventionId: item.intervention_id, interventionName: item.intervention, processScore: item.process_score, outcomeScore: item.outcome_score}}) 
       
       this.totalRecords= res.meta.totalItems;
-      this.loading = false;
     }, err => {
       this.loading = false;});
 
   };
+
   mapOutcomeScores(value: number) {
     
     switch (value) {
@@ -642,6 +651,10 @@ sectorCountResult(){
   }
   compareByAge(a:any, b:any) {
     return b.count - a.count;
+  }
+
+  goToResult(id: number) {
+    this.router.navigate(['carbon-market-tool-result'], { queryParams: { id: id }, relativeTo: this.activatedRoute })
   }
   
 }

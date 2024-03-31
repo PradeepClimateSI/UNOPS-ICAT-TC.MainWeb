@@ -79,8 +79,8 @@
                     </div>
                 </td>
                 <td>{{parameterList.investmentParameter.assessment.assessmentType}}</td>
-                <td>{{parameterList.investmentParameter.assessment.from| date: "yyyy/MM/dd "}} -
-                    {{parameterList.investmentParameter.assessment.to| date: "yyyy/MM/dd "}}</td>
+                <td>{{parameterList.investmentParameter.assessment.from| date: "dd/MM/yyyy"}} -
+                    {{parameterList.investmentParameter.assessment.to| date: "dd/MM/yyyy"}}</td>
                 <td>{{parameterList.investmentParameter.type}}</td>
                 <td>{{parameterList.investmentParameter.category?.name}}</td>
                 <td>{{parameterList.investmentParameter.characteristics?.name}}</td>
@@ -106,7 +106,7 @@
             </td>
 
             <td>
-                {{ parameterList.deadlineDataEntry | date: "yyyy-MM-dd " }}
+                {{ parameterList.deadlineDataEntry | date: "dd/MM/yyyy" }}
             </td>
             <td>
                 <i class="pi pi-ellipsis-v" style="font-size: 2rem" (click)="getInfo(parameterList)"></i>

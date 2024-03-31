@@ -7,6 +7,8 @@ import { MasterDataService } from 'app/shared/master-data.service';
 import { LazyLoadEvent } from 'primeng/api';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { HeatMapScore, TableData } from 'app/charts/heat-map/heat-map.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-investment-dashboard',
@@ -14,7 +16,6 @@ import { HeatMapScore, TableData } from 'app/charts/heat-map/heat-map.component'
   styleUrls: ['./investment-dashboard.component.css','../portfolio-dashboard/portfolio-dashboard.component.css']
 })
 export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
- 
 
 
   @ViewChild('investmentSDGsPieChart')
@@ -67,7 +68,7 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
   totalRecords: number = 0;
   xData: {label: string; value: number}[]
   yData: {label: string; value: number}[]
-  rows :number;
+  rows :number = 10;
   score={
     process_score: [], outcome_score: [] 
   }
@@ -98,20 +99,27 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
     'rgba(47, 79, 79, 1)',
     'rgba(139, 69, 19, 1)'
   ]
+  allAssessments: any[] = [];
+  selectedAssessments: any;
+  selectedIds:string[] = [];
+  selectionLimit:number = 10;
+
   constructor(
     private projectProxy: ProjectControllerServiceProxy,
     private investorProxy: InvestorToolControllerServiceProxy,
     private assessmentCMProxy:AssessmentCMDetailControllerServiceProxy,
     public masterDataService: MasterDataService,
     private cdr: ChangeDetectorRef,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
   ) {
     Chart.register(...registerables);
   
   }
 
   ngOnInit(): void {
-    this.averageTCValue =75
+    this.averageTCValue = 75
     this.sdgColorMap = this.masterDataService.SDG_color_map
     this.sectorColorMap = this.masterDataService.Sector_color_map
 
@@ -125,9 +133,25 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
     let event: any = {};
     event.rows = this.rows;
     event.first = 0;
-    this.loadgridData(event);
+    this.investorProxy.getDashboardData(1,this.rows,this.selectedIds).subscribe((res) => {
+     
+      if(res.meta.allData && res.meta.allData.length>0){
+        this.allAssessments = this.mapOptionlable(res.meta.allData)
+      }
+    });
     this.sectorCountResult();
   }
+  
+  mapOptionlable(data: any[]) {
+    return data.map(item => {
+      let label:string = item.climateAction.policyName
+      if (item.from && item.to) {
+       label = label + " - " + moment(new Date(item.from)).format("DD/MM/YYYY").toString() + " - " + moment(new Date(item.to)).format("DD/MM/YYYY").toString()
+      }
+      return {label:label, id: item.id}
+    })
+  }
+
   loadgridData = (event: LazyLoadEvent) => {
     this.loading = true;
     this.totalRecords = 0;
@@ -137,11 +161,10 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
         ? 1
         : event.first / (event.rows === undefined ? 1 : event.rows) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
-    this.investorProxy.getDashboardData(pageNumber,this.rows).subscribe((res) => {
+    this.investorProxy.getDashboardData(pageNumber,this.rows,this.selectedIds).subscribe((res) => {
       this.tableData=res.items;
       this.heatMapScore = this.tableData.map(item => {return {processScore: item.process_score, outcomeScore: item.outcome_score}})
       this.heatMapData = this.tableData.map(item => {return {interventionId: item.climateAction?.intervention_id, interventionName: item.climateAction?.policyName, processScore: item.process_score, outcomeScore: item.outcome_score}}) 
-      
       this.totalRecords= res.meta.totalItems
       this.loading = false;
     }, err => {
@@ -149,6 +172,27 @@ export class InvestmentDashboardComponent implements OnInit,AfterViewInit {
 
   
   };
+
+  goToResult(id: number) {
+    this.router.navigate(['assessment-result-investor', id], { queryParams: { assessmentId:id }, relativeTo: this.activatedRoute });
+  }
+  onSelectAssessment() {
+     this.selectedIds = this.selectedAssessments.map((item: any)=> item.id)
+     this.callTable()
+  }
+
+  onClear() {
+    this.selectedIds = []
+     this.selectedAssessments = []
+     this.callTable()
+  }
+
+  callTable(){
+    let event: any = {};
+      event.rows = this.rows;
+      event.first = 0;
+      this.loadgridData(event);
+  }
 
   mapOutcomeScores(value: number) {
     

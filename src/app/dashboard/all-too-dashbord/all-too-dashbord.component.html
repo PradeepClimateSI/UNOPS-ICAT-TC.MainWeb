@@ -1,6 +1,47 @@
 <div class="p-grid p-fluid card m-3">
+    <div class="p-field p-2">
+    </div>
+  
+    <div class="row">
+      <div class="col-3 ">
+        <h6>Select Portfolio : </h6>
+      </div>
+  
+      <div class="col-4 ">
+        <p-dropdown appendTo="body" name="portfolio" placeholder="Select Portfolio" [(ngModel)]="selectedPortfolio"
+          appendTo="body" [options]="portfolioList" optionLabel="portfolioName"
+          (onChange)="selectPortfolio()"></p-dropdown>
+      </div>
+  
+  
+      <div class="col-1">
+        <button class="btn btn-primary text-uppercase" type="button" (click)="goToFunction()" title="Clear Selected Portfolio">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+  
+  
+      <div class="col-4 ">
+      </div>
+    </div>
+  </div>
+<div class="p-grid p-fluid card m-3">
     <div class="row">
         <h3>Recent Assessments Done</h3>
+
+        <div class="row mt-20 ml-10">
+            <div class="col-3 ">
+              <h5>Select Assessments </h5>
+            </div>
+            <div class="col-6 ">
+                <p-multiSelect name="assess" [options]="allAssessments" [(ngModel)]="selectedAssessments" appendTo="body"
+                (onChange)="onSelectAssessment()" (onClear) ="onClear()" [showClear]="true" defaultLabel="Select Assessment" [selectionLimit]="selectionLimit"
+                optionLabel="label"></p-multiSelect>
+              </div>
+            
+            
+          </div>
+
         <div class="col-12 mt-20 ml-10" [hidden]="calResults?.length == 0">
             <p-table [value]="tableData" [paginator]="true" [rows]="rows" [totalRecords]="totalRecords" [lazy]="true"
                 (onLazyLoad)="loadgridData($event)" [showCurrentPageReport]="true"
@@ -11,15 +52,17 @@
                     <tr>
                         <th class="table-header-3">Intervention Name</th>
                         <th class="table-header">Tool</th>
+                        <th class="table-header-3">Assessment Period</th>
                         <th class="table-header" style="line-height: 130%;">Likelihood of Transformation</th>
                         <th class="table-header" style="line-height: 130%;">Outcome Score</th>
                         
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-tableData>
-                    <tr>
+                    <tr (click)="goToResult(tableData.id, tableData.tool)">
                         <td>{{ tableData.climateAction?.policyName }}</td>
                         <td>{{ masterDataService.getToolName(tableData.tool) }}</td>
+                        <td>{{ tableData.from| date: 'dd/MM/yyyy'}} - {{tableData.to| date: 'dd/MM/yyyy'}}</td>
                             <td>{{ mapProcessScores(tableData.process_score) }}</td>
                             <td>{{ mapOutcomeScores(tableData.outcome_score) }}</td>
                     </tr>
@@ -49,8 +92,8 @@
         <div #sourceDiv class="p-grid p-fluid card m-3">
             <div  class="row text-center">
                 <h3>SDGs impacted by the assessed interventions</h3>
-                <div *ngIf="sdgDetailsList.length != 0" class="col-12 mt-20" >
-                    <canvas height="450" #investmentSDGsPieChart2>{{ pieChart1 }}</canvas>
+                <div [hidden]="sdgDetailsList.length == 0" class="col-12 mt-20" >
+                    <canvas height="450" #portfolioSDGsPieChart>{{ portfolioSDGsPieChart }}</canvas>
                 </div>
             </div>
             <div *ngIf="sdgDetailsList.length == 0" class="col-12" >

@@ -237,7 +237,7 @@ async saveForm(formData: NgForm) {
             this.messageService.add({
               severity:'success', 
               summary:'Success', 
-              detail:institution.name +' has saved successfully',  
+              detail:institution.name +' saved successfully',  
               closable: true,});
            
             

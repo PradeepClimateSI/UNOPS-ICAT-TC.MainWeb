@@ -6,9 +6,15 @@
                 <ng-container *ngFor="let section of sections; let idxs = index;">
                     <p-accordionTab  header="{{section.name}}"  *ngIf="idxs <= currentSection">
                         <ng-container *ngIf="section.code === 'SECTION_2'">
+                            <p>
+                                <i>{{section2_description}}</i>
+                            </p>
                             <ng-container *ngFor="let criteria of criterias[idxs]; let idxc = index;">
                                 <div class="row p-2" *ngIf="idxc <= currentCriteria">
                                     <label >{{criteria.name}}</label>
+                                    <p *ngIf="criteria.code === 'S-2-CRITERIA-1'">
+                                        <i>{{criteria1_description}}</i>
+                                    </p>
                                     <ng-container *ngFor="let question of criteria.questions;let idx=index; ">
                                         <app-cm-question *ngIf="idx <= criteria.currentQuestion" [assessmentquestions]="assessmentQuestions" [question]="question" (prev_answer)="onAnswer2($event, question.message, question, criteria, section )"
                                             [approach]="approach" [isEditMode]="isEditMode"></app-cm-question>
@@ -17,7 +23,7 @@
                             </ng-container>
                         </ng-container>
                         <ng-container  *ngIf="section.code === 'SECTION_3'">
-                            <app-cm-section-three [assessmentquestions]="assessmentQuestions" [isEditMode]="isEditMode" [approach]="approach" [assessment]="assessment" (onSubmit)="save($event)"></app-cm-section-three>
+                            <app-cm-section-three [assessmentquestions]="assessmentQuestions" [isEditMode]="isEditMode" [approach]="approach" [assessment]="assessment" (onSubmit)="save($event)" [expected_ghg_mitigation]="expectedGhgMitigation" [isCompleted]="isCompleted"></app-cm-section-three>
                         </ng-container>
                     </p-accordionTab>
                 </ng-container>
@@ -27,10 +33,10 @@
             <div class="row p-grid p-fluid col-sm-12">
                 <div class="col-10"></div>
                 <div class="d-flex flex-row-reverse mt-20 ">
-                    <button class="btn btn-primary text-uppercase" type="submit" (click)="save({result: [], isDraft: false,name:'',type:''})">
+                    <button class="btn btn-primary text-uppercase" type="submit" (click)="save(emptySaveDto)">
                       {{ (assessment && assessment.assessment_approach=== 'INDIRECT') ? 'Send to Data Collection Team' : 'Calculate & Check Results' }}
                     </button>
-                    <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="save({result: [], isDraft: true,name:'',type:''})">
+                    <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="save({result: [], isDraft: true, name: '', type: '', expected_ghg_mitigation: 0})">
                         Save
                     </div>
                 </div>

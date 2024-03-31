@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { FieldNames, MasterDataDto, MasterDataService } from 'app/shared/master-data.service';
+import { FieldNames, MasterDataDto, MasterDataService, assessment_period_info, chapter6_url } from 'app/shared/master-data.service';
 import * as moment from 'moment';
-import { MessageService } from 'primeng/api';
-import { AllBarriersSelected, Assessment, AssessmentControllerServiceProxy, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, PortfolioQuestionDetails, PortfolioQuestions,  Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { AllBarriersSelected, Assessment, AssessmentControllerServiceProxy, BarrierSelected, Characteristics, ClimateAction, CreateInvestorToolDto, FinalInvestorAssessmentDto, GeographicalAreasCoveredDto, ImpactCovered, IndicatorDetails, InstitutionControllerServiceProxy, InvestorAssessment, InvestorTool, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, PortfolioQuestionDetails, PortfolioQuestions,  Sector, SectorControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { TabView } from 'primeng/tabview';
 import { environment } from 'environments/environment';
@@ -13,6 +13,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { DialogService } from 'primeng/dynamicdialog';
 import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
 import { ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { MultiSelect } from 'primeng/multiselect';
+import { OutcomDataDto } from '../investor-tool/investor-tool.component';
 
 
 interface CharacteristicWeight {
@@ -38,8 +40,10 @@ interface ChaCategoryTotalEqualsTo1 {
   templateUrl: './portfolio-track4.component.html',
   styleUrls: ['./portfolio-track4.component.css']
 })
-export class PortfolioTrack4Component implements OnInit {
+export class PortfolioTrack4Component implements OnInit, OnDestroy {
 
+  @ViewChild('multiSelectComponent') multiSelectComponent: MultiSelect;
+  geographicalArea:MasterDataDto = new MasterDataDto()
   assessment: Assessment = new Assessment();
   investorAssessment: InvestorTool = new InvestorTool();
   sectorArray: Sector[] = [];
@@ -90,19 +94,13 @@ export class PortfolioTrack4Component implements OnInit {
   processData: {
     type: string,
     CategoryName: string,
+    categoryCode: string,
     categoryID: number,
     isValidated: boolean | null
     data: InvestorAssessment[]
   }[] = [];
 
-  outcomeData: {
-    type: string,
-    CategoryName: string,
-    categoryID: number,
-    isValidated: boolean | null
-    data: InvestorAssessment[],
-    id: number,
-  }[] = [];
+  outcomeData: OutcomDataDto[] = [];
   @ViewChild(TabView) tabView: TabView;
 
   tabName: string = '';
@@ -120,7 +118,7 @@ export class PortfolioTrack4Component implements OnInit {
   characteristicsLoaded: boolean = false;
   categoriesLoaded: boolean = false;
   geographicalAreasCoveredArr: any[] = []
-
+  
   barrierBox: boolean = false;
   barrierSelected: BarrierSelected = new BarrierSelected();
   finalBarrierList: BarrierSelected[] = [];
@@ -149,6 +147,23 @@ export class PortfolioTrack4Component implements OnInit {
   isFirstLoading0: boolean = true;
   isFirstLoading1: boolean = true;
   notFilledCategories: any[] = []
+  chapter6_url = chapter6_url
+  from_date:Date
+  to_date: Date
+  isCompleted: boolean = false;
+  assessment_period_info = assessment_period_info
+  isContinue: boolean = false;
+  isDisableIntervention: boolean = false;
+  completModeSectorList: Sector[]=[];
+  selectedSectorsCompleteMode: Sector[] = [];
+  isCreatingAssessment: boolean = false
+  lastUpdatedCategory: any
+  autoSaveTimer: any;
+  visibleDialogBox: boolean = false;
+  isSavingDraft: boolean = false;
+  mainTabIndex: any = 0
+  categoryTabIndex: any
+  savedInInterval: boolean;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -163,6 +178,7 @@ export class PortfolioTrack4Component implements OnInit {
     public sanitizer: DomSanitizer,
     private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
     protected dialogService: DialogService,
+    private confirmationService: ConfirmationService,
 
   ) {
     this.uploadUrl = environment.baseUrlAPI + "/document/upload-file-by-name" ;
@@ -187,17 +203,26 @@ export class PortfolioTrack4Component implements OnInit {
 
   assessmentId: number;
   isEditMode: boolean = false;
-
+  phaseTransformExapmle: any[] = []
+  
   async ngOnInit(): Promise<void> {
-    this.sectorList = await this.sectorProxy.findAllSector().toPromise()
+    this.phaseTransformExapmle = this.masterDataService.phase_transfrom
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;
     this.geographicalAreasCovered = this.masterDataService.level_of_implemetation;
     this.ghg_info = this.masterDataService.other_invest_ghg_info
     this.sdg_info = this.masterDataService.other_invest_sdg_info
     this.adaptation_info = this.masterDataService.other_invest_adaptation_info
     this.ghg_score_info = this.masterDataService.other_invest_ghg_score_info
-    this.activatedRoute.queryParams.subscribe(params => {
-      params['isEdit'] == 'true' ? (this.isEditMode = true) : false
+    this.activatedRoute.queryParams.subscribe(async params => {
+      params['isEdit'] == 'true' ? (this.isEditMode = true) : false;
+      params['iscompleted'] == 'true' ? (this.isCompleted = true) : false
+      params['isContinue'] == 'true' ? (this.isContinue = true) : false
+      if(params['interventionId'] && params['assessmentType']){
+        await this.getPolicies().then( x=>
+          this.setDataFromFlow(params['interventionId'],params['assessmentType'])
+        )
+        
+      }
       this.assessmentId = params['id']
       if (!this.assessmentId && this.isEditMode) {
         window.location.reload();
@@ -205,22 +230,26 @@ export class PortfolioTrack4Component implements OnInit {
 
 
     })
+    await this.getCharacteristics();
     if (this.isEditMode == false) {
       await this.getPolicies();
       await this.getAllImpactsCovered();
-      await this.getCharacteristics();
-      this.sectorList = await this.sectorProxy.findAllSector().toPromise()
     }
     else {
       try {
         await this.getSavedAssessment()
+        .then(x => {
+          if (!this.isCompleted) {
+            this.startAutoSave()
+          }
+        })
       }
       catch (error) {
       }
     }
     this.visionExample = [
       { title: 'Transformational Vision', value: 'Decarbonized electricity sector with a high % of Solar PV energy which will enable economic growth and will lead the shift of the labour market towards green jobs.' },
-      { title: 'Long term ( > 15 years)', value: 'Zero-carbon electricity production. The 2050 vision is to achieve 60% solar PV in the national electricity mix and create 2 million new green jobs.' },
+      { title: 'Long term (> 15 years)', value: 'Zero-carbon electricity production. The 2050 vision is to achieve 60% solar PV in the national electricity mix and create 2 million new green jobs.' },
       { title: 'Medium term (> 5 years and  < 15 years)', value: 'Achieve 30% solar PV in the national electricity mix and create 1 million new green jobs. ' },
       { title: 'Short term (< 5 years)', value: 'Install 20 GW of rooftop solar PV and create 200,000 new green jobs in doing so. The solar PV policy is implemented at subnational levels, supported by incentives for private sector involvement and knowledge development.' },
       { title: 'Phase of transformation', value: 'Acceleration. Solar PV is widely accepted in the society and its use is spreading increasingly fast. Fossil-fuel based energy production is being challenged as the only way to ensure a reliable energy supply. Changes have already occurred in the economy, institutions and society as a result of the spreading of Solar PV.' },
@@ -271,7 +300,61 @@ export class PortfolioTrack4Component implements OnInit {
       this.sdgList = res
     });
     this.isFirstLoading0 = false
+    if (this.activeIndexMain === 0 ) {
+      this.lastUpdatedCategory = this.processData[this.activeIndex]
+    } else {
+      this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
+    }
+    // window.onbeforeunload = () => {
+    //   if (!this.isSavingDraft) this.saveDraft(this.lastUpdatedCategory, this.lastUpdatedCategory.CategoryName, this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true)
+    //   window.setTimeout(() => {
+    //     window.location.reload()
+    //   }, 10000)
+    // }
+  }
 
+
+  ngOnDestroy(): void {
+    if (!this.isCompleted && (this.isSavedAssessment || this.isContinue || this.isEditMode)) {
+      if (this.activeIndexMain === 0 ) {
+        this.lastUpdatedCategory = this.processData[this.activeIndex]
+      } else {
+        this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
+      }
+      if (this.isEditMode) {
+        if (!this.isSavingDraft) {this.saveDraft(this.lastUpdatedCategory,this.lastUpdatedCategory.CategoryName,this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true, true)}
+      } else {
+        if (!this.savedInInterval) {
+          if (!this.isSavingDraft) {this.saveDraft(this.lastUpdatedCategory,this.lastUpdatedCategory.CategoryName,this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true, true)}
+        }
+      }
+    }
+    this.stopAutoSave()
+  }
+
+  startAutoSave() {
+    this.autoSaveTimer = setInterval(() => {
+      if (this.activeIndexMain === 0 ) {
+        this.lastUpdatedCategory = this.processData[this.activeIndex]
+      } else {
+        this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
+      }
+      this.savedInInterval = true
+      if (!this.isSavingDraft)  {this.saveDraft(this.lastUpdatedCategory,this.lastUpdatedCategory.CategoryName,this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', false, true)}
+    }, 50000);
+  }
+
+  stopAutoSave() {
+    clearInterval(this.autoSaveTimer);
+  }
+
+  setDataFromFlow(interventonId:string, assessmentType:string) {
+    this.isDisableIntervention = true
+    this.assessment.climateAction = this.policies.find((i)=>i.id==Number(interventonId))! 
+    this.assessment.assessmentType = assessmentType;
+    let event:any = {}
+    event.value = this.assessment.climateAction
+    this.onSelectIntervention(event)
   }
 
   watchVideo(){
@@ -289,17 +372,38 @@ export class PortfolioTrack4Component implements OnInit {
       
     })
   }
-
+  
   async getSavedAssessment() {
-    await this.getCharacteristics();
-    this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+    this.processData = []
+    this.outcomeData = []
+    this.sdgDataSendArray = []
+    this.sdgDataSendArray4 = []
+    this.selectedSDGs = []
+    this.selectedSDGsWithAnswers = []
+    // await this.getCharacteristics();
+    this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise();
     this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
     this.outcomeData = await this.investorToolControllerproxy.getOutcomeData(this.assessmentId).toPromise();
     this.sdgDataSendArray2 = await this.investorToolControllerproxy.getScaleSDGData(this.assessmentId).toPromise();
     this.sdgDataSendArray4 = await this.investorToolControllerproxy.getSustainedSDGData(this.assessmentId).toPromise();
     this.selectedSDGs = await this.investorToolControllerproxy.getSelectedSDGs(this.assessmentId).toPromise();
     this.selectedSDGsWithAnswers = await this.investorToolControllerproxy.getSelectedSDGsWithAnswers(this.assessmentId).toPromise();
-
+    this.minDate = new Date(
+      this.assessment.climateAction.dateOfImplementation.year(),
+      this.assessment.climateAction.dateOfImplementation.month(),
+      this.assessment.climateAction.dateOfImplementation.date(),
+    )
+    this.from_date= new Date(
+      this.assessment.from?.year(),
+      this.assessment.from?.month(),
+      this.assessment.from?.date()
+    );
+    this.to_date= new Date(
+      this.assessment.to?.year(),
+      this.assessment.to?.month(),
+      this.assessment.to?.date()
+    );
+    this.onSelectFromDate(this.from_date)
     this.processData.forEach((d) => {
       if (d.CategoryName == this.assessment.processDraftLocation) {
         this.activeIndex = d.categoryID - 1;
@@ -313,8 +417,22 @@ export class PortfolioTrack4Component implements OnInit {
     if (this.assessment.lastDraftLocation == 'out') {
       this.activeIndexMain = 1;
     }
+    this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise();
     this.policies.push(this.assessment.climateAction)
-    this.finalBarrierList = this.assessment['policy_barrier']
+    this.finalBarrierList = this.assessment['policy_barrier'].map((i: { is_affected: boolean; characteristics: Characteristics[]; explanation: string; barrier: string; })=> {
+      let p =  new BarrierSelected()
+      p.affectedbyIntervention = i.is_affected
+      p.characteristics = i.characteristics.map( char =>{
+        let characteristic = new Characteristics()
+        characteristic.id = char.id
+        characteristic.name = char.name
+        return characteristic
+      })
+      p.explanation = i.explanation
+      p.barrier = i.barrier
+      return p
+      
+     });
     let areas: MasterDataDto[] = []
     this.assessment['geographicalAreasCovered'].map((area: { code: any; }) => {
       let level = this.levelOfImplementation.find(o => o.code === area.code)
@@ -323,11 +441,16 @@ export class PortfolioTrack4Component implements OnInit {
       }
     })
     this.geographicalAreasCoveredArr = areas
-    let sectors: any[] = [];
-    this.assessment['sector'].map((sector: { name: any; }) => {
-      sectors.push(this.sectorList.find(o => o.name === sector.name))
+    this.geographicalArea = this.geographicalAreasCoveredArr[0]
+     this.completModeSectorList = this.assessment.climateAction.policySector.map(i=> i.sector)
+     this.sectorList = this.completModeSectorList
+    this.assessment['sector'].map((sector: Sector) => {
+      let _sector = this.sectorList.find(i =>i.id ==sector.id)
+      if(_sector){
+        this.sectorArray.push(_sector)
+      }
     })
-    this.sectorArray = sectors
+    this.selectedSectorsCompleteMode =  this.sectorArray
     this.processData = await this.investorToolControllerproxy.getProcessData(this.assessmentId).toPromise();
     this.setFrom()
     this.setTo()
@@ -335,7 +458,7 @@ export class PortfolioTrack4Component implements OnInit {
   }
   setFrom() {
     if (this.assessment.from) {
-      let convertTime = moment(this.assessment.from).format("YYYY-MM-DD HH:mm:ss");
+      let convertTime = moment(this.assessment.from).format("DD/MM/YYYY HH:mm:ss");
       let convertTimeObject = new Date(convertTime);
       this.assessment.from = moment(convertTimeObject);
     }
@@ -344,7 +467,7 @@ export class PortfolioTrack4Component implements OnInit {
 
   setTo() {
     if (this.assessment.to) {
-      let convertTime = moment(this.assessment.to).format("YYYY-MM-DD HH:mm:ss");
+      let convertTime = moment(this.assessment.to).format("DD/MM/YYYY HH:mm:ss");
       let convertTimeObject = new Date(convertTime);
       this.assessment.to = moment(convertTimeObject);
     }
@@ -459,7 +582,7 @@ export class PortfolioTrack4Component implements OnInit {
 
         if (x.type === 'process') {
           this.processData.push({
-            type: 'process', CategoryName: x.name, categoryID: x.id,
+            type: 'process', CategoryName: x.name, categoryID: x.id, categoryCode: x.code,
             data: categoryArray,
             isValidated: null
           })
@@ -473,6 +596,7 @@ export class PortfolioTrack4Component implements OnInit {
 
           this.outcomeData.push({
             type: 'outcome', CategoryName: x.name, categoryID: x.id,
+            categoryCode: x.code,
             data: categoryArray,
             isValidated: null,
             id: 0
@@ -481,6 +605,7 @@ export class PortfolioTrack4Component implements OnInit {
           if (x.name === 'SDG Scale of the Outcome') {
             this.sdgDataSendArray.push({
               type: 'outcome', CategoryName: x.name, categoryID: x.id,
+              categoryCode: x.code,
               data: categoryArray
             })
           }
@@ -488,6 +613,7 @@ export class PortfolioTrack4Component implements OnInit {
           if (x.name === 'SDG Time frame over which the outcome is sustained') {
             this.sdgDataSendArray3.push({
               type: 'outcome', CategoryName: x.name, categoryID: x.id,
+              categoryCode: x.code,
               data: categoryArray
             })
           }
@@ -500,6 +626,11 @@ export class PortfolioTrack4Component implements OnInit {
         this.tabLoading = true;
       }
     });
+    if (this.activeIndexMain === 0 ) {
+      this.lastUpdatedCategory = this.processData[this.activeIndex]
+    } else {
+      this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
+    }
 
   }
 
@@ -508,11 +639,16 @@ export class PortfolioTrack4Component implements OnInit {
     this.isStageDisble = true;
 
     this.assessment.tool = 'PORTFOLIO'
-    this.assessment.year = moment(new Date()).format("YYYY-MM-DD")
+    this.assessment.year = moment(new Date()).format("DD/MM/YYYY")
     if (!this.assessment.id) this.assessment.createdOn = moment(new Date())
     this.assessment.editedOn = moment(new Date())
-
+    if(this.isCompleted || !this.isContinue){
+      form.controls['sectors'].setValue(this.sectorArray)
+    }
     if (form.valid) {
+
+      this.assessment.from = moment(this.from_date)
+      this.assessment.to = moment(this.to_date)
       this.methodologyAssessmentControllerServiceProxy.saveAssessment(this.assessment)
         .subscribe(res => {
           this.load = true
@@ -524,14 +660,24 @@ export class PortfolioTrack4Component implements OnInit {
             allBarriersSelected.assessment = res;
 
             this.projectControllerServiceProxy.policyBar(allBarriersSelected).subscribe((res) => {
+              let status = this.isCompleted? 'updated': 'created'
               this.messageService.add({
                 severity: 'success',
                 summary: 'Success',
-                detail: 'Assessment has been created successfully',
+                detail: `Assessment has been ${status} successfully`,
                 closable: true,
               },
-
+              
               );
+              if (!this.isCompleted) {
+                setTimeout(() => {
+                  this.visibleDialogBox = true;
+                }, 300);
+                setTimeout(() => {
+                  this.visibleDialogBox = false;
+                }, 6000);
+              }
+              this.startAutoSave()
             },
               (err) => {
                 this.messageService.add({
@@ -541,13 +687,12 @@ export class PortfolioTrack4Component implements OnInit {
                   sticky: true,
                 });
               })
-            this.geographicalAreasCoveredArr = this.geographicalAreasCoveredArr.map(a => {
-              let _a = new GeographicalAreasCoveredDto()
-              _a.id = a.id
-              _a.name = a.name
-              _a.code = a.code
-              return _a
-            })
+            this.geographicalAreasCoveredArr = []
+            let _a = new GeographicalAreasCoveredDto()
+            _a.id = this.geographicalArea.id
+            _a.name = this.geographicalArea.name
+            _a.code = this.geographicalArea.code
+            this.geographicalAreasCoveredArr.push(_a)
             this.investorAssessment.assessment = res;
             this.mainAssessment = res
             this.createInvestorToolDto.sectors = this.sectorArray;
@@ -558,8 +703,11 @@ export class PortfolioTrack4Component implements OnInit {
             this.investorToolControllerproxy.createinvestorToolAssessment(this.createInvestorToolDto)
               .subscribe(_res => {
                 if (_res) {
-                  this.isSavedAssessment = true;
-
+                  if(!this.isCompleted){
+                    this.isSavedAssessment = true;
+                    this.isCompleted ? this.isCreatingAssessment = false : this.isCreatingAssessment = true;
+                  }
+                 
                 }
               }, error => {
                 this.messageService.add({
@@ -627,13 +775,10 @@ export class PortfolioTrack4Component implements OnInit {
 
   }
 
-  onItemSelectSectors(event: any) {
-  }
   onItemSelectImpacts(event: any) {
   }
 
-  mainTabIndex: any
-  categoryTabIndex: any
+  
 
   onMainTabChange(event: any) {
     this.mainTabIndex = event.index;
@@ -664,6 +809,11 @@ export class PortfolioTrack4Component implements OnInit {
           this.isFirstLoading1 = false
         }
       }
+    }
+    if (this.mainTabIndex === 0) {
+      this.lastUpdatedCategory = this.processData[this.activeIndex]
+    } else {
+      this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
     }
 
   }
@@ -696,8 +846,10 @@ export class PortfolioTrack4Component implements OnInit {
     }
     if (type === 'process'){
       this.checkTab1Mandatory(event.index)
+      this.lastUpdatedCategory = this.processData[this.activeIndex]
     } else {
       this.checkTab2Mandatory(event.index)
+      this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
     }
   }
 
@@ -740,7 +892,8 @@ export class PortfolioTrack4Component implements OnInit {
   }
 
 
-  async saveDraft(category: any, processDraftLocation: string, type: string) {
+  async saveDraft(category: any, processDraftLocation: string, type: string,isAutoSaving: boolean = false, isDefault?: boolean) {
+    this.isSavingDraft = true
 
     let finalArray = this.processData.concat(this.outcomeData)
     if (this.isEditMode == true) {
@@ -785,36 +938,69 @@ export class PortfolioTrack4Component implements OnInit {
       sustainedSDGs: this.sdgDataSendArray4,
       sdgs: this.selectedSDGsWithAnswers
     }
+    
     await this.investorToolControllerproxy.createFinalAssessment2(data)
       .subscribe(async _res => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Assessment draft has been saved successfully',
-          closable: true,
-        })
+        this.isSavingDraft = false
+        if (!isDefault) {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Assessment draft has been saved successfully',
+            closable: true,
+          })
+        }
         if (data.isDraft) {
           this.setFrom()
           this.setTo()
         }
-        if (this.isEditMode == false) {
+        if (this.isEditMode == false && !isAutoSaving) {
           this.router.navigate(['app/portfolio-tool-edit'], {
             queryParams: { id: this.mainAssessment.id, isEdit: true },
           });
         }
         ;
       }, error => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Assessment detail saving failed',
-          closable: true,
-        })
+        this.isSavingDraft = false
+        if (!isDefault) {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Assessment detail saving failed',
+            closable: true,
+          })
+        }
       })
   }
 
-  async onsubmit(form: NgForm) {
+  saveResultInAutoSave(data: FinalInvestorAssessmentDto) {
+    this.investorToolControllerproxy.createFinalAssessment2(data).subscribe(res => {
+      // if (res) {
+        if (!this.isEditMode) {
+          this.router.navigate(['app/portfolio-tool-edit'], {
+            queryParams: { id: this.mainAssessment.id, isEdit: true },
+          });
+        }
+      // }
+    })
+  }
 
+  checkSustainSDGIsFilled() {
+    for (let sdgData of this.sdgDataSendArray4) {
+      if (sdgData.data.length > 0) {
+        for (let data of sdgData.data) {
+          if (!data.score) {
+            return false;
+          }
+        }
+      } else {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  checkMandatory(){
     for (let item of this.processData) {
       for (let item2 of item.data) {
         if ((item2.likelihood == null || item2.relavance == null) && item2.relavance != 0) {
@@ -825,152 +1011,201 @@ export class PortfolioTrack4Component implements OnInit {
             closable: true,
           })
 
-          return
+          return false
         }
       }
     }
 
     for (let item of this.processData) {
-      for (let item2 of item.data) {
-        if ((item2.likelihood_justification == null || item2.likelihood_justification === "") && item2.relavance != 0) {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Warning',
-            detail: 'Fill all mandatory justification fields',
-            closable: true,
-          })
-
-          return
-        }
+      if (!this.checkValidation(item.data, 'process')) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Warning',
+          detail: 'Fill all mandatory justification fields',
+          closable: true,
+        })
+        return false
       }
     }
 
+    /**There is an issue  in setting score and justification for sustained adaptation.
+     * calling saveDraft is a tempory solution. Need to find a proper solution
+    */
+    // this.saveDraft(this.outcomeData[5], this.outcomeData[5].CategoryName, 'out', true)
     for (let item of this.outcomeData) {
-      if (item.categoryID == 5 || item.categoryID == 7 || item.categoryID == 9 || item.categoryID == 10) {
-
-        for (let item2 of item.data) {
-          if (item2.justification == null || item2.justification === "" || item2.score === null || item2.score === undefined) {
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Warning',
-              detail: 'Fill all mandatory justification fields',
-              closable: true,
-            })
-
-            return
-          }
-        }
+      if (!this.checkValidation(item.data, 'outcome')) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Warning',
+          detail: 'Fill all mandatory justification fields',
+          closable: true,
+        })
+        return false
       }
     }
 
-    for (let item of this.sdgDataSendArray2) {
-      for (let item2 of item.data) {
-        if (item2.justification == null || item2.justification === "" || item2.score === null || item2.score === undefined) {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Warning',
-            detail: 'Fill all mandatory justification fields',
-            closable: true,
-          })
-
-          return
-        }
-      }
+    if (!this.sdgValidation(this.sdgDataSendArray2)) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Warning',
+        detail: 'Fill all mandatory fields in scale sdg',
+        closable: true,
+      })
+      return false
     }
 
-    for (let item of this.sdgDataSendArray4) {
-      for (let item2 of item.data) {
-        if (item2.justification == null || item2.justification === "" || item2.score === null || item2.score === undefined) {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Warning',
-            detail: 'Fill all mandatory justification fields',
-            closable: true,
-          })
-
-          return
-        }
-      }
+    if (!this.sdgValidation(this.sdgDataSendArray4)) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Warning',
+        detail: 'Fill all mandatory fields sustained sdg',
+        closable: true,
+      })
+      return false
     }
+    return true
+  }
 
+  async onsubmit(form: NgForm, updateData?: {category?: any, type: string}) {
 
     if (this.assessment.assessment_approach === 'Direct') {
-      let finalArray = this.processData.concat(this.outcomeData)
-      if (this.isEditMode == true) {
-        this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
-        finalArray.map(x => x.data.map(y => y.assessment = this.assessment));
-      }
-      else {
-        finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
-      }
-
-      for (let i = 0; i < this.sdgDataSendArray2.length; i++) {
-        for (let item of this.sdgDataSendArray2[i].data) {
-          item.portfolioSdg = this.selectedSDGs[i];
+      if(this.isCompleted){
+        this.confirmationService.confirm({
+          message: `Are you sure want to update`,
+          header: 'Confirmation',
+          acceptIcon: 'icon-not-visible',
+          rejectIcon: 'icon-not-visible',
+          acceptLabel: 'Update',
+          rejectLabel: 'Go back',
+          key: 'updateConfirm',
+          accept: async () => {
+            if (updateData?.category?.categoryCode === 'SCALE_SD' && this.isCompleted && !this.checkSustainSDGIsFilled()) {
+              if (!this.sdgValidation(this.sdgDataSendArray2)) {
+                this.messageService.add({
+                  severity: 'error',
+                  summary: 'Warning',
+                  detail: 'Fill all mandatory fields in scale sdg',
+                  closable: true,
+                })
+                return 
+              }
+              this.confirmationService.confirm({
+                message: 'Pls make sure to update "Time frame outcome is sustained section" to update the result.',
+                header: 'Warning',
+                acceptLabel: 'Okay',
+                rejectLabel: 'Cancel',
+                accept: () => {
+                  if (updateData) { this.next(updateData.category, updateData.type) }
+                }, reject: () => { }
+              })
+            } else {
+              if (!this.checkMandatory()) {
+                return 
+              } else {
+                this.saveResults()
+              }
+            }
+          },
+          reject: () => {
+  
+          },
+        });
+      }else{
+        if (! this.checkMandatory()) {
+          return
+        } else {
+          this.saveResults()
         }
-
       }
-
-      for (let i = 0; i < this.sdgDataSendArray4.length; i++) {
-        for (let item of this.sdgDataSendArray4[i].data) {
-          item.portfolioSdg = this.selectedSDGs[i];
-        }
-
-      }
-
-      let data: any = {
-        finalArray: finalArray,
-        scaleSDGs: this.sdgDataSendArray2,
-        sustainedSDGs: this.sdgDataSendArray4,
-        sdgs: this.selectedSDGsWithAnswers,
-        isEdit: this.isEditMode,
-        isDraft: false,
-      }
-      this.investorToolControllerproxy.createFinalAssessment2(data)
-        .subscribe(_res => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Assessment has been created successfully',
-            closable: true,
-          })
-          this.showResults();
-
-        }, error => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Assessment detail saving failed',
-            closable: true,
-          })
-        })
+      
 
     }
     else {
-      let finalArray = this.processData.concat(this.outcomeData)
-      finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment));
-      //@ts-ignore - We are accepting Array in back-end
-      this.investorToolControllerproxy.createFinalAssessmentIndirect(finalArray)
-        .subscribe(_res => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Assessment has been created successfully',
-            closable: true,
+      if (! this.checkMandatory()){
+        return
+      } else {
+        let finalArray = this.processData.concat(this.outcomeData)
+        finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment));
+        //@ts-ignore - We are accepting Array in back-end
+        this.investorToolControllerproxy.createFinalAssessmentIndirect(finalArray)
+          .subscribe(_res => {
+            let task = this.isCompleted? 'updated' :'created'
+                this.messageService.add({
+                  severity: 'success',
+                  summary: 'Success',
+                  detail: `Assessment has been ${task} successfully`,
+                  closable: true,
+            })
+            this.showResults();
+  
+          }, error => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Assessment detail saving failed',
+              closable: true,
+            })
           })
-          this.showResults();
-
-        }, error => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Assessment detail saving failed',
-            closable: true,
-          })
-        })
+      }
     }
 
 
+  }
+
+  async saveResults() {
+    let finalArray = this.processData.concat(this.outcomeData)
+    if (this.isEditMode == true) {
+      this.assessment = await this.assessmentControllerServiceProxy.findOne(this.assessmentId).toPromise()
+      finalArray.map(x => x.data.map(y => y.assessment = this.assessment));
+    }
+    else {
+      finalArray.map(x => x.data.map(y => y.assessment = this.mainAssessment))
+    }
+
+    for (let i = 0; i < this.sdgDataSendArray2.length; i++) {
+      for (let item of this.sdgDataSendArray2[i].data) {
+        item.portfolioSdg = this.selectedSDGs[i];
+      }
+
+    }
+
+    for (let i = 0; i < this.sdgDataSendArray4.length; i++) {
+      for (let item of this.sdgDataSendArray4[i].data) {
+        item.portfolioSdg = this.selectedSDGs[i];
+      }
+
+    }
+
+    let data: any = {
+      finalArray: finalArray,
+      scaleSDGs: this.sdgDataSendArray2,
+      sustainedSDGs: this.sdgDataSendArray4,
+      sdgs: this.selectedSDGsWithAnswers,
+      isEdit: this.isEditMode,
+      isDraft: false,
+    }
+
+    this.investorToolControllerproxy.createFinalAssessment2(data)
+      .subscribe(_res => {
+        let task = this.isCompleted ? 'updated' : 'created'
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: `Assessment has been ${task} successfully`,
+          closable: true,
+        })
+        if (!this.isCompleted) {
+          this.showResults();
+        }
+
+      }, error => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Assessment detail saving failed',
+          closable: true,
+        })
+      })
   }
 
 
@@ -989,29 +1224,89 @@ export class PortfolioTrack4Component implements OnInit {
   }
 
   checkValidation(data: any[], type: string){
-    return (data?.filter(investorAssessment =>
-      (investorAssessment.relavance !== undefined) &&
-      (investorAssessment.likelihood !== undefined) &&
-      (investorAssessment.likelihood_justification !== undefined && investorAssessment.likelihood_justification !== null && investorAssessment.likelihood_justification !== '') ||
-      (investorAssessment.relavance == 0))?.length === data?.length && type == 'process') ||
-      (data.filter(investorAssessment =>
-      ((investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '') &&
-        (investorAssessment.score !== undefined && investorAssessment.score !== null))
-      )?.length === data.length && type == 'outcome') ||
-      (data.filter(sdg =>
-      (sdg.data?.filter((data: { justification: undefined; }) =>
-        (data.justification !== undefined))?.length === (sdg.data?.length)
-      ))?.length === data.length && type == 'sdg')
+    let isValid: boolean = false
+    for (let investorAssessment of data) {
+      if (type === 'process' ) {
+        if (investorAssessment.relavance === 0) {
+          isValid = true;
+        } else {
+          if (
+            (investorAssessment.relavance !== undefined && investorAssessment.relavance !== null) &&
+            (investorAssessment.likelihood !== undefined && investorAssessment.likelihood !== null) &&
+            (investorAssessment.likelihood_justification !== undefined && investorAssessment.likelihood_justification !== null && investorAssessment.likelihood_justification !== '') 
+          ) {
+            isValid = true
+          } else {
+            isValid = false
+            break;
+          }
+        }
+      } else {
+        for (let investorAssessment of data) {
+          if (["SUSTAINED_GHG", "SUSTAINED_ADAPTATION"].includes(investorAssessment.category.code) || ["SUSTAINED_GHG", "SUSTAINED_ADAPTATION"].includes(investorAssessment.characteristics.category?.code)) {
+            if (
+              (investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '') &&
+              (investorAssessment.score !== undefined && investorAssessment.score !== null)
+            ) {
+              isValid = true
+            } else {
+              isValid = false
+              break;
+            }
+          } else if (['SCALE_SD', 'SUSTAINED_SD'].includes(investorAssessment.characteristics.category?.code) || ['SCALE_SD', 'SUSTAINED_SD'].includes(investorAssessment.category?.code)) {
+            isValid = true
+            continue;
+          } else {
+            if (['MACRO_LEVEL', 'INTERNATIONAL'].includes(investorAssessment.characteristics.code)) {
+              if (
+                (investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '') &&
+                (investorAssessment.score !== undefined && investorAssessment.score !== null)
+              ) {
+                isValid = true
+              } else {
+                isValid = false
+                break;
+              }
+            } else {
+              isValid = true
+            }
+          }
+        }
+      }
+    }
+    return isValid;
   }
 
   sdgValidation(data: any[]) {
-    return this.selectedSDGs.length > 0 && (data?.filter(sdg =>
-      (sdg.data?.filter((data: {
-        score: null; justification: undefined;
-      }) =>
-        (data.justification !== undefined && data.justification !== null && data.justification !== '') &&
-        (data.score !== undefined && data.score !== null))?.length === (sdg.data?.length)
-      ))?.length === data?.length)
+    if (this.selectedSDGs.length < 0) {
+      return false
+    } else {
+      let isValid: boolean = false;
+      data.forEach(sdg => {
+        for (let data of sdg.data) {
+          if (data.characteristics?.category?.code === "SUSTAINED_SD" || data.category.code === "SUSTAINED_SD") {
+            if ((data.justification !== undefined && data.justification !== null && data.justification !== '') && (data.score !== undefined && data.score !== null)) {
+              isValid = true
+            } else {
+              isValid = false
+              break;
+            }
+          } else {
+            if (data.characteristics.code === 'MACRO_LEVEL') {
+              if ((data.justification !== undefined && data.justification !== null && data.justification !== '') && (data.score !== undefined && data.score !== null)) {
+                isValid = true
+              } else {
+                isValid = false
+                break;
+              }
+            } else {
+              isValid = true
+            }
+          }
+        }
+      })
+      return isValid
+    }
   }
 
   next(data: {
@@ -1037,6 +1332,11 @@ export class PortfolioTrack4Component implements OnInit {
         this.activeIndex = this.activeIndex + 1;
         this.checkTab1Mandatory(this.activeIndex)
 
+      }
+      if (this.activeIndexMain === 0 ) {
+        this.lastUpdatedCategory = this.processData[this.activeIndex]
+      } else {
+        this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
       }
     } else {
       this.messageService.add({
@@ -1239,15 +1539,88 @@ export class PortfolioTrack4Component implements OnInit {
 
   onSelectIntervention(event: any) {
     this.minDate = new Date(event.value.dateOfImplementation)
+    
+    this.geographicalArea = this.geographicalAreasCovered.find(item=>{
+      if (item.name==this.assessment.climateAction.geographicalAreaCovered){
+        return item
+      }
+    })
+    this.sectorList = this.assessment.climateAction.policySector.map(i=> i.sector)
+    this.sectorArray = this.sectorList
+  }
+
+  onChangeGeoAreaCovered(){
+    if(this.assessment.climateAction.geographicalAreaCovered && this.geographicalArea.name !==this.assessment.climateAction.geographicalAreaCovered ){
+      this.confirmationService.confirm({
+        message: `You selected a geographical scope that deviates from the one that was assigned to this intervention- ${this.assessment.climateAction.geographicalAreaCovered }. Are you sure you want to continue with this selection?`,
+        header: 'Confirmation',
+        acceptIcon: 'icon-not-visible',
+        rejectIcon: 'icon-not-visible',
+        acceptLabel: 'Continue',
+        rejectLabel: 'Go back',
+        key: 'geoConfirm',
+        accept: () => {
+        },
+        reject: () => { 
+          if(this.isCompleted){
+            this.geographicalArea = this.geographicalAreasCovered.find(item=>{
+              if (item.name==this.assessment['geographicalAreasCovered'][0].name){
+                return item
+              }
+            })
+          }
+          else{
+            this.geographicalArea = this.geographicalAreasCovered.find(item=>{
+              if (item.name==this.assessment.climateAction.geographicalAreaCovered){
+                return item
+              }
+            })
+          }
+        },
+      });
+    }
+  }
+
+  onItemSelectSectors(event: any) {
+    if(this.assessment.climateAction.policySector){
+      if(this.assessment.climateAction.policySector.length !=  this.sectorArray.length ){
+        this.closeMultiSelect();
+        this.confirmationService.confirm({
+          message: `You selected sectors that deviates from the one that was assigned to this intervention- ${ this.assessment.climateAction.policySector.map(i=> i.sector.name).join(",")}. Are you sure you want to continue with this selection?`,
+          header: 'Confirmation',
+          acceptIcon: 'icon-not-visible',
+          rejectIcon: 'icon-not-visible',
+          acceptLabel: 'Continue',
+          rejectLabel: 'Go back',
+          key: 'sectorConfirm',
+          accept: () => {
+          },
+          reject: () => { 
+            if(!this.isCompleted){
+              this.sectorArray = this.sectorList
+            }else{
+             this.sectorArray = this.selectedSectorsCompleteMode
+            }
+          },
+        });
+      }
+      
+    }
+    
+  }
+  closeMultiSelect() {
+    if (this.multiSelectComponent) {
+      this.multiSelectComponent.overlayVisible = false;
+    }
   }
 
   getTooltipData(ch: string) {
     switch (ch) {
       case 'International/global level':
         return this.ghg_score_info.macro
-      case 'National/Sectorial level':
+      case 'National/Sectoral level':
         return this.ghg_score_info.medium
-      case 'Subnational/regional/municipal or sub sectorial level':
+      case 'Subnational/regional/municipal or sub sectoral level':
         return this.ghg_score_info.micro
       default:
         return ''
@@ -1269,8 +1642,57 @@ export class PortfolioTrack4Component implements OnInit {
     return str
   }
 
-  adaptationJustificationChange(){
-    this.checkTab2Mandatory(6)
+  adaptationJustificationChange(data: InvestorAssessment){
+    if (data.category?.code === 'SUSTAINED_ADAPTATION' || data.characteristics.category?.code === 'SUSTAINED_ADAPTATION') {
+      this.checkTab2Mandatory(6)
+    }
+  }
+
+  onSelectScore(category: OutcomDataDto, characteristicCode: string, sdgIndex?:number) {
+    let score = this.masterDataService.outcomeScaleScore.find(s => s.value === 99)
+    if (['SCALE_GHG'].includes(category.categoryCode) && (["MEDIUM_LEVEL", "MICRO_LEVEL"].includes(characteristicCode))){
+      category.data = category.data.map(data => {
+        if (data.characteristics.code === "MACRO_LEVEL") {
+          if (score?.value) {data.score = score.value}
+          data.justification = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.';
+        }
+        return data;
+      })
+    } else if (category.categoryCode === "SCALE_SD" && (["MEDIUM_LEVEL", "MICRO_LEVEL"].includes(characteristicCode))) {
+      if (sdgIndex !== undefined) {
+        this.sdgDataSendArray2.data = this.sdgDataSendArray2[sdgIndex].data.map((data: any) => {
+          if (data.characteristics.code === "MACRO_LEVEL") {
+            if (score?.value) {data.score = score.value}
+            data.justification = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.';
+          }
+          return data;
+        })
+      }
+    } else if (category.categoryCode === 'SCALE_ADAPTATION' && ["NATIONAL", "SUBNATIONAL"].includes(characteristicCode)) {
+      category.data = category.data.map(data => {
+        if (data.characteristics.code === "INTERNATIONAL") {
+          if (score?.value) {data.score = score.value}
+          data.justification = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.';
+        }
+        return data;
+      })
+    }
+  }
+
+  isMandatoryActive(category_code: string, characteristic_code: string) {
+    return ['MACRO_LEVEL', 'INTERNATIONAL','LONG_TERM','MEDIUM_TERM','SHORT_TERM'].includes(characteristic_code)  || category_code === 'SUSTAINED_ADAPTATION';
+  }
+
+  checkCategory(categoryCode: string, CharateristiCode: string){
+    let isWarning = false
+    
+    if((categoryCode == 'SCALE_GHG' || categoryCode == 'SCALE_ADAPTATION') && ['MACRO_LEVEL', 'INTERNATIONAL'].includes(CharateristiCode)){
+      isWarning = true
+    }
+    else if(categoryCode == 'SUSTAINED_GHG' || categoryCode == 'SUSTAINED_ADAPTATION'){
+      isWarning = true
+    }
+    return isWarning
   }
 
 

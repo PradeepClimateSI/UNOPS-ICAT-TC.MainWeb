@@ -4,7 +4,7 @@
             <h4 class="mt-4"> {{portfolio.portfolioName}}</h4>
         </div>
         <div class="p-grid p-fluid card">
-           
+
             <div class="p-grid p-fluid col-md-12 col-sm-12 text-title">
                 <div class="row p-2" *ngFor="let item of card">
                     <div class="col-6">{{item.title}} :</div>
@@ -26,8 +26,8 @@
                         <td>{{ assessList.assessment.climateAction.intervention_id }}</td>
                         <td>{{ assessList.assessment.climateAction.policyName }}</td>
                         <td>{{ assessList.assessment.assessmentType }}</td>
-                        <td>{{ assessList.assessment.from | date:'yyyy-MM-dd'}} - {{ assessList.assessment.to |
-                            date:'yyyy-MM-dd'}}
+                        <td>{{ assessList.assessment.from | date:'dd/MM/yyyy'}} - {{ assessList.assessment.to |
+                            date:'dd/MM/yyyy'}}
                         </td>
                     </tr>
                 </ng-template>
@@ -58,13 +58,8 @@
 
             <div class="d-flex  mt-4 mb-2 mr-2">
                 <p-button (click)="genarateExcel()" label="Export"></p-button>
-                
-                    <p-button
-                 
-                    (click)=" generate()"
-                        label="Report"
-                
-                    ></p-button>
+
+                <p-button (click)=" generate()" label="Report"></p-button>
             </div>
         </div>
     </div>
@@ -104,8 +99,8 @@
                     <td>{{ assessList.assessment.climateAction.intervention_id }}</td>
                     <td>{{ assessList.assessment.climateAction.policyName }}</td>
                     <td>{{ assessList.assessment.assessmentType }}</td>
-                    <td>{{ assessList.assessment.from | date:'yyyy-MM-dd'}} - {{ assessList.assessment.to |
-                        date:'yyyy-MM-dd'}}
+                    <td>{{ assessList.assessment.from | date:'dd/MM/yyyy'}} - {{ assessList.assessment.to |
+                        date:'dd/MM/yyyy'}}
                     </td>
                 </tr>
             </ng-template>
@@ -161,26 +156,25 @@
 
     </div>
 </div>
- 
-    <p-dialog [(visible)]="display">
-        <div class="container" style="width: 600px; height: 400px">
-          
-          
-            <div class="row p-2">
-                <div class="col-2">
-                    <div>
-                        <label for="sector">Report Name</label>
-                    </div>
-                </div>
-                <div class="col-10">
-                    <div>
-                        <input [style]="{ width: '75%' }" type="text" name="reportName" class="p-inputtext"
-                            [(ngModel)]="reportName" pInputText />
-                    </div>
+
+<p-dialog [(visible)]="display">
+    <div class="container" style="width: 600px; height: 400px">
+
+
+        <div class="row p-2">
+            <div class="col-2">
+                <div>
+                    <label for="sector">Report Name</label>
                 </div>
             </div>
-            <div>
-                <button style="margin-right: 5px" pButton pRipple label="Generate" (click)="confirm()"></button>
+            <div class="col-10">
+                <div>
+                    <input [style]="{ width: '75%' }" type="text" name="reportName" class="p-inputtext" [(ngModel)]="reportName" pInputText />
+                </div>
             </div>
         </div>
-      </p-dialog>
+        <div>
+            <button style="margin-right: 5px" pButton pRipple label="Generate" (click)="confirm()"></button>
+        </div>
+    </div>
+</p-dialog>

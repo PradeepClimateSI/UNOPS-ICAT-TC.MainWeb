@@ -53,8 +53,8 @@
           <label for="projStatus">Date</label>
           <p-calendar
 
-              placeholder="MM/DD/YYYY"
-              dateFormat="mm/dd/yy"
+              placeholder="DD/MM/YYYY"
+              dateFormat="dd/mm/yy"
               [maxDate]="Date"
               #propsedDate="ngModel"
               [(ngModel)]="searchBy.editedOn"
@@ -119,7 +119,7 @@
             <td>{{ activities.userName }}</td>
             <td>{{ getUserTypeName(activities.userType) }}</td>
             <td>{{ activities.description }}</td>
-            <td>{{ activities.logDate}}</td>
+            <td>{{ activities.logDate | date: "dd/MM/yyyy"}}</td>
             <td>{{ activities.logTime}}</td>
             <td>{{ activities.actionStatus}}</td>
           </tr>

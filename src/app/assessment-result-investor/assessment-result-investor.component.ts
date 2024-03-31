@@ -114,6 +114,7 @@ export class AssessmentResultInvestorComponent implements OnInit {
       this.outcomeData = res?.outcomeData;
       this.outcomeScore = res?.outcomeScore;
       this.processScore = res?.processScore;
+      console.log("outcomeScore",this.outcomeData)
       this.scale_GHGs = res?.outcomeData.find((item: { code: string; })=>item?.code=='SCALE_GHG')
       this.scale_SD = res?.outcomeData.find((item: { code: string; })=>item?.code=='SCALE_SD')
       this.sustained_GHGs = res?.outcomeData.find((item: { code: string; })=>item?.code=='SUSTAINED_GHG')
@@ -182,8 +183,8 @@ export class AssessmentResultInvestorComponent implements OnInit {
           { title: 'Assessment Type', data: this.assessmentType },
           { title: 'Geographical Area Covered', data: this.geographicalAreasList.map((a: any) => a.name) },
           { title: 'Sectors Covered', data: this.sectorList.join(', ') },
-          { title: 'From', data: this.datePipe.transform(this.date1, 'yyyy-MM-dd') },
-          { title: 'To', data: this.datePipe.transform(this.date2, 'yyyy-MM-dd') },
+          { title: 'From', data: this.datePipe.transform(this.date1, 'dd/MM/yyyy') },
+          { title: 'To', data: this.datePipe.transform(this.date2, 'dd/MM/yyyy') },
           { title: 'Opportunities for stakeholders to participate in the assessment', data: (this.opportunities)?(this.opportunities):'-' },
 
         ])

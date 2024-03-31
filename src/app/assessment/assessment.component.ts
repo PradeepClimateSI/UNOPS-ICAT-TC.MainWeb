@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
 import { MasterDataService } from 'app/shared/master-data.service';
-import { LazyLoadEvent } from 'primeng/api';
+import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Table } from 'primeng/table';
-import { MethodologyAssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { AppService } from 'shared/AppService';
+import { Assessment, AssessmentControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, User, UsersControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-assessment',
@@ -22,6 +23,7 @@ export class AssessmentComponent implements OnInit {
   loading: boolean;
   totalRecords: number
   load: boolean = false
+  loggedUser: User
 
   dt2: Table
   rows: number = 10;
@@ -32,6 +34,11 @@ export class AssessmentComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     public masterDataService: MasterDataService,
     protected dialogService: DialogService,
+    public assessmentServiceControllerProxy: AssessmentControllerServiceProxy,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService,
+    private appService: AppService,
+    private usersControllerServiceProxy: UsersControllerServiceProxy
   ) { }
 
 
@@ -39,6 +46,12 @@ export class AssessmentComponent implements OnInit {
 
   async ngOnInit() {
     this.loading = true;
+    let loginProfileId = this.appService.getProfileId()
+    if (loginProfileId) {
+      let user = await this.usersControllerServiceProxy.getUserLoginProfile(loginProfileId).toPromise()
+      if (user) this.loggedUser = user
+    }
+
     await this.loadData({})
 
   }
@@ -89,7 +102,7 @@ export class AssessmentComponent implements OnInit {
 
 
 
-  myFunction(assessId: any, averageProcess: any, averageOutcome: any, tool: string, assessment_method: string) {
+  viewResult(assessId: any, averageProcess: any, averageOutcome: any, tool: string, assessment_method: string) {
 
     if (tool === 'INVESTOR' || (tool === 'PORTFOLIO' && assessment_method === 'Track 4')) {
       this.router.navigate(['/app/assessment-result-investor', assessId], {
@@ -114,6 +127,53 @@ export class AssessmentComponent implements OnInit {
         }
       });
     }
+  }
+
+  async deleteAssessment(id: number, tool: string) {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete the assessment?',
+      accept: () => {
+        this.assessmentServiceControllerProxy.deleteAssessment(id, tool).subscribe(res => {
+          if (res) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Assessment deleted successfully',
+              closable: true,
+            })
+            this.loadData({})
+          } else {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Failed to delete assessment',
+              closable: true,
+            })
+          }
+        })
+      }
+    })
+  }
+
+  editAssessment(assessment: Assessment) {
+    if(assessment.tool =="CARBON_MARKET"){
+      this.router.navigate(['app/carbon-market-tool-edit'], {  
+      queryParams: { id: assessment.id, isEdit: true,iscompleted:true},  
+      });
+    }
+    if(assessment.tool =="PORTFOLIO"){
+      this.router.navigate(['app/portfolio-tool'], {  
+      queryParams: { id: assessment.id, isEdit: true, iscompleted:true},  
+      });
+    }
+
+    if(assessment.tool =="INVESTOR"){
+      this.router.navigate(['app/investor-tool-new'], {  
+      queryParams: { id: assessment.id, isEdit: true, iscompleted:true},  
+      });
+    }
+    
+
   }
 
 

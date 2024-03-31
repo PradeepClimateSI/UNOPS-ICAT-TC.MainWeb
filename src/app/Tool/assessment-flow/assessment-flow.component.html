@@ -1,0 +1,70 @@
+<div  class="container pl-20 pr-20">
+    <div class="mb-12">
+        <h4 class="mt-4">How to decide which tool to use?</h4>
+    </div>
+
+    <div class="card" style="min-height: 600px;">
+        <div class="p-grid p-fluid col-12">
+            <div class="row">
+                <div class="col-12">
+                    <p class="question"> Q.1 Do you want to evaluate the transformational impact of a <strong>set of
+                            multiple interventions</strong>?</p>
+                </div>
+                <div class="d-flex flex-row-reverse button-over">
+                    <button class="btn btn-primary btn-block no-button ml-20" type="button"
+                        (click)="onClick(flowConditions.Q1_NO)">No
+                    </button>
+                    <button class="btn btn-primary btn-block yes-button" type="button"
+                        (click)="onClick(flowConditions.Q1_YES)">Yes
+                    </button>
+                </div>
+            </div>
+            <div *ngIf="isShowInternvention" class="row ml-10 mb-30">
+                <div class="p-field p-2 col-md-4 ">
+                    <label for="policy">Select Intervention *</label>
+                    <p-dropdown name="policy" #policy="ngModel" placeholder="Select Intervention" [(ngModel)]="intervention" appendTo="body" [options]="policies" optionLabel="policyName" [required]="true" 
+                     (onChange)="onChangeInterventionAndType()" ></p-dropdown>
+                    <p class="info-message text-danger" *ngIf=" !intervention.id &&  policy.touched  ">
+                      This is a mandatory field
+                    </p>
+                </div>
+                <div class="p-field p-2 col-md-4">
+                    <label for="policy">Assessment Type *</label>
+                    <p-dropdown name="type" #type="ngModel" placeholder="Select Assessment Type" [(ngModel)]="assessmentType" [options]="assessment_types" optionLabel="name" optionValue="name" [required]="true" appendTo="body" 
+                    (onChange)="onChangeInterventionAndType()" ></p-dropdown>
+                    <p class="info-message text-danger" *ngIf="!assessmentType && type.touched  ">
+                        This is a mandatory field
+                    </p>
+                </div>
+            </div>
+
+            <div *ngIf="isShowQ2" class="row">
+                <div class="col-12">
+                    <p class="question"> Q.2 Will the proposed intervention lead to emission reductions which could (at least in part) be 
+                        <strong>traded within a market scheme</strong>?</p>
+                </div>
+                <div class="d-flex flex-row-reverse button-over">
+                    <button class="btn btn-primary btn-block no-button ml-20" type="button"
+                        (click)="onClick(flowConditions.Q2_NO)">No
+                    </button>
+                    <button class="btn btn-primary btn-block yes-button" type="button"
+                        (click)="onClick(flowConditions.Q2_YES)">Yes
+                    </button>
+                </div>
+            </div>
+            <div *ngIf="isShowQ3" class="row">
+                <div class="col-12">
+                    <p class="question"> Q.3 Is the intervention <strong> financed </strong> (at least in part) <strong>by sources other than public budgets</strong>?</p>
+                </div>
+                <div class="d-flex flex-row-reverse button-over">
+                    <button class="btn btn-primary btn-block no-button ml-20" type="button"
+                        (click)="onClick(flowConditions.Q3_NO)">No
+                    </button>
+                    <button class="btn btn-primary btn-block yes-button" type="button"
+                        (click)="onClick(flowConditions.Q3_YES)">Yes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

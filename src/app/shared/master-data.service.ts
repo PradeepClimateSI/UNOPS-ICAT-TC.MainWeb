@@ -64,7 +64,8 @@ export class MasterDataService {
   private _SDG_color_map: {id: number, sdgNumber: number, color: string}[] = []
   private _Sector_color_map: {id: number, sectorNumber: number, color: string}[] = []
   private _word_limits: {field: string, count: number}[] = []
-
+  public phase_transfrom:{title: string,value:string}[]=[]
+    
 
   constructor() {
     this.months = [
@@ -224,8 +225,8 @@ export class MasterDataService {
 
     this.level_of_implemetation = [
       { id: 1, name: "International", code: "INTERNATIONAL" },
-      { id: 2, name: "National/sectorial", code: "NATIONAL" },
-      { id: 3, name: "Sub-national/sub-sectorial", code: "SUBNATIONAL" },
+      { id: 2, name: "National/sectoral", code: "NATIONAL" },
+      { id: 3, name: "Sub-national/sub-sectoral", code: "SUBNATIONAL" },
 
     ]
 
@@ -301,12 +302,12 @@ export class MasterDataService {
       macro: 'Quantitative impacts can also be entered here, using the following indicators as a guide:\n 3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.1% of global emissions in the sector in the latest year for which data is available\n' +
         '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.05% of global emissions in the sector in the latest year for which data is available\n' +
         '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >0.01% of global emissions in the sector in the latest year for which data is available\n' +
-        '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) <0.1% of global emissions in the sector in the latest year for which data is available\n' +
+        '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) <0.01% of global emissions in the sector in the latest year for which data is available\n' +
         '-3 - any emissions increase',
       medium: 'Quantitative impacts can also be entered here, using the following indicators as a guide:\n 3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >1% of national/sectoral emissions in the latest year for which data is available\n' +
         '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.5-1% of national/sectoral emissions in the latest year for which data is available\n' +
         '1 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 0.1-0.5% of national/sectoral emissions in the latest year for which data is available\n' +
-        '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) <0.1% of national/sectoral emissions in the latest year for which data is available\n' +
+        '0 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) <0.01% of national/sectoral emissions in the latest year for which data is available\n' +
         '-3 - any emissions increase',
       micro: 'Quantitative impacts can also be entered here, using the following indicators as a guide:\n 3 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) >5% of subnational/regional/municipal emissions in the latest year for which data is available\n' +
         '2 - average reduction in emissions (tCO2e/yr calculated as total estimated reductions over lifetime of the project divided by project lifetime) equal to 1-5% of subnational/regional/municipal emissions in the latest year for which data is available\n' +
@@ -412,7 +413,8 @@ export class MasterDataService {
       new ScoreDto({ name: '0 - The intervention will not result in GHG impacts relative to the starting situation at the level of assessment targeted.', code: '0', value: 0 }),
       new ScoreDto({name: '-1  - The intervention will result in GHG impacts that represent a minor increase in emissions, relative to the starting situation, at the level of assessment targeted.', code: '-1', value: -1}),
       new ScoreDto({name: '-2 - The intervention will result in GHG impacts that represent moderate emissions increasing, relative to the starting situation, at the level of assessment targeted.', code: '-2', value: -2}),
-      new ScoreDto({name: '-3 - The intervention will result in GHG impacts that represent a large increase in emissions, relative to the starting situation, at the level of assessment targeted.', code: '-3', value: -3})
+      new ScoreDto({name: '-3 - The intervention will result in GHG impacts that represent a large increase in emissions, relative to the starting situation, at the level of assessment targeted.', code: '-3', value: -3}),
+      new ScoreDto({name: 'Outside assessment boundaries', code: '-99', value: -99})
     ]
 
     this.GHG_scale_score_medium = [
@@ -422,7 +424,8 @@ export class MasterDataService {
       new ScoreDto({name: '0 - The intervention will not result in GHG impacts relative to the starting situation at the level of assessment targeted.', code: '0', value: 0}),
       new ScoreDto({name: '-1  - The intervention will result in GHG impacts that represent a minor increase in emissions, relative to the starting situation, at the level of assessment targeted.', code: '-1', value: -1}),
       new ScoreDto({name: '-2 - The intervention will result in GHG impacts that represent moderate emissions increasing, relative to the starting situation, at the level of assessment targeted.', code: '-2', value: -2}),
-      new ScoreDto({name: '-3 - The intervention will result in GHG impacts that represent a large increase in emissions, relative to the starting situation, at the level of assessment targeted.', code: '-3', value: -3})
+      new ScoreDto({name: '-3 - The intervention will result in GHG impacts that represent a large increase in emissions, relative to the starting situation, at the level of assessment targeted.', code: '-3', value: -3}),
+      new ScoreDto({name: 'Outside assessment boundaries', code: '-99', value: -99})
     ]
     this.GHG_scale_score_micro = [
       new ScoreDto({name: '3 - The intervention will result in GHG impacts that represent large emissions reductions, relative to the starting situation, at the level of assessment targeted.', code: '3', value: 3}),
@@ -431,14 +434,16 @@ export class MasterDataService {
       new ScoreDto({name: '0 - The intervention will not result in GHG impacts relative to the starting situation at the level of assessment targeted.', code: '0', value: 0}),
       new ScoreDto({name: '-1  - The intervention will result in GHG impacts that represent a minor increase in emissions, relative to the starting situation, at the level of assessment targeted.', code: '-1', value: -1}),
       new ScoreDto({name: '-2 - The intervention will result in GHG impacts that represent moderate emissions increasing, relative to the starting situation, at the level of assessment targeted.', code: '-2', value: -2}),
-      new ScoreDto({name: '-3 - The intervention will result in GHG impacts that represent a large increase in emissions, relative to the starting situation, at the level of assessment targeted.', code: '-3', value: -3})
+      new ScoreDto({name: '-3 - The intervention will result in GHG impacts that represent a large increase in emissions, relative to the starting situation, at the level of assessment targeted.', code: '-3', value: -3}),
+      new ScoreDto({name: 'Outside assessment boundaries', code: '-99', value: -99})
     ]
     this.GHG_sustained_score = [
       new ScoreDto({name: '3 - Expected positive impact of over 20 years on the selected scale', code: '3', value: 3}),
       new ScoreDto({name: '2 - Expected positive impact of 11-20 years on the selected scale', code: '2', value: 2}),
       new ScoreDto({name: '1 - Expected positive impact of 0-10 years on the selected scale', code: '1', value: 1}),
       new ScoreDto({name: '0 - No expected impact on the selected scale', code: '0', value: 0}),
-      new ScoreDto({name: '-1 - Expected negative impact', code: '-1', value: -1})
+      new ScoreDto({name: '-1 - Expected negative impact', code: '-1', value: -1}),
+      new ScoreDto({name: 'Outside assessment boundaries', code: '-99', value: -99})
     ]
 
     this.SDG_scale_score = [
@@ -449,6 +454,7 @@ export class MasterDataService {
       new ScoreDto({name: '-1 - The intervention will result in minor net negative sustainable development impacts, relative to the starting situation, at the level of assessment targeted.', code: '-1', value: -1}),
       new ScoreDto({name: '-2 - The intervention will result in moderate net negative sustainable development impacts, relative to the starting situation, at the level of assessment targeted.', code: '-2', value: -2}),
       new ScoreDto({name: '-3 - The intervention will result in large net negative sustainable development impacts, relative to the starting situation, at the level of assessment targeted.', code: '-3', value: -3}),
+      new ScoreDto({name: 'Outside assessment boundaries', code: '-99', value: -99})
     ]
     this.SDG_sustained_score = [
       new ScoreDto({name: '3 - Expected positive impact of over 20 years on the selected scale', code: '3', value: 3}),
@@ -456,6 +462,7 @@ export class MasterDataService {
       new ScoreDto({name: '1 - Expected positive impact of 0-10 years on the selected scale', code: '1', value: 1}),
       new ScoreDto({name: '0 - No expected impact on the selected scale', code: '0', value: 0}),
       new ScoreDto({name: '-1 - Expected negative impact', code: '-1', value: -1}),
+      new ScoreDto({name: 'Outside assessment boundaries', code: '-99', value: -99})
     ]
 
     this.adaptation_scale_score = [
@@ -466,6 +473,7 @@ export class MasterDataService {
       new ScoreDto({name: '-1 - The intervention will result in minor net negative climate change adaptation impacts, relative to the starting situation, at the level of assessment targeted.', code: '-1', value: -1}),
       new ScoreDto({name: '-2 - The intervention will result in moderate net negative climate change adaptation impacts, relative to the starting situation, at the level of assessment targeted.', code: '-2', value: -2}),
       new ScoreDto({name: '-3 - The intervention will result in large net negative climate change adaptation impacts, relative to the starting situation, at the level of assessment targeted.', code: '-3', value: -3}),
+      new ScoreDto({name: 'Outside assessment boundaries', code: '-99', value: -99})
     ]
 
     this.adaptation_sustained_score = [
@@ -474,6 +482,7 @@ export class MasterDataService {
       new ScoreDto({name: '1 - Expected positive impact of 0-10 years on the selected scale', code: '1', value: 1}),
       new ScoreDto({name: '0 - No expected impact on the selected scale', code: '0', value: 0}),
       new ScoreDto({name: '-1 - Expected negative impact', code: '-1', value: -1}),
+      new ScoreDto({name: 'Outside assessment boundaries', code: '-99', value: -99})
     ]
 
     this.xData = [
@@ -517,7 +526,7 @@ export class MasterDataService {
     this.tools = [
       {id: 1, name: 'General tool', code: 'PORTFOLIO'},
       {id: 2, name: 'Carbon Market Tool', code: 'CARBON_MARKET'},
-      {id: 3, name: 'Investor & Private Sector Tool', code: 'INVESTOR'},
+      {id: 3, name: 'Investment Tool', code: 'INVESTOR'},
     ]
 
     this.sdg_priorities = [
@@ -530,17 +539,17 @@ export class MasterDataService {
     this.investment_instruments = [
       { id: 1, name: 'Own capital', code: 'OWN_CAPITAL'},
       { id: 2, name: 'National/subnational budget', code: 'NATIONAL_SUBNATIONAL_BUDGET'},
-      { id: 2, name: 'Capital markets', code: 'CAPITAL_MARKETS'},
-      { id: 2, name: 'Private Funding/venture capital (national)', code: 'PRIVATE_FUNDING_VENTURE_CAPITAL_NATIONAL'},
-      { id: 2, name: 'Private funding/venture capital (inter.)', code: 'PRIVATE_FUNDING_VENTURE_CAPITAL_INTER'},
-      { id: 2, name: 'Senior debt', code: 'SENIOR_DEBT'},
-      { id: 2, name: 'Green bonds', code: 'GREEN_BONDS'},
-      { id: 2, name: 'Blended finance', code: 'BLENDED_FINANCE'},
-      { id: 2, name: 'Grants (ODA)', code: 'GRANTS_ODA'},
-      { id: 2, name: 'Concesional loans (ODA)', code: 'CONCESIONAL_LOANS_ODA'},
-      { id: 2, name: 'Investment loans', code: 'INVESTMENT_LOANS'},
-      { id: 2, name: 'Credit lines', code: 'CREDIT_LINES'},
-      { id: 2, name: 'Other', code: 'OTHER'},
+      { id: 3, name: 'Capital markets', code: 'CAPITAL_MARKETS'},
+      { id: 4, name: 'Private Funding/venture capital (national)', code: 'PRIVATE_FUNDING_VENTURE_CAPITAL_NATIONAL'},
+      { id: 5, name: 'Private funding/venture capital (inter.)', code: 'PRIVATE_FUNDING_VENTURE_CAPITAL_INTER'},
+      { id: 6, name: 'Senior debt', code: 'SENIOR_DEBT'},
+      { id: 7, name: 'Green bonds', code: 'GREEN_BONDS'},
+      { id: 8, name: 'Blended finance', code: 'BLENDED_FINANCE'},
+      { id: 9, name: 'Grants (ODA)', code: 'GRANTS_ODA'},
+      { id: 10, name: 'Concesional loans (ODA)', code: 'CONCESIONAL_LOANS_ODA'},
+      { id: 11, name: 'Investment loans', code: 'INVESTMENT_LOANS'},
+      { id: 12, name: 'Credit lines', code: 'CREDIT_LINES'},
+      { id: 13, name: 'Other', code: 'OTHER'},
     ]
 
     this.scale_of_activity = [
@@ -592,6 +601,13 @@ export class MasterDataService {
       {field: FieldNames.BARRIER_EXPLANATION, count: 1500},
       {field: FieldNames.VISION, count: 1500},
       {field: FieldNames.JUSTIFICATION, count: 1000},
+    ]
+
+    this.phase_transfrom =[
+      { title: 'Pre-development', value: 'The pre-development phase is characterized by, on the one hand, visible and increasing pressure to make moves towards low-carbon and sustainable development and, on the other hand, by stability and a status quo, in which predominant paradigms are rarely challenged, and institutions are stagnant.' },
+      { title: 'Take-off', value: 'In the take-off phase, there are observable moves to change the system towards more openness and acceptance of new ideas and concepts that question or challenge existing high-carbon paradigms.' },
+      { title: 'Acceleration', value: 'In the acceleration phase, new solutions or innovations gain momentum and challenge the status quo. Alternative solutions have become widespread, and are accepted and acknowledged.' },
+      { title: 'Stabilization or relapse', value: 'In the stabilization phase, the system is fully transformed, and the new pathways are embraced broadly in society and the economy. However, the risk of relapse is high if the interests of the high-carbon regime remain active, and continued efforts may be needed to maintain momentum' },
     ]
   }
 
@@ -1043,6 +1059,7 @@ export class MasterDataService {
   get word_limits (): {field: string; count: number;}[] {
     return this._word_limits;
   }
+  
 
   getToolName(code: string) {
     let tool = this.tools.find(o => o.code === code)
@@ -1083,3 +1100,10 @@ export enum FieldNames {
   ASSESSMENT_OPPORTUNITIES = "ASSESSMENT_OPPORTUNITIES",
   JUSTIFICATION = "JUSTIFICATION"
 }
+
+export const chapter6_url = 'https://storage.googleapis.com/public-bucket-kh/Transformational-Change-Methodology_ch6.pdf'
+export const assessment_period_info = 'This refers to the timeframe, for which the intervention\'s impact is assessed - NOT when the assessment is conducted.\n' +
+  'The period cannot begin earlier than the start date that was selected for the intervention. It can be different from the implementation period and should include the full range ' +
+  'of relevant impacts.\n' +
+  'System changes usually unfold over a longer period of time than individual impacts. Hence, users are encouraged to select a long assessment period (e.g. 15 years or more, with ' +
+  'an end date such as 2040 or 2050) to align with longer term plans and goals.'

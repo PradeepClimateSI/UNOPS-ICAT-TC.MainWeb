@@ -182,12 +182,12 @@ export class AcceptedPoliciesComponent implements OnInit, AfterViewInit {
    
   };
   addproject() {
-    this.router.navigate(['/add-polocies']);
+    this.router.navigate(['/add-interventions']);
   }
 
 
   detail(climateactions: Project) {
-    this.router.navigate(['app/add-polocies'], {
+    this.router.navigate(['app/add-interventions'], {
       
     queryParams: { id: climateactions.id ,flag:this.flag},
     
