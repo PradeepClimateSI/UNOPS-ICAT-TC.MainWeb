@@ -58,7 +58,7 @@ export class CmResultComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    this.fileServerURL = environment.baseUrlAPI+'/uploads'
+    this.fileServerURL = environment.baseUrlAPI+'/document/downloadDocumentsFromFileName/uploads'
     this.route.queryParams.subscribe(async (params) => {
       let assessmentId = params['id']
       this.assessment = await this.assessmentControllerServiceProxy.findOne(assessmentId).toPromise()
