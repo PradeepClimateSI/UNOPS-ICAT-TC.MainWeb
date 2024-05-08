@@ -172,26 +172,32 @@ export class AssessmentResultInvestorComponent implements OnInit {
         this.geographicalAreasCovered = this.geographicalAreasList.map((a: any) => a.name).join(',');
     });
 
-
     setTimeout(() => {
-      this.card.push(
-        ...[
-          { title: 'Intervention ID', data: (this.intervention.intervention_id)?(this.intervention.intervention_id):'-' },
-          { title: 'Intervention Type', data: (this.intervention.typeofAction)?(this.intervention.typeofAction):'-' },
-          { title: 'Intervention Status', data: (this.intervention.projectStatus)?(this.intervention.projectStatus.name):'-' },
-          { title: 'Assessment Type', data: this.assessmentType },
-          { title: 'Geographical Area Covered', data: this.geographicalAreasList.map((a: any) => a.name) },
-          { title: 'Sectors Covered', data: this.sectorList.join(', ') },
-          { title: 'From', data: this.datePipe.transform(this.date1, 'dd/MM/yyyy') },
-          { title: 'To', data: this.datePipe.transform(this.date2, 'dd/MM/yyyy') },
-          { title: 'Opportunities for stakeholders to participate in the assessment', data: (this.opportunities)?(this.opportunities):'-' },
-
-        ])
+      this.loadCardDetails();
       this.load = true;
 
     }, 1000);
 
+
   }
+
+  loadCardDetails () {
+    this.card = []
+    this.card.push(
+      ...[
+        { title: 'Intervention ID', data: (this.intervention.intervention_id)?(this.intervention.intervention_id):'-' },
+        { title: 'Intervention Type', data: (this.intervention.typeofAction)?(this.intervention.typeofAction):'-' },
+        { title: 'Intervention Status', data: (this.intervention.projectStatus)?(this.intervention.projectStatus.name):'-' },
+        { title: 'Assessment Type', data: this.assessmentType },
+        { title: 'Geographical Area Covered', data: this.geographicalAreasList?.map((a: any) => a.name).join(', ') },
+        { title: 'Sectors Covered', data: this.sectorList.join(', ') },
+        { title: 'From', data: this.datePipe.transform(this.date1, 'dd/MM/yyyy') },
+        { title: 'To', data: this.datePipe.transform(this.date2, 'dd/MM/yyyy') },
+        { title: 'Opportunities for stakeholders to participate in the assessment', data: (this.opportunities)?(this.opportunities):'-' },
+
+      ])
+  }
+
   getBackgroundColor(x: number, y: number): string {
     let value = x + y
     switch (value) {
@@ -232,30 +238,33 @@ export class AssessmentResultInvestorComponent implements OnInit {
 
   exportToExcel() {
     let colorMap = this.createColorMap();
-      let book_name = 'Results - ' + this.intervention.policyName;
-  
-      const workbook = XLSX.utils.book_new();
-      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.card, { skipHeader: true });
-      let table = document.getElementById('allTables');
-      let worksheet = XLSX.utils.table_to_sheet(table,{});
-    
-        let heatmap = XLSX.utils.table_to_sheet(document.getElementById('heatmap'),{});
-        
-        XLSX.utils.book_append_sheet(workbook, ws, 'Assessment Info');
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Assessment Results');
-        XLSX.utils.book_append_sheet(workbook, heatmap, 'Heat map');
+    this.loadCardDetails();
+    let book_name = 'Results - ' + this.intervention.policyName;
 
-        for (const itm of colorMap) {
-          if (heatmap[itm.cell]) {
-            heatmap[itm.cell].s = {
-              fill: { fgColor: { rgb: itm.color } },
-              font: { color: { rgb: itm.color } }
-            };
-          }
-        }
-  
-        XLSX.writeFile(workbook, book_name + ".xlsx");
-    
+    const workbook = XLSX.utils.book_new();
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.card, { skipHeader: true });
+    let table = document.getElementById('allTables');
+    let worksheet = XLSX.utils.table_to_sheet(table, {});
+
+    let heatmap = XLSX.utils.table_to_sheet(document.getElementById('heatmap'), {});
+
+    XLSX.utils.book_append_sheet(workbook, ws, 'Assessment Info');
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Assessment Results');
+    XLSX.utils.book_append_sheet(workbook, heatmap, 'Heat map');
+
+
+    for (const itm of colorMap) {
+      if (heatmap[itm.cell]) {
+        heatmap[itm.cell].s = {
+          fill: { fgColor: { rgb: itm.color } },
+          font: { color: { rgb: itm.color } }
+        };
+      }
+    }
+
+    XLSX.writeFile(workbook, book_name + ".xlsx");
+
   }
   createColorMap(){
     let colorMap = [];
