@@ -58,7 +58,7 @@ export class CmResultComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    this.fileServerURL = environment.baseUrlAPI+'/uploads'
+    this.fileServerURL = environment.baseUrlAPI+'/document/downloadDocumentsFromFileName/uploads'
     this.route.queryParams.subscribe(async (params) => {
       let assessmentId = params['id']
       this.assessment = await this.assessmentControllerServiceProxy.findOne(assessmentId).toPromise()
@@ -85,8 +85,8 @@ export class CmResultComponent implements OnInit {
           { title: 'Intervention', data: this.intervention.policyName },
           { title: 'Scale of Activity', data: scale?.name },
           { title: 'Assessment Type', data: this.assessment.assessmentType },
-          { title: 'Geographical Areas Covered', data: this.assessmentCMDetail.geographicalAreasCovered.map(a => a.name)},
-          { title: 'Sectors Covered', data: this.assessmentCMDetail.sectorsCovered.map(a => a.sector.name)},
+          { title: 'Geographical Areas Covered', data: this.assessmentCMDetail.geographicalAreasCovered.map(a => a.name).join(', ')},
+          { title: 'Sectors Covered', data: this.assessmentCMDetail.sectorsCovered.map(a => a.sector.name).join(', ')},
           { title: 'Opportunities for stakeholders to participate in the assessment', data: this.assessment.opportunities},
           { title: 'Assessment Period', data: moment(this.assessment.from).format('DD/MM/YYYY') + ' - ' + moment(this.assessment.to).format('DD/MM/YYYY')},
           { title: 'Assessment Boundaries (If different from the intervention boundary specified in the baseline methodology)', data: this.assessmentCMDetail.boundraries},

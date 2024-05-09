@@ -504,6 +504,7 @@ export class ClimateActionComponent implements OnInit  {
     if (this.project.sector) {
       let sector = new Sector();
       sector.id = this.project.sector.id;
+      sector.name = this.project.sector.name;
       this.project.sector = sector;
     }
 
@@ -515,12 +516,14 @@ export class ClimateActionComponent implements OnInit  {
     if (this.project.aggregatedAction) {
       let ndc = new Ndc();
       ndc.id = this.project.aggregatedAction?.id;
+      ndc.name = this.project.aggregatedAction?.name;
       this.project.aggregatedAction = ndc;
     }
 
     if (this.project.actionArea) {
       let subned = new SubNdc();
       subned.id = this.project.actionArea?.id;
+      subned.name = this.project.actionArea?.name;
       this.project.actionArea = subned;
     }
     if (formData.form.valid && this.project.id > 0) {
@@ -568,6 +571,7 @@ export class ClimateActionComponent implements OnInit  {
         this.project.user.id =this.proposingUser.id;
         let savingCountry = new Country()
         savingCountry.id = this.project.country.id;
+        savingCountry.name = this.project.country.name;
         this.project.country = savingCountry
           this.projectProxy.createNewCA(this.project)
           .subscribe(
@@ -588,6 +592,12 @@ export class ClimateActionComponent implements OnInit  {
                 
                 this.policySectorArray.push(ps);
               }
+              for(let x of this.policySectorArray){
+                this.sectornames.push(x.sector.name)
+              }
+              this.sectorsJoined = ''
+              this.sectorsJoined = this.sectornames.join(', ')
+
               let allSectors= new AllPolicySectors();
               allSectors.allSectors =this.policySectorArray;
               this.projectProxy.policySectors(allSectors).subscribe((res) => {
@@ -1171,6 +1181,8 @@ toDownload() {
 
       pdf.addImage(imgData, 'PNG', 0, 0, componentWidth, componentHeight);
       pdf.save('download.pdf');
+      this.isDownloadMode = 0;
+      this.isDownloading = false;
     });
   }, 1);
 }
