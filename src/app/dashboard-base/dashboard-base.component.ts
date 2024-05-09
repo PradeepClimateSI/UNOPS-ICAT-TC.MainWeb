@@ -6,6 +6,7 @@ import { NotificationControllerServiceProxy, UsersControllerServiceProxy,Notific
 import decode from 'jwt-decode';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { map } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard-base',
@@ -31,6 +32,7 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
   messages: Message[] | undefined;
   private systemTimer: any;
   isDeploying: boolean=false;
+  isAutoSaveDone: boolean = true;
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -86,6 +88,10 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
 
     });
 
+    this.appService.autoSavingDone.subscribe(res => {
+      this.isAutoSaveDone = res;
+    })
+
 
   }
 
@@ -101,8 +107,32 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
   }
 
   logout() {
-    this.appService.logout();
-    this.stopSystemStatusTimer();
+    this.appService.loginOut.next(true);
+    let autoSub = this.appService.autoSavingDone.subscribe(res => {
+      console.log("sub in logout", res)
+      if (res) {
+        this.confirmationService.confirm({
+          message: 'Are you sure you want to logout?',
+          key: 'logout',
+          accept: () => {
+            this.appService.logout();
+            this.stopSystemStatusTimer();
+          },
+          reject: () => {
+            autoSub.unsubscribe()
+            this.appService.loginOut.next(false);
+          }
+        })
+      } else {
+        autoSub.unsubscribe()
+        this.appService.loginOut.next(false);
+      }
+    }, () => {
+      autoSub.unsubscribe()
+      this.appService.loginOut.next(false);
+    })
+
+
 
   }
 

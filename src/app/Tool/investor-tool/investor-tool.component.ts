@@ -12,6 +12,8 @@ import { HttpResponse } from '@angular/common/http';
 import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { MultiSelect } from 'primeng/multiselect';
+import { AppService } from 'shared/AppService';
+import { Subscription } from 'rxjs';
 
 
 interface CharacteristicWeight {
@@ -187,6 +189,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
   lastUpdatedCategory: any;
   isSavingDraft: boolean = false;
   savedInInterval: boolean = false;
+  isLogoutClicked: boolean;
+  logOutSubs: Subscription
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
     public masterDataService: MasterDataService,
@@ -199,6 +203,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
     private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
     protected dialogService: DialogService,
     private confirmationService: ConfirmationService,
+    private appService: AppService
 
   ) {
     this.uploadUrl = environment.baseUrlAPI + "/document/upload-file-by-name";
@@ -254,6 +259,25 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
       }
       catch (error) {
       }
+      this.appService.autoSavingDone.next(false)
+
+      this.logOutSubs =  this.appService.loginOut.subscribe(res => {
+        if (res) {
+          this.isLogoutClicked = true
+          this.confirmationService.confirm({
+            message: 'There are unsaved changes. Do you want to continue?',
+            key: 'autosave',
+            accept: () => {
+              this.saveDraft(this.lastUpdatedCategory, this.lastUpdatedCategory.CategoryName, this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', false, false)
+            },
+            reject: () => {
+              this.appService.loginOut.next(false)
+              // this.appService.autoSavingDone.next(true)
+              this.logOutSubs.unsubscribe()
+            }
+          })
+        }
+      })
 
     }
     this.isFirstLoading0 = false
@@ -316,6 +340,11 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
       }
     }
     this.stopAutoSave()
+    if (this.logOutSubs) {
+      this.logOutSubs.unsubscribe()
+      //@ts-ignore
+      this.logOutSubs = undefined
+    }
   }
  
   startAutoSave() {
@@ -788,7 +817,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
         }
       }, error => {
         if (!isDefault){
-          this.isSavingDraft = false
+          this.isSavingDraft = false;
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
@@ -797,6 +826,12 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
           })
         }
        
+      }, () => {
+        if (this.isLogoutClicked) {
+          this.appService.autoSavingDone.next(true)
+          this.appService.loginOut.next(false)
+        }
+        
       })
   }
 
