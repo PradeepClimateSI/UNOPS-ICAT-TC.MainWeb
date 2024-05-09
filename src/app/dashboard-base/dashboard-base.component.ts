@@ -113,7 +113,8 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
   logout() {
 
     this.appService.loginOut.next(true)
-    if (!(this.route.children[0].component && ['InvestorToolComponent'].includes(this.route.children[0].component.name))) {
+    console.log(this.route.children[0].component?.name)
+    if (!(this.route.children[0].component && ['InvestorToolComponent', 'PortfolioTrack4Component'].includes(this.route.children[0].component.name))) {
       this.appService.autoSavingDone.next(true)
     }
     this.autoSub = this.appService.autoSavingDone.subscribe(res => {

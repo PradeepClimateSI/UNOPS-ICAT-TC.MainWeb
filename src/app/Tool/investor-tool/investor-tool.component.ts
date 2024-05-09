@@ -261,27 +261,9 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
       }
       catch (error) {
       }
-      
-
-      this.appService.autoSavingDone.next(false)
-
-      this.logOutSubs = this.appService.loginOut.subscribe(res => {
-        if (res) {
-          this.confirmationService.confirm({
-            message: 'There are unsaved changes. Do you want to continue?',
-            key: 'autosave',
-            accept: () => {
-
-              this.isLogoutClicked = true
-              this.saveDraft(this.lastUpdatedCategory, this.lastUpdatedCategory.CategoryName, this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', false, false)
-            },
-            reject: () => {
-            }
-          })
-        }
-      })
 
     }
+    this.subscribeLogout()
     this.isFirstLoading0 = false
 
 
@@ -328,6 +310,31 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
       this.lastUpdatedCategory = this.processData[this.activeIndex]
     } else {
       this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
+    }
+  }
+
+  subscribeLogout() {
+    if (this.isEditMode || this.isSavedAssessment) {
+      this.appService.autoSavingDone.next(false)
+
+      this.logOutSubs = this.appService.loginOut.subscribe(res => {
+        if (res) {
+          this.confirmationService.confirm({
+            message: 'There might be unsaved changes. Do you want to continue logging out?',
+            key: 'autosave',
+            accept: () => {
+              this.isLogoutClicked = true
+              if (this.isSavedAssessment) {
+                this.saveDraft(this.lastUpdatedCategory, this.lastUpdatedCategory.CategoryName, this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', false, false)
+              } else {
+                this.appService.autoSavingDone.next(true)
+              }
+            },
+            reject: () => {
+            }
+          })
+        }
+      })
     }
   }
 
@@ -484,6 +491,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
     this.setFrom();
     this.setTo();
     this.draftLoading = true;
+    this.isSavedAssessment = true;
   }
 
   onChangeSDGsAnswer(withAnswers: any, item: any) {
@@ -722,6 +730,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
                   await this.investorToolControllerproxy.saveTotalInvestments(investDto).toPromise();
                   if(!this.isCompleted){
                     this.isSavedAssessment = true;
+                    this.subscribeLogout();
                     this.startAutoSave()
                   }
 

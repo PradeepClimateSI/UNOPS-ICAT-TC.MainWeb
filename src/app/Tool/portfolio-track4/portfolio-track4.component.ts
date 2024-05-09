@@ -15,6 +15,8 @@ import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.compon
 import { ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import { MultiSelect } from 'primeng/multiselect';
 import { OutcomDataDto } from '../investor-tool/investor-tool.component';
+import { AppService } from 'shared/AppService';
+import { Subscription } from 'rxjs';
 
 
 interface CharacteristicWeight {
@@ -164,6 +166,8 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
   mainTabIndex: any = 0
   categoryTabIndex: any
   savedInInterval: boolean;
+  isLogoutClicked: boolean;
+  logOutSubs: Subscription
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -179,6 +183,7 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
     private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
     protected dialogService: DialogService,
     private confirmationService: ConfirmationService,
+    private appService: AppService
 
   ) {
     this.uploadUrl = environment.baseUrlAPI + "/document/upload-file-by-name" ;
@@ -304,6 +309,35 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
       this.lastUpdatedCategory = this.processData[this.activeIndex]
     } else {
       this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
+    }
+
+    this.subscribeLogout()
+    
+  }
+
+  subscribeLogout() {
+    if (this.isEditMode || this.isSavedAssessment) {
+      this.appService.autoSavingDone.next(false)
+
+      this.logOutSubs = this.appService.loginOut.subscribe(res => {
+        console.log("sub", res)
+        if (res) {
+          this.confirmationService.confirm({
+            message: 'There might be unsaved changes. Do you want to continue logging out?',
+            key: 'autosave',
+            accept: () => {
+              this.isLogoutClicked = true
+              if (this.isSavedAssessment) {
+                this.saveDraft(this.lastUpdatedCategory, this.lastUpdatedCategory.CategoryName, this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', false, false)
+              } else {
+                this.appService.autoSavingDone.next(true)
+              }
+            },
+            reject: () => {
+            }
+          })
+        }
+      })
     }
   }
 
@@ -448,6 +482,7 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
     this.setFrom()
     this.setTo()
     this.draftLoading = true
+    this.isSavedAssessment = true
   }
   setFrom() {
     if (this.assessment.from) {
@@ -698,6 +733,7 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
                 if (_res) {
                   if(!this.isCompleted){
                     this.isSavedAssessment = true;
+                    this.subscribeLogout();
                     this.isCompleted ? this.isCreatingAssessment = false : this.isCreatingAssessment = true;
                   }
                  
@@ -963,6 +999,12 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
             closable: true,
           })
         }
+      }, () => {
+        if (this.isLogoutClicked) {
+          this.appService.autoSavingDone.next(true)
+          this.appService.loginOut.next(false)
+        }
+        
       })
   }
 
