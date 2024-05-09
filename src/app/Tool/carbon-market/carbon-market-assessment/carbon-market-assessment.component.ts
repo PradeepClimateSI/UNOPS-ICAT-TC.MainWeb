@@ -9,6 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 import { DialogService } from 'primeng/dynamicdialog';
 import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
 import { MultiSelect } from 'primeng/multiselect';
+import { AppService } from 'shared/AppService';
 @Component({
   selector: 'app-carbon-market-assessment',
   templateUrl: './carbon-market-assessment.component.html',
@@ -95,9 +96,11 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     private route: ActivatedRoute,
     protected dialogService: DialogService,
     private confirmationService: ConfirmationService,
+    private appService: AppService
   ) { }
 
   async ngOnInit(): Promise<void> {
+    this.appService.autoSavingDone.next(true)
     this.tableData =  this.getProductsData();
     this.assessment_types = this.masterDataService.assessment_type
     this.impact_types = this.masterDataService.impact_types

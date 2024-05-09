@@ -113,8 +113,7 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
   logout() {
 
     this.appService.loginOut.next(true)
-    console.log(this.route.children[0].component?.name)
-    if (!(this.route.children[0].component && ['InvestorToolComponent', 'PortfolioTrack4Component'].includes(this.route.children[0].component.name))) {
+    if (!(this.route.children[0].component && ['InvestorToolComponent', 'PortfolioTrack4Component', 'CarbonMarketAssessmentComponent'].includes(this.route.children[0].component.name))) {
       this.appService.autoSavingDone.next(true)
     }
     this.autoSub = this.appService.autoSavingDone.subscribe(res => {
@@ -127,7 +126,6 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
             this.stopSystemStatusTimer();
           },
           reject: () => {
-            console.log(this.autoSub)
             this.autoSub.unsubscribe()
             //@ts-ignore
             this.autoSub = undefined

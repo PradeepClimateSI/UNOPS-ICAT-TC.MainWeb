@@ -6,6 +6,8 @@ import { FieldNames, MasterDataService } from 'app/shared/master-data.service';
 import { environment } from 'environments/environment';
 import * as moment from 'moment';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { Subscription } from 'rxjs';
+import { AppService } from 'shared/AppService';
 import { Assessment, CMAssessmentQuestion, CMAssessmentQuestionControllerServiceProxy, CMDefaultValue, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Category, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, SaveCMResultDto, ScoreDto, UniqueCategory, UniqueCharacteristic } from 'shared/service-proxies/service-proxies';
 
 
@@ -116,6 +118,8 @@ export class CmSectionThreeComponent implements OnInit {
   "– cement production (2A1)”. And in case of an intervention focusing on increasing the share or renewables, the relevant sector is “Fuel combustion activities – energy industries "+
   "(1A1)”."
 startingSituation: any;
+logOutSubs: Subscription;
+isLogoutClicked: boolean = false;
 
 
   constructor(
@@ -129,6 +133,7 @@ startingSituation: any;
     private confirmationService: ConfirmationService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
+    private appService: AppService
   ) {
     this.uploadUrl = environment.baseUrlAPI + "/document/upload-file-by-name" ; 
     this.fileServerURL = environment.baseUrlAPI+'/document/downloadDocumentsFromFileName/uploads';
@@ -182,7 +187,36 @@ startingSituation: any;
     this.relevance = this.masterDataService.relevance;
     await this.getSDGList();
     await this.setInitialState();
-    this.initializeDefaultStatus()
+    this.initializeDefaultStatus();
+    this.subscribeLogout();
+  }
+
+  subscribeLogout() {
+    if (this.isEditMode) {
+      this.appService.autoSavingDone.next(false)
+
+      this.logOutSubs = this.appService.loginOut.subscribe(res => {
+        if (res) {
+          this.confirmationService.confirm({
+            message: 'There might be unsaved changes. Do you want to continue logging out?',
+            key: 'autosave',
+            accept: () => {
+              this.isLogoutClicked = true
+              let draftCategory = ''
+              let maincategory = this.types[this.activeIndexMain].code
+              if (maincategory === 'process') {
+                draftCategory = this.categories[maincategory][this.activeIndex].code
+              } else {
+                draftCategory = this.outcome[this.activeIndex2].type + '_' + this.outcome[this.activeIndex2].method
+              }
+              this.submit(draftCategory, true, draftCategory, maincategory === 'process' ? 'prose' : 'out')
+            },
+            reject: () => {
+            }
+          })
+        }
+      })
+    }
   }
 
   async setInitialState() {
@@ -716,6 +750,8 @@ startingSituation: any;
   }
 
   async submit(draftCategory: string, isDraft: boolean = false, name: string, type: string) {
+    let _type = this.types[this.activeIndexMain]
+
     if (name === 'SCALE_SD' && this.isCompleted && !this.checkSustainSDGIsFilled()) {
       this.confirmationService.confirm({
         message: 'Pls make sure to update "Time frame outcome is sustained section" to update the result.',
@@ -953,7 +989,7 @@ startingSituation: any;
         this.categoriesToSave = []
         this.isDraftSaved = true
         if(!isDraft && !this.isCompleted) this.savedData = true
-        this.onSubmit.emit({result: this.results, isDraft: isDraft,name:name,type:type, expected_ghg_mitigation: this.expected_ghg_mitigation})
+        this.onSubmit.emit({result: this.results, isDraft: isDraft,name:name,type:type, expected_ghg_mitigation: this.expected_ghg_mitigation, isLogoutClicked: this.isLogoutClicked})
       } else {
         this.messageService.add({
           severity: 'error',

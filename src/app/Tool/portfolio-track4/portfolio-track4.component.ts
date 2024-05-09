@@ -320,7 +320,6 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
       this.appService.autoSavingDone.next(false)
 
       this.logOutSubs = this.appService.loginOut.subscribe(res => {
-        console.log("sub", res)
         if (res) {
           this.confirmationService.confirm({
             message: 'There might be unsaved changes. Do you want to continue logging out?',
