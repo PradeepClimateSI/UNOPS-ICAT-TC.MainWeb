@@ -14,6 +14,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { MultiSelect } from 'primeng/multiselect';
 import { AppService } from 'shared/AppService';
 import { Subscription } from 'rxjs';
+import { DashboardBaseComponent } from 'app/dashboard-base/dashboard-base.component';
 
 
 interface CharacteristicWeight {
@@ -47,6 +48,7 @@ interface ChaCategoryTotalEqualsTo1 {
 export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDestroy  {
 
   @ViewChild('multiSelectComponent') multiSelectComponent: MultiSelect;
+  @ViewChild('dashboardBaseComponent') dashboardBaseComponent: DashboardBaseComponent;
   geographicalArea:MasterDataDto = new MasterDataDto()
   assessment: Assessment = new Assessment();
   investorAssessment: InvestorTool = new InvestorTool();
@@ -212,7 +214,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
   }
   
   
-  async ngOnInit(): Promise<void> {
+  async ngOnInit(): Promise<void> { 
     this.phaseTransformExapmle = this.masterDataService.phase_transfrom
     this.levelOfImplementation = this.masterDataService.level_of_implemetation;
     this.geographicalAreasCovered = this.masterDataService.level_of_implemetation;
@@ -259,21 +261,21 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
       }
       catch (error) {
       }
+      
+
       this.appService.autoSavingDone.next(false)
 
-      this.logOutSubs =  this.appService.loginOut.subscribe(res => {
+      this.logOutSubs = this.appService.loginOut.subscribe(res => {
         if (res) {
-          this.isLogoutClicked = true
           this.confirmationService.confirm({
             message: 'There are unsaved changes. Do you want to continue?',
             key: 'autosave',
             accept: () => {
+
+              this.isLogoutClicked = true
               this.saveDraft(this.lastUpdatedCategory, this.lastUpdatedCategory.CategoryName, this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', false, false)
             },
             reject: () => {
-              this.appService.loginOut.next(false)
-              // this.appService.autoSavingDone.next(true)
-              this.logOutSubs.unsubscribe()
             }
           })
         }
@@ -345,11 +347,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
       }
     }
     this.stopAutoSave()
-    if (this.logOutSubs) {
-      this.logOutSubs.unsubscribe()
-      //@ts-ignore
-      this.logOutSubs = undefined
-    }
   }
  
   startAutoSave() {

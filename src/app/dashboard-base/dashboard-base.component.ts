@@ -6,7 +6,8 @@ import { NotificationControllerServiceProxy, UsersControllerServiceProxy,Notific
 import decode from 'jwt-decode';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { map } from 'rxjs/operators';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-base',
@@ -33,6 +34,8 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
   private systemTimer: any;
   isDeploying: boolean=false;
   isAutoSaveDone: boolean = true;
+  autoSub: Subscription
+  isInAutoSaving: boolean = false;
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -43,6 +46,7 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
     private countryProxy: CountryControllerServiceProxy,
     public masterDataService: MasterDataService,
     private systemStatusProxy: SystemStatusControllerServiceProxy,
+    private route: ActivatedRoute
   ) { }
   ngAfterViewInit(): void {
     this.cdr.detectChanges();
@@ -107,9 +111,12 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
   }
 
   logout() {
-    this.appService.loginOut.next(true);
-    let autoSub = this.appService.autoSavingDone.subscribe(res => {
-      console.log("sub in logout", res)
+
+    this.appService.loginOut.next(true)
+    if (!(this.route.children[0].component && ['InvestorToolComponent'].includes(this.route.children[0].component.name))) {
+      this.appService.autoSavingDone.next(true)
+    }
+    this.autoSub = this.appService.autoSavingDone.subscribe(res => {
       if (res) {
         this.confirmationService.confirm({
           message: 'Are you sure you want to logout?',
@@ -119,21 +126,15 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
             this.stopSystemStatusTimer();
           },
           reject: () => {
-            autoSub.unsubscribe()
+            console.log(this.autoSub)
+            this.autoSub.unsubscribe()
+            //@ts-ignore
+            this.autoSub = undefined
             this.appService.loginOut.next(false);
           }
         })
-      } else {
-        autoSub.unsubscribe()
-        this.appService.loginOut.next(false);
       }
-    }, () => {
-      autoSub.unsubscribe()
-      this.appService.loginOut.next(false);
     })
-
-
-
   }
 
   public startSystemStatusTimer(isFirst: boolean=false) {
