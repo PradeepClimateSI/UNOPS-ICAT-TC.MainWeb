@@ -1,6 +1,6 @@
 <div class="container pl-20 pr-20">
   <div class="mb-12">
-    <h4 class="mt-4"> Assessment
+    <h4 class="mt-4">  Assess Interventions: {{masterDataService.getToolName('INVESTOR')}}
       <span class="infor-video" ><i class="pi pi-info-circle" (mouseover)="opAssessment.toggle($event)" (mouseout)="opAssessment.toggle($event)" style="font-size: 1em ;  margin-left: 1em;"></i></span>
       <span (click)="watchVideo()" pTooltip="Click to watch guidance video"  class="infor-video" ><i class="pi pi-video" style=" font-size: 1em ;  margin-left: 1em;"></i></span>
     </h4>
@@ -67,10 +67,16 @@
               </p>
             </div>
             <div class="p-field p-2">
-              <label for="totalInvenstement">Investment Instruments</label>
+              <label for="totalInvenstement">Investment Instruments *</label>
               <p-multiSelect name="investorAssessment.investmentInstruments" #gac="ngModel" placeholder="Select Investment Instrument" [(ngModel)]="selectedInstruments" [options]="investment_instruments" optionLabel="name" [required]="true"
                 [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" appendTo="body" (onChange)="onSelectInstrument($event)">
               </p-multiSelect>
+              <p class="info-message text-danger" *ngIf="
+                                (!selectedInstruments || selectedInstruments?.length == 0) &&
+                                (fData.submitted || totInvestment.touched)
+                              ">
+                This is a mandatory field
+              </p>
             </div>
             <div class="p-field p-2">
               <ng-container *ngFor="let investment of totalInvestments; let idx = index">
@@ -78,6 +84,12 @@
                   <label class="col">{{investment.instrument_name}}</label>
                   <p-inputNumber class="col"  [(ngModel)]="investment.propotion" inputId="expiry"  suffix=" %" (onInput)="onInputChange($event)" #totInvestment="ngModel" [name]="'totInvestment'+idx" [required]="true" [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)"> </p-inputNumber>
                   <!-- <input class="col" suffix=" %" pInputText type="number" (input)="onInputChange($event)" #totInvestment="ngModel" [name]="'totInvestment'+idx" ngModel [(ngModel)]="investment.propotion" required [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" /> -->
+                  <p class="info-message text-danger" *ngIf="
+                                (!investment.propotion) &&
+                                (fData.submitted || totInvestment.touched)
+                              ">
+                This is a mandatory field
+              </p>
                 </div>
               </ng-container>
               <p class="info-message text-danger" *ngIf="isExceeded">
@@ -440,13 +452,7 @@
                                 <label style="font-size: 17px;" *ngIf="question.question.isMain" for="Indicator" class="mt-10 mb-10"><u>{{question.question.name}}</u></label>
                                 <div class="row" *ngIf="!question.question.isMain">
                                   <div class=" ml-25 col-6 mb-20">
-                                    <p class="question">{{question.question.name}}</p>
-                                    <div class="tooltip-container">
-                                      <div *ngIf="question.question.tooltip">
-                                        <span class="tooltip-icon">i</span>
-                                        <div class="tooltip-text" [innerHTML]="addNewline(question.question.tooltip)"></div>
-                                      </div>
-                                    </div>
+                                    <p class="question">{{question.question.name}} <i  [pTooltip]="addNewline(question.question.tooltip)" [escape]="false" tooltipPosition="top" class="pi pi-info-circle" style="font-size: 1rem;"></i></p>
                                   </div>
                                   <div class="col-4 mb-20">
                                     <p-dropdown *ngIf="approach===1" name="cat-{{cat}}-data.charData.question-{{i}}-{{j}}" #type="ngModel" placeholder="Select Answer" [(ngModel)]="question.value" [options]="yesNoAnswer" optionLabel="name" appendTo="body" optionValue="name">

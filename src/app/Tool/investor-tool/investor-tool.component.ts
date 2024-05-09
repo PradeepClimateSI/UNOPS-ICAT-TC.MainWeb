@@ -174,7 +174,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
   minDateTo: Date;
   notFilledCategories: any[] = []
   chapter6_url = chapter6_url
-  selectedInstruments: any[]
+  selectedInstruments: any[] = []
   show_less_message: boolean;
   phaseTransformExapmle: any[] = []
    from_date: Date
