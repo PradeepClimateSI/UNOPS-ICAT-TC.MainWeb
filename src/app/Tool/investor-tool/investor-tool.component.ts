@@ -322,6 +322,11 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
     this.investorToolControllerproxy.findAllSDGs().subscribe((res: any) => {
       this.sdgList = res;
     });
+    if (this.activeIndexMain === 0 ) {
+      this.lastUpdatedCategory = this.processData[this.activeIndex]
+    } else {
+      this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
+    }
   }
 
   ngOnDestroy(): void {
@@ -1353,6 +1358,11 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
       if (this.activeIndex <= 2 && this.activeIndex >= 0 && this.activeIndexMain === 0) {
         this.activeIndex = this.activeIndex + 1;
         this.checkTab1Mandatory(this.activeIndex)
+      }
+      if (this.activeIndexMain === 0 ) {
+        this.lastUpdatedCategory = this.processData[this.activeIndex]
+      } else {
+        this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
       }
     } else {
       this.messageService.add({
