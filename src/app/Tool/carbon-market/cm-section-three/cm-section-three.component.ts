@@ -197,6 +197,7 @@ isLogoutClicked: boolean = false;
 
       this.logOutSubs = this.appService.loginOut.subscribe(res => {
         if (res) {
+          this.appService.autoSavingDone.next(false)
           this.confirmationService.confirm({
             message: 'There might be unsaved changes. Do you want to continue logging out?',
             key: 'autosave',
@@ -212,6 +213,7 @@ isLogoutClicked: boolean = false;
               this.submit(draftCategory, true, draftCategory, maincategory === 'process' ? 'prose' : 'out')
             },
             reject: () => {
+              this.appService.autoSavingDone.next(true)
             }
           })
         }
