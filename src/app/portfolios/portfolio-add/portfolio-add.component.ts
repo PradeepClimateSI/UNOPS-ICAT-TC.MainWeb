@@ -89,6 +89,7 @@ export class PortfolioAddComponent implements OnInit {
 
     this.resultsList = res[0];
     this.totalRecords = res[1];
+    console.log("results",this.resultsList)
    
     if (this.resultsList){
       this.loading = false;
