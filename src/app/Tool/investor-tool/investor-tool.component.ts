@@ -311,6 +311,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
     } else {
       this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
     }
+    this.autoFillInternational()
   }
 
   subscribeLogout() {
@@ -730,6 +731,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
                   await this.investorToolControllerproxy.saveTotalInvestments(investDto).toPromise();
                   if(!this.isCompleted){
                     this.isSavedAssessment = true;
+                    this.autoFillInternational();
                     this.subscribeLogout();
                     this.startAutoSave()
                   }
@@ -1636,6 +1638,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
       }
     });
 
+    this.autoFillInternational();
+
   }
 
 
@@ -1770,35 +1774,42 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
     }
   }
 
-  onSelectScore(category: OutcomDataDto, characteristicCode: string, sdgIndex?:number) {
-    let score = this.masterDataService.outcomeScaleScore.find(s => s.value === 99)
-    if (['SCALE_GHG'].includes(category.categoryCode) && (["MEDIUM_LEVEL", "MICRO_LEVEL"].includes(characteristicCode))){
-      category.data = category.data.map(data => {
-        if (data.characteristics.code === "MACRO_LEVEL") {
-          if (score?.value) {data.score = score.value}
-          data.justification = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.';
-        }
-        return data;
-      })
-    } else if (category.categoryCode === "SCALE_SD" && (["MEDIUM_LEVEL", "MICRO_LEVEL"].includes(characteristicCode))) {
-      if (sdgIndex !== undefined) {
-        this.sdgDataSendArray2.data = this.sdgDataSendArray2[sdgIndex].data.map((data: any) => {
-          if (data.characteristics.code === "MACRO_LEVEL") {
-            if (score?.value) {data.score = score.value}
-            data.justification = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.';
+  autoFillInternational() {
+    if (['NATIONAL', 'SUBNATIONAL'].includes(this.assessment['geographicalAreasCovered'][0].code)) {
+      for (let category of this.outcomeData) {
+        let score = this.masterDataService.outcomeScaleScore.find(s => s.value === 99)
+        if (['SCALE_GHG'].includes(category.categoryCode)){
+          category.data = category.data.map(data => {
+            if (data.characteristics.code === "MACRO_LEVEL") {
+              if (score?.value && !data.score) {data.score = score.value}
+              if (!data.justification) data.justification = 'The geographical area covered by this assessment is ' + (this.assessment['geographicalAreasCovered'][0].code === 'NATIONAL' ? 'national/sectoral': 'sub-national/sub-sectoral.');
+            }
+            return data;
+          })
+        } else if (category.categoryCode === "SCALE_SD") {
+          for (let sdg of this.sdgDataSendArray2) {
+            this.sdgDataSendArray2.data = sdg.data.map((data: any) => {
+              if (data.characteristics.code === "MACRO_LEVEL") {
+                if (score?.value && !data.score) {data.score = score.value}
+                if (!data.justification) data.justification = 'The geographical area covered by this assessment is ' + (this.assessment['geographicalAreasCovered'][0].code === 'NATIONAL' ? 'national/sectoral': 'sub-national/sub-sectoral.');
+              }
+              return data;
+            })
           }
-          return data;
-        })
-      }
-    } else if (category.categoryCode === 'SCALE_ADAPTATION' && ["NATIONAL", "SUBNATIONAL"].includes(characteristicCode)) {
-      category.data = category.data.map(data => {
-        if (data.characteristics.code === "INTERNATIONAL") {
-          if (score?.value) {data.score = score.value}
-          data.justification = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.';
+        } else if (category.categoryCode === 'SCALE_ADAPTATION') {
+          category.data = category.data.map(data => {
+            if (data.characteristics.code === "INTERNATIONAL") {
+              if (score?.value && !data.score) {data.score = score.value}
+              if (!data.justification) data.justification = 'The geographical area covered by this assessment is ' + (this.assessment['geographicalAreasCovered'][0].code === 'NATIONAL' ? 'national/sectoral': 'sub-national/sub-sectoral.');
+            }
+            return data;
+          })
         }
-        return data;
-      })
+      }
     }
+  }
+
+  onSelectScore(category: OutcomDataDto, characteristicCode: string, sdgIndex?:number) {
   }
 
   checkCategory(categoryCode: string, CharateristiCode: string){
