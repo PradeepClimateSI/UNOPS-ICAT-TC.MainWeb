@@ -1292,18 +1292,14 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
             isValid = true
             continue;
           } else {
-            if (['MACRO_LEVEL', 'INTERNATIONAL'].includes(investorAssessment.characteristics.code)) {
-              if (
-                (investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '') &&
-                (investorAssessment.score !== undefined && investorAssessment.score !== null)
-              ) {
-                isValid = true
-              } else {
-                isValid = false
-                break;
-              }
-            } else {
+            if (
+              (investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '') &&
+              (investorAssessment.score !== undefined && investorAssessment.score !== null)
+            ) {
               isValid = true
+            } else {
+              isValid = false
+              break;
             }
           }
         }
@@ -1327,15 +1323,11 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
               break;
             }
           } else {
-            if (data.characteristics.code === 'MACRO_LEVEL') {
-              if ((data.justification !== undefined && data.justification !== null && data.justification !== '') && (data.score !== undefined && data.score !== null)) {
-                isValid = true
-              } else {
-                isValid = false
-                break;
-              }
-            } else {
+            if ((data.justification !== undefined && data.justification !== null && data.justification !== '') && (data.score !== undefined && data.score !== null)) {
               isValid = true
+            } else {
+              isValid = false
+              break;
             }
           }
         }
