@@ -1292,18 +1292,14 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
             isValid = true
             continue;
           } else {
-            if (['MACRO_LEVEL', 'INTERNATIONAL'].includes(investorAssessment.characteristics.code)) {
-              if (
-                (investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '') &&
-                (investorAssessment.score !== undefined && investorAssessment.score !== null)
-              ) {
-                isValid = true
-              } else {
-                isValid = false
-                break;
-              }
-            } else {
+            if (
+              (investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '') &&
+              (investorAssessment.score !== undefined && investorAssessment.score !== null)
+            ) {
               isValid = true
+            } else {
+              isValid = false
+              break;
             }
           }
         }
@@ -1327,15 +1323,11 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
               break;
             }
           } else {
-            if (data.characteristics.code === 'MACRO_LEVEL') {
-              if ((data.justification !== undefined && data.justification !== null && data.justification !== '') && (data.score !== undefined && data.score !== null)) {
-                isValid = true
-              } else {
-                isValid = false
-                break;
-              }
-            } else {
+            if ((data.justification !== undefined && data.justification !== null && data.justification !== '') && (data.score !== undefined && data.score !== null)) {
               isValid = true
+            } else {
+              isValid = false
+              break;
             }
           }
         }
@@ -1723,7 +1715,7 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
   }
 
   isMandatoryActive(category_code: string, characteristic_code: string) {
-    return ['MACRO_LEVEL', 'INTERNATIONAL','LONG_TERM','MEDIUM_TERM','SHORT_TERM'].includes(characteristic_code)  || category_code === 'SUSTAINED_ADAPTATION';
+    return ['MACRO_LEVEL', 'MEDIUM_LEVEL', 'MICRO_LEVEL', 'INTERNATIONAL', 'NATIONAL', 'SUBNATIONAL', 'LONG_TERM','MEDIUM_TERM','SHORT_TERM'].includes(characteristic_code)  || category_code === 'SUSTAINED_ADAPTATION';
   }
 
   checkCategory(categoryCode: string, CharateristiCode: string){
