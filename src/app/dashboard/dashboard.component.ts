@@ -275,6 +275,7 @@ export class DashboardComponent implements OnInit {
   
   viewPieChart() {
     this.investorProxy.getDashboardAllDataGraph().subscribe((res:any)=>{
+      console.log(res)
      let  counts= res[0];
       let percentages = res[1];
       this.pieChart = new Chart('pieChart', {
