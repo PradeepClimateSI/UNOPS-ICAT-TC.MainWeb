@@ -18,7 +18,7 @@ export class AssessmentComponent implements OnInit {
   resultsList: any = []
   assessmentData: any = []
 
-  results: any = []
+  results: AssessmentResultDataDto[] = []
   data2: any
   loading: boolean;
   totalRecords: number
@@ -89,9 +89,25 @@ export class AssessmentComponent implements OnInit {
     this.rows = event.rows == undefined ? 10 : event.rows;
 
     let skip = pageNumber * this.rows;
-    let res = await this.methassess.getResultPageData(skip, this.rows, this.filterText, '', '').toPromise();
+    let res = await this.methassess.getResultPageData(skip, this.rows, this.filterText, '', '', event.sortField ? event.sortField : '', event.sortOrder === 1 ? 'ASC' : 'DESC').toPromise();
 
-    this.results = res[0];
+    this.results = []
+    for await (let r of res[0]) {
+      let _res = new AssessmentResultDataDto();
+      _res.intervention = r.assessment.climateAction.policyName
+      _res.assessment_type = r.assessment.assessmentType
+      _res.tool = this.masterDataService.getToolName(r.assessment.tool)
+      _res.assessment_tool = r.assessment.tool
+      _res.created_date = r.assessment.createdOn
+      _res.assessment_id = r.assessment.id
+      _res.averageProcess = r.averageProcess
+      _res.averageOutcome = r.averageOutcome
+      _res.assessment_method = r.assessment.assessment_method
+      _res.assessment = r.assessment
+      _res.user_id = r.assessment.user.id
+      this.results.push(_res)
+    }
+
     this.totalRecords = res[1];
    
     if (this.results){
@@ -119,7 +135,7 @@ export class AssessmentComponent implements OnInit {
         relativeTo: this.activatedRoute
       });
     } else {
-      this.router.navigate(['/assessment-result', assessId], {
+      this.router.navigate(['/app/assessment-result', assessId], {
         queryParams: {
           assessmentId: assessId,
           averageProcess: averageProcess,
@@ -132,6 +148,7 @@ export class AssessmentComponent implements OnInit {
   async deleteAssessment(id: number, tool: string) {
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete the assessment?',
+      key: 'delete',
       accept: () => {
         this.assessmentServiceControllerProxy.deleteAssessment(id, tool).subscribe(res => {
           if (res) {
@@ -177,6 +194,20 @@ export class AssessmentComponent implements OnInit {
   }
 
 
+}
+
+export class AssessmentResultDataDto {
+  assessment_id: number
+  averageProcess: number
+  averageOutcome: number
+  intervention: string
+  assessment_type: string
+  tool: string
+  assessment_tool: string
+  created_date: Date
+  assessment_method: string
+  assessment: Assessment
+  user_id: number
 }
 
 

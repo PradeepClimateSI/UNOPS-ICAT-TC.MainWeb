@@ -85,7 +85,7 @@ export class PortfolioAddComponent implements OnInit {
     this.rows = event.rows == undefined ? 10 : event.rows;
 
     let skip = pageNumber * this.rows;
-    let res = await this.methassess.getResultPageData(skip, this.rows, this.filterText, this.searchSectors, this.type).toPromise()
+    let res = await this.methassess.getResultPageData(skip, this.rows, this.filterText, this.searchSectors, this.type, '', '').toPromise()
 
     this.resultsList = res[0];
     this.totalRecords = res[1];

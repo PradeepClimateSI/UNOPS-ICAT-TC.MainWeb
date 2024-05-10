@@ -11836,7 +11836,7 @@ export class MethodologyAssessmentControllerServiceProxy {
         return _observableOf(null as any);
     }
 
-    getResultPageData(skip: number, pageSize: number, filterText: string, sectorList: string, assessmentType: string): Observable<any[]> {
+    getResultPageData(skip: number, pageSize: number, filterText: string, sectorList: string, assessmentType: string, sortField: string, sortOrder: string): Observable<any[]> {
         let url_ = this.baseUrl + "/methodology-assessment/results/{skip}/{pageSize}/{filterText}?";
         if (skip === undefined || skip === null)
             throw new Error("The parameter 'skip' must be defined.");
@@ -11856,6 +11856,14 @@ export class MethodologyAssessmentControllerServiceProxy {
             throw new Error("The parameter 'assessmentType' must be defined and cannot be null.");
         else
             url_ += "assessmentType=" + encodeURIComponent("" + assessmentType) + "&";
+        if (sortField === undefined || sortField === null)
+            throw new Error("The parameter 'sortField' must be defined and cannot be null.");
+        else
+            url_ += "sortField=" + encodeURIComponent("" + sortField) + "&";
+        if (sortOrder === undefined || sortOrder === null)
+            throw new Error("The parameter 'sortOrder' must be defined and cannot be null.");
+        else
+            url_ += "sortOrder=" + encodeURIComponent("" + sortOrder) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -21320,16 +21328,7 @@ export class CMQuestionControllerServiceProxy {
         return _observableOf(null as any);
     }
 }
-export enum DocumentsDocumentOwner {
-        Project = <any>"Project",
-        Country = <any>"Country",
-        CountryNC = <any>"CountryNC",
-        CountryBUR = <any>"CountryBUR",
-        CountryBTR = <any>"CountryBTR",
-        CountryNDC = <any>"CountryNDC",
-        CountryGHG = <any>"CountryGHG",
-    }
-    
+
 @Injectable()
 export class CMAssessmentQuestionControllerServiceProxy {
     private http: HttpClient;
@@ -21340,6 +21339,7 @@ export class CMAssessmentQuestionControllerServiceProxy {
         this.http = http;
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
+
 
     saveResult(body: SaveCMResultDto): Observable<any> {
         let url_ = this.baseUrl + "/cm-assessment-question/save-result";
@@ -39931,6 +39931,16 @@ export interface INotification {
 
     [key: string]: any;
 }
+export enum DocumentsDocumentOwner {
+        Project = <any>"Project",
+        Country = <any>"Country",
+        CountryNC = <any>"CountryNC",
+        CountryBUR = <any>"CountryBUR",
+        CountryBTR = <any>"CountryBTR",
+        CountryNDC = <any>"CountryNDC",
+        CountryGHG = <any>"CountryGHG",
+    }
+    
 
 export enum CountryStatus {
     Active = <any>"Active",

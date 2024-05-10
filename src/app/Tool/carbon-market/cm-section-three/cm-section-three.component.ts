@@ -192,7 +192,7 @@ isLogoutClicked: boolean = false;
   }
 
   subscribeLogout() {
-    if (this.isEditMode) {
+    if (this.isEditMode && !this.isCompleted) {
       this.appService.autoSavingDone.next(false)
 
       this.logOutSubs = this.appService.loginOut.subscribe(res => {

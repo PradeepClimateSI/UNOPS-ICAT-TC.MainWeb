@@ -314,7 +314,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
   }
 
   subscribeLogout() {
-    if (this.isEditMode || this.isSavedAssessment) {
+    if ((this.isEditMode || this.isSavedAssessment) && !this.isCompleted) {
       this.appService.autoSavingDone.next(false)
 
       this.logOutSubs = this.appService.loginOut.subscribe(res => {
