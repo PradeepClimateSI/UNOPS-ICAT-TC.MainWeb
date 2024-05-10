@@ -224,7 +224,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
     this.adaptation_info = this.masterDataService.other_invest_adaptation_info
     this.ghg_score_info = this.masterDataService.other_invest_ghg_score_info
 
-    this.relevance_tooltip = "Does the process characteristic affects/impacts any of the identified barriers? does the intervention affects/impacts the process characteristic?"
+    this.relevance_tooltip = "Does the process characteristic affects/impacts any of the identified barriers? Does the intervention affect or is affected by this process characteristic?"
 
     this.activatedRoute.queryParams.subscribe(async params => {
       params['isEdit'] == 'true' ? (this.isEditMode = true) : false;
@@ -433,7 +433,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
       if (d.CategoryName === 'GHG Scale of the Outcome') {
         d.data = d.data.map(_d => {
           if (_d.characteristics.code === 'MICRO_LEVEL') {
-            _d['abatement'] = _d.expected_ghg_mitigation * Math.pow(10, 3) / this.investorAssessment.total_investment
+            _d['abatement'] = _d.expected_ghg_mitigation  / this.investorAssessment.total_investment
           }
           return _d
         })
@@ -1003,6 +1003,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
       this.checkTab2Mandatory(event.index)
       this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
     }
+    console.log("outcome data",this.outcomeData)
   }
 
   checkTab1Mandatory(idx: number) {

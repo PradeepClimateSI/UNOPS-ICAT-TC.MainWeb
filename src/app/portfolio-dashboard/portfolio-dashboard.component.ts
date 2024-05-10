@@ -389,7 +389,7 @@ this.selectPortfolio();
 
   viewPortfolioSDGsPieChart(){
     this.sdgDetailsList.sort((a: any, b: any) => b.count - a.count)
-    let labels = this.sdgDetailsList.map((item:any) => 'SDG ' + item.number + ' - ' + item.sdg);
+    let labels = this.sdgDetailsList.map((item:any) => item.number + ' - ' + item.sdg);
     let counts:number[] = this.sdgDetailsList.map((item:any) => item.count);
     this.sdgDetailsList.forEach((sd: any) => {
       let color = this.sdgColorMap.find((o:any) => o.sdgNumber === sd.number)

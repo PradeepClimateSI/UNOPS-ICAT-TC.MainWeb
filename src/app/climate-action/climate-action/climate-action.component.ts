@@ -34,7 +34,8 @@ import {
   BarrierSelected,
   AllPolicySectors,
   ProjectApprovalStatusControllerServiceProxy,
-  ProjectStatusControllerServiceProxy
+  ProjectStatusControllerServiceProxy,
+  AddPolicySector
 
 } from 'shared/service-proxies/service-proxies';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -45,6 +46,8 @@ import html2canvas from 'html2canvas';
 import decode from 'jwt-decode';
 import { FieldNames, MasterDataService } from 'app/shared/master-data.service';
 import { GlobalArrayService } from 'app/shared/global-documents/global-documents.service';
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
+import { DialogService } from 'primeng/dynamicdialog';
 
 
 @Component({
@@ -187,6 +190,7 @@ export class ClimateActionComponent implements OnInit  {
     private userproxy:UsersControllerServiceProxy,
     private projectApprovalStatusControllerServiceProxy: ProjectApprovalStatusControllerServiceProxy,
     private projectStatusControllerServiceProxy: ProjectStatusControllerServiceProxy,
+    protected dialogService: DialogService,
     
   ) 
   { }
@@ -841,7 +845,7 @@ export class ClimateActionComponent implements OnInit  {
   back() {
     this.location.back();
   }
-  edit(label: string){
+  async edit(label: string){
     if (label === 'Edit') {
       this.editMode =true;
     }
@@ -851,6 +855,21 @@ export class ClimateActionComponent implements OnInit  {
       this.project.levelofImplemenation = this.project.levelofImplemenation;
       this.project.dateOfCompletion= this.dateOfCompletion
       this.project.dateOfImplementation =this.dateOfImplementation;
+      
+      let obj = new AddPolicySector
+      obj.id =this.project.id;
+      obj.sector=this.finalSectors;
+     await  this.projectProxy.deletePolicySector(this.project.id).subscribe(async (res)=>{
+      await this.projectProxy.addPolicySector(obj).subscribe((res)=>{});
+     });
+      
+     setTimeout(() => {
+      this.sectornames=[]
+      for(let x of this.finalSectors){
+        this.sectornames.push(x.name)
+      }
+      this.sectorsJoined = ''
+      this.sectorsJoined = this.sectornames.join(', ')
 
       this.projectProxy.updateOneClimateAction(this.project)
       .subscribe(
@@ -871,6 +890,9 @@ export class ClimateActionComponent implements OnInit  {
           });
         }
       )
+    }, 2000);
+
+      
 
     }
   }
@@ -1197,5 +1219,21 @@ toDownload() {
     }
     
 
+  }
+
+  watchVideo() {
+    let ref = this.dialogService.open(GuidanceVideoComponent, {
+      header: 'Guidance Video',
+      width: '60%',
+      contentStyle: { "overflow": "auto" },
+      baseZIndex: 10000,
+      data: {
+        sourceName: 'Interventions',
+      },
+    });
+
+    ref.onClose.subscribe(() => {
+
+    })
   }
 }

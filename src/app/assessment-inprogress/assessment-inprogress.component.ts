@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
 import { MasterDataService } from 'app/shared/master-data.service';
-import { LazyLoadEvent } from 'primeng/api';
+import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
-import { Assessment, AssessmentControllerServiceProxy } from 'shared/service-proxies/service-proxies';
+import { AppService } from 'shared/AppService';
+import { Assessment, AssessmentControllerServiceProxy, User, UsersControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-assessment-inprogress',
@@ -27,17 +28,26 @@ export class AssessmentInprogressComponent implements OnInit {
   };
 
   assessments: Assessment[];
-
+  loggedUser: User
 
   constructor(
     private router: Router,
     private assessmentProxy: AssessmentControllerServiceProxy,
     public masterDataService: MasterDataService,
     protected dialogService: DialogService,
+    private appService: AppService,
+    private usersControllerServiceProxy: UsersControllerServiceProxy,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService,
   ) { }
 
 
-  ngOnInit(): void { 
+  async ngOnInit(): Promise<void> { 
+    let loginProfileId = this.appService.getProfileId()
+    if (loginProfileId) {
+      let user = await this.usersControllerServiceProxy.getUserLoginProfile(loginProfileId).toPromise()
+      if (user) this.loggedUser = user
+    }
     let event: any = {};
     event.rows = this.rows;
     event.first = 0;
@@ -110,6 +120,35 @@ export class AssessmentInprogressComponent implements OnInit {
     }
     
 
+  }
+
+  async deleteAssessment(id: number, tool: string) {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete the assessment?',
+      accept: () => {
+        this.assessmentProxy.deleteAssessment(id, tool).subscribe(res => {
+          if (res) {
+            setTimeout(() => {
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Assessment deleted successfully',
+                closable: true,
+              })
+            }, 1000);
+            
+            this.loadgridData({})
+          } else {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Failed to delete assessment',
+              closable: true,
+            })
+          }
+        })
+      }
+    })
   }
 
 }

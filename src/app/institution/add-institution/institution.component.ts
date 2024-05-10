@@ -4,6 +4,8 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { Country, Institution, InstitutionCategory, InstitutionCategoryControllerServiceProxy, InstitutionControllerServiceProxy, InstitutionType, InstitutionTypeControllerServiceProxy, Sector, SectorControllerServiceProxy, ServiceProxy, User, UserType } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { NgForm } from '@angular/forms';
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-institution',
@@ -66,6 +68,7 @@ export class InstitutionComponent implements OnInit {
     private router: Router,
     private messageService: MessageService,
     private sectorProxy: SectorControllerServiceProxy,
+    protected dialogService: DialogService,
     private cdr: ChangeDetectorRef) { }
 
     ngAfterViewInit(): void {
@@ -419,6 +422,22 @@ edit(institution: Institution) {
   this.router.navigate(['edit-institution'], {
     queryParams: { id: institution.id }
   });
+}
+
+watchVideo(){
+  let ref = this.dialogService.open(GuidanceVideoComponent, {
+    header: 'Guidance Video',
+    width: '60%',
+    contentStyle: {"overflow": "auto"},
+    baseZIndex: 10000,
+    data: {
+      sourceName: 'institution',
+    },
+  });
+
+  ref.onClose.subscribe(() => {
+    
+  })
 }
 
 }
