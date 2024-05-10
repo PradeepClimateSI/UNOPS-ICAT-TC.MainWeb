@@ -57,6 +57,8 @@ export enum ProfileStatus {
 export class AppService {
 
   loadingSub: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  loginOut: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  autoSavingDone: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   loadingMap: Map<string, boolean> = new Map<string, boolean>();
   

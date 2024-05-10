@@ -5,6 +5,8 @@ import { MessageService, ConfirmationService } from 'primeng/api';
 import { UsersControllerServiceProxy, ServiceProxy, User, Institution, InstitutionControllerServiceProxy, UserTypeControllerServiceProxy, Country, InstitutionType, InstitutionCategory, UserType, CountryControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import { LoginProfile, UserType as AuthUserType, LoginProfileControllerServiceProxy, ServiceProxy as authServiceProxy } from 'shared/service-proxies/auth-service-proxies';
 import decode from 'jwt-decode';
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-user-form',
@@ -76,6 +78,7 @@ export class UserFormComponent implements OnInit, AfterViewInit {
     private countryProxy: CountryControllerServiceProxy,
     private ref: ChangeDetectorRef,
     private logProxy : LoginProfileControllerServiceProxy,
+    protected dialogService: DialogService,
   ) { }
   ngAfterViewInit(): void {
     this.ref.detectChanges();
@@ -382,6 +385,21 @@ export class UserFormComponent implements OnInit, AfterViewInit {
 
     this.selectedUserTypesFordrop = ty;
 
+  }
+  watchVideo(){
+    let ref = this.dialogService.open(GuidanceVideoComponent, {
+      header: 'Guidance Video',
+      width: '60%',
+      contentStyle: {"overflow": "auto"},
+      baseZIndex: 10000,
+      data: {
+        sourceName: 'User',
+      },
+    });
+
+    ref.onClose.subscribe(() => {
+      
+    })
   }
 
 }

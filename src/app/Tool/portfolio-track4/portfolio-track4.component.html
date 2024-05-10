@@ -1,7 +1,7 @@
 <div class="container pl-20 pr-20">
   <div>
     <div class="mb-12">
-      <h4 class="mt-4">Assessment
+      <h4 class="mt-4">Assess Interventions: {{masterDataService.getToolName('PORTFOLIO')}}
         <span class="infor-video" ><i class="pi pi-info-circle" (mouseover)="opAssessment.toggle($event)" (mouseout)="opAssessment.toggle($event)" style="font-size: 1em ;  margin-left: 1em;"></i></span>
         <span (click)="watchVideo()" pTooltip="Click to watch guidance video"  class="infor-video" ><i class="pi pi-video" style=" font-size: 1em ;  margin-left: 1em;"></i></span>
       </h4>
@@ -63,7 +63,7 @@
             <p class="info-message text-danger" *ngIf="!opportunities.value && (fData.submitted || opportunities.touched)">This is a mandatory field</p>
           </div>
           <div class="p-field p-2">
-            <label for="date1">Assessment Period* <i class="pi pi-info-circle" style="font-size: 1rem" tooltipPosition="bottom" [pTooltip]="assessment_period_info"></i></label>
+            <label for="date1">Assessment Period&nbsp;* <i class="pi pi-info-circle" style="font-size: 1rem" tooltipPosition="bottom" [pTooltip]="assessment_period_info"></i></label>
             <div class="p-inputgroup">
               <span class="p-inputgroup-addon">
                 <i class="pi pi-calendar"></i>
@@ -404,15 +404,10 @@
                                   </div>
                                 </div>
                               </div>
+                              <br>
                               <div *ngIf="data.relavance !=0">
                                 <div class="row p-2">
-                                  <label style="font-size: 17px;" for="question">{{data.characteristics.portfolioQuestion}} </label>
-                                  <div class="tooltip-container">
-                                    <div *ngIf="data.characteristics.portfolioHint">
-                                      <span class="tooltip-icon">i</span>
-                                      <div class="tooltip-text" [innerHTML]="addNewline(data.characteristics.portfolioHint)"></div>
-                                    </div>
-                                  </div>
+                                  <label style="font-size: 17px;" for="question">{{data.characteristics.portfolioQuestion}} <i  [pTooltip]="addNewline(data.characteristics.portfolioHint)" [escape]="false" tooltipPosition="top" class="pi pi-info-circle" style="font-size: 1rem;"></i> </label>
                                 </div>
                                 <div class="row p-2">
                                   <div class="col-12 col-lg-6">
@@ -543,7 +538,7 @@
                                         <label for="justification">Justification<span *ngIf="isMandatoryActive(data.category.code, data.characteristics.code)">*</span> </label>
                                         <textarea rows="5" type="text" pInputText [(ngModel)]="data.justification" #just2="ngModel" placeholder="Enter Justification" name="{{cat}}_{{i}}_justification" [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (ngModelChange)="adaptationJustificationChange(data)" ></textarea>
                                         <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
-                                        <p class="info-message text-danger" *ngIf="checkCategory(category.categoryCode, data.characteristics.code ) && !data.justification  && ((fData1.submitted || just2.touched)|| (category.isValidated==false && !data.justification)|| (tabIsValid[cat] !== undefined && !tabIsValid[cat])) ">
+                                        <p class="info-message text-danger" *ngIf=" (!data.justification || data.justification == null)  && ((fData1.submitted || just2.touched)|| (category.isValidated==false && !data.justification)|| (tabIsValid[cat] !== undefined && !tabIsValid[cat])) ">
                                           This is a mandatory field </p>
                                       </div>
                                     </div>
@@ -563,7 +558,7 @@
                                   <div class="row p-2" *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' && data.characteristics.name === 'Subnational/regional/municipal or sub sectoral level' ">
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
-                                        <label for="expected_ghg_mitigation">Expected average GHG reductions or removals (mitigation outcomes) (tCO₂e/year)</label>
+                                        <label for="expected_ghg_mitigation">Expected average GHG reductions or removals (mitigation outcomes) (tCO₂e)</label>
                                         <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation" name="expected_ghg_mitigation" placeholder="Expected GHG reductions over intervention lifetime" inputId="locale-us" mode="decimal" locale="en-US" [minFractionDigits]="2">
                                         </p-inputNumber>
                                       </div>
@@ -973,7 +968,7 @@
 </p-overlayPanel>
 <p-overlayPanel #opRelevance [style]="{'width': '800px'}">
   <div class="p-grid p-fluid col-md-12 col-sm-12 text-title">
-      <label>Does the process characteristic affects/impacts any of the identified barriers? does the intervention affects/impacts the process characteristic?</label>
+      <label>Does the process characteristic affects/impacts any of the identified barriers? Does the intervention affect or is affected by this process characteristic?</label>
       <br><br><br>
       <p-table [value]="[{}]">
           <ng-template pTemplate="header">
@@ -985,15 +980,15 @@
           <ng-template pTemplate="body" let-row>
               <tr>
                   <td>Relevant</td>
-                  <td>Reason to believe that a characteristic is important for transformational change in the context of the policy</td>
+                  <td>Reason to believe that a characteristic is important for transformational change in the context of the intervention</td>
               </tr>
               <tr>
                   <td>Possibly relevant</td>
-                  <td>Not clear whether the characteristic is important for transformational change in the context of the policy. Where the relevance is unknown or cannot be determined, the characteristic should be monitored over time.</td>
+                  <td>Not clear whether the characteristic is important for transformational change in the context of the intervention. Where the relevance is unknown or cannot be determined, the characteristic should be monitored over time.</td>
               </tr>
               <tr>
                   <td>Not relevant</td>
-                  <td>Reason to believe that the characteristic is not important for transformational change in the context of the policy.</td>
+                  <td>Reason to believe that the characteristic is not important for transformational change in the context of the intervention.</td>
               </tr>
           </ng-template>
       </p-table>
@@ -1005,3 +1000,4 @@
     Please note that your inputs will be automatically saved upon entering the data.
   </p>
 </p-dialog>
+<p-confirmDialog key="autosave" header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

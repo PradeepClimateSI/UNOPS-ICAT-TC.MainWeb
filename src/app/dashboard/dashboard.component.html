@@ -1,6 +1,8 @@
 <div>
     <div class="dahsboard-header" >
-        <h1>Transformational Change Toolkit</h1>
+        <h1>Transformational Change Toolkit 
+          <span (click)="watchVideo()" pTooltip="Click to watch guidance video"  class="infor-video" ><i class="pi pi-video" style=" font-size: 1em ;  margin-left: 0.5em;"></i></span>
+        </h1>
     </div>
     <div class="dashboard-wrapper container pl-20 pr-20">
 
@@ -9,7 +11,7 @@
           <div class="row">
             <div class="col-md-7 ">
               <h3>Tool used
-                <span (click)="watchVideo()" pTooltip="Click to watch guidance video"  class="infor-video" ><i class="pi pi-video" style=" font-size: 1em ;  margin-left: 1em;"></i></span>
+               
               </h3><br>
               <div *ngIf="typeofInterventionCount" [hidden]="typeofInterventionCount.length==0">
                 <p-chart type="bar" [data]="data" [options]="options"></p-chart>
@@ -27,7 +29,8 @@
 
             <div class="col-md-5 ">
               <h3 class="text-center ">Assessment summary 
-                <i class="pi pi-info-circle mt-1 ml-3" style="size:large " tooltipPosition="bottom" pTooltip="The colors correspond to the assessment results as illustrated by the matrix below. Green interventions are likely to contribute to transformational change and have positive and sustained impacts."></i>
+                <i class="pi pi-info-circle mt-1 ml-3" style="size:large " tooltipPosition="bottom" pTooltip="The colors correspond to the assessment results as illustrated by the matrix below. Green interventions are likely to contribute to transformational change and have positive and sustained impacts.
+                Red interventions have mostly negative impacts and/or are unlikely to facilitate a fundamental transformation."></i>
               </h3>
               <br>
               <div class="row text-center ">
