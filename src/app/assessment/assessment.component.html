@@ -13,7 +13,7 @@
     </ng-container>
     <div *ngIf="load">
       <p-table #dt2 [lazy]="true" (onLazyLoad)="loadData($event)" paginatorDropdownAppendTo="body" [rows]="rows" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]" [totalRecords]="totalRecords"
-        [value]="results" [tableStyle]="{'min-width': '50rem'}" [paginator]="true" [sortField]="'id'" [sortOrder]="-1" [globalFilterFields]="['meth', 'method', 'approach', 'assessmentType', 'tool']">
+        [value]="results" [tableStyle]="{'min-width': '50rem'}" [paginator]="true"  [globalFilterFields]="['intervention', 'assessment_type', 'tool', 'created_date']">
         <ng-template pTemplate="caption">
           <div class="d-flex justify-content-end">
             <span class="p-input-icon-left ml-auto">
@@ -24,24 +24,24 @@
         </ng-template>
         <ng-template pTemplate="header">
           <tr style="height:4rem;">
-            <th style="width:30%" pSortableColumn="method">Intervention <p-sortIcon field="meth"></p-sortIcon></th>
-            <th style="width:10%" pSortableColumn="assessmentType">Assessment Type <p-sortIcon field="assessmentType"></p-sortIcon></th>
+            <th style="width:30%" pSortableColumn="intervention">Intervention <p-sortIcon field="intervention"></p-sortIcon></th>
+            <th style="width:10%" pSortableColumn="assessment_type">Assessment Type <p-sortIcon field="assessment_type"></p-sortIcon></th>
             <th style="width:20%" pSortableColumn="tool">Tool <p-sortIcon field="tool"></p-sortIcon></th>
-            <th style="width:15%" pSortableColumn="tool">Created Date <p-sortIcon field="tool"></p-sortIcon></th>
+            <th style="width:15%" pSortableColumn="created_date">Created Date <p-sortIcon field="created_date"></p-sortIcon></th>
             <th style="width:25%">Action</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-results>
           <tr>
-            <td>{{results.assessment.climateAction.policyName}}</td>
-            <td>{{results.assessment.assessmentType}}</td>
-            <td>{{masterDataService.getToolName(results.assessment.tool)}}</td>
-            <td>{{results.assessment.createdOn | date: 'dd/MM/YYYY'}}</td>
+            <td>{{results.intervention}}</td>
+            <td>{{results.assessment_type}}</td>
+            <td>{{results.tool}}</td>
+            <td>{{results.created_date | date: 'dd/MM/YYYY'}}</td>
             <td>
               <div class="row">
-                <button pButton pRipple class="col btn btn-primary btn-block text-uppercase" type='submit' (click)="viewResult(results.assessment.id, results.averageProcess, results.averageOutcome, results.assessment.tool,results.assessment.assessment_method )"> View</button>
+                <button pButton pRipple class="col btn btn-primary btn-block text-uppercase" type='submit' (click)="viewResult(results.assessment_id, results.averageProcess, results.averageOutcome, results.assessment_tool,results.assessment_method )"> View</button>
                 <button pButton pRipple class="col ml-10 btn btn-primary btn-block text-uppercase" type='submit' (click)="editAssessment(results.assessment)"> Edit</button>
-                <button *ngIf="loggedUser && results.assessment.user.id === loggedUser.id" pButton pRipple class="col ml-10 btn btn-delete btn-block text-uppercase" type='submit' (click)="deleteAssessment(results.assessment.id,results.assessment.tool)"> Delete</button>
+                <button *ngIf="loggedUser && results.user_id === loggedUser.id" pButton pRipple class="col ml-10 btn btn-delete btn-block text-uppercase" type='submit' (click)="deleteAssessment(results.assessment_id,results.assessment_tool)"> Delete</button>
               </div>
             </td>
           </tr>
@@ -50,4 +50,5 @@
     </div>
   </div>
 </div>
-<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<p-confirmDialog key="assessment" header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<p-confirmDialog key="delete" header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

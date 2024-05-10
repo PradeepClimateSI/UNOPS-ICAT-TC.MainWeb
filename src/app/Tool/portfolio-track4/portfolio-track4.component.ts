@@ -15,6 +15,8 @@ import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.compon
 import { ProjectControllerServiceProxy } from 'shared/service-proxies/service-proxies';
 import { MultiSelect } from 'primeng/multiselect';
 import { OutcomDataDto } from '../investor-tool/investor-tool.component';
+import { AppService } from 'shared/AppService';
+import { Subscription } from 'rxjs';
 
 
 interface CharacteristicWeight {
@@ -164,6 +166,8 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
   mainTabIndex: any = 0
   categoryTabIndex: any
   savedInInterval: boolean;
+  isLogoutClicked: boolean;
+  logOutSubs: Subscription
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -179,6 +183,7 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
     private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
     protected dialogService: DialogService,
     private confirmationService: ConfirmationService,
+    private appService: AppService
 
   ) {
     this.uploadUrl = environment.baseUrlAPI + "/document/upload-file-by-name" ;
@@ -304,6 +309,34 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
       this.lastUpdatedCategory = this.processData[this.activeIndex]
     } else {
       this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
+    }
+
+    this.subscribeLogout()
+    this.autoFillInternational();
+  }
+
+  subscribeLogout() {
+    if ((this.isEditMode || this.isSavedAssessment) && !this.isCompleted) {
+      this.appService.autoSavingDone.next(false)
+
+      this.logOutSubs = this.appService.loginOut.subscribe(res => {
+        if (res) {
+          this.confirmationService.confirm({
+            message: 'There might be unsaved changes. Do you want to continue logging out?',
+            key: 'autosave',
+            accept: () => {
+              this.isLogoutClicked = true
+              if (this.isSavedAssessment) {
+                this.saveDraft(this.lastUpdatedCategory, this.lastUpdatedCategory.CategoryName, this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', false, false)
+              } else {
+                this.appService.autoSavingDone.next(true)
+              }
+            },
+            reject: () => {
+            }
+          })
+        }
+      })
     }
   }
 
@@ -448,6 +481,7 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
     this.setFrom()
     this.setTo()
     this.draftLoading = true
+    this.isSavedAssessment = true
   }
   setFrom() {
     if (this.assessment.from) {
@@ -518,7 +552,7 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
         return { ...selectedSdg, answer: "" };
       }
     });
-
+    this.autoFillInternational();
   }
 
   async getPolicies() {
@@ -698,6 +732,8 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
                 if (_res) {
                   if(!this.isCompleted){
                     this.isSavedAssessment = true;
+                    this.subscribeLogout();
+                    this.autoFillInternational();
                     this.isCompleted ? this.isCreatingAssessment = false : this.isCreatingAssessment = true;
                   }
                  
@@ -963,6 +999,12 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
             closable: true,
           })
         }
+      }, () => {
+        if (this.isLogoutClicked) {
+          this.appService.autoSavingDone.next(true)
+          this.appService.loginOut.next(false)
+        }
+        
       })
   }
 
@@ -1250,18 +1292,14 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
             isValid = true
             continue;
           } else {
-            if (['MACRO_LEVEL', 'INTERNATIONAL'].includes(investorAssessment.characteristics.code)) {
-              if (
-                (investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '') &&
-                (investorAssessment.score !== undefined && investorAssessment.score !== null)
-              ) {
-                isValid = true
-              } else {
-                isValid = false
-                break;
-              }
-            } else {
+            if (
+              (investorAssessment.justification !== undefined && investorAssessment.justification !== null && investorAssessment.justification !== '') &&
+              (investorAssessment.score !== undefined && investorAssessment.score !== null)
+            ) {
               isValid = true
+            } else {
+              isValid = false
+              break;
             }
           }
         }
@@ -1285,15 +1323,11 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
               break;
             }
           } else {
-            if (data.characteristics.code === 'MACRO_LEVEL') {
-              if ((data.justification !== undefined && data.justification !== null && data.justification !== '') && (data.score !== undefined && data.score !== null)) {
-                isValid = true
-              } else {
-                isValid = false
-                break;
-              }
-            } else {
+            if ((data.justification !== undefined && data.justification !== null && data.justification !== '') && (data.score !== undefined && data.score !== null)) {
               isValid = true
+            } else {
+              isValid = false
+              break;
             }
           }
         }
@@ -1641,39 +1675,47 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
     }
   }
 
-  onSelectScore(category: OutcomDataDto, characteristicCode: string, sdgIndex?:number) {
-    let score = this.masterDataService.outcomeScaleScore.find(s => s.value === 99)
-    if (['SCALE_GHG'].includes(category.categoryCode) && (["MEDIUM_LEVEL", "MICRO_LEVEL"].includes(characteristicCode))){
-      category.data = category.data.map(data => {
-        if (data.characteristics.code === "MACRO_LEVEL") {
-          if (score?.value) {data.score = score.value}
-          data.justification = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.';
-        }
-        return data;
-      })
-    } else if (category.categoryCode === "SCALE_SD" && (["MEDIUM_LEVEL", "MICRO_LEVEL"].includes(characteristicCode))) {
-      if (sdgIndex !== undefined) {
-        this.sdgDataSendArray2.data = this.sdgDataSendArray2[sdgIndex].data.map((data: any) => {
-          if (data.characteristics.code === "MACRO_LEVEL") {
-            if (score?.value) {data.score = score.value}
-            data.justification = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.';
+  autoFillInternational() {
+    if (['NATIONAL', 'SUBNATIONAL'].includes(this.assessment['geographicalAreasCovered'][0].code)) {
+      for (let category of this.outcomeData) {
+        let score = this.masterDataService.outcomeScaleScore.find(s => s.value === 99)
+        if (['SCALE_GHG'].includes(category.categoryCode)){
+          category.data = category.data.map(data => {
+            if (data.characteristics.code === "MACRO_LEVEL") {
+              if (score?.value && !data.score) {data.score = score.value}
+              if (!data.justification) data.justification = 'The geographical area covered by this assessment is ' + (this.assessment['geographicalAreasCovered'][0].code === 'NATIONAL' ? 'national/sectoral': 'sub-national/sub-sectoral.');
+            }
+            return data;
+          })
+        } else if (category.categoryCode === "SCALE_SD") {
+          for (let sdg of this.sdgDataSendArray2) {
+            this.sdgDataSendArray2.data = sdg.data.map((data: any) => {
+              if (data.characteristics.code === "MACRO_LEVEL") {
+                if (score?.value && !data.score) {data.score = score.value}
+                if (!data.justification) data.justification = 'The geographical area covered by this assessment is ' + (this.assessment['geographicalAreasCovered'][0].code === 'NATIONAL' ? 'national/sectoral': 'sub-national/sub-sectoral.');
+              }
+              return data;
+            })
           }
-          return data;
-        })
-      }
-    } else if (category.categoryCode === 'SCALE_ADAPTATION' && ["NATIONAL", "SUBNATIONAL"].includes(characteristicCode)) {
-      category.data = category.data.map(data => {
-        if (data.characteristics.code === "INTERNATIONAL") {
-          if (score?.value) {data.score = score.value}
-          data.justification = 'The geographical area covered by this assessment is national/sectoral OR sub-national/sub-sectoral.';
+        } else if (category.categoryCode === 'SCALE_ADAPTATION') {
+          category.data = category.data.map(data => {
+            if (data.characteristics.code === "INTERNATIONAL") {
+              if (score?.value && !data.score) {data.score = score.value}
+              if (!data.justification) data.justification = 'The geographical area covered by this assessment is ' + (this.assessment['geographicalAreasCovered'][0].code === 'NATIONAL' ? 'national/sectoral': 'sub-national/sub-sectoral.');
+            }
+            return data;
+          })
         }
-        return data;
-      })
+      }
     }
   }
 
+  onSelectScore(category: OutcomDataDto, characteristicCode: string, sdgIndex?:number) {
+    
+  }
+
   isMandatoryActive(category_code: string, characteristic_code: string) {
-    return ['MACRO_LEVEL', 'INTERNATIONAL','LONG_TERM','MEDIUM_TERM','SHORT_TERM'].includes(characteristic_code)  || category_code === 'SUSTAINED_ADAPTATION';
+    return ['MACRO_LEVEL', 'MEDIUM_LEVEL', 'MICRO_LEVEL', 'INTERNATIONAL', 'NATIONAL', 'SUBNATIONAL', 'LONG_TERM','MEDIUM_TERM','SHORT_TERM'].includes(characteristic_code)  || category_code === 'SUSTAINED_ADAPTATION';
   }
 
   checkCategory(categoryCode: string, CharateristiCode: string){

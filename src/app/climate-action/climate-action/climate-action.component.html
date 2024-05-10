@@ -134,6 +134,9 @@
                       This is a mandatory field
                     </p>
                   </ng-container>
+                  <ng-container *ngIf="!editEntytyId && isDownloadMode == 1">
+                    <input [disabled]="editEntytyId > 0" type="text" maxlength="50" name="projStatusName" #nameCountry="ngModel" class="p-inputtext" [(ngModel)]="project.projectStatus.name!" [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText required />
+                  </ng-container>
                   <ng-container *ngIf="editMode">
                     <p-dropdown  placeholder="Please Select Status" name="projStatus" #projStatus="ngModel" [(ngModel)]="project.projectStatus" [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false" [options]="projectStatusList" optionLabel="name"
                       appendTo="body" [required]="true"></p-dropdown>
@@ -218,6 +221,9 @@
                       This is a mandatory field
                     </p>
                   </ng-container>
+                  <ng-container *ngIf="!editEntytyId && isDownloadMode == 1">
+                    <input [disabled]="editEntytyId > 0" type="text" maxlength="50" name="geoAreaName" #nameCountry="ngModel" class="p-inputtext" [(ngModel)]="project.geographicalAreaCovered!" [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText required />
+                  </ng-container>
                   <ng-container *ngIf="editMode">
 
                     <p-dropdown placeholder="Please Select the Geographical Area Targeted" name="geographical_area_targeted" #geographical_areas="ngModel" [(ngModel)]="project.geographicalAreaCovered" [options]="geographicalAreaCovered" optionLabel="name"
@@ -238,9 +244,12 @@
                 <div class="p-field">
                   <label for="projStatus">Level of Implementation</label>
                   <div type="button" class="pi pi-info-circle ml-10" pTooltip="Who does implement the policy?"></div>
-                  <ng-container *ngIf="isDownloadMode == 0 && flag !=1  && !editMode">
+                  <ng-container *ngIf="isDownloadMode == 0 && flag !=1  && !editMode;">
                     <p-dropdown [disabled]="editEntytyId > 0 && !editMode" placeholder="Please Select the Level of Implementation" name="level_of_implemetation" #level_of_implemetation="ngModel" [(ngModel)]="project.levelofImplemenation" [options]="levelOfImplementation" optionLabel="name"
                       optionValue="name" [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false" appendTo="body"></p-dropdown>
+                  </ng-container>
+                  <ng-container *ngIf="!editEntytyId && isDownloadMode == 1">
+                    <input [disabled]="editEntytyId > 0" type="text" maxlength="50" name="levelImpName" #nameCountry="ngModel" class="p-inputtext" [(ngModel)]="project.levelofImplemenation" [ngModelOptions]="{ standalone: true }" pattern="^[a-zA-Z0-9 ]{1,64}$" pInputText required />
                   </ng-container>
                   <ng-container *ngIf="editMode">
                     <p-dropdown placeholder="Please Select the Level of Implementation" name="level_of_implemetation" #level_of_implemetation="ngModel" [(ngModel)]="project.levelofImplemenation" [options]="levelOfImplementation" optionLabel="name"

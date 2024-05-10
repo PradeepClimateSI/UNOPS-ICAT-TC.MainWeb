@@ -30,6 +30,7 @@
                         </p>
                     </div>
                     <br>
+                    <br>
                     <div *ngIf="char.relevance !== 0">
                         <p><strong>{{char.main_question}}</strong></p>
                         <br>
@@ -85,12 +86,11 @@
                                                 <ng-container *ngIf="!(useDefault[char.characteristic.id] && useDefault[char.characteristic.id].st_default) || char.characteristic.code !== 'INTERNATIONAL'">
                                                     <input type="text" [name]="'stSituation'+char.characteristic.id" #tboundrary="ngModel"
                                                         [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)"
-                                                        [(ngModel)]="char.startingSituation" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" 
+                                                        [(ngModel)]="char.startingSituation" class="form-control" [required]="true" 
                                                         (mouseleave)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)" />
-                                                    <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
-                                                        ((fData.form.controls['stSituation'+char.characteristic.id]?.touched ? 
-                                                            (char.startingSituation === undefined || char.startingSituation === '')
-                                                        : char.startingSituation === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
+                                                    <p class="info-message text-danger" *ngIf="((fData.form.controls['stSituation'+char.characteristic.id]?.touched ? 
+                                                            (char.startingSituation === undefined || char.startingSituation === '' || char.startingSituation === null)
+                                                        : (char.startingSituation === undefined || char.startingSituation === null) && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                                         ">
                                                         This is a mandatory field
                                                     </p>
@@ -98,7 +98,7 @@
                                                 <ng-container *ngIf="(useDefault[char.characteristic.id] && useDefault[char.characteristic.id].st_default) && char.characteristic.code === 'INTERNATIONAL'">
                                                     <p-dropdown
                                                         [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)"
-                                                        [options]="default_values[char.characteristic.id]? default_values[char.characteristic.id].st_default_values : []" [name]="'st_default_values'+char.characteristic.code" [required]="char.characteristic.code === 'INTERNATIONAL'"
+                                                        [options]="default_values[char.characteristic.id]? default_values[char.characteristic.id].st_default_values : []" [name]="'st_default_values'+char.characteristic.code" [required]="true"
                                                         [(ngModel)]="startingSituation" optionLabel="label" (onChange)="onSelectDefault($event, char); autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)">
                                                     </p-dropdown>
                                                 </ng-container>
@@ -115,11 +115,10 @@
                                     <div class="col-4">Expected Impact</div>
                                     <div class="col-8">
                                         <input type="text" [name]="'impact'+char.characteristic.id" #tboundrary="ngModel" placeholder="Please describe the expected emissions reductions on the indicated scale." [(ngModel)]="char.expectedImpact" class="form-control"
-                                            [required]="char.characteristic.code === 'INTERNATIONAL'" (mouseleave)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)"/>
-                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
-                                                ((fData.form.controls['impact'+char.characteristic.id]?.touched ? 
-                                                    (char.expectedImpact === undefined || char.expectedImpact === '')
-                                                : char.expectedImpact === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
+                                            [required]="true" (mouseleave)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)"/>
+                                        <p class="info-message text-danger" *ngIf="((fData.form.controls['impact'+char.characteristic.id]?.touched ? 
+                                                    (char.expectedImpact === undefined || char.expectedImpact === '' || char.expectedImpact === null)
+                                                : (char.expectedImpact === undefined || char.expectedImpact === null) && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                                 ">
                                             This is a mandatory field
                                         </p>
@@ -129,7 +128,7 @@
                                     <div class="col-4">Score</div>
                                     <div class="col-6">
                                         <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.characteristic.id" #type="ngModel" placeholder="Select Score" [(ngModel)]="char.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
-                                            [options]="char.characteristic.code === 'INTERNATIONAL' ? GHG_scale_score_macro : (char.characteristic.code === 'NATIONAL' ? GHG_scale_score_medium : GHG_scale_score_micro)" [required]="char.characteristic.code === 'INTERNATIONAL'" appendTo="body"
+                                            [options]="char.characteristic.code === 'INTERNATIONAL' ? GHG_scale_score_macro : (char.characteristic.code === 'NATIONAL' ? GHG_scale_score_medium : GHG_scale_score_micro)" [required]="true" appendTo="body"
                                             (onChange)="onSelectScore($event, char, idx, category.type);autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)" optionLabel="name">
                                             <ng-template let-option pTemplate="item">
                                                 <div class="custom-option">
@@ -137,9 +136,8 @@
                                                 </div>
                                             </ng-template>
                                         </p-dropdown>
-                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
-                                            ((fData.form.controls['score'+char.characteristic.id]?.touched ? 
-                                                (char.selectedScore.code === undefined || char.selectedScore.code === '')
+                                        <p class="info-message text-danger" *ngIf="((fData.form.controls['score'+char.characteristic.id]?.touched ? 
+                                                (char.selectedScore.code === undefined || char.selectedScore.code === '' )
                                             : char.selectedScore.code === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                             ">
                                             This is a mandatory field
@@ -152,13 +150,12 @@
                                             style="font-size: 1rem"></i></div>
                                     <div class="col-6">
                                         <textarea type="text" rows="5" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? 'Enter Justification' : ''"
-                                            [required]="char.characteristic.code === 'INTERNATIONAL'" [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"
+                                            [required]="true" [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"
                                             (mouseleave)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)"></textarea>
                                         <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
-                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
-                                                ((fData.form.controls['justification'+char.characteristic.id]?.touched ? 
-                                                    (char.comment === undefined || char.comment === '')
-                                                : char.comment === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
+                                        <p class="info-message text-danger" *ngIf="((fData.form.controls['justification'+char.characteristic.id]?.touched ? 
+                                                    (char.comment === undefined || char.comment === '' || char.comment === null)
+                                                : (char.comment === undefined || char.comment === null) && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                                 ">
                                             This is a mandatory field
                                         </p>
@@ -184,15 +181,14 @@
                                     <div class="col-4">Score</div>
                                     <div class="col-6">
                                         <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.characteristic.id" #scoreee="ngModel" placeholder="Select Score" [(ngModel)]="char.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
-                                            [options]="GHG_sustained_score" optionLabel="name" [required]="char.characteristic.code === 'INTERNATIONAL'" appendTo="body" (onChange)="onSelectScore($event, char, idx, category.type); autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)">
+                                            [options]="GHG_sustained_score" optionLabel="name" [required]="true" appendTo="body" (onChange)="onSelectScore($event, char, idx, category.type); autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)">
                                             <ng-template let-option pTemplate="item">
                                                 <div class="custom-option">
                                                     {{ option.name }}
                                                 </div>
                                             </ng-template>
                                         </p-dropdown>
-                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
-                                            ((fData.form.controls['score'+char.characteristic.id]?.touched ? 
+                                        <p class="info-message text-danger" *ngIf="((fData.form.controls['score'+char.characteristic.id]?.touched ? 
                                                 (char.selectedScore.code === undefined || char.selectedScore.code === '')
                                             : char.selectedScore.code === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                             ">
@@ -204,13 +200,12 @@
                                 <div class="row p-2">
                                     <div class="col-4">Justification</div>
                                     <div class="col-6">
-                                        <textarea rows="5" type="text" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" placeholder="Enter Justification" [required]="char.characteristic.code === 'INTERNATIONAL'"
+                                        <textarea rows="5" type="text" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" placeholder="Enter Justification" [required]="true"
                                             [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (mouseleave)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)"></textarea>
                                         <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
-                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
-                                                ((fData.form.controls['justification'+char.characteristic.id]?.touched ? 
-                                                    (char.comment === undefined || char.comment === '')
-                                                : char.comment === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
+                                        <p class="info-message text-danger" *ngIf="((fData.form.controls['justification'+char.characteristic.id]?.touched ? 
+                                                    (char.comment === undefined || char.comment === '' || char.comment === null)
+                                                : (char.comment === undefined || char.comment === null) && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                                 ">
                                             This is a mandatory field
                                         </p>
@@ -290,12 +285,11 @@
                                 <div class="row p-2">
                                     <div class="col-4">Adaptation Co-benifit <i class="pi pi-info-circle" pTooltip="{{adaptation_tooltip}}" tooltipPosition="bottom" style="font-size: 1rem"></i></div>
                                     <div class="col-8">
-                                        <input type="text" [name]="'benifit'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.adaptationCoBenifit" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'"
+                                        <input type="text" [name]="'benifit'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.adaptationCoBenifit" class="form-control" [required]="true"
                                         (mouseleave)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)" />
-                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' && 
-                                            ((fData.form.controls['benifit'+char.characteristic.id]?.touched ? 
-                                                (char.adaptationCoBenifit === undefined || char.adaptationCoBenifit === '')
-                                            : char.adaptationCoBenifit === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
+                                        <p class="info-message text-danger" *ngIf="((fData.form.controls['benifit'+char.characteristic.id]?.touched ? 
+                                                (char.adaptationCoBenifit === undefined || char.adaptationCoBenifit === '' || char.adaptationCoBenifit === null)
+                                            : (char.adaptationCoBenifit === undefined || char.adaptationCoBenifit === null) && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                             ">
                                             This is a mandatory field
                                         </p>
@@ -306,11 +300,10 @@
                                     <div class="col-8">
                                         <input type="text" [name]="'stSituation'+char.characteristic.id" #tboundrary="ngModel"
                                             [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)"
-                                            [(ngModel)]="char.startingSituation" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" (mouseleave)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)" />
-                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
-                                            ((fData.form.controls['stSituation'+char.characteristic.id]?.touched ? 
-                                                (char.startingSituation === undefined || char.startingSituation === '')
-                                            : char.startingSituation === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
+                                            [(ngModel)]="char.startingSituation" class="form-control" [required]="true" (mouseleave)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)" />
+                                        <p class="info-message text-danger" *ngIf="((fData.form.controls['stSituation'+char.characteristic.id]?.touched ? 
+                                                (char.startingSituation === undefined || char.startingSituation === '' || char.startingSituation === null)
+                                            : (char.startingSituation === undefined  || char.startingSituation === null) && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                             ">
                                             This is a mandatory field
                                         </p>
@@ -320,11 +313,10 @@
                                     <div class="col-4">Expected Impact <i class="pi pi-info-circle" pTooltip="{{expected_impact_tooltip}}" tooltipPosition="bottom" style="font-size: 1rem"></i></div>
                                     <div class="col-8">
                                         <input type="text" [name]="'impact'+char.characteristic.id" #tboundrary="ngModel" placeholder="Please describe the expected emissions reductions on the indicated scale." [(ngModel)]="char.expectedImpact" class="form-control"
-                                            [required]="char.characteristic.code === 'INTERNATIONAL'" (mouseleave)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)"/>
-                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
-                                                ((fData.form.controls['impact'+char.characteristic.id]?.touched ? 
-                                                    (char.expectedImpact === undefined || char.expectedImpact === '')
-                                                : char.expectedImpact === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
+                                            [required]="true" (mouseleave)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)"/>
+                                        <p class="info-message text-danger" *ngIf="((fData.form.controls['impact'+char.characteristic.id]?.touched ? 
+                                                    (char.expectedImpact === undefined || char.expectedImpact === '' || char.expectedImpact === null)
+                                                : (char.expectedImpact === undefined || char.expectedImpact === null) && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                                 ">
                                             This is a mandatory field
                                         </p>
@@ -334,15 +326,14 @@
                                     <div class="col-4">Score</div>
                                     <div class="col-6">
                                         <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.characteristic.id" #type="ngModel" placeholder="Select Score" [(ngModel)]="char.selectedScore" [options]="adaptation_scale_score" [virtualScroll]="true" [virtualScrollItemSize]="20"
-                                            [style]="{'width': '100%'}" optionLabel="name" [required]="char.characteristic.code === 'INTERNATIONAL'" appendTo="body" (onChange)="onSelectScore($event, char, idx, category.type);autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)">
+                                            [style]="{'width': '100%'}" optionLabel="name" [required]="true" appendTo="body" (onChange)="onSelectScore($event, char, idx, category.type);autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)">
                                             <ng-template let-option pTemplate="item">
                                                 <div class="custom-option">
                                                     {{ option.name }}
                                                 </div>
                                             </ng-template>
                                         </p-dropdown>
-                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
-                                            ((fData.form.controls['score'+char.characteristic.id]?.touched ? 
+                                        <p class="info-message text-danger" *ngIf="((fData.form.controls['score'+char.characteristic.id]?.touched ? 
                                                 (char.selectedScore.code === undefined || char.selectedScore.code === '')
                                             : char.selectedScore.code === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                             ">
@@ -356,12 +347,11 @@
                                             style="font-size: 1rem"></i></div>
                                     <div class="col-6">
                                         <textarea rows="5" type="text" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? 'Enter Justification' : ''"
-                                            [required]="char.characteristic.code === 'INTERNATIONAL'" [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (mouseleave)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)"></textarea>
+                                            [required]="true" [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (mouseleave)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)"></textarea>
                                         <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
-                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
-                                            ((fData.form.controls['justification'+char.characteristic.id]?.touched ? 
-                                                (char.comment === undefined || char.comment === '')
-                                            : char.comment === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
+                                        <p class="info-message text-danger" *ngIf="((fData.form.controls['justification'+char.characteristic.id]?.touched ? 
+                                                (char.comment === undefined || char.comment === '' || char.comment === null)
+                                            : (char.comment === undefined || char.comment === null) && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                             ">
                                             This is a mandatory field
                                         </p>
@@ -387,17 +377,16 @@
                                     <div class="col-4">Score</div>
                                     <div class="col-6">
                                         <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+char.characteristic.id" #type="ngModel" placeholder="Select Score" [(ngModel)]="char.selectedScore" [options]="adaptation_sustained_score" optionLabel="name"
-                                            [required]="char.characteristic.code === 'INTERNATIONAL'" appendTo="body" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}" (onChange)="onSelectScore($event, char, idx, category.type);autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)">
+                                            [required]="true" appendTo="body" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}" (onChange)="onSelectScore($event, char, idx, category.type);autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)">
                                             <ng-template let-option pTemplate="item">
                                                 <div class="custom-option">
                                                     {{ option.name }}
                                                 </div>
                                             </ng-template>
                                         </p-dropdown>
-                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
-                                        ((fData.form.controls['score'+char.characteristic.id]?.touched ? 
-                                            (char.selectedScore.code === undefined || char.selectedScore.code === '')
-                                        : char.selectedScore.code === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
+                                        <p class="info-message text-danger" *ngIf="((fData.form.controls['score'+char.characteristic.id]?.touched ? 
+                                            (char.selectedScore.code === undefined || char.selectedScore.code === '' || char.selectedScore.code === null)
+                                        : (char.selectedScore.code === undefined  || char.selectedScore.code === null) && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                         ">
                                             This is a mandatory field
                                         </p>
@@ -407,13 +396,12 @@
                                 <div class="row p-2">
                                     <div class="col-4">Justification</div>
                                     <div class="col-6">
-                                        <textarea rows="5" type="text" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" placeholder="Enter Justification" [required]="char.characteristic.code === 'INTERNATIONAL'"
+                                        <textarea rows="5" type="text" [name]="'justification'+char.characteristic.id" #tboundrary="ngModel" [(ngModel)]="char.comment" class="form-control" placeholder="Enter Justification" [required]="true"
                                             [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (mouseleave)="adaptationJustificationChange();autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, undefined)"></textarea>
                                         <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
-                                        <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
-                                            ((fData.form.controls['justification'+char.characteristic.id]?.touched ? 
-                                                (char.comment === undefined || char.comment === '')
-                                            : char.comment === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
+                                        <p class="info-message text-danger" *ngIf="((fData.form.controls['justification'+char.characteristic.id]?.touched ? 
+                                                (char.comment === undefined || char.comment === '' || char.comment === null)
+                                            : (char.comment === undefined  || char.comment === null) && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                             ">
                                             This is a mandatory field
                                         </p>
@@ -489,12 +477,11 @@
                                             <div class="row p-2">
                                                 <div class="col-4">SDG Indicator <i class="pi pi-info-circle" pTooltip="Please describe the indicator used to assess the contribution to the selected SDG (i.e. number of jobs created)." tooltipPosition="bottom" style="font-size: 1rem"></i></div>
                                                 <div class="col-8">
-                                                    <input type="text" [name]="'indicator'+SDG.code+char.characteristic.id" [(ngModel)]="char.sdgIndicator" class="form-control" placeholder="" [required]="char.characteristic.code === 'INTERNATIONAL'" 
+                                                    <input type="text" [name]="'indicator'+SDG.code+char.characteristic.id" [(ngModel)]="char.sdgIndicator" class="form-control" placeholder="" [required]="true" 
                                                     (mouseleave)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, SDG.id)"/>
-                                                    <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
-                                                        ((fData.form.controls['indicator'+SDG.code+char.characteristic.id]?.touched ? 
-                                                            (char.sdgIndicator === undefined || char.sdgIndicator === '')
-                                                        : char.sdgIndicator === undefined && clickedFormMap[activeIndex2]  || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
+                                                    <p class="info-message text-danger" *ngIf="((fData.form.controls['indicator'+SDG.code+char.characteristic.id]?.touched ? 
+                                                            (char.sdgIndicator === undefined || char.sdgIndicator === '' || char.sdgIndicator === null)
+                                                        : (char.sdgIndicator === undefined || char.sdgIndicator === null) && clickedFormMap[activeIndex2]  || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                                         ">
                                                         This is a mandatory field
                                                     </p>
@@ -505,11 +492,10 @@
                                                 <div class="col-8">
                                                     <input type="text" [name]="'stSituation'+char.characteristic.id+SDG.id" #tboundrary="ngModel"
                                                         [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? ghg_starting_situation_placeholder.international : (char.characteristic.code === 'NATIONAL' ? ghg_starting_situation_placeholder.national : ghg_starting_situation_placeholder.subNational)"
-                                                        [(ngModel)]="char.startingSituation" class="form-control" [required]="char.characteristic.code === 'INTERNATIONAL'" (mouseleave)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, SDG.id)" />
-                                                    <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
-                                                        ((fData.form.controls['stSituation'+char.characteristic.id]?.touched ? 
-                                                            (char.startingSituation === undefined || char.startingSituation === '')
-                                                        : char.startingSituation === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
+                                                        [(ngModel)]="char.startingSituation" class="form-control" [required]="true" (mouseleave)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, SDG.id)" />
+                                                    <p class="info-message text-danger" *ngIf="((fData.form.controls['stSituation'+char.characteristic.id]?.touched ? 
+                                                            (char.startingSituation === undefined || char.startingSituation === '' || char.startingSituation === null)
+                                                        : (char.startingSituation === undefined  || char.startingSituation === null) && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                                         ">
                                                         This is a mandatory field
                                                     </p>
@@ -519,11 +505,10 @@
                                                 <div class="col-4">Expected Impact <i class="pi pi-info-circle" pTooltip="Please describe the value of the indicator after intervention implementation." tooltipPosition="bottom" style="font-size: 1rem"></i></div>
                                                 <div class="col-8">
                                                     <input type="text" [name]="'impact'+char.characteristic.id+SDG.id" #tboundrary="ngModel" placeholder="Please describe the expected emissions reductions on the indicated scale." [(ngModel)]="char.expectedImpact" class="form-control"
-                                                        [required]="char.characteristic.code === 'INTERNATIONAL'" (mouseleave)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, SDG.id)"/>
-                                                    <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
-                                                            ((fData.form.controls['impact'+char.characteristic.id]?.touched ? 
-                                                                (char.expectedImpact === undefined || char.expectedImpact === '')
-                                                            : char.expectedImpact === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
+                                                        [required]="true" (mouseleave)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, SDG.id)"/>
+                                                    <p class="info-message text-danger" *ngIf="((fData.form.controls['impact'+char.characteristic.id]?.touched ? 
+                                                                (char.expectedImpact === undefined || char.expectedImpact === '' || char.expectedImpact === null)
+                                                            : (char.expectedImpact === undefined || char.expectedImpact === null) && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                                             ">
                                                         This is a mandatory field
                                                     </p>
@@ -533,17 +518,16 @@
                                                 <div class="col-4">Score</div>
                                                 <div class="col-8">
                                                     <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'score'+SDG.code+char.characteristic.id" #type="ngModel" placeholder="Select Score" [(ngModel)]="char.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20" [style]="{'width': '100%'}"
-                                                        (onChange)="onSelectScore($event, char, idx, SDG.id); autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, SDG.id)" [options]="SDG_scale_score" optionLabel="name" [required]="char.characteristic.code === 'INTERNATIONAL'" appendTo="body">
+                                                        (onChange)="onSelectScore($event, char, idx, SDG.id); autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, SDG.id)" [options]="SDG_scale_score" optionLabel="name" [required]="true" appendTo="body">
                                                         <ng-template let-option pTemplate="item">
                                                             <div class="custom-option">
                                                                 {{ option.name }}
                                                             </div>
                                                         </ng-template>
                                                     </p-dropdown>
-                                                    <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
-                                                        ((fData.form.controls['score'+SDG.code+char.characteristic.id]?.touched ? 
-                                                            (char.selectedScore.code === undefined || char.selectedScore.code === '')
-                                                        : char.selectedScore.code === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
+                                                    <p class="info-message text-danger" *ngIf="((fData.form.controls['score'+SDG.code+char.characteristic.id]?.touched ? 
+                                                            (char.selectedScore.code === undefined || char.selectedScore.code === '' || char.selectedScore.code === null)
+                                                        : (char.selectedScore.code === undefined || char.selectedScore.code === null) && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                                         ">
                                                         This is a mandatory field
                                                     </p>
@@ -555,12 +539,11 @@
                                                         tooltipPosition="bottom" style="font-size: 1rem"></i></div>
                                                 <div class="col-6">
                                                     <textarea rows="5" type="text" [name]="'justification'+SDG.code+char.characteristic.id" [(ngModel)]="char.comment" class="form-control" [placeholder]="char.characteristic.code === 'INTERNATIONAL' ? 'Enter Justification' : ''"
-                                                        [required]="char.characteristic.code === 'INTERNATIONAL'" [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (mouseleave)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, SDG.id)"></textarea>
+                                                        [required]="true" [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (mouseleave)="autoSaveResult(category.code, true, category.code, 'out', char.characteristic.id, undefined, SDG.id)"></textarea>
                                                     <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
-                                                    <p class="info-message text-danger" *ngIf="char.characteristic.code === 'INTERNATIONAL' &&
-                                                        ((fData.form.controls['justification'+SDG.code+char.characteristic.id]?.touched ? 
-                                                            (char.comment === undefined || char.comment === '')
-                                                        : char.comment === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
+                                                    <p class="info-message text-danger" *ngIf="((fData.form.controls['justification'+SDG.code+char.characteristic.id]?.touched ? 
+                                                            (char.comment === undefined || char.comment === '' || char.comment === null)
+                                                        : (char.comment === undefined || char.comment === null) && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                                         ">
                                                         This is a mandatory field
                                                     </p>
@@ -589,15 +572,14 @@
                                                 <div class="col-4">Score</div>
                                                 <div class="col-6">
                                                     <p-dropdown *ngIf="approach !== 'INDIRECT'" [name]="'susScore'+SDG.code+chSus.characteristic.id" #type="ngModel" placeholder="Select Score" [(ngModel)]="chSus.selectedScore" [virtualScroll]="true" [virtualScrollItemSize]="20"
-                                                        [style]="{'width': '100%'}" (onChange)="onSelectScore($event, chSus, idx, SDG.id);autoSaveResult(category.code, true, category.code, 'out', chSus.characteristic.id, undefined, SDG.id)" [options]="SDG_sustained_score" optionLabel="name" [required]="chSus.characteristic.code === 'INTERNATIONAL'" appendTo="body">
+                                                        [style]="{'width': '100%'}" (onChange)="onSelectScore($event, chSus, idx, SDG.id);autoSaveResult(category.code, true, category.code, 'out', chSus.characteristic.id, undefined, SDG.id)" [options]="SDG_sustained_score" optionLabel="name" [required]="true" appendTo="body">
                                                         <ng-template let-option pTemplate="item">
                                                             <div class="custom-option">
                                                                 {{ option.name }}
                                                             </div>
                                                         </ng-template>
                                                     </p-dropdown>
-                                                    <p class="info-message text-danger" *ngIf="chSus.characteristic.code === 'INTERNATIONAL' &&
-                                                        ((fData.form.controls['susScore'+SDG.code+chSus.characteristic.id]?.touched ? 
+                                                    <p class="info-message text-danger" *ngIf="((fData.form.controls['susScore'+SDG.code+chSus.characteristic.id]?.touched ? 
                                                             (chSus.selectedScore.code === undefined || chSus.selectedScore.code === '')
                                                         : chSus.selectedScore.code === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                                         ">
@@ -609,13 +591,12 @@
                                             <div class="row p-2">
                                                 <div class="col-4">Justification</div>
                                                 <div class="col-6">
-                                                    <textarea rows="5" type="text" [name]="'susJustification'+SDG.code+chSus.characteristic.id" [(ngModel)]="chSus.comment" class="form-control" placeholder="Enter Justification" [required]="chSus.characteristic.code === 'INTERNATIONAL'"
+                                                    <textarea rows="5" type="text" [name]="'susJustification'+SDG.code+chSus.characteristic.id" [(ngModel)]="chSus.comment" class="form-control" placeholder="Enter Justification" [required]="true"
                                                         [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (mouseleave)="autoSaveResult(category.code, true, category.code, 'out', chSus.characteristic.id, undefined, SDG.id)"></textarea>
                                                     <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
-                                                    <p class="info-message text-danger" *ngIf="chSus.characteristic.code === 'INTERNATIONAL' &&
-                                                        ((fData.form.controls['susJustification'+SDG.code+chSus.characteristic.id]?.touched ? 
-                                                            (chSus.comment === undefined || chSus.comment === '')
-                                                        : chSus.comment === undefined && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
+                                                    <p class="info-message text-danger" *ngIf="((fData.form.controls['susJustification'+SDG.code+chSus.characteristic.id]?.touched ? 
+                                                            (chSus.comment === undefined || chSus.comment === '' || chSus.comment === null)
+                                                        : (chSus.comment === undefined || chSus.comment === null) && clickedFormMap[activeIndex2] || tabIsValid[catidx] !== undefined && !tabIsValid[catidx]))
                                                         ">
                                                         This is a mandatory field
                                                     </p>
@@ -709,3 +690,5 @@
     </div>
 </p-overlayPanel>
 <p-confirmDialog></p-confirmDialog>
+
+<p-confirmDialog key="autosave" header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
