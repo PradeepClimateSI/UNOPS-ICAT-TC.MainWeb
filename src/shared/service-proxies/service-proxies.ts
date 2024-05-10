@@ -17882,6 +17882,112 @@ export class ProjectControllerServiceProxy {
         }
         return _observableOf(null as any);
     }
+
+    deletePolicySector(id: number): Observable<any> {
+        let url_ = this.baseUrl + "/climateAction/delete-p-sector?";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined and cannot be null.");
+        else
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeletePolicySector(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeletePolicySector(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<any>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<any>;
+        }));
+    }
+
+    protected processDeletePolicySector(response: HttpResponseBase): Observable<any> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 201) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result201: any = null;
+            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result201 = resultData201 !== undefined ? resultData201 : <any>null;
+    
+            return _observableOf(result201);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    addPolicySector(body: AddPolicySector): Observable<any> {
+        let url_ = this.baseUrl + "/climateAction/add-p-sector";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processAddPolicySector(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processAddPolicySector(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<any>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<any>;
+        }));
+    }
+
+    protected processAddPolicySector(response: HttpResponseBase): Observable<any> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 201) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result201: any = null;
+            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result201 = resultData201 !== undefined ? resultData201 : <any>null;
+    
+            return _observableOf(result201);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
 }
 
 @Injectable()
@@ -21320,16 +21426,7 @@ export class CMQuestionControllerServiceProxy {
         return _observableOf(null as any);
     }
 }
-export enum DocumentsDocumentOwner {
-        Project = <any>"Project",
-        Country = <any>"Country",
-        CountryNC = <any>"CountryNC",
-        CountryBUR = <any>"CountryBUR",
-        CountryBTR = <any>"CountryBTR",
-        CountryNDC = <any>"CountryNDC",
-        CountryGHG = <any>"CountryGHG",
-    }
-    
+
 @Injectable()
 export class CMAssessmentQuestionControllerServiceProxy {
     private http: HttpClient;
@@ -27152,6 +27249,15 @@ export class GetManyCountryResponseDto implements IGetManyCountryResponseDto {
     }
 }
 
+export enum DocumentsDocumentOwner {
+        Project = <any>"Project",
+        Country = <any>"Country",
+        CountryNC = <any>"CountryNC",
+        CountryBUR = <any>"CountryBUR",
+        CountryBTR = <any>"CountryBTR",
+        CountryNDC = <any>"CountryNDC",
+        CountryGHG = <any>"CountryGHG",
+    }
 export interface IGetManyCountryResponseDto {
     data: Country[];
     count: number;
@@ -35501,6 +35607,76 @@ export class AllPolicySectors implements IAllPolicySectors {
 
 export interface IAllPolicySectors {
     allSectors: PolicySector[];
+
+    [key: string]: any;
+}
+
+export class AddPolicySector implements IAddPolicySector {
+    sector: Sector[];
+    id: number;
+
+    [key: string]: any;
+
+    constructor(data?: IAddPolicySector) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.sector = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            if (Array.isArray(_data["sector"])) {
+                this.sector = [] as any;
+                for (let item of _data["sector"])
+                    this.sector.push(Sector.fromJS(item));
+            }
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): AddPolicySector {
+        data = typeof data === 'object' ? data : {};
+        let result = new AddPolicySector();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        if (Array.isArray(this.sector)) {
+            data["sector"] = [];
+            for (let item of this.sector)
+                data["sector"].push(item.toJSON());
+        }
+        data["id"] = this.id;
+        return data;
+    }
+
+    clone(): AddPolicySector {
+        const json = this.toJSON();
+        let result = new AddPolicySector();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IAddPolicySector {
+    sector: Sector[];
+    id: number;
 
     [key: string]: any;
 }

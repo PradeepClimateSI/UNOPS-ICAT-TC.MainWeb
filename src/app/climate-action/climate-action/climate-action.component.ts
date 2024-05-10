@@ -34,7 +34,8 @@ import {
   BarrierSelected,
   AllPolicySectors,
   ProjectApprovalStatusControllerServiceProxy,
-  ProjectStatusControllerServiceProxy
+  ProjectStatusControllerServiceProxy,
+  AddPolicySector
 
 } from 'shared/service-proxies/service-proxies';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -844,7 +845,7 @@ export class ClimateActionComponent implements OnInit  {
   back() {
     this.location.back();
   }
-  edit(label: string){
+  async edit(label: string){
     if (label === 'Edit') {
       this.editMode =true;
     }
@@ -854,6 +855,21 @@ export class ClimateActionComponent implements OnInit  {
       this.project.levelofImplemenation = this.project.levelofImplemenation;
       this.project.dateOfCompletion= this.dateOfCompletion
       this.project.dateOfImplementation =this.dateOfImplementation;
+      
+      let obj = new AddPolicySector
+      obj.id =this.project.id;
+      obj.sector=this.finalSectors;
+     await  this.projectProxy.deletePolicySector(this.project.id).subscribe(async (res)=>{
+      await this.projectProxy.addPolicySector(obj).subscribe((res)=>{});
+     });
+      
+     setTimeout(() => {
+      this.sectornames=[]
+      for(let x of this.finalSectors){
+        this.sectornames.push(x.name)
+      }
+      this.sectorsJoined = ''
+      this.sectorsJoined = this.sectornames.join(', ')
 
       this.projectProxy.updateOneClimateAction(this.project)
       .subscribe(
@@ -874,6 +890,9 @@ export class ClimateActionComponent implements OnInit  {
           });
         }
       )
+    }, 2000);
+
+      
 
     }
   }
