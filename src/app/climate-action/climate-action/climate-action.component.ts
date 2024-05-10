@@ -45,6 +45,8 @@ import html2canvas from 'html2canvas';
 import decode from 'jwt-decode';
 import { FieldNames, MasterDataService } from 'app/shared/master-data.service';
 import { GlobalArrayService } from 'app/shared/global-documents/global-documents.service';
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
+import { DialogService } from 'primeng/dynamicdialog';
 
 
 @Component({
@@ -187,6 +189,7 @@ export class ClimateActionComponent implements OnInit  {
     private userproxy:UsersControllerServiceProxy,
     private projectApprovalStatusControllerServiceProxy: ProjectApprovalStatusControllerServiceProxy,
     private projectStatusControllerServiceProxy: ProjectStatusControllerServiceProxy,
+    protected dialogService: DialogService,
     
   ) 
   { }
@@ -1197,5 +1200,21 @@ toDownload() {
     }
     
 
+  }
+
+  watchVideo() {
+    let ref = this.dialogService.open(GuidanceVideoComponent, {
+      header: 'Guidance Video',
+      width: '60%',
+      contentStyle: { "overflow": "auto" },
+      baseZIndex: 10000,
+      data: {
+        sourceName: 'Interventions',
+      },
+    });
+
+    ref.onClose.subscribe(() => {
+
+    })
   }
 }

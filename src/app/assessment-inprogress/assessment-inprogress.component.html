@@ -1,7 +1,6 @@
 <div class="container pl-20 pr-20">
 
     <div class="card" style="min-height: 600px;">
-        <p-toast></p-toast>
 
         <div class="mb-12">
             <h4 class="mt-4"> Assessments in progress    
@@ -31,12 +30,11 @@
             <ng-template pTemplate="header">
                 <tr>
                     <th>Intervention</th>
-                    <th>Assessment Approach</th>
+                    <th>Assessment Type</th>
                     <th>Tool</th>
-                    <th>Sector/Sectors(Intervention)</th>
                     <th>Created Date</th>
                     <th style="width:10%" >Last Update Date</th>
-                    <th style="width:15%" >Action</th>
+                    <th style="width:25%" >Action</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-assessment>
@@ -50,9 +48,6 @@
                         {{masterDataService.getToolName(assessment.tool)}}
                     </td>
                     <td>
-                        {{setName( assessment)}}
-                    </td>
-                    <td>
                         {{assessment?.createdOn | date: "dd/MM/yyyy "}}
                     </td>
                     <td>
@@ -61,12 +56,15 @@
                     <td>
                         <div class="row">
                             <button class="col" type="button" pButton pRipple label="Edit" (click)="detail(assessment, false)"></button>
-                            <button class="col" type="button" pButton pRipple label="Continue" (click)="detail(assessment, true)"></button>
+                            <button class="col ml-10" type="button" pButton pRipple label="Continue" (click)="detail(assessment, true)"></button>
+                            <button *ngIf="loggedUser && assessment.user.id === loggedUser.id" [style.background-color]="'#d9534f'" class="col ml-10 " type="button" pButton pRipple label="Delete"   (click)="deleteAssessment(assessment.id,assessment.tool)"> </button>
                         </div>
                     </td>
 
                 </tr>
             </ng-template>
+            
         </p-table>
     </div>
 </div>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
