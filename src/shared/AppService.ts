@@ -170,7 +170,9 @@ export class AppService {
   }
 
   logout(){
-    this.clearData();
+    setTimeout(() => {
+      this.clearData();
+    }, 1000)
     this.stopRefreshTokenTimer();
     this.router.navigate(['/auth/login']);
   }

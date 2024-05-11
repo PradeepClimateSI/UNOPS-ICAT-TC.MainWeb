@@ -263,7 +263,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
       }
 
     }
-    this.subscribeLogout()
     this.isFirstLoading0 = false
 
 
@@ -732,7 +731,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
                   if(!this.isCompleted){
                     this.isSavedAssessment = true;
                     this.autoFillInternational();
-                    this.subscribeLogout();
                     this.startAutoSave()
                   }
 
