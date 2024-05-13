@@ -188,7 +188,6 @@ isLogoutClicked: boolean = false;
     await this.getSDGList();
     await this.setInitialState();
     this.initializeDefaultStatus();
-    this.subscribeLogout();
     this.autoFillInternational();
     this.autoFillSDG();
   }

@@ -311,7 +311,6 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
       this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
     }
 
-    this.subscribeLogout()
     this.autoFillInternational();
   }
 
@@ -732,7 +731,6 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
                 if (_res) {
                   if(!this.isCompleted){
                     this.isSavedAssessment = true;
-                    this.subscribeLogout();
                     this.autoFillInternational();
                     this.isCompleted ? this.isCreatingAssessment = false : this.isCreatingAssessment = true;
                   }

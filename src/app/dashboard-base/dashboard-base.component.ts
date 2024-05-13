@@ -36,6 +36,7 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
   isAutoSaveDone: boolean = true;
   autoSub: Subscription
   isInAutoSaving: boolean = false;
+  isLogoutClicked: boolean = false;
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -92,11 +93,6 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
 
     });
 
-    this.appService.autoSavingDone.subscribe(res => {
-      this.isAutoSaveDone = res;
-    })
-
-
   }
 
   onHideDialog(){}
@@ -110,30 +106,31 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
     })
   }
 
-  logout() {
-
-    this.appService.loginOut.next(true)
-    if (!(this.route.children[0].component && ['InvestorToolComponent', 'PortfolioTrack4Component', 'CarbonMarketAssessmentComponent'].includes(this.route.children[0].component.name))) {
-      this.appService.autoSavingDone.next(true)
-    }
-    this.autoSub = this.appService.autoSavingDone.subscribe(res => {
-      if (res) {
-        this.confirmationService.confirm({
-          message: 'Are you sure you want to logout?',
-          key: 'logout',
-          accept: () => {
-            this.appService.logout();
-            this.stopSystemStatusTimer();
-          },
-          reject: () => {
-            this.autoSub.unsubscribe()
-            //@ts-ignore
-            this.autoSub = undefined
-            this.appService.loginOut.next(false);
-          }
-        })
+  logoutSubscription() {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to logout?',
+      key: 'logout',
+      accept: () => {
+        this.appService.logout();
+        this.stopSystemStatusTimer();
+      },
+      reject: () => {
       }
     })
+  }
+
+  logout() {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to logout?',
+      key: 'logout',
+      accept: () => {
+        this.appService.logout();
+        this.stopSystemStatusTimer();
+      },
+      reject: () => {
+      }
+    })
+    
   }
 
   public startSystemStatusTimer(isFirst: boolean=false) {

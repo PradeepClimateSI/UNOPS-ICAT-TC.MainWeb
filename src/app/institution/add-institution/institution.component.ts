@@ -19,8 +19,8 @@ export class InstitutionComponent implements OnInit {
   institution: Institution = new Institution();
   sectorList: Sector[] = [];
   typeList: InstitutionType[] = [];
-  selectedTypeList: string[] = [];
-  selectedTypeList1: string[] = [];
+  selectedTypeList: InstitutionType[] = [];
+  selectedTypeList1: InstitutionType[] = [];
   categoryList: InstitutionCategory[] = [];
   institutionId: number = 0;
   title: string;
@@ -32,7 +32,7 @@ export class InstitutionComponent implements OnInit {
   deletedAt: Date;
   isNew: boolean = true;
 
-  intype: InstitutionType;
+  intype: InstitutionType = new InstitutionType();
   insector: Sector;
   country: Country;
   countryId: number;
@@ -199,7 +199,8 @@ async saveForm(formData: NgForm) {
     let inscat = new InstitutionCategory
     inscat.id =this.incategory.id;
     institution.category = inscat;
-    let instype = new InstitutionType
+    let instype = new InstitutionType();
+    this.intype.id = this.selectedTypeList[0].id
     instype.id =this.intype.id;
     institution.type = instype;
     institution.address = this.inaddress;
