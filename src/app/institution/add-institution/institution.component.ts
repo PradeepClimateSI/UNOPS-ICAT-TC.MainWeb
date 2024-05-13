@@ -199,7 +199,7 @@ async saveForm(formData: NgForm) {
     let inscat = new InstitutionCategory
     inscat.id =this.incategory.id;
     institution.category = inscat;
-    let instype = new InstitutionType
+    let instype = new InstitutionType();
     this.intype.id = this.selectedTypeList[0].id
     instype.id =this.intype.id;
     institution.type = instype;
