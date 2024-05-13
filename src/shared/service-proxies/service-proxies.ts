@@ -40116,15 +40116,7 @@ export interface INotification {
 
     [key: string]: any;
 }
-export enum DocumentsDocumentOwner {
-        Project = <any>"Project",
-        Country = <any>"Country",
-        CountryNC = <any>"CountryNC",
-        CountryBUR = <any>"CountryBUR",
-        CountryBTR = <any>"CountryBTR",
-        CountryNDC = <any>"CountryNDC",
-        CountryGHG = <any>"CountryGHG",
-    }
+
     
 
 export enum CountryStatus {
