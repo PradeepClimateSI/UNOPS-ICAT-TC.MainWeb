@@ -160,7 +160,7 @@ isLogoutClicked: boolean = false;
 
     this.starting_situation_tooltip = "Please describe the baseline scenario on the indicated scale for the intervention, including the current and expected climate risks and impacts in the project area."
     this.expected_impact_tooltip = "Please describe the adaptation benefits on the indicated scale."
-    this.relevance_tooltip = "Does the process characteristic affects/impacts any of the identified barriers? Does the intervention affect or is affected by this process characteristic?"
+    this.relevance_tooltip = "Does the process characteristic affect/impact any of the identified barriers? Does the intervention affect or is affected by this process characteristic?"
 
     this.GHG_scale_info = this.masterDataService.GHG_scale_info;
     this.SD_scale_info = this.masterDataService.SD_scale_info;
