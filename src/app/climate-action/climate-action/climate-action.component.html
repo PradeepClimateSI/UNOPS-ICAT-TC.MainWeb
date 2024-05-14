@@ -1,18 +1,20 @@
 <div class="container pl-20 pr-20">
+  <div *ngIf="project.projectApprovalStatus ; else elseblock" class="mb-12">
+    <h4 class="mt-4">{{ project.projectApprovalStatus.id == 1 ?'Accepted':project.projectApprovalStatus.id
+      == 5 ?'Accepted':editEntytyId > 0?'View ':'Create an '}} Intervention <i class="pi pi-info-circle" style="font-size: 25px" tooltipPosition="bottom" pTooltip="An intervention can be a project, a policy, or a coherent set of activities"></i></h4>
+  </div>
+  <ng-template #elseblock>
+    <h4 class="mt-4">Create an Intervention <i class="pi pi-info-circle" style="font-size: 25px" tooltipPosition="bottom" pTooltip="An intervention can be a project, a policy, or a coherent set of activities"></i>
+      <span (click)="watchVideo()" pTooltip="Click to watch guidance video"  class="infor-video" ><i class="pi pi-video" style=" font-size: 1em ;  margin-left: 1em;"></i></span>
+
+    </h4>
+  </ng-template>
   <form #fData="ngForm" (ngSubmit)="saveForm(fData)">
+
     <div id="content" #content>
       <div class="card">
         <div class="p-grid p-fluid col-sm-12">
-          <div *ngIf="project.projectApprovalStatus ; else elseblock" class="mb-12">
-            <h4 class="mt-4">{{ project.projectApprovalStatus.id == 1 ?'Accepted':project.projectApprovalStatus.id
-              == 5 ?'Accepted':editEntytyId > 0?'View ':'Create an '}} Intervention <i class="pi pi-info-circle" style="font-size: 25px" tooltipPosition="bottom" pTooltip="An intervention can be a project, a policy, or a coherent set of activities"></i></h4>
-          </div>
-          <ng-template #elseblock>
-            <h4>Create an Intervention <i class="pi pi-info-circle" style="font-size: 25px" tooltipPosition="bottom" pTooltip="An intervention can be a project, a policy, or a coherent set of activities"></i>
-              <span (click)="watchVideo()" pTooltip="Click to watch guidance video"  class="infor-video" ><i class="pi pi-video" style=" font-size: 1em ;  margin-left: 1em;"></i></span>
-
-            </h4>
-          </ng-template>
+         
           <div class="p-2">
             <h6>Contact Details</h6>
           </div>
@@ -246,7 +248,7 @@
               <div class="col-12 col-md-6">
                 <div class="p-field">
                   <label for="projStatus">Level of Implementation</label>
-                  <div type="button" class="pi pi-info-circle ml-10" pTooltip="Who does implement the policy?"></div>
+                  <div type="button" class="pi pi-info-circle ml-10" pTooltip="Who does implement the intervention?"></div>
                   <ng-container *ngIf="isDownloadMode == 0 && flag !=1  && !editMode;">
                     <p-dropdown [disabled]="editEntytyId > 0 && !editMode" placeholder="Please Select the Level of Implementation" name="level_of_implemetation" #level_of_implemetation="ngModel" [(ngModel)]="project.levelofImplemenation" [options]="levelOfImplementation" optionLabel="name"
                       optionValue="name" [ngModelOptions]="{ standalone: false }" [autoDisplayFirst]="false" appendTo="body"></p-dropdown>

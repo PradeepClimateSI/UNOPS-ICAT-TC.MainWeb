@@ -1,15 +1,10 @@
 <div class="container pl-20 pr-20">
-
+    <div class="mb-12">
+        <h4 class="mt-4"> Assessments in progress    
+            <span (click)="watchVideo()" pTooltip="Click to watch guidance video"  class="infor-video" ><i class="pi pi-video" style=" font-size: 1em ;  margin-left: 1em;"></i></span>
+        </h4>
+    </div>
     <div class="card" style="min-height: 600px;">
-
-        <div class="mb-12">
-            <h4 class="mt-4"> Assessments in progress    
-                <span (click)="watchVideo()" pTooltip="Click to watch guidance video"  class="infor-video" ><i class="pi pi-video" style=" font-size: 1em ;  margin-left: 1em;"></i></span>
-            </h4>
-
-        </div>
-
-
         <p-table #dt2 [value]="assessments" [paginator]="true" [rows]="rows" [totalRecords]="totalRecords"
             [sortField]="'id'" [sortOrder]="-1" [lazy]="true" (onLazyLoad)="loadgridData($event)"
             [showCurrentPageReport]="true"
