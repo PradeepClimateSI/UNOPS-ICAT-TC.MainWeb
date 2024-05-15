@@ -224,7 +224,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
     this.adaptation_info = this.masterDataService.other_invest_adaptation_info
     this.ghg_score_info = this.masterDataService.other_invest_ghg_score_info
 
-    this.relevance_tooltip = "Does the process characteristic affects/impacts any of the identified barriers? Does the intervention affect or is affected by this process characteristic?"
+    this.relevance_tooltip = "Does the process characteristic affect/impact any of the identified barriers? Does the intervention affect or is affected by this process characteristic?"
 
     this.activatedRoute.queryParams.subscribe(async params => {
       params['isEdit'] == 'true' ? (this.isEditMode = true) : false;
