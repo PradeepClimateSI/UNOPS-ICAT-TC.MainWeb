@@ -9,6 +9,8 @@ import { ActivatedRoute } from '@angular/router';
 import { DialogService } from 'primeng/dynamicdialog';
 import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
 import { MultiSelect } from 'primeng/multiselect';
+import { AppService } from 'shared/AppService';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-carbon-market-assessment',
   templateUrl: './carbon-market-assessment.component.html',
@@ -82,6 +84,8 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   selectedSectorsCompleteMode: Sector[] = [];
   autoSaveDialog: boolean;
 
+logOutSubs: Subscription;
+
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
     private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,
@@ -95,9 +99,11 @@ export class CarbonMarketAssessmentComponent implements OnInit {
     private route: ActivatedRoute,
     protected dialogService: DialogService,
     private confirmationService: ConfirmationService,
+    private appService: AppService
   ) { }
 
   async ngOnInit(): Promise<void> {
+    // this.appService.autoSavingDone.next(true)
     this.tableData =  this.getProductsData();
     this.assessment_types = this.masterDataService.assessment_type
     this.impact_types = this.masterDataService.impact_types
@@ -136,6 +142,14 @@ export class CarbonMarketAssessmentComponent implements OnInit {
 
     this.international_tooltip = 'Name of international or private carbon market standard under which the intervention is registered.'
     await this.getCharacteristics();
+
+    if (!this.isEditMode) {
+      this.logOutSubs = this.appService.loginOut.subscribe(res => {
+        if (res) {
+          this.appService.autoSavingDone.next(true)
+        }
+      })
+    }
   }
   setDataFromFlow(interventonId:string, assessmentType:string) {
     this.isDisableIntervention = true

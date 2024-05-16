@@ -22,5 +22,7 @@ export class AppComponent {
   constructor(private appService: AppService){
     this.appService.startRefreshTokenTimer();
     this.appService.startIdleTimer();
+    this.appService.autoSavingDone.next(true);
+    this.appService.loginOut.next(false);
   }
 }

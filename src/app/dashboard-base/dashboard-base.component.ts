@@ -6,6 +6,8 @@ import { NotificationControllerServiceProxy, UsersControllerServiceProxy,Notific
 import decode from 'jwt-decode';
 import { MasterDataService } from 'app/shared/master-data.service';
 import { map } from 'rxjs/operators';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-base',
@@ -31,6 +33,10 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
   messages: Message[] | undefined;
   private systemTimer: any;
   isDeploying: boolean=false;
+  isAutoSaveDone: boolean = true;
+  autoSub: Subscription
+  isInAutoSaving: boolean = false;
+  isLogoutClicked: boolean = false;
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -41,6 +47,7 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
     private countryProxy: CountryControllerServiceProxy,
     public masterDataService: MasterDataService,
     private systemStatusProxy: SystemStatusControllerServiceProxy,
+    private route: ActivatedRoute
   ) { }
   ngAfterViewInit(): void {
     this.cdr.detectChanges();
@@ -86,7 +93,6 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
 
     });
 
-
   }
 
   onHideDialog(){}
@@ -100,10 +106,31 @@ export class DashboardBaseComponent implements OnInit,AfterViewInit {
     })
   }
 
-  logout() {
-    this.appService.logout();
-    this.stopSystemStatusTimer();
+  logoutSubscription() {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to logout?',
+      key: 'logout',
+      accept: () => {
+        this.appService.logout();
+        this.stopSystemStatusTimer();
+      },
+      reject: () => {
+      }
+    })
+  }
 
+  logout() {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to logout?',
+      key: 'logout',
+      accept: () => {
+        this.appService.logout();
+        this.stopSystemStatusTimer();
+      },
+      reject: () => {
+      }
+    })
+    
   }
 
   public startSystemStatusTimer(isFirst: boolean=false) {

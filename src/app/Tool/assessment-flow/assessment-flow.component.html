@@ -1,6 +1,8 @@
 <div  class="container pl-20 pr-20">
     <div class="mb-12">
-        <h4 class="mt-4">How to decide which tool to use?</h4>
+        <h4 class="mt-4">How to decide which tool to use
+            <i class="pi pi-info-circle" (mouseover)="opAssessment.toggle($event)" (mouseout)="opAssessment.toggle($event)" style="font-size:  25px ;"></i>
+        </h4>
     </div>
 
     <div class="card" style="min-height: 600px;">
@@ -67,4 +69,8 @@
             </div>
         </div>
     </div>
-</div>
+</div><p-overlayPanel #opAssessment [style]="{'width': '800px'}">
+    <div class="p-grid p-fluid col-md-12 col-sm-12 text-title">
+      <img src="../../../assets/images/assessment/assessment_flow.png" alt="Assessment Flow"  width="780px" >
+    </div>
+  </p-overlayPanel>
