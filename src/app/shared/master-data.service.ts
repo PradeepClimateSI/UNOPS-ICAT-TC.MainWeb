@@ -1101,7 +1101,7 @@ export enum FieldNames {
   JUSTIFICATION = "JUSTIFICATION"
 }
 
-export const chapter6_url = 'https://storage.googleapis.com/public-bucket-kh/Transformational-Change-Methodology_ch6.pdf'
+export const chapter6_url = 'https://storage.googleapis.com/tc-toolkit-public-files/public/Transformational-Change-Methodology_ch6.pdf'
 export const assessment_period_info = 'This refers to the timeframe, for which the intervention\'s impact is assessed - NOT when the assessment is conducted.\n' +
   'The period cannot begin earlier than the start date that was selected for the intervention. It can be different from the implementation period and should include the full range ' +
   'of relevant impacts.\n' +
