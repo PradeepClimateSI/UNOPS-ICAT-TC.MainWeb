@@ -346,6 +346,11 @@
                 <app-document-upload [doucmentList]="documents" [documentOwner]="documentsDocumentOwner" [documentOwnerId]="documentOwnerId" [isNew]="false" [showUpload]="false" [showDeleteButton]="true">
                 </app-document-upload>
               </ng-container>
+              <ng-container *ngIf=" !editEntytyId && isDownloadMode == 1">
+                <ng-container *ngFor="let doc of selectedDocuments">
+                  <label>{{doc.fileName}}</label>
+                </ng-container>
+              </ng-container>
               <div *ngIf="selectedDocuments.length ==0 && editEntytyId > 0 && !editMode">
                 <p>Documents not uploaded </p>
               </div>
