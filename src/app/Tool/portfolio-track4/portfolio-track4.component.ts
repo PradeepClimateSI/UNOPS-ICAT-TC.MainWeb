@@ -168,6 +168,7 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
   savedInInterval: boolean;
   isLogoutClicked: boolean;
   logOutSubs: Subscription
+  isFirst: boolean = false;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -222,6 +223,7 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
       params['isEdit'] == 'true' ? (this.isEditMode = true) : false;
       params['iscompleted'] == 'true' ? (this.isCompleted = true) : false
       params['isContinue'] == 'true' ? (this.isContinue = true) : false
+      params['isFirst'] == 'true' ? (this.isFirst = true): (this.isFirst= false)
       if(params['interventionId'] && params['assessmentType']){
         await this.getPolicies().then( x=>
           this.setDataFromFlow(params['interventionId'],params['assessmentType'])
@@ -242,6 +244,7 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
     }
     else {
       try {
+        
         await this.getSavedAssessment()
         .then(x => {
           if (!this.isCompleted) {
@@ -251,6 +254,7 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
       }
       catch (error) {
       }
+      this.autoFillInternational();
     }
     this.visionExample = [
       { title: 'Transformational Vision', value: 'Decarbonized electricity sector with a high % of Solar PV energy which will enable economic growth and will lead the shift of the labour market towards green jobs.' },
@@ -311,7 +315,7 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
       this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
     }
 
-    this.autoFillInternational();
+   
   }
 
   subscribeLogout() {
@@ -341,7 +345,7 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
 
 
   ngOnDestroy(): void {
-    if (!this.isCompleted && (this.isSavedAssessment || this.isContinue || this.isEditMode)) {
+    if (!this.isCompleted && (this.isSavedAssessment || this.isContinue || this.isEditMode) && !this.isFirst) {
       if (this.activeIndexMain === 0 ) {
         this.lastUpdatedCategory = this.processData[this.activeIndex]
       } else {
@@ -354,6 +358,8 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
           if (!this.isSavingDraft) {this.saveDraft(this.lastUpdatedCategory,this.lastUpdatedCategory.CategoryName,this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true, true)}
         }
       }
+    }else{
+      this.isFirst = false
     }
     this.stopAutoSave()
   }
@@ -965,7 +971,6 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
       sustainedSDGs: this.sdgDataSendArray4,
       sdgs: this.selectedSDGsWithAnswers
     }
-    
     await this.investorToolControllerproxy.createFinalAssessment2(data)
       .subscribe(async _res => {
         this.isSavingDraft = false
@@ -982,6 +987,7 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
           this.setTo()
         }
         if (this.isEditMode == false && !isAutoSaving) {
+          this.isFirst = true;
           this.router.navigate(['app/portfolio-tool-edit'], {
             queryParams: { id: this.mainAssessment.id, isEdit: true },
           });
