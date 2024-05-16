@@ -589,6 +589,10 @@ export class ClimateActionComponent implements OnInit  {
                
               })
 
+              this.docService.getDocuments(res.id, this.documentsDocumentOwner).subscribe(res => 
+                this.selectedDocuments = res
+              )
+
               for (let sec of this.finalSectors) {
                 let ps = new PolicySector();
                 ps.intervention = res
