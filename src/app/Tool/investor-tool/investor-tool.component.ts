@@ -193,6 +193,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
   savedInInterval: boolean = false;
   isLogoutClicked: boolean;
   logOutSubs: Subscription
+  isFirst: boolean = false;
+
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
     public masterDataService: MasterDataService,
@@ -230,6 +232,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
       params['isEdit'] == 'true' ? (this.isEditMode = true) : false;
       params['iscompleted'] == 'true' ? (this.isCompleted = true) : false
       params['isContinue'] == 'true' ? (this.isContinue = true) : false
+      params['isFirst'] == 'true' ? (this.isFirst = true): (this.isFirst= false)
       this.assessmentId = params['id'];
       if(params['interventionId'] && params['assessmentType']){
         await this.getPolicies().then( x=>
@@ -261,6 +264,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
       }
       catch (error) {
       }
+      this.autoFillInternational();
 
     }
     this.isFirstLoading0 = false
@@ -310,7 +314,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
     } else {
       this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
     }
-    this.autoFillInternational()
   }
 
   subscribeLogout() {
@@ -339,7 +342,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
   }
 
   ngOnDestroy(): void {
-    if (!this.isCompleted && (this.isSavedAssessment || this.isContinue || this.isEditMode)) {
+    if (!this.isCompleted && (this.isSavedAssessment || this.isContinue || this.isEditMode) && !this.isFirst) {
       if (this.activeIndexMain === 0 ) {
         this.lastUpdatedCategory = this.processData[this.activeIndex]
       } else {
@@ -352,6 +355,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
           if (!this.isSavingDraft) {this.saveDraft(this.lastUpdatedCategory,this.lastUpdatedCategory.CategoryName,this.lastUpdatedCategory.type === 'process' ? 'pro' : 'out', true, true)}
         }
       }
+    } else{
+      this.isFirst = false
     }
     this.stopAutoSave()
   }
@@ -822,6 +827,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
         this.setFrom()
         this.setTo()
         if (this.isEditMode == false  && !isAutoSaving) {
+          this.isFirst = true;
           this.router.navigate(['app/investor-tool-new-edit'], {
             queryParams: { id: this.mainAssessment.id, isEdit: true },
           });
