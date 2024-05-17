@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { environment } from 'environments/environment';
 import { Router, ActivatedRoute } from '@angular/router';
-
+import {  chapter6_url } from 'app/shared/master-data.service';
 import {
   ServiceProxy,
 } from 'shared/service-proxies/service-proxies';
@@ -30,7 +30,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
     description: '',
     savedLocation: '',
   };
-
+  chapter6_url :string= chapter6_url;
   responsiveOptions = [
     {
       breakpoint: '1024px',
