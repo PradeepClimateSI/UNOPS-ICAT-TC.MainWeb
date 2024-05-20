@@ -77,11 +77,10 @@ export class AssessmentInprogressComponent implements OnInit {
     let pageNumber = event.first === 0 || event.first === undefined ? 1 : (event.first / (event.rows === undefined ? 10 : event.rows)) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
     this.assessmentProxy.assessmentInprogress(pageNumber,this.rows,filterText).subscribe(res => {
-        this.assessments = res.items;
-        this.totalRecords = res.meta.totalItems;
+        this.assessments=res[1];
+        this.totalRecords= res[0];
         this.loading = false
-      }
-      )
+      })
       this.loading = false
   }
    setName(item:any){
