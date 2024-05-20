@@ -285,8 +285,8 @@ export class MasterDataService {
       {  id: "3 - Very likely (90-100%)",value:3 },
       {  id: "2 - Likely (60-90%)",value:2  },
       {  id: "1 - Possible (30-60%)",value:1 },
-      {  id: "0 - Less likely (10-30%)",value:0 },
-      {  id: "-1 - Unlikely (0-10%)",value:-1 },
+      {  id: "0 - Unlikely (10-30%)",value:0 },
+      {  id: "-1 - Very unlikely (0-10%)",value:-1 },
       {  id: "Outside assessment boundaries",value:99 },
     ]
 

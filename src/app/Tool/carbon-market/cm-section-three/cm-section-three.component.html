@@ -66,6 +66,12 @@
                             <p *ngIf="category.method === 'SCALE' && char.characteristic.code === 'INTERNATIONAL'">
                                 <i [innerText]="GHG_scale_info.macro"></i>
                             </p>
+                            <p *ngIf="category.method === 'SCALE' && char.characteristic.code === 'NATIONAL'">
+                                <i [innerText]="GHG_scale_info.medium"></i>
+                            </p>
+                            <p *ngIf="category.method === 'SCALE' && char.characteristic.code === 'SUBNATIONAL'">
+                                <i [innerText]="GHG_scale_info.micro"></i>
+                            </p>
                             <ng-container *ngIf="category.method === 'SCALE' && char.characteristic.code === 'NATIONAL'">
                                 <p><i [innerText]="sectoral_description"></i></p>
                                 <p><a target="_blank" href="https://www.ipcc-nggip.iges.or.jp/public/2006gl/pdf/1_Volume1/V1_4_Ch4_MethodChoice.pdf">Chapter 4 - Methodological Choice And Identification Of Key Categories </a></p>
@@ -270,6 +276,12 @@
                             <p *ngIf="category.method === 'SCALE' && char.characteristic.code === 'INTERNATIONAL'">
                                 <i [innerText]="adaptation_scale_info.macro"></i>
                             </p>
+                            <p *ngIf="category.method === 'SCALE' && char.characteristic.code === 'NATIONAL'">
+                                <i [innerText]="adaptation_scale_info.medium"></i>
+                            </p>
+                            <p *ngIf="category.method === 'SCALE' && char.characteristic.code === 'SUBNATIONAL'">
+                                <i [innerText]="adaptation_scale_info.micro"></i>
+                            </p>
                             <ng-container *ngIf="category.method === 'SCALE' && char.characteristic.code === 'NATIONAL'">
                                 <p><i [innerText]="sectoral_description"></i></p>
                                 <p><a target="_blank" href="https://www.ipcc-nggip.iges.or.jp/public/2006gl/pdf/1_Volume1/V1_4_Ch4_MethodChoice.pdf">Chapter 4 - Methodological Choice And Identification Of Key Categories </a></p>
@@ -461,6 +473,12 @@
                                             <h6>{{idx+1}}. {{char.characteristic.name}}</h6>
                                             <p *ngIf="char.characteristic.code === 'INTERNATIONAL'">
                                                 <i [innerText]="SD_scale_info.macro"></i>
+                                            </p>
+                                            <p *ngIf="char.characteristic.code === 'NATIONAL'">
+                                                <i [innerText]="SD_scale_info.medium"></i>
+                                            </p>
+                                            <p *ngIf="char.characteristic.code === 'SUBNATIONAL'">
+                                                <i [innerText]="SD_scale_info.micro"></i>
                                             </p>
                                             <ng-container *ngIf="category.method === 'SCALE' && char.characteristic.code === 'NATIONAL'">
                                                 <p><i [innerText]="sectoral_description"></i></p>
