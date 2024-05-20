@@ -15,7 +15,7 @@ import { Assessment, AssessmentControllerServiceProxy, User, UsersControllerServ
 export class AssessmentInprogressComponent implements OnInit {
 
 
-  loading: boolean;
+  loading: boolean = true ;
   totalRecords: number = 0;
   rows: number = 10;
   last: number;
@@ -72,15 +72,16 @@ export class AssessmentInprogressComponent implements OnInit {
   }
 
   loadgridData = (event: LazyLoadEvent) => {
+   
     let filterText = this.searchBy.text ? this.searchBy.text : '';
     let pageNumber = event.first === 0 || event.first === undefined ? 1 : (event.first / (event.rows === undefined ? 10 : event.rows)) + 1;
     this.rows = event.rows === undefined ? 10 : event.rows;
-
     this.assessmentProxy.assessmentInprogress(pageNumber,this.rows,filterText).subscribe(res => {
         this.assessments=res[1];
         this.totalRecords= res[0];
-      }
-      )
+        this.loading = false
+      })
+      this.loading = false
   }
    setName(item:any){
     let name:string ='';
