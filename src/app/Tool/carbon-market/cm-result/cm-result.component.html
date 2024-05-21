@@ -114,7 +114,7 @@
                                     <ng-container *ngFor="let data of cat.characteristic">
                                         <td>{{question[data.name + 'question']}}</td>
                                         <td>{{question[data.name + 'weight']}}%</td>
-                                        <td>{{question[data.name + 'score']}}</td>
+                                        <td>{{question[data.name + 'score'] }}</td>
                                     </ng-container>
                                 </ng-container>
                             </tr>
@@ -124,7 +124,7 @@
                                 <ng-container *ngFor="let data of cat.characteristic">
                                     <td colspan="3">
                                         <span>
-                                            {{data.name}} score: {{data.ch_score}} <br> Weight: {{data.weight}}%
+                                            {{data.name}} score: {{data.ch_score === null ? 'N/A' : data.ch_score}} <br> Weight: {{data.weight}}%
                                         </span>
                                     </td>
                                 </ng-container>
@@ -135,7 +135,7 @@
                             <ng-container *ngFor="let data of processData.data">
                                 <td [attr.colspan]="data.characteristic.length*3">
                                     <span>
-                                        {{data.name}} score: {{data.cat_score}} <br> Weight: {{data.weight}}%
+                                        {{data.name}} score: {{data.cat_score === null ? 'N/A' : data.cat_score}} <br> Weight: {{data.weight}}%
                                     </span>
                                 </td>
                             </ng-container>
