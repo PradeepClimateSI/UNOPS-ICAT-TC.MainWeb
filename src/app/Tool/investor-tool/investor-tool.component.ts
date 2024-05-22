@@ -496,7 +496,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
     this.setFrom();
     this.setTo();
     this.draftLoading = true;
-    this.isSavedAssessment = true;
   }
 
   onChangeSDGsAnswer(withAnswers: any, item: any) {
@@ -1772,14 +1771,20 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
   }
 
   autoFillInternational() {
-    if (['NATIONAL', 'SUBNATIONAL'].includes(this.assessment['geographicalAreasCovered'][0].code)) {
+    let geoArea = ''
+    if (this.isEditMode === false) {
+      geoArea = this.geographicalArea.code
+    } else {
+      geoArea = this.assessment['geographicalAreasCovered'][0].code
+    }
+    if (['NATIONAL', 'SUBNATIONAL'].includes(geoArea)) {
       for (let category of this.outcomeData) {
         let score = this.masterDataService.outcomeScaleScore.find(s => s.value === 99)
         if (['SCALE_GHG'].includes(category.categoryCode)){
           category.data = category.data.map(data => {
             if (data.characteristics.code === "MACRO_LEVEL") {
               if (score?.value && !data.score) {data.score = score.value}
-              if (!data.justification) data.justification = 'The geographical area covered by this assessment is ' + (this.assessment['geographicalAreasCovered'][0].code === 'NATIONAL' ? 'national/sectoral': 'sub-national/sub-sectoral.');
+              if (!data.justification) data.justification = 'The geographical area covered by this assessment is ' + (geoArea === 'NATIONAL' ? 'national/sectoral': 'sub-national/sub-sectoral.');
             }
             return data;
           })
@@ -1788,7 +1793,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
             this.sdgDataSendArray2.data = sdg.data.map((data: any) => {
               if (data.characteristics.code === "MACRO_LEVEL") {
                 if (score?.value && !data.score) {data.score = score.value}
-                if (!data.justification) data.justification = 'The geographical area covered by this assessment is ' + (this.assessment['geographicalAreasCovered'][0].code === 'NATIONAL' ? 'national/sectoral': 'sub-national/sub-sectoral.');
+                if (!data.justification) data.justification = 'The geographical area covered by this assessment is ' + (geoArea === 'NATIONAL' ? 'national/sectoral': 'sub-national/sub-sectoral.');
               }
               return data;
             })
@@ -1797,7 +1802,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
           category.data = category.data.map(data => {
             if (data.characteristics.code === "INTERNATIONAL") {
               if (score?.value && !data.score) {data.score = score.value}
-              if (!data.justification) data.justification = 'The geographical area covered by this assessment is ' + (this.assessment['geographicalAreasCovered'][0].code === 'NATIONAL' ? 'national/sectoral': 'sub-national/sub-sectoral.');
+              if (!data.justification) data.justification = 'The geographical area covered by this assessment is ' + (geoArea === 'NATIONAL' ? 'national/sectoral': 'sub-national/sub-sectoral.');
             }
             return data;
           })
