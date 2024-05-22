@@ -23,16 +23,16 @@
             </div>
             <div *ngIf="isShowInternvention" class="row ml-10 mb-30">
                 <div class="p-field p-2 col-md-4 ">
-                    <label for="policy">Select Intervention *</label>
-                    <p-dropdown name="policy" #policy="ngModel" placeholder="Select Intervention" [(ngModel)]="intervention" appendTo="body" [options]="policies" optionLabel="policyName" [required]="true" 
+                    <label for="policy">Select intervention *</label>
+                    <p-dropdown name="policy" #policy="ngModel" placeholder="Select intervention" [(ngModel)]="intervention" appendTo="body" [options]="policies" optionLabel="policyName" [required]="true" 
                      (onChange)="onChangeInterventionAndType()" ></p-dropdown>
                     <p class="info-message text-danger" *ngIf=" !intervention.id &&  policy.touched  ">
                       This is a mandatory field
                     </p>
                 </div>
                 <div class="p-field p-2 col-md-4">
-                    <label for="policy">Assessment Type *</label>
-                    <p-dropdown name="type" #type="ngModel" placeholder="Select Assessment Type" [(ngModel)]="assessmentType" [options]="assessment_types" optionLabel="name" optionValue="name" [required]="true" appendTo="body" 
+                    <label for="policy">Assessment type *</label>
+                    <p-dropdown name="type" #type="ngModel" placeholder="Select assessment type" [(ngModel)]="assessmentType" [options]="assessment_types" optionLabel="name" optionValue="name" [required]="true" appendTo="body" 
                     (onChange)="onChangeInterventionAndType()" ></p-dropdown>
                     <p class="info-message text-danger" *ngIf="!assessmentType && type.touched  ">
                         This is a mandatory field

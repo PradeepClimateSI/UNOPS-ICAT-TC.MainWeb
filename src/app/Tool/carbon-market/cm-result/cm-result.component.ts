@@ -83,14 +83,14 @@ export class CmResultComponent implements OnInit {
       this.card.push(
         ...[
           { title: 'Intervention', data: this.intervention.policyName },
-          { title: 'Scale of Activity', data: scale?.name },
-          { title: 'Assessment Type', data: this.assessment.assessmentType },
-          { title: 'Geographical Areas Covered', data: this.assessmentCMDetail.geographicalAreasCovered.map(a => a.name).join(', ')},
-          { title: 'Sectors Covered', data: this.assessmentCMDetail.sectorsCovered.map(a => a.sector.name).join(', ')},
+          { title: 'Scale of activity', data: scale?.name },
+          { title: 'Assessment type', data: this.assessment.assessmentType },
+          { title: 'Geographical areas covered', data: this.assessmentCMDetail.geographicalAreasCovered.map(a => a.name).join(', ')},
+          { title: 'Sectors covered', data: this.assessmentCMDetail.sectorsCovered.map(a => a.sector.name).join(', ')},
           { title: 'Opportunities for stakeholders to participate in the assessment', data: this.assessment.opportunities},
-          { title: 'Assessment Period', data: moment(this.assessment.from).format('DD/MM/YYYY') + ' - ' + moment(this.assessment.to).format('DD/MM/YYYY')},
-          { title: 'Assessment Boundaries (If different from the intervention boundary specified in the baseline methodology)', data: this.assessmentCMDetail.boundraries},
-          { title: 'International Carbon Market Approach Used', data: cmApproache?.name},
+          { title: 'Assessment period', data: moment(this.assessment.from).format('DD/MM/YYYY') + ' - ' + moment(this.assessment.to).format('DD/MM/YYYY')},
+          { title: 'Assessment boundaries (If different from the intervention boundary specified in the baseline methodology)', data: this.assessmentCMDetail.boundraries},
+          { title: 'International carbon market approach used', data: cmApproache?.name},
           { title: 'Baseline and monitoring methodology applied by the intervention', data: this.assessmentCMDetail.appliedMethodology}
         ])
       await this.getResult()
@@ -245,25 +245,25 @@ export class CmResultComponent implements OnInit {
       XLSX.utils.sheet_add_json(ws, this.results[section], { skipHeader: false, origin: "A" + length });
       length = length + this.results[section].length + 2
     })
-    XLSX.utils.sheet_add_json(ws, [{title: 'Transformational Change Criteria'}], { skipHeader: true, origin: "A" + length });
+    XLSX.utils.sheet_add_json(ws, [{title: 'Transformational change criteria'}], { skipHeader: true, origin: "A" + length });
     length = length + 2
 
     let processData =  this._mapProcessData()
 
     if (processData.technology && processData.technology.length!=0){
-      XLSX.utils.sheet_add_json(ws, [{title: 'Process of Change / Technology'}], { skipHeader: true, origin: "A" + length });
+      XLSX.utils.sheet_add_json(ws, [{title: 'Process of change / Technology'}], { skipHeader: true, origin: "A" + length });
       length = length + 2
       XLSX.utils.sheet_add_json(ws, processData.technology, { skipHeader: false, origin: "A" + length });
       length = length + this.processData.technology.length + 2
     }
     if (processData.incentives && processData.incentives.length!=0){
-      XLSX.utils.sheet_add_json(ws, [{title: 'Process of Change / Incentives'}], { skipHeader: true, origin: "A" + length });
+      XLSX.utils.sheet_add_json(ws, [{title: 'Process of change / Incentives'}], { skipHeader: true, origin: "A" + length });
       length = length + 2
       XLSX.utils.sheet_add_json(ws, processData.incentives, { skipHeader: false, origin: "A" + length });
       length = length + this.processData.incentives.length + 2
     }
     if (processData.norms && processData.norms.length!=0){
-      XLSX.utils.sheet_add_json(ws, [{title: 'Process of Change / Norms'}], { skipHeader: true, origin: "A" + length });
+      XLSX.utils.sheet_add_json(ws, [{title: 'Process of change / Norms'}], { skipHeader: true, origin: "A" + length });
       length = length + 2
       XLSX.utils.sheet_add_json(ws, processData.norms, { skipHeader: false, origin: "A" + length });
       length = length + this.processData.norms.length + 2
@@ -271,25 +271,25 @@ export class CmResultComponent implements OnInit {
 
     let outcomeData = this.mapOutcomeData()
     if (outcomeData.scaleGHGs && outcomeData.scaleGHGs.length!=0){
-      XLSX.utils.sheet_add_json(ws, [{title: 'Outcome of Change / Scale GHGs'}], { skipHeader: true, origin: "A" + length });
+      XLSX.utils.sheet_add_json(ws, [{title: 'Outcome of change / Scale GHGs'}], { skipHeader: true, origin: "A" + length });
       length = length + 2
       XLSX.utils.sheet_add_json(ws, outcomeData.scaleGHGs, { skipHeader: false, origin: "A" + length });
       length = length + outcomeData.scaleGHGs.length + 2
     }
     if (outcomeData.sustainedGHGs && outcomeData.sustainedGHGs.length!=0){
-      XLSX.utils.sheet_add_json(ws, [{title: 'Outcome of Change / Sustained GHGs'}], { skipHeader: true, origin: "A" + length });
+      XLSX.utils.sheet_add_json(ws, [{title: 'Outcome of change / Sustained GHGs'}], { skipHeader: true, origin: "A" + length });
       length = length + 2
       XLSX.utils.sheet_add_json(ws, outcomeData.sustainedGHGs, { skipHeader: false, origin: "A" + length });
       length = length + outcomeData.scaleGHGs.length + 2
     }
     if (outcomeData.scaleSDs && outcomeData.scaleSDs.length!=0){
-      XLSX.utils.sheet_add_json(ws, [{title: 'Outcome of Change / Scale SDs'}], { skipHeader: true, origin: "A" + length });
+      XLSX.utils.sheet_add_json(ws, [{title: 'Outcome of change / Scale SDs'}], { skipHeader: true, origin: "A" + length });
       length = length + 2
       XLSX.utils.sheet_add_json(ws, outcomeData.scaleSDs, { skipHeader: false, origin: "A" + length });
       length = length + outcomeData.scaleSDs.length + 2
     }
     if (outcomeData.sustainedSDs && outcomeData.sustainedSDs.length!=0){
-      XLSX.utils.sheet_add_json(ws, [{title: 'Outcome of Change / Sustained SDs'}], { skipHeader: true, origin: "A" + length });
+      XLSX.utils.sheet_add_json(ws, [{title: 'Outcome of change / Sustained SDs'}], { skipHeader: true, origin: "A" + length });
       length = length + 2
       XLSX.utils.sheet_add_json(ws, outcomeData.sustainedSDs, { skipHeader: false, origin: "A" + length });
       length = length + outcomeData.sustainedSDs.length + 2

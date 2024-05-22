@@ -202,7 +202,7 @@ export class ViewComponent implements OnInit, AfterViewInit {
     if(climateactions){
       this.confirmationService.confirm({
         message: 'Are you sure you want to delete the intervention?',
-        header: 'Delete Confirmation',
+        header: 'Delete confirmation',
         acceptIcon: 'icon-not-visible',
         rejectIcon: 'icon-not-visible',
         accept: () => {

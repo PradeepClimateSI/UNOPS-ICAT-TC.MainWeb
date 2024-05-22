@@ -40,12 +40,12 @@
 
       <br><br><br>
 
-      <h4>Process of Change</h4><br>
+      <h4>Process of change</h4><br>
       <p-table [value]="allData" [tableStyle]="{ 'min-width': '100%' }">
         <ng-template pTemplate="header">
           <tr>
-            <th style="width:70%">LIKELIHOOD COMPARISON</th>
-            <th style="width:10%">PROCESSES</th>
+            <th style="width:70%">Likelihood comparison</th>
+            <th style="width:10%">Processes</th>
             <th style="width:20%"></th>
 
           </tr>
@@ -70,12 +70,12 @@
           <tr>
             <th style="width:10%">ID</th>
             <th style="width:15%">Name</th>
-            <th style="width:15%">Intervention Type</th>
+            <th style="width:15%">Intervention type</th>
             <th style="width:10%">Status</th>
-            <th style="width:10%">Category Score</th>
-            <th style="width:10%">Category Score</th>
-            <th style="width:10%">Category Score</th>
-            <th style="width:10%">Category Score</th>
+            <th style="width:10%">Category score</th>
+            <th style="width:10%">Category score</th>
+            <th style="width:10%">Category score</th>
+            <th style="width:10%">Category score</th>
             <th style="width:10%">Likelihood Score</th>
           </tr>
         </ng-template>
@@ -135,10 +135,10 @@
             <th style="width:15%">Name</th>
             <th style="width:15%">Intervention Type</th>
             <th style="width:10%">Status</th>
-            <th style="width:10%">Category Score</th>
-            <th style="width:10%">Category Score</th>
-            <th style="width:10%">Category Score</th>
-            <th style="width:10%">Category Score</th>
+            <th style="width:10%">Category score</th>
+            <th style="width:10%">Category score</th>
+            <th style="width:10%">Category score</th>
+            <th style="width:10%">Category score</th>
             <th style="width:10%">Relevance Score</th>
           </tr>
         </ng-template>
@@ -169,13 +169,13 @@
 
       <br><br><br>
 
-      <h4>Outcome of Change</h4><br>
+      <h4>Outcome of change</h4><br>
 
       <p-table [value]="allData" [tableStyle]="{ 'min-width': '100%' }">
         <ng-template pTemplate="header">
           <tr>
-            <th style="width:70%">SCALE COMPARISON</th>
-            <th style="width:10%">OUTCOMES</th>
+            <th style="width:70%">Scale comparison</th>
+            <th style="width:10%">Outcomes</th>
             <th style="width:20%"></th>
 
           </tr>
@@ -198,11 +198,11 @@
           <tr>
             <th style="width:10%">ID</th>
             <th style="width:25%">Name</th>
-            <th style="width:20%">Intervention Type</th>
+            <th style="width:20%">Intervention type</th>
             <th style="width:15%">Status</th>
-            <th style="width:10%">Category Score</th>
-            <th style="width:10%">Category Score</th>
-            <th style="width:10%">Scale Score</th>
+            <th style="width:10%">Category score</th>
+            <th style="width:10%">Category score</th>
+            <th style="width:10%">Scale score</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-allData>
@@ -251,11 +251,11 @@
           <tr>
             <th style="width:10%">ID</th>
             <th style="width:25%">Name</th>
-            <th style="width:20%">Intervention Type</th>
+            <th style="width:20%">Intervention type</th>
             <th style="width:15%">Status</th>
-            <th style="width:10%">Category Score</th>
-            <th style="width:10%">Category Score</th>
-            <th style="width:10%">Sustained Score</th>
+            <th style="width:10%">Category score</th>
+            <th style="width:10%">Category score</th>
+            <th style="width:10%">Sustained score</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-allData>
@@ -310,7 +310,7 @@
 </div>
 <div class="container pl-20 pr-20">
   <div class="d-flex flex-row-reverse mt-2 mb-2">
-    <button (click)="Back()" class="btn btn-primary btn-block text-uppercase">Back</button> &nbsp;&nbsp;
+    <button (click)="Back()" class="btn btn-primary btn-block">Back</button> &nbsp;&nbsp;
   </div>
 
 </div>
@@ -340,7 +340,7 @@
 
   <div>
     <h6 style="text-align: center;">Category: {{clickData.name}}</h6>
-    <h6 style="text-align: center;">Category Score: {{clickData.likelihoodAverage}}</h6>
+    <h6 style="text-align: center;">Category score: {{clickData.likelihoodAverage}}</h6>
   </div> <br>
 
   <p-table [value]="clickData.characteristics" [tableStyle]="{ 'min-width': '3rem' }">
@@ -373,7 +373,7 @@
 
   <div>
     <h6 style="text-align: center;">Category: {{clickData2.name}}</h6>
-    <h6 style="text-align: center;">Category Score: {{clickData2.relevanceAverage}}</h6>
+    <h6 style="text-align: center;">Category score: {{clickData2.relevanceAverage}}</h6>
   </div> <br>
 
   <p-table [value]="clickData2.characteristics" [tableStyle]="{ 'min-width': '3rem' }">
@@ -407,7 +407,7 @@
 
   <div>
     <h6 style="text-align: center;">Category: {{clickData3.name}}</h6>
-    <h6 style="text-align: center;">Category Score: {{clickData3.scoreAverage}}</h6>
+    <h6 style="text-align: center;">Category score: {{clickData3.scoreAverage}}</h6>
   </div> <br>
 
   <p-table [value]="clickData3.characteristics" [tableStyle]="{ 'min-width': '3rem' }">
@@ -441,7 +441,7 @@
 
   <div>
     <h6 style="text-align: center;">Category: {{clickData4.name}}</h6>
-    <h6 style="text-align: center;">Category Score: {{clickData4.scoreAverage}}</h6>
+    <h6 style="text-align: center;">Category score: {{clickData4.scoreAverage}}</h6>
   </div> <br>
 
   <p-table [value]="clickData4.characteristics" [tableStyle]="{ 'min-width': '3rem' }">
@@ -462,7 +462,7 @@
 
  <div class="container pl-20 pr-20">
   <div class="d-flex flex-row-reverse mt-2 mb-2">
-    <button (click)="makePDF()" class="btn btn-primary btn-block text-uppercase">Download as PDF</button> &nbsp;&nbsp;
+    <button (click)="makePDF()" class="btn btn-primary btn-block">Download as PDF</button> &nbsp;&nbsp;
 
   </div>
 </div>

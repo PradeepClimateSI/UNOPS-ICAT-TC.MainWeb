@@ -177,12 +177,12 @@ export class PortfolioResultComponent implements OnInit {
       this.card.push(
         ...[
           { title: 'Portfolio ID', data: this.portfolio.portfolioId },
-          { title: 'Name of the Portfolio', data: this.portfolio.portfolioName },
+          { title: 'Name of the portfolio', data: this.portfolio.portfolioName },
           { title: 'Description', data: this.portfolio.description },
           { title: 'Is this assessment an update of a previous assessment?', data: res[0].IsPreviousAssessment },
           { title: 'Objective(s) of the assessment', data: this.portfolio.objectives },
           { title: 'Intended audience(s) of the assessment', data: this.portfolio.audience },
-          { title: 'Number of Assessments', data: await this.noOfAssessments }
+          { title: 'Number of assessments', data: await this.noOfAssessments }
         ])
       });
 
