@@ -9,11 +9,11 @@
      <div style="display: flex; flex-direction: row;">
        <div style="flex-basis: 30%;">
          <p><strong>Intervention</strong></p>
-         <p><strong>Assessment Type</strong></p>
-         <p><strong>Assessment Approach</strong></p>
-         <p><strong>Assessment Method</strong></p>
+         <p><strong>Assessment type</strong></p>
+         <p><strong>Assessment approach</strong></p>
+         <p><strong>Assessment method</strong></p>
          <p><strong>Tool</strong></p>
-         <p><strong>Assessment Period</strong></p>
+         <p><strong>Assessment period</strong></p>
          <p><strong>Barriers</strong></p>
        </div>
        <div style="flex-basis: 50%;">
@@ -33,10 +33,10 @@
       <ng-template pTemplate="header">
           <tr>
               <th>Barrier</th>
-              <th>Characteristic Affected</th>
-              <th>Barrier Score</th>
+              <th>Characteristic affected</th>
+              <th>Barrier score</th>
               <th>Rationale</th>
-              <th>Barrier Directly Targeted By Policy of Action</th>
+              <th>Barrier directly targeted by policy of action</th>
           </tr>
       </ng-template>
       <ng-template pTemplate="body" let-barriersData>
@@ -85,8 +85,8 @@
 
 
  <br><br><br>
- <h5>Aggregated Characteristic</h5><br>
- <h5>Process of Change : {{ averageProcess }}</h5><br>
+ <h5>Aggregated characteristic</h5><br>
+ <h5>Process of change : {{ averageProcess }}</h5><br>
 
  <p-table [value]="processCategory" rowGroupMode="rowspan" groupRowsBy="category" sortField="category" sortMode="single"  [tableStyle]="{'min-width': '30rem'}">
    <ng-template pTemplate="header">
@@ -124,7 +124,7 @@
 
 
 
- <h5>Outcome of Change : {{ averageOutcome }}</h5><br>
+ <h5>Outcome of change : {{ averageOutcome }}</h5><br>
 
  <p-table [value]="outcomeCategory" rowGroupMode="rowspan" groupRowsBy="category" sortField="category" sortMode="single"  [tableStyle]="{'min-width': '60rem'}">
    <ng-template pTemplate="header">
@@ -171,7 +171,7 @@
 
 
  <div class="d-flex flex-row-reverse mt-2 mb-2">
-   <button (click)="makePDF()" pButton pRipple class="btn btn-primary btn-block text-uppercase" type='submit'>Download as PDF</button>
+   <button (click)="makePDF()" pButton pRipple class="btn btn-primary btn-block" type='submit'>Download as PDF</button>
  </div>
 
  </div>

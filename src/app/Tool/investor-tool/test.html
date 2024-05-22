@@ -1,4 +1,4 @@
-<p-tabPanel header="Outcome of Change" >
+<p-tabPanel header="Outcome of change" >
   <p-tabView #tabView2 (onChange)="onCategoryTabChange($event, tabView2) " [(activeIndex)]="activeIndex2">
 
       <p-tabPanel [header]="category.CategoryName" *ngFor="let category of outcomeData">

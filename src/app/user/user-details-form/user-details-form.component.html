@@ -2,14 +2,14 @@
 <p-toast position="top-right"></p-toast>
 <div class="container pl-20 pr-20">
   <div class="mb-12">
-    <h4 class="mt-4">View User</h4>
+    <h4 class="mt-4">View user</h4>
   </div>
   <div class="card">
     <div class="p-grid p-fluid col-sm-12">
       <div class="row p-2">
         <div class="col-12 col-md-6">
           <div class="p-field">
-            <label for="institution">Assigned Institution </label>
+            <label for="institution">Assigned institution </label>
 
             <input
               [disabled]="editUserId > 0"
@@ -30,7 +30,7 @@
       <div class="row p-2">
         <div class="col-12 col-md-8">
           <div class="p-field">
-            <label for="usertype">User Type </label>
+            <label for="usertype">User type </label>
 
             <input *ngIf="user.userType"
               [disabled]="editUserId > 0"
@@ -53,7 +53,7 @@
       <div class="row p-2">
         <div class="col-12 col-md-8">
           <div class="p-field">
-            <label for="firstname">First Name </label>
+            <label for="firstname">First name </label>
             <input
               [disabled]="editUserId > 0"
               type="text"
@@ -73,7 +73,7 @@
       <div class="row p-2">
         <div class="col-12 col-md-8">
           <div class="p-field">
-            <label for="lastname">Last Name </label>
+            <label for="lastname">Last name </label>
 
             <input
               [disabled]="editUserId > 0"
@@ -142,7 +142,7 @@
     <div class="row">
       <div class="d-flex  col-2 justify-content-start mb-0 pl-2  ">
         <button
-          class="btn btn-secondary text-uppercase ml-15 "
+          class="btn btn-secondary  ml-15 "
           (click)="onBackClick()"
         >
           Back
@@ -156,7 +156,7 @@
         pRipple
           *ngIf="!isNewUser"
           [disabled]="itsMe || user.canNotDelete == true || checkRole"
-          class="btn text-uppercase"
+          class="btn "
           type="button"
           (click)="confirmDeletUser()"
         >

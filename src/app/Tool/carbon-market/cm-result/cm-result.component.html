@@ -60,7 +60,7 @@
                 <br>
                 <table>
                     <tr class="table-header-left">
-                        <p class="category-topic"><u><b>Transformational Change Criteria</b> </u> </p>
+                        <p class="category-topic"><u><b>Transformational change criteria</b> </u> </p>
                     </tr>
                 </table>
                 <br>
@@ -69,7 +69,7 @@
                 </table>
                 <table *ngIf="processData?.data?.length > 0">
                     <tr class="table-header-left">
-                        <p style="font-size: large;">Process of Change</p>
+                        <p style="font-size: large;">Process of change</p>
                     </tr>
                 </table>
                 <br>
@@ -102,7 +102,7 @@
                             <td [attr.rowspan]="processData.guidingQuestions?.length + 2">Score</td>
                             <ng-container *ngFor="let cat of processData.data">
                                 <ng-container *ngFor="let data of cat.characteristic">
-                                    <td>Guiding Question</td>
+                                    <td>Guiding question</td>
                                     <td>Weight</td>
                                     <td>Score</td>
                                 </ng-container>
@@ -149,7 +149,7 @@
                 <br>
                 <table *ngIf="processData?.data?.length > 0">
                     <tr class="table-header-left">
-                        <p style="font-size: large;">Category Score - Process of change - {{score.process_score === null ? 'N/A' : score.process_score}}</p>
+                        <p style="font-size: large;">Category score - Process of change - {{score.process_score === null ? 'N/A' : score.process_score}}</p>
                     </tr>
                 </table>
                 <br>
@@ -159,7 +159,7 @@
                 <br>
                 <table *ngIf="outcomeData.scale_GHGs.length!=0 || outcomeData.scale_SDs.length!=0 || outcomeData.scale_adaptation.length!=0">
                     <tr class="table-header-left">
-                        <p style="font-size: large;">Outcome of Change - GHG</p>
+                        <p style="font-size: large;">Outcome of change - GHG</p>
                     </tr>
                 </table>
                 <br>
@@ -169,13 +169,13 @@
                             <tr>
                                 <th></th>
                                 <th>Characteristic</th>
-                                <th *ngIf="isDownloading">Starting Situarion</th>
-                                <th *ngIf="isDownloading">Expected Impact</th>
+                                <th *ngIf="isDownloading">Starting situarion</th>
+                                <th *ngIf="isDownloading">Expected impact</th>
                                 <th>Score</th>
-                                <th colspan="2">Evidence Provided?</th>
+                                <th colspan="2">Evidence provided?</th>
                                 <th>Scale/sustained score</th>
                                 <th>Weight</th>
-                                <th>Category Score</th>
+                                <th>Category score</th>
                             </tr>
                         </ng-template>
 
@@ -218,7 +218,7 @@
                     <br>
                     <table>
                         <tr class="table-header-left">
-                            <p style="font-size: large;">Outcome of Change - SDGs</p>
+                            <p style="font-size: large;">Outcome of change - SDGs</p>
                         </tr>
                     </table>
                     <br>
@@ -228,14 +228,14 @@
                                 <th></th>
                                 <th>SDG</th>
                                 <th>Characteristic</th>
-                                <th *ngIf="isDownloading">SDG Indicator</th>
-                                <th *ngIf="isDownloading">Starting Situation</th>
-                                <th *ngIf="isDownloading">Expected Impact</th>
+                                <th *ngIf="isDownloading">SDG indicator</th>
+                                <th *ngIf="isDownloading">Starting situation</th>
+                                <th *ngIf="isDownloading">Expected impact</th>
                                 <th>Score</th>
-                                <th colspan="2">Evidence Provided?</th>
+                                <th colspan="2">Evidence provided?</th>
                                 <th>Scale/sustained score</th>
                                 <th>Weight</th>
-                                <th>Category Score</th>
+                                <th>Category score</th>
                             </tr>
                         </ng-template>
 
@@ -284,7 +284,7 @@
                         <ng-template pTemplate="header">
                             <tr>
                                 <th>SDG</th>
-                                <th>SDG Score</th>
+                                <th>SDG score</th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-sdg>
@@ -304,7 +304,7 @@
                     <br>
                     <table>
                         <tr class="table-header-left">
-                            <p style="font-size: large;">Outcome of Change - Adaptation Co Benifits</p>
+                            <p style="font-size: large;">Outcome of change - Adaptation co-benifits</p>
                         </tr>
                     </table>
                     <br>
@@ -313,14 +313,14 @@
                             <tr>
                                 <th></th>
                                 <th>Characteristic</th>
-                                <th *ngIf="isDownloading">Adaptation Co-benifit</th>
-                                <th *ngIf="isDownloading">Starting Situation</th>
-                                <th *ngIf="isDownloading">Expected Impact</th>
+                                <th *ngIf="isDownloading">Adaptation co-benifit</th>
+                                <th *ngIf="isDownloading">Starting situation</th>
+                                <th *ngIf="isDownloading">Expected impact</th>
                                 <th>Score</th>
-                                <th colspan="2">Evidence Provided?</th>
+                                <th colspan="2">Evidence provided?</th>
                                 <th>Scale/sustained score</th>
                                 <th>Weight</th>
-                                <th>Category Score</th>
+                                <th>Category score</th>
                             </tr>
                         </ng-template>
 
@@ -367,7 +367,7 @@
                 <br>
                 <table *ngIf="outcomeData.scale_GHGs.length!=0 || outcomeData.scale_SDs.length!=0 || outcomeData.scale_adaptation.length!=0">
                     <tr class="table-header-left">
-                        <p style="font-size: large;">Category Score - Outcome of change - {{score.outcome_score.outcome_score === null ? 'N/A' : score.outcome_score.outcome_score}}</p>
+                        <p style="font-size: large;">Category score - Outcome of change - {{score.outcome_score.outcome_score === null ? 'N/A' : score.outcome_score.outcome_score}}</p>
                     </tr>
                 </table>
                 <br>
@@ -381,8 +381,8 @@
     <div class="container pl-20 pr-20">
  
         <div class="d-flex flex-row-reverse mt-2 mb-2">
-          <button (click)="toDownloadExcel()" class="btn btn-primary btn-block text-uppercase">Download as Excel</button>
-          <button  class="btn btn-primary btn-block text-uppercase mr-20" label="Generate" (click)="generate()">Generate Report</button>
+          <button (click)="toDownloadExcel()" class="btn btn-primary btn-block">Download as Excel</button>
+          <button  class="btn btn-primary btn-block mr-20" label="Generate" (click)="generate()">Generate report</button>
         </div>
       </div>
     <p-dialog [(visible)]="display">
@@ -392,7 +392,7 @@
             <div class="row p-2">
                 <div class="col-2">
                     <div>
-                        <label for="sector">Report Name</label>
+                        <label for="sector">Report name</label>
                     </div>
                 </div>
                 <div class="col-10">
