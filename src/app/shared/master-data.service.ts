@@ -247,8 +247,8 @@ export class MasterDataService {
 
     this.relevance = [
       {  name: "Relevant ",value:2 },
-      {  name: "Possibly Relevant ",value:1 },
-      {  name: "Not Relevant ",value:0 },
+      {  name: "Possibly relevant ",value:1 },
+      {  name: "Not relevant ",value:0 },
     ]
     this.score = [
       {  name: "3 - Major",value:3 },
