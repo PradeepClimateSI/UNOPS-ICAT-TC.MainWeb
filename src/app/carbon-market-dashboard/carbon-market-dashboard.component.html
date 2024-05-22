@@ -5,7 +5,7 @@
   <div  class="col-md-7 col-sm-7 col-12">
       <div class="p-grid p-fluid card m-3" style="height: 95.5%;">
           <div class="row text-center ">
-              <h3>Recent Assessments Done</h3>
+              <h3>Recent assessments done</h3>
               <ng-container *ngIf="tableData.length==0; else elseBlock3">
                 <div  class="col-12 " >
                   <p-messages severity="warn" >
@@ -20,8 +20,8 @@
               <ng-template #elseBlock3 >
                 <div  class="col-12  mt-20 ml-10" >
                   <div class="row">
-                    <label class="col-3">Select Assessments</label>
-                    <p-multiSelect placeholder="Select Assessments" name="interventions" class="col"
+                    <label class="col-3">Select assessments</label>
+                    <p-multiSelect placeholder="Select assessments" name="interventions" class="col"
                       #sector="ngModel" [(ngModel)]="selected_interventions" [options]="interventions_to_filter" appendTo="body"
                       optionLabel="intervention" optionValue="intervention_id" (ngModelChange)="loadgridData($event)" [selectionLimit]="10"></p-multiSelect>
                   </div>
@@ -45,10 +45,10 @@
               >
                   <ng-template pTemplate="header">
                       <tr>
-                          <th style="width:30%">Intervention Name</th>
-                          <th style="width:30%">Assessment Period</th>
-                          <th style="width:20%" style="line-height: 130%;">Likelihood of Transformation</th>
-                          <th style="width:20%" style="line-height: 130%;">Outcome Score</th>
+                          <th style="width:30%">Intervention name</th>
+                          <th style="width:30%">Assessment period</th>
+                          <th style="width:20%" style="line-height: 130%;">Likelihood of transformation</th>
+                          <th style="width:20%" style="line-height: 130%;">Outcome score</th>
 
                       </tr>
                   </ng-template>
@@ -71,7 +71,7 @@
 
     <div  class="p-grid p-fluid card m-3 ">
       <div class="row text-center ">
-          <h3>Meeting Environmental Integrity Criteria</h3>
+          <h3>Meeting environmental integrity criteria</h3>
           <div *ngIf="CMPrerequiste" [hidden]="CMPrerequiste[0].count==0 && CMPrerequiste[1].count==0" class="col-12  mt-20 ml-10 "  >
               <canvas id="pieChartCM" >{{pieChartCM}}</canvas>
           </div>
@@ -93,7 +93,7 @@
   <div class=" col-12">
       <div class="p-grid p-fluid card m-3">
           <div class="row text-center ">
-              <h3>Transformational Change of Interventions</h3>
+              <h3>Transformational change of interventions</h3>
               <ng-container *ngIf="tableData.length==0; else elseBlock4">
                 <div  class="col-12 " >
                   <p-messages severity="warn" >

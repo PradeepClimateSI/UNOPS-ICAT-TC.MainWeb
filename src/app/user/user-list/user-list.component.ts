@@ -175,7 +175,7 @@ export class UserListComponent implements OnInit {
   onDeleteClick(id: number) {
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete the user?',
-      header: 'Delete Confirmation',
+      header: 'Delete confirmation',
       acceptIcon: 'icon-not-visible',
       rejectIcon: 'icon-not-visible',
       accept: () => {

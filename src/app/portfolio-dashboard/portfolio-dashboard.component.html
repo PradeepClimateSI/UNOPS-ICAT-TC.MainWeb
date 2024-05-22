@@ -30,15 +30,15 @@
 
 <div class="p-grid p-fluid card m-3">
   <div class="row">
-    <h3>Recent Assessments Done</h3>
+    <h3>Recent assessments done</h3>
     <div class="row mt-20 ml-10">
       <div class="col-3 ">
-        <h5>Select Assessments </h5>
+        <h5>Select assessments </h5>
       </div>
   
       <div class="col-6 ">
         <p-multiSelect name="assess" [options]="allAssessments" [(ngModel)]="selectedAssessments" appendTo="body"
-        (onChange)="onSelectAssessment()" (onClear) ="onClear()" [showClear]="true" defaultLabel="Select Assessment" [selectionLimit]="selectionLimit"
+        (onChange)="onSelectAssessment()" (onClear) ="onClear()" [showClear]="true" defaultLabel="Select assessment" [selectionLimit]="selectionLimit"
         optionLabel="label"></p-multiSelect>
       </div>
     </div>
@@ -60,10 +60,10 @@
       >
         <ng-template pTemplate="header">
           <tr>
-            <th class="table-header-3">Intervention Name</th>
-            <th class="table-header-3">Assessment Period</th>
-            <th class="table-header" style="line-height: 130%;">Likelihood of Transformation</th>
-            <th class="table-header" style="line-height: 130%;">Outcome Score</th>
+            <th class="table-header-3">Intervention name</th>
+            <th class="table-header-3">Assessment period</th>
+            <th class="table-header-3" >Likelihood of transformation</th>
+            <th class="table-header-3" >Outcome score</th>
             
           </tr>
         </ng-template>
@@ -93,6 +93,7 @@
 
 <div class="p-grid p-fluid card m-3">
   <div class="row text-center">
+    <h3>Transformational change of interventions</h3>
     <app-heat-map  id="heatmap" [xData]="xData" [yData]="yData" [score]="heatMapScore" [showOp]="true" [tableData]="heatMapData"></app-heat-map>
   </div>
 </div>

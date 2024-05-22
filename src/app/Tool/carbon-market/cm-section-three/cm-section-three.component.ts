@@ -141,8 +141,8 @@ isLogoutClicked: boolean = false;
 
   async ngOnInit(): Promise<void> {
     this.types = [
-      { name: 'Process of Change', code: 'process' },
-      { name: 'Outcome of Change', code: 'outcome' }
+      { name: 'Process of change', code: 'process' },
+      { name: 'Outcome of change', code: 'outcome' }
     ]
 
     this.adaptation_tooltip = "Please describe the adaptation co-benefit resulting from the intervention and the approach for its determination.\n" +

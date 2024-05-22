@@ -1,7 +1,7 @@
 <div class="container pl-20 pr-20">
     <div class="mb-12">
 
-        <h4 class="mt-4"> {{ isNew ? "Create" : "View" }} Institution {{internalTeam ? "/ Internal Team" : ""}} 
+        <h4 class="mt-4"> {{ isNew ? "Create" : "View" }} institution {{internalTeam ? "/ Internal Team" : ""}} 
             <span (click)="watchVideo()" pTooltip="Click to watch guidance video"  class="infor-video" ><i class="pi pi-video" style=" font-size: 1em ;  margin-left: 1em;"></i></span>
          </h4>
 
@@ -64,8 +64,8 @@
                 <div class="row p-2">
                     <div class="col-12 col-md-6">
                         <div class="p-field">
-                            <label for="name">Institution Name*</label>
-                            <input [disabled]="institutionId > 0" type="text" placeholder="Enter Institution Name"
+                            <label for="name">Institution name*</label>
+                            <input [disabled]="institutionId > 0" type="text" placeholder="Enter institution name"
                                 name="insname" [(ngModel)]="inname" class="p-inputtext" #insname="ngModel" pInputText
                                 required (ngModelChange)="onInstitutionNameChange($event)" />
 
@@ -107,7 +107,7 @@
                 <div class="row p-2">
                     <div class="col-12 col-md-6">
                         <div class="p-field">
-                            <label for="objective">Contact Number*</label>
+                            <label for="objective">Contact number*</label>
 
                             <input id="telephoneNumber" type="text" name="telephone" class="form-control" required
                                 [(ngModel)]="intelephoneNumber" #telephoneNumber="ngModel" placeholder="+xxxxxxxxx" />
@@ -166,29 +166,29 @@
         <div class="d-flex flex-row-reverse mt-2 mb-2">
 
 
-            <button class="btn btn-primary btn-block text-uppercase ml-10" (click)="onBackClick()" label="Back">
+            <button class="btn btn-primary btn-block ml-10" (click)="onBackClick()" label="Back">
                 Back
             </button>
             <button [hidden]="institutionId > 0" pRipple [disabled]="isSaving" [disabled]=" insName"
-                class="btn btn-primary btn-block text-uppercase ml-10" type="submit" label="Save">Save
+                class="btn btn-primary btn-block ml-10" type="submit" label="Save">Save
             </button>
         </div>
 
         <div class="d-flex flex-row-reverse mt-2 mb-2">
             <button *ngIf="institutionId > 0 && institution.status===0" pButton pRipple
-                class="btn btn-primary btn-block text-uppercase  ml-10" (click)="activateInstitution(institution)">
+                class="btn btn-primary btn-block  ml-10" (click)="activateInstitution(institution)">
                 Deactivate
             </button>
 
             <button *ngIf="institutionId > 0 && institution.status===1" pButton pRipple
-                class="btn btn-primary btn-block text-uppercase  ml-10" (click)="activateInstitution(institution)">
+                class="btn btn-primary btn-block te  ml-10" (click)="activateInstitution(institution)">
                 Activate
             </button>
 
         </div>
 
         <div class="d-flex flex-row-reverse mt-2 mb-2">
-            <button *ngIf="institutionId > 0" pRipple class="btn btn-primary btn-block text-uppercase  ml-10"
+            <button *ngIf="institutionId > 0" pRipple class="btn btn-primary btn-block  ml-10"
                 type="edit" (click)="edit(institution)">
                 Edit
             </button>
