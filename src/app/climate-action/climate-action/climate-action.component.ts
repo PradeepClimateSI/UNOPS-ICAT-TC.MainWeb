@@ -120,7 +120,7 @@ export class ClimateActionComponent implements OnInit  {
   category: BarriersCategory[];
   selectCategory: any;
   approachList: string[] = ['AR1', 'AR2', 'AR3', 'AR4', 'AR5'];
-  typeofAction: string[] = ['Investment','Carbon Market','General tool']
+  typeofAction: string[] = ['Investment','Carbon market','General tool']
   levelOfImplementation: any[] = [];
   geographicalAreaCovered: any[] = [];
   characteristicsList: Characteristics[] = [];

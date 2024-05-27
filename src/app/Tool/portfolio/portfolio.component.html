@@ -22,7 +22,7 @@
                 <label for="policy">Interventions</label>
                 <select [disabled]="isSubmitted" class="form-control select-with-arrow" (change)="onChange($event)" ngModel name="policy"
                   id="exampleFormControlSelect1">
-                  <option value="" disabled selected hidden>Select Intervention</option>
+                  <option value="" disabled selected hidden>Select intervention</option>
                   <option *ngFor="let policy of policyList" [value]="policy.policyName">{{policy.policyName}}</option>
                 </select>
               </div>
@@ -48,10 +48,10 @@
           <div class="row p-2">
             <div class="col-12 col-md-8">
               <div class="p-field">
-                <label for="assessment_type">Assessment Type</label>
+                <label for="assessment_type">Assessment type</label>
                 <select [disabled]="isSubmitted" class="form-control select-with-arrow"  ngModel name="assessment_type"
                   id="exampleFormControlSelect1">
-                  <option value="" disabled selected hidden>Select Assessment Type</option>
+                  <option value="" disabled selected hidden>Select assessment type</option>
                   <option>Ex-ante</option>
                   <option>Ex-post</option>
                 </select>
@@ -1089,7 +1089,7 @@
       </div>
 
       <div class="d-flex flex-row-reverse mt-2 mb-2">
-        <button pButton pRipple class="btn btn-primary btn-block text-uppercase" type='submit'>Submit</button>
+        <button pButton pRipple class="btn btn-primary btn-block" type='submit'>Submit</button>
       </div>
     </form>
 
@@ -1103,7 +1103,7 @@
       <div class="row p-2">
         <div class="col-12 col-md-8">
           <div class="p-field">
-            <label for="category-select">Select Characteristics Affected By Barriers:</label>
+            <label for="category-select">Select characteristics affected by barriers:</label>
             <p-multiSelect [options]="relevantChaList" [(ngModel)]="selectChaAffectByBarriers"
               (onChange)="onItemSelectcha($event)" defaultLabel="Select Characteristics" optionLabel="name"></p-multiSelect>
             <button type="submit" (click)="submitForm()">Submit</button>

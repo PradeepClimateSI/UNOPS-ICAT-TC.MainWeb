@@ -9,7 +9,7 @@
             </div>
             <div class="col-md-4">
                 <div class="p-inputgroup pt-4">
-                    <input placeholder="Type Your Keyword" [(ngModel)]="searchBy.text" #nameClimate="ngModel"
+                    <input placeholder="Type your keyword" [(ngModel)]="searchBy.text" #nameClimate="ngModel"
                         type="text" name="nameClimate" class="p-inputtext" pInputText />
                     <button type="button" pButton pRipple label="Search" (click)="onSearch()"></button>
                 </div>
@@ -19,7 +19,7 @@
             <div class="col-md-4">
                 <div class="col-12">
                     <div class="p-field">
-                        <label for="projNdc">Select Report Type</label>
+                        <label for="projNdc">Select report type</label>
                         <p-dropdown appendTo="body" name="reporttype" [options]="reportTypes" placeholder="Select .."
                             [(ngModel)]="selectedReportTypes"  [showClear]="true" [filter]="true"
                              (onChange)="onSelectType($event)">
@@ -30,7 +30,7 @@
             <div  *ngIf="selectedReportTypes=='Result'"  class="col-md-4">
                 <div class="col-12">
                     <div class="p-field">
-                        <label for="projNdc">Select Intervention</label>
+                        <label for="projNdc">Select intervention</label>
                         <p-dropdown appendTo="body" name="ndc" [options]="climateActions" placeholder="Select .."
                             [(ngModel)]="searchBy.climateAction" #fndc="ngModel" [showClear]="true" [filter]="true"
                             optionLabel="policyName" (onChange)="onCAChange($event)">
@@ -41,7 +41,7 @@
             <div *ngIf="selectedReportTypes=='Result'&&searchBy.climateAction" class="col-md-4">
                 <div class="col-12">
                     <div class="p-field">
-                        <label for="projNdc">Select Tool</label>
+                        <label for="projNdc">Select tool</label>
                         <p-dropdown appendTo="body" name="rporttool" [options]="tools" placeholder="Select .."
                             [(ngModel)]="selectedTool"   [showClear]="true" [filter]="true"
                             (onChange)="onSelectTool($event)" >

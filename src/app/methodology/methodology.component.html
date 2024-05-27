@@ -21,7 +21,7 @@
                 <label for="policy">Interventions</label>
                 <select class="form-control select-with-arrow" (change)="onChange($event)" ngModel name="policy"
                   id="exampleFormControlSelect1">
-                  <option value="" disabled selected hidden>Select Intervention</option>
+                  <option value="" disabled selected hidden>Select intervention</option>
                   <option *ngFor="let policy of policyList" [value]="policy.policyName">{{policy.policyName}}</option>
                 </select>
 
@@ -262,7 +262,7 @@
 
 
       <div class="d-flex flex-row-reverse mt-2 mb-2">
-        <button pButton pRipple class="btn btn-primary btn-block text-uppercase" type='submit'>
+        <button pButton pRipple class="btn btn-primary btn-block" type='Submit'>
           Submit
         </button>
 
@@ -291,7 +291,7 @@
     <div class="row p-2">
       <div class="col-12 col-md-8">
         <div class="p-field">
-          <label for="category-select">Select Characteristics Affected By Barriers:</label>
+          <label for="category-select">Select characteristics affected by barriers:</label>
           <p-multiSelect [options]="relevantChaList" [(ngModel)]="selectChaAffectByBarriers" (onChange)="onItemSelectcha($event)" defaultLabel="Select Characteristics" optionLabel="name"></p-multiSelect>
           <button type="submit" (click)="submitForm()">Submit</button>
         </div>

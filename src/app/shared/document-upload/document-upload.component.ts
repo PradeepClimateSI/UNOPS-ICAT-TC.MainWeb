@@ -172,7 +172,7 @@ export class DocumentUploadComponent implements OnInit, OnChanges {
   async deleteConfirm(doc: Documents) {
     this.confirmationService.confirm({
       message: `Do you want to delete ${(doc.fileName)} ?`,
-      header: 'Delete Confirmation',
+      header: 'Delete confirmation',
       icon: 'pi pi-info-circle',
       accept: () => {
         if (this.token) {

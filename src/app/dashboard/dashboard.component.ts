@@ -246,7 +246,7 @@ export class DashboardComponent implements OnInit {
     };
   }
   handleBarClick(label: string, count: number) {
-    if(label=='Carbon Market'){
+    if(label=='Carbon market'){
       this.goToCarbonMarket();
     }
     else if(label=='Investment'){
