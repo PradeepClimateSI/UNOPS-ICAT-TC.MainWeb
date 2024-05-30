@@ -83,7 +83,7 @@ export class PortfolioComparisonComponent implements OnInit {
 
   async getDummyData() {
     let interventions = await this.portfolioServiceProxy.getPortfolioComparisonData(this.portfolioId).toPromise();
-    console.log(interventions)
+   
 
     this.process_data = interventions.process_data
     this.outcome_data = interventions.outcome_data
