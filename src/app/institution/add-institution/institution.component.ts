@@ -4,6 +4,8 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { Country, Institution, InstitutionCategory, InstitutionCategoryControllerServiceProxy, InstitutionControllerServiceProxy, InstitutionType, InstitutionTypeControllerServiceProxy, Sector, SectorControllerServiceProxy, ServiceProxy, User, UserType } from 'shared/service-proxies/service-proxies';
 import decode from 'jwt-decode';
 import { NgForm } from '@angular/forms';
+import { GuidanceVideoComponent } from 'app/guidance-video/guidance-video.component';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-institution',
@@ -17,8 +19,8 @@ export class InstitutionComponent implements OnInit {
   institution: Institution = new Institution();
   sectorList: Sector[] = [];
   typeList: InstitutionType[] = [];
-  selectedTypeList: string[] = [];
-  selectedTypeList1: string[] = [];
+  selectedTypeList: InstitutionType[] = [];
+  selectedTypeList1: InstitutionType[] = [];
   categoryList: InstitutionCategory[] = [];
   institutionId: number = 0;
   title: string;
@@ -30,7 +32,7 @@ export class InstitutionComponent implements OnInit {
   deletedAt: Date;
   isNew: boolean = true;
 
-  intype: InstitutionType;
+  intype: InstitutionType = new InstitutionType();
   insector: Sector;
   country: Country;
   countryId: number;
@@ -66,6 +68,7 @@ export class InstitutionComponent implements OnInit {
     private router: Router,
     private messageService: MessageService,
     private sectorProxy: SectorControllerServiceProxy,
+    protected dialogService: DialogService,
     private cdr: ChangeDetectorRef) { }
 
     ngAfterViewInit(): void {
@@ -196,7 +199,8 @@ async saveForm(formData: NgForm) {
     let inscat = new InstitutionCategory
     inscat.id =this.incategory.id;
     institution.category = inscat;
-    let instype = new InstitutionType
+    let instype = new InstitutionType();
+    this.intype.id = this.selectedTypeList[0].id
     instype.id =this.intype.id;
     institution.type = instype;
     institution.address = this.inaddress;
@@ -419,6 +423,22 @@ edit(institution: Institution) {
   this.router.navigate(['edit-institution'], {
     queryParams: { id: institution.id }
   });
+}
+
+watchVideo(){
+  let ref = this.dialogService.open(GuidanceVideoComponent, {
+    header: 'Guidance Video',
+    width: '60%',
+    contentStyle: {"overflow": "auto"},
+    baseZIndex: 10000,
+    data: {
+      sourceName: 'institution',
+    },
+  });
+
+  ref.onClose.subscribe(() => {
+    
+  })
 }
 
 }

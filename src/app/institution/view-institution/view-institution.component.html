@@ -9,26 +9,6 @@
         <div class="p-grid p-fluid col-sm-12">
 
           <div class="row p-2">
-
-
-            <div class="col-12 col-md-6">
-              <div class="p-field">
-                <label for="type">Type</label>
-                <input
-                type="text"
-                [disabled]="institutionId > 0"
-                placeholder={{institution.type.name}}
-                [(ngModel)]="institution.type.name"
-                  name = "type"
-                  class="p-inputtext"
-                  pInputText
-                  optionLabel="name"
-                >
-
-              </div>
-            </div>
-          </div>
-          <div class="row p-2">
             <div class="col-12 col-md-6">
               <div class="p-field">
                 <label for="sector">Sector</label>
@@ -68,7 +48,7 @@
           <div class="row p-2">
             <div class="col-12 col-md-6">
               <div class="p-field">
-                <label for="projScope">Institution Name</label>
+                <label for="projScope">Institution name</label>
                 <input
                 [disabled]="institutionId > 0"
                 pattern="^[a-zA-Z]{1,64}$"
@@ -85,7 +65,7 @@
           <div class="row p-2">
             <div class="col-12 col-md-6">
               <div class="p-field">
-                <label for="projScope">Contact Number</label>
+                <label for="projScope">Contact number</label>
                 <input
                 [disabled]="institutionId > 0"
                   type="number"
@@ -148,7 +128,7 @@
         <div class="d-flex flex-row-reverse mt-2 mb-2">
 
         <button
-        class="btn btn-primary btn-block text-uppercase m-1"
+        class="btn btn-primary btn-block  m-1"
         (click) = "onBackClick()"
         >
           Back
@@ -158,7 +138,7 @@
         *ngIf="institutionId > 0 && institution.status===0"
         pButton
         pRipple
-        class="btn btn-primary btn-block text-uppercase m-1"
+        class="btn btn-primary btn-block  m-1"
         (click)="activateInstitution(institution)"
       >
       Deactivate
@@ -168,7 +148,7 @@
       *ngIf="institutionId > 0 && institution.status===1"
       pButton
       pRipple
-      class="btn btn-primary btn-block text-uppercase m-1"
+      class="btn btn-primary btn-block  m-1"
       (click)="activateInstitution(institution)"
     >
     Activate
@@ -178,7 +158,7 @@
         *ngIf="institutionId > 0"
         pButton
           pRipple
-          class="btn btn-primary btn-block text-uppercase m-1"
+          class="btn btn-primary btn-block  m-1"
           type="edit"
           (click) = "edit(institution)"
         >

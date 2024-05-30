@@ -1,7 +1,7 @@
 <div class="container pl-20 pr-20">
   <div class="mb-12">
-    <h4 class="mt-4"> Assessment
-      <span class="infor-video" ><i class="pi pi-info-circle" (mouseover)="opAssessment.toggle($event)" (mouseout)="opAssessment.toggle($event)" style="font-size: 1em ;  margin-left: 1em;"></i></span>
+    <h4 class="mt-4">  Assess interventions: {{masterDataService.getToolName('INVESTOR')}}
+      <span class="infor-video" ><i class="pi pi-info-circle" (mouseover)="opAssessment.toggle($event)" (mouseout)="opAssessment.toggle($event)" style="font-size: 25px"></i></span>
       <span (click)="watchVideo()" pTooltip="Click to watch guidance video"  class="infor-video" ><i class="pi pi-video" style=" font-size: 1em ;  margin-left: 1em;"></i></span>
     </h4>
   </div>
@@ -11,8 +11,8 @@
         <div class="row p-2">
           <div class="col-12 col-md-6">
             <div class="p-field p-2">
-              <label for="policy">Select Intervention *</label>
-              <p-dropdown name="policy" #policy="ngModel" placeholder="Select Intervention" [(ngModel)]="assessment.climateAction" appendTo="body" [options]="policies" optionLabel="policyName" [required]="true" (onChange)="onSelectIntervention($event)"
+              <label for="policy">Select intervention *</label>
+              <p-dropdown name="policy" #policy="ngModel" placeholder="Select intervention" [(ngModel)]="assessment.climateAction" appendTo="body" [options]="policies" optionLabel="policyName" [required]="true" (onChange)="onSelectIntervention($event)"
                 [disabled]="isSavedAssessment || isEditMode || isDisableIntervention"></p-dropdown>
               <p class="info-message text-danger" *ngIf="
                                 !assessment.climateAction &&
@@ -22,8 +22,8 @@
               </p>
             </div>
             <div class="p-field p-2">
-              <label for="policy">Assessment Type *</label>
-              <p-dropdown name="type" #type="ngModel" placeholder="Select Assessment Type" [(ngModel)]="assessment.assessmentType" [options]="assessment_types" optionLabel="name" optionValue="name" [required]="true" appendTo="body" [disabled]="isSavedAssessment|| isEditMode || isDisableIntervention"
+              <label for="policy">Assessment type *</label>
+              <p-dropdown name="type" #type="ngModel" placeholder="Select assessment type" [(ngModel)]="assessment.assessmentType" [options]="assessment_types" optionLabel="name" optionValue="name" [required]="true" appendTo="body" [disabled]="isSavedAssessment|| isEditMode || isDisableIntervention"
                 (onChange)="selectAssessmentType($event)"></p-dropdown>
               <p class="info-message text-danger" *ngIf="
                                 !assessment.assessmentType &&
@@ -33,9 +33,9 @@
               </p>
             </div>
             <div class="p-field p-2">
-              <label for="Level of implementation">Geographical Area Covered *</label>
+              <label for="Level of implementation">Geographical area covered *</label>
               <p-confirmDialog key="geoConfirm"  icon="pi pi-exclamation-triangle" position="top" [style]="{width: '50vw'}" [baseZIndex]="10000"></p-confirmDialog>
-              <p-dropdown appendTo="body" name="investorAssessment.geographical_areas_covered" #type="ngModel" placeholder="Select Geographical Areas Covered" [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" [(ngModel)]="geographicalArea" [options]="levelOfImplementation" optionLabel="name"
+              <p-dropdown appendTo="body" name="investorAssessment.geographical_areas_covered" #type="ngModel" placeholder="Select geographical areas covered" [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" [(ngModel)]="geographicalArea" [options]="levelOfImplementation" optionLabel="name"
               (onChange)="onChangeGeoAreaCovered()" [required]="true"></p-dropdown>
               <p class="info-message text-danger" *ngIf="
                                   !geographicalArea &&
@@ -45,9 +45,9 @@
               </p>
             </div>
             <div class="p-field p-2">
-              <label for="Sectors Covered">Sectors Covered *</label>
+              <label for="Sectors Covered">Sectors covered *</label>
               <p-confirmDialog key="sectorConfirm"  icon="pi pi-exclamation-triangle" position="top" [style]="{width: '50vw'}" [baseZIndex]="10000"></p-confirmDialog>
-              <p-multiSelect #multiSelectComponent appendTo="body" name="sectors" #type="ngModel" placeholder="Select Sectors Covered" [(ngModel)]="sectorArray" [options]="sectorList" (onChange)="onItemSelectSectors($event)" [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" optionLabel="name"
+              <p-multiSelect #multiSelectComponent appendTo="body" name="sectors" #type="ngModel" placeholder="Select sectors covered" [(ngModel)]="sectorArray" [options]="sectorList" (onChange)="onItemSelectSectors($event)" [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" optionLabel="name"
                 [required]="true"></p-multiSelect>
               <p class="info-message text-danger" *ngIf="
                                 sectorArray.length===0 &&
@@ -57,7 +57,7 @@
               </p>
             </div>
             <div class="p-field p-2">
-              <label for="Sectors Covered">Total Investement (in USD)*</label>
+              <label for="Sectors Covered">Total investement (in USD)*</label>
               <input pInputText type="number" #totInvestment="ngModel" name="totInvestment" ngModel placeholder="Enter total investment" [(ngModel)]="investorAssessment.total_investment" required [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" />
               <p class="info-message text-danger" *ngIf="
                                 !investorAssessment.total_investment &&
@@ -67,10 +67,16 @@
               </p>
             </div>
             <div class="p-field p-2">
-              <label for="totalInvenstement">Investment Instruments</label>
-              <p-multiSelect name="investorAssessment.investmentInstruments" #gac="ngModel" placeholder="Select Investment Instrument" [(ngModel)]="selectedInstruments" [options]="investment_instruments" optionLabel="name" [required]="true"
+              <label for="totalInvenstement">Investment instruments *</label>
+              <p-multiSelect name="investorAssessment.investmentInstruments" #gac="ngModel" placeholder="Select investment instrument" [(ngModel)]="selectedInstruments" [options]="investment_instruments" optionLabel="name" [required]="true"
                 [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" appendTo="body" (onChange)="onSelectInstrument($event)">
               </p-multiSelect>
+              <p class="info-message text-danger" *ngIf="
+                                (!selectedInstruments || selectedInstruments?.length == 0) &&
+                                (fData.submitted || totInvestment.touched)
+                              ">
+                This is a mandatory field
+              </p>
             </div>
             <div class="p-field p-2">
               <ng-container *ngFor="let investment of totalInvestments; let idx = index">
@@ -78,6 +84,12 @@
                   <label class="col">{{investment.instrument_name}}</label>
                   <p-inputNumber class="col"  [(ngModel)]="investment.propotion" inputId="expiry"  suffix=" %" (onInput)="onInputChange($event)" #totInvestment="ngModel" [name]="'totInvestment'+idx" [required]="true" [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)"> </p-inputNumber>
                   <!-- <input class="col" suffix=" %" pInputText type="number" (input)="onInputChange($event)" #totInvestment="ngModel" [name]="'totInvestment'+idx" ngModel [(ngModel)]="investment.propotion" required [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" /> -->
+                  <p class="info-message text-danger" *ngIf="
+                                (!investment.propotion) &&
+                                (fData.submitted || totInvestment.touched)
+                              ">
+                This is a mandatory field
+              </p>
                 </div>
               </ng-container>
               <p class="info-message text-danger" *ngIf="isExceeded">
@@ -88,7 +100,7 @@
               </p>
             </div>
             <div class="p-field p-2">
-              <label for="date1">Assessment Period* <i class="pi pi-info-circle" style="font-size: 1rem" tooltipPosition="bottom" [pTooltip]="assessment_period_info"></i></label>
+              <label for="date1">Assessment period&nbsp;* <i class="pi pi-info-circle" style="font-size: 1rem" tooltipPosition="bottom" [pTooltip]="assessment_period_info"></i></label>
               <div class="p-inputgroup">
                 <span class="p-inputgroup-addon">
                   <i class="pi pi-calendar"></i>
@@ -115,7 +127,7 @@
           <div class="mt-2 overflow-visible" style="z-index: 1;">
             <div class="p-grid p-fluid col-sm-12">
               <div class="p-2">
-                <h6>Transformational Vision & Stage <i class="pi pi-info-circle" (mouseover)="op.toggle($event)" (mouseout)="op.toggle($event)" style="font-size: 1rem"></i></h6>
+                <h6>Transformational vision & stage <i class="pi pi-info-circle" (mouseover)="op.toggle($event)" (mouseout)="op.toggle($event)" style="font-size: 1rem"></i></h6>
               </div>
               <div class="row p-2">
                 <div class="  col-12">
@@ -142,7 +154,7 @@
                 <div class="col-12 col-md-6">
                   <div class="p-field">
                     <label for="vision_short">Within 5 years? *</label>
-                    <textarea [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" name="vision_short" placeholder="Short Term Vision" #vision_short="ngModel" [(ngModel)]="assessment.vision_short" rows="1" cols="130" pInputText autoResize="autoResize" 
+                    <textarea [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" name="vision_short" placeholder="Short term vision" #vision_short="ngModel" [(ngModel)]="assessment.vision_short" rows="1" cols="130" pInputText autoResize="autoResize" 
                     [maxlength]="masterDataService.getFieldCharCount(fieldNames.VISION)" required></textarea>
                     <span style="float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.VISION)}}</span>
                     <p class="info-message text-danger" *ngIf="  !vision_short.value &&                     
@@ -155,7 +167,7 @@
                 <div class="col-12 col-md-6">
                   <div class="p-field">
                     <label for="vision_short">Between 5 and 15 years? *</label>
-                    <textarea [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" name="vision_medium" placeholder="Medium Term Vision" #vision_medium="ngModel" [(ngModel)]="assessment.vision_medium" rows="1" cols="130" pInputText autoResize="autoResize" 
+                    <textarea [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" name="vision_medium" placeholder="Medium term vision" #vision_medium="ngModel" [(ngModel)]="assessment.vision_medium" rows="1" cols="130" pInputText autoResize="autoResize" 
                     [maxlength]="masterDataService.getFieldCharCount(fieldNames.VISION)" required></textarea>
                     <span style="float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.VISION)}}</span>
                     <p class="info-message text-danger" *ngIf="  !vision_medium.value &&                     
@@ -168,7 +180,7 @@
                 <div class="col-12 col-md-6">
                   <div class="p-field">
                     <label for="vision_short">After 15 years? *</label>
-                    <textarea [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" name="vision_long" placeholder="Long Term Vision" #vision_long="ngModel" [(ngModel)]="assessment.vision_long" rows="1" cols="130" pInputText required autoResize="autoResize"
+                    <textarea [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" name="vision_long" placeholder="Long term vision" #vision_long="ngModel" [(ngModel)]="assessment.vision_long" rows="1" cols="130" pInputText required autoResize="autoResize"
                     [maxlength]="masterDataService.getFieldCharCount(fieldNames.VISION)"></textarea>
                     <span style="float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.VISION)}}</span>
                     <p class="info-message text-danger" *ngIf="  !vision_long.value &&                     
@@ -221,7 +233,7 @@
                 <h6>Barriers &nbsp; <p-button [hidden]="isSavedAssessment || (isEditMode && !isCompleted && isContinue)" icon="pi pi-plus " styleClass="p-button-sm p-button-rounded" (click)="showDialog()"></p-button></h6>
                 <label><i>Add a barrier by clicking the “+” button. To add multiple barriers, click the “+” button again after saving your inputs.</i></label>
               </div>
-              <p-dialog header="Add Barrier" [(visible)]="barrierBox" [modal]="true" appendTo="body" [style]="{width: '50vw'}">
+              <p-dialog header="Add barriers" [(visible)]="barrierBox" [modal]="true" appendTo="body" [style]="{width: '50vw'}">
                 <div class="tooltip2-container">
                   <div>
                     <div class="tooltip2-icon">i</div>
@@ -231,7 +243,7 @@
                           <tr>
                             <th>Barrier</th>
                             <th>Explanation</th>
-                            <th>Characteristics Affected</th>
+                            <th>Characteristics affected</th>
                             <th>Is the barrier directly affected by the intervention?</th>
                           </tr>
                         </ng-template>
@@ -271,7 +283,7 @@
                   <div class="row p-2">
                     <div class="col-12 col-md-6">
                       <div class="p-field">
-                        <label style="width:200px" for="impEntity">Characteristic Affected</label>
+                        <label style="width:200px" for="impEntity">Characteristic affected</label>
                         <ng-container *ngIf="isDownloadMode == 0; else elseBlockcharacteristics">
                           <p-multiSelect placeholder="Please select characteristics" name="characteristics" #characteristic="ngModel" [(ngModel)]="barrierSelected.characteristics" [options]="barrierChList" appendTo="body" optionLabel="name" [required]="true"></p-multiSelect>
                           <p class="info-message text-danger" *ngIf="  !finalSectors &&                     
@@ -317,7 +329,7 @@
                 </div>
                 <div class="col-12 col-md-3">
                   <div class="p-field">
-                    <label class="barrier-top" for="relatedPolicies">Characteristic Affected </label>
+                    <label class="barrier-top" for="relatedPolicies">Characteristic affected </label>
                   </div>
                 </div>
                 <div class="col-12 col-md-4">
@@ -387,7 +399,7 @@
       <div class="row justify-content-end" *ngIf="!isSavedAssessment && !isEditMode || isCompleted || !isContinue">
         <div>
           <div class="d-flex flex-row-reverse  ">
-            <button class="btn btn-primary text-uppercase" type="submit">
+            <button class="btn btn-primary" type="submit">
               {{isCompleted ? 'Update' : (!isContinue ? 'Update' : 'Continue')}}
             </button>
           </div>
@@ -398,9 +410,9 @@
   <div class="card" *ngIf="(isSavedAssessment && tabLoading) || (isEditMode && draftLoading)">
     <form #fData1="ngForm" (ngSubmit)="onsubmit(fData1)">
       <p-tabView (onChange)="onMainTabChange($event) " [(activeIndex)]="activeIndexMain ">
-        <p-tabPanel header="Process of Change">
+        <p-tabPanel header="Process of change">
           <ng-template pTemplate="header">
-            <span>Process of Change</span><i *ngIf="maintabIsValid[0] !== undefined && !maintabIsValid[0]"  pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
+            <span>Process of change</span><i *ngIf="maintabIsValid[0] !== undefined && !maintabIsValid[0]"  pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
           </ng-template>
           <p-tabView #tabView (onChange)="onCategoryTabChange($event, tabView, 'process')" [(activeIndex)]="activeIndex ">
             <p-tabPanel [header]="category.CategoryName" [selected]="category.CategoryName==assessment.processDraftLocation" *ngFor="let category of processData; index as cat">
@@ -428,30 +440,25 @@
                               <label for="Description">Relevance* <i class="pi pi-info-circle" (mouseover)="opRelevance.toggle($event)" (mouseout)="opRelevance.toggle($event)" style="font-size: 1rem"></i></label>
                             </div>
                             <div class="col-4">
-                              <p-dropdown name="cat-{{cat}}-data.charData.relavance-{{i}}" #rel="ngModel" placeholder="Select Relevance" [(ngModel)]="data.relavance" [options]="relevance" optionLabel="name" (ngModelChange)="onChangeRelevance(data.relavance, data)" appendTo="body" optionValue="value"
+                              <p-dropdown name="cat-{{cat}}-data.charData.relavance-{{i}}" #rel="ngModel" placeholder="Select relevance" [(ngModel)]="data.relavance" [options]="relevance" optionLabel="name" (ngModelChange)="onChangeRelevance(data.relavance, data)" appendTo="body" optionValue="value"
                                 [required]="true"></p-dropdown>
                               <p class="info-message text-danger" *ngIf="data.relavance ==null  && ((fData1.submitted || rel.touched)  || (category.isValidated==false && data.relavance ==null) || tab1IsValid[cat] !== undefined && !tab1IsValid[cat])">
                                 This is a mandatory field </p>
                             </div>
                           </div>
+                          <br>
                           <div *ngIf="data.relavance !=0">
                             <div class="row p-2">
                               <div class="row" *ngFor="let question of data.indicator_details ; let j = index">
                                 <label style="font-size: 17px;" *ngIf="question.question.isMain" for="Indicator" class="mt-10 mb-10"><u>{{question.question.name}}</u></label>
                                 <div class="row" *ngIf="!question.question.isMain">
                                   <div class=" ml-25 col-6 mb-20">
-                                    <p class="question">{{question.question.name}}</p>
-                                    <div class="tooltip-container">
-                                      <div *ngIf="question.question.tooltip">
-                                        <span class="tooltip-icon">i</span>
-                                        <div class="tooltip-text" [innerHTML]="addNewline(question.question.tooltip)"></div>
-                                      </div>
-                                    </div>
+                                    <p class="question">{{question.question.name}} <i  [pTooltip]="addNewline(question.question.tooltip)" [escape]="false" tooltipPosition="top" class="pi pi-info-circle" style="font-size: 1rem;"></i></p>
                                   </div>
                                   <div class="col-4 mb-20">
-                                    <p-dropdown *ngIf="approach===1" name="cat-{{cat}}-data.charData.question-{{i}}-{{j}}" #type="ngModel" placeholder="Select Answer" [(ngModel)]="question.value" [options]="yesNoAnswer" optionLabel="name" appendTo="body" optionValue="name">
+                                    <p-dropdown *ngIf="approach===1" name="cat-{{cat}}-data.charData.question-{{i}}-{{j}}" #type="ngModel" placeholder="Select answer" [(ngModel)]="question.value" [options]="yesNoAnswer" optionLabel="name" appendTo="body" optionValue="name">
                                     </p-dropdown>
-                                    <p-dropdown *ngIf="approach===2" name={{data}}_charData.relavance placeholder="Select Institution" [(ngModel)]="question.value" [options]="instiTutionList" optionLabel="name" appendTo="body" optionValue="id">
+                                    <p-dropdown *ngIf="approach===2" name={{data}}_charData.relavance placeholder="Select institution" [(ngModel)]="question.value" [options]="instiTutionList" optionLabel="name" appendTo="body" optionValue="id">
                                     </p-dropdown>
                                   </div>
                                 </div>
@@ -460,7 +467,7 @@
                                     <p class="justifiaction" class="question">Justification*</p>
                                   </div>
                                   <div class="col-4 mb-20">
-                                    <textarea rows="5" type="text" pInputText [(ngModel)]="question.justification" placeholder="Enter Justification" #questionJustification="ngModel" [name]="question.question.name+'question'" 
+                                    <textarea rows="5" type="text" pInputText [(ngModel)]="question.justification" placeholder="Enter justification" #questionJustification="ngModel" [name]="question.question.name+'question'" 
                                     [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
                                     <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                     <p class="info-message text-danger" *ngIf="!question.justification  && ((fData1.submitted || questionJustification.touched) || (category.isValidated==false && !question.justification)|| tab1IsValid[cat] !== undefined && !tab1IsValid[cat])">
@@ -473,7 +480,7 @@
                               <div class="col-12 col-lg-6">
                                 <div class="p-field">
                                   <label for="likelihood">Likelihood*</label>
-                                  <p-dropdown appendTo="body" name="cat-{{cat}}-data.charData.likelihood-{{i}}" #likelihood2="ngModel" placeholder="Select Likelihood" [(ngModel)]="data.likelihood" [options]="likelihood" optionLabel="id" optionValue="value" [required]="true"></p-dropdown>
+                                  <p-dropdown appendTo="body" name="cat-{{cat}}-data.charData.likelihood-{{i}}" #likelihood2="ngModel" placeholder="Select likelihood" [(ngModel)]="data.likelihood" [options]="likelihood" optionLabel="id" optionValue="value" [required]="true"></p-dropdown>
                                   <p class="info-message text-danger" *ngIf="data.likelihood ==null && ((fData1.submitted || likelihood2.touched) || (category.isValidated==false && data.likelihood ==null) || tab1IsValid[cat] !== undefined && !tab1IsValid[cat])">
                                     This is a mandatory field </p>
                                 </div>
@@ -481,7 +488,7 @@
                               <div class="col-12 col-lg-6" *ngIf="approach===1">
                                 <div class="p-field">
                                   <label for="justification">Justification*</label>
-                                  <textarea rows="5" type="text" pInputText [(ngModel)]="data.likelihood_justification" #just1="ngModel" placeholder="Enter Justification" [name]="data.characteristics.name+ 'likelihood_justification'"
+                                  <textarea rows="5" type="text" pInputText [(ngModel)]="data.likelihood_justification" #just1="ngModel" placeholder="Enter justification" [name]="data.characteristics.name+ 'likelihood_justification'"
                                   [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" ></textarea>
                                   <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                   <p class="info-message text-danger" *ngIf="!data.likelihood_justification  && ((fData1.submitted || just1.touched) ||(category.isValidated==false && !data.likelihood_justification) || tab1IsValid[cat] !== undefined && !tab1IsValid[cat]) ">
@@ -490,7 +497,7 @@
                               </div>
                             </div>
                             <div class="row p-2">
-                              <label for="question">Supporting Documentation</label>
+                              <label for="question">Supporting documentation</label>
                             </div>
                             <div class="row p-2 align-items-center">
                               <div class="col-2 d-flex align-items-center">
@@ -513,10 +520,10 @@
               </div>
               <div class="row justify-content-end">
                 <div class="d-flex flex-row-reverse mt-20 ">
-                  <div class="btn btn-primary text-uppercase" (click)="next(category,'process')">
+                  <div class="btn btn-primary" (click)="next(category,'process')">
                     Next
                   </div>
-                  <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="isCompleted ? onsubmit(fData1):saveDraft(category,category.CategoryName,'pro')">
+                  <div style="margin-right: 10px;" class="btn btn-primary" (click)="isCompleted ? onsubmit(fData1):saveDraft(category,category.CategoryName,'pro')">
                   {{isCompleted ? 'Update': 'Save'}}  
                   </div>
                 </div>
@@ -524,9 +531,9 @@
             </p-tabPanel>
           </p-tabView>
         </p-tabPanel>
-        <p-tabPanel header="Outcome of Change">
+        <p-tabPanel header="Outcome of change">
           <ng-template pTemplate="header">
-            <span>Outcome of Change</span><i *ngIf="maintabIsValid[1] !== undefined && !maintabIsValid[1]"  pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
+            <span>Outcome of change</span><i *ngIf="maintabIsValid[1] !== undefined && !maintabIsValid[1]"  pTooltip="Mandatory fields not filled" tooltipPosition="top" class="pi pi-info-circle" style="color: red; font-size: 1rem;"></i>
           </ng-template>
           <p-tabView #tabView2 (onChange)="onCategoryTabChange($event, tabView2, 'outcome') " [(activeIndex)]="activeIndex2">
             <p-tabPanel *ngFor="let category of outcomeData; index as cat" [selected]="category.CategoryName==assessment.outcomeDraftLocation">
@@ -587,12 +594,12 @@
                                   <div class="p-field">
                                     <label for="score">Score* <i *ngIf=" category.CategoryName ==='GHG Scale of the Outcome'" class="pi pi-info-circle" pTooltip="{{getTooltipData(data.characteristics.name)}}" tooltipPosition="bottom" style="font-size: 1rem"></i></label>
                                     <div *ngIf=" category.CategoryName ==='GHG Scale of the Outcome' ||  category.CategoryName ==='Adaptation Scale of the Outcome' ">
-                                      <p-dropdown appendTo="body" name="{{cat}}_{{i}}_outcomeScaleScore_" #type="ngModel" placeholder="Select Score" [(ngModel)]="data.score" (autoDisplayFirst)=false [options]="outcomeScaleScore" optionLabel="id" optionValue="value" (onChange)="onSelectScore(category, data.characteristics.code)"></p-dropdown>
-                                      <p class="info-message text-danger" *ngIf="['MACRO_LEVEL', 'INTERNATIONAL'].includes(data.characteristics.code) && data.score==undefined  && ((fData1.submitted || type.touched) || (category.isValidated==false && data.score==undefined) ||tabIsValid[cat] !== undefined && !tabIsValid[cat])">
+                                      <p-dropdown appendTo="body" name="{{cat}}_{{i}}_outcomeScaleScore_" #type="ngModel" placeholder="Select score" [(ngModel)]="data.score" (autoDisplayFirst)=false [options]="outcomeScaleScore" optionLabel="id" optionValue="value" (onChange)="onSelectScore(category, data.characteristics.code)"></p-dropdown>
+                                      <p class="info-message text-danger" *ngIf=" data.score==undefined  && ((fData1.submitted || type.touched) || (category.isValidated==false && data.score==undefined) ||tabIsValid[cat] !== undefined && !tabIsValid[cat])">
                                         This is a mandatory field </p>
                                     </div>
                                     <div *ngIf=" category.CategoryName ==='GHG Time frame over which the outcome is sustained' ||  category.CategoryName ==='Adaptation Time frame over which the outcome is sustained' ">
-                                      <p-dropdown appendTo="body" name="{{cat}}_{{i}}_outcomeSustainedScore_" #type="ngModel" placeholder="Select Score" [(ngModel)]="data.score" [options]="outcomeSustainedScore" optionLabel="id" optionValue="value"></p-dropdown>
+                                      <p-dropdown appendTo="body" name="{{cat}}_{{i}}_outcomeSustainedScore_" #type="ngModel" placeholder="Select score" [(ngModel)]="data.score" [options]="outcomeSustainedScore" optionLabel="id" optionValue="value"></p-dropdown>
                                       <p class="info-message text-danger" *ngIf="data.score==undefined  && ((fData1.submitted || type.touched) || (category.isValidated==false && data.score==undefined) || tabIsValid[cat] !== undefined && !tabIsValid[cat])">
                                         This is a mandatory field </p>
                                     </div>
@@ -601,10 +608,10 @@
                                 <div class="col-12 col-lg-6">
                                   <div class="p-field">
                                     <label for="justification">Justification*</label>
-                                    <textarea rows="5" type="text" pInputText [(ngModel)]="data.justification" #just2="ngModel" placeholder="Enter Justification" [name]="cat+'_'+data.characteristics.code+'justification'" 
+                                    <textarea rows="5" type="text" pInputText [(ngModel)]="data.justification" #just2="ngModel" placeholder="Enter justification" [name]="cat+'_'+data.characteristics.code+'justification'" 
                                     [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)" (ngModelChange)="adaptationJustificationChange(data)"></textarea>
                                     <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
-                                    <p class="info-message text-danger" *ngIf="checkCategory(category.categoryCode, data.characteristics.code ) &&  !data.justification  && ((fData1.submitted || just2.touched) || (category.isValidated==false && !data.justification) ||tabIsValid[cat] !== undefined && !tabIsValid[cat])">
+                                    <p class="info-message text-danger" *ngIf="  !data.justification  && ((fData1.submitted || just2.touched) || (category.isValidated==false && !data.justification) ||tabIsValid[cat] !== undefined && !tabIsValid[cat])">
                                       This is a mandatory field </p>
                                   </div>
                                 </div>
@@ -635,7 +642,7 @@
                                 <div class="row p-2">
                                   <div class="col-12 col-lg-6">
                                     <div class="p-field">
-                                      <label for="expected_ghg_mitigation">Expected average GHG reductions or removals (mitigation outcomes) (tCO₂e/year)</label>
+                                      <label for="expected_ghg_mitigation">Expected average GHG reductions or removals (mitigation outcomes) (tCO₂e)</label>
                                       <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation_year" name="expected_ghg_mitigation_year" placeholder="Expected average GHG reductions or removals (mitigation outcomes)" inputId="locale-us" mode="decimal" locale="en-US" [minFractionDigits]="2">
                                       </p-inputNumber>
                                     </div>
@@ -666,17 +673,17 @@
                 </div>
                 <div class="row justify-content-end" *ngIf="activeIndex2!==5 || activeIndexMain!==1">
                   <div class="d-flex flex-row-reverse mt-20 ">
-                    <div class="btn btn-primary text-uppercase" (click)="next(category,'outcome')">
+                    <div class="btn btn-primary" (click)="next(category,'outcome')">
                       Next
                     </div>
-                    <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="isCompleted ? onsubmit(fData1, {category: category, type: 'outcome'}):saveDraft(category,category.CategoryName,'out')">
+                    <div style="margin-right: 10px;" class="btn btn-primary" (click)="isCompleted ? onsubmit(fData1, {category: category, type: 'outcome'}):saveDraft(category,category.CategoryName,'out')">
                       {{isCompleted ? 'Update': 'Save'}}  
                     </div>
                   </div>
                 </div>
                 <div class="row justify-content-end" *ngIf="activeIndex2==5 && activeIndexMain==1">
                   <div class="d-flex flex-row-reverse mt-20 ">
-                    <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)=" isCompleted ? onsubmit(fData1, {category: category, type: 'outcome'}):saveDraft(category,category.CategoryName,'out')">
+                    <div style="margin-right: 10px;" class="btn btn-primary" (click)=" isCompleted ? onsubmit(fData1, {category: category, type: 'outcome'}):saveDraft(category,category.CategoryName,'out')">
                       Save
                     </div>
                   </div>
@@ -704,18 +711,18 @@
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
                                         <label for="score">Score*</label>
-                                        <p-dropdown appendTo="body" name="score" #type="ngModel" placeholder="Select Score" [(ngModel)]="data.score" (ngModelChange)="assignSDG(selectedSDGs[i], data)" [options]="outcomeScaleScore" optionLabel="id" optionValue="value" (onChange)="onSelectScore(category, data.characteristics.code, i)"></p-dropdown>
-                                        <p class="info-message text-danger" *ngIf="['MACRO_LEVEL'].includes(data.characteristics.code) && data.score==undefined  && ((fData1.submitted || type.touched) || (isValidSCaleSD==false && data.score==undefined) || tabIsValid[cat] !== undefined && !tabIsValid[cat])">
+                                        <p-dropdown appendTo="body" name="score" #type="ngModel" placeholder="Select score" [(ngModel)]="data.score" (ngModelChange)="assignSDG(selectedSDGs[i], data)" [options]="outcomeScaleScore" optionLabel="id" optionValue="value" (onChange)="onSelectScore(category, data.characteristics.code, i)"></p-dropdown>
+                                        <p class="info-message text-danger" *ngIf=" data.score==undefined  && ((fData1.submitted || type.touched) || (isValidSCaleSD==false && data.score==undefined) || tabIsValid[cat] !== undefined && !tabIsValid[cat])">
                                           This is a mandatory field </p>
                                       </div>
                                     </div>
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
                                         <label for="justification">Justification*</label>
-                                        <textarea rows="5" (ngModelChange)="assignSDG(selectedSDGs[i], data)" type="text" pInputText [(ngModel)]="data.justification" #just3="ngModel" placeholder="Enter Justification" name="justification" 
+                                        <textarea rows="5" (ngModelChange)="assignSDG(selectedSDGs[i], data)" type="text" pInputText [(ngModel)]="data.justification" #just3="ngModel" placeholder="Enter justification" name="justification" 
                                         [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
                                         <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
-                                        <p class="info-message text-danger" *ngIf="['MACRO_LEVEL'].includes(data.characteristics.code) && !data.justification  && ((fData1.submitted || just3.touched) || (isValidSCaleSD==false && !data.justification) || tabIsValid[cat] !== undefined && !tabIsValid[cat])">
+                                        <p class="info-message text-danger" *ngIf="!data.justification  && ((fData1.submitted || just3.touched) || (isValidSCaleSD==false && !data.justification) || tabIsValid[cat] !== undefined && !tabIsValid[cat])">
                                           This is a mandatory field </p>
                                       </div>
                                     </div>
@@ -743,10 +750,10 @@
                 </div>
                 <div class="row justify-content-end">
                   <div class="d-flex flex-row-reverse mt-20 ">
-                    <div class="btn btn-primary text-uppercase" (click)="nextSDG(sdgDataSendArray2,'scaleSD')">
+                    <div class="btn btn-primary" (click)="nextSDG(sdgDataSendArray2,'scaleSD')">
                       Next
                     </div>
-                    <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="isCompleted ? onsubmit(fData1, {category: category, type: 'outcome'}):saveDraft(category,category.CategoryName,'out')">
+                    <div style="margin-right: 10px;" class="btn btn-primary" (click)="isCompleted ? onsubmit(fData1, {category: category, type: 'outcome'}):saveDraft(category,category.CategoryName,'out')">
                       {{isCompleted ? 'Update': 'Save'}}  
                     </div>
                   </div>
@@ -771,7 +778,7 @@
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
                                         <label for="score">Score*</label>
-                                        <p-dropdown appendTo="body" name="score" #type="ngModel" placeholder="Select Score" [(ngModel)]="data.score" (ngModelChange)="assignSDG(selectedSDGs[i], data)" [options]="outcomeSustainedScore" optionLabel="id" optionValue="value"></p-dropdown>
+                                        <p-dropdown appendTo="body" name="score" #type="ngModel" placeholder="Select score" [(ngModel)]="data.score" (ngModelChange)="assignSDG(selectedSDGs[i], data)" [options]="outcomeSustainedScore" optionLabel="id" optionValue="value"></p-dropdown>
                                         <p class="info-message text-danger" *ngIf="data.score==undefined   && ((fData1.submitted || type.touched) || (isValidSustainedSD==false && data.score==undefined) || tabIsValid[cat] !== undefined && !tabIsValid[cat])">
                                           This is a mandatory field </p>
                                       </div>
@@ -779,7 +786,7 @@
                                     <div class="col-12 col-lg-6">
                                       <div class="p-field">
                                         <label for="justification">Justification*</label>
-                                        <textarea rows="5" (ngModelChange)="assignSDG(selectedSDGs[i], data)" type="text" pInputText [(ngModel)]="data.justification" #just4="ngModel" placeholder="Enter Justification" name="justification" 
+                                        <textarea rows="5" (ngModelChange)="assignSDG(selectedSDGs[i], data)" type="text" pInputText [(ngModel)]="data.justification" #just4="ngModel" placeholder="Enter justification" name="justification" 
                                         [maxlength]="masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)"></textarea>
                                         <span style="font-size: 1rem; float: right;">Maximum characters {{masterDataService.getFieldCharCount(fieldNames.JUSTIFICATION)}}</span>
                                         <p class="info-message text-danger" *ngIf="!data.justification  && ((fData1.submitted || just4.touched) || (isValidSustainedSD==false && !data.justification) || tabIsValid[cat] !== undefined && !tabIsValid[cat])">
@@ -810,10 +817,10 @@
                 </div>
                 <div class="row justify-content-end">
                   <div class="d-flex flex-row-reverse mt-20 ">
-                    <div class="btn btn-primary text-uppercase" (click)="nextSDG(sdgDataSendArray4,'sustainedSD')">
+                    <div class="btn btn-primary" (click)="nextSDG(sdgDataSendArray4,'sustainedSD')">
                       Next
                     </div>
-                    <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="isCompleted ? onsubmit(fData1, {category: category, type: 'outcome'}):saveDraft(category,category.CategoryName,'out')">
+                    <div style="margin-right: 10px;" class="btn btn-primary" (click)="isCompleted ? onsubmit(fData1, {category: category, type: 'outcome'}):saveDraft(category,category.CategoryName,'out')">
                       {{isCompleted ? 'Update': 'Save'}}  
                     </div>
                   </div>
@@ -827,8 +834,8 @@
       <div *ngIf="activeIndex2===5 && activeIndexMain===1" class="row justify-content-end">
         <div>
           <div class="d-flex flex-row-reverse mt-20 ">
-            <button class="btn btn-primary text-uppercase" type="submit" [disabled]="failedLikelihoodArray.length!=0 ||failedRelevanceArray.length!=0 || !fData1.valid">
-              {{approach==1 ?'Calculate & Check results': (approach==2 ?'Send to Data Collection Team':'')}}
+            <button class="btn btn-primary" type="submit" [disabled]="failedLikelihoodArray.length!=0 ||failedRelevanceArray.length!=0 || !fData1.valid">
+              {{approach==1 ?'Calculate & check results': (approach==2 ?'Send to Data Collection Team':'')}}
             </button>
           </div>
           <div class="d-flex flex-row-reverse mt-20 ">
@@ -869,7 +876,7 @@
 </p-overlayPanel>
 <p-overlayPanel #opRelevance [style]="{'width': '800px'}">
   <div class="p-grid p-fluid col-md-12 col-sm-12 text-title">
-      <label>Does the process characteristic affects/impacts any of the identified barriers? does the intervention affects/impacts the process characteristic?</label>
+      <label>Does the process characteristic affect/impact any of the identified barriers? Does the intervention affect or is affected by this process characteristic?</label>
       <br><br><br>
       <p-table [value]="[{}]">
           <ng-template pTemplate="header">
@@ -881,21 +888,21 @@
           <ng-template pTemplate="body" let-row>
               <tr>
                   <td>Relevant</td>
-                  <td>Reason to believe that a characteristic is important for transformational change in the context of the policy</td>
+                  <td>Reason to believe that a characteristic is important for transformational change in the context of the intervention</td>
               </tr>
               <tr>
                   <td>Possibly relevant</td>
-                  <td>Not clear whether the characteristic is important for transformational change in the context of the policy. Where the relevance is unknown or cannot be determined, the characteristic should be monitored over time.</td>
+                  <td>Not clear whether the characteristic is important for transformational change in the context of the intervention. Where the relevance is unknown or cannot be determined, the characteristic should be monitored over time.</td>
               </tr>
               <tr>
                   <td>Not relevant</td>
-                  <td>Reason to believe that the characteristic is not important for transformational change in the context of the policy.</td>
+                  <td>Reason to believe that the characteristic is not important for transformational change in the context of the intervention.</td>
               </tr>
           </ng-template>
       </p-table>
   </div>
 </p-overlayPanel>
-<p-confirmDialog></p-confirmDialog>
+<p-confirmDialog key="autosave" header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 
 <p-dialog header="Notification" [(visible)]="visibleDialogBox" [style]="{width: '50vw'}">
   <p>

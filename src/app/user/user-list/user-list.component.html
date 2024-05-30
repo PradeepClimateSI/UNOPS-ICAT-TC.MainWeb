@@ -1,13 +1,16 @@
-<div class="container">
-  <h4 class="mt-4">Users 
-    <span (click)="watchVideo()" pTooltip="Click to watch guidance video"  class="infor-video" ><i class="pi pi-video" style=" font-size: 1em ;  margin-left: 1em;"></i></span>
-  </h4>
+<div class="container pl-20 pr-20">
+  <div class="mb-12"> 
+    <h4 class="mt-4">Users 
+      <span (click)="watchVideo()" pTooltip="Click to watch guidance video"  class="infor-video" ><i class="pi pi-video" style=" font-size: 1em ;  margin-left: 1em;"></i></span>
+    </h4>
+  </div>
+  
   <div class="p-grid p-fluid card">
     <div class="row mb-3">
       <div class="col-md-6">
         <div class="col-12">
           <div class="p-field">
-            <label for="userType">User Type
+            <label for="userType">User type
               
             </label>
             
@@ -31,7 +34,7 @@
       <div class="col-md-6">
         <div class="p-inputgroup pt-4">
           <input
-            placeholder="Type Your Keyword"
+            placeholder="Type your keyword"
             [(ngModel)]="searchBy.text"
             #nameInstitution="ngModel"
             type="text"
@@ -81,10 +84,10 @@
           </th>
           <th></th>
           <th>Type</th>
-          <th>First Name</th>
+          <th>First name</th>
           <th>Institution</th>
      
-          <th>Contact Number</th>
+          <th>Contact number</th>
           <th>Email</th>
         </tr>
       </ng-template>

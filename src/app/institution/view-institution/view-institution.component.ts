@@ -86,9 +86,9 @@ export class ViewInstitutionComponent implements OnInit {
 
 
     if(this.institutionId == 0){
-      this.title = "Add Institution"
+      this.title = "Add institution"
     }else{
-      this.title = "Manage Institution"
+      this.title = "View institution"
     }
 
 

@@ -285,8 +285,8 @@ export class MasterDataService {
       {  id: "3 - Very likely (90-100%)",value:3 },
       {  id: "2 - Likely (60-90%)",value:2  },
       {  id: "1 - Possible (30-60%)",value:1 },
-      {  id: "0 - Less likely (10-30%)",value:0 },
-      {  id: "-1 - Unlikely (0-10%)",value:-1 },
+      {  id: "0 - Unlikely (10-30%)",value:0 },
+      {  id: "-1 - Very unlikely (0-10%)",value:-1 },
       {  id: "Outside assessment boundaries",value:99 },
     ]
 
@@ -490,9 +490,9 @@ export class MasterDataService {
       {label: 'Moderate', value: 2},
       {label: 'Minor', value: 1},
       {label: 'None', value: 0},
-      {label: 'Minor Negative', value: -1},
-      {label: 'Moderate Negative', value: -2},
-      {label: 'Major Negative', value: -3}
+      {label: 'Minor negative', value: -1},
+      {label: 'Moderate negative', value: -2},
+      {label: 'Major negative', value: -3}
     ]
   
     this.yData = [
@@ -500,7 +500,7 @@ export class MasterDataService {
       {label: 'Likely', value: 3},
       {label: 'Possible', value: 2},
       {label: 'Unlikely', value: 1},
-      {label: 'Very Unlikely', value: 0}
+      {label: 'Very unlikely', value: 0}
     ]
 
     this.SDGs= [
@@ -525,15 +525,15 @@ export class MasterDataService {
 
     this.tools = [
       {id: 1, name: 'General tool', code: 'PORTFOLIO'},
-      {id: 2, name: 'Carbon Market Tool', code: 'CARBON_MARKET'},
-      {id: 3, name: 'Investment Tool', code: 'INVESTOR'},
+      {id: 2, name: 'Carbon market tool', code: 'CARBON_MARKET'},
+      {id: 3, name: 'Investment tool', code: 'INVESTOR'},
     ]
 
     this.sdg_priorities = [
-      { id: 1, name: 'High Priority', code: 'HIGH', value: 3 },
-      { id: 2, name: 'Medium Priority', code: 'MEDIUM', value: 2 },
-      { id: 3, name: 'Low Priority', code: 'LOW', value: 1 },
-      { id: 3, name: 'No Priority', code: 'NO', value: 0 },
+      { id: 1, name: 'High priority', code: 'HIGH', value: 3 },
+      { id: 2, name: 'Medium priority', code: 'MEDIUM', value: 2 },
+      { id: 3, name: 'Low priority', code: 'LOW', value: 1 },
+      { id: 3, name: 'No priority', code: 'NO', value: 0 },
     ]
 
     this.investment_instruments = [
@@ -1101,7 +1101,7 @@ export enum FieldNames {
   JUSTIFICATION = "JUSTIFICATION"
 }
 
-export const chapter6_url = 'https://storage.googleapis.com/public-bucket-kh/Transformational-Change-Methodology_ch6.pdf'
+export const chapter6_url = 'https://storage.googleapis.com/tc-toolkit-public-files/public/Transformational-Change-Methodology_ch6.pdf'
 export const assessment_period_info = 'This refers to the timeframe, for which the intervention\'s impact is assessed - NOT when the assessment is conducted.\n' +
   'The period cannot begin earlier than the start date that was selected for the intervention. It can be different from the implementation period and should include the full range ' +
   'of relevant impacts.\n' +

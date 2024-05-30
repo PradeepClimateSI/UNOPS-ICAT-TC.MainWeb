@@ -13,14 +13,14 @@
         <div style="display: flex; flex-direction: row;">
           <div style="flex-basis: 40%;">
             <p><strong>Intervention ID</strong></p>
-            <p><strong>Tool Applied</strong></p>
-            <p><strong>Intervention Status</strong></p>
-            <p><strong>Assessment Type</strong></p>
+            <p><strong>Tool applied</strong></p>
+            <p><strong>Intervention status</strong></p>
+            <p><strong>Assessment type</strong></p>
 
-            <p><strong>Geographical Area Covered</strong></p>
+            <p><strong>Geographical area covered</strong></p>
 
-            <p><strong>Sectors Covered</strong></p>
-            <p><strong>Assessment Period</strong></p>
+            <p><strong>Sectors covered</strong></p>
+            <p><strong>Assessment period</strong></p>
             <p><strong>Opportunities for stakeholders to participate in the assessment</strong></p>
           </div>
           <div style="flex-basis: 50%;">
@@ -44,7 +44,7 @@
       <div id="allTables" class="card" *ngIf="loading">
         <table> 
           <tr></tr>
-          <tr class="table-header-left"> <p class="category-topic">Process of Change</p></tr>
+          <tr class="table-header-left"> <p class="category-topic">Process of change</p></tr>
           <tr></tr>
         </table>  
        
@@ -61,15 +61,15 @@
                     <td colspan="12"></td>
                 </tr>
                 <tr>
-                  <td colspan="4" class="table-header-left">Intervention Information</td>
+                  <td colspan="4" class="table-header-left">Intervention information</td>
                   <ng-container *ngFor="let cat of processData">
                     <td  class="table-header"   [attr.colspan]="cat.characteristicData.length">{{cat.category}}</td>
                   </ng-container>
                 </tr>
                 <tr>
                   <td class="table-header">ID</td>
-                  <td class="table-header">Intervention Name</td>
-                  <td class="table-header">Tool Applied</td>
+                  <td class="table-header">Intervention name</td>
+                  <td class="table-header">Tool applied</td>
                   <td class="table-header">Status</td>
                   <ng-container *ngFor="let cat of processData">
                     <ng-container *ngFor="let data of cat.characteristicData">
@@ -93,15 +93,15 @@
                   <td colspan="12"></td>
                 </tr>
                 <tr>
-                  <td  class="table-header-left" colspan="4">Intervention Information</td>
+                  <td  class="table-header-left" colspan="4">Intervention information</td>
                   <ng-container *ngFor="let cat of processData">
                     <td  class="table-header" [attr.colspan]="cat.characteristicData.length">{{cat.category}}</td>
                   </ng-container>
                 </tr>
                 <tr  class="table-header">
                   <td class="table-header">ID</td>
-                  <td class="table-header">Intervention Name</td>
-                  <td class="table-header">Tool Applied</td>
+                  <td class="table-header">Intervention name</td>
+                  <td class="table-header">Tool applied</td>
                   <td class="table-header">Status</td>
                   <ng-container *ngFor="let cat of processData">
                     <ng-container *ngFor="let data of cat.characteristicData">
@@ -121,7 +121,7 @@
                   </ng-container>
                 </tr>
                 <tr>
-                  <td  class="table-header-left" colspan="4">Characteristics Weights</td>
+                  <td  class="table-header-left" colspan="4">Characteristics weights</td>
                   <ng-container *ngFor="let cat of processData">
                       <ng-container *ngFor="let data of cat.characteristicData">
                           <td  class="table-data" class="table-data">{{(data.char_weight)?data.char_weight:'-'}}%</td>
@@ -130,7 +130,7 @@
                   </ng-container>
                 </tr> 
                 <tr>
-                  <td  class="table-header-left" colspan="4">Recalculated Characteristics Weights</td>
+                  <td  class="table-header-left" colspan="4">Recalculated characteristics weights</td>
                   <ng-container *ngFor="let cat of processData">
                       <ng-container *ngFor="let data of cat.characteristicData">
                           <td  class="table-data">{{(data.recalculated_char_weight!=null)?data.recalculated_char_weight+'%':'-'}}</td>
@@ -138,25 +138,25 @@
                   </ng-container>
                 </tr> 
                 <tr>
-                  <td  class="table-header-left" colspan="4">Category Score(quantitative)</td>
+                  <td  class="table-header-left" colspan="4">Category score(quantitative)</td>
                   <ng-container *ngFor="let cat of processData">
                     <td   class="table-data" [attr.colspan]="cat.characteristicData.length">{{(cat.category_score.value!=null?cat.category_score.value:"-")}}</td>
                   </ng-container>
                 </tr> 
                 <tr>
-                  <td  class="table-header-left" colspan="4">Category Score(qualitative)</td>
+                  <td  class="table-header-left" colspan="4">Category score(qualitative)</td>
                   <ng-container *ngFor="let cat of processData">
                     <td   class="table-data" [attr.colspan]="cat.characteristicData.length">{{(cat.category_score.name!=null)?cat.category_score.name:'-'}}</td>
                   </ng-container>
                 </tr>
                 <tr>
-                  <td  class="table-header-left" colspan="4">Category Weights</td>
+                  <td  class="table-header-left" colspan="4">Category weights</td>
                   <ng-container *ngFor="let cat of processData">
                     <td   class="table-data" [attr.colspan]="cat.characteristicData.length">{{(cat.category_weight)?cat.category_weight+'%':'-'}} </td>
                   </ng-container>
                 </tr> 
                 <tr>
-                  <td class="table-header-left"  colspan="4">Recalculated Category Weights</td>
+                  <td class="table-header-left"  colspan="4">Recalculated category weights</td>
                   <ng-container *ngFor="let cat of processData">
                     <td  c class="table-data" [attr.colspan]="cat.characteristicData.length">{{(cat.recalculated_category_weight)?cat.recalculated_category_weight+'%':'0%'}}</td>
                   </ng-container>
@@ -166,13 +166,13 @@
         <br>
         <table> 
           <tr></tr>
-          <tr class="table-header-left"> <p class="category-topic">Processes Score - {{processScore === null ? 'N/A' : processScore}}</p></tr>
+          <tr class="table-header-left"> <p class="category-topic">Processes score - {{processScore === null ? 'N/A' : processScore}}</p></tr>
           <tr></tr>
         </table>  
         <br>
         
         <table> 
-          <tr class="table-header-left"> <p class="category-topic">Outcome of Change - GHGs</p></tr>
+          <tr class="table-header-left"> <p class="category-topic">Outcome of change - GHGs</p></tr>
           <tr></tr>
         </table>  
         <br>
@@ -185,21 +185,21 @@
             </ng-template>
             <ng-template pTemplate="body" let-rowData>
                 <tr>
-                  <td colspan="4" class="table-header-left">Intervention Information</td>
+                  <td colspan="4" class="table-header-left">Intervention information</td>
                   <td colspan="5" class="table-header">GHG</td>
                   <td  class="table-header">Weights</td>
                  
                 </tr>
                 <tr>
                   <td class="table-header">ID</td>
-                  <td class="table-header">Intervention Name</td>
-                  <td class="table-header">Tool Applied</td>
+                  <td class="table-header">Intervention name</td>
+                  <td class="table-header">Tool applied</td>
                   <td class="table-header">Status</td>
                   <ng-container *ngFor="let char of scale_GHGs.characteristicData">
                       <td class="table-header">{{char.characteristic}}</td>
                   </ng-container>
                   
-                  <td class="table-header">Category Score</td>
+                  <td class="table-header">Category score</td>
                   <td class="table-header"></td>
                   <td class="table-header"></td>
                 </tr>
@@ -227,21 +227,21 @@
           </ng-template>
           <ng-template pTemplate="body" let-rowData>
               <tr>
-                <td colspan="4" class="table-header-left">Intervention Information</td>
+                <td colspan="4" class="table-header-left">Intervention information</td>
                 <td colspan="5" class="table-header">GHG</td>
                 <td  class="table-header">Weights</td>
                
               </tr>
               <tr>
                 <td class="table-header">ID</td>
-                <td class="table-header">Intervention Name</td>
-                <td class="table-header">Tool Applied</td>
+                <td class="table-header">Intervention name</td>
+                <td class="table-header">Tool applied</td>
                 <td class="table-header">Status</td>
                 <ng-container *ngFor="let char of sustained_GHGs.characteristicData">
                     <td class="table-header">{{char.characteristic}}</td>
                 </ng-container>
                 
-                <td class="table-header">Category Score</td>
+                <td class="table-header">Category score</td>
                 <td class="table-header"></td>
                 <td class="table-header"></td>
               </tr>
@@ -264,7 +264,7 @@
         
         <table> 
           <tr></tr>
-          <tr class="table-header-left"> <p class="category-topic">Outcome of Change - SDGs</p></tr>
+          <tr class="table-header-left"> <p class="category-topic">Outcome of change - SDGs</p></tr>
           <tr></tr>
         </table>  
         <br>
@@ -277,20 +277,20 @@
             </ng-template>
             <ng-template pTemplate="body" let-rowData>
                 <tr>
-                  <td colspan="4" class="table-header-left">Intervention Information</td>
+                  <td colspan="4" class="table-header-left">Intervention information</td>
                   <td  class="table-header">SDG</td>
-                  <td colspan="5" class="table-header">Sustainable Development</td>
+                  <td colspan="5" class="table-header">Sustainable development</td>
                 </tr>
                 <tr>
                   <td class="table-header">ID</td>
-                  <td class="table-header">Intervention Name</td>
-                  <td class="table-header">Tool Applied</td>
+                  <td class="table-header">Intervention name</td>
+                  <td class="table-header">Tool applied</td>
                   <td class="table-header">Status</td>
                   <td class="table-header"></td>
                   <td class="table-header">International/global level</td>
                   <td class="table-header">National/Sectoral level</td>
                   <td class="table-header">Subnational/regional/municipal or sub sectoral level</td>
-                  <td class="table-header">SDG Score</td>
+                  <td class="table-header">SDG score</td>
                   <td class="table-header"></td>
                 </tr>
                
@@ -320,7 +320,7 @@
                     <td class="table-data"></td>
                   </tr>
                 <tr>
-                  <td  class="table-header" colspan="8">Category Score</td>
+                  <td  class="table-header" colspan="8">Category score</td>
                   <td class="table-data">{{(scale_SD.category_score.value!=null)?(scale_SD.category_score.value):'Outside assessment boundaries'}}</td>
                   <td class="table-data">{{(scale_SD.category_score.value!=null)?(scale_SD.category_score.value + "-" + scale_SD.category_score.name):'Outside assessment boundaries'}}</td>
                  
@@ -341,21 +341,21 @@
           </ng-template>
           <ng-template pTemplate="body" let-rowData>
               <tr>
-                <td colspan="4" class="table-header-left">Intervention Information</td>
+                <td colspan="4" class="table-header-left">Intervention information</td>
                 <td  class="table-header">SDG</td>
-                <td colspan="5" class="table-header">Sustainable Development</td>
+                <td colspan="5" class="table-header">Sustainable development</td>
                 <td  class="table-header"></td>
               </tr>
               <tr>
                 <td class="table-header">ID</td>
-                <td class="table-header">Intervention Name</td>
-                <td class="table-header">Tool Applied</td>
+                <td class="table-header">Intervention name</td>
+                <td class="table-header">Tool applied</td>
                 <td class="table-header">Status</td>
                 <td class="table-header"></td>
                 <td class="table-header">Long term (>15 years)</td>
                 <td class="table-header">Medium term (5-15 years)	</td>
                 <td class="table-header">Short term (<5 years)</td>
-                <td class="table-header">SDG Score</td>
+                <td class="table-header">SDG score</td>
                 <td class="table-header"></td>
                 <td class="table-header"></td>
               </tr>
@@ -389,13 +389,13 @@
                     <td class="table-data"></td>
                   </tr>
               <tr>
-                <td  class="table-header" colspan="8">Category Score</td>
+                <td  class="table-header" colspan="8">Category score</td>
                 <td class="table-data">{{(sustained_SD.category_score.value!=null)?(sustained_SD.category_score.value):'Outside assessment boundaries'}}</td>
                 <td class="table-data">{{(sustained_SD.category_score.value!=null)?(sustained_SD.category_score.value + "-" + sustained_SD.category_score.name):'Outside assessment boundaries'}}</td>
                 <td class="table-data"></td>
               </tr>
               <tr>
-                <td  class="table-header" colspan="8">SDG Outcome Score</td>
+                <td  class="table-header" colspan="8">SDG outcome score</td>
                 <td class="table-data">{{(aggregated_score.value!=null)?(aggregated_score.value):'Outside assessment boundaries'}}</td>
                 <td class="table-data">{{(aggregated_score.value!=null)?(aggregated_score.value + "-" + aggregated_score.name):'Outside assessment boundaries'}}</td>
                 <td class="table-data">50%</td>
@@ -409,7 +409,7 @@
         <ng-template pTemplate="header">
           <tr>
             <th class="table-header-main" colspan="1">SDG</th>
-            <th class="table-header-main" colspan="1">SDG Score</th>
+            <th class="table-header-main" colspan="1">SDG score</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData>
@@ -425,7 +425,7 @@
       <br>
         <table> 
           <tr></tr>
-          <tr class="table-header-left"> <p class="category-topic">Outcome of Change - Adaptation</p></tr>
+          <tr class="table-header-left"> <p class="category-topic">Outcome of change - Adaptation</p></tr>
           <tr></tr>
         </table>  
       <br>
@@ -438,21 +438,21 @@
         </ng-template>
         <ng-template pTemplate="body" let-rowData>
             <tr>
-              <td colspan="4" class="table-header-left">Intervention Information</td>
+              <td colspan="4" class="table-header-left">Intervention information</td>
               <td colspan="5" class="table-header">Adaptaion</td>
               <td  class="table-header">Weights</td>
              
             </tr>
             <tr>
               <td class="table-header">ID</td>
-              <td class="table-header">Intervention Name</td>
-              <td class="table-header">Tool Applied</td>
+              <td class="table-header">Intervention name</td>
+              <td class="table-header">Tool applied</td>
               <td class="table-header">Status</td>
               <ng-container *ngFor="let char of scale_adaptation.characteristicData">
                   <td class="table-header">{{char.characteristic}}</td>
               </ng-container>
               
-              <td class="table-header">Category Score</td>
+              <td class="table-header">Category score</td>
               <td class="table-header"></td>
               <td class="table-header"></td>
             </tr>
@@ -483,21 +483,21 @@
         </ng-template>
         <ng-template pTemplate="body" let-rowData>
             <tr>
-              <td colspan="4" class="table-header-left">Intervention Information</td>
+              <td colspan="4" class="table-header-left">Intervention information</td>
               <td colspan="5" class="table-header">Adaptation</td>
               <td  class="table-header">Weights</td>
              
             </tr>
             <tr>
               <td class="table-header">ID</td>
-              <td class="table-header">Intervention Name</td>
-              <td class="table-header">Tool Applied</td>
+              <td class="table-header">Intervention name</td>
+              <td class="table-header">Tool applied</td>
               <td class="table-header">Status</td>
               <ng-container *ngFor="let char of sustained_adaptation.characteristicData">
                   <td class="table-header">{{char.characteristic}}</td>
               </ng-container>
               
-              <td class="table-header">Category Score</td>
+              <td class="table-header">Category score</td>
               <td class="table-header"></td>
               <td class="table-header"></td>
             </tr>
@@ -520,7 +520,7 @@
       <br>
         <table> 
           <tr></tr>
-          <tr class="table-header-left"> <p class="category-topic">Outcome Score - {{outcomeScore==null?'N/A':outcomeScore}}</p></tr>
+          <tr class="table-header-left"> <p class="category-topic">Outcome score - {{outcomeScore==null?'N/A':outcomeScore}}</p></tr>
           <tr></tr>
           <tr></tr>
         </table>  
@@ -538,8 +538,8 @@
 <div class="container pl-20 pr-20">
  
   <div class="d-flex flex-row-reverse mt-2 mb-2">
-    <button (click)="exportToExcel()" class="btn btn-primary btn-block text-uppercase">Download as Excel</button>
-    <button *ngIf="this.tool === 'PORTFOLIO'||this.tool === 'INVESTOR'" class="btn btn-primary btn-block text-uppercase mr-20" label="Generate" (click)="generate()">Generate Report</button>
+    <button (click)="exportToExcel()" class="btn btn-primary btn-block">Download as Excel</button>
+    <button *ngIf="this.tool === 'PORTFOLIO'||this.tool === 'INVESTOR'" class="btn btn-primary btn-block mr-20" label="Generate" (click)="generate()">Generate report</button>
   </div>
 </div>
 <p-dialog [(visible)]="display">
@@ -549,7 +549,7 @@
       <div class="row p-2">
           <div class="col-2">
               <div>
-                  <label for="sector">Report Name</label>
+                  <label for="sector">Report name</label>
               </div>
           </div>
           <div class="col-10">

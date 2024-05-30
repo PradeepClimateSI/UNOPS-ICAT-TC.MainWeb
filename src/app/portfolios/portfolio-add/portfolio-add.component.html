@@ -23,15 +23,15 @@
 
 
             <div class="p-field p-2">
-              <label for="portfolioName">Name of the Portfolio *</label>
+              <label for="portfolioName">Name of the portfolio *</label>
               <input pInputText type="text" #portfolioName="ngModel" name="portfolioName"
-                [(ngModel)]="portfolio.portfolioName" placeholder="Portfolio Name" required />
+                [(ngModel)]="portfolio.portfolioName" placeholder="Portfolio name" required />
               <p class="info-message text-danger"
                 *ngIf="!portfolioName.value && (fData.submitted || portfolioName.touched)">This is a mandatory field</p>
             </div>
 
             <div class="p-field p-2">
-              <label for="description">Description of the Portfolio* <i class="pi pi-info-circle" pTooltip="Describe in general terms the interventions composing the portfolio" tooltipPosition="bottom"
+              <label for="description">Description of the portfolio&nbsp;* <i class="pi pi-info-circle" pTooltip="Describe in general terms the interventions composing the portfolio" tooltipPosition="bottom"
                 style="font-size: 1rem"></i></label>
               <input pInputText type="text" #description="ngModel" name="description"
                 [(ngModel)]="portfolio.description" placeholder="Description" required />
@@ -74,7 +74,7 @@
             </div>
             <div class="p-field p-2">
 
-              <label for="date">Date* <i class="pi pi-info-circle" pTooltip="Date of the assessment" tooltipPosition="bottom"
+              <label for="date">Date <i class="pi pi-info-circle" pTooltip="Date of the assessment" tooltipPosition="bottom"
                 style="font-size: 1rem"></i></label>
                 <p-calendar dateFormat="dd/mm/yy" [disabled]="true" inputId="date"  [(ngModel)]="currentDate" 
                   name="date" #date="ngModel" [required]="true" appendTo="body">
@@ -93,7 +93,7 @@
       </div>
 
       <br>
-      <h4>Add Interventions</h4>
+      <h4>Add interventions</h4>
 
       <p-table #dt2 
       [lazy]="true" 
@@ -117,7 +117,7 @@
               <p-columnFilter field="climateAction.policy_sector" matchMode="contains" [showMenu]="false">
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                   <p-multiSelect  [options]="sectorList" (onChange)="onSearch($event.value, 'SECTOR')" optionLabel="name"
-                    placeholder="Select Sector" >
+                    placeholder="Select sector" >
                   </p-multiSelect>
                 </ng-template>
               </p-columnFilter>
@@ -127,7 +127,7 @@
               <p-columnFilter field="assessmentType" matchMode="equals" [showMenu]="false">
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                   <p-dropdown [options]="statuses" optionValue="value" (onChange)="onSearch($event.value, 'TYPE')"
-                    placeholder="Select Type" [showClear]="true">
+                    placeholder="Select assessment type"[showClear]="true">
                   </p-dropdown>
                 </ng-template>
               </p-columnFilter>
@@ -151,14 +151,14 @@
         <ng-template pTemplate="header">
 
           <tr>
-            <th style="width:8%"></th>
-            <th style="width:6%">ID</th>
-            <th style="width:20%">Intervention</th>
-            <th style="width:20%">Sectors Covered</th>
-            <th style="width:12%">Assessment Type</th>
+            <th style="width:5%"></th>
+            <th style="width:4%">ID</th>
+            <th style="width:19%">Intervention</th>
+            <th style="width:20%">Sectors covered</th>
+            <th style="width:8%">Assessment type</th>
             <th style="width:12%">Tool</th>
-            <th style="width:20%">Assessment Period</th>
-
+            <th style="width:10%">Created date</th>
+            <th style="width:22%">Assessment period</th>
           </tr>
 
         </ng-template>
@@ -186,8 +186,12 @@
               {{ masterDataService.getToolName(assessList.assessment.tool) }}
             </td>
             <td>
+              {{ assessList.assessment.createdOn | date:'dd/MM/yyyy' }} 
+            </td>
+            <td>
               {{ assessList.assessment.from | date:'dd/MM/yyyy' }} - {{ assessList.assessment.to | date:'dd/MM/yyyy'}}
             </td>
+           
 
           </tr>
         </ng-template>
@@ -204,7 +208,7 @@
         <div>
 
           <div class="d-flex flex-row-reverse  ">
-            <button class="btn btn-primary text-uppercase" type="submit">
+            <button class="btn btn-primary" type="submit">
               Save
             </button>
           </div>

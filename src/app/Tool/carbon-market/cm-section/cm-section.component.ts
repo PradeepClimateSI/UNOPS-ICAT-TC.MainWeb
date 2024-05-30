@@ -1,7 +1,10 @@
-import { Component, Input, OnInit, } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Assessment, CMAnswer, CMAssessmentQuestion, CMAssessmentQuestionControllerServiceProxy, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Category, Criteria, Institution, SaveCMResultDto, ScoreDto, Section, ServiceProxy } from 'shared/service-proxies/service-proxies';
+import { CmSectionThreeComponent } from '../cm-section-three/cm-section-three.component';
+import { AppService } from 'shared/AppService';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-cm-section',
@@ -15,6 +18,7 @@ export class CmSectionComponent implements OnInit {
   @Input() isEditMode: boolean;
   @Input() isCompleted: boolean;
   @Input() expectedGhgMitigation: number;
+  @ViewChild('cmSectionThreeComponent') cmSectionThreeComponent: CmSectionThreeComponent
  
   openAccordion = 0
 
@@ -57,6 +61,8 @@ export class CmSectionComponent implements OnInit {
     'be demonstrated through the application of different additionality tests including a regulatory additionality test (going beyond existing laws and regulations), an investment ' +
     'test and/or a barrier test. For the quantification of mitigation outcomes, it is essential that crediting baselines are set credibly and conservatively and that a robust ' +
     'monitoring concept is in place. The following questions are therefore focusing on the intervention’s approach to additionality determination, baseline setting and monitoring.'
+  criteria2_description = 'GHG emissions lock-in refers to the investment in technologies or practices that prevent transitioning to lower-emission technologies or practices in the ' + 
+    'short term, inhibiting a transformation to low-carbon societies.'
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -64,7 +70,8 @@ export class CmSectionComponent implements OnInit {
     private messageService: MessageService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private serviceProxy: ServiceProxy
+    private serviceProxy: ServiceProxy,
+    private appService: AppService
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -501,6 +508,16 @@ export class CmSectionComponent implements OnInit {
           detail: 'Error in result saving',
           closable: true,
         })
+      }, () => {
+        if (event.isLogoutClicked) {
+          this.appService.autoSavingDone.next(true);
+          this.appService.loginOut.next(false)
+          if  (event.logoutSub) {
+            event.logoutSub.unsubscribe();
+            //@ts-ignore
+            event.logoutSub = undefined;
+          }
+        }
       })
   }
 
@@ -570,6 +587,8 @@ export class SaveDto {
   name:string = ''
   type:string = ''
   expected_ghg_mitigation: number = 0
+  isLogoutClicked: boolean = false
+  logoutSub?: Subscription 
 }
 
 export class SectionResultDto{
