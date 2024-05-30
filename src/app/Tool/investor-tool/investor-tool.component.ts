@@ -1006,7 +1006,6 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
       this.checkTab2Mandatory(event.index)
       this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
     }
-    console.log("outcome data",this.outcomeData)
   }
 
   checkTab1Mandatory(idx: number) {
