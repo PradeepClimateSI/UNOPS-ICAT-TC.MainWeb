@@ -324,8 +324,8 @@ export class AllTooDashbordComponent implements OnInit, AfterViewInit {
     let skip = pageNumber * this.rows;
     this.investorProxy.getDashboardAllDatafilter(pageNumber, this.rows, this.projectName, this.selectedPortfolio ? this.selectedPortfolio.id : 0).subscribe((res) => {
       this.tableData = res.items;
-      this.heatMapScore = this.tableData.map(item => { return { processScore: item.process_score, outcomeScore: item.outcome_score } })
-      this.heatMapData = this.tableData.map(item => { return { interventionId: item.climateAction?.intervention_id, interventionName: item.climateAction?.policyName, processScore: item.process_score, outcomeScore: item.outcome_score } })
+      this.heatMapScore = this.tableData.map(item => { return { processScore: item.result.averageProcess, outcomeScore: item.result.averageOutcome } })
+      this.heatMapData = this.tableData.map(item => { return { interventionId: item.climateAction?.intervention_id, interventionName: item.climateAction?.policyName, processScore: item.result.averageProcess, outcomeScore: item.result.averageOutcome } })
       this.totalRecords = res.meta.totalItems
       this.loading = false;
     }, err => {

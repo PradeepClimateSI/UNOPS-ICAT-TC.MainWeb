@@ -63,8 +63,8 @@
                         <td>{{ tableData.climateAction?.policyName }}</td>
                         <td>{{ masterDataService.getToolName(tableData.tool) }}</td>
                         <td>{{ tableData.from| date: 'dd/MM/yyyy'}} - {{tableData.to| date: 'dd/MM/yyyy'}}</td>
-                            <td>{{ mapProcessScores(tableData.process_score) }}</td>
-                            <td>{{ mapOutcomeScores(tableData.outcome_score) }}</td>
+                            <td>{{ mapProcessScores(tableData.result.averageProcess) }}</td>
+                            <td>{{ mapOutcomeScores(tableData.result.averageOutcome) }}</td>
                     </tr>
                 </ng-template>
 
