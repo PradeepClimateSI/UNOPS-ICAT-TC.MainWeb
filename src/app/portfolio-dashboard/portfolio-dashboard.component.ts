@@ -684,7 +684,7 @@ this.selectPortfolio();
               beginAtZero: true,
               title: {
                 display: true,
-                text: 'Expected average GHG reductions or removals (mitigation outcomes) (tCO₂e) ',
+                text: 'Expected average GHG reductions or removals (mitigation outcomes) (tCO₂e/year) ',
                 font: {
                   size: 10,
                   weight: 'bold',
