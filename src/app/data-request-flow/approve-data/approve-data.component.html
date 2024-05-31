@@ -23,7 +23,7 @@
         <div class="col-md-6">
           <div class="col-12">
             <div class="p-field">
-              <label for="projStatus">Assessment Type</label>
+              <label for="projStatus">Assessment type</label>
               <input
               [disabled]="true"
               type="text"
@@ -139,7 +139,7 @@
           class="d-flex justify-content-end align-content-center flex-wrap mb-15 mr-10"
         >
           <button
-            class="btn btn-primary text-uppercase"
+            class="btn btn-primary"
             type="submit"
             [disabled]="isHideRejectButton || enableQCButton"
             (click)="onAcceptClick()"
@@ -148,7 +148,7 @@
           </button>
           <div *ngIf="isHideRejectButton == false">
           <button
-            class="btn btn-primary text-uppercase ml-5"
+            class="btn btn-primary ml-5"
             type="submit"
             [disabled]="isRejectButtonDisable"
             (click)="onRejectClick()"
@@ -158,7 +158,7 @@
           </button>
            </div>
           <button
-            class="btn btn-primary text-uppercase ml-5"
+            class="btn btn-primary ml-5"
             type="submit"
             [disabled]="!enableQCButton"
             (click)="onOpenPopUP()"

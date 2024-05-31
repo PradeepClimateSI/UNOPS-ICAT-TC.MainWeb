@@ -65,14 +65,14 @@ export class PortfolioComparisonComponent implements OnInit {
     this.card.push(
       ...[
         { title: 'Portfolio ID', data: this.portfolio.portfolioId },
-        { title: 'Name of the Portfolio', data: this.portfolio.portfolioName },
+        { title: 'Name of the portfolio', data: this.portfolio.portfolioName },
         { title: 'Description', data: this.portfolio.description },
         { title: 'Date', data: date },
         { title: 'Is this assessment an update of a previous assessment?', data: this.portfolio.IsPreviousAssessment },
         { title: 'Link to previous assessment', data: this.portfolio.link },
         { title: 'Objective(s) of the assessment', data: this.portfolio.objectives },
         { title: 'Intended audience(s) of the assessment', data: this.portfolio.audience },
-        { title: 'Number of Assessments', data: await this.noOfAssessments }
+        { title: 'Number of assessments', data: await this.noOfAssessments }
       ])
   }
 
@@ -82,7 +82,8 @@ export class PortfolioComparisonComponent implements OnInit {
   }
 
   async getDummyData() {
-    let interventions = await this.portfolioServiceProxy.getPortfolioComparisonData(this.portfolioId).toPromise()
+    let interventions = await this.portfolioServiceProxy.getPortfolioComparisonData(this.portfolioId).toPromise();
+   
 
     this.process_data = interventions.process_data
     this.outcome_data = interventions.outcome_data
@@ -90,15 +91,15 @@ export class PortfolioComparisonComponent implements OnInit {
 
     this.aggregation_data = {
       col_set_1: [
-        { label: 'INTERVENTION INFORMATION', colspan: 4 },
+        { label: 'Intervention information', colspan: 4 },
         { label: '', colspan: 1 }
       ],
       col_set_2: [
         { label: 'ID', code: 'id' },
-        { label: 'INTERVENTION NAME', code: 'name' },
-        { label: 'TOOL APPLIED', code: 'tool' },
-        { label: 'STATUS', code: 'status' },
-        { label: 'EXPECTED AVERAGE GHG REDUCTIONS OR REMOVALS (MITIGATION OUTCOMES)(tCO₂e/year)', code: 'mitigation' },
+        { label: 'Intervention name', code: 'name' },
+        { label: 'Tool applied', code: 'tool' },
+        { label: 'Status', code: 'status' },
+        { label: 'Expected average GHG reductions or removals (mitigation outcomes) (tCO₂e/year)', code: 'mitigation' },
       ],
       interventions: interventions.aggregation_data.interventions,
       total: interventions.aggregation_data.total

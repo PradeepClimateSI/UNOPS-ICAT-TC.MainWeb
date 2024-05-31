@@ -490,9 +490,9 @@ export class MasterDataService {
       {label: 'Moderate', value: 2},
       {label: 'Minor', value: 1},
       {label: 'None', value: 0},
-      {label: 'Minor Negative', value: -1},
-      {label: 'Moderate Negative', value: -2},
-      {label: 'Major Negative', value: -3}
+      {label: 'Minor negative', value: -1},
+      {label: 'Moderate negative', value: -2},
+      {label: 'Major negative', value: -3}
     ]
   
     this.yData = [
@@ -500,7 +500,7 @@ export class MasterDataService {
       {label: 'Likely', value: 3},
       {label: 'Possible', value: 2},
       {label: 'Unlikely', value: 1},
-      {label: 'Very Unlikely', value: 0}
+      {label: 'Very unlikely', value: 0}
     ]
 
     this.SDGs= [
@@ -524,16 +524,16 @@ export class MasterDataService {
     ]
 
     this.tools = [
-      {id: 1, name: 'General Tool', code: 'PORTFOLIO'},
-      {id: 2, name: 'Carbon Market Tool', code: 'CARBON_MARKET'},
-      {id: 3, name: 'Investment Tool', code: 'INVESTOR'},
+      {id: 1, name: 'General tool', code: 'PORTFOLIO'},
+      {id: 2, name: 'Carbon market tool', code: 'CARBON_MARKET'},
+      {id: 3, name: 'Investment tool', code: 'INVESTOR'},
     ]
 
     this.sdg_priorities = [
-      { id: 1, name: 'High Priority', code: 'HIGH', value: 3 },
-      { id: 2, name: 'Medium Priority', code: 'MEDIUM', value: 2 },
-      { id: 3, name: 'Low Priority', code: 'LOW', value: 1 },
-      { id: 3, name: 'No Priority', code: 'NO', value: 0 },
+      { id: 1, name: 'High priority', code: 'HIGH', value: 3 },
+      { id: 2, name: 'Medium priority', code: 'MEDIUM', value: 2 },
+      { id: 3, name: 'Low priority', code: 'LOW', value: 1 },
+      { id: 3, name: 'No priority', code: 'NO', value: 0 },
     ]
 
     this.investment_instruments = [

@@ -4,18 +4,18 @@
   
     <div class="row">
       <div class="col-3 ">
-        <h6>Select Portfolio : </h6>
+        <h6>Select portfolio : </h6>
       </div>
   
       <div class="col-4 ">
-        <p-dropdown appendTo="body" name="portfolio" placeholder="Select Portfolio" [(ngModel)]="selectedPortfolio"
+        <p-dropdown appendTo="body" name="portfolio" placeholder="Select portfolio" [(ngModel)]="selectedPortfolio"
           appendTo="body" [options]="portfolioList" optionLabel="portfolioName"
           (onChange)="selectPortfolio()"></p-dropdown>
       </div>
   
   
       <div class="col-1">
-        <button class="btn btn-primary text-uppercase" type="button" (click)="goToFunction()" title="Clear Selected Portfolio">
+        <button class="btn btn-primary" type="button" (click)="goToFunction()" title="Clear selected portfolio">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -27,15 +27,15 @@
   </div>
 <div class="p-grid p-fluid card m-3">
     <div class="row">
-        <h3>Recent Assessments Done</h3>
+        <h3>Recent assessments done</h3>
 
         <div class="row mt-20 ml-10">
             <div class="col-3 ">
-              <h5>Select Assessments </h5>
+              <h5>Select assessments </h5>
             </div>
             <div class="col-6 ">
                 <p-multiSelect name="assess" [options]="allAssessments" [(ngModel)]="selectedAssessments" appendTo="body"
-                (onChange)="onSelectAssessment()" (onClear) ="onClear()" [showClear]="true" defaultLabel="Select Assessment" [selectionLimit]="selectionLimit"
+                (onChange)="onSelectAssessment()" (onClear) ="onClear()" [showClear]="true" defaultLabel="Select assessment" [selectionLimit]="selectionLimit"
                 optionLabel="label"></p-multiSelect>
               </div>
             
@@ -50,11 +50,11 @@
                 [rowsPerPageOptions]="[ 5, 10, 25,50]" [loading]="loading" [responsive]="true">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th class="table-header-3">Intervention Name</th>
+                        <th class="table-header-3">Intervention name</th>
                         <th class="table-header">Tool</th>
-                        <th class="table-header-3">Assessment Period</th>
-                        <th class="table-header" style="line-height: 130%;">Likelihood of Transformation</th>
-                        <th class="table-header" style="line-height: 130%;">Outcome Score</th>
+                        <th class="table-header-3">Assessment period</th>
+                        <th class="table-header" style="line-height: 130%;">Likelihood of transformation</th>
+                        <th class="table-header" style="line-height: 130%;">Outcome score</th>
                         
                     </tr>
                 </ng-template>
@@ -63,8 +63,8 @@
                         <td>{{ tableData.climateAction?.policyName }}</td>
                         <td>{{ masterDataService.getToolName(tableData.tool) }}</td>
                         <td>{{ tableData.from| date: 'dd/MM/yyyy'}} - {{tableData.to| date: 'dd/MM/yyyy'}}</td>
-                            <td>{{ mapProcessScores(tableData.process_score) }}</td>
-                            <td>{{ mapOutcomeScores(tableData.outcome_score) }}</td>
+                            <td>{{ mapProcessScores(tableData.result.averageProcess) }}</td>
+                            <td>{{ mapOutcomeScores(tableData.result.averageOutcome) }}</td>
                     </tr>
                 </ng-template>
 
@@ -83,6 +83,7 @@
 
 <div class="p-grid p-fluid card mt-20 m-3">
     <div class="row text-center">
+        <h3>Transformational change of interventions</h3>
         <app-heat-map  id="heatmap" [xData]="xData" [yData]="yData" [score]="heatMapScore" [showOp]="true" [tableData]="heatMapData"></app-heat-map>
        
     </div>

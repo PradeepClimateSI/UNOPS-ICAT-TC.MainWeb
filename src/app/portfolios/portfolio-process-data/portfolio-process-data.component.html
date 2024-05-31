@@ -2,8 +2,8 @@
     <p-table [value]="data.interventions" [style]="{'text-align': 'center'}">
         <ng-template pTemplate="header">
             <tr>
-                <th colspan="4">LIKELIHOOD COMPARISON</th>
-                <th [attr.colspan]="data.characteristic_count + 1">PROCESS</th>
+                <th colspan="4">Likelihood comparison</th>
+                <th [attr.colspan]="data.characteristic_count + 1">Process of change</th>
             </tr>
             <tr>
                 <ng-container *ngFor="let col of data.col_set_1">

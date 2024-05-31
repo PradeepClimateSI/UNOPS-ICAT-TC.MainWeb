@@ -21,7 +21,7 @@
         <div class="col-md-4">
           <div class="p-inputgroup pt-4">
             <input
-              placeholder="Type Your Keyword"
+              placeholder="Type your keyword"
               type="text"
               class="p-inputtext"
               [(ngModel)]="searchBy.text"
@@ -59,7 +59,7 @@
         </div>
         <div class="col-md-4">
           <div class="p-field">
-            <label for="projYear">Assessment Type</label>
+            <label for="projYear">Assessment type</label>
             <p-dropdown
               name="projYear"
               [(ngModel)]="searchBy.year"
@@ -120,10 +120,10 @@
                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
               </th>
               <th >Intervention</th>
-              <th >Assessment Type</th>
+              <th >Assessment type</th>
               
               <ng-container *ngIf="tabIndex==1||tabIndex==2" >
-                <th >Assessment Period</th>
+                <th >Assessment period</th>
               </ng-container>
                 <th>Process/Outcome</th>
                 <th>Category</th>
@@ -132,7 +132,7 @@
               <ng-container *ngIf="tabIndex==0" >
                 
               </ng-container>
-              <th >Data Provider</th>
+              <th >Data provider</th>
               <th>Deadline</th>
               <th>Status</th>
               <th >Info</th>

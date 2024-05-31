@@ -56,7 +56,7 @@
                         pRipple
                         [disabled]="!this.isCarbonMarketTool &&  userRole !=loginRole.External"
                         (click)="goToCarbonMarket()"
-                        label="Carbon Market">
+                        label="Carbon market">
                     </button>
                 </div>
                 <div class="col-md-3" *ngIf="this.isInvesmentTool ||  userRole ==loginRole.External">
@@ -95,7 +95,7 @@
                       type="button"
                       pButton
                       pRipple
-                      label="All Tools"
+                      label="All tools"
                       [disabled]="!this.isAllTool &&  userRole !=loginRole.External"
                       (click)="goToAllTool()">
                   </button>

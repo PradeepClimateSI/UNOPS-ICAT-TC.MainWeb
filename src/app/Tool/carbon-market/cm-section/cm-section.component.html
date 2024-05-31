@@ -15,6 +15,9 @@
                                     <p *ngIf="criteria.code === 'S-2-CRITERIA-1'">
                                         <i>{{criteria1_description}}</i>
                                     </p>
+                                    <p *ngIf="criteria.code === 'S-2-CRITERIA-2'">
+                                        <i>{{criteria2_description}}</i>
+                                    </p>
                                     <ng-container *ngFor="let question of criteria.questions;let idx=index; ">
                                         <app-cm-question *ngIf="idx <= criteria.currentQuestion" [assessmentquestions]="assessmentQuestions" [question]="question" (prev_answer)="onAnswer2($event, question.message, question, criteria, section )"
                                             [approach]="approach" [isEditMode]="isEditMode"></app-cm-question>
@@ -33,10 +36,10 @@
             <div class="row p-grid p-fluid col-sm-12">
                 <div class="col-10"></div>
                 <div class="d-flex flex-row-reverse mt-20 ">
-                    <button class="btn btn-primary text-uppercase" type="submit" (click)="save(emptySaveDto)">
-                      {{ (assessment && assessment.assessment_approach=== 'INDIRECT') ? 'Send to Data Collection Team' : 'Calculate & Check Results' }}
+                    <button class="btn btn-primary" type="submit" (click)="save(emptySaveDto)">
+                      {{ (assessment && assessment.assessment_approach=== 'INDIRECT') ? 'Send to Data Collection Team' : 'Calculate & check results' }}
                     </button>
-                    <div style="margin-right: 10px;" class="btn btn-primary text-uppercase" (click)="save({result: [], isDraft: true, name: '', type: '', expected_ghg_mitigation: 0, isLogoutClicked: false})">
+                    <div style="margin-right: 10px;" class="btn btn-primary" (click)="save({result: [], isDraft: true, name: '', type: '', expected_ghg_mitigation: 0, isLogoutClicked: false})">
                         Save
                     </div>
                 </div>
@@ -55,7 +58,7 @@
             <h4>Caution!</h4>
             <p [class]="showConditionDialog ? 'caution-dialog' : ''"  [innerHTML]="message"></p>
             <p [class]="showConditionDialog ? 'caution-dialog' : ''" [innerHTML]="condition_message"></p>
-            <button style="background-color: #224373;" class="btn btn-primary text-uppercase" type="submit" (click)="okay()">
+            <button style="background-color: #224373;" class="btn btn-primary" type="submit" (click)="okay()">
                 Close
             </button>
         </div>
@@ -69,7 +72,7 @@
             <br>
             <h4>{{isPassed ? 'Successful': 'Caution!'}}</h4>
             <p [class]="showConditionDialog ? 'caution-dialog' : ''" [innerHTML]="condition_message"></p>
-            <button style="background-color: #224373;" class="btn btn-primary text-uppercase" type="submit" (click)="okayCondition()">
+            <button style="background-color: #224373;" class="btn btn-primary" type="submit" (click)="okayCondition()">
                 Close
             </button>
         </div>
