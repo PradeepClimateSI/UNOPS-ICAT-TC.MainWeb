@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { FieldNames, MasterDataDto, MasterDataService, assessment_period_info, chapter6_url } from 'app/shared/master-data.service';
+import { FieldNames, MasterDataDto, MasterDataService, assessment_geoArea_tooltip, assessment_period_info, assessment_sector_tooltip, chapter6_url } from 'app/shared/master-data.service';
 import * as moment from 'moment';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { AllBarriersSelected, Assessment, AssessmentCMDetail, AssessmentCMDetailControllerServiceProxy, AssessmentControllerServiceProxy, BarrierSelected, CMDefaultValue, Category, Characteristics, ClimateAction, GeographicalAreasCovered, InvestorSector, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, PolicyBarriers, ProjectControllerServiceProxy, Sector, SectorControllerServiceProxy, ServiceProxy, ToolsMultiselectDto } from 'shared/service-proxies/service-proxies';
@@ -85,7 +85,8 @@ export class CarbonMarketAssessmentComponent implements OnInit {
   autoSaveDialog: boolean;
 
 logOutSubs: Subscription;
-
+  assessment_geoArea_tooltip = assessment_geoArea_tooltip
+  assessment_sector_tooltip = assessment_sector_tooltip
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
     private methodologyAssessmentControllerServiceProxy: MethodologyAssessmentControllerServiceProxy,

@@ -49,7 +49,7 @@
                         </div>
                        
                         <div class="p-field p-2">
-                          <label for="Level of implementation">Geographical area covered *</label>
+                          <label for="Level of implementation">Geographical Area Covered * <i class="pi pi-info-circle" style="font-size: 1rem" tooltipPosition="bottom" [pTooltip]="assessment_geoArea_tooltip"></i></label>
                           <p-confirmDialog key="geoConfirm"  icon="pi pi-exclamation-triangle" position="top" [style]="{width: '50vw'}" [baseZIndex]="10000"></p-confirmDialog>
                           <p-dropdown appendTo="body" name="investorAssessment.geographical_areas_covered" #geoarea="ngModel" placeholder="Select geographical areas covered" [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" [(ngModel)]="geographicalArea" [options]="levelOfImplementation" optionLabel="name"
                           (onChange)="onChangeGeoAreaCovered()" [required]="true"></p-dropdown>
@@ -61,7 +61,7 @@
                           </p>
                         </div>
                         <div class="p-field p-2">
-                          <label for="Sectors Covered">Sectors covered *</label>
+                          <label for="Sectors Covered">Sectors Covered * <i class="pi pi-info-circle" style="font-size: 1rem" tooltipPosition="bottom" [pTooltip]="assessment_sector_tooltip"></i></label>
                           <p-confirmDialog key="sectorConfirm"  icon="pi pi-exclamation-triangle" position="top" [style]="{width: '50vw'}" [baseZIndex]="10000"></p-confirmDialog>
                           <p-multiSelect #multiSelectComponent appendTo="body" name="sectors" #sectors="ngModel" placeholder="Select sectors covered" [(ngModel)]="sectorArray" [options]="sectorList" (onChange)="onItemSelectSectors($event)" [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" optionLabel="name"
                             [required]="true"></p-multiSelect>
