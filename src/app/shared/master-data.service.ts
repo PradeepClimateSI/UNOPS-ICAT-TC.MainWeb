@@ -1106,4 +1106,7 @@ export const assessment_period_info = 'This refers to the timeframe, for which t
   'The period cannot begin earlier than the start date that was selected for the intervention. It can be different from the implementation period and should include the full range ' +
   'of relevant impacts.\n' +
   'System changes usually unfold over a longer period of time than individual impacts. Hence, users are encouraged to select a long assessment period (e.g. 15 years or more, with ' +
-  'an end date such as 2040 or 2050) to align with longer term plans and goals.'
+  'an end date such as 2040 or 2050) to align with longer term plans and goals.' 
+
+export const assessment_geoArea_tooltip ='The assessment can be undertaken at the international, national, sub-national level. This may or may not be the same as the geographical coverage of the intervention.'
+export const assessment_sector_tooltip ='Specify the sector(s) included in the assessment. These can be the same as, or a subset of, sectors targeted by the intervention.'
