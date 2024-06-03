@@ -83,7 +83,7 @@ export class PortfolioComparisonComponent implements OnInit {
 
   async getDummyData() {
     let interventions = await this.portfolioServiceProxy.getPortfolioComparisonData(this.portfolioId).toPromise();
-    console.log(interventions)
+   
 
     this.process_data = interventions.process_data
     this.outcome_data = interventions.outcome_data
@@ -99,7 +99,7 @@ export class PortfolioComparisonComponent implements OnInit {
         { label: 'Intervention name', code: 'name' },
         { label: 'Tool applied', code: 'tool' },
         { label: 'Status', code: 'status' },
-        { label: 'Expected average GHG reductions or removals (Mitigation outcomes)(tCO₂e/year)', code: 'mitigation' },
+        { label: 'Expected average GHG reductions or removals (mitigation outcomes) (tCO₂e/year)', code: 'mitigation' },
       ],
       interventions: interventions.aggregation_data.interventions,
       total: interventions.aggregation_data.total
