@@ -23,7 +23,7 @@ export class ReportComponent implements OnInit {
   allSelect: boolean
   reportName: string;
   assessmentTypes: any[]
- reportTypes=['Result','Comparison']
+ reportTypes=['Assessment reports','Portfolio reports']
  selectedReportTypes:string='';
  tools=['Investment','General tool']
  selectedTool:string='';
@@ -127,8 +127,8 @@ export class ReportComponent implements OnInit {
   filterReportData() {
     let climateAction = this.searchBy.climateAction ? this.searchBy.climateAction.policyName.toString() : "";
     let reportName = this.searchBy.text ? this.searchBy.text : "";
-
-    this.reportControllerServiceProxy.getReportData(climateAction, reportName,this.selectedReportTypes,this.selectedTool).subscribe(res => {
+    let reportType = this.mapReportType(this.selectedReportTypes)
+    this.reportControllerServiceProxy.getReportData(climateAction, reportName,reportType,this.selectedTool).subscribe(res => {
       this.pdfFiles = res;
     })
 
@@ -138,5 +138,20 @@ export class ReportComponent implements OnInit {
   view(path: string){
     window.open(this.DOWNLOAD_BY_NAMA_URL +"/"+ path, "_blank");
   }
+  mapReportType(type: string ) : string {
+    let returnType = ''
+
+    if(type == 'Assessment reports'){
+      returnType = 'Result'
+    }
+    else if(type == 'Portfolio reports'){
+      returnType = 'Comparison'
+    }
+    else{
+      returnType = ''
+    }
+    return returnType
+  }
+
 
 }

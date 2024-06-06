@@ -989,7 +989,7 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
         }
         if (this.isEditMode == false && !isAutoSaving) {
           this.isFirst = true;
-          this.router.navigate(['app/portfolio-tool-edit'], {
+          this.router.navigate(['app/general-tool-edit'], {
             queryParams: { id: this.mainAssessment.id, isEdit: true },
           });
         }
@@ -1017,7 +1017,7 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
     this.investorToolControllerproxy.createFinalAssessment2(data).subscribe(res => {
      
         if (!this.isEditMode) {
-          this.router.navigate(['app/portfolio-tool-edit'], {
+          this.router.navigate(['app/general-tool-edit'], {
             queryParams: { id: this.mainAssessment.id, isEdit: true },
           });
         }
