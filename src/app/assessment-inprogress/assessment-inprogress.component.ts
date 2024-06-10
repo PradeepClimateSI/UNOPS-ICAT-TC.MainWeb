@@ -109,13 +109,13 @@ export class AssessmentInprogressComponent implements OnInit {
       });
     }
     if (assessment.tool =="PORTFOLIO"){
-      this.router.navigate(['app/portfolio-tool'], {  
+      this.router.navigate(['app/general-tool'], {  
       queryParams: { id: assessment.id,isEdit:assessment.isDraft, isContinue: isContinue},  
       });
     }
 
     if (assessment.tool =="INVESTOR"){
-      this.router.navigate(['app/investor-tool-new'], {  
+      this.router.navigate(['app/investment-tool'], {  
       queryParams: { id: assessment.id,isEdit:assessment.isDraft, isContinue: isContinue},  
       });
     }
