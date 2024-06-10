@@ -58,7 +58,7 @@
             </div>
             <div class="p-field p-2">
               <label for="Sectors Covered">Total investement (in USD) *</label>
-              <input pInputText type="number" #totInvestment="ngModel" name="totInvestment" ngModel placeholder="Enter total investment" [(ngModel)]="investorAssessment.total_investment" required [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" />
+              <p-inputNumber type="number" #totInvestment="ngModel" name="totInvestment" mode="decimal" ngModel placeholder="Enter total investment" [(ngModel)]="investorAssessment.total_investment" [required]="true" [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" [minFractionDigits]="2" ></p-inputNumber>
               <p class="info-message text-danger" *ngIf="
                                 !investorAssessment.total_investment &&
                                 (fData.submitted || totInvestment.touched)
