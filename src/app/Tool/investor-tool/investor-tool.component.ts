@@ -829,7 +829,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
         this.setTo()
         if (this.isEditMode == false  && !isAutoSaving) {
           this.isFirst = true;
-          this.router.navigate(['app/investor-tool-new-edit'], {
+          this.router.navigate(['app/investment-tool-edit'], {
             queryParams: { id: this.mainAssessment.id, isEdit: true },
           });
         }
@@ -1169,7 +1169,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
             detail: 'Successfully sent to Data Collection Team',
             closable: true,
           })
-          this.router.navigate(['/app/investor-tool-new']);
+          this.router.navigate(['/app/investment-tool']);
 
         }, error => {
           this.messageService.add({

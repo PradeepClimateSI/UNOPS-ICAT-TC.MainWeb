@@ -33,9 +33,9 @@
               </p>
             </div>
             <div class="p-field p-2">
-              <label for="Level of implementation">Geographical Area Covered * <i class="pi pi-info-circle" style="font-size: 1rem" tooltipPosition="bottom" [pTooltip]="assessment_geoArea_tooltip"></i></label>
+              <label for="Level of implementation">Geographical area covered * <i class="pi pi-info-circle" style="font-size: 1rem" tooltipPosition="bottom" [pTooltip]="assessment_geoArea_tooltip"></i></label>
               <p-confirmDialog key="geoConfirm"  icon="pi pi-exclamation-triangle" position="top" [style]="{width: '50vw'}" [baseZIndex]="10000"></p-confirmDialog>
-              <p-dropdown appendTo="body" name="investorAssessment.geographical_areas_covered" #type="ngModel" placeholder="Select geographical areas covered" [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" [(ngModel)]="geographicalArea" [options]="levelOfImplementation" optionLabel="name"
+              <p-dropdown appendTo="body" name="investorAssessment.geographical_areas_covered" #type="ngModel" placeholder="Select geographical area covered" [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" [(ngModel)]="geographicalArea" [options]="levelOfImplementation" optionLabel="name"
               (onChange)="onChangeGeoAreaCovered()" [required]="true"></p-dropdown>
               <p class="info-message text-danger" *ngIf="
                                   !geographicalArea &&
@@ -45,7 +45,7 @@
               </p>
             </div>
             <div class="p-field p-2">
-              <label for="Sectors Covered">Sectors Covered * <i class="pi pi-info-circle" style="font-size: 1rem" tooltipPosition="bottom" [pTooltip]="assessment_sector_tooltip"></i></label>
+              <label for="Sectors Covered">Sectors covered * <i class="pi pi-info-circle" style="font-size: 1rem" tooltipPosition="bottom" [pTooltip]="assessment_sector_tooltip"></i></label>
               <p-confirmDialog key="sectorConfirm"  icon="pi pi-exclamation-triangle" position="top" [style]="{width: '50vw'}" [baseZIndex]="10000"></p-confirmDialog>
               <p-multiSelect #multiSelectComponent appendTo="body" name="sectors" #type="ngModel" placeholder="Select sectors covered" [(ngModel)]="sectorArray" [options]="sectorList" (onChange)="onItemSelectSectors($event)" [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" optionLabel="name"
                 [required]="true"></p-multiSelect>
@@ -57,7 +57,7 @@
               </p>
             </div>
             <div class="p-field p-2">
-              <label for="Sectors Covered">Total investement (in USD)*</label>
+              <label for="Sectors Covered">Total investement (in USD) *</label>
               <input pInputText type="number" #totInvestment="ngModel" name="totInvestment" ngModel placeholder="Enter total investment" [(ngModel)]="investorAssessment.total_investment" required [disabled]="isSavedAssessment|| (isEditMode && !isCompleted && isContinue)" />
               <p class="info-message text-danger" *ngIf="
                                 !investorAssessment.total_investment &&
@@ -632,7 +632,7 @@
                                 <div class="row p-2">
                                   <div class="col-12 col-lg-6">
                                     <div class="p-field">
-                                      <label for="expected_ghg_mitigation">Expected GHG reductions over intervention lifetime(t CO₂-eq)</label>
+                                      <label for="expected_ghg_mitigation">Expected GHG reductions over intervention lifetime(tCO₂e)</label>
                                       <p-inputNumber [(ngModel)]="data.expected_ghg_mitigation" name="expected_ghg_mitigation" placeholder="Expected GHG reductions over intervention lifetime" inputId="locale-us" mode="decimal" locale="en-US" [minFractionDigits]="2"
                                         (onInput)="calculateAbatement($event.value, data)">
                                       </p-inputNumber>
@@ -651,7 +651,7 @@
                                 <div class="row p-2">
                                   <div class="col-12 col-lg-6">
                                     <div class="p-field">
-                                      <label for="expected_ghg_mitigation">Abatement per dollar (GHG reduction over intervention lifetime/total investment), t CO₂-eq/USD</label>
+                                      <label for="expected_ghg_mitigation">Abatement per dollar (GHG reduction over intervention lifetime/total investment), tCO₂e/USD</label>
                                       <p-inputNumber [disabled]="true" [(ngModel)]="data['abatement']" disabl [name]="'abatement'+data.characteristics.id" placeholder="Expected GHG reduction per year" mode="decimal" locale="en-US" [minFractionDigits]="3">
                                       </p-inputNumber>
                                     </div>
@@ -888,7 +888,7 @@
           <ng-template pTemplate="body" let-row>
               <tr>
                   <td>Relevant</td>
-                  <td>Reason to believe that a characteristic is important for transformational change in the context of the intervention</td>
+                  <td>Reason to believe that a characteristic is important for transformational change in the context of the intervention.</td>
               </tr>
               <tr>
                   <td>Possibly relevant</td>

@@ -120,7 +120,7 @@
                     </div>
                   </p-header>
                   <div class="sidebar-items--link d-flex flex-column align-items-start" *ngIf="isPortfolioTool || userRole==loginRole.External"
-                    [routerLink]="['/app/portfolio-tool']" routerLinkActive="selected">
+                    [routerLink]="['/app/general-tool']" routerLinkActive="selected">
                     <p class="mb-0 ml-20">{{masterDataService.getToolName('PORTFOLIO')}}</p>
                   </div>
                   <div class="sidebar-items--link d-flex flex-column align-items-start" *ngIf="isCarbonMarketTool || userRole==loginRole.External"
@@ -129,7 +129,7 @@
                   </div>
 
                   <div class="sidebar-items--link d-flex flex-column align-items-start" *ngIf="isInvesmentTool || userRole==loginRole.External"
-                    [routerLink]="['/app/investor-tool-new']" routerLinkActive="selected">
+                    [routerLink]="['/app/investment-tool']" routerLinkActive="selected">
                     <p class="mb-0 ml-20">{{masterDataService.getToolName('INVESTOR')}}</p>
                   </div>
 

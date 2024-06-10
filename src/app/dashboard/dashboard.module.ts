@@ -185,7 +185,7 @@ const routes: Routes = [
     data: {}
   },
    {
-     path: 'portfolio-tool',
+     path: 'general-tool',
      component: PortfolioTrack4Component,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
      canActivate: [],
@@ -227,21 +227,21 @@ const routes: Routes = [
     data: {}
   },
   {
-    path: 'investor-tool-new',
+    path: 'investment-tool',
     component: InvestorToolComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}
   },
   {
-    path: 'investor-tool-new-edit',
+    path: 'investment-tool-edit',
     component: InvestorToolComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],
     data: {}
   },
   {
-    path: 'portfolio-tool-edit',
+    path: 'general-tool-edit',
     component: PortfolioTrack4Component,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
     canActivate: [],

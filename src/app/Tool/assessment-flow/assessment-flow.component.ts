@@ -113,7 +113,7 @@ export class AssessmentFlowComponent implements OnInit {
 
   goToGeneral() {
     if (this.isPortfolioTool) {
-      this.router.navigate(['app/portfolio-tool'], {
+      this.router.navigate(['app/general-tool'], {
         queryParams: { interventionId: this.intervention.id, assessmentType: this.assessmentType, },
       })
     }
@@ -124,7 +124,7 @@ export class AssessmentFlowComponent implements OnInit {
 
   goToInvestment() {
     if (this.isInvesmentTool) {
-      this.router.navigate(['app/investor-tool-new'], {
+      this.router.navigate(['app/investment-tool'], {
         queryParams: { interventionId: this.intervention.id, assessmentType: this.assessmentType },
       })
     }
