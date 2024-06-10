@@ -25,7 +25,7 @@ export class ReportComponent implements OnInit {
   assessmentTypes: any[]
  reportTypes=['Assessment reports','Portfolio reports']
  selectedReportTypes:string='';
- tools=['Investment','General tool']
+ tools=['Investment','General','Carbon market']
  selectedTool:string='';
   selectedClimateAction: ClimateAction
   selectedAssessment: Assessment
@@ -128,7 +128,8 @@ export class ReportComponent implements OnInit {
     let climateAction = this.searchBy.climateAction ? this.searchBy.climateAction.policyName.toString() : "";
     let reportName = this.searchBy.text ? this.searchBy.text : "";
     let reportType = this.mapReportType(this.selectedReportTypes)
-    this.reportControllerServiceProxy.getReportData(climateAction, reportName,reportType,this.selectedTool).subscribe(res => {
+
+    this.reportControllerServiceProxy.getReportData(climateAction, reportName,reportType,this.mapReportTool(this.selectedTool)).subscribe(res => {
       this.pdfFiles = res;
     })
 
@@ -146,6 +147,24 @@ export class ReportComponent implements OnInit {
     }
     else if(type == 'Portfolio reports'){
       returnType = 'Comparison'
+    }
+    else{
+      returnType = ''
+    }
+    return returnType
+  }
+
+  mapReportTool(type: string ) : string {
+    let returnType = ''
+
+    if(type == 'Investment'){
+      returnType = 'Investment tool'
+    }
+    else if(type == 'General'){
+      returnType = 'General tool'
+    }
+    else if(type == 'Carbon market'){
+      returnType = 'Carbon market tool'
     }
     else{
       returnType = ''
