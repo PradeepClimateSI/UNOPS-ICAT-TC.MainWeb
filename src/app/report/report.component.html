@@ -3,7 +3,18 @@
         <span (click)="watchVideo()" pTooltip="Click to watch guidance video"  class="infor-video" ><i class="pi pi-video" style=" font-size: 1em ;  margin-left: 1em;"></i></span>
     </h4>
     <div class="p-grid p-fluid card">
-       
+        <div class="row mb-3">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-4">
+                <div class="p-inputgroup pt-4">
+                    <input placeholder="Type your keyword" [(ngModel)]="searchBy.text" #nameClimate="ngModel"
+                        type="text" name="nameClimate" class="p-inputtext" pInputText />
+                    <button type="button" pButton pRipple label="Search" (click)="onSearch()"></button>
+                </div>
+            </div>
+        </div>
        
         <div class="row mb-3"></div>
         <h6 class="mt-4" style="color: #1a4f7b">Reports</h6>

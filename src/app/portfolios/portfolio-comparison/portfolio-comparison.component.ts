@@ -72,7 +72,7 @@ export class PortfolioComparisonComponent implements OnInit {
         { title: 'Link to previous assessment', data: this.portfolio.link },
         { title: 'Objective(s) of the assessment', data: this.portfolio.objectives },
         { title: 'Intended audience(s) of the assessment', data: this.portfolio.audience },
-        { title: 'Number of assessments', data: await this.noOfAssessments }
+        { title: 'Number of assessments', data: await this.assessmentList.length },
       ])
   }
 
