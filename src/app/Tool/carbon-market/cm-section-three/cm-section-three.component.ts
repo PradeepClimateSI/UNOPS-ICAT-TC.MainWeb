@@ -8,7 +8,7 @@ import * as moment from 'moment';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { AppService } from 'shared/AppService';
-import { Assessment, CMAssessmentQuestion, CMAssessmentQuestionControllerServiceProxy, CMDefaultValue, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Category, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, SaveCMResultDto, ScoreDto, UniqueCategory, UniqueCharacteristic } from 'shared/service-proxies/service-proxies';
+import { Assessment, AssessmentCMDetailControllerServiceProxy, CMAssessmentQuestion, CMAssessmentQuestionControllerServiceProxy, CMDefaultValue, CMQuestion, CMQuestionControllerServiceProxy, CMResultDto, Category, Characteristics, Institution, InstitutionControllerServiceProxy, InvestorToolControllerServiceProxy, MethodologyAssessmentControllerServiceProxy, OutcomeCategory, PortfolioSdg, SaveCMResultDto, ScoreDto, UniqueCategory, UniqueCharacteristic } from 'shared/service-proxies/service-proxies';
 
 
 interface UploadEvent {
@@ -133,7 +133,8 @@ isLogoutClicked: boolean = false;
     private confirmationService: ConfirmationService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private appService: AppService
+    private appService: AppService,
+    private assessmentCMDetailControllerServiceProxy: AssessmentCMDetailControllerServiceProxy
   ) {
     this.uploadUrl = environment.baseUrlAPI + "/document/upload-file-by-name" ; 
     this.fileServerURL = environment.baseUrlAPI+'/document/downloadDocumentsFromFileName/uploads';
@@ -566,77 +567,92 @@ isLogoutClicked: boolean = false;
     }
   }
 
-  autoFillInternational(){
-    if (['NATIONAL', 'SUBNATIONAL'].includes(this.assessment['geographicalAreasCovered'][0].code)) {
-      for (let _outcome of this.outcome) {
-        if (['SCALE_GHG','SUSTAINED_GHG', 'SCALE_ADAPTATION' ,  'SUSTAINED_ADAPTATION'].includes(_outcome.code)) {
-          let category_code = _outcome.code
-          let score_array = _outcome.code === 'SCALE_GHG' ? this.masterDataService.GHG_scale_score_macro : 
-          (_outcome.code === 'SUSTAINED_GHG' ? this.masterDataService.GHG_sustained_score : 
-          (_outcome.code === 'SCALE_ADAPTATION' ? this.masterDataService.adaptation_scale_score: this.masterDataService.adaptation_sustained_score) ) 
-          this.outcome = this.outcome.map((category: OutcomeCategory) => {
-            if (category.code === category_code) {
-              category.results = category.results.map((result: CMResultDto) => {
-                if (result.characteristic.code === 'INTERNATIONAL') {
-                  if (!result.selectedScore.code) {
-                    let score = score_array.find(o => o.code === '-99')
-                    if (score) result.selectedScore = score
+  async autoFillInternational(){
+    try {
+      let geographicalAreasCovered = this.assessment['geographicalAreasCovered'][0]
+      if (geographicalAreasCovered === undefined){
+        geographicalAreasCovered = (await this.assessmentCMDetailControllerServiceProxy.getAssessmentCMDetailByAssessmentId(this.assessment.id).toPromise()).geographicalAreasCovered[0];
+      }
+      if (geographicalAreasCovered && ['NATIONAL', 'SUBNATIONAL'].includes(geographicalAreasCovered.code)) {
+        for (let _outcome of this.outcome) {
+          if (['SCALE_GHG','SUSTAINED_GHG', 'SCALE_ADAPTATION' ,  'SUSTAINED_ADAPTATION'].includes(_outcome.code)) {
+            let category_code = _outcome.code
+            let score_array = _outcome.code === 'SCALE_GHG' ? this.masterDataService.GHG_scale_score_macro : 
+            (_outcome.code === 'SUSTAINED_GHG' ? this.masterDataService.GHG_sustained_score : 
+            (_outcome.code === 'SCALE_ADAPTATION' ? this.masterDataService.adaptation_scale_score: this.masterDataService.adaptation_sustained_score) ) 
+            this.outcome = this.outcome.map((category: OutcomeCategory) => {
+              if (category.code === category_code) {
+                category.results = category.results.map((result: CMResultDto) => {
+                  if (result.characteristic.code === 'INTERNATIONAL') {
+                    if (!result.selectedScore.code) {
+                      let score = score_array.find(o => o.code === '-99')
+                      if (score) result.selectedScore = score
+                    }
+                    if (!result.comment) result.comment = 'The geographical area covered by this assessment is ' + (geographicalAreasCovered.code === 'NATIONAL' ? 'national/sectoral': 'sub-national/sub-sectoral.')
+                    if (!result.startingSituation) result.startingSituation = 'N/A'
+                    if (!result.expectedImpact ) result.expectedImpact = 'N/A'
+                    if (['SCALE_ADAPTATION', 'SUSTAINED_ADAPTATION'].includes(category_code)) {
+                      if (!result.adaptationCoBenifit) result.adaptationCoBenifit = 'N/A'
+                    }
+      
+                    this.autoSaveResult(category.code, true, category.code, 'out', result.characteristic.id, undefined, undefined)
                   }
-                  if (!result.comment) result.comment = 'The geographical area covered by this assessment is ' + (this.assessment['geographicalAreasCovered'][0].code === 'NATIONAL' ? 'national/sectoral': 'sub-national/sub-sectoral.')
-                  if (!result.startingSituation) result.startingSituation = 'N/A'
-                  if (!result.expectedImpact ) result.expectedImpact = 'N/A'
-                  if (['SCALE_ADAPTATION', 'SUSTAINED_ADAPTATION'].includes(category_code)) {
-                    if (!result.adaptationCoBenifit) result.adaptationCoBenifit = 'N/A'
-                  }
-    
-                  this.autoSaveResult(category.code, true, category.code, 'out', result.characteristic.id, undefined, undefined)
-                }
-                return result;
-              })
-            }
-            return category
-          })
+                  return result;
+                })
+              }
+              return category
+            })
+          }
         }
       }
+    } catch (error) {
+      console.error("Error occurred in auto fill international", error)
     }
   }
 
-  autoFillSDG() {
-    if (['NATIONAL', 'SUBNATIONAL'].includes(this.assessment['geographicalAreasCovered'][0].code)) {
-      this.selectedSDGs = this.selectedSDGs.map(sdg => {
-        sdg.scaleResult = sdg.scaleResult.map(result => {
-          if (result.characteristic.code === 'INTERNATIONAL') {
-            if (!result.selectedScore.code) {
-              let score = this.masterDataService.SDG_scale_score.find(o => o.code === '-99')
-              if (score) result.selectedScore = score
+  async autoFillSDG() {
+    try {
+      let geographicalAreasCovered = this.assessment['geographicalAreasCovered'][0]
+      if (geographicalAreasCovered === undefined){
+        geographicalAreasCovered = (await this.assessmentCMDetailControllerServiceProxy.getAssessmentCMDetailByAssessmentId(this.assessment.id).toPromise()).geographicalAreasCovered[0];
+      }
+      if (geographicalAreasCovered && ['NATIONAL', 'SUBNATIONAL'].includes(geographicalAreasCovered.code)) {
+        this.selectedSDGs = this.selectedSDGs.map(sdg => {
+          sdg.scaleResult = sdg.scaleResult.map(result => {
+            if (result.characteristic.code === 'INTERNATIONAL') {
+              if (!result.selectedScore.code) {
+                let score = this.masterDataService.SDG_scale_score.find(o => o.code === '-99')
+                if (score) result.selectedScore = score
+              }
+              if (!result.comment) result.comment = 'The geographical area covered by this assessment is ' + (geographicalAreasCovered.code === 'NATIONAL' ? 'national/sectoral': 'sub-national/sub-sectoral.')
+              if (!result.startingSituation) result.startingSituation = 'N/A'
+              if (!result.expectedImpact) result.expectedImpact = 'N/A'
+              if (!result.sdgIndicator) result.sdgIndicator = 'N/A'
+  
+              this.autoSaveResult('SCALE_SD', true, 'SCALE_SD', 'out', result.characteristic.id, undefined, sdg.id)
             }
-            if (!result.comment) result.comment = 'The geographical area covered by this assessment is ' + (this.assessment['geographicalAreasCovered'][0].code === 'NATIONAL' ? 'national/sectoral': 'sub-national/sub-sectoral.')
-            if (!result.startingSituation) result.startingSituation = 'N/A'
-            if (!result.expectedImpact) result.expectedImpact = 'N/A'
-            if (!result.sdgIndicator) result.sdgIndicator = 'N/A'
-
-            this.autoSaveResult('SCALE_SD', true, 'SCALE_SD', 'out', result.characteristic.id, undefined, sdg.id)
-          }
-          return result
-        })
-        sdg.sustainResult = sdg.sustainResult.map(result => {
-          if (result.characteristic.code === 'INTERNATIONAL') {
-            if (!result.selectedScore.code) {
-              let score = this.masterDataService.SDG_sustained_score.find(o => o.code === '-99')
-              if (score) result.selectedScore = score
+            return result
+          })
+          sdg.sustainResult = sdg.sustainResult.map(result => {
+            if (result.characteristic.code === 'INTERNATIONAL') {
+              if (!result.selectedScore.code) {
+                let score = this.masterDataService.SDG_sustained_score.find(o => o.code === '-99')
+                if (score) result.selectedScore = score
+              }
+              if (!result.comment) result.comment = 'The geographical area covered by this assessment is ' + (geographicalAreasCovered.code === 'NATIONAL' ? 'national/sectoral': 'sub-national/sub-sectoral.')
+              if (!result.startingSituation) result.startingSituation = 'N/A'
+              if (!result.expectedImpact) result.expectedImpact = 'N/A'
+              if (!result.sdgIndicator) result.sdgIndicator = 'N/A'
+              this.autoSaveResult('SUSTAINED_SD', true, 'SUSTAINED_SD', 'out', result.characteristic.id, undefined, sdg.id)
             }
-            if (!result.comment) result.comment = 'The geographical area covered by this assessment is ' + (this.assessment['geographicalAreasCovered'][0].code === 'NATIONAL' ? 'national/sectoral': 'sub-national/sub-sectoral.')
-            if (!result.startingSituation) result.startingSituation = 'N/A'
-            if (!result.expectedImpact) result.expectedImpact = 'N/A'
-            if (!result.sdgIndicator) result.sdgIndicator = 'N/A'
-            this.autoSaveResult('SUSTAINED_SD', true, 'SUSTAINED_SD', 'out', result.characteristic.id, undefined, sdg.id)
-          }
-          return result
+            return result
+          })
+          return sdg
         })
-        return sdg
-      })
+      }
+    } catch (error) {
+      console.error("Error occurred in auto fill SDG", error)
     }
-
   }
 
   onSelectScore(event: any, char: CMResultDto, index: number, sdg_id? : number) {
