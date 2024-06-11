@@ -63,6 +63,7 @@ export class CmSectionComponent implements OnInit {
     'monitoring concept is in place. The following questions are therefore focusing on the intervention’s approach to additionality determination, baseline setting and monitoring.'
   criteria2_description = 'GHG emissions lock-in refers to the investment in technologies or practices that prevent transitioning to lower-emission technologies or practices in the ' + 
     'short term, inhibiting a transformation to low-carbon societies.'
+  readyToNavigate: boolean = false
 
   constructor(
     private cMQuestionControllerServiceProxy: CMQuestionControllerServiceProxy,
@@ -554,7 +555,11 @@ export class CmSectionComponent implements OnInit {
           this.cMAssessmentQuestionControllerServiceProxy.saveResult(cmResult).subscribe(res => {
             if (res) {
               if (!this.isEditMode) {
-                this.router.navigate(['../carbon-market-tool-edit'], { queryParams: { id: this.assessment.id, isEdit: true, isContinue: true }, relativeTo: this.activatedRoute });
+                if (this.visible === false) {
+                  this.router.navigate(['../carbon-market-tool-edit'], { queryParams: { id: this.assessment.id, isEdit: true, isContinue: true }, relativeTo: this.activatedRoute });
+                } else {
+                  this.readyToNavigate = true;
+                }
               }
             }
           })
@@ -565,6 +570,10 @@ export class CmSectionComponent implements OnInit {
 
   okay() {
     this.visible = false
+    if (this.readyToNavigate === true) {
+      this.readyToNavigate = false;
+      this.router.navigate(['../carbon-market-tool-edit'], { queryParams: { id: this.assessment.id, isEdit: true, isContinue: true }, relativeTo: this.activatedRoute });
+    }
   }
 
   okayCondition(){
