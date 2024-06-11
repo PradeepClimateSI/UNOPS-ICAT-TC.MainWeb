@@ -12,16 +12,6 @@
                 <div class="row p-2">
                     <div class="col-12 col-md-6">
                         <div class="p-field">
-                            <label for="type">Type*</label>
-                            <p-dropdown appendTo="body" placeholder="Select" [(ngModel)]="institution.type" name="type"
-                                [options]="typeList" [autoDisplayFirst]="false" optionLabel="name"
-                                [disabled]="institutionId > 0"></p-dropdown>
-                        </div>
-                    </div>
-                </div>
-                <div class="row p-2">
-                    <div class="col-12 col-md-6">
-                        <div class="p-field">
                             <label for="sector">Sector*</label>
                             <p-dropdown placeholder="" [(ngModel)]="institution.sector" name="sector"
                                 [options]="sectorList" optionLabel="name" [disabled]="institutionId > 0">
