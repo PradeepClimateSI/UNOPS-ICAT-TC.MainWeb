@@ -185,7 +185,9 @@ isLogoutClicked: boolean = false;
     this.institutionControllerServiceProxy.getAllInstitutions().subscribe((res: any) => {
       this.institutions = res;
     });
-    this.removeNullAssessmentQuestions();
+    if (this.isEditMode && this.isCompleted) {
+      this.removeNullAssessmentQuestions();
+    }
     this.relevance = this.masterDataService.relevance;
     await this.getSDGList();
     await this.setInitialState();
@@ -199,6 +201,8 @@ isLogoutClicked: boolean = false;
     this.assessmentquestions.map(q => {
       if (['SOCIAL_NORMS', 'BEHAVIOUR', 'AWARENESS', 'INSTITUTIONAL_AND_REGULATORY', 'DISINCENTIVES', 'ECONOMIC_NON_ECONOMIC', 'BENIFICIARIES', 'COALITION_OF_ADVOCATES', 'ENTREPRENEURS', 'SCALE_UP', 'ADOPTION', 'R_&_D'].includes(q.characteristic.code)) {
         if (q.question.id !== undefined) {
+          AssessQ.push(q)
+        } else if (q.question.id === undefined && q.relevance === 0) {
           AssessQ.push(q)
         }
       } else {
@@ -853,9 +857,9 @@ isLogoutClicked: boolean = false;
               res.selectedSdg = new PortfolioSdg()
               if (res.question.id) {
                 this.results.push(res)
-              } else if (res.relevance === 0 && !res.assessmentQuestionId) {
+              } else if (res.relevance === 0) {
                 this.results.push(res)
-              }
+              } 
             }
           }
         }
