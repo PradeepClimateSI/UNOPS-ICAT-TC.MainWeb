@@ -185,12 +185,31 @@ isLogoutClicked: boolean = false;
     this.institutionControllerServiceProxy.getAllInstitutions().subscribe((res: any) => {
       this.institutions = res;
     });
+    if (this.isEditMode && this.isCompleted) {
+      this.removeNullAssessmentQuestions();
+    }
     this.relevance = this.masterDataService.relevance;
     await this.getSDGList();
     await this.setInitialState();
     this.initializeDefaultStatus();
     this.autoFillInternational();
     this.autoFillSDG();
+  }
+
+  removeNullAssessmentQuestions() {
+    let AssessQ: CMAssessmentQuestion[] = []
+    this.assessmentquestions.map(q => {
+      if (['SOCIAL_NORMS', 'BEHAVIOUR', 'AWARENESS', 'INSTITUTIONAL_AND_REGULATORY', 'DISINCENTIVES', 'ECONOMIC_NON_ECONOMIC', 'BENIFICIARIES', 'COALITION_OF_ADVOCATES', 'ENTREPRENEURS', 'SCALE_UP', 'ADOPTION', 'R_&_D'].includes(q.characteristic.code)) {
+        if (q.question.id !== undefined) {
+          AssessQ.push(q)
+        } else if (q.question.id === undefined && q.relevance === 0) {
+          AssessQ.push(q)
+        }
+      } else {
+        AssessQ.push(q)
+      }
+    })
+    this.assessmentquestions = AssessQ;
   }
 
   subscribeLogout() {
@@ -255,7 +274,7 @@ isLogoutClicked: boolean = false;
           if (type.code === 'process') {
             this.categories[type.code].map((cat: any) => {
               cat.characteristics.map((char: any) => {
-                let assQ = this.assessmentquestions.find(o => o.characteristic.id === char.id)
+                let assQ = this.assessmentquestions.find(o => o.characteristic.id === char.id && o.question.id !== null)
                 if (assQ) {
                   let rel = this.relevance.find(o => o.value === assQ?.relevance)
                   char.relevance = rel?.value
@@ -522,7 +541,7 @@ isLogoutClicked: boolean = false;
   }
 
   isFormValid() {
-    let form = this.viewChildren.filter((f, idx) => idx === this.activeIndex2)
+    let form: any = this.viewChildren.filter((f, idx) => idx === this.activeIndex2)
     return form[0].form.valid
   }
 
@@ -831,13 +850,16 @@ isLogoutClicked: boolean = false;
                     }
                   }
                 }
+                if (res.relevance === 0) {
+                  this.results.push(res)
+                }
               }
               res.selectedSdg = new PortfolioSdg()
               if (res.question.id) {
                 this.results.push(res)
-              } else if (res.relevance === 0 && !res.assessmentQuestionId) {
+              } else if (res.relevance === 0) {
                 this.results.push(res)
-              }
+              } 
             }
           }
         }
