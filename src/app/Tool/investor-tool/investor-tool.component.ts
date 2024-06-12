@@ -82,6 +82,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
   investorQuestions: InvestorQuestions[] = [];
   geographicalAreasCoveredArr: any[] = []
   totalInvestments: TotalInvestment[] = []
+  countryId: any;
 
 
   sdgList: any[];
@@ -209,7 +210,8 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
     private assessmentControllerServiceProxy: AssessmentControllerServiceProxy,
     protected dialogService: DialogService,
     private confirmationService: ConfirmationService,
-    private appService: AppService
+    private appService: AppService,
+    private sectorProxy: SectorControllerServiceProxy,
 
   ) {
     this.uploadUrl = environment.baseUrlAPI + "/document/upload-file-by-name";
@@ -229,6 +231,7 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
     this.ghg_score_info = this.masterDataService.other_invest_ghg_score_info
 
     this.relevance_tooltip = "Does the process characteristic affect/impact any of the identified barriers? Does the intervention affect or is affected by this process characteristic?"
+    this.getSetors();
 
     this.activatedRoute.queryParams.subscribe(async params => {
       params['isEdit'] == 'true' ? (this.isEditMode = true) : false;
@@ -316,6 +319,13 @@ export class InvestorToolComponent implements OnInit, AfterContentChecked, OnDes
     } else {
       this.lastUpdatedCategory = this.outcomeData[this.activeIndex2]
     }
+  }
+
+  async getSetors() {
+    const token = localStorage.getItem('ACCESS_TOKEN')!;
+    const countryId = token ? decode<any>(token).countryId : 0;
+    this.countryId = countryId;
+    this.sectorList = await this.sectorProxy.findAllSector().toPromise()
   }
 
   subscribeLogout() {
