@@ -25,11 +25,11 @@
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
-                    <th>Intervention</th>
-                    <th>Assessment type</th>
-                    <th>Tool</th>
-                    <th>Created date</th>
-                    <th style="width:10%" >Last update date</th>
+                    <th pSortableColumn="intervention">Intervention <p-sortIcon field="intervention"></p-sortIcon></th>
+                    <th pSortableColumn="assessment_type">Assessment type <p-sortIcon field="assessment_type"></p-sortIcon></th>
+                    <th pSortableColumn="tool">Tool <p-sortIcon field="tool"></p-sortIcon></th>
+                    <th pSortableColumn="created_date">Created date <p-sortIcon field="created_date"></p-sortIcon></th>
+                    <th style="width:10%" pSortableColumn="updated_date" >Last update date <p-sortIcon field="updated_date"></p-sortIcon></th>
                     <th style="width:25%" >Action</th>
                 </tr>
             </ng-template>
