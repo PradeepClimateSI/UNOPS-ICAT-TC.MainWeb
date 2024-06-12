@@ -1070,6 +1070,10 @@ isLogoutClicked: boolean = false;
             }
             if (this.isEditMode){
               let assQ = this.assessmentquestions.find(o => (o.characteristic.id === characteristic_result.id) && (o.question.id === questionResult?.id || o.relevance === 0))
+              if (assQ === undefined) {
+                assQ = this.assessmentquestions.find(o => (o.characteristic.id === characteristic_result.id) && o.relevance !== undefined)
+              }
+              
               if (assQ) {
                 _result.assessmentQuestionId = assQ.id
                 if (assQ.assessmentAnswers.length > 0) {
