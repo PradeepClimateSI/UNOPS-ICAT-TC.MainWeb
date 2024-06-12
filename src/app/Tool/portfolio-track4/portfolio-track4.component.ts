@@ -171,6 +171,7 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
   isFirst: boolean = false;
   assessment_geoArea_tooltip = assessment_geoArea_tooltip
   assessment_sector_tooltip = assessment_sector_tooltip
+  countryId: any;
 
   constructor(
     private projectControllerServiceProxy: ProjectControllerServiceProxy,
@@ -221,6 +222,7 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
     this.sdg_info = this.masterDataService.other_invest_sdg_info
     this.adaptation_info = this.masterDataService.other_invest_adaptation_info
     this.ghg_score_info = this.masterDataService.other_invest_ghg_score_info
+    this.getSetors();
     this.activatedRoute.queryParams.subscribe(async params => {
       params['isEdit'] == 'true' ? (this.isEditMode = true) : false;
       params['iscompleted'] == 'true' ? (this.isCompleted = true) : false
@@ -318,6 +320,13 @@ export class PortfolioTrack4Component implements OnInit, OnDestroy {
     }
 
    
+  }
+
+  async getSetors() {
+    const token = localStorage.getItem('ACCESS_TOKEN')!;
+    const countryId = token ? decode<any>(token).countryId : 0;
+    this.countryId = countryId;
+    this.sectorList = await this.sectorProxy.findAllSector().toPromise()
   }
 
   subscribeLogout() {
