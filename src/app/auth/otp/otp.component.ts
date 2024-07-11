@@ -38,6 +38,9 @@ export class OtpComponent implements OnInit {
     }
   }
 
+  toLanding() {
+    this.router.navigate(['/landing-page']);
+  }
   checkOTP(form: NgForm){
     if(this.userName){
       this.authControllerServiceProxy.submitOTP(this.userName, this.otp).subscribe((res: any )=> {

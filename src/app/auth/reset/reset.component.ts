@@ -39,6 +39,9 @@ export class ResetComponent implements OnInit {
     }
   }
 
+  toLanding() {
+    this.router.navigate(['/landing-page']);
+  }
   goLogin(){
     this.router.navigate(['../login'], {relativeTo:this.activatedRoute});
   }
